@@ -1,0 +1,121 @@
+/**
+ * 
+ */
+package com.idigitronics.IDigi.request.vo;
+
+import java.util.List;
+
+/**
+ * @author k VimaL Kumar
+ *
+ */
+public class CustomerRequestVO {
+	
+	private int customerID;
+	private int communityID;
+	private int blockID;
+	private String houseNumber;
+	private String firstName;
+	private String lastName;
+	private String email;
+	private String mobileNumber;
+	private List<MeterRequestVO> meters;
+	private int tariffID;
+	private int gatewayID;
+	private String customerUniqueID;
+	private int createdByID;
+	private int loggedInRoleID;
+	private String loggedInUserID;
+	
+	public int getCustomerID() {
+		return customerID;
+	}
+	public void setCustomerID(int customerID) {
+		this.customerID = customerID;
+	}
+	public int getCommunityID() {
+		return communityID;
+	}
+	public void setCommunityID(int communityID) {
+		this.communityID = communityID;
+	}
+	public int getBlockID() {
+		return blockID;
+	}
+	public void setBlockID(int blockID) {
+		this.blockID = blockID;
+	}
+	public String getHouseNumber() {
+		return houseNumber;
+	}
+	public void setHouseNumber(String houseNumber) {
+		this.houseNumber = houseNumber;
+	}
+	public String getFirstName() {
+		return firstName;
+	}
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+	public String getLastName() {
+		return lastName;
+	}
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	public String getMobileNumber() {
+		return mobileNumber;
+	}
+	public void setMobileNumber(String mobileNumber) {
+		this.mobileNumber = mobileNumber;
+	}
+	public int getCreatedByID() {
+		return createdByID;
+	}
+	public void setCreatedByID(int createdByID) {
+		this.createdByID = createdByID;
+	}
+	public String getCustomerUniqueID() {
+		return customerUniqueID;
+	}
+	public void setCustomerUniqueID(String customerUniqueID) {
+		this.customerUniqueID = customerUniqueID;
+	}
+	public int getLoggedInRoleID() {
+		return loggedInRoleID;
+	}
+	public void setLoggedInRoleID(int loggedInRoleID) {
+		this.loggedInRoleID = loggedInRoleID;
+	}
+	public String getLoggedInUserID() {
+		return loggedInUserID;
+	}
+	public void setLoggedInUserID(String loggedInUserID) {
+		this.loggedInUserID = loggedInUserID;
+	}
+	public List<MeterRequestVO> getMeters() {
+		return meters;
+	}
+	public void setMeters(List<MeterRequestVO> meters) {
+		this.meters = meters;
+	}
+	public int getTariffID() {
+		return tariffID;
+	}
+	public void setTariffID(int tariffID) {
+		this.tariffID = tariffID;
+	}
+	public int getGatewayID() {
+		return gatewayID;
+	}
+	public void setGatewayID(int gatewayID) {
+		this.gatewayID = gatewayID;
+	}
+	
+}
