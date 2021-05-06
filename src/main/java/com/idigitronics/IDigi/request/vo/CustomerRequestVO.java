@@ -20,8 +20,6 @@ public class CustomerRequestVO {
 	private String email;
 	private String mobileNumber;
 	private List<MeterRequestVO> meters;
-	private int tariffID;
-	private int gatewayID;
 	private String customerUniqueID;
 	private int createdByID;
 	private int loggedInRoleID;
@@ -105,17 +103,4 @@ public class CustomerRequestVO {
 	public void setMeters(List<MeterRequestVO> meters) {
 		this.meters = meters;
 	}
-	public int getTariffID() {
-		return tariffID;
-	}
-	public void setTariffID(int tariffID) {
-		this.tariffID = tariffID;
-	}
-	public int getGatewayID() {
-		return gatewayID;
-	}
-	public void setGatewayID(int gatewayID) {
-		this.gatewayID = gatewayID;
-	}
-	
 }

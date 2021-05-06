@@ -709,6 +709,7 @@ public class CommunitySetUpDAO {
 					metervo.setMiuID(rs2.getString("MIUID"));
 					metervo.setMeterSerialNumber(rs2.getString("MeterSerialNumber"));
 					metervo.setMeterType(rs2.getString("MeterType"));
+					metervo.setLocation(rs2.getString("Location"));
 					metervo.setTariffID(rs2.getInt("TariffID"));
 					
 					PreparedStatement pstmt3 = con.prepareStatement("SELECT TariffName from tariff WHERE TariffID = "+ metervo.getTariffID());
@@ -783,7 +784,7 @@ public class CommunitySetUpDAO {
 					
 					for(int i = 0; i <= customervo.getMeters().size(); i++) {
 						
-						PreparedStatement pstmt4 = con.prepareStatement("INSERT INTO customermeterdetails (CustomerID, CustomerUniqueID, MIUID, MeterSerialNumber, MeterType, MeterSize, PayType, TariffID, GatewayID, ModifiedDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
+						PreparedStatement pstmt4 = con.prepareStatement("INSERT INTO customermeterdetails (CustomerID, CustomerUniqueID, MIUID, MeterSerialNumber, MeterType, MeterSize, PayType, TariffID, GatewayID, Location, ModifiedDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
 						pstmt4.setInt(1, rs.getInt("CustomerID"));
 						pstmt4.setString(2, customervo.getCustomerUniqueID());
 						pstmt4.setString(3, customervo.getMeters().get(i).getMiuID());
@@ -792,7 +793,8 @@ public class CommunitySetUpDAO {
 						pstmt4.setInt(6, customervo.getMeters().get(i).getMeterSize());
 						pstmt4.setString(7, customervo.getMeters().get(i).getPayType());
 						pstmt4.setInt(8, customervo.getMeters().get(i).getTariffID());
-						pstmt4.setInt(8, customervo.getGatewayID());
+						pstmt4.setInt(9, customervo.getMeters().get(i).getGatewayID());
+						pstmt4.setString(10, customervo.getMeters().get(i).getLocation());
 						
 						if(pstmt4.executeUpdate() > 0) {
 							responsevo.setResult("Success");
@@ -979,7 +981,7 @@ public class CommunitySetUpDAO {
 				while (rs.next()) {
 
 					pstmt6 = con.prepareStatement(
-							"INSERT INTO customerdeletemeter (CustomerMeterID, CustomerID, CustomerUniqueID, MIUID, MeterSerialNumber, MeterType, MeterSize, PayType, TariffID, GatewayID, ModifiedDate ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())");
+							"INSERT INTO customerdeletemeter (CustomerMeterID, CustomerID, CustomerUniqueID, MIUID, MeterSerialNumber, MeterType, MeterSize, PayType, Location, ModifiedDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
 
 					pstmt6.setInt(1, rs.getInt("CustomerMeterID"));
 					pstmt6.setInt(2, rs.getInt("CustomerID"));
@@ -989,6 +991,7 @@ public class CommunitySetUpDAO {
 					pstmt6.setString(6, rs.getString("MeterType"));
 					pstmt6.setInt(7, rs.getInt("MeterSize"));
 					pstmt6.setString(8, rs.getString("PayType"));
+					pstmt6.setString(9, rs.getString("Location"));
 
 					pstmt6.executeUpdate();					
 				}

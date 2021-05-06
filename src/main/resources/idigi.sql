@@ -133,8 +133,7 @@ CREATE TABLE `customerdeletemeter` (
   `MeterType` varchar(12) NOT NULL,
   `MeterSize` int(11) DEFAULT NULL,
   `PayType` varchar(10) NOT NULL,
-  `TariffID` int(10) NOT NULL,
-  `GatewayID` int(20) NOT NULL,
+  `Location` varchar(100) DEFAULT NULL,
   `RegisteredDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `ModifiedDate` datetime NOT NULL,
   PRIMARY KEY (`CustomerMeterDeleteID`)
@@ -180,6 +179,9 @@ CREATE TABLE `customermeterdetails` (
   `MeterType` varchar(12) NOT NULL,
   `MeterSize` int(11) DEFAULT NULL,
   `PayType` varchar(10) NOT NULL,
+  `TariffID` int(255) NOT NULL,
+  `GatewayID` int(255) NOT NULL,
+  `Location` varchar(100) DEFAULT NULL,
   `RegisteredDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `ModifiedDate` datetime NOT NULL,
   PRIMARY KEY (`CustomerMeterID`)
@@ -588,7 +590,7 @@ CREATE TABLE `user` (
 insert  into `user`(`ID`,`UserID`,`UserName`,`UserPassword`,`RoleID`,`ActiveStatus`,`CommunityID`,`BlockID`,`CustomerID`,`CustomerUniqueID`,`CreatedByID`,`CreatedByRoleID`,`RegisteredDate`,`ModifiedDate`) values 
 (1,'Superadmin','Idigitronics','cvp/LzpadrQT+2k0WDjyOQ==',1,1,0,0,0,NULL,0,0,'2021-05-01 17:19:40','2021-05-01 17:19:37'),
 (2,'kvkadmin','Kvk\r\n','cvp/LzpadrQT+2k0WDjyOQ==\r\n',2,1,1,1,0,NULL,1,1,'2021-05-01 17:24:22','2021-05-01 17:24:12'),
-(3,'Vimal\r\n','Vimal Kumar\r\n','cvp/LzpadrQT+2k0WDjyOQ==\r\n',3,1,1,1,1,'IDIGI00001',2,2,'2021-05-01 17:25:54','2021-05-01 17:25:56'),
+(3,'Vimal\r\n','Vimal Kumar\r\n','cvp/LzpadrQT+2k0WDjyOQ==\r\n',3,1,1,1,1,'IDIGI1',2,2,'2021-05-01 17:25:54','2021-05-01 17:25:56'),
 (4,'Superadminsupervisor\r\n','HanbitSuperadminsupervisor\r\n','cvp/LzpadrQT+2k0WDjyOQ==\r\n',4,1,0,0,0,NULL,1,1,'2021-05-01 17:26:45','2021-05-01 17:26:48'),
 (5,'Adminsupervisor\r\n','KvkAdminsupervisor\r\n','cvp/LzpadrQT+2k0WDjyOQ==\r\n',5,1,1,1,0,NULL,1,1,'2021-05-01 17:28:26','2021-05-01 17:28:29');
 
