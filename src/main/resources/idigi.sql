@@ -35,6 +35,40 @@ CREATE TABLE `alertsettings` (
 
 /*Data for the table `alertsettings` */
 
+/*Table structure for table `balancelog` */
+
+DROP TABLE IF EXISTS `balancelog`;
+
+CREATE TABLE `balancelog` (
+  `ReadingID` bigint(255) NOT NULL AUTO_INCREMENT,
+  `MIUID` varchar(100) NOT NULL,
+  `CommunityID` int(11) DEFAULT NULL,
+  `BlockID` int(11) DEFAULT NULL,
+  `CustomerID` bigint(255) DEFAULT NULL,
+  `CustomerMeterID` bigint(255) DEFAULT NULL,
+  `MeterSerialNumber` varchar(100) DEFAULT NULL,
+  `CustomerUniqueID` varchar(100) DEFAULT NULL,
+  `MeterType` int(255) NOT NULL,
+  `SyncTime` varchar(100) NOT NULL,
+  `SyncInterval` int(100) NOT NULL,
+  `PayType` int(100) NOT NULL,
+  `BatteryVoltage` decimal(10,2) NOT NULL,
+  `ValveConfiguration` tinyint(2) NOT NULL,
+  `ValveStatus` tinyint(2) NOT NULL,
+  `Balance` decimal(10,2) NOT NULL,
+  `TariffID` int(255) DEFAULT NULL,
+  `Tariff` decimal(10,2) NOT NULL,
+  `EmergencyCredit` decimal(10,2) NOT NULL,
+  `Minutes` bigint(255) DEFAULT NULL,
+  `Reading` decimal(10,2) NOT NULL,
+  `TamperDetect` tinyint(2) DEFAULT NULL,
+  `TimeStamp` varchar(80) DEFAULT NULL,
+  `LogDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`ReadingID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+/*Data for the table `balancelog` */
+
 /*Table structure for table `block` */
 
 DROP TABLE IF EXISTS `block`;
@@ -61,20 +95,32 @@ DROP TABLE IF EXISTS `command`;
 
 CREATE TABLE `command` (
   `TransactionID` bigint(255) NOT NULL AUTO_INCREMENT,
-  `TataReferenceNumber` bigint(20) NOT NULL,
-  `CustomerID` int(255) NOT NULL,
+  `CustomerID` bigint(255) NOT NULL,
+  `CustomerMeterID` bigint(255) NOT NULL,
   `MIUID` varchar(80) NOT NULL,
-  `CommandType` int(255) NOT NULL,
-  `DataFrame` varchar(1000) DEFAULT NULL,
-  `Value` double DEFAULT NULL,
-  `Status` int(245) NOT NULL,
-  `CustomerUniqueID` varchar(100) DEFAULT NULL,
+  `CustomerUniqueID` varchar(100) NOT NULL,
   `CreatedDate` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `ModifiedDate` datetime DEFAULT NULL,
   PRIMARY KEY (`TransactionID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*Data for the table `command` */
+
+/*Table structure for table `commanddetails` */
+
+DROP TABLE IF EXISTS `commanddetails`;
+
+CREATE TABLE `commanddetails` (
+  `CommandDetailsID` bigint(255) NOT NULL AUTO_INCREMENT,
+  `TransactionID` bigint(255) NOT NULL,
+  `CommandType` int(50) NOT NULL,
+  `Value` varchar(500) NOT NULL,
+  `Status` tinyint(5) NOT NULL DEFAULT '0',
+  `RegisteredDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `ModifiedDate` datetime DEFAULT NULL,
+  PRIMARY KEY (`CommandDetailsID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+/*Data for the table `commanddetails` */
 
 /*Table structure for table `community` */
 
@@ -189,140 +235,40 @@ CREATE TABLE `customermeterdetails` (
 
 /*Data for the table `customermeterdetails` */
 
-/*Table structure for table `displayenergyrbalancelog` */
+/*Table structure for table `displaybalancelog` */
 
-DROP TABLE IF EXISTS `displayenergyrbalancelog`;
+DROP TABLE IF EXISTS `displaybalancelog`;
 
-CREATE TABLE `displayenergyrbalancelog` (
+CREATE TABLE `displaybalancelog` (
   `ReadingID` bigint(255) NOT NULL AUTO_INCREMENT,
   `MainBalanceLogID` bigint(255) NOT NULL,
-  `MeterID` varchar(70) NOT NULL,
-  `Reading` decimal(10,2) NOT NULL,
-  `Balance` decimal(10,2) NOT NULL,
+  `MIUID` varchar(100) NOT NULL,
   `CommunityID` int(11) DEFAULT NULL,
   `BlockID` int(11) DEFAULT NULL,
-  `CustomerID` bigint(20) DEFAULT NULL,
-  `BatteryVoltage` decimal(10,2) NOT NULL,
-  `TariffAmount` decimal(18,2) NOT NULL,
-  `EmergencyCredit` varchar(30) NOT NULL,
-  `MeterType` int(255) NOT NULL,
-  `SolonideStatus` tinyint(2) DEFAULT NULL,
-  `CreditStatus` tinyint(2) DEFAULT NULL,
-  `TamperDetect` tinyint(2) DEFAULT NULL,
-  `TamperTimeStamp` varchar(50) DEFAULT NULL,
-  `DoorOpenTimeStamp` varchar(50) DEFAULT NULL,
-  `LowBattery` tinyint(2) DEFAULT NULL,
-  `Vacation` tinyint(4) DEFAULT NULL,
+  `CustomerID` bigint(255) DEFAULT NULL,
+  `CustomerMeterID` bigint(255) DEFAULT NULL,
   `MeterSerialNumber` varchar(100) DEFAULT NULL,
   `CustomerUniqueID` varchar(100) DEFAULT NULL,
-  `Minutes` int(11) DEFAULT NULL,
-  `IoTTimeStamp` varchar(80) DEFAULT NULL,
-  `LogDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `MeterType` int(255) NOT NULL,
+  `SyncTime` varchar(100) NOT NULL,
+  `SyncInterval` int(100) NOT NULL,
+  `PayType` int(100) NOT NULL,
+  `BatteryVoltage` decimal(10,2) NOT NULL,
+  `ValveConfiguration` tinyint(2) NOT NULL,
+  `ValveStatus` tinyint(2) NOT NULL,
+  `Balance` decimal(10,2) NOT NULL,
+  `TariffID` int(10) DEFAULT NULL,
+  `Tariff` decimal(10,2) NOT NULL,
+  `EmergencyCredit` decimal(10,2) NOT NULL,
+  `Minutes` bigint(255) DEFAULT NULL,
+  `Reading` decimal(10,2) NOT NULL,
+  `TamperDetect` tinyint(2) NOT NULL,
+  `TimeStamp` varchar(80) NOT NULL,
+  `LogDate` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`ReadingID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-/*Data for the table `displayenergyrbalancelog` */
-
-/*Table structure for table `displaygasbalancelog` */
-
-DROP TABLE IF EXISTS `displaygasbalancelog`;
-
-CREATE TABLE `displaygasbalancelog` (
-  `ReadingID` bigint(255) NOT NULL AUTO_INCREMENT,
-  `MainBalanceLogID` bigint(255) NOT NULL,
-  `MeterID` varchar(70) NOT NULL,
-  `Reading` decimal(10,2) NOT NULL,
-  `Balance` decimal(10,2) NOT NULL,
-  `CommunityID` int(11) DEFAULT NULL,
-  `BlockID` int(11) DEFAULT NULL,
-  `CustomerID` bigint(20) DEFAULT NULL,
-  `BatteryVoltage` decimal(10,2) NOT NULL,
-  `TariffAmount` decimal(18,2) NOT NULL,
-  `EmergencyCredit` varchar(30) NOT NULL,
-  `MeterType` int(255) NOT NULL,
-  `SolonideStatus` tinyint(2) DEFAULT NULL,
-  `CreditStatus` tinyint(2) DEFAULT NULL,
-  `TamperDetect` tinyint(2) DEFAULT NULL,
-  `TamperTimeStamp` varchar(50) DEFAULT NULL,
-  `DoorOpenTimeStamp` varchar(50) DEFAULT NULL,
-  `LowBattery` tinyint(2) DEFAULT NULL,
-  `Vacation` tinyint(4) DEFAULT NULL,
-  `MeterSerialNumber` varchar(100) DEFAULT NULL,
-  `CustomerUniqueID` varchar(100) DEFAULT NULL,
-  `Minutes` int(11) DEFAULT NULL,
-  `IoTTimeStamp` varchar(80) DEFAULT NULL,
-  `LogDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`ReadingID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
-/*Data for the table `displaygasbalancelog` */
-
-/*Table structure for table `displaywaterbalancelog` */
-
-DROP TABLE IF EXISTS `displaywaterbalancelog`;
-
-CREATE TABLE `displaywaterbalancelog` (
-  `ReadingID` bigint(255) NOT NULL AUTO_INCREMENT,
-  `MainBalanceLogID` bigint(255) NOT NULL,
-  `MeterID` varchar(70) NOT NULL,
-  `Reading` decimal(10,2) NOT NULL,
-  `Balance` decimal(10,2) NOT NULL,
-  `CommunityID` int(11) DEFAULT NULL,
-  `BlockID` int(11) DEFAULT NULL,
-  `CustomerID` bigint(20) DEFAULT NULL,
-  `BatteryVoltage` decimal(10,2) NOT NULL,
-  `TariffAmount` decimal(18,2) NOT NULL,
-  `EmergencyCredit` varchar(30) NOT NULL,
-  `MeterType` int(255) NOT NULL,
-  `SolonideStatus` tinyint(2) DEFAULT NULL,
-  `CreditStatus` tinyint(2) DEFAULT NULL,
-  `TamperDetect` tinyint(2) DEFAULT NULL,
-  `TamperTimeStamp` varchar(50) DEFAULT NULL,
-  `DoorOpenTimeStamp` varchar(50) DEFAULT NULL,
-  `LowBattery` tinyint(2) DEFAULT NULL,
-  `Vacation` tinyint(4) DEFAULT NULL,
-  `MeterSerialNumber` varchar(100) DEFAULT NULL,
-  `CustomerUniqueID` varchar(100) DEFAULT NULL,
-  `Minutes` int(11) DEFAULT NULL,
-  `IoTTimeStamp` varchar(80) DEFAULT NULL,
-  `LogDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`ReadingID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
-/*Data for the table `displaywaterbalancelog` */
-
-/*Table structure for table `energybalancelog` */
-
-DROP TABLE IF EXISTS `energybalancelog`;
-
-CREATE TABLE `energybalancelog` (
-  `ReadingID` bigint(255) NOT NULL AUTO_INCREMENT,
-  `MeterID` varchar(70) NOT NULL,
-  `Reading` decimal(10,2) NOT NULL,
-  `Balance` decimal(10,2) NOT NULL,
-  `CommunityID` int(11) DEFAULT NULL,
-  `BlockID` int(11) DEFAULT NULL,
-  `CustomerID` bigint(20) DEFAULT NULL,
-  `BatteryVoltage` decimal(10,2) NOT NULL,
-  `TariffAmount` decimal(18,2) NOT NULL,
-  `EmergencyCredit` varchar(30) NOT NULL,
-  `MeterType` int(255) NOT NULL,
-  `SolonideStatus` tinyint(2) DEFAULT NULL,
-  `CreditStatus` tinyint(2) DEFAULT NULL,
-  `TamperDetect` tinyint(2) DEFAULT NULL,
-  `TamperTimeStamp` varchar(50) DEFAULT NULL,
-  `DoorOpenTimeStamp` varchar(50) DEFAULT NULL,
-  `LowBattery` tinyint(2) DEFAULT NULL,
-  `Vacation` tinyint(4) DEFAULT NULL,
-  `MeterSerialNumber` varchar(100) DEFAULT NULL,
-  `CustomerUniqueID` varchar(100) DEFAULT NULL,
-  `Minutes` int(11) DEFAULT NULL,
-  `IoTTimeStamp` varchar(80) DEFAULT NULL,
-  `LogDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`ReadingID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
-/*Data for the table `energybalancelog` */
+/*Data for the table `displaybalancelog` */
 
 /*Table structure for table `feedback` */
 
@@ -345,39 +291,6 @@ CREATE TABLE `feedback` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*Data for the table `feedback` */
-
-/*Table structure for table `gasbalancelog` */
-
-DROP TABLE IF EXISTS `gasbalancelog`;
-
-CREATE TABLE `gasbalancelog` (
-  `ReadingID` bigint(255) NOT NULL AUTO_INCREMENT,
-  `MeterID` varchar(70) NOT NULL,
-  `Reading` decimal(10,2) NOT NULL,
-  `Balance` decimal(10,2) NOT NULL,
-  `CommunityID` int(11) DEFAULT NULL,
-  `BlockID` int(11) DEFAULT NULL,
-  `CustomerID` bigint(20) DEFAULT NULL,
-  `BatteryVoltage` decimal(10,2) NOT NULL,
-  `TariffAmount` decimal(18,2) NOT NULL,
-  `EmergencyCredit` varchar(30) NOT NULL,
-  `MeterType` int(255) NOT NULL,
-  `SolonideStatus` tinyint(2) DEFAULT NULL,
-  `CreditStatus` tinyint(2) DEFAULT NULL,
-  `TamperDetect` tinyint(2) DEFAULT NULL,
-  `TamperTimeStamp` varchar(50) DEFAULT NULL,
-  `DoorOpenTimeStamp` varchar(50) DEFAULT NULL,
-  `LowBattery` tinyint(2) DEFAULT NULL,
-  `Vacation` tinyint(4) DEFAULT NULL,
-  `MeterSerialNumber` varchar(100) DEFAULT NULL,
-  `CustomerUniqueID` varchar(100) DEFAULT NULL,
-  `Minutes` int(11) DEFAULT NULL,
-  `IoTTimeStamp` varchar(80) DEFAULT NULL,
-  `LogDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`ReadingID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
-/*Data for the table `gasbalancelog` */
 
 /*Table structure for table `gateways` */
 
@@ -414,24 +327,6 @@ CREATE TABLE `mailsettings` (
 
 /*Data for the table `mailsettings` */
 
-/*Table structure for table `meter` */
-
-DROP TABLE IF EXISTS `meter`;
-
-CREATE TABLE `meter` (
-  `MeterID` bigint(20) NOT NULL AUTO_INCREMENT,
-  `MeterSerialNumber` varchar(20) NOT NULL,
-  `MIUID` varchar(30) NOT NULL,
-  `MeterType` varchar(12) NOT NULL,
-  `MeterSize` int(11) DEFAULT NULL,
-  `PayType` varchar(10) NOT NULL,
-  `RegisteredDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `ModifiedDate` datetime NOT NULL,
-  PRIMARY KEY (`MeterID`,`MIUID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
-/*Data for the table `meter` */
-
 /*Table structure for table `payment` */
 
 DROP TABLE IF EXISTS `payment`;
@@ -459,19 +354,6 @@ CREATE TABLE `payment` (
 
 /*Data for the table `payment` */
 
-/*Table structure for table `supplierinfo` */
-
-DROP TABLE IF EXISTS `supplierinfo`;
-
-CREATE TABLE `supplierinfo` (
-  `supplierName` varchar(40) NOT NULL,
-  `supplierAddress` varchar(50) NOT NULL,
-  `supplierMobile` varchar(15) NOT NULL,
-  `supplierEmail` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
-/*Data for the table `supplierinfo` */
-
 /*Table structure for table `tariff` */
 
 DROP TABLE IF EXISTS `tariff`;
@@ -489,21 +371,6 @@ CREATE TABLE `tariff` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*Data for the table `tariff` */
-
-/*Table structure for table `testtable` */
-
-DROP TABLE IF EXISTS `testtable`;
-
-CREATE TABLE `testtable` (
-  `HolidayID` int(11) NOT NULL AUTO_INCREMENT,
-  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `dt` datetime NOT NULL,
-  `numb` int(11) DEFAULT NULL,
-  PRIMARY KEY (`HolidayID`),
-  UNIQUE KEY `numb` (`numb`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
-/*Data for the table `testtable` */
 
 /*Table structure for table `topup` */
 
@@ -638,39 +505,6 @@ CREATE TABLE `vacation` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*Data for the table `vacation` */
-
-/*Table structure for table `waterbalancelog` */
-
-DROP TABLE IF EXISTS `waterbalancelog`;
-
-CREATE TABLE `waterbalancelog` (
-  `ReadingID` bigint(255) NOT NULL AUTO_INCREMENT,
-  `MeterID` varchar(70) NOT NULL,
-  `Reading` decimal(10,2) NOT NULL,
-  `Balance` decimal(10,2) NOT NULL,
-  `CommunityID` int(11) DEFAULT NULL,
-  `BlockID` int(11) DEFAULT NULL,
-  `CustomerID` bigint(20) DEFAULT NULL,
-  `BatteryVoltage` decimal(10,2) NOT NULL,
-  `TariffAmount` decimal(18,2) NOT NULL,
-  `EmergencyCredit` varchar(30) NOT NULL,
-  `MeterType` int(255) NOT NULL,
-  `SolonideStatus` tinyint(2) DEFAULT NULL,
-  `CreditStatus` tinyint(2) DEFAULT NULL,
-  `TamperDetect` tinyint(2) DEFAULT NULL,
-  `TamperTimeStamp` varchar(50) DEFAULT NULL,
-  `DoorOpenTimeStamp` varchar(50) DEFAULT NULL,
-  `LowBattery` tinyint(2) DEFAULT NULL,
-  `Vacation` tinyint(4) DEFAULT NULL,
-  `MeterSerialNumber` varchar(100) DEFAULT NULL,
-  `CustomerUniqueID` varchar(100) DEFAULT NULL,
-  `Minutes` int(11) DEFAULT NULL,
-  `IoTTimeStamp` varchar(80) DEFAULT NULL,
-  `LogDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`ReadingID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
-/*Data for the table `waterbalancelog` */
 
 /*Table structure for table `customermeterdetailsview` */
 
