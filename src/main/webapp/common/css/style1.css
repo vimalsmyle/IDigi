@@ -1,0 +1,220 @@
+*{
+	padding:0px;
+	margin:0px;
+	border:0px;
+}
+body{
+	background-color: #fff;
+    font-family: "Roboto",sans-serif;
+    font-weight: 300;
+	padding-top: 4.5rem;
+
+}
+.login_form{
+	background-color: #d0d0ce;
+     min-height: 100vh;
+	 padding-top: 0rem;
+}
+.min-vh-100 {
+    min-height: 100vh!important;
+}
+.login-card{
+	border: 0;
+   -webkit-clip-path: polygon(0% 0%, 0% 100%, 73% 100%, 100% 61%, 100% 0%);
+    clip-path: polygon(0% 0%, 0% 100%, 73% 100%, 100% 61%, 100% 0%);
+    overflow: hidden;
+}
+.login-card-img {
+    border-radius: 0;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    -o-object-fit: cover;
+    object-fit: cover;
+}
+.login-card .card-body {
+    padding: 85px 60px 60px;
+	background: #b2d136;
+
+}
+.login-card-description {
+	font-size: 25px;
+    color: #3f3f3f;
+    font-weight: 700;
+    margin-bottom: 23px;
+}
+.login-card form {
+    max-width: 326px;
+}
+.brand-wrapper {
+    margin-bottom: 19px;
+}
+.login-card .login-btn {
+	padding: 14px 20px;
+   background: linear-gradient(to left, #3f3f3f 50%, #0b0b0c 50%);
+    background-size: 200% 100%;
+    background-position: right bottom;
+    transition: all 1s ease;
+	margin-bottom:20px;
+	color:#fff;
+	font-weight:bold;
+}
+.login-card .login-btn:hover {
+    background-position: left bottom;
+}
+.login-card .forgot-password-link {
+    font-size: 14px;
+    color: #212529;
+    margin-bottom: 12px;
+}
+.login-card-footer-text {
+    font-size: 16px;
+     color: #212529;
+	margin-bottom: 30px;
+}
+.login-card-footer-text a{
+	color:#fff;
+	font-weight:700;
+}
+
+.footer {
+	margin-left: 16.666667%;
+    background-color: #fff;
+    color: #212529;
+    text-align: center;
+    border-top: 1px solid #ddd;
+    height: 50px;
+    line-height: 50px;
+}
+.left_menu{
+	position: fixed;
+    top: 0px;
+    left: 0px;
+    background: red;
+    width: 240px;
+    height: 100Vh;
+}
+/*Left Menu*/
+#sidebar {
+    overflow: auto;
+    z-index: 3;
+    position: fixed;
+    height: calc(100vh - 64px);
+    box-sizing: border-box;
+}
+#sidebar .list-group {
+    min-width: 100%;
+    background-color: #3F3F3F;
+    min-height: 100vh;
+}
+#sidebar i {
+    margin-right: 6px;
+}
+#sidebar .list-group-item {
+    border-radius: 0;
+    background-color: #3F3F3F;
+    color: #fff;
+    border-left: 0;
+    border-right: 0;
+    border-color: #b2d136;
+    white-space: nowrap;
+}
+#sidebar .list-group-item:not(.collapsed) {
+    background-color: #525252;
+    color: #c4c4c4;
+}
+#sidebar .list-group .list-group-item[aria-expanded="false"]::after {
+  content: " \f0d7";
+  font-family: FontAwesome;
+  display: inline;
+  text-align: right;
+  padding-left: 5px;
+}
+#sidebar .list-group .list-group-item[aria-expanded="true"] {
+    background-color: #525252;
+    color: #c4c4c4; 
+}
+#sidebar .list-group .list-group-item[aria-expanded="true"]::after {
+  content: " \f0da";
+  font-family: FontAwesome;
+  display: inline;
+  text-align: right;
+  padding-left: 5px;
+}
+#sidebar .list-group .collapse .list-group-item,
+#sidebar .list-group .collapsing .list-group-item  {
+  padding-left: 20px;
+}
+#sidebar .list-group .collapse > .collapse .list-group-item,
+#sidebar .list-group .collapse > .collapsing .list-group-item {
+  padding-left: 30px;
+}
+#sidebar .list-group .collapse > .collapse > .collapse .list-group-item {
+  padding-left: 40px;
+}
+.sideHide{display:block !important;}
+.main{margin-left: 16.666667%;}
+.pb-6{padding-bottom: 5rem !important;}
+		
+
+
+
+@media (max-width:768px) {
+    #sidebar {
+        min-width: 35px;
+        max-width: 40px;
+        overflow-y: auto;
+        overflow-x: visible;
+        transition: all 0.25s ease;
+        transform: translateX(-45px);
+        position: fixed;
+    }
+    
+    #sidebar.show {
+        transform: translateX(0);
+    }
+
+    #sidebar::-webkit-scrollbar{ width: 0px; }
+    
+    #sidebar, #sidebar .list-group {
+        min-width: 1px;
+        overflow: visible;
+    }
+    /* overlay sub levels on small screens */
+    #sidebar .list-group .collapse.show, #sidebar .list-group .collapsing {
+        position: relative;
+        z-index: 1;
+        width: 190px;
+        top: 0;
+    }
+    #sidebar .list-group > .list-group-item {
+        text-align: center;
+        padding: .75rem .5rem;
+    }
+    /* hide caret icons of top level when collapsed */
+    #sidebar .list-group > .list-group-item[aria-expanded="true"]::after,
+    #sidebar .list-group > .list-group-item[aria-expanded="false"]::after {
+        display:none;
+    }
+}
+
+.collapse.show {
+  visibility: visible;
+}
+.collapsing {
+  visibility: visible;
+  height: 0;
+  -webkit-transition-property: height, visibility;
+  transition-property: height, visibility;
+  -webkit-transition-timing-function: ease-out;
+  transition-timing-function: ease-out;
+}
+.collapsing.width {
+  -webkit-transition-property: width, visibility;
+  transition-property: width, visibility;
+  width: 0;
+  height: 100%;
+  -webkit-transition-timing-function: ease-out;
+  transition-timing-function: ease-out;
+}
+
