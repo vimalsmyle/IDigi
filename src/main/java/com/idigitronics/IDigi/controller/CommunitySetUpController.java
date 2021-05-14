@@ -28,7 +28,7 @@ import com.idigitronics.IDigi.response.vo.ResponseVO;
 import com.idigitronics.IDigi.response.vo.TariffResponseVO;
 
 /**
- * @author K VimaL Kumar
+ * @author VmL
  * 
  */
 @Controller

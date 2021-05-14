@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.google.gson.Gson;
 import com.idigitronics.IDigi.dao.DashboardDAO;
 import com.idigitronics.IDigi.request.vo.DashboardRequestVO;
+import com.idigitronics.IDigi.request.vo.DataRequestVO;
 import com.idigitronics.IDigi.request.vo.FilterVO;
 import com.idigitronics.IDigi.request.vo.TataRequestVO;
 import com.idigitronics.IDigi.response.vo.DashboardResponseVO;
@@ -80,9 +81,9 @@ public class DashboardController {
 		return dasboardresponsevo;
 	}
 	
-	@RequestMapping(value = "/inputdata", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	@RequestMapping(value = "/server/api/{device_eui}/status", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	public @ResponseBody
-	ResponseVO postDashboardDetails(HttpEntity<String> httpEntity) {
+	ResponseVO postDashboardDetails(HttpEntity<String> httpEntity, @PathVariable("device_eui") String miuID) {
 
 		DashboardDAO dashboarddao = new DashboardDAO();
 		ResponseVO responsevo = new ResponseVO();
@@ -91,10 +92,10 @@ public class DashboardController {
 		
 		String json = httpEntity.getBody();
 		
-		TataRequestVO tataRequestVO = gson.fromJson(json, TataRequestVO.class);
+		DataRequestVO dataRequestVO = gson.fromJson(json, DataRequestVO.class);
 		
 		try {
-			responsevo = dashboarddao.postDashboarddetails(tataRequestVO);
+			responsevo = dashboarddao.postDashboarddetails(dataRequestVO, miuID);
 		} catch (Exception ex) {
 			logger.error("This is Error message", ex);
 			ex.printStackTrace();
@@ -103,7 +104,7 @@ public class DashboardController {
 	}
 	
 	
-	@RequestMapping(value = "/datafrommobile", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	/*@RequestMapping(value = "/datafrommobile", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	public @ResponseBody
 	ResponseVO datafrommobile(@RequestBody DashboardRequestVO dashboardRequestVO) {
 
@@ -120,6 +121,6 @@ public class DashboardController {
 			responsevo.setMessage("Data Insertion Failed");
 		}
 		return responsevo;
-	}
+	}*/
 	
 }

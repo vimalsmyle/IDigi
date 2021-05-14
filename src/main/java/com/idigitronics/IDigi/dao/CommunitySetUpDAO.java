@@ -782,7 +782,7 @@ public class CommunitySetUpDAO {
 				ResultSet rs = pstmt1.executeQuery();
 				if(rs.next()) {
 					
-					for(int i = 0; i <= customervo.getMeters().size(); i++) {
+					for(int i = 0; i < customervo.getMeters().size(); i++) {
 						
 						PreparedStatement pstmt4 = con.prepareStatement("INSERT INTO customermeterdetails (CustomerID, CustomerUniqueID, MIUID, MeterSerialNumber, MeterType, MeterSize, PayType, TariffID, GatewayID, Location, ModifiedDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
 						pstmt4.setInt(1, rs.getInt("CustomerID"));

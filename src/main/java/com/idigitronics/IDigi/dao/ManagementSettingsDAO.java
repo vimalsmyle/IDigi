@@ -368,7 +368,7 @@ public class ManagementSettingsDAO {
 
 	}
 
-	public ResponseVO addvacation(VacationRequestVO vacationRequestVO) throws SQLException {
+/*	public ResponseVO addvacation(VacationRequestVO vacationRequestVO) throws SQLException {
 		// TODO Auto-generated method stub
 
 		Random randomNumber = new Random();
@@ -665,7 +665,7 @@ public class ManagementSettingsDAO {
 		}
 
 		return responsevo;
-	}
+	}*/
 
 	public boolean checkvacationsettings(VacationRequestVO vacationRequestVO) throws SQLException {
 		// TODO Auto-generated method stub

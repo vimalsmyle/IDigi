@@ -104,38 +104,22 @@ public class ExtraMethodsDAO {
 		
 	}
 	
-	public ResponseEntity<TataResponseVO> tataget(RestCallVO restcallvo) throws IOException {
+	public int postdata(RestCallVO restcallvo) throws IOException {
 		
-	
-		RestTemplate restTemplate = new RestTemplate();
-		HttpHeaders headers = new HttpHeaders();
-		
-		final String tataAuthenication = "Basic "	+ Base64.getEncoder().encodeToString((ExtraConstants.TataUserName + ':' + ExtraConstants.TataPassword).getBytes());
-		
-		headers.set("Authorization", tataAuthenication);
-		
-		HttpEntity<String> entity = new HttpEntity<String>(headers);
-		
-		ResponseEntity<TataResponseVO> response = restTemplate.exchange(ExtraConstants.TataGatewayURL+restcallvo.getMeterID().toLowerCase()+restcallvo.getUrlExtension()+restcallvo.getTataTransactionID(), HttpMethod.GET, entity, TataResponseVO.class);
-		
-		return response;
-	}
-
-	public String tatapost(RestCallVO restcallvo) throws IOException {
-	
-	URL url = new URL(ExtraConstants.TataGatewayURL+restcallvo.getMeterID().toLowerCase()+"/payloads/dl"+ExtraConstants.QueryParams);
+	URL url = new URL(ExtraConstants.StaticIP+restcallvo.getMiuID()+"/"+restcallvo.getUrlExtension());
     HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
     
-    urlConnection.setRequestProperty("Content-Type", ExtraConstants.ContentType); 
+    urlConnection.setRequestProperty("Content-Type", "application/json"); 
     
-    final String tataAuthenication = "Basic "	+ Base64.getEncoder().encodeToString((ExtraConstants.TataUserName + ':' + ExtraConstants.TataPassword).getBytes());
+//    final String tataAuthenication = "Basic "	+ Base64.getEncoder().encodeToString((ExtraConstants.TataUserName + ':' + ExtraConstants.TataPassword).getBytes());
 
-	urlConnection.setRequestProperty("Authorization", tataAuthenication);
+//	urlConnection.setRequestProperty("Authorization", tataAuthenication);
 	
+	String data = gson.toJson(restcallvo, RestCallVO.class);
 		// Send post request
 		urlConnection.setDoOutput(true);
 		DataOutputStream wr = new DataOutputStream(urlConnection.getOutputStream());
-		wr.writeBytes(restcallvo.getDataFrame());
+		wr.writeBytes(data);
 		wr.flush();
 		wr.close();
 	
@@ -147,7 +131,8 @@ public class ExtraMethodsDAO {
 		responses.append(inputLine);
 	}
 	in.close();
-	return responses.toString();
+//	return responses.toString();
+	return urlConnection.getResponseCode();
 }
 	
 	public String razorpaypost(RazorPayOrderVO razorPayOrderVO, RazorpayRequestVO razorpayRequestVO) throws IOException {
@@ -199,7 +184,7 @@ public class ExtraMethodsDAO {
 	
 //	@Scheduled(cron="0 0 * ? * *") // scheduled for 1 hour
 //	@Scheduled(cron="0 0/2 * * * ?") // scheduled for every 2 min
-	public void topupstatusupdatecall() throws SQLException {
+/*	public void topupstatusupdatecall() throws SQLException {
 		
 		Connection con = null;
 		PreparedStatement pstmt = null;
@@ -217,8 +202,7 @@ public class ExtraMethodsDAO {
 				
 				RestCallVO restcallvo  = new RestCallVO();
 				restcallvo.setUrlExtension("/payloads/dl/");
-				restcallvo.setMeterID(rs.getString("MeterID").toLowerCase());
-				restcallvo.setTataTransactionID(rs.getString("TataReferenceNumber"));
+				restcallvo.setMiuID(rs.getString("MeterID").toLowerCase());
 				
 				ResponseEntity<TataResponseVO> response = tataget(restcallvo);
 				
@@ -291,7 +275,7 @@ public class ExtraMethodsDAO {
 			con.close();
 		}
 		
-	}
+	}*/
 	
 //	@Scheduled(cron="0 0 * ? * *")
 /*	@Scheduled(cron="0 0/4 * * * ?") 
@@ -333,83 +317,6 @@ public class ExtraMethodsDAO {
 		}
 		
 	}*/
-	
-//	@Scheduled(cron="0 0 * ? * *")
-//	@Scheduled(cron="0 0/4 * * * ?") 
-	public void commandstatusupdatecall() throws SQLException {
-		
-		Connection con = null;
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		
-		try {
-			con = getConnection();
-			pstmt = con.prepareStatement("SELECT MeterID, TataReferenceNumber FROM command WHERE Status BETWEEN 0 AND 1");
-			rs = pstmt.executeQuery();
-			while(rs.next()) {
-				
-				RestCallVO restcallvo  = new RestCallVO();
-				restcallvo.setUrlExtension("/payloads/dl/");
-				restcallvo.setMeterID(rs.getString("MeterID").toLowerCase());
-				restcallvo.setTataTransactionID(rs.getString("TataReferenceNumber"));
-				
-				ResponseEntity<TataResponseVO> response = tataget(restcallvo);
-				
-				PreparedStatement pstmt1 = con.prepareStatement("UPDATE command SET Status = ?, ModifiedDate= NOW() WHERE TataReferenceNumber = ?");
-
-				pstmt1.setInt(1, response.getBody().getTransmissionStatus());
-				pstmt1.setLong(2, response.getBody().getId());
-				pstmt1.executeUpdate();
-
-			} 
-		} catch (Exception e) {
-			e.printStackTrace();
-			
-		} finally {
-			pstmt.close();
-			rs.close();
-			con.close();
-		}
-		
-	}
-	
-//	@Scheduled(cron="0 0 * ? * *")
-//	@Scheduled(cron="0 0/6 * * * ?") 
-	public void vacationstatusupdatecall() throws SQLException {
-		
-		Connection con = null;
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		
-		try {
-			con = getConnection();
-			pstmt = con.prepareStatement("SELECT MeterID, TataReferenceNumber FROM vacation WHERE Status BETWEEN 0 AND 1 AND Source = 'web'");
-			rs = pstmt.executeQuery();
-			while(rs.next()) {
-				
-				RestCallVO restcallvo  = new RestCallVO();
-				restcallvo.setUrlExtension("/payloads/dl/");
-				restcallvo.setMeterID(rs.getString("MeterID").toLowerCase());
-				restcallvo.setTataTransactionID(rs.getString("TataReferenceNumber"));
-				
-				ResponseEntity<TataResponseVO> response = tataget(restcallvo);
-				
-				PreparedStatement pstmt1 = con.prepareStatement("UPDATE vacation SET Status = ?, ModifiedDate= NOW() WHERE TataReferenceNumber = ?");
-
-				pstmt1.setInt(1, response.getBody().getTransmissionStatus());
-				pstmt1.setLong(2, response.getBody().getId());
-				pstmt1.executeUpdate();
-
-			} 
-		} catch (Exception e) {
-			e.printStackTrace();
-			
-		} finally {
-			pstmt.close();
-			rs.close();
-			con.close();
-		}
-	}
 	
 //	@Scheduled(cron="0 0 7 ? * *")
 //	@Scheduled(cron="0 0 7 ? * TUE,FRI") 
