@@ -219,3 +219,15 @@ body{
   transition-timing-function: ease-out;
 }
 
+.select2-container .select2-selection--single {
+    height: 37.61px !important;
+	display: flex;
+    align-items: center;
+    
+}
+
+.select2-container {
+ width: 100% !important;
+ 
+ 
+}

@@ -47,61 +47,150 @@
 				<!--Right start-->
 				<div class="row">
 					<div class="col-md-12">
-						<table id="customerTable"
-							class="table table-striped table-bordered dt-responsive nowrap dataTable no-footer dtr-inline collapsed"
-							style="width: 100%">
-							<thead>
-								<tr>
-									<th>Community</th>
-									<th>Block</th>
-									<th>CRN Number</th>
-									<th>First Name</th>
-									<th>Last Name</th>
-									<th>House No</th>
-									<th>MSN</th>
-									<th>MIU ID</th>
-									<th>Mobile</th>
-									<th>Email</th>
-									<th>Created By UserName</th>
-									<th>Created By Role</th>
-									<th>Registration Date</th>
-									<th>Action</th>
-									<th>Action</th>
-								</tr>
-							</thead>
-							<tbody>
-							
-							</tbody>
-						</table>
+						<h5 class="modal-title" id="exampleModalLabel">Customer Add
+						Form</h5>
 						
+						<form id="customerDetails">
+						<div class="row">
 						
-						<table id="customerTable1"
-							class="table table-striped table-bordered dt-responsive nowrap dataTable no-footer dtr-inline collapsed"
-							style="width: 100%">
-							<thead>
-								<tr>
-									<th>Community</th>
-									<th>Block</th>
-									<th>CRN Number</th>
-									<th>First Name</th>
-									<th>Last Name</th>
-									<th>House No</th>
-									<th>MSN</th>
-									<th>MIU ID</th>
-									<th>Mobile</th>
-									<th>Email</th>
-									<th>Created By UserName</th>
-									<th>Created By Role</th>
-									<th>Registration Date</th>
-									<th>Action</th>
-									<th>Action</th>
-								</tr>
-							</thead>
-							<tbody>
+						<%if(!user_id.equalsIgnoreCase("2")) {%>
+							<div class="col-xs-4">
+								<div class="form-group has-feedback has-success bmd-form-group is-filled">
+									<label class="bmd-label-floating select-label">Community Name</label> 
+									<select
+										class="form-control" id="selectcommunityName" name="selectcommunityName" onchange="showBlockbyCommunity(this.value);">
+									</select>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group has-feedback has-success bmd-form-group is-filled">
+									<label class="bmd-label-floating select-label">Select Block</label> <select
+										class="form-control" id="selectBlockBasedonCommunity" name="selectBlockBasedonCommunity">
+									</select>
+								</div>
+							</div>
+							<%} else if(user_id.equalsIgnoreCase("2")){%>
+
+							<div class="col-md-4">
+								<div id = "formcommunityNameAdd" class="form-group">
+									<label class="bmd-label-floating">Community Name</label> <input
+										type="text" class="form-control" name="communityNameAdd"
+										id="communityNameAdd" disabled>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div id = "formblockNameAdd" class="form-group">
+									<label class="bmd-label-floating">Block Name</label> <input
+										type="text" class="form-control" name="blockNameAdd"
+										id="blockNameAdd"  disabled>
+								</div>
+							</div>
+
+<%} %>
+							<div class="col-md-4">
+								<div class="form-group">
+									<label class="bmd-label-floating">First Name</label> <input
+										type="text" class="form-control" name="firstNameAdd"
+										id="firstNameAdd">
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group">
+									<label class="bmd-label-floating">Last Name</label> <input
+										type="text" class="form-control" name="lastNameAdd"
+										id="lastNameAdd">
+								</div>
+							</div>
 							
-																
-							</tbody>
-						</table>
+							
+							
+							<div class="col-md-4">
+								<div class="form-group">
+									<label class="bmd-label-floating">House No.</label> <input
+										type="text" class="form-control" name="houseNoAdd"
+										id="houseNoAdd">
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group">
+									<label class="bmd-label-floating">Mobile No</label> <input
+										type="text" class="form-control" name="mobileNoAdd"
+										id="mobileNoAdd">
+								</div>
+							</div>
+							
+							
+							
+							
+							<div class="col-md-4">
+								<div class="form-group">
+									<label class="bmd-label-floating">Email</label> <input
+										type="email" class="form-control" name="emailAdd"
+										id="emailAdd">
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group">
+									<label class="bmd-label-floating">MSN</label> <input
+										type="text" class="form-control" name="meterSerialAdd"
+										id="meterSerialAdd">
+								</div>
+							</div>
+							
+							
+							
+							
+							<div class="col-md-4">
+								<div class="form-group">
+									<label class="bmd-label-floating">MIU ID</label> <input
+										type="text" class="form-control" name="amrAdd"
+										id="amrAdd">
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group">
+									<label class="bmd-label-floating select-label">Tariff Name</label>  <select
+										class="form-control" id="selectTariffName" name="selectTariffName">
+										<!-- <option style = "color: Red" value="" disabled selected>Select Tariff</option> --><!--  <option>Select Community</option> --> 
+									</select>
+								</div>
+							</div>
+							
+							
+							<div class="col-md-4">
+								<div class="form-group">
+									<label class="bmd-label-floating">CRN Number</label> <input
+										type="text" class="form-control" name="CRNAdd"
+										id="CRNAdd">
+								</div>
+							</div>
+							
+							<div class="col-md-4">
+							<button class="btn btn-primary submit-button"
+									 value="Add!" id="addMeter"
+									type="button">Add</button>
+							</div>
+							<div class="col-md-4">
+									<button class="btn btn-secondary submit-button"
+									 value="Save!" id="customerAdd"
+									type="button" disabled>Save</button>
+							</div>
+
+							<div class="col-md-3">
+								<button type="button" class="btn btn-secondary btn-raised mr-3 resetFilter" id="resetFilter">Reset</button>
+							</div>
+
+
+							<div class="col-md-4">
+								<button type="button" class="btn btn-danger btn-raised mr-4"
+									data-dismiss="modal">
+									Close
+									<div class="ripple-container"></div>
+								</button>
+							</div>
+						</div>
+					</form>
+						
 					</div>
 				</div>
 
