@@ -633,7 +633,7 @@ public class CommunitySetUpDAO {
 		try{
 		con = getConnection();
 		
-		pstmt = con.prepareStatement("select * from customermeterdetails where BlockID=?");
+		pstmt = con.prepareStatement("select * from customerdetails where BlockID = ?");
 		pstmt.setInt(1, blockID);
 		
 		rs = pstmt.executeQuery();
@@ -678,7 +678,7 @@ public class CommunitySetUpDAO {
 					"SELECT community.CommunityName, block.BlockName, customerdetails.CustomerID, customerdetails.HouseNumber, customerdetails.FirstName, customerdetails.LastName, \r\n" + 
 							"customerdetails.Email, customerdetails.MobileNumber, customermeterdetails.MIUID, customermeterdetails.MeterSerialNumber, \r\n" + 
 							"customerdetails.CustomerUniqueID, customerdetails.ModifiedDate, customerdetails.CreatedByID, customerdetails.CreatedByRoleID FROM customerdetails \r\n" + 
-							"LEFT JOIN community ON community.CommunityID = customerdetails.communityID LEFT JOIN block ON block.BlockID = customerdetails.BlockID <change>";
+							"LEFT JOIN community ON community.CommunityID = customerdetails.communityID LEFT JOIN block ON block.BlockID = customerdetails.BlockID LEFT JOIN customermeterdetails as customermeterdetails ON customermeterdetails.CustomerID = customerdetails.CustomerID <change>";
 							
 			pstmt = con.prepareStatement(query.replaceAll("<change>", ((roleid == 1 || roleid == 4) && (filterCid == -1)) ? "ORDER BY customerdetails.CustomerID DESC" : ((roleid == 1 || roleid == 4) && (filterCid != -1)) ? " WHERE customerdetails.CommunityID = "+filterCid+" ORDER BY customerdetails.CustomerID DESC" : (roleid == 2 || roleid == 5) ? "WHERE customerdetails.BlockID = "+id+ " ORDER BY customerdetails.CustomerID DESC" : (roleid == 3) ? "WHERE customerdetails.CustomerUniqueID = '"+id+"'":""));
 			
