@@ -41,7 +41,7 @@ table = $('#communityTable')
 	"scrollY" : 324,
 	"scrollX" : true,
 "ajax" : {
-"url":"/PAYGTL_LORA_BLE/community/"+sessionStorage.getItem("roleID")+"/"+sessionStorage.getItem("ID"),
+"url":"./community/"+sessionStorage.getItem("roleID")+"/"+sessionStorage.getItem("ID"),
 "type" : "GET",
 "data" : function(search) {
 },
@@ -67,7 +67,7 @@ return json.data;
 		return "<div id=tdfiled><a href=# id=CommunityEdit data-toggle=modal data-target=#myCommunityEdit onclick='getCommunityFormEdit("
 																	+ row.communityID
 																	+ ")'>"
-																	+ "<i class='material-icons' style='color:#17e9e9'>edit</i>"
+																	+ "<i class='fa fa-edit'></i>"
 																	+ "</a></div>"
 	}
 	}
@@ -327,7 +327,7 @@ $(document)
 														.ajax({
 															type : "POST",
 															contentType : "application/json",
-															url : "/PAYGTL_LORA_BLE/community/add",
+															url : "./community/add",
 															data : JSON
 																	.stringify(data1),
 															dataType : "JSON",
@@ -339,20 +339,25 @@ $(document)
 
 																	/*alert( "data"
 																			+ data.result);*/
-																	
-																	bootbox.alert(data.Message,
-																			function(
-																					result) {
-																					
-																		//alert();
-																		window.location = "communityDetails.jsp";
-																				});
+																	swal({
+																		  title: "Saved",
+																		  text: data.Message,
+																		  icon: "success"
+																		}).then(function() {
+																		    window.location = "communityDetails.jsp";
+																		});
 																	return false
 																	
 
 																} else if(data.result == "Failure"){
 																	
-																	bootbox.alert(data.Message);
+																	swal({
+																		  title: "error",
+																		  text: data.Message,
+																		  icon: "error"
+																		}).then(function() {
+																		    window.location = "communityDetails.jsp";
+																		});
 																	return false;
 																}
 															}
@@ -378,7 +383,7 @@ $(document)
 												.ajax({
 													type : "POST",
 													contentType : "application/json",
-													url : "/PAYGTL_LORA_BLE/community/edit/"+$("#communityIdhidden").val(),
+													url : "./community/edit/"+$("#communityIdhidden").val(),
 													data : JSON
 															.stringify(data1),
 													dataType : "JSON",
@@ -391,20 +396,27 @@ $(document)
 															/*alert( "data"
 																	+ data.result);*/
 															
-															bootbox.alert(data.Message,
-																	function(
-																			result) {
-																			
-																//alert();
-																window.location = "communityDetails.jsp";
-																		});
+															swal({
+																  title: "Saved",
+																  text: data.Message,
+																  icon: "success"
+																}).then(function() {
+																    window.location = "communityDetails.jsp";
+																});
 															return false
 															
 
 														} else if(data.result == "Failure"){
 															
-															bootbox.alert(data.Message);
-															return false;
+															swal({
+																  title: "error",
+																  text: data.Message,
+																  icon: "error"
+																}).then(function() {
+																    window.location = "communityDetails.jsp";
+																    return false;
+																});
+															
 														}
 													}
 												});
@@ -421,7 +433,7 @@ function getCommunityFormEdit(id) {
 
 //	 alert(id);
 
-	$.getJSON("/PAYGTL_LORA_BLE/community/"+sessionStorage.getItem("roleID")+"/"+sessionStorage.getItem("ID"), function(data) {
+	$.getJSON("./community/"+sessionStorage.getItem("roleID")+"/"+sessionStorage.getItem("ID"), function(data) {
 		$.each(data.data, function(i, item) {
 			if (id == item.communityID) {
 				$('#communityNameEdit').val(item.communityName).trigger("change");

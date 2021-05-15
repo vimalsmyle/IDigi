@@ -43,16 +43,16 @@
 				<!--Right start-->
 				<div class="row">
 					<div class="col-md-12">
-						<table id="blockTable"
+						<table id="gatewayTable"
 							class="table table-striped table-bordered dt-responsive nowrap dataTable no-footer dtr-inline collapsed"
 							style="width: 100%">
 							<thead>
 								<tr>
-									<th>Community</th>
-									<th>Block Name</th>
-									<th>Location</th>
-									<th>email</th>
-									<th>Mobile</th>
+									<th>Gateway Name</th>
+									<th>Gateway Serial Number</th>
+									<th>Gateway IP</th>
+									<th>Gateway Port</th>
+									<th>Date</th>
 									<th>Action</th>
 								</tr>
 							</thead>
@@ -75,65 +75,53 @@
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title" id="exampleModalLabel">Add Block</h5>
+					<h5 class="modal-title" id="exampleModalLabel">Add Gateway</h5>
 					<button type="button" class="close" data-dismiss="modal"
 						aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
 				</div>
 				<div class="modal-body">
-					<form id="blockDetails">
+					<form id="gatewayDetails">
 						<div class="row">
 							<div class="col-md-6">
 								 <div class="form-group">
-									<label for="text">Community:</label>
-									<select
-										class="form-control select2" id="selectcommunityName" name="selectcommunityName">
-									</select>
-								  </div>
-								</div>
-								
-								
-								
-							<div class="col-md-6">
-								<div class="form-group">
-									<label for="text">Block Name:</label>
+									<label for="text">Name:</label>
 									<input
-										type="text" class="form-control" name="blockNameAdd"
-										id="blockNameAdd">
+										class="form-control" id="gatewayNameAdd" name="gatewayNameAdd">
+									
+								  </div>
+								</div>
+								
+								
+								
+							<div class="col-md-6">
+								<div class="form-group">
+									<label for="text">Serial Number:</label>
+									<input
+										type="text" class="form-control" name="serialNumberAdd"
+										id="serialNumberAdd">
 								  </div>
 							</div>
 
 							<div class="col-md-6">
 								<div class="form-group">
-									<label class="bmd-label-floating">Location</label> <input
-										type="text" class="form-control" name="blockLocationAdd"
-										id="blockLocationAdd">
+									<label class="bmd-label-floating">IP</label> <input
+										type="text" class="form-control" name="ipAdd"
+										id="ipAdd">
 								</div>
 							</div>
 							<div class="col-md-6">
 								<div class="form-group">
-									<label class="bmd-label-floating">Mobile Number</label> <input
-										type="text" class="form-control" name="blockMobileAdd"
-										id="blockMobileAdd">
+									<label class="bmd-label-floating">Port</label> <input
+										type="text" class="form-control" name="portAdd"
+										id="portAdd">
 								</div>
 							</div>
-
-							<div class="col-md-6">
-								<div class="form-group">
-									<label class="bmd-label-floating">Email</label> <input
-										type="email" class="form-control" name="blockEmailAdd"
-										id="blockEmailAdd">
-								</div>
-							</div>
-							
-							<div class="col-md-6">
-							</div>
-							
 
 							<div class="col-md-4">
 								<button class="btn btn-secondary submit-button"
-									 value="Save!" id="blockAdd"
+									 value="Save!" id="gatewayAdd"
 									type="button" disabled>Save</button>
 							</div>
 
@@ -157,65 +145,54 @@
 		</div>
 	</div>
 
-	<div class="modal fade" id="myBlockEdit" role="dialog">
+	<div class="modal fade" id="myGatewayEdit" role="dialog">
 		<div class="modal-dialog">
 
 			<!-- Modal content-->
 			<div class="modal-content">
 				<div class="modal-header">
-					<h4 class="modal-title" align="center">Edit Block</h4>
+					<h4 class="modal-title" align="center">Edit Gateway</h4>
 					<button type="button" class="close" data-dismiss="modal">&times;</button>
 				</div>
 				<div class="modal-body">
 					<form id="blockEdit">
 						<div class="row">
 							<div class="col-md-6">
-								<div id="formcomunityName" class="form-group">
-									<label class="bmd-label-floating">Community</label> <input
-										type="text" class="form-control select2" name="communityNameEdit"
-										id="communityNameEdit" disabled>
+								<div id="formGatewayName" class="form-group">
+									<label class="bmd-label-floating">Name</label> <input
+										type="text" class="form-control" name="gatewayNameEdit"
+										id="gatewayNameEdit">
 								</div>
 							</div>
 							<div class="col-md-6">
-								<div id="formblockName" class="form-group">
+								<div id="formserialNumber" class="form-group">
 									<label class="bmd-label-floating">Block Name</label> <input
-										type="text" class="form-control" name="blockNameEdit"
-										id="blockNameEdit">
+										type="text" class="form-control" name="serialNumberEdit"
+										id="serialNumberEdit">
 								</div>
 							</div>
 
 							<div class="col-md-6">
-								<div id="formblocklocation" class="form-group">
-									<label class="bmd-label-floating">Location</label> <input
-										type="text" class="form-control" name="blockLocationEdit"
-										id="blockLocationEdit">
+								<div id="formip" class="form-group">
+									<label class="bmd-label-floating">IP</label> <input
+										type="text" class="form-control" name="ipEdit"
+										id="ipEdit">
 								</div>
 							</div>
 							<div class="col-md-6">
-								<div id="formblockMobile" class="form-group">
-									<label class="bmd-label-floating">Mobile Number</label> <input
-										type="text" class="form-control" name="blockMobileEdit"
-										id="blockMobileEdit">
+								<div id="formport" class="form-group">
+									<label class="bmd-label-floating">Port</label> <input
+										type="text" class="form-control" name="portEdit"
+										id="portEdit">
 								</div>
 							</div>
 
-							<div class="col-md-6">
-								<div id="formblockEmail" class="form-group">
-									<label class="bmd-label-floating">Email</label> <input
-										type="email" class="form-control" name="blockEmailEdit"
-										id="blockEmailEdit">
-										
-										 <input
-										type="hidden" id="blockIdhidden">
-										
-								</div>
-							</div>
-							<div class="col-md-6">
-							</div>
+								 <input
+										type="hidden" id="gatewayIdhidden">
 
 							<div class="col-md-4">
 									<button class="btn btn-secondary submit-button"
-									 value="Save!" id="blockEditsave"
+									 value="Save!" id="gatewayEditsave"
 									type="button" disabled>Update</button>
 							</div>
 
@@ -246,7 +223,7 @@
 
 
 	<script src="js/dropdown.js"></script>
-	<script src="js/block.js"></script>
+	<script src="js/gateway.js"></script>
 	<script src="js/common.js"></script>
 	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
 	<script

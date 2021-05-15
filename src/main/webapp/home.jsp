@@ -5,9 +5,9 @@
 <meta charset="utf-8">
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link rel="stylesheet" href="common/css/bootstrap.min.css">
+<!-- <link rel="stylesheet" href="common/css/bootstrap.min.css">
 <link rel="icon" type="image/png" sizes="16x16" href="common/images/1-hanbit.png">
-<!-- Material Design for Bootstrap CSS -->
+Material Design for Bootstrap CSS
 <link rel="stylesheet"
 	href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css"
 	integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX"
@@ -21,7 +21,7 @@
 	href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css">
 <link rel="stylesheet"
 	href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.bootstrap4.min.css">
-
+ -->
 <title>Home</title>
 </head>
 
@@ -41,13 +41,14 @@
 		class="container-fluid topspacing bottomspacing pl-0 pr-0 mr-0 ml-0">
 		<div class="row mr-0 ml-0">
 			<div class="col-md-2 pl-0 pr-0">
-				<jsp:include page="menu.jsp" />
+				<jsp:include page="slidebar.jsp" />
 			</div>
 			<!-- <div id="container" style="height: 400px; width: 500"></div> -->
 
 			<div class="right_data col-md-10 mt-4 mb-4">
 				<!--Right start-->
-				<div class="rightblock">
+				<input type="hidden" id="hidden" value="<%= user_id %>">
+				<%-- <div class="rightblock">
 					<%
 						if (user_id.equalsIgnoreCase("1") || user_id.equalsIgnoreCase("2") || user_id.equalsIgnoreCase("4")
 									|| user_id.equalsIgnoreCase("5")) {
@@ -685,7 +686,7 @@
 					<%
 						}
 					%>
-				</div>
+				</div> --%>
 			</div>
 		</div>
 	</div>
@@ -695,7 +696,7 @@
 	%>
 
 	<!-- Modal -->
-	<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<!-- 	<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
 
 	<script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js"
 		integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U"
@@ -711,7 +712,7 @@
 	<script
 		src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js"
 		integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9"
-		crossorigin="anonymous"></script>
+		crossorigin="anonymous"></script> -->
 	<script>
 		$(document).ready(function() {
 			$('body').bootstrapMaterialDesign();
@@ -722,8 +723,8 @@
 
 
 
-	<script
-		src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/5.4.0/bootbox.min.js"></script>
+	<!-- <script
+		src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/5.4.0/bootbox.min.js"></script> -->
 	<script>
 		$(document).ready(function() {
 			var flag = true;

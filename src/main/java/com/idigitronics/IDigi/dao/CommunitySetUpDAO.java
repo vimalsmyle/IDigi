@@ -196,7 +196,7 @@ public class CommunitySetUpDAO {
 		try {
 			con = getConnection();
 			gateway_list = new LinkedList<GatewayResponseVO>();
-			pstmt = con.prepareStatement("SELECT GatewayID, GatewayName, GatewaySerialNumber, GatewayIP, GatewayPort, ModifiedDate FROM gateway ORDER BY GatewayID DESC");
+			pstmt = con.prepareStatement("SELECT GatewayID, GatewayName, GatewaySerialNumber, GatewayIP, GatewayPort, ModifiedDate FROM gateways ORDER BY GatewayID DESC");
 			rs = pstmt.executeQuery();
 
 			while (rs.next()) {
@@ -227,7 +227,7 @@ public class CommunitySetUpDAO {
 		ResponseVO responsevo = new ResponseVO();
 		try {
 			con = getConnection();
-			pstmt = con.prepareStatement("INSERT INTO gateway (GatewayName, GatewaySerialNumber, GatewayIP, GatewayPort, RegisteredDate) VALUES(?, ?, ?, ?, NOW())");
+			pstmt = con.prepareStatement("INSERT INTO gateways (GatewayName, GatewaySerialNumber, GatewayIP, GatewayPort, RegisteredDate) VALUES(?, ?, ?, ?, NOW())");
 			pstmt.setString(1, gatewayvo.getGatewayName());
 			pstmt.setString(2, gatewayvo.getGatewaySerialNumber());
 			pstmt.setString(3, gatewayvo.getGatewayIP());
@@ -258,7 +258,7 @@ public class CommunitySetUpDAO {
 
 		try {
 			con = getConnection();
-			pstmt = con.prepareStatement("UPDATE gateway SET GatewayName = ?, GatewaySerialNumber = ?, GatewayIP = ?, GatewayPort = ?, ModifiedDate = NOW() WHERE GatewayID = ?");
+			pstmt = con.prepareStatement("UPDATE gateways SET GatewayName = ?, GatewaySerialNumber = ?, GatewayIP = ?, GatewayPort = ?, ModifiedDate = NOW() WHERE GatewayID = ?");
 			pstmt.setString(1, gatewayvo.getGatewayName());
 			pstmt.setString(2, gatewayvo.getGatewaySerialNumber());
 			pstmt.setString(3, gatewayvo.getGatewayIP());
@@ -290,7 +290,7 @@ public class CommunitySetUpDAO {
 
 		try {
 			con = getConnection();
-			pstmt = con.prepareStatement("DELETE FROM gateway WHERE GatewayID ="+gatewayID);
+			pstmt = con.prepareStatement("DELETE FROM gateways WHERE GatewayID ="+gatewayID);
 
 			if (pstmt.executeUpdate() > 0) {
 				responsevo.setResult("Success");
@@ -319,7 +319,7 @@ public class CommunitySetUpDAO {
 
 		try {
 			con = getConnection();
-			pstmt = con.prepareStatement("SELECT * FROM gateway WHERE GatewaySerialNumber = " + gatewaySerialNumber.trim());
+			pstmt = con.prepareStatement("SELECT * FROM gateways WHERE GatewaySerialNumber = " + gatewaySerialNumber.trim());
 			rs = pstmt.executeQuery();
 			if (rs.next()) {
 				result = true;
@@ -484,14 +484,14 @@ public class CommunitySetUpDAO {
 					smsRequestVO.setToMobileNumber(blockvo.getMobileNumber());
 					smsRequestVO.setMessage("Please Save the Credentials for further communications \n" + " UserID: " + mailrequestvo.getUserID() + "\n Password: " + mailrequestvo.getUserPassword()+ "\n Use URL for login : "+ ExtraConstants.ApplicationURL);
 					
-					extraMethodsDAO.sendsms(smsRequestVO);
+					//extraMethodsDAO.sendsms(smsRequestVO);
 					
 					if(extraMethodsDAO.sendmail(mailrequestvo).equalsIgnoreCase("Success")) {
-						extraMethodsDAO.sendsms(smsRequestVO);
+						//extraMethodsDAO.sendsms(smsRequestVO);
 						responsevo.setResult("Success");
 						responsevo.setMessage("Block Added Successfully and Block Admin Credentials have been sent to registered mail");
 					}else {
-						extraMethodsDAO.sendsms(smsRequestVO);
+						//extraMethodsDAO.sendsms(smsRequestVO);
 						responsevo.setResult("Success");
 						responsevo.setMessage("Block Registered Successfully but due to internal server Error Credentials have not been sent to your registered Mail ID. Please Contact Administrator");
 					}

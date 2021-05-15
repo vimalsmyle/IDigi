@@ -7,22 +7,15 @@
 	content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link rel="stylesheet" href="common/css/bootstrap.min.css">
 <link rel="icon" type="image/png" sizes="16x16" href="common/images/1-hanbit.png">
-<link href="common/css/materialize.fontawsome.css"
-	rel="stylesheet">
 <!-- Material Design for Bootstrap CSS -->
-<link rel="stylesheet"
-	href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css"
-	integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX"
-	crossorigin="anonymous">
-<link rel="stylesheet"
-	href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
-	integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU"
-	crossorigin="anonymous">
-<link rel="stylesheet" href="common/css/style.css">
+<!-- <link rel="stylesheet" href="common/css/style.css"> -->
 <link rel="stylesheet"
 	href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css">
 <link rel="stylesheet"
 	href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.bootstrap4.min.css">
+	
+	<link href="common/css/materialize.fontawsome.css"
+	rel="stylesheet">
 
 <title>Community Management</title>
 </head>
@@ -39,32 +32,19 @@
 			response.sendRedirect("login.jsp");
 		}else {
 	%>
-<div id="preloader">
+<div id="preloader" style="display:none;">
   <div id="status">&nbsp;</div>
 </div>
 
 	<jsp:include page="header.jsp" />
+	<jsp:include page="slidebar.jsp" />
+		<main class="col-md-10 float-left col px-5 pl-md-3 pt-2 pb-6 main">
 	<div
 		class="container-fluid topspacing bottomspacing pl-0 pr-0 mr-0 ml-0">
 		<div class="row mr-0 ml-0">
-			<div class="left_nav col-md-2 pl-0 pr-0">
-
-				<jsp:include page="menu.jsp" />
-			</div>
-			<div class="right_data col-md-10 mt-4 mb-4">
+			
+			<div class="right_data col-md-12 mt-4 mb-4">
 				<!--Right start-->
-				<!-- <div class="row mb-4">
-					<div class="col-md-6">
-						<h3>Community Management</h3>
-					</div>
-					<div class="col-md-6">
-						<button type="button" id="communitypopup"
-							class="btn btn-raised btn-primary float-right"
-							data-toggle="modal" data-target="#exampleModal">
-							<i class="fa fa-user-plus"></i>
-						</button>
-					</div>
-				</div> -->
 				<div class="row">
 					<div class="col-md-12">
 						<table id="communityTable"
@@ -77,10 +57,11 @@
 									<th>Mail Id</th>
 									<th>Mobile</th>
 									<th id="thfiled">Action</th>
+									
 								</tr>
 							</thead>
 							<tbody>
-							</tbody>
+        </tbody>
 						</table>
 					</div>
 				</div>
@@ -89,6 +70,7 @@
 			</div>
 		</div>
 	</div>
+	</main>
 	<jsp:include page="footer.jsp" />
 
 	<!-- Modal -->
@@ -108,33 +90,37 @@
 					<form id="communityDetails">
 						<div class="row">
 							<div class="col-md-6">
-								<div class="input-group form-group">
-									<label class="bmd-label-floating">Name</label> <input
-										type="text" class="form-control" name="communityNameAdd"
-										id="communityNameAdd">
+								 <div class="form-group">
+									<label for="text">Name:</label>
+									<input type="text" class="form-control"  name="communityNameAdd"
+										id="communityNameAdd" placeholder = "Community Name">
+								  </div>
 								</div>
-							</div>
+							
+							
 							<div class="col-md-6">
-								<div class="input-group form-group">
-									<label class="bmd-label-floating">Address</label> <input
-										type="text" class="form-control" name="communityAddressAdd"
-										id="communityAddressAdd">
+								 <div class="form-group">
+									<label for="text">Address:</label>
+									<input type="text" class="form-control" name="communityAddressAdd"
+										id="communityAddressAdd" placeholder = "Community Address">
+								  </div>
 								</div>
-							</div>
-
+							
 							<div class="col-md-6">
-								<div class="input-group form-group">
-									<label class="bmd-label-floating">Mobile</label> <input
-										type="text" class="form-control" name="communityMobileAdd"
-										id="communityMobileAdd">
-								</div>
+								<div class="form-group">
+									<label for="text">Mobile:</label>
+									<input type="text" class="form-control" name="communityMobileAdd"
+										id="communityMobileAdd" placeholder = "Community Mobile">
+								  </div>
 							</div>
+							
+							
 							<div class="col-md-6">
-								<div class="input-group form-group">
-									<label class="bmd-label-floating">Email</label> <input
-										type="email" class="form-control" name="communityEmailAdd"
-										id="communityEmailAdd">
-								</div>
+								<div class="form-group">
+									<label for="text">Email:</label>
+									<input type="text" class="form-control"  name="communityEmailAdd"
+										id="communityEmailAdd" placeholder = "Community Email">
+								  </div>
 							</div>
 
 							<div class="col-md-4">
@@ -176,34 +162,36 @@
 					<form id="communityEdit">
 						<div class="row">
 							<div class="col-md-6">
-								<div id="formcomunityName" class="input-group form-group">
-									<label class="bmd-label-floating">Name</label> <input
-										type="text" class="form-control" name="communityNameEdit"
-										id="communityNameEdit">
-								</div>
+								<div class="form-group">
+									<label for="text">Name:</label>
+									<input type="text" class="form-control"  name="communityNameEdit"
+										id="communityNameEdit" placeholder = "Community Name">
+								  </div>
 							</div>
 							<div class="col-md-6">
-								<div id="formcomunityAddress" class="input-group form-group">
-									<label class="bmd-label-floating">Address</label> <input
-										type="text" class="form-control" name="communityAddressEdit"
-										id="communityAddressEdit">
-								</div>
+								<div class="form-group">
+									<label for="text">Address:</label>
+									<input type="text" class="form-control"  name="communityAddressEdit"
+										id="communityAddressEdit" placeholder = "Community Address">
+								  </div>
 							</div>
 
 							<div class="col-md-6">
-								<div id="formcomunityMobile" class="input-group form-group">
-									<label class="bmd-label-floating">Mobile</label> <input
-										type="text" class="form-control" name="communityMobileEdit"
-										id="communityMobileEdit">
-								</div>
+								
+								<div class="form-group">
+									<label for="text">Mobile:</label>
+									<input type="text" class="form-control"  name="communityMobileEdit"
+										id="communityMobileEdit" placeholder = "Community Mobile">
+								  </div>
 							</div>
 							<div class="col-md-6">
-								<div id="formcomunityEmail" class="input-group form-group">
-									<label class="bmd-label-floating">Email</label> <input
-										type="email" class="form-control" name="communityEmailEdit"
-										id="communityEmailEdit">
+								
+								<div class="form-group">
+									<label for="text">Email:</label>
+									<input type="text" class="form-control"  name="communityEmailEdit"
+										id="communityEmailEdit" placeholder = "Community Email">
+								  </div>
 										<input type = "hidden" id="communityIdhidden">
-								</div>
 							</div>
 
 							<div class="col-md-4">
@@ -231,36 +219,13 @@
 		</div>
 	</div>
 	<%} %>
-
-
-	<!-- 	<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
-    integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
-    crossorigin="anonymous"></script> -->
-
-	<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
-
-	<!-- <script src="common/js/bootstrap.min.js"></script> -->
-
-
+   
 	<script type="text/javascript"
 		src="//cdn.jsdelivr.net/jquery.bootstrapvalidator/0.5.0/js/bootstrapValidator.min.js"></script>
 
 	<script src="js/community.js"></script>
 	<script src="js/common.js"></script>
 	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
-	<script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js"
-		integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U"
-		crossorigin="anonymous"></script>
-	<script
-		src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js"
-		integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9"
-		crossorigin="anonymous"></script>
-	<script>
-		$(document).ready(function() {
-			$('body').bootstrapMaterialDesign();
-		});
-	</script>
-	<!-- <script src="https://code.jquery.com/jquery-3.3.1.js"></script> -->
 	<script
 		src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
 		
@@ -311,6 +276,9 @@
 		
 		<script
 		src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/5.4.0/bootbox.min.js"></script>
+		
+		<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+		
 	<script>
 		$(document).ready(function() {
 			$('#communityTable').DataTable();

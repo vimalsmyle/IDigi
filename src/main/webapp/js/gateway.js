@@ -11,7 +11,7 @@ $(document).ready(function() {
 		var dom1 = "<'row'<'col-sm-4 headname'><'col-sm-2'><'col-sm-1'><'col-sm-2'f>>" +"<'row'<'col-sm-4'B><'col-sm-2'l><'col-sm-2'><'col-sm-2'><'col-sm-1'>>" + "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-6 text-black'i><'col-sm-6 text-black'p>>";
 		
 	}
-table = $('#blockTable')
+table = $('#gatewayTable')
 .DataTable(
 {
 "dom": dom1,
@@ -29,7 +29,7 @@ table = $('#blockTable')
 "scrollY" : 324,
 "scrollX" : true,
 "ajax" : {
-"url":"./block/"+sessionStorage.getItem("roleID")+"/"+sessionStorage.getItem("ID"),
+"url":"./gateway",
 "type" : "GET",
 "data" : function(search) {
 },
@@ -40,16 +40,16 @@ return json.data;
 },
 "columns" : [
                         {
-"data" : "communityName"
+"data" : "gatewayName"
 },{
-"data" : "blockName"
+"data" : "gatewaySerialNumber"
 },{
-"data" : "Location"
+"data" : "gatewayIP"
 },{
-"data" : "email"
+"data" : "gatewayPort"
 }
 ,{
-"data" : "mobile"
+"data" : "modifiedDate"
 }
 ,{
 	"mData" : "action",
@@ -62,13 +62,13 @@ return json.data;
 		</button>*/
 	//return "<a href='#communityEditModal' class='teal modal-trigger' data-toggle='modal' data-target='#communityEditModal' id='communityEditModal' onclick='getSocietyFormEdit("+row.communityID+")'><i class='material-icons' style='color:#17e9e9'>edit</i></a>"
 		
-		return "<div id = actionfield> <a href=# id=BlockEdit data-toggle=modal data-target=#myBlockEdit onclick='getBlockFormEdit("
-																	+ row.blockID
+		return "<div id = actionfield> <a href=# id=GatewayEdit data-toggle=modal data-target=#myBlockEdit onclick='getGatewayFormEdit("
+																	+ row.gatewayID
 																	+ ")'>"
 																	+ "<i class='material-icons' style='color:#17e9e9'>edit</i>"
 																	+ "</a>"
-																	+"<a onclick='getBlockFormDelete("
-																	+ row.blockID
+																	+"<a onclick='getGatewayFormDelete("
+																	+ row.gatewayID
 																	+ ")'>"
 																	+ "<i class='material-icons' style='color:#17e9e9;cursor:pointer;'>delete</i>"
 																	+ "</a></div>"
@@ -89,9 +89,9 @@ return json.data;
 	]
 });
 
-$("div.headname").html('<h3>Block Managemnent</h3>');
+$("div.headname").html('<h3>Gateway Managemnent</h3>');
 
-$("div.addevent").html('<button type="button" id="blockAddButton"'
+$("div.addevent").html('<button type="button" id="gatewayAddButton"'
 		+'class="btn btn-raised btn-primary float-right"'
 			+'data-toggle="modal" data-target="#exampleModal">'
 			+'<i class="fa fa-user-plus"></i>'
@@ -107,14 +107,7 @@ $("div.addevent").html('<button type="button" id="blockAddButton"'
 $(document)
 				.ready(
 						function() {
-							$('#blockDetails')
-							
-							/*.find('[name="selectcommunityName"]')
-            .selectpicker()
-            .change(function(e) {
-                $('#blockDetails').bootstrapValidator('revalidateField', 'selectcommunityName');
-            })
-            .end()*/
+							$('#gatewayDetails')
 							
 									.bootstrapValidator(
 											{
@@ -124,35 +117,28 @@ $(document)
 													validating : 'glyphicon glyphicon-refresh'
 												},
 												fields : {
-													/*selectcommunityName: {
-									                    validators: {
-									                        notEmpty: {
-									                            message: 'Please select your native language.'
-									                        }
-									                    }
-									                },*/
-													blockNameAdd : {
-														message : 'Block Name is not valid',
+													gatewayNameAdd : {
+														message : 'Gateway Name is not valid',
 														validators : {
 															notEmpty : {
-																message : 'Block Name is required and cannot be empty'
+																message : 'Gateway Name is required and cannot be empty'
 															},
 															stringLength : {
 																min : 4,
 																max : 30,
-																message : 'Block Name must be more than 4 and less than 30 characters long'
+																message : 'Gateway Name must be more than 4 and less than 30 characters long'
 															},
 															regexp : {
 																regexp : /^[a-zA-Z][a-zA-Z0-9.,$; ]+$/,
-																message : 'Block Name can only consist of Alphanumaric'
+																message : 'Gateway Name can only consist of Alphanumaric'
 															}
 														}
 													},
-													blockLocationAdd : {
-														message : 'Location is not valid',
+													serialNumberAdd : {
+														message : 'Serial Number is not valid',
 														validators : {
 															notEmpty : {
-																message : 'Location is required and cannot be empty'
+																message : 'Serial Number is required and cannot be empty'
 															},
 															stringLength : {
 																min : 4,
@@ -161,32 +147,28 @@ $(document)
 															},
 															regexp : {
 																regexp : /^[a-zA-Z ]+$/,
-																message : 'Location can only consist of alphabetical'
+																message : 'Serial Number can only consist of alphabetical'
 															}
 														}
 													},
-													blockMobileAdd : {
-														message : 'Mobile is not valid',
+													ipAdd : {
+														message : 'ip is not valid',
 														validators : {
 															notEmpty : {
-																message : 'Mobile is required and cannot be empty'
+																message : 'IP is required and cannot be empty'
 															},
 															regexp : {
 																regexp : /^[0-9]{10}$/,
-																message : 'Mobile can only consist of number'
+																message : 'IP can only consist of number'
 															}
 														}
 													},
-													blockEmailAdd : {
-														message : 'Email is not valid',
+													portAdd : {
+														message : 'Port is not valid',
 														validators : {
 															notEmpty : {
-																message : 'Email is required and cannot be empty'
-															}/*,
-															regexp : {
-																regexp : /^[a-zA-Z0-9]+$/,
-																message : 'Community Address can only consist of alphabetical and number'
-															}*/
+																message : 'Port is required and cannot be empty'
+															}
 														}
 													}
 												}
@@ -195,7 +177,7 @@ $(document)
 							
 							
 							
-							$('#blockEdit')
+							$('#gatewayEdit')
 							.bootstrapValidator(
 									{
 										feedbackIcons : {
@@ -204,62 +186,58 @@ $(document)
 											validating : 'glyphicon glyphicon-refresh'
 										},
 										fields : {
-											blockNameEdit : {
-												message : 'Block Name is not valid',
+											gatewayNameEdit : {
+												message : 'Gateway Name is not valid',
 												validators : {
 													notEmpty : {
-														message : 'Block Name is required and cannot be empty'
+														message : 'Gateway Name is required and cannot be empty'
 													},
 													stringLength : {
 														min : 4,
 														max : 30,
-														message : 'Block Name must be more than 4 and less than 30 characters long'
+														message : 'Gateway Name must be more than 4 and less than 30 characters long'
 													},
 													regexp : {
 														regexp : /^[a-zA-Z][a-zA-Z0-9.,$; ]+$/,
-														message : 'Block Name can only consist of Alphanumaric'
+														message : 'Gateway Name can only consist of Alphanumaric'
 													}
 												}
 											},
-											blockLocationEdit : {
-												message : 'Location is not valid',
+											serialNumberEdit : {
+												message : 'Serial Number is not valid',
 												validators : {
 													notEmpty : {
-														message : 'Location is required and cannot be empty'
+														message : 'Serial Number is required and cannot be empty'
 													},
 													stringLength : {
 														min : 6,
 														max : 30,
-														message : 'Location must be more than 6 and less than 30 characters long'
+														message : 'Serial Number must be more than 6 and less than 30 characters long'
 													},
 													regexp : {
-														regexp : /^[a-zA-Z ]+$/,
-														message : 'Location can only consist of alphabetical'
+														regexp : /^[a-zA-Z0-9]+$/,
+														message : 'Serial Number can only consist of Alphanumaric'
 													}
 												}
 											},
-											blockMobileEdit : {
-												message : 'Mobile is not valid',
+											ipEdit : {
+												message : 'IP is not valid',
 												validators : {
 													notEmpty : {
-														message : 'Mobile is required and cannot be empty'
+														message : 'IP is required and cannot be empty'
 													},
 													regexp : {
 														regexp : /^\d{10}$/,
-														message : 'Mobile can only consist of number'
+														message : 'IP can only consist of number'
 													}
 												}
 											},
-											blockEmailEdit : {
-												message : 'Email is not valid',
+											portEdit : {
+												message : 'Port is not valid',
 												validators : {
 													notEmpty : {
-														message : 'Email is required and cannot be empty'
-													}/*,
-													regexp : {
-														regexp : /^[a-zA-Z0-9]+$/,
-														message : 'Community Address can only consist of alphabetical and number'
-													}*/
+														message : 'Port is required and cannot be empty'
+													}
 												}
 											}
 										}
@@ -269,12 +247,12 @@ $(document)
 							
 							
 
-							$('#blockDetails')
+							$('#gatewayDetails')
 									.on(
 											'status.field.bv',
 											function(e, data) {
 												formIsValid = true;
-												$('.input-group.form-group', $(this))
+												$('.form-group', $(this))
 														.each(
 																function() {
 																//	alert(this+"@@=>"+formIsValid);
@@ -302,11 +280,11 @@ $(document)
 							
 							
 							
-							$('#blockEdit').on(
+							$('#gatewayEdit').on(
 									'status.field.bv',
 									function(e, data) {
 										formIsValid = true;
-										$('.input-group.form-group', $(this))
+										$('.form-group', $(this))
 												.each(
 														function() {
 														//	alert(this+"@@=>"+formIsValid);
@@ -321,11 +299,11 @@ $(document)
 														});
 
 										if (formIsValid) {
-											$('#blockEditsave', $(this))
+											$('#gatewayEditsave', $(this))
 													.attr('disabled',
 															false);
 										} else {
-											$('#blockEditsave', $(this))
+											$('#gatewayEditsave', $(this))
 													.attr('disabled',
 															true);
 										}
@@ -333,28 +311,18 @@ $(document)
 							
 							
 							
-												$(document).on('click', '#blockAdd', function () {
+												$(document).on('click', '#gatewayAdd', function () {
 													 
-												
-												//alert(""+$("#selectcommunityName").val());
-
-												if($("#selectcommunityName").val() == -1 || $("#selectcommunityName").val() == null || $("#selectcommunityName").val() == "Select Community"){
-													bootbox
-													.alert("Select Community Id");
-													return false;
-												}
-												
 												var data1 = {}
-												data1["communityID"] = $("#selectcommunityName").val();
-												data1["blockName"] = $("#blockNameAdd").val();
-												data1["location"] = $("#blockLocationAdd").val();
-												data1["mobileNumber"] = $("#blockMobileAdd").val();
-												data1["email"] = $("#blockEmailAdd").val();
+												data1["gatewayName"] = $("#gatewayNameAdd").val();
+												data1["gatewaySerialNumber"] = $("#serialNumberAdd").val();
+												data1["gatewayIP"] = $("#ipAdd").val();
+												data1["gatewayPort"] = $("#portAdd").val();
 												data1["createdByID"] = sessionStorage.getItem("createdByID");
 												data1["loggedInUserID"] = sessionStorage.getItem("userID");
 												data1["roleID"] = sessionStorage.getItem("roleID");
 
-												$('#blockAdd').prop('disabled', true).addClass('disabled').off( "click" );
+												$('#gatewayAdd').prop('disabled', true).addClass('disabled').off( "click" );
 												
 												/*console.log("===>"
 														+ JSON.stringify(data1));*/
@@ -362,7 +330,7 @@ $(document)
 														.ajax({
 															type : "POST",
 															contentType : "application/json",
-															url : "./block/add",
+															url : "./gateway/add",
 															data : JSON
 																	.stringify(data1),
 															dataType : "JSON",
@@ -377,7 +345,7 @@ $(document)
 																		  text: data.Message,
 																		  icon: "success"
 																		}).then(function() {
-																		    window.location = "blockDetails.jsp";
+																		    window.location = "gateway.jsp";
 																		    
 																		});
 																	return false;
@@ -391,7 +359,7 @@ $(document)
 																		  text: data.Message,
 																		  icon: "error"
 																		}).then(function() {
-																		    window.location = "blockDetails.jsp";
+																		    window.location = "gateway.jsp";
 																		    
 																		});
 																	return false;
@@ -404,7 +372,7 @@ $(document)
 																		  text: "Something went Wrong",
 																		  icon: "error"
 																		}).then(function() {
-																		    window.location = "blockDetails.jsp";
+																		    window.location = "gateway.jsp";
 																		    
 																		});
 																	
@@ -416,17 +384,17 @@ $(document)
 							
 							
 							
-							$("#blockEditsave")
+							$("#gatewayEditsave")
 							.click(
 									function() {
 
 										var data1 = {}
 										
 										var data1 = {}
-										data1["blockName"] = $("#blockNameEdit").val();
-										data1["location"] = $("#blockLocationEdit").val();
-										data1["mobileNumber"] = $("#blockMobileEdit").val();
-										data1["email"] = $("#blockEmailEdit").val();
+										data1["gatewayName"] = $("#gatewayNameEdit").val();
+										data1["gatewaySerialNumber"] = $("#serialNumberEdit").val();
+										data1["gatewayIP"] = $("#ipEdit").val();
+										data1["gatewayPort"] = $("#portEdit").val();
 										data1["createdByID"] = sessionStorage.getItem("createdByID");
 										data1["loggedInUserID"] = sessionStorage.getItem("userID");
 										data1["roleID"] = sessionStorage.getItem("roleID");
@@ -438,7 +406,7 @@ $(document)
 												.ajax({
 													type : "POST",
 													contentType : "application/json",
-													url : "./block/edit/"+$("#blockIdhidden").val(),
+													url : "./gateway/edit/"+$("#gatewayIdhidden").val(),
 													data : JSON
 															.stringify(data1),
 													dataType : "JSON",
@@ -458,7 +426,7 @@ $(document)
 																  text: data.Message,
 																  icon: "success"
 																}).then(function() {
-																    window.location = "blockDetails.jsp";
+																    window.location = "gateway.jsp";
 																    
 																});
 															return false;
@@ -471,7 +439,7 @@ $(document)
 																  text: data.Message,
 																  icon: "error"
 																}).then(function() {
-																    window.location = "blockDetails.jsp";
+																    window.location = "gateway.jsp";
 																    
 																});
 															return false;
@@ -488,34 +456,32 @@ $(document)
 
 
 
-function getBlockFormEdit(id) {
+function getGatewayFormEdit(id) {
 
  // alert(id);
 
-	$.getJSON("./block/"+sessionStorage.getItem("roleID")+"/"+sessionStorage.getItem("ID"), function(data) {
+	$.getJSON("./gateway/"+sessionStorage.getItem("roleID")+"/"+sessionStorage.getItem("ID"), function(data) {
 		$.each(data.data, function(i, item) {
-			if (id == item.blockID) {
+			if (id == item.gatewayID) {
 				
-				$('#communityNameEdit').val(item.communityName).trigger("change");
-				$("#formcomunityName").addClass("input-group form-group has-feedback has-success bmd-form-group is-filled")
-				$('#blockNameEdit').val(item.blockName).trigger("change");
-				$("#formblockName").addClass("input-group form-group has-feedback has-success bmd-form-group is-filled")
-				$('#blockLocationEdit').val(item.Location).trigger("change");
-				$("#formblocklocation").addClass("input-group form-group has-feedback has-success bmd-form-group is-filled")
-			    $('#blockMobileEdit').val(item.mobile).trigger("change");
-				$("#formblockMobile").addClass("input-group form-group has-feedback has-success bmd-form-group is-filled")
-				$('#blockEmailEdit').val(item.email).trigger("change");
-				$("#formblockEmail").addClass("input-group form-group has-feedback has-success bmd-form-group is-filled")
-				$("#blockIdhidden").val(item.blockID);
+				$('#gatewayNameEdit').val(item.communityName).trigger("change");
+				$("#formgatewayName").addClass("input-group form-group has-feedback has-success bmd-form-group is-filled")
+				$('#serialNumberEdit').val(item.blockName).trigger("change");
+				$("#formserialNumber").addClass("input-group form-group has-feedback has-success bmd-form-group is-filled")
+				$('#ipEdit').val(item.Location).trigger("change");
+				$("#formip").addClass("input-group form-group has-feedback has-success bmd-form-group is-filled")
+			    $('#portEdit').val(item.mobile).trigger("change");
+				$("#formport").addClass("input-group form-group has-feedback has-success bmd-form-group is-filled")
+				$("#gatewayIdhidden").val(item.gatewayID);
 			
-				$('#blockEditsave')
+				$('#gatewayEditsave')
 				.attr('disabled',
 						false);
 				
 			} else {
 			}
 		});
-		$('#myBlockEdit').modal('show');
+		$('#myGatewayEdit').modal('show');
 	});
 }
 
