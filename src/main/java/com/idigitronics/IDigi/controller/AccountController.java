@@ -24,6 +24,7 @@ import com.idigitronics.IDigi.dao.AccountDAO;
 import com.idigitronics.IDigi.exceptions.BusinessException;
 import com.idigitronics.IDigi.request.vo.CheckOutRequestVO;
 import com.idigitronics.IDigi.request.vo.ConfigurationRequestVO;
+import com.idigitronics.IDigi.request.vo.DataRequestVO;
 import com.idigitronics.IDigi.request.vo.TopUpRequestVO;
 import com.idigitronics.IDigi.response.vo.ConfigurationResponseVO;
 import com.idigitronics.IDigi.response.vo.ResponseVO;
@@ -66,6 +67,25 @@ public class AccountController {
 		ResponseVO responsevo = new ResponseVO();
 		try {
 			responsevo = accountdao.updatetopup(checkOutRequestVO);
+		} catch (Exception e) {
+			responsevo.setResult("Failure");
+			responsevo.setMessage(e.getMessage());
+		}
+
+		return responsevo;
+	}
+	
+	// change accordingly
+	
+	@RequestMapping(value = "/server/api/{device_eui}/topup/response", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	public @ResponseBody
+	ResponseVO updatetopup(@RequestBody DataRequestVO dataRequestVO, @PathVariable("device_eui") String miuID)
+			throws ClassNotFoundException, SQLException, BusinessException {
+
+		ResponseVO responsevo = new ResponseVO();
+		
+		try{
+			responsevo = accountdao.updatetopupstatus(dataRequestVO, miuID);
 		} catch (Exception e) {
 			responsevo.setResult("Failure");
 			responsevo.setMessage(e.getMessage());

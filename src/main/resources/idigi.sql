@@ -61,8 +61,12 @@ CREATE TABLE `balancelog` (
   `EmergencyCredit` decimal(10,2) NOT NULL,
   `Minutes` bigint(255) DEFAULT NULL,
   `Reading` decimal(10,2) NOT NULL,
-  `TamperDetect` tinyint(2) DEFAULT NULL,
-  `TimeStamp` varchar(80) DEFAULT NULL,
+  `DoorOpenTamper` tinyint(2) DEFAULT NULL,
+  `MagneticTamper` tinyint(2) DEFAULT NULL,
+  `Vacation` tinyint(2) DEFAULT NULL,
+  `RTCFault` tinyint(2) DEFAULT NULL,
+  `LowBattery` tinyint(2) DEFAULT NULL,
+  `LowBalance` tinyint(2) DEFAULT NULL,
   `LogDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`ReadingID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -114,7 +118,7 @@ CREATE TABLE `commanddetails` (
   `TransactionID` bigint(255) NOT NULL,
   `CommandType` int(50) NOT NULL,
   `Value` varchar(500) NOT NULL,
-  `Status` tinyint(5) NOT NULL DEFAULT '0',
+  `Status` tinyint(5) NOT NULL DEFAULT '10',
   `RegisteredDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `ModifiedDate` datetime DEFAULT NULL,
   PRIMARY KEY (`CommandDetailsID`)
@@ -257,14 +261,18 @@ CREATE TABLE `displaybalancelog` (
   `ValveConfiguration` tinyint(2) NOT NULL,
   `ValveStatus` tinyint(2) NOT NULL,
   `Balance` decimal(10,2) NOT NULL,
-  `TariffID` int(10) DEFAULT NULL,
+  `TariffID` int(255) DEFAULT NULL,
   `Tariff` decimal(10,2) NOT NULL,
   `EmergencyCredit` decimal(10,2) NOT NULL,
   `Minutes` bigint(255) DEFAULT NULL,
   `Reading` decimal(10,2) NOT NULL,
-  `TamperDetect` tinyint(2) NOT NULL,
-  `TimeStamp` varchar(80) NOT NULL,
-  `LogDate` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
+  `DoorOpenTamper` tinyint(2) DEFAULT NULL,
+  `MagneticTamper` tinyint(2) DEFAULT NULL,
+  `Vacation` tinyint(2) DEFAULT NULL,
+  `RTCFault` tinyint(2) DEFAULT NULL,
+  `LowBattery` tinyint(2) DEFAULT NULL,
+  `LowBalance` tinyint(2) DEFAULT NULL,
+  `LogDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`ReadingID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -377,15 +385,15 @@ CREATE TABLE `tariff` (
 DROP TABLE IF EXISTS `topup`;
 
 CREATE TABLE `topup` (
-  `TransactionID` bigint(20) NOT NULL AUTO_INCREMENT,
-  `TataReferenceNumber` bigint(20) unsigned NOT NULL DEFAULT '0',
+  `TransactionID` bigint(255) NOT NULL AUTO_INCREMENT,
   `CommunityID` int(11) NOT NULL,
   `BlockID` int(11) NOT NULL,
   `CustomerID` bigint(20) NOT NULL,
-  `MeterID` varchar(50) NOT NULL,
+  `MIUID` varchar(50) NOT NULL,
+  `CustomerMeterID` bigint(255) NOT NULL,
   `TariffID` int(11) NOT NULL,
   `Amount` decimal(10,0) NOT NULL,
-  `Status` tinyint(4) unsigned NOT NULL DEFAULT '0',
+  `Status` int(4) unsigned NOT NULL DEFAULT '10',
   `FixedCharges` int(10) unsigned DEFAULT '0',
   `ReconnectionCharges` int(10) unsigned DEFAULT '0',
   `Source` varchar(10) NOT NULL,

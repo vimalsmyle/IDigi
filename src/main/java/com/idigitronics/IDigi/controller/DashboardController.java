@@ -82,8 +82,8 @@ public class DashboardController {
 	}
 	
 	@RequestMapping(value = "/server/api/{device_eui}/status", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
-	public @ResponseBody
-	ResponseVO postDashboardDetails(HttpEntity<String> httpEntity, @PathVariable("device_eui") String miuID) {
+	public @ResponseBody ResponseVO postDashboardDetails(HttpEntity<String> httpEntity, @PathVariable("device_eui") String miuID) {
+//	public @ResponseBody ResponseVO postDashboardDetails(@RequestBody DataRequestVO dataRequestVO, @PathVariable("device_eui") String miuID) {
 
 		DashboardDAO dashboarddao = new DashboardDAO();
 		ResponseVO responsevo = new ResponseVO();

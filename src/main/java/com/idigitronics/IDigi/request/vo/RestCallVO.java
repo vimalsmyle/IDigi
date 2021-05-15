@@ -9,9 +9,11 @@ import java.util.List;
 public class RestCallVO {
 	
 	private String miuID;
-	private int transaction_id;
+	private long transaction_id;
 	private int parameter_id;
 	private String value;
+	private float emergency_credit;
+	private float credit;
 
 	private List<CommandGroupRequestVO> parameters;
 	private String urlExtension;
@@ -22,10 +24,10 @@ public class RestCallVO {
 	public void setMiuID(String miuID) {
 		this.miuID = miuID;
 	}
-	public int getTransaction_id() {
+	public long getTransaction_id() {
 		return transaction_id;
 	}
-	public void setTransaction_id(int transaction_id) {
+	public void setTransaction_id(long transaction_id) {
 		this.transaction_id = transaction_id;
 	}
 	public int getParameter_id() {
@@ -51,6 +53,18 @@ public class RestCallVO {
 	}
 	public void setParameters(List<CommandGroupRequestVO> parameters) {
 		this.parameters = parameters;
+	}
+	public float getEmergency_credit() {
+		return emergency_credit;
+	}
+	public void setEmergency_credit(float emergency_credit) {
+		this.emergency_credit = emergency_credit;
+	}
+	public float getCredit() {
+		return credit;
+	}
+	public void setCredit(float credit) {
+		this.credit = credit;
 	}
 	
 }

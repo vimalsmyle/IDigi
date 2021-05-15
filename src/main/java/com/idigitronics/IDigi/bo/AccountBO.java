@@ -28,7 +28,7 @@ public class AccountBO {
 			throw new BusinessException("RECHARGE AMOUNT MUST BE GREATER THAN EMERGENCY CREDIT AND UNIT RATE");
 		}
 		
-		if(accountdao.checktopup(topupvo.getMeterID())) {
+		if(accountdao.checktopup(topupvo.getCustomerMeterID())) {
 			throw new BusinessException("PREVIOUS TOPUP REQUEST IS PENDING");
 		}
 		

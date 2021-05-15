@@ -10,8 +10,10 @@ package com.idigitronics.IDigi.request.vo;
 public class TopUpRequestVO {
 	
 	private String source;
+	private int payType;
 	private String CustomerUniqueID;
-	private String meterID;
+	private int customerMeterID;
+	private String miuID;
 	private int amount;
 	private String cardNumber;
 	private String cardType;
@@ -73,11 +75,17 @@ public class TopUpRequestVO {
 	public void setTransactionIDForTata(long transactionIDForTata) {
 		this.transactionIDForTata = transactionIDForTata;
 	}
-	public String getMeterID() {
-		return meterID;
+	public int getCustomerMeterID() {
+		return customerMeterID;
 	}
-	public void setMeterID(String meterID) {
-		this.meterID = meterID;
+	public void setCustomerMeterID(int customerMeterID) {
+		this.customerMeterID = customerMeterID;
+	}
+	public String getMiuID() {
+		return miuID;
+	}
+	public void setMiuID(String miuID) {
+		this.miuID = miuID;
 	}
 	public String getSource() {
 		return source;
@@ -156,6 +164,12 @@ public class TopUpRequestVO {
 	}
 	public void setTariff(float tariff) {
 		this.tariff = tariff;
+	}
+	public int getPayType() {
+		return payType;
+	}
+	public void setPayType(int payType) {
+		this.payType = payType;
 	}
 	
 }
