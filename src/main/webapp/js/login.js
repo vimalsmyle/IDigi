@@ -86,14 +86,14 @@ $(document)
 												
 												data1["source"] = "web";
 												
-												alert("@@");
+											//	alert("@@");
 												
 												
 												$
 														.ajax({
 															type : "POST",
 															contentType : "application/json",
-															url : "/PAYGTL_LORA_BLE/login",
+															url : "./login",
 															data : JSON
 																	.stringify(data1),
 															dataType : "JSON",

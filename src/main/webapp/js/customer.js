@@ -35,7 +35,7 @@ table = $('#customerTable')
 	"scrollY" : 324,
 	"scrollX" : true,
 "ajax" : {
-"url":"/PAYGTL_LORA_BLE/customer/"+sessionStorage.getItem("roleID")+"/"+sessionStorage.getItem("ID")+"/-1",
+"url":"./customer/"+sessionStorage.getItem("roleID")+"/"+sessionStorage.getItem("ID")+"/-1",
 "type" : "GET",
 "data" : function(search) {
 },
@@ -450,7 +450,7 @@ $(document)
 												.ajax({
 													type : "GET",
 													contentType : "application/json",
-													url : "/PAYGTL_LORA_BLE/customer/"+url,
+													url : "./customer/"+url,
 													dataType : "JSON",
 
 													success : function(d) {
@@ -679,7 +679,7 @@ $(document)
 														.ajax({
 															type : "POST",
 															contentType : "application/json",
-															url : "/PAYGTL_LORA_BLE/customer/add",
+															url : "./customer/add",
 															data : JSON
 																	.stringify(data1),
 															dataType : "JSON",
@@ -746,7 +746,7 @@ $(document)
 												.ajax({
 													type : "POST",
 													contentType : "application/json",
-													url : "/PAYGTL_LORA_BLE/customer/edit/"+$("#CRNEdit").val(),
+													url : "./customer/edit/"+$("#CRNEdit").val(),
 													data : JSON
 															.stringify(data1),
 													dataType : "JSON",
@@ -794,7 +794,7 @@ $(document)
 function getCustomerFormEdit(id) {
 
 
-	$.getJSON("/PAYGTL_LORA_BLE/customer/"+sessionStorage.getItem("roleID")+"/"+sessionStorage.getItem("ID")+"/-1", function(data) {
+	$.getJSON("./customer/"+sessionStorage.getItem("roleID")+"/"+sessionStorage.getItem("ID")+"/-1", function(data) {
 		$.each(data.data, function(i, item) {
 			if (id == item.CRNNumber) {
 				$('#communityNameEdit').val(item.communityName).trigger("change");
@@ -873,7 +873,7 @@ function getCustomerFormDelete(CRNNumber){
 				$.ajax({
 					type : "POST",
 					contentType : "application/json",
-					url : "/PAYGTL_LORA_BLE/customer/delete/" + CRNNumber,
+					url : "./customer/delete/" + CRNNumber,
 					dataType : "JSON",
 					success : function(data) {
 						//alert("Success====" + data.result);

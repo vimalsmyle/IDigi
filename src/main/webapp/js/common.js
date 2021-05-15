@@ -3,8 +3,9 @@
  */
 
 $(document).ready(function () {
+	 $('.select2').select2();
     	var flag =true;
-      $('.button-left').click(function () {
+    /*  $('.button-left').click(function () {
         $('.left ').toggleClass('fliph');
 		flag = !flag;
 		if(flag == true){
@@ -16,15 +17,15 @@ $(document).ready(function () {
 			var oTable = $("#liveTable").dataTable();
 			
 		}
-      });
+      });*/
       
       
       
       var pageURL = $(location). attr("href");
 		//alert(pageURL.split('LORA_BLE/')[1]);
-		let  url = pageURL.split('LORA_BLE/')[1].split("?")[0] =="LoginAction.jsp"?"home.jsp":pageURL.split('LORA_BLE/')[1];
-		document.querySelector("a[href='"+url+"']").className = "active";
-		
+		let  url = pageURL.split('IDigi/')[1].split("?")[0] =="LoginAction.jsp"?"home.jsp":pageURL.split('LORA_BLE/')[1];
+	/*	document.querySelector("a[href='"+url+"']").className = "active";
+		*/
 		
 		$(".resetFilter")
 		.click(

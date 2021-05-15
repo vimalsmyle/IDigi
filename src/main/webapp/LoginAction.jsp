@@ -20,12 +20,15 @@
 	%>
 
 	<jsp:forward page="login.jsp" />
-
+	
+	
 	<%
 		} else {
 	%>
 
 	<jsp:forward page="home.jsp" />
+	
+	
 
 	<%
 		}

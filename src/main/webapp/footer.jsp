@@ -19,10 +19,9 @@
 		}
 	%>
 <!--Footer Start-->
-	<nav
-		class="navbar fixed-bottom navbar-light bg-light justify-content-center footer">
-		<a class="navbar-brand">&copy; Copyrights 2020 Hanbit<sup>&reg;</sup>. All Rights Reserved.</a>
-	</nav>
+	<footer class="navbar footer fixed-bottom footer-light footer-shadow content container-fluid">
+        <p>&copy; 2020 iDigitronics</p>
+    </footer>
 	<!--Footer end-->
 </body>
 </html>

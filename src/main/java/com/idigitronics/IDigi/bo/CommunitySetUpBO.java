@@ -31,9 +31,10 @@ public class CommunitySetUpBO {
 		
 		// TODO Auto-generated method stub
 		
-		if (communityvo.getCommunityName().isEmpty() || communityvo.getmobileNumber().isEmpty() || communityvo.getEmail().isEmpty() || communityvo.getAddress().isEmpty() || communityvo.getTariffID() == 0) {
+		if (communityvo.getCommunityName().isEmpty() || communityvo.getmobileNumber().isEmpty() || communityvo.getEmail().isEmpty() || communityvo.getAddress().isEmpty()) {
 			throw new BusinessException("ALL FIELDS ARE MANDATORY");
 		}
+		
 		communityvo.setCommunityID(0);
 		
 		if(communitysetupdao.checkIfCommunityNameExists(communityvo, "add")) {
@@ -58,7 +59,7 @@ public class CommunitySetUpBO {
 			throws SQLException, BusinessException {
 		// TODO Auto-generated method stub
 		
-		if (communityvo.getCommunityName().isEmpty() || communityvo.getmobileNumber().isEmpty() || communityvo.getEmail().isEmpty() || communityvo.getAddress().isEmpty()  || communityvo.getTariffID() == 0) {
+		if (communityvo.getCommunityName().isEmpty() || communityvo.getmobileNumber().isEmpty() || communityvo.getEmail().isEmpty() || communityvo.getAddress().isEmpty()) {
 			throw new BusinessException("ALL FIELDS ARE MANDATORY");
 		}
 		

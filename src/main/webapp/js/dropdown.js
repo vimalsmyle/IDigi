@@ -9,7 +9,7 @@ $(function() {
 	if(sessionStorage.getItem("roleID") == 2 || sessionStorage.getItem("roleID") == 5){
 		$("#selectHouseBasedonBlock").append("<option>" + "Select CRN" + "</option>");
 		
-		$.getJSON("/PAYGTL_LORA_BLE/customers/" + sessionStorage.getItem("roleID") + "/"
+		$.getJSON("./customers/" + sessionStorage.getItem("roleID") + "/"
 				+ sessionStorage.getItem("ID")+ "/" + sessionStorage.getItem("ID"), function(data) {
 			var Options = "";
 			$.each(data.dropDownHouses, function(key, value) {
@@ -22,7 +22,7 @@ $(function() {
 	}
 	
 	
-	$.getJSON("/PAYGTL_LORA_BLE/communities/" + sessionStorage.getItem("roleID") + "/"
+	$.getJSON("./communities/" + sessionStorage.getItem("roleID") + "/"
 			+ sessionStorage.getItem("ID"), function(data) {
 		var Options = "<option value='-1'>Select  Community</option>";
 		
@@ -36,7 +36,7 @@ $(function() {
 	});
 	
 	
-	$.getJSON("/PAYGTL_LORA_BLE/tariffs", function(data) {
+	$.getJSON("./tariffs", function(data) {
 		var Options = "<option value='-1'>Select  Tariff</option>";
 		$.each(data.dropDownTariffs, function(key, value) {
 			Options = Options + "<option value='" + key + "'>" + value
@@ -67,7 +67,7 @@ function showBlockbyCommunity(communityId){
 
 	$("#AMR_topup").val("");
 	
-	$.getJSON("/PAYGTL_LORA_BLE/blocks/"+ sessionStorage.getItem("roleID") + "/"
+	$.getJSON("./blocks/"+ sessionStorage.getItem("roleID") + "/"
 			+ sessionStorage.getItem("ID")+ "/" + communityId, function(data) {
 		var Options = "";
 		$.each(data.dropDownBlocks, function(key, value) {
@@ -88,7 +88,7 @@ function showCustomerbyBlock(blockId){
 
 	$("#selectHouseBasedonBlock").append("<option>" + "Select CRN" + "</option>");
 	
-	$.getJSON("/PAYGTL_LORA_BLE/customers/" + sessionStorage.getItem("roleID") + "/"
+	$.getJSON("./customers/" + sessionStorage.getItem("roleID") + "/"
 			+ sessionStorage.getItem("ID")+ "/" + blockId, function(data) {
 		var Options = "";
 		$.each(data.dropDownHouses, function(key, value) {
@@ -102,7 +102,7 @@ function showCustomerbyBlock(blockId){
 
 function showTopupDetails(customerId){
 	
-	$.getJSON("/PAYGTL_LORA_BLE/topupdetails/" + customerId, function(data) {
+	$.getJSON("./topupdetails/" + customerId, function(data) {
 		//var Options = "";
 		$("#AMR_topup").val(data.topupdetails.meterID).trigger("change");
 		$("#formAMR_topup").addClass("input-group form-group has-feedback has-success bmd-form-group is-filled")
