@@ -143,6 +143,39 @@ public class AccountController {
 		return responsevo;
 	}
 
+	
+	@RequestMapping(value = "/server/api/{device_eui}/set/response", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	public @ResponseBody
+	ResponseVO updateconfiguration(@RequestBody ConfigurationRequestVO configurationvo, @PathVariable("device_eui") String miuID)
+			throws ClassNotFoundException, SQLException, BusinessException {
+
+		ResponseVO responsevo = new ResponseVO();
+		try{
+			responsevo = accountdao.updateconfiguration(configurationvo, miuID);
+		} catch (Exception e) {
+			responsevo.setResult("Failure");
+			responsevo.setMessage(e.getMessage());
+		}
+
+		return responsevo;
+	}
+	
+	@RequestMapping(value = "/server/api/{device_eui}/group/set/response", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	public @ResponseBody
+	ResponseVO updategroupconfiguration(@RequestBody ConfigurationRequestVO configurationvo, @PathVariable("device_eui") String miuID)
+			throws ClassNotFoundException, SQLException, BusinessException {
+
+		ResponseVO responsevo = new ResponseVO();
+		try{
+			responsevo = accountdao.updateconfiguration(configurationvo, miuID);
+		} catch (Exception e) {
+			responsevo.setResult("Failure");
+			responsevo.setMessage(e.getMessage());
+		}
+
+		return responsevo;
+	}
+	
 	@RequestMapping(value = "/configuration/delete/{transactionID}", method = RequestMethod.POST, produces = "application/json")
 	public @ResponseBody
 	ResponseVO editcommunity(@PathVariable("transactionID") int transactionID)
@@ -152,5 +185,6 @@ public class AccountController {
 
 		return responsevo;
 	}
+	
 
 }
