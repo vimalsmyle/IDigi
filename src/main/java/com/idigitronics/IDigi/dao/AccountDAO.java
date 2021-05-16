@@ -27,9 +27,11 @@ import com.idigitronics.IDigi.request.vo.RazorPayOrderVO;
 import com.idigitronics.IDigi.request.vo.RazorpayRequestVO;
 import com.idigitronics.IDigi.request.vo.RestCallVO;
 import com.idigitronics.IDigi.request.vo.TopUpRequestVO;
+import com.idigitronics.IDigi.response.vo.BillingResponseVO;
 import com.idigitronics.IDigi.response.vo.CheckoutDetails;
 import com.idigitronics.IDigi.response.vo.CommandGroupResponseVO;
 import com.idigitronics.IDigi.response.vo.ConfigurationResponseVO;
+import com.idigitronics.IDigi.response.vo.ConfigurationStatusResponseVO;
 import com.idigitronics.IDigi.response.vo.Notes;
 import com.idigitronics.IDigi.response.vo.Prefill;
 import com.idigitronics.IDigi.response.vo.RazorPayResponseVO;
@@ -90,7 +92,7 @@ public class AccountDAO {
 		try {
 			con = getConnection();
 			
-					PreparedStatement pstmt1 = con.prepareStatement("SELECT tr.EmergencyCredit, tr.AlarmCredit, tr.FixedCharges, tr.TariffID, tr.Tariff, CONCAT(cd.FirstName, ' ', cd.LastName) AS CustomerName, cd.Email, cd.MobileNumber, cd.CustomerUniqueID, cd.HouseNumber, cmd.CustomerMeterID FROM customerdetails AS cd LEFT JOIN customermeterdetails AS cmd on cmd.customerID = cd.CustomerID LEFT JOIN tariff AS tr ON tr.TariffID = cmd.TariffID WHERE cd.CustomerUniqueID = '"
+					PreparedStatement pstmt1 = con.prepareStatement("SELECT tr.EmergencyCredit, tr.AlarmCredit, tr.FixedCharges, tr.TariffID, tr.Tariff, CONCAT(cd.FirstName, ' ', cd.LastName) AS CustomerName, cd.Email, cd.MobileNumber, cd.CustomerUniqueID, cd.HouseNumber, cmd.CustomerMeterID, g.GatewayIP, g.GatewayPort FROM customerdetails AS cd LEFT JOIN customermeterdetails AS cmd on cmd.customerID = cd.CustomerID LEFT JOIN tariff AS tr ON tr.TariffID = cmd.TariffID LEFT JOIN gateways AS g ON g.GatewayID = cmd.GatewayID WHERE cd.CustomerUniqueID = '"
 									+ topUpRequestVO.getCustomerUniqueID() + "' AND CustomerMeterID = " + topUpRequestVO.getCustomerMeterID());
 					ResultSet rs1 = pstmt1.executeQuery();
 					if (rs1.next()) {
@@ -98,6 +100,8 @@ public class AccountDAO {
 						topUpRequestVO.setAlarmCredit(rs1.getFloat("AlarmCredit"));
 						topUpRequestVO.setEmergencyCredit(rs1.getFloat("EmergencyCredit"));
 						topUpRequestVO.setTariff(rs1.getFloat("Tariff"));
+						topUpRequestVO.setGatewayIP(rs1.getString("GatewayIP"));
+						topUpRequestVO.setGatewayPort(rs1.getInt("GatewayPort"));
 
 						LocalDateTime dateTime = LocalDateTime.now();
 
@@ -362,6 +366,8 @@ public class AccountDAO {
 			restcallvo.setMiuID(topUpRequestVO.getMiuID().toLowerCase());
 			restcallvo.setEmergency_credit(topUpRequestVO.getEmergencyCredit());
 			restcallvo.setCredit(topUpRequestVO.getAmount()	- (topUpRequestVO.getFixedCharges() + topUpRequestVO.getReconnectionCharges()));
+			restcallvo.setGatewayIP(topUpRequestVO.getGatewayIP());
+			restcallvo.setGatewayPort(topUpRequestVO.getGatewayPort());
 			restcallvo.setUrlExtension("/topup");
 			
 			// creating transaction id in topup
@@ -374,8 +380,6 @@ public class AccountDAO {
 				restcallresponse = extramethodsdao.postdata(restcallvo);
 			}
 			
-				// sending payload to gateway
-				
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -857,6 +861,18 @@ public class AccountDAO {
 		return responsevo;
 
 	}
+	
+	/* Billing Details*/
+	
+	public List<BillingResponseVO> getbillingdetails(int roleid, String id, int filterCid, int month) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	public ResponseVO printbill(int billingID) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 	/* Configuration */
 
@@ -905,7 +921,7 @@ public class AccountDAO {
 				while(rs1.next()) {
 					commands = new CommandGroupResponseVO();
 					
-					commands.setCommandType(rs1.getInt("CommandType") == 1 ? "Meter Reset" : rs1.getInt("CommandType") == 3 ? "Tariff" : rs1.getInt("CommandType") == 4 ? "EmergencyCredit" : rs1.getInt("CommandType") == 5 ? "Valve" : rs1.getInt("CommandType") == 6 ? "RTC" : rs1.getInt("CommandType") == 7 ? "Schedule Disconnect" : rs1.getInt("CommandType") == 8 ? "Sync Interval" : rs1.getInt("CommandType") == 9 ? "Meter Reading" : rs1.getInt("CommandType") == 10 ? "PrePaidPostPaid Mode" : rs1.getInt("CommandType") == 11 ? "Meter Resource type" : rs1.getInt("CommandType") == 12 ? "Clear Tamper" : rs1.getInt("CommandType") == 13 ? "Sync Time" : rs1.getInt("CommandType") == 14 ? "Cancel Transaction" : "");
+					commands.setCommandType(rs1.getInt("CommandType") == 1 ? "Meter Reset" : rs1.getInt("CommandType") == 3 ? "Tariff" : rs1.getInt("CommandType") == 5 ? "Valve" : rs1.getInt("CommandType") == 6 ? "RTC" : rs1.getInt("CommandType") == 8 ? "Sync Interval" : rs1.getInt("CommandType") == 9 ? "Meter Reading" : rs1.getInt("CommandType") == 10 ? "PrePaidPostPaid Mode" : rs1.getInt("CommandType") == 12 ? "Clear Tamper" : rs1.getInt("CommandType") == 13 ? "Sync Time" : "");
 					commands.setStatus(rs1.getInt("Status") == 0 ? "Passed" : rs1.getInt("Status") == 1 ? "Already Executed" : rs1.getInt("Status") == 2 ? "Invalid Syntax" : rs1.getInt("Status") == 3 ? "Invalid Parameters" : rs1.getInt("Status") == 4 ? "Value Cannot be Applied" : rs1.getInt("Status") == 5 ? "Value Not in Range" : rs1.getInt("Status") == 6 ? "Command Not Found" : rs1.getInt("Status") == 7 ? "Device Not Found" : rs1.getInt("Status") == 8 ? "Transaction Discarded" : rs1.getInt("Status") == 9 ? "Transaction not Found" : rs1.getInt("Status") == 10 ? "Pending" : "Unknown Failure");
 					commands.setValue(rs1.getString("Value"));
 					commands.setModifiedDate(rs1.getString("ModifiedDate"));
@@ -956,6 +972,12 @@ public class AccountDAO {
 			
 			if(rs.next()) {
 				
+				PreparedStatement pstmt = con.prepareStatement("SELECT g.GatewayIP, g.GatewayPort FROM gateways as g LEFT JOIN customermeterdetails as cmd ON g.GatewayID = cmd.GatewayID WHERE CustomerMeterID = " + configurationvo.getCustomerMeterID());
+				ResultSet rs2 = pstmt.executeQuery();
+				
+				if(rs2.next()) {
+				restcallvo.setGatewayIP(rs2.getString("GatewayIP"));
+				restcallvo.setGatewayPort(rs2.getInt("GatewayPort"));
 				restcallvo.setMiuID(configurationvo.getMiuID());
 				restcallvo.setTransaction_id(rs.getInt("TransactionID"));
 				
@@ -1005,7 +1027,7 @@ public class AccountDAO {
 					}
 					
 				}
-				
+			}
 				}
 			}
 			
@@ -1038,7 +1060,7 @@ public class AccountDAO {
 
 	}
 	
-	public ResponseVO updateconfiguration(ConfigurationRequestVO configurationvo, String miuID) throws SQLException {
+	public ResponseVO updateconfiguration(ConfigurationStatusResponseVO configurationstatusvo, String miuID) throws SQLException {
 		// TODO Auto-generated method stub
 
 		Connection con = null;
@@ -1048,7 +1070,7 @@ public class AccountDAO {
 		try {
 			con = getConnection();
 			
-			ps = con.prepareStatement("UPDATE commanddetails SET ModifiedDate = NOW(), Status = "+ configurationvo.getCmd_status() +" WHERE TransactionID = "+ configurationvo.getTransactionID());
+			ps = con.prepareStatement("UPDATE commanddetails SET ModifiedDate = NOW(), Status = "+ configurationstatusvo.getCmd_status() +" WHERE TransactionID = "+ configurationstatusvo.getTransaction_id());
 			
 			if(ps.executeUpdate() > 0) {
 				

@@ -4,7 +4,7 @@
 package com.idigitronics.IDigi.response.vo;
 
 /**
- * @author VmL
+ * @author K Vimal Kumar
  *
  */
 public class CommandGroupResponseVO {

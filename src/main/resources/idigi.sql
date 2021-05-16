@@ -73,6 +73,66 @@ CREATE TABLE `balancelog` (
 
 /*Data for the table `balancelog` */
 
+/*Table structure for table `billingdetails` */
+
+DROP TABLE IF EXISTS `billingdetails`;
+
+CREATE TABLE `billingdetails` (
+  `BillingID` bigint(255) NOT NULL AUTO_INCREMENT,
+  `CommunityID` int(10) NOT NULL,
+  `BlockID` int(10) NOT NULL,
+  `CustomerID` bigint(255) NOT NULL,
+  `CustomerMeterID` bigint(255) NOT NULL,
+  `MIUID` varchar(100) NOT NULL,
+  `PreviousReading` decimal(10,2) NOT NULL,
+  `PresentReading` decimal(10,2) NOT NULL,
+  `Consumption` int(100) NOT NULL,
+  `TariffID` int(10) NOT NULL,
+  `Tariff` float NOT NULL,
+  `BillAmount` int(100) NOT NULL,
+  `FixedCharges` int(11) DEFAULT NULL,
+  `ReconnectionCharges` int(11) DEFAULT NULL,
+  `Status` tinyint(10) NOT NULL DEFAULT '0',
+  `BillingDate` datetime DEFAULT NULL,
+  `BillMonth` int(10) DEFAULT NULL,
+  `BillYear` int(10) DEFAULT NULL,
+  `LogDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`BillingID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+/*Data for the table `billingdetails` */
+
+/*Table structure for table `billingpaymentdetails` */
+
+DROP TABLE IF EXISTS `billingpaymentdetails`;
+
+CREATE TABLE `billingpaymentdetails` (
+  `TransactionID` bigint(255) NOT NULL AUTO_INCREMENT,
+  `BillingID` bigint(255) DEFAULT NULL,
+  `CustomerID` bigint(20) NOT NULL,
+  `MIUID` varchar(50) NOT NULL,
+  `CustomerMeterID` bigint(255) NOT NULL,
+  `Amount` decimal(10,0) NOT NULL,
+  `Source` varchar(10) NOT NULL,
+  `ModeOfPayment` varchar(50) NOT NULL,
+  `PaymentStatus` tinyint(4) unsigned NOT NULL DEFAULT '0',
+  `RazorPayOrderID` varchar(50) DEFAULT NULL,
+  `RazorPayPaymentID` varchar(50) DEFAULT NULL,
+  `RazorPaySignature` varchar(5000) DEFAULT NULL,
+  `ErrorResponse` varchar(10000) DEFAULT NULL,
+  `RazorPayRefundID` varchar(50) DEFAULT NULL,
+  `RazorPayRefundStatus` varchar(50) DEFAULT NULL,
+  `RazorPayRefundEntity` varchar(10000) DEFAULT NULL,
+  `CreatedByID` int(11) NOT NULL,
+  `CreatedByRoleID` int(11) NOT NULL,
+  `CustomerUniqueID` varchar(100) NOT NULL,
+  `TransactionDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `AcknowledgeDate` datetime NOT NULL,
+  PRIMARY KEY (`TransactionID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+/*Data for the table `billingpaymentdetails` */
+
 /*Table structure for table `block` */
 
 DROP TABLE IF EXISTS `block`;
@@ -89,9 +149,12 @@ CREATE TABLE `block` (
   `CreatedDate` datetime NOT NULL,
   `ModifiedDate` datetime NOT NULL,
   PRIMARY KEY (`BlockID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 /*Data for the table `block` */
+
+insert  into `block`(`BlockID`,`BlockName`,`Location`,`MobileNumber`,`Email`,`CommunityID`,`CreatedByID`,`CreatedByRoleID`,`CreatedDate`,`ModifiedDate`) values 
+(1,'idigiblock','secunderabad','8498890001','vimal_smyle2006@yahoo.com',1,1,1,'2021-05-15 23:23:08','2021-05-15 23:24:59');
 
 /*Table structure for table `command` */
 
@@ -139,9 +202,12 @@ CREATE TABLE `community` (
   `CreatedDate` datetime NOT NULL,
   `ModifiedDate` datetime DEFAULT NULL,
   PRIMARY KEY (`CommunityID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 /*Data for the table `community` */
+
+insert  into `community`(`CommunityID`,`CommunityName`,`Email`,`MobileNumber`,`Address`,`CreatedDate`,`ModifiedDate`) values 
+(1,'Idigi','vimal_smyle2006@yahoo.com','8498890000','hyderabad','2021-05-15 23:21:57',NULL);
 
 /*Table structure for table `customerdeletedetails` */
 
@@ -458,7 +524,7 @@ CREATE TABLE `user` (
   `ModifiedDate` datetime DEFAULT NULL,
   PRIMARY KEY (`ID`),
   KEY `CommunityID` (`CommunityID`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 
 /*Data for the table `user` */
 
@@ -467,7 +533,8 @@ insert  into `user`(`ID`,`UserID`,`UserName`,`UserPassword`,`RoleID`,`ActiveStat
 (2,'kvkadmin','Kvk\r\n','cvp/LzpadrQT+2k0WDjyOQ==\r\n',2,1,1,1,0,NULL,1,1,'2021-05-01 17:24:22','2021-05-01 17:24:12'),
 (3,'Vimal\r\n','Vimal Kumar\r\n','cvp/LzpadrQT+2k0WDjyOQ==\r\n',3,1,1,1,1,'IDIGI1',2,2,'2021-05-01 17:25:54','2021-05-01 17:25:56'),
 (4,'Superadminsupervisor\r\n','HanbitSuperadminsupervisor\r\n','cvp/LzpadrQT+2k0WDjyOQ==\r\n',4,1,0,0,0,NULL,1,1,'2021-05-01 17:26:45','2021-05-01 17:26:48'),
-(5,'Adminsupervisor\r\n','KvkAdminsupervisor\r\n','cvp/LzpadrQT+2k0WDjyOQ==\r\n',5,1,1,1,0,NULL,1,1,'2021-05-01 17:28:26','2021-05-01 17:28:29');
+(5,'Adminsupervisor\r\n','KvkAdminsupervisor\r\n','cvp/LzpadrQT+2k0WDjyOQ==\r\n',5,1,1,1,0,NULL,1,1,'2021-05-01 17:28:26','2021-05-01 17:28:29'),
+(6,'idigiblock','idigiblock','yotlEHVjsFQOtJ1njm6kXQ==',2,1,1,1,0,'NULL',1,1,'2021-05-15 23:23:08','2021-05-15 23:23:08');
 
 /*Table structure for table `userrole` */
 

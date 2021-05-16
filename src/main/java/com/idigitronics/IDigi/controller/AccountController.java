@@ -26,7 +26,9 @@ import com.idigitronics.IDigi.request.vo.CheckOutRequestVO;
 import com.idigitronics.IDigi.request.vo.ConfigurationRequestVO;
 import com.idigitronics.IDigi.request.vo.DataRequestVO;
 import com.idigitronics.IDigi.request.vo.TopUpRequestVO;
+import com.idigitronics.IDigi.response.vo.BillingResponseVO;
 import com.idigitronics.IDigi.response.vo.ConfigurationResponseVO;
+import com.idigitronics.IDigi.response.vo.ConfigurationStatusResponseVO;
 import com.idigitronics.IDigi.response.vo.ResponseVO;
 import com.idigitronics.IDigi.response.vo.StatusResponseVO;
 
@@ -74,8 +76,6 @@ public class AccountController {
 
 		return responsevo;
 	}
-	
-	// change accordingly
 	
 	@RequestMapping(value = "/server/api/{device_eui}/topup/response", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	public @ResponseBody
@@ -134,6 +134,35 @@ public class AccountController {
 	
 	}
 	
+	/* Billing Details */
+
+	@RequestMapping(value = "/billing/{roleid}/{id}/{filterCid}/{month}", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody
+	BillingResponseVO billdetails(@PathVariable("roleid") int roleid, @PathVariable("id") String id, @PathVariable("filterCid") int filterCid, @PathVariable("month") int month) throws SQLException {
+
+		BillingResponseVO billingresponsevo = new BillingResponseVO();
+
+		billingresponsevo.setData(accountdao.getbillingdetails(roleid, id, filterCid, month));
+
+		return billingresponsevo;
+	}
+
+	@RequestMapping(value = "/billing/print/{billingID}", method = RequestMethod.GET, produces = "application/pdf")
+	 public ResponseEntity<InputStreamResource> downloadbill(@PathVariable("billingID") int billingID) throws IOException, SQLException {
+			
+		ResponseVO responsevo = new ResponseVO();
+		
+		responsevo = accountdao.printbill(billingID);
+	
+		File file = new File(responsevo.getLocation() + responsevo.getFileName());
+	    InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
+		
+		ResponseEntity<InputStreamResource> response = new ResponseEntity<InputStreamResource>(resource, HttpStatus.OK);
+		
+		return response;
+	
+	}
+	
 	/* Configuration */
 
 	@RequestMapping(value = "/configuration/{roleid}/{id}/{filterCid}", method = RequestMethod.GET, produces = "application/json")
@@ -166,12 +195,12 @@ public class AccountController {
 	
 	@RequestMapping(value = "/server/api/{device_eui}/set/response", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	public @ResponseBody
-	ResponseVO updateconfiguration(@RequestBody ConfigurationRequestVO configurationvo, @PathVariable("device_eui") String miuID)
+	ResponseVO updateconfiguration(@RequestBody ConfigurationStatusResponseVO configurationstatusvo, @PathVariable("device_eui") String miuID)
 			throws ClassNotFoundException, SQLException, BusinessException {
 
 		ResponseVO responsevo = new ResponseVO();
 		try{
-			responsevo = accountdao.updateconfiguration(configurationvo, miuID);
+			responsevo = accountdao.updateconfiguration(configurationstatusvo, miuID);
 		} catch (Exception e) {
 			responsevo.setResult("Failure");
 			responsevo.setMessage(e.getMessage());
@@ -182,12 +211,12 @@ public class AccountController {
 	
 	@RequestMapping(value = "/server/api/{device_eui}/group/set/response", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	public @ResponseBody
-	ResponseVO updategroupconfiguration(@RequestBody ConfigurationRequestVO configurationvo, @PathVariable("device_eui") String miuID)
+	ResponseVO updategroupconfiguration(@RequestBody ConfigurationStatusResponseVO configurationstatusvo, @PathVariable("device_eui") String miuID)
 			throws ClassNotFoundException, SQLException, BusinessException {
 
 		ResponseVO responsevo = new ResponseVO();
 		try{
-			responsevo = accountdao.updateconfiguration(configurationvo, miuID);
+			responsevo = accountdao.updateconfiguration(configurationstatusvo, miuID);
 		} catch (Exception e) {
 			responsevo.setResult("Failure");
 			responsevo.setMessage(e.getMessage());

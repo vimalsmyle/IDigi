@@ -99,7 +99,7 @@ public class DropDownDAO {
 	
 	
 	
-	public TopupDetailsResponseVO gettopupdetails(String CRNNumber) throws SQLException {
+	public TopupDetailsResponseVO gettopupdetails(String CustomerUniqueID, int customerMeterID) throws SQLException {
 		// TODO Auto-generated method stub
 		Connection con = null;
 		PreparedStatement pstmt = null;
@@ -112,44 +112,44 @@ public class DropDownDAO {
 			
 			topupdetailsresponsevo.setReconnectionCharges(0);
 			LocalDateTime dateTime = LocalDateTime.now();
-			
-			ps = con.prepareStatement("SELECT cmd.MeterID, t.TariffID, t.TariffName, t.Tariff, t.EmergencyCredit, t.AlarmCredit, t.FixedCharges FROM customermeterdetails AS cmd LEFT JOIN tariff AS t ON t.TariffID = cmd.TariffID WHERE cmd.CustomerUniqueID = ?");
-	        ps.setString(1, CRNNumber);
-	        rs = ps.executeQuery();
-	        if (rs.next()) {
-	        	topupdetailsresponsevo.setMeterID(rs.getString("MeterID"));
-	        	topupdetailsresponsevo.setAlarmCredit(rs.getFloat("AlarmCredit"));
-	        	topupdetailsresponsevo.setEmergencyCredit(rs.getFloat("EmergencyCredit"));
-	        	topupdetailsresponsevo.setTariffName(rs.getString("TariffName"));
-	        	topupdetailsresponsevo.setTariff(rs.getFloat("Tariff"));
-	        	topupdetailsresponsevo.setTariffID(rs.getInt("TariffID"));
-	        	topupdetailsresponsevo.setFixedCharges(rs.getInt("FixedCharges"));
-	        	topupdetailsresponsevo.setNoOfMonths(1);
-	                    
-	                    pstmt = con.prepareStatement("SELECT dbl.IoTTimeStamp, dbl.Balance, al.ReconnectionCharges, dbl.Minutes FROM displaybalanceLog AS dbl JOIN alertsettings AS al WHERE CRNNumber = ? ");
-	                    pstmt.setString(1, CRNNumber);
-	                    ResultSet rs1 = pstmt.executeQuery();
-	                    if (rs1.next()) {
-	                    	topupdetailsresponsevo.setIoTTimeStamp(ExtraMethodsDAO.datetimeformatter(rs1.getString("IoTTimeStamp")));
-                        	topupdetailsresponsevo.setCurrentBalance(rs1.getFloat("Balance"));
-                        	topupdetailsresponsevo.setReconnectionCharges(rs1.getInt("Minutes") != 0 ? rs1.getInt("ReconnectionCharges") : 0);
-                        	topupdetailsresponsevo.setNoOfMonths(0);
-                        	
-        					PreparedStatement pstmt2 = con.prepareStatement("SELECT MONTH(TransactionDate) AS previoustopupmonth from topup WHERE Status = 2 and CRNNumber = '"+CRNNumber+"'" + "ORDER BY TransactionID DESC LIMIT 0,1");
-        					ResultSet rs2 = pstmt2.executeQuery();
-        					
-        					if(rs2.next()) {
-        						topupdetailsresponsevo.setNoOfMonths(dateTime.getMonthValue() - rs2.getInt("previoustopupmonth"));
-        						topupdetailsresponsevo.setFixedCharges(rs2.getInt("previoustopupmonth") != dateTime.getMonthValue() ? (rs.getInt("FixedCharges") * (dateTime.getMonthValue() - rs2.getInt("previoustopupmonth"))) : 0);
-        					}
 
-	                    	} else {
-	        					
-	        					topupdetailsresponsevo.setIoTTimeStamp("0");
-	                        	topupdetailsresponsevo.setCurrentBalance(0);
-	                        	topupdetailsresponsevo.setReconnectionCharges(0);
-	                        }
-	            }
+					ps = con.prepareStatement("SELECT cmd.MIUID, cmd.CustomerMeterID, t.TariffID, t.TariffName, t.Tariff, t.EmergencyCredit, t.AlarmCredit, t.FixedCharges FROM customermeterdetails AS cmd LEFT JOIN tariff AS t ON t.TariffID = cmd.TariffID WHERE cmd.CustomerMeterID = ?");
+			        ps.setInt(1, customerMeterID);
+			        rs = ps.executeQuery();
+			        if (rs.next()) {
+			        	topupdetailsresponsevo.setMiuID(rs.getString("MIUID"));
+			        	topupdetailsresponsevo.setAlarmCredit(rs.getFloat("AlarmCredit"));
+			        	topupdetailsresponsevo.setEmergencyCredit(rs.getFloat("EmergencyCredit"));
+			        	topupdetailsresponsevo.setTariffName(rs.getString("TariffName"));
+			        	topupdetailsresponsevo.setTariff(rs.getFloat("Tariff"));
+			        	topupdetailsresponsevo.setTariffID(rs.getInt("TariffID"));
+			        	topupdetailsresponsevo.setFixedCharges(rs.getInt("FixedCharges"));
+			        	topupdetailsresponsevo.setCustomerMeterID(rs.getInt("CustomerMeterID"));
+			        	topupdetailsresponsevo.setNoOfMonths(1);
+			                    
+			                    pstmt = con.prepareStatement("SELECT dbl.LogDate, dbl.Balance, al.ReconnectionCharges, dbl.Minutes FROM displaybalanceLog AS dbl JOIN alertsettings AS al WHERE CustomerUniqueID = ? AND CustomerMeterID =" +customerMeterID);
+			                    pstmt.setString(1, CustomerUniqueID);
+			                    ResultSet rs1 = pstmt.executeQuery();
+			                    if (rs1.next()) {
+		                        	topupdetailsresponsevo.setCurrentBalance(rs1.getFloat("Balance"));
+		                        	topupdetailsresponsevo.setReconnectionCharges(rs1.getInt("Minutes") != 0 ? rs1.getInt("ReconnectionCharges") : 0);
+		                        	topupdetailsresponsevo.setNoOfMonths(0);
+		                        	
+		        					PreparedStatement pstmt2 = con.prepareStatement("SELECT MONTH(TransactionDate) AS previoustopupmonth from topup WHERE Status = 0 AND CustomerUniqueID = '"+CustomerUniqueID+"' AND CustomerMeterID = " + customerMeterID + " ORDER BY TransactionID DESC LIMIT 0,1");
+		        					ResultSet rs2 = pstmt2.executeQuery();
+		        					
+		        					if(rs2.next()) {
+		        						topupdetailsresponsevo.setNoOfMonths(dateTime.getMonthValue() - rs2.getInt("previoustopupmonth"));
+		        						topupdetailsresponsevo.setFixedCharges(rs2.getInt("previoustopupmonth") != dateTime.getMonthValue() ? (rs.getInt("FixedCharges") * (dateTime.getMonthValue() - rs2.getInt("previoustopupmonth"))) : 0);
+		        					}
+
+			                    	} else {
+			        					
+			                        	topupdetailsresponsevo.setCurrentBalance(0);
+			                        	topupdetailsresponsevo.setReconnectionCharges(0);
+			                        }
+			            }
+					
 		}
 		catch (Exception ex) {
 			ex.printStackTrace();

@@ -14,7 +14,9 @@ public class RestCallVO {
 	private String value;
 	private float emergency_credit;
 	private float credit;
-
+	private String gatewayIP;
+	private int gatewayPort;
+	
 	private List<CommandGroupRequestVO> parameters;
 	private String urlExtension;
 	
@@ -65,6 +67,18 @@ public class RestCallVO {
 	}
 	public void setCredit(float credit) {
 		this.credit = credit;
+	}
+	public String getGatewayIP() {
+		return gatewayIP;
+	}
+	public void setGatewayIP(String gatewayIP) {
+		this.gatewayIP = gatewayIP;
+	}
+	public int getGatewayPort() {
+		return gatewayPort;
+	}
+	public void setGatewayPort(int gatewayPort) {
+		this.gatewayPort = gatewayPort;
 	}
 	
 }

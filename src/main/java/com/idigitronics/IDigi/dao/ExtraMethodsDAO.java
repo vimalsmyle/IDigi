@@ -106,7 +106,7 @@ public class ExtraMethodsDAO {
 	
 	public int postdata(RestCallVO restcallvo) throws IOException {
 		
-	URL url = new URL(ExtraConstants.StaticIP+restcallvo.getMiuID()+"/"+restcallvo.getUrlExtension());
+	URL url = new URL("http://" + restcallvo.getGatewayIP() + ":" + restcallvo.getGatewayPort() +"/"+ restcallvo.getMiuID()+"/"+restcallvo.getUrlExtension());
     HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
     
     urlConnection.setRequestProperty("Content-Type", "application/json"); 
@@ -184,7 +184,7 @@ public class ExtraMethodsDAO {
 	
 //	@Scheduled(cron="0 0 * ? * *") // scheduled for 1 hour
 //	@Scheduled(cron="0 0/2 * * * ?") // scheduled for every 2 min
-/*	public void topupstatusupdatecall() throws SQLException {
+/*	public void billgeneration() throws SQLException {
 		
 		Connection con = null;
 		PreparedStatement pstmt = null;
@@ -332,12 +332,12 @@ public class ExtraMethodsDAO {
 		
 		try {
 			con = getConnection();
-			pstmt = con.prepareStatement("SELECT cmd.MeterID, b.Email, b.MobileNumber, cmd.HouseNumber, cmd.CRNNumber FROM customermeterdetails AS cmd LEFT JOIN block AS b ON cmd.BlockID = b.BlockID");
+			pstmt = con.prepareStatement("SELECT cmd.MIUID, b.Email, b.MobileNumber, cd.HouseNumber, cd.CustomerUniqueID, cmd.CustomerMeterID FROM customerdetails as cd LEFT JOIN customermeterdetails AS cmd on cd.CustomerID = cmd.CustomerID LEFT JOIN block AS b ON cd.BlockID = b.BlockID");
 			rs = pstmt.executeQuery();
 			while(rs.next()) {
 				
-				pstmt1 = con.prepareStatement("SELECT ((SELECT (TIMESTAMPDIFF (MINUTE, (SELECT IotTimeStamp FROM displaybalancelog WHERE MeterID = ?), NOW()))) - (SELECT NoAMRInterval FROM alertsettings)) AS diff");
-				pstmt1.setString(1, rs.getString("MeterID"));
+				pstmt1 = con.prepareStatement("SELECT ((SELECT (TIMESTAMPDIFF (MINUTE, (SELECT LogDate FROM displaybalancelog WHERE MIUID = ?), NOW()))) - (SELECT NoAMRInterval FROM alertsettings)) AS diff");
+				pstmt1.setString(1, rs.getString("MIUID"));
 				rs1 = pstmt1.executeQuery();
 				if(rs1.next()) {
 					if(rs1.getInt("diff") > 0) {
@@ -345,15 +345,15 @@ public class ExtraMethodsDAO {
 						mailRequestVO = new MailRequestVO();
 						smsRequestVO = new SMSRequestVO();
 						
-						mailRequestVO.setSubject("No Communication from MIU ID: "+rs.getString("MeterID"));
+						mailRequestVO.setSubject("No Communication from MIU ID: "+rs.getString("MIUID"));
 						mailRequestVO.setToEmail(rs.getString("Email"));
-						mailRequestVO.setMessage("Dear Admin, \n \n CRNNumber: "+rs.getString("CRNNumber")+ " is not up to date for more than 3 days.");
+						mailRequestVO.setMessage("Dear Admin, \n \n CRN/CAN/UAN: "+rs.getString("CustomerUniqueID")+ " is not up to date for more than 3 days.");
 						
-						smsRequestVO.setMessage("Dear Admin, \n \n CRNNumber: "+rs.getString("CRNNumber")+ " is not up to date for more than 3 days.");
+						smsRequestVO.setMessage("Dear Admin, \n \n CRN/CAN/UAN: "+rs.getString("CustomerUniqueID")+ " is not up to date for more than 3 days.");
 						smsRequestVO.setToMobileNumber(rs.getString("MobileNumber"));
 						
-						sendmail(mailRequestVO);
-						sendsms(smsRequestVO);
+//						sendmail(mailRequestVO);
+//						sendsms(smsRequestVO);
 						
 					}
 				}

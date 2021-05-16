@@ -32,6 +32,8 @@ public class TopUpRequestVO {
 	private float alarmCredit;
 	private float emergencyCredit;
 	private float tariff;
+	private String gatewayIP;
+	private int gatewayPort;
 	
 	public int getAmount() {
 		return amount;
@@ -170,6 +172,18 @@ public class TopUpRequestVO {
 	}
 	public void setPayType(int payType) {
 		this.payType = payType;
+	}
+	public String getGatewayIP() {
+		return gatewayIP;
+	}
+	public void setGatewayIP(String gatewayIP) {
+		this.gatewayIP = gatewayIP;
+	}
+	public int getGatewayPort() {
+		return gatewayPort;
+	}
+	public void setGatewayPort(int gatewayPort) {
+		this.gatewayPort = gatewayPort;
 	}
 	
 }
