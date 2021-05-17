@@ -95,11 +95,11 @@ public class ManagementSettingsBO {
 
 	/* Vacation */
 
-/*	public ResponseVO addvacation(VacationRequestVO vacationRequestVO) throws SQLException, BusinessException {
+	public ResponseVO addvacation(VacationRequestVO vacationRequestVO) throws SQLException, BusinessException {
 		// TODO Auto-generated method stub
 
 		if(vacationRequestVO.getCommunityID() < 0 || vacationRequestVO.getBlockID() < 0 || vacationRequestVO.getVacationName().isEmpty() 
-				|| vacationRequestVO.getCRNNumber().isEmpty() || vacationRequestVO.getStartDateTime().isEmpty() || vacationRequestVO.getEndDateTime().isEmpty()){
+				|| vacationRequestVO.getCustomerUniqueID().isEmpty() || vacationRequestVO.getStartDateTime().isEmpty() || vacationRequestVO.getEndDateTime().isEmpty()){
 			throw new BusinessException("ALL FIELDS ARE MANDATORY");
 		}
 		
@@ -115,7 +115,7 @@ public class ManagementSettingsBO {
 		// TODO Auto-generated method stub
 		
 		if(vacationRequestVO.getVacationID() < 0 || vacationRequestVO.getCommunityID() < 0 || vacationRequestVO.getBlockID() < 0 || vacationRequestVO.getVacationName().isEmpty() 
-				|| vacationRequestVO.getCRNNumber().isEmpty() || vacationRequestVO.getStartDateTime().isEmpty() || vacationRequestVO.getEndDateTime().isEmpty()){
+				|| vacationRequestVO.getCustomerUniqueID().isEmpty() || vacationRequestVO.getStartDateTime().isEmpty() || vacationRequestVO.getEndDateTime().isEmpty()){
 			throw new BusinessException("ALL FIELDS ARE MANDATORY");
 		}
 		
@@ -138,7 +138,7 @@ public class ManagementSettingsBO {
 		}
 		
 		return managementsettingsdao.deletevacation(vacationID, source);
-	}*/
+	}
 
 	public ResponseVO addfeedback(FeedbackRequestVO feedbackRequestVO) throws BusinessException, SQLException {
 		// TODO Auto-generated method stub

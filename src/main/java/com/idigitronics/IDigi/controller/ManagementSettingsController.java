@@ -183,7 +183,7 @@ public class ManagementSettingsController {
 		return vacationResponseVO;
 	}
 
-/*	@RequestMapping(value = "/vacation/add", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	@RequestMapping(value = "/vacation/add", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	public @ResponseBody
 	ResponseVO addvacation(@RequestBody VacationRequestVO vacationRequestVO) throws ClassNotFoundException,
 			SQLException, BusinessException {
@@ -234,6 +234,6 @@ public class ManagementSettingsController {
 		}
 
 		return responsevo;
-	}*/
+	}
 
 }
