@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Random;
 
 import com.google.gson.Gson;
 import com.idigitronics.IDigi.constants.DataBaseConstants;
@@ -26,9 +25,7 @@ import com.idigitronics.IDigi.request.vo.UserManagementRequestVO;
 import com.idigitronics.IDigi.response.vo.AlertResponseVO;
 import com.idigitronics.IDigi.response.vo.FeedbackResponseVO;
 import com.idigitronics.IDigi.response.vo.ResponseVO;
-import com.idigitronics.IDigi.response.vo.TataResponseVO;
 import com.idigitronics.IDigi.response.vo.VacationResponseVO;
-import com.idigitronics.IDigi.utils.Encoding;
 import com.idigitronics.IDigi.response.vo.UserManagementResponseVO;
 
 /**
@@ -658,18 +655,18 @@ public class ManagementSettingsDAO {
 			pstmt.setInt(1, vacationRequestVO.getCustomerMeterID());
 			rs = pstmt.executeQuery();
 			if (rs.next()) {
-				if (rs.getString("Status").equals("10") || rs.getString("Status").equals("1")) {
+				if (rs.getString("Status").equals("10")) {
 					result = true;
 				} else {
 					
 					// continue from here
-					PreparedStatement pstmt1 = con.prepareStatement("SELECT VacationID FROM vacation WHERE Status BETWEEN 10 AND 1 AND ? BETWEEN StartDate AND EndDate ");
+					PreparedStatement pstmt1 = con.prepareStatement("SELECT VacationID FROM vacation WHERE Status != 10 AND ? BETWEEN StartDate AND EndDate ");
 					pstmt1.setString(1, vacationRequestVO.getStartDateTime());
 					ResultSet rs1 = pstmt1.executeQuery();
 					if(rs1.next()) {
 						result = true;
 					}else {
-						pstmt1 = con.prepareStatement("SELECT VacationID FROM vacation WHERE Status BETWEEN 0 AND 1 AND ? BETWEEN StartDate AND EndDate");
+						pstmt1 = con.prepareStatement("SELECT VacationID FROM vacation WHERE Status != 10 AND ? BETWEEN StartDate AND EndDate");
 						pstmt1.setString(1, vacationRequestVO.getEndDateTime());
 						rs1 = pstmt1.executeQuery();
 						if(rs1.next()) {
@@ -702,7 +699,7 @@ public class ManagementSettingsDAO {
 			pstmt = con.prepareStatement("SELECT Status FROM vacation WHERE VacationID = "+vacationID);
 			rs = pstmt.executeQuery();
 			if (rs.next()) {
-				if (rs.getString("Status").equals("0") || rs.getString("Status").equals("1")) {
+				if (rs.getString("Status").equals("10")) {
 					result = true;
 				}
 			}

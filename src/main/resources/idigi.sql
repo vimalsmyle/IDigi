@@ -93,10 +93,10 @@ CREATE TABLE `billingdetails` (
   `FixedCharges` int(11) DEFAULT NULL,
   `ReconnectionCharges` int(11) DEFAULT NULL,
   `Status` tinyint(10) NOT NULL DEFAULT '0',
-  `BillingDate` datetime DEFAULT NULL,
   `BillMonth` int(10) DEFAULT NULL,
   `BillYear` int(10) DEFAULT NULL,
   `LogDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `ModifiedDate` datetime DEFAULT NULL,
   PRIMARY KEY (`BillingID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -278,9 +278,12 @@ CREATE TABLE `customerdetails` (
   `ModifiedDate` datetime DEFAULT NULL,
   PRIMARY KEY (`CustomerID`,`CustomerUniqueID`),
   UNIQUE KEY `CRNNumber` (`CustomerUniqueID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 /*Data for the table `customerdetails` */
+
+insert  into `customerdetails`(`CustomerID`,`CommunityID`,`BlockID`,`HouseNumber`,`FirstName`,`LastName`,`Email`,`MobileNumber`,`ActiveStatus`,`CustomerUniqueID`,`CreatedByID`,`CreatedByRoleID`,`RegistrationDate`,`ModifiedDate`) values 
+(1,1,1,'101','Vimal','Kumar','kvk9889@gmail.com','8498890000',1,'IDIGI1',2,2,'2021-05-17 23:20:44',NULL);
 
 /*Table structure for table `customermeterdetails` */
 
@@ -301,9 +304,15 @@ CREATE TABLE `customermeterdetails` (
   `RegisteredDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `ModifiedDate` datetime NOT NULL,
   PRIMARY KEY (`CustomerMeterID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 
 /*Data for the table `customermeterdetails` */
+
+insert  into `customermeterdetails`(`CustomerMeterID`,`CustomerID`,`CustomerUniqueID`,`MIUID`,`MeterSerialNumber`,`MeterType`,`MeterSize`,`PayType`,`TariffID`,`GatewayID`,`Location`,`RegisteredDate`,`ModifiedDate`) values 
+(1,1,'IDIGI1','1122','11223344','Gas',NULL,'Prepaid',1,1,'Kitchen','2021-05-17 23:22:24','2021-05-17 23:24:13'),
+(2,1,'IDIGI1','2233','22334455','Water',NULL,'Postpaid',2,1,'Bathroom','2021-05-17 23:24:09','2021-05-17 23:24:17'),
+(3,1,'IDIGI1','3344','33445566','Water',NULL,'Postpaid',3,1,'Bedroom','2021-05-17 23:25:15','2021-05-17 23:25:13'),
+(4,1,'IDIGI1','4455','44556677','Water',NULL,'Postpaid',2,1,'Washarea','2021-05-17 23:26:11','2021-05-17 23:26:10');
 
 /*Table structure for table `displaybalancelog` */
 
@@ -379,9 +388,12 @@ CREATE TABLE `gateways` (
   `RegisteredDate` datetime NOT NULL,
   `ModifiedDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`GatewayID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 /*Data for the table `gateways` */
+
+insert  into `gateways`(`GatewayID`,`GatewayName`,`GatewaySerialNumber`,`GatewayIP`,`GatewayPort`,`RegisteredDate`,`ModifiedDate`) values 
+(1,'Gateway1','123','123.123.123.123',1234,'2021-05-17 23:23:10','2021-05-17 23:23:12');
 
 /*Table structure for table `mailsettings` */
 
@@ -442,9 +454,14 @@ CREATE TABLE `tariff` (
   `RegisteredDate` datetime NOT NULL,
   `ModifiedDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`TariffID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 
 /*Data for the table `tariff` */
+
+insert  into `tariff`(`TariffID`,`Tariff`,`TariffName`,`EmergencyCredit`,`AlarmCredit`,`FixedCharges`,`RegisteredDate`,`ModifiedDate`) values 
+(1,10,'tariff1',20,30,50,'2021-05-17 23:26:58','2021-05-17 23:27:01'),
+(2,20,'tariff2',40,50,100,'2021-05-17 23:27:23','2021-05-17 23:27:24'),
+(3,15,'tariff3',30,40,70,'2021-05-17 23:27:55','2021-05-17 23:27:57');
 
 /*Table structure for table `topup` */
 

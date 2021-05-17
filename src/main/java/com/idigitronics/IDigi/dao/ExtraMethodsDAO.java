@@ -42,7 +42,6 @@ import com.idigitronics.IDigi.request.vo.RazorpayRequestVO;
 import com.idigitronics.IDigi.request.vo.RestCallVO;
 import com.idigitronics.IDigi.request.vo.SMSRequestVO;
 import com.idigitronics.IDigi.response.vo.RazorPayResponseVO;
-import com.idigitronics.IDigi.response.vo.TataResponseVO;
 /**
  * @author K VimaL Kumar
  * 
@@ -184,88 +183,68 @@ public class ExtraMethodsDAO {
 	
 //	@Scheduled(cron="0 0 * ? * *") // scheduled for 1 hour
 //	@Scheduled(cron="0 0/2 * * * ?") // scheduled for every 2 min
-/*	public void billgeneration() throws SQLException {
+	public void billgeneration() throws SQLException {
 		
 		Connection con = null;
 		PreparedStatement pstmt = null;
+		PreparedStatement pstmt1 = null;
+		PreparedStatement pstmt2 = null;
+		PreparedStatement pstmt3 = null;
 		ResultSet rs = null;
-		SMSRequestVO smsRequestVO = new SMSRequestVO();
-		MailRequestVO mailRequestVO = new MailRequestVO();
-		RazorpayRequestVO razorpayRequestVO = new RazorpayRequestVO();
+		ResultSet rs1 = null;
+		ResultSet rs2 = null;
+		float consumption = 0;
+		int billAmount = 0;
 		
 		try {
 			
 			con = getConnection();
-			pstmt = con.prepareStatement("SELECT t.MeterID, t.TataReferenceNumber, t.PaymentStatus, cmd.MobileNumber, cmd.Email, cmd.CRNNumber, t.Amount, t.RazorPayPaymentID, t.TransactionID, t.ModeOfPayment FROM topup AS t LEFT JOIN customermeterdetails AS cmd ON cmd.CRNNumber = t.CRNNumber WHERE t.Status IN (0, 1) AND t.Source = 'web' AND t.TataReferenceNumber != 0");
+			
+//			fetch reconnection charges from alertsettings after discussion
+			
+			pstmt = con.prepareStatement("SELECT cd.CommunityID, cd.BlockID, cd.CustomerID, cmd.CustomerMeterID, cmd.MIUID, cmd.TariffID, t.Tariff, t.FixedCharges FROM customerdetails AS cd LEFT JOIN customermeterdetails AS cmd ON cd.CustomerID = cmd.CustomerID LEFT JOIN tariff AS t ON t.TariffID = cmd.TariffID");
 			rs = pstmt.executeQuery();
 			while(rs.next()) {
 				
-				RestCallVO restcallvo  = new RestCallVO();
-				restcallvo.setUrlExtension("/payloads/dl/");
-				restcallvo.setMiuID(rs.getString("MeterID").toLowerCase());
+				pstmt1 = con.prepareStatement("SELECT Reading, LogDate FROM balancelog WHERE CustomerMeterID = ? AND Logdate BETWEEN CONCAT((SELECT LAST_DAY(CURDATE() - INTERVAL 2 MONTH) + INTERVAL 1 DAY AS 'FIRST DAY OF PREVIOUS MONTH'), ' 00:00:00') AND CONCAT((SELECT DATE_SUB(LAST_DAY(NOW()),INTERVAL DAY(LAST_DAY(NOW()))- 1 DAY) AS 'FIRST DAY OF CURRENT MONTH'), ' 23:59:59') ORDER BY ReadingID ASC LIMIT 0,1");
+				pstmt1.setInt(1, rs.getInt("CustomerMeterID"));
+				rs1 = pstmt1.executeQuery();
 				
-				ResponseEntity<TataResponseVO> response = tataget(restcallvo);
-				
-				PreparedStatement pstmt1 = con.prepareStatement("UPDATE topup SET Status = ?, AcknowledgeDate= NOW() WHERE TataReferenceNumber = ?");
-
-				pstmt1.setInt(1, response.getBody().getTransmissionStatus());
-				pstmt1.setLong(2, response.getBody().getId());
-				if(pstmt1.executeUpdate() > 0){
+				if(rs1.next()) {
 					
-					smsRequestVO.setToMobileNumber(rs.getString("MobileNumber"));
-					smsRequestVO.setMessage(response.getBody().getTransmissionStatus() == 2 ? "Thank You for Recharging your CRN: "+ rs.getString("CRNNumber")+". Your request has been processed successfully." : response.getBody().getTransmissionStatus() > 2 ? "Your Recharge request has failed to reach the CRN: "+ rs.getString("CRNNumber")+". Kindly retry after sometime. Deducted Amount will be refunded in 5-10 working days. We regret the inconvenience caused." : "");
+					pstmt2 = con.prepareStatement("SELECT Reading, LogDate FROM balancelog WHERE CustomerMeterID = ? AND Logdate BETWEEN CONCAT((SELECT LAST_DAY(CURDATE() - INTERVAL 2 MONTH) + INTERVAL 1 DAY AS 'FIRST DAY OF PREVIOUS MONTH'), ' 00:00:00') AND CONCAT((SELECT DATE_SUB(LAST_DAY(NOW()),INTERVAL DAY(LAST_DAY(NOW()))- 1 DAY) AS 'FIRST DAY OF CURRENT MONTH'), ' 23:59:59') ORDER BY ReadingID DESC LIMIT 0,1");
+					pstmt2.setInt(1, rs.getInt("CustomerMeterID"));
+					rs2 = pstmt2.executeQuery();
 					
-					mailRequestVO.setToEmail(rs.getString("Email"));
-					mailRequestVO.setSubject("Recharge Status!!!");
-					mailRequestVO.setMessage(response.getBody().getTransmissionStatus() == 2 ? "Thank You for Recharging your CRN: "+ rs.getString("CRNNumber")+". Your request has been processed successfully." : response.getBody().getTransmissionStatus() > 2 ? "Your Recharge request has failed to reach the CRN: "+ rs.getString("CRNNumber")+". Kindly retry after sometime. Deducted Amount will be refunded in 5-10 working days. We regret the inconvenience caused." : "");
-					
-					if(response.getBody().getTransmissionStatus() >= 2) {
-						sendsms(smsRequestVO);
-						sendmail(mailRequestVO);
-					}
-					
-					
-					if(response.getBody().getTransmissionStatus() >= 3 && rs.getInt("PaymentStatus") == 1 && rs.getString("ModeOfPayment").equalsIgnoreCase("Online")) {
-						// initiate refund process
+					if(rs2.next()) {
+						consumption = rs2.getFloat("Reading") - rs1.getFloat("Reading");
+						billAmount = (int) (consumption * rs.getFloat("Tariff"));
 						
-						  razorpayRequestVO.setApi("payments");
-						  razorpayRequestVO.setId(rs.getString("RazorPayPaymentID"));
-						  razorpayRequestVO.setAmount(rs.getInt("Amount")*100);
-						  razorpayRequestVO.setExtension("refund");
-						  
-						  String rzpRestCallResponse = razorpaypost(null, razorpayRequestVO);
-						  
-						  RazorPayResponseVO razorPayResponseVO = gson.fromJson(rzpRestCallResponse, RazorPayResponseVO.class);
-						  
-						  PreparedStatement pstmt2 = con.
-						  prepareStatement("UPDATE topup SET PaymentStatus = 3, RazorPayRefundID = ?, RazorPayRefundStatus = ?, RazorPayRefundEntity = ? WHERE TransactionID = "+ rs.getLong("TransactionID"));
-						  pstmt2.setString(1,razorPayResponseVO.getId()); 
-						  pstmt2.setString(2,razorPayResponseVO.getStatus()); 
-						  pstmt2.setString(3,rzpRestCallResponse);
-						  
-						  if (pstmt2.executeUpdate() > 0) {
-						  
-						  smsRequestVO.setToMobileNumber(rs.getString("MobileNumber"));
-						  smsRequestVO.setMessage("Your Refund of Amount: "+rs.getInt("Amount")
-						  +"/- is initiated and will be credited to your original mode of payment in 5-10 working days. We regret the inconvenience caused."
-						  );
-						  
-						   sendsms(smsRequestVO);
-						  
-						  mailRequestVO.setToEmail(rs.getString("Email"));
-						  mailRequestVO.setSubject("Refund Initiated!!!");
-						  mailRequestVO.setMessage("Your Refund of Amount: "+rs.getInt("Amount")
-						  +"/- is initiated and will be credited to your original mode of payment in 5-10 working days. We regret the inconvenience caused."
-						  );
-						  
-						  sendmail(mailRequestVO);
-						  
-						  }
+						pstmt3 = con.prepareStatement("INSERT INTO billingdetails (CommunityID, BlockID, CustomerID, CustomerMeterID, MIUID, PreviousReading, PresentReading, Consumption, TariffID, Tariff, BillAmount, FixedCharges, ReconnectionCharges, BillMonth, BillYear) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+						pstmt3.setInt(1, rs.getInt("CommunityID"));
+						pstmt3.setInt(2, rs.getInt("BlockID"));
+						pstmt3.setInt(3, rs.getInt("CustomerID"));
+						pstmt3.setInt(4, rs.getInt("CustomerMeterID"));
+						pstmt3.setString(5, rs.getString("MIUID"));
+						pstmt3.setFloat(6, rs1.getFloat("Reading"));
+						pstmt3.setFloat(7, rs2.getFloat("Reading"));
+						pstmt3.setFloat(8, consumption);
+						pstmt3.setInt(9, rs.getInt("TariffID"));
+						pstmt3.setFloat(10, rs.getFloat("Tariff"));
+						pstmt3.setInt(11, billAmount);
+						pstmt3.setInt(12, rs.getInt("FixedCharges"));
+						pstmt3.setInt(13, 0); // add reconnection charges after discussion
+						pstmt3.setInt(14, 0);// add month
+						pstmt3.setInt(15, 2021);// add year 
+						
+						if(pstmt3.executeUpdate() > 0) {
+//					perform some actions after discussion							
+						}
+						
 					}
-					
 				}
-
-			} 
+				
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			
@@ -275,7 +254,7 @@ public class ExtraMethodsDAO {
 			con.close();
 		}
 		
-	}*/
+	}
 	
 //	@Scheduled(cron="0 0 * ? * *")
 /*	@Scheduled(cron="0 0/4 * * * ?") 
@@ -352,7 +331,7 @@ public class ExtraMethodsDAO {
 						smsRequestVO.setMessage("Dear Admin, \n \n CRN/CAN/UAN: "+rs.getString("CustomerUniqueID")+ " is not up to date for more than 3 days.");
 						smsRequestVO.setToMobileNumber(rs.getString("MobileNumber"));
 						
-//						sendmail(mailRequestVO);
+						sendmail(mailRequestVO);
 //						sendsms(smsRequestVO);
 						
 					}

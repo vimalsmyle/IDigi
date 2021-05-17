@@ -19,7 +19,6 @@ import com.idigitronics.IDigi.dao.DashboardDAO;
 import com.idigitronics.IDigi.request.vo.DashboardRequestVO;
 import com.idigitronics.IDigi.request.vo.DataRequestVO;
 import com.idigitronics.IDigi.request.vo.FilterVO;
-import com.idigitronics.IDigi.request.vo.TataRequestVO;
 import com.idigitronics.IDigi.response.vo.DashboardResponseVO;
 import com.idigitronics.IDigi.response.vo.GraphResponseVO;
 import com.idigitronics.IDigi.response.vo.HomeResponseVO;
@@ -82,17 +81,17 @@ public class DashboardController {
 	}
 	
 	@RequestMapping(value = "/server/api/{device_eui}/status", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
-	public @ResponseBody ResponseVO postDashboardDetails(HttpEntity<String> httpEntity, @PathVariable("device_eui") String miuID) {
-//	public @ResponseBody ResponseVO postDashboardDetails(@RequestBody DataRequestVO dataRequestVO, @PathVariable("device_eui") String miuID) {
+//	public @ResponseBody ResponseVO postDashboardDetails(HttpEntity<String> httpEntity, @PathVariable("device_eui") String miuID) {
+	public @ResponseBody ResponseVO postDashboardDetails(@RequestBody DataRequestVO dataRequestVO, @PathVariable("device_eui") String miuID) {
 
 		DashboardDAO dashboarddao = new DashboardDAO();
 		ResponseVO responsevo = new ResponseVO();
 		
-		Gson gson = new Gson();
+//		Gson gson = new Gson();
 		
-		String json = httpEntity.getBody();
+//		String json = httpEntity.getBody();
 		
-		DataRequestVO dataRequestVO = gson.fromJson(json, DataRequestVO.class);
+//		DataRequestVO dataRequestVO = gson.fromJson(json, DataRequestVO.class);
 		
 		try {
 			responsevo = dashboarddao.postDashboarddetails(dataRequestVO, miuID);
@@ -104,15 +103,15 @@ public class DashboardController {
 	}
 	
 	
-	/*@RequestMapping(value = "/datafrommobile", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	@RequestMapping(value = "/datafrommobile", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	public @ResponseBody
-	ResponseVO datafrommobile(@RequestBody DashboardRequestVO dashboardRequestVO) {
+	ResponseVO datafrommobile(@RequestBody DataRequestVO dataRequestVO) {
 
 		DashboardDAO dashboarddao = new DashboardDAO();
 		ResponseVO responsevo = new ResponseVO();
 
 		try {
-			responsevo.setResult(dashboarddao.insertdashboard(dashboardRequestVO));
+			responsevo.setResult(dashboarddao.insertdashboard(dataRequestVO, dataRequestVO.getMiuID()));
 			responsevo.setMessage("Data Inserted Successfully");
 			
 		} catch (Exception ex) {
@@ -121,6 +120,6 @@ public class DashboardController {
 			responsevo.setMessage("Data Insertion Failed");
 		}
 		return responsevo;
-	}*/
+	}
 	
 }
