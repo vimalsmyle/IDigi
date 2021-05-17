@@ -561,16 +561,16 @@ insert  into `userrole`(`RoleID`,`RoleDescription`) values
 DROP TABLE IF EXISTS `vacation`;
 
 CREATE TABLE `vacation` (
-  `VacationID` bigint(20) NOT NULL AUTO_INCREMENT,
-  `TataReferenceNumber` bigint(20) NOT NULL,
+  `VacationID` bigint(255) NOT NULL AUTO_INCREMENT,
   `CommunityID` int(11) NOT NULL,
   `BlockID` int(11) NOT NULL,
   `CustomerID` int(11) NOT NULL,
-  `MeterID` varchar(20) NOT NULL,
+  `MIUID` varchar(20) NOT NULL,
+  `CustomerMeterID` bigint(255) NOT NULL,
   `VacationName` varchar(300) DEFAULT NULL,
   `StartDate` datetime NOT NULL,
   `EndDate` datetime NOT NULL,
-  `Status` tinyint(4) NOT NULL,
+  `Status` tinyint(4) NOT NULL DEFAULT '10',
   `Source` varchar(10) NOT NULL,
   `CustomerUniqueID` varchar(100) NOT NULL,
   `mode` varchar(100) NOT NULL,
