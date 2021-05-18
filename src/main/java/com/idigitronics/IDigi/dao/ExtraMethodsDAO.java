@@ -256,6 +256,31 @@ public class ExtraMethodsDAO {
 		
 	}
 	
+//	@Scheduled(cron="0 0/4 * * * ?") 
+	public void sendingbill() throws SQLException {
+		
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		try {
+			con = getConnection();
+			pstmt = con.prepareStatement("");
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+			
+			} 
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+		} finally {
+			pstmt.close();
+			rs.close();
+			con.close();
+		}
+		
+	}
+	
 //	@Scheduled(cron="0 0 * ? * *")
 /*	@Scheduled(cron="0 0/4 * * * ?") 
 	public void razorpayPaymentCapture() throws SQLException {

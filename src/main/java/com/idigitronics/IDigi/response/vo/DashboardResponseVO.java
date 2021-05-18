@@ -20,6 +20,8 @@ public class DashboardResponseVO {
 	private String miuID;
 	private int customerMeterID;
 	private String meterSerialNumber;
+	private String meterType;
+	private String payType;
 	private float reading;
 	private int consumption;
 	private float balance;
@@ -332,6 +334,22 @@ public class DashboardResponseVO {
 
 	public void setCustomerMeterID(int customerMeterID) {
 		this.customerMeterID = customerMeterID;
+	}
+
+	public String getMeterType() {
+		return meterType;
+	}
+
+	public void setMeterType(String meterType) {
+		this.meterType = meterType;
+	}
+
+	public String getPayType() {
+		return payType;
+	}
+
+	public void setPayType(String payType) {
+		this.payType = payType;
 	}
 
 }

@@ -127,7 +127,7 @@ public class DropDownDAO {
 			        	topupdetailsresponsevo.setCustomerMeterID(rs.getInt("CustomerMeterID"));
 			        	topupdetailsresponsevo.setNoOfMonths(1);
 			                    
-			                    pstmt = con.prepareStatement("SELECT dbl.LogDate, dbl.Balance, al.ReconnectionCharges, dbl.Minutes FROM displaybalanceLog AS dbl JOIN alertsettings AS al WHERE CustomerUniqueID = ? AND CustomerMeterID =" +customerMeterID);
+			                    pstmt = con.prepareStatement("SELECT dbl.LogDate, dbl.Balance, al.ReconnectionCharges, dbl.Minutes FROM displaybalanceLog AS dbl JOIN alertsettings AS al WHERE dbl.CustomerUniqueID = ? AND dbl.CustomerMeterID =" +customerMeterID);
 			                    pstmt.setString(1, CustomerUniqueID);
 			                    ResultSet rs1 = pstmt.executeQuery();
 			                    if (rs1.next()) {
@@ -209,7 +209,7 @@ public class DropDownDAO {
 		return gateways;
 	}
 
-	public HashMap<Integer, String> getallcustomermeters(String customerUniqueID) throws SQLException {
+	public HashMap<Integer, String> getallcustomermeters(String customerUniqueID, String payType) throws SQLException {
 		// TODO Auto-generated method stub
 		
 		HashMap<Integer, String> customermeters = new HashMap<Integer, String>();
@@ -217,8 +217,8 @@ public class DropDownDAO {
 		Connection con = null;
 		try {
 			con = getConnection();
-			PreparedStatement pstmt = con
-					.prepareStatement("SELECT CustomerMeterID, MIUID FROM customermeterdetails WHERE CustomerUniqueID = '"+ customerUniqueID.trim() + "'");
+			String query = "SELECT CustomerMeterID, MIUID FROM customermeterdetails WHERE CustomerUniqueID = '"+ customerUniqueID.trim() + "' <change>";
+			PreparedStatement pstmt = con.prepareStatement(query.replaceAll("<change>", payType.equalsIgnoreCase("Prepaid") ? "AND PayType = 'Prepaid' " : "AND PayType = 'Postpaid' "));
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
 				customermeters.put(rs.getInt("CustomerMeterID"), rs.getString("MIUID"));
@@ -231,4 +231,5 @@ public class DropDownDAO {
 		}
 		return customermeters;
 	}
+
 }

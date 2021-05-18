@@ -31,9 +31,12 @@ CREATE TABLE `alertsettings` (
   `ModifiedDate` datetime NOT NULL,
   PRIMARY KEY (`AlertID`),
   KEY `AlertID` (`AlertID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 MAX_ROWS=1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1 MAX_ROWS=1;
 
 /*Data for the table `alertsettings` */
+
+insert  into `alertsettings`(`AlertID`,`NoAMRInterval`,`LowBatteryVoltage`,`TimeOut`,`PerUnitValue`,`ReconnectionCharges`,`RegisteredDate`,`ModifiedDate`) values 
+(1,2880,3.00,330,2.4,50,'2021-05-18 18:52:34','2021-05-18 18:52:37');
 
 /*Table structure for table `balancelog` */
 
@@ -48,10 +51,10 @@ CREATE TABLE `balancelog` (
   `CustomerMeterID` bigint(255) DEFAULT NULL,
   `MeterSerialNumber` varchar(100) DEFAULT NULL,
   `CustomerUniqueID` varchar(100) DEFAULT NULL,
-  `MeterType` int(255) NOT NULL,
+  `MeterType` varchar(100) NOT NULL,
   `SyncTime` varchar(100) NOT NULL,
   `SyncInterval` int(100) NOT NULL,
-  `PayType` int(100) NOT NULL,
+  `PayType` varchar(100) NOT NULL,
   `BatteryVoltage` decimal(10,2) NOT NULL,
   `ValveConfiguration` tinyint(2) NOT NULL,
   `ValveStatus` tinyint(2) NOT NULL,
@@ -69,9 +72,18 @@ CREATE TABLE `balancelog` (
   `LowBalance` tinyint(2) DEFAULT NULL,
   `LogDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`ReadingID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
 
 /*Data for the table `balancelog` */
+
+insert  into `balancelog`(`ReadingID`,`MIUID`,`CommunityID`,`BlockID`,`CustomerID`,`CustomerMeterID`,`MeterSerialNumber`,`CustomerUniqueID`,`MeterType`,`SyncTime`,`SyncInterval`,`PayType`,`BatteryVoltage`,`ValveConfiguration`,`ValveStatus`,`Balance`,`TariffID`,`Tariff`,`EmergencyCredit`,`Minutes`,`Reading`,`DoorOpenTamper`,`MagneticTamper`,`Vacation`,`RTCFault`,`LowBattery`,`LowBalance`,`LogDate`) values 
+(1,'2233',1,1,1,2,'22334455','IDIGI1','Water','00:00:05',1440,'Postpaid',90.00,1,1,300.00,2,20.00,40.00,12,1.00,0,0,0,0,0,0,'2021-04-08 16:49:58'),
+(2,'1122',1,1,1,1,'11223344','IDIGI1','Gas','00:00:05',1440,'Prepaid',90.00,1,1,100.00,1,10.00,20.00,12,5.00,0,0,0,0,0,0,'2021-05-18 18:37:12'),
+(3,'2233',1,1,1,2,'22334455','IDIGI1','Water','00:00:05',1440,'Postpaid',90.00,1,1,0.00,2,20.00,40.00,10,10.00,0,0,0,0,0,0,'2021-04-29 19:00:27'),
+(4,'2233',1,1,1,2,'22334455','IDIGI1','Water','00:00:05',1440,'Postpaid',90.00,1,1,0.00,2,20.00,40.00,10,15.00,0,0,0,0,0,0,'2021-05-03 19:00:38'),
+(5,'2233',1,1,1,2,'22334455','IDIGI1','Water','00:00:05',1440,'Postpaid',90.00,1,1,0.00,2,20.00,40.00,10,20.00,0,0,0,0,0,0,'2021-05-18 19:00:44'),
+(6,'2233',1,1,1,2,'22334455','IDIGI1','Water','00:00:05',1440,'Postpaid',90.00,1,1,0.00,2,20.00,40.00,10,25.00,0,0,0,0,0,0,'2021-05-18 19:00:48'),
+(7,'2233',1,1,1,2,'22334455','IDIGI1','Water','00:00:05',1440,'Postpaid',90.00,1,1,0.00,2,20.00,40.00,10,30.00,0,0,0,0,0,0,'2021-05-18 19:00:53');
 
 /*Table structure for table `billingdetails` */
 
@@ -283,7 +295,7 @@ CREATE TABLE `customerdetails` (
 /*Data for the table `customerdetails` */
 
 insert  into `customerdetails`(`CustomerID`,`CommunityID`,`BlockID`,`HouseNumber`,`FirstName`,`LastName`,`Email`,`MobileNumber`,`ActiveStatus`,`CustomerUniqueID`,`CreatedByID`,`CreatedByRoleID`,`RegistrationDate`,`ModifiedDate`) values 
-(1,1,1,'101','Vimal','Kumar','kvk9889@gmail.com','8498890000',1,'IDIGI1',2,2,'2021-05-17 23:20:44',NULL);
+(1,1,1,'101','Vimal','Kumar','kvk9889@gmail.com','8498890000',1,'IDIGI1',2,2,'2021-05-17 23:20:44','2021-05-18 14:26:45');
 
 /*Table structure for table `customermeterdetails` */
 
@@ -328,10 +340,10 @@ CREATE TABLE `displaybalancelog` (
   `CustomerMeterID` bigint(255) DEFAULT NULL,
   `MeterSerialNumber` varchar(100) DEFAULT NULL,
   `CustomerUniqueID` varchar(100) DEFAULT NULL,
-  `MeterType` int(255) NOT NULL,
+  `MeterType` varchar(100) NOT NULL,
   `SyncTime` varchar(100) NOT NULL,
   `SyncInterval` int(100) NOT NULL,
-  `PayType` int(100) NOT NULL,
+  `PayType` varchar(100) NOT NULL,
   `BatteryVoltage` decimal(10,2) NOT NULL,
   `ValveConfiguration` tinyint(2) NOT NULL,
   `ValveStatus` tinyint(2) NOT NULL,
@@ -349,9 +361,13 @@ CREATE TABLE `displaybalancelog` (
   `LowBalance` tinyint(2) DEFAULT NULL,
   `LogDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`ReadingID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
 /*Data for the table `displaybalancelog` */
+
+insert  into `displaybalancelog`(`ReadingID`,`MainBalanceLogID`,`MIUID`,`CommunityID`,`BlockID`,`CustomerID`,`CustomerMeterID`,`MeterSerialNumber`,`CustomerUniqueID`,`MeterType`,`SyncTime`,`SyncInterval`,`PayType`,`BatteryVoltage`,`ValveConfiguration`,`ValveStatus`,`Balance`,`TariffID`,`Tariff`,`EmergencyCredit`,`Minutes`,`Reading`,`DoorOpenTamper`,`MagneticTamper`,`Vacation`,`RTCFault`,`LowBattery`,`LowBalance`,`LogDate`) values 
+(1,7,'2233',1,1,1,2,'22334455','IDIGI1','Water','00:00:05',1440,'Postpaid',90.00,1,1,0.00,2,20.00,40.00,10,30.00,0,0,0,0,0,0,'2021-05-18 19:00:53'),
+(2,2,'1122',1,1,1,1,'11223344','IDIGI1','Gas','00:00:05',1440,'Prepaid',90.00,1,1,100.00,1,10.00,20.00,12,5.00,0,0,0,0,0,0,'2021-05-18 18:37:12');
 
 /*Table structure for table `feedback` */
 
@@ -375,11 +391,11 @@ CREATE TABLE `feedback` (
 
 /*Data for the table `feedback` */
 
-/*Table structure for table `gateways` */
+/*Table structure for table `gateway` */
 
-DROP TABLE IF EXISTS `gateways`;
+DROP TABLE IF EXISTS `gateway`;
 
-CREATE TABLE `gateways` (
+CREATE TABLE `gateway` (
   `GatewayID` int(11) NOT NULL AUTO_INCREMENT,
   `GatewayName` varchar(100) DEFAULT NULL,
   `GatewaySerialNumber` varchar(100) NOT NULL,
@@ -390,9 +406,9 @@ CREATE TABLE `gateways` (
   PRIMARY KEY (`GatewayID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
-/*Data for the table `gateways` */
+/*Data for the table `gateway` */
 
-insert  into `gateways`(`GatewayID`,`GatewayName`,`GatewaySerialNumber`,`GatewayIP`,`GatewayPort`,`RegisteredDate`,`ModifiedDate`) values 
+insert  into `gateway`(`GatewayID`,`GatewayName`,`GatewaySerialNumber`,`GatewayIP`,`GatewayPort`,`RegisteredDate`,`ModifiedDate`) values 
 (1,'Gateway1','123','123.123.123.123',1234,'2021-05-17 23:23:10','2021-05-17 23:23:12');
 
 /*Table structure for table `mailsettings` */
@@ -547,10 +563,10 @@ CREATE TABLE `user` (
 
 insert  into `user`(`ID`,`UserID`,`UserName`,`UserPassword`,`RoleID`,`ActiveStatus`,`CommunityID`,`BlockID`,`CustomerID`,`CustomerUniqueID`,`CreatedByID`,`CreatedByRoleID`,`RegisteredDate`,`ModifiedDate`) values 
 (1,'Superadmin','Idigitronics','cvp/LzpadrQT+2k0WDjyOQ==',1,1,0,0,0,NULL,0,0,'2021-05-01 17:19:40','2021-05-01 17:19:37'),
-(2,'kvkadmin','Kvk\r\n','cvp/LzpadrQT+2k0WDjyOQ==\r\n',2,1,1,1,0,NULL,1,1,'2021-05-01 17:24:22','2021-05-01 17:24:12'),
-(3,'Vimal\r\n','Vimal Kumar\r\n','cvp/LzpadrQT+2k0WDjyOQ==\r\n',3,1,1,1,1,'IDIGI1',2,2,'2021-05-01 17:25:54','2021-05-01 17:25:56'),
-(4,'Superadminsupervisor\r\n','HanbitSuperadminsupervisor\r\n','cvp/LzpadrQT+2k0WDjyOQ==\r\n',4,1,0,0,0,NULL,1,1,'2021-05-01 17:26:45','2021-05-01 17:26:48'),
-(5,'Adminsupervisor\r\n','KvkAdminsupervisor\r\n','cvp/LzpadrQT+2k0WDjyOQ==\r\n',5,1,1,1,0,NULL,1,1,'2021-05-01 17:28:26','2021-05-01 17:28:29'),
+(2,'kvkadmin','Kvk','cvp/LzpadrQT+2k0WDjyOQ==',2,1,1,1,0,NULL,1,1,'2021-05-01 17:24:22','2021-05-01 17:24:12'),
+(3,'IDIGI1','Vimal Kumar','cvp/LzpadrQT+2k0WDjyOQ==',3,1,1,1,1,'IDIGI1',2,2,'2021-05-01 17:25:54','2021-05-01 17:25:56'),
+(4,'Superadminsupervisor','Idigisuperadminsupervisor','cvp/LzpadrQT+2k0WDjyOQ==',4,1,0,0,0,NULL,1,1,'2021-05-01 17:26:45','2021-05-01 17:26:48'),
+(5,'Adminsupervisor','Kvkadminsupervisor','cvp/LzpadrQT+2k0WDjyOQ==',5,1,1,1,0,NULL,1,1,'2021-05-01 17:28:26','2021-05-01 17:28:29'),
 (6,'idigiblock','idigiblock','yotlEHVjsFQOtJ1njm6kXQ==',2,1,1,1,0,'NULL',1,1,'2021-05-15 23:23:08','2021-05-15 23:23:08');
 
 /*Table structure for table `userrole` */

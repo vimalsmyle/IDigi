@@ -72,7 +72,7 @@ public class DashboardDAO {
 				perUnitValue = rs1.getFloat("PerUnitValue");
 			}
 			
-			String query = "SELECT DISTINCT c.CommunityName, b.BlockName, cd.FirstName,cd.CustomerUniqueID, cd.LastName, cd.HouseNumber, cmd.MeterSerialNumber, dbl.ReadingID, dbl.MainBalanceLogID, dbl.EmergencyCredit, \r\n" + 
+			String query = "SELECT DISTINCT c.CommunityName, b.BlockName, cd.FirstName,cd.CustomerUniqueID, cd.LastName, cd.HouseNumber, cmd.CustomerMeterID, cmd.MeterSerialNumber, dbl.ReadingID, dbl.MainBalanceLogID, dbl.EmergencyCredit, \r\n" + 
 					"dbl.MIUID, dbl.Reading, dbl.Balance, dbl.BatteryVoltage, dbl.LowBattery, dbl.Tariff, dbl.ValveStatus, dbl.DoorOpenTamper, dbl.MagneticTamper, dbl.RTCFault, dbl.Vacation, dbl.LowBalance, dbl.LogDate\r\n" + 
 					"FROM displaybalancelog AS dbl LEFT JOIN community AS c ON c.communityID = dbl.CommunityID LEFT JOIN block AS b ON b.BlockID = dbl.BlockID\r\n" + 
 					"LEFT JOIN customerdetails AS cd ON cd.CustomerID = dbl.CustomerID LEFT JOIN customermeterdetails AS cmd ON cmd.CustomerMeterID = dbl.CustomerMeterID WHERE 1=1 <change>";
@@ -110,8 +110,6 @@ public class DashboardDAO {
 				dashboardvo.setValveStatusColor((rs.getInt("ValveStatus") == 0) ? "GREEN" : (rs.getInt("ValveStatus") == 1) ? "RED" : "");
 				dashboardvo.setBattery(rs.getInt("BatteryVoltage"));
 				dashboardvo.setBatteryColor((rs.getInt("LowBattery") == 1 ) ? "RED" : "GREEN");
-				
-				// 0 = no tamper 1 = magnetic; 2 = door open
 				
 				dashboardvo.setDoorOpenTamper((rs.getInt("DoorOpenTamper") == 0) ? "NO" : (rs.getInt("DoorOpenTamper") == 1) ? "YES" : "NO");
 				dashboardvo.setDooropentamperColor((rs.getInt("DoorOpenTamper") == 0) ? "GREEN" : "RED");
@@ -225,7 +223,7 @@ public class DashboardDAO {
 				dashboardvo.setConsumption((int) (dashboardvo.getReading() * perUnitValue));
 				dashboardvo.setBalance(rs.getFloat("Balance"));
 				dashboardvo.setEmergencyCredit(rs.getFloat("EmergencyCredit"));
-				dashboardvo.setValveStatus((rs.getInt("ValveStatus") == 0) ? "OPEN" : (rs.getInt("ValveStatus") == 1) ? "CLOSED" : "");	
+				dashboardvo.setValveStatus((rs.getInt("ValveStatus") == 1) ? "OPEN" : (rs.getInt("ValveStatus") == 0) ? "CLOSED" : "");	
 				dashboardvo.setValveStatusColor((rs.getInt("ValveStatus") == 0) ? "GREEN" : (rs.getInt("ValveStatus") == 1) ? "RED" : "");
 //				dashboardvo.setBattery((int)((rs.getInt("BatteryVoltage"))*(100/3.5) > 100 ? 100 : (rs.getFloat("BatteryVoltage"))*(100/3.5)));
 				dashboardvo.setBattery(rs.getInt("BatteryVoltage"));
@@ -520,10 +518,10 @@ public class DashboardDAO {
 					pstmt.setInt(5, rs.getInt("CustomerMeterID"));
 					pstmt.setString(6, rs.getString("MeterSerialNumber"));
 					pstmt.setString(7, rs.getString("CustomerUniqueID"));
-					pstmt.setInt(8, dataRequestVO.getType());
+					pstmt.setString(8, dataRequestVO.getType() == 1 ? "Water" : dataRequestVO.getType() == 2 ? "Gas" : dataRequestVO.getType() == 3 ? "Energy" : "");
 					pstmt.setString(9, dataRequestVO.getSync_time());
 					pstmt.setInt(10, dataRequestVO.getSync_interval());
-					pstmt.setInt(11, dataRequestVO.getPre_post_paid());
+					pstmt.setString(11, dataRequestVO.getPre_post_paid() == 0 ? "Prepaid" : "Postpaid");
 					pstmt.setFloat(12, dataRequestVO.getBat_volt());
 					pstmt.setInt(13, rs.getInt("TariffID"));
 					pstmt.setFloat(14, dataRequestVO.getTariff());
@@ -562,10 +560,10 @@ public class DashboardDAO {
 								pstmt1.setInt(6, rs.getInt("CustomerMeterID"));
 								pstmt1.setString(7, rs.getString("MeterSerialNumber"));
 								pstmt1.setString(8, rs.getString("CustomerUniqueID"));
-								pstmt1.setInt(9, dataRequestVO.getType());
+								pstmt1.setString(9, dataRequestVO.getType() == 1 ? "Water" : dataRequestVO.getType() == 2 ? "Gas" : dataRequestVO.getType() == 3 ? "Energy" : "");
 								pstmt1.setString(10, dataRequestVO.getSync_time());
 								pstmt1.setInt(11, dataRequestVO.getSync_interval());
-								pstmt1.setInt(12, dataRequestVO.getPre_post_paid());
+								pstmt1.setString(12, dataRequestVO.getPre_post_paid() == 0 ? "Prepaid" : "Postpaid");
 								pstmt1.setFloat(13, dataRequestVO.getBat_volt());
 								pstmt1.setInt(14, rs.getInt("TariffID"));
 								pstmt1.setFloat(15, dataRequestVO.getTariff());
@@ -594,10 +592,10 @@ public class DashboardDAO {
 									pstmt1.setInt(6, rs.getInt("CustomerMeterID"));
 									pstmt1.setString(7, rs.getString("MeterSerialNumber"));
 									pstmt1.setString(8, rs.getString("CustomerUniqueID"));
-									pstmt1.setInt(9, dataRequestVO.getType());
+									pstmt1.setString(9, dataRequestVO.getType() == 1 ? "Water" : dataRequestVO.getType() == 2 ? "Gas" : dataRequestVO.getType() == 3 ? "Energy" : "");
 									pstmt1.setString(10, dataRequestVO.getSync_time());
 									pstmt1.setInt(11, dataRequestVO.getSync_interval());
-									pstmt1.setInt(12, dataRequestVO.getPre_post_paid());
+									pstmt1.setString(12, dataRequestVO.getPre_post_paid() == 0 ? "Prepaid" : "Postpaid");
 									pstmt1.setFloat(13, dataRequestVO.getBat_volt());
 									pstmt1.setInt(14, rs.getInt("TariffID"));
 									pstmt1.setFloat(15, dataRequestVO.getTariff());

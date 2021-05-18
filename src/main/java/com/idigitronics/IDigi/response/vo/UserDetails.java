@@ -5,6 +5,7 @@ package com.idigitronics.IDigi.response.vo;
 
 import java.util.List;
 
+import com.idigitronics.IDigi.request.vo.CommandGroupRequestVO;
 import com.idigitronics.IDigi.request.vo.MeterRequestVO;
 
 /**
@@ -24,11 +25,10 @@ public class UserDetails {
 	private int customerID;
 	private String CustomerUniqueID;
 	private String communityName;
-	private int pendingCommandType;
+	private List<CommandGroupRequestVO> pendingCommands;
 	private int pendingTransactionID;
 	private String blockName;
 	private List<MeterRequestVO> meters;
-	private String dataFrame;
 	
 	public String getCommunityName() {
 		return communityName;
@@ -85,12 +85,6 @@ public class UserDetails {
 		this.userName = userName;
 	}
 	
-	public int getPendingCommandType() {
-		return pendingCommandType;
-	}
-	public void setPendingCommandType(int pendingCommandType) {
-		this.pendingCommandType = pendingCommandType;
-	}
 	public int getPendingTransactionID() {
 		return pendingTransactionID;
 	}
@@ -124,11 +118,11 @@ public class UserDetails {
 	public void setBlockName(String blockName) {
 		this.blockName = blockName;
 	}
-	public String getDataFrame() {
-		return dataFrame;
+	public List<CommandGroupRequestVO> getPendingCommands() {
+		return pendingCommands;
 	}
-	public void setDataFrame(String dataFrame) {
-		this.dataFrame = dataFrame;
+	public void setPendingCommands(List<CommandGroupRequestVO> pendingCommands) {
+		this.pendingCommands = pendingCommands;
 	}
 	public List<MeterRequestVO> getMeters() {
 		return meters;

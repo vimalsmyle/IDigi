@@ -483,14 +483,14 @@ public class CommunitySetUpDAO {
 					smsRequestVO.setToMobileNumber(blockvo.getMobileNumber());
 					smsRequestVO.setMessage("Please Save the Credentials for further communications \n" + " UserID: " + mailrequestvo.getUserID() + "\n Password: " + mailrequestvo.getUserPassword()+ "\n Use URL for login : "+ ExtraConstants.ApplicationURL);
 					
-					extraMethodsDAO.sendsms(smsRequestVO);
+//					extraMethodsDAO.sendsms(smsRequestVO);
 					
 					if(extraMethodsDAO.sendmail(mailrequestvo).equalsIgnoreCase("Success")) {
-						extraMethodsDAO.sendsms(smsRequestVO);
+//						extraMethodsDAO.sendsms(smsRequestVO);
 						responsevo.setResult("Success");
 						responsevo.setMessage("Block Added Successfully and Block Admin Credentials have been sent to registered mail");
 					}else {
-						extraMethodsDAO.sendsms(smsRequestVO);
+//						extraMethodsDAO.sendsms(smsRequestVO);
 						responsevo.setResult("Success");
 						responsevo.setMessage("Block Registered Successfully but due to internal server Error Credentials have not been sent to your registered Mail ID. Please Contact Administrator");
 					}
@@ -674,13 +674,10 @@ public class CommunitySetUpDAO {
 		
 			// create a view for this
 			
-			String query =
-					"SELECT community.CommunityName, block.BlockName, customerdetails.CustomerID, customerdetails.HouseNumber, customerdetails.FirstName, customerdetails.LastName, \r\n" + 
-							"customerdetails.Email, customerdetails.MobileNumber, customermeterdetails.MIUID, customermeterdetails.MeterSerialNumber, \r\n" + 
-							"customerdetails.CustomerUniqueID, customerdetails.ModifiedDate, customerdetails.CreatedByID, customerdetails.CreatedByRoleID FROM customerdetails \r\n" + 
-							"LEFT JOIN community ON community.CommunityID = customerdetails.communityID LEFT JOIN block ON block.BlockID = customerdetails.BlockID LEFT JOIN customermeterdetails as customermeterdetails ON customermeterdetails.CustomerID = customerdetails.CustomerID <change>";
+			String query = "SELECT c.CommunityName, b.BlockName, cd.CustomerID, cd.HouseNumber, cd.FirstName, cd.LastName, cd.Email, cd.MobileNumber, cd.CustomerUniqueID, cd.CreatedByID, cd.CreatedByRoleID, cd.ModifiedDate\n" + 
+							"FROM customerdetails AS cd LEFT JOIN community AS c ON cd.CommunityID = c.CommunityID LEFT JOIN block AS b ON b.BlockID = cd.BlockID <change>";
 							
-			pstmt = con.prepareStatement(query.replaceAll("<change>", ((roleid == 1 || roleid == 4) && (filterCid == -1)) ? "ORDER BY customerdetails.CustomerID DESC" : ((roleid == 1 || roleid == 4) && (filterCid != -1)) ? " WHERE customerdetails.CommunityID = "+filterCid+" ORDER BY customerdetails.CustomerID DESC" : (roleid == 2 || roleid == 5) ? "WHERE customerdetails.BlockID = "+id+ " ORDER BY customerdetails.CustomerID DESC" : (roleid == 3) ? "WHERE customerdetails.CustomerUniqueID = '"+id+"'":""));
+			pstmt = con.prepareStatement(query.replaceAll("<change>", ((roleid == 1 || roleid == 4) && (filterCid == -1)) ? "ORDER BY cd.CustomerID DESC" : ((roleid == 1 || roleid == 4) && (filterCid != -1)) ? " WHERE cd.CommunityID = "+filterCid+" ORDER BY cd.CustomerID DESC" : (roleid == 2 || roleid == 5) ? "WHERE cd.BlockID = "+id+ " ORDER BY cd.CustomerID DESC" : (roleid == 3) ? "WHERE cd.CustomerUniqueID = '"+id+"'":""));
 			
 			rs = pstmt.executeQuery();
 
@@ -697,7 +694,7 @@ public class CommunitySetUpDAO {
 				customervo.setCustomerUniqueID(rs.getString("CustomerUniqueID"));
 				customervo.setCustomerID(rs.getInt("CustomerID"));
 				
-				PreparedStatement pstmt2 = con.prepareStatement("SELECT * FROM customermeterdetails WHERE CustomerUniqueID = '" + customervo.getCustomerUniqueID() + "'");
+				PreparedStatement pstmt2 = con.prepareStatement("SELECT * FROM customermeterdetails WHERE CustomerID = " + customervo.getCustomerID());
 				
 				ResultSet rs2 = pstmt2.executeQuery();
 				
@@ -705,11 +702,13 @@ public class CommunitySetUpDAO {
 					
 					metervo = new MeterRequestVO();
 					
+					metervo.setCustomerMeterID(rs2.getInt("CustomerMeterID"));
 					metervo.setMiuID(rs2.getString("MIUID"));
 					metervo.setMeterSerialNumber(rs2.getString("MeterSerialNumber"));
 					metervo.setMeterType(rs2.getString("MeterType"));
 					metervo.setLocation(rs2.getString("Location"));
 					metervo.setTariffID(rs2.getInt("TariffID"));
+					metervo.setGatewayID(rs2.getInt("GatewayID"));
 					
 					PreparedStatement pstmt3 = con.prepareStatement("SELECT TariffName from tariff WHERE TariffID = "+ metervo.getTariffID());
 					
@@ -832,11 +831,11 @@ public class CommunitySetUpDAO {
 						String result = extraMethodsDAO.sendmail(mailrequestvo);
 						
 						if(result.equalsIgnoreCase("Success")) {
-							extraMethodsDAO.sendsms(smsRequestVO);
+//							extraMethodsDAO.sendsms(smsRequestVO);
 							responsevo.setResult("Success");
 							responsevo.setMessage("Customer Details Added Successfully");
 						}else {
-							extraMethodsDAO.sendsms(smsRequestVO);
+//							extraMethodsDAO.sendsms(smsRequestVO);
 							responsevo.setResult("Success");
 							responsevo.setMessage("Customer Registered Successfully but due to internal server Error Credentials have not been sent to your registered Mail ID. Please Contact Administrator");
 						}
@@ -923,6 +922,10 @@ public class CommunitySetUpDAO {
 	            pstmt.setString(5, customervo.getCustomerUniqueID());
 
 	            if (pstmt.executeUpdate() > 0) {
+	            	
+	            	for(int i = 0; i < customervo.getMeters().size(); i++) {
+	            		con.prepareStatement("UPDATE customermeterdetails SET MIUID = '"+customervo.getMeters().get(i).getMiuID()+"', ModifiedDate = NOW() WHERE CustomerMeterID = " + customervo.getMeters().get(i).getCustomerMeterID()).executeUpdate();
+	            	}
 	            	
 	            	PreparedStatement pstmt1 = con.prepareStatement("UPDATE USER SET UserName = CONCAT (?, (SELECT LastName FROM customerdetails WHERE CustomerUniqueID = ?)) WHERE CustomerUniqueID = ?");
 	            	pstmt1.setString(1, customervo.getFirstName() + " ");
@@ -1059,8 +1062,8 @@ public class CommunitySetUpDAO {
         	customerresponsevo.setEmail(rs.getString("Email"));
         	customerresponsevo.setMobileNumber(rs.getString("MobileNumber"));
         	
-        	PreparedStatement pstmt1 = con.prepareStatement("SELECT UserID FROM user WHERE CRNNumber = ?");
-        	pstmt1.setString(1, rs.getString("CRNNumber"));
+        	PreparedStatement pstmt1 = con.prepareStatement("SELECT UserID FROM user WHERE CustomerUniqueID = ?");
+        	pstmt1.setString(1, rs.getString("CustomerUniqueID"));
         
         	ResultSet rs1 = pstmt1.executeQuery();
         	if(rs1.next()) {

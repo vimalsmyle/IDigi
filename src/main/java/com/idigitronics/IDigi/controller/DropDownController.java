@@ -55,11 +55,11 @@ public class DropDownController {
 		return responsevo;
 	}
 	
-	@RequestMapping(value = "/customermeters/{CustomerUniqueID}",method = RequestMethod.GET, produces="application/json")
-	public @ResponseBody ResponseVO getallcustomermeters(@PathVariable("CustomerUniqueID") String customerUniqueID) throws SQLException {
+	@RequestMapping(value = "/customermeters/{payType}/{CustomerUniqueID}",method = RequestMethod.GET, produces="application/json")
+	public @ResponseBody ResponseVO getallcustomermeters(@PathVariable("CustomerUniqueID") String customerUniqueID, @PathVariable("payType") String payType) throws SQLException {
 		
 		ResponseVO responsevo = new ResponseVO();
-		responsevo.setDropDownCustomerMeters(dropdowndao.getallcustomermeters(customerUniqueID));
+		responsevo.setDropDownCustomerMeters(dropdowndao.getallcustomermeters(customerUniqueID, payType));
 
 		return responsevo;
 	}
