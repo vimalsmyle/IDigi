@@ -184,7 +184,7 @@ public class ExtraMethodsDAO {
 	
 //	@Scheduled(cron="0 0 * ? * *") // scheduled for 1 hour
 //	@Scheduled(cron="0 0/2 * * * ?") // scheduled for every 2 min
-	public void billgeneration() throws SQLException {
+	public void individualbillgeneration() throws SQLException {
 		
 		Connection con = null;
 		PreparedStatement pstmt = null;
@@ -244,13 +244,76 @@ public class ExtraMethodsDAO {
 						pstmt3.setInt(17, currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear());// add year 
 						
 						if(pstmt3.executeUpdate() > 0) {
-//					perform some actions after discussion							
+//					perform some actions after discussion
 						}
 						
 					}
 				}
 				
 			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+		} finally {
+			pstmt.close();
+			rs.close();
+			con.close();
+		}
+		
+	}
+	
+//	@Scheduled(cron="0 0 * ? * *") // scheduled for 1 hour
+//	@Scheduled(cron="0 0/2 * * * ?") // scheduled for every 2 min
+	public void billgeneration() throws SQLException {
+		
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		PreparedStatement pstmt1 = null;
+		PreparedStatement pstmt2 = null;
+		ResultSet rs = null;
+		ResultSet rs1 = null;
+		
+		try {
+			
+			con = getConnection();
+			LocalDate currentdate = LocalDate.now();
+			
+			pstmt = con.prepareStatement("SELECT * FROM customerdetails");
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				
+				int totalamount = 0;
+				int totalConsumption = 0;
+				int fixedCharges = 0;
+				int reconnectionCharges = 0;
+				
+				pstmt1 = con.prepareStatement("SELECT * FROM billingdetails WHERE CustomerID = " + rs.getInt("CustomerID") + " AND BillMonth = "+ (currentdate.getMonthValue() - 1) + " AND BillYear = " + (currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear()));
+				rs1 = pstmt1.executeQuery();
+				while (rs1.next()) {
+				
+				totalamount = rs1.getInt("Amount") + totalamount;
+				totalConsumption = rs1.getInt("Consumption") + totalConsumption;
+				fixedCharges = rs1.getInt("FixedCharges") + fixedCharges;
+				reconnectionCharges = rs1.getInt("ReconnectionCharges") + reconnectionCharges;
+				
+				}
+				
+				pstmt2 = con.prepareStatement("INSERT INTO customerbillingdetails (CommunityID, BlockID, CustomerID, CustomerUniqueID, TotalAmount, TotalConsumption, BillMonth, BillYear, ModifiedDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())");
+				pstmt2.setInt(1, rs.getInt("CommunityID"));
+				pstmt2.setInt(2, rs.getInt("BlockID"));
+				pstmt2.setInt(3, rs.getInt("CustomerID"));
+				pstmt2.setString(4, rs.getString("CustomerUniqueID"));
+				pstmt2.setInt(5, totalamount + fixedCharges + reconnectionCharges); // add Taxes after discussion
+				pstmt2.setInt(6, totalConsumption);
+				pstmt2.setInt(7, currentdate.getMonthValue() - 1);
+				pstmt2.setInt(8, currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear());
+				
+				pstmt2.executeUpdate();
+			}
+			
+			
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			

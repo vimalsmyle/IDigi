@@ -106,7 +106,6 @@ CREATE TABLE `billingdetails` (
   `BillAmount` int(100) NOT NULL,
   `FixedCharges` int(11) DEFAULT NULL,
   `ReconnectionCharges` int(11) DEFAULT NULL,
-  `Status` tinyint(10) NOT NULL DEFAULT '0',
   `BillMonth` int(10) DEFAULT NULL,
   `BillYear` int(10) DEFAULT NULL,
   `LogDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -122,10 +121,11 @@ DROP TABLE IF EXISTS `billingpaymentdetails`;
 
 CREATE TABLE `billingpaymentdetails` (
   `TransactionID` bigint(255) NOT NULL AUTO_INCREMENT,
-  `BillingID` bigint(255) DEFAULT NULL,
+  `CustomerBillingID` bigint(255) NOT NULL,
   `CustomerID` bigint(20) NOT NULL,
   `MIUID` varchar(50) NOT NULL,
   `CustomerMeterID` bigint(255) NOT NULL,
+  `CustomerUniqueID` varchar(100) NOT NULL,
   `Amount` decimal(10,0) NOT NULL,
   `Source` varchar(10) NOT NULL,
   `ModeOfPayment` varchar(50) NOT NULL,
@@ -139,7 +139,6 @@ CREATE TABLE `billingpaymentdetails` (
   `RazorPayRefundEntity` varchar(10000) DEFAULT NULL,
   `CreatedByID` int(11) NOT NULL,
   `CreatedByRoleID` int(11) NOT NULL,
-  `CustomerUniqueID` varchar(100) NOT NULL,
   `TransactionDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `AcknowledgeDate` datetime NOT NULL,
   PRIMARY KEY (`TransactionID`)
@@ -222,6 +221,28 @@ CREATE TABLE `community` (
 
 insert  into `community`(`CommunityID`,`CommunityName`,`Email`,`MobileNumber`,`Address`,`CreatedDate`,`ModifiedDate`) values 
 (1,'Idigi','vimal_smyle2006@yahoo.com','8498890000','hyderabad','2021-05-15 23:21:57',NULL);
+
+/*Table structure for table `customerbillingdetails` */
+
+DROP TABLE IF EXISTS `customerbillingdetails`;
+
+CREATE TABLE `customerbillingdetails` (
+  `CustomerBillingID` bigint(255) NOT NULL AUTO_INCREMENT,
+  `CommunityID` int(100) NOT NULL,
+  `BlockID` int(100) NOT NULL,
+  `CustomerID` bigint(255) NOT NULL,
+  `CustomerUniqueID` varchar(500) NOT NULL,
+  `TotalAmount` int(100) NOT NULL,
+  `TotalConsumption` int(100) NOT NULL,
+  `Status` tinyint(5) NOT NULL DEFAULT '0',
+  `BillMonth` int(11) DEFAULT NULL,
+  `BillYear` int(11) DEFAULT NULL,
+  `LogDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `ModifiedDate` datetime DEFAULT NULL,
+  PRIMARY KEY (`CustomerBillingID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+/*Data for the table `customerbillingdetails` */
 
 /*Table structure for table `customerdeletedetails` */
 

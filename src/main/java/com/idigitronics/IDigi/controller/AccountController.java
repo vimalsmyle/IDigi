@@ -25,6 +25,7 @@ import com.idigitronics.IDigi.exceptions.BusinessException;
 import com.idigitronics.IDigi.request.vo.CheckOutRequestVO;
 import com.idigitronics.IDigi.request.vo.ConfigurationRequestVO;
 import com.idigitronics.IDigi.request.vo.DataRequestVO;
+import com.idigitronics.IDigi.request.vo.PayBillRequestVO;
 import com.idigitronics.IDigi.request.vo.TopUpRequestVO;
 import com.idigitronics.IDigi.response.vo.BillingResponseVO;
 import com.idigitronics.IDigi.response.vo.ConfigurationResponseVO;
@@ -145,6 +146,21 @@ public class AccountController {
 		billingresponsevo.setData(accountdao.getbillingdetails(roleid, id, filterCid));
 
 		return billingresponsevo;
+	}
+	
+	@RequestMapping(value = "/paybill", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	public @ResponseBody
+	ResponseVO paybill(@RequestBody PayBillRequestVO paybillRequestVO) throws ClassNotFoundException,
+			BusinessException, SQLException {
+		ResponseVO responsevo = new ResponseVO();
+		try {
+			responsevo = accountdao.paybill(paybillRequestVO);
+		} catch (Exception e) {
+			responsevo.setResult("Failure");
+			responsevo.setMessage(e.getMessage());
+		}
+
+		return responsevo;
 	}
 
 	@RequestMapping(value = "/billing/print/{billingID}", method = RequestMethod.GET, produces = "application/pdf")

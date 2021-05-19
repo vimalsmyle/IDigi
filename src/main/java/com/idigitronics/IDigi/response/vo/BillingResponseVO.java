@@ -11,38 +11,26 @@ import java.util.List;
  */
 public class BillingResponseVO {
 
-	private int billingID;
-	private int customerMeterID;
+	private long customerBillingID;
 	private String communityName;
 	private String blockName;
 	private String customerName;
 	private String houseNumber;
-	private String miuID;
-	private float previousReading;
-	private float presentReading;
-	private int consumption;
-	private float tariff;
-	private int billAmount;
-	private int fixedCharges;
-	private int reconnectionCharges;
+	private int totalConsumption;
+	private int totalAmount;
 	private String billingDate;
 	private String billMonth;
 	private int billYear;
 	private String logDate;
 	
+	private List<IndividualBillingResponseVO> individualbills;
 	private List<BillingResponseVO> data;
 	
-	public int getBillingID() {
-		return billingID;
+	public long getCustomerBillingID() {
+		return customerBillingID;
 	}
-	public void setBillingID(int billingID) {
-		this.billingID = billingID;
-	}
-	public int getCustomerMeterID() {
-		return customerMeterID;
-	}
-	public void setCustomerMeterID(int customerMeterID) {
-		this.customerMeterID = customerMeterID;
+	public void setCustomerBillingID(long customerBillingID) {
+		this.customerBillingID = customerBillingID;
 	}
 	public String getCommunityName() {
 		return communityName;
@@ -62,53 +50,17 @@ public class BillingResponseVO {
 	public void setCustomerName(String customerName) {
 		this.customerName = customerName;
 	}
-	public String getMiuID() {
-		return miuID;
+	public String getHouseNumber() {
+		return houseNumber;
 	}
-	public void setMiuID(String miuID) {
-		this.miuID = miuID;
+	public void setHouseNumber(String houseNumber) {
+		this.houseNumber = houseNumber;
 	}
-	public float getPreviousReading() {
-		return previousReading;
+	public int getTotalConsumption() {
+		return totalConsumption;
 	}
-	public void setPreviousReading(float previousReading) {
-		this.previousReading = previousReading;
-	}
-	public float getPresentReading() {
-		return presentReading;
-	}
-	public void setPresentReading(float presentReading) {
-		this.presentReading = presentReading;
-	}
-	public int getConsumption() {
-		return consumption;
-	}
-	public void setConsumption(int consumption) {
-		this.consumption = consumption;
-	}
-	public float getTariff() {
-		return tariff;
-	}
-	public void setTariff(float tariff) {
-		this.tariff = tariff;
-	}
-	public int getBillAmount() {
-		return billAmount;
-	}
-	public void setBillAmount(int billAmount) {
-		this.billAmount = billAmount;
-	}
-	public int getFixedCharges() {
-		return fixedCharges;
-	}
-	public void setFixedCharges(int fixedCharges) {
-		this.fixedCharges = fixedCharges;
-	}
-	public int getReconnectionCharges() {
-		return reconnectionCharges;
-	}
-	public void setReconnectionCharges(int reconnectionCharges) {
-		this.reconnectionCharges = reconnectionCharges;
+	public void setTotalConsumption(int totalConsumption) {
+		this.totalConsumption = totalConsumption;
 	}
 	public String getBillingDate() {
 		return billingDate;
@@ -134,17 +86,23 @@ public class BillingResponseVO {
 	public void setLogDate(String logDate) {
 		this.logDate = logDate;
 	}
+	public List<IndividualBillingResponseVO> getIndividualbills() {
+		return individualbills;
+	}
+	public void setIndividualbills(List<IndividualBillingResponseVO> individualbills) {
+		this.individualbills = individualbills;
+	}
 	public List<BillingResponseVO> getData() {
 		return data;
 	}
 	public void setData(List<BillingResponseVO> data) {
 		this.data = data;
 	}
-	public String getHouseNumber() {
-		return houseNumber;
+	public int getTotalAmount() {
+		return totalAmount;
 	}
-	public void setHouseNumber(String houseNumber) {
-		this.houseNumber = houseNumber;
+	public void setTotalAmount(int totalAmount) {
+		this.totalAmount = totalAmount;
 	}
 	
 }

@@ -21,6 +21,7 @@
 	
 	<!-- <bean id="billgeneration" class="com.idigitronics.IDigi.dao.ExtraMethodsDAO"></bean>
 	<bean id="communicationfailurealert" class="com.idigitronics.IDigi.dao.ExtraMethodsDAO"></bean>
-	<bean id="sendingbill" class="com.idigitronics.IDigi.dao.ExtraMethodsDAO"></bean> -->
+	<bean id="sendingbill" class="com.idigitronics.IDigi.dao.ExtraMethodsDAO"></bean> 
+	<bean id="individualbillgeneration" class="com.idigitronics.IDigi.dao.ExtraMethodsDAO"></bean> --> 
 	<!-- <bean id="razorpayPaymentCapture" class="com.idigitronics.IDigi.dao.ExtraMethodsDAO"></bean> -->
 </beans>

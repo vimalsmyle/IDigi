@@ -14,7 +14,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Random;
 
 import com.google.gson.Gson;
 import com.idigitronics.IDigi.constants.DataBaseConstants;
@@ -24,6 +23,7 @@ import com.idigitronics.IDigi.request.vo.CheckOutRequestVO;
 import com.idigitronics.IDigi.request.vo.CommandGroupRequestVO;
 import com.idigitronics.IDigi.request.vo.ConfigurationRequestVO;
 import com.idigitronics.IDigi.request.vo.DataRequestVO;
+import com.idigitronics.IDigi.request.vo.PayBillRequestVO;
 import com.idigitronics.IDigi.request.vo.RazorPayOrderVO;
 import com.idigitronics.IDigi.request.vo.RazorpayRequestVO;
 import com.idigitronics.IDigi.request.vo.RestCallVO;
@@ -33,14 +33,13 @@ import com.idigitronics.IDigi.response.vo.CheckoutDetails;
 import com.idigitronics.IDigi.response.vo.CommandGroupResponseVO;
 import com.idigitronics.IDigi.response.vo.ConfigurationResponseVO;
 import com.idigitronics.IDigi.response.vo.ConfigurationStatusResponseVO;
+import com.idigitronics.IDigi.response.vo.IndividualBillingResponseVO;
 import com.idigitronics.IDigi.response.vo.Notes;
 import com.idigitronics.IDigi.response.vo.Prefill;
 import com.idigitronics.IDigi.response.vo.RazorPayResponseVO;
 import com.idigitronics.IDigi.response.vo.ResponseVO;
 import com.idigitronics.IDigi.response.vo.StatusResponseVO;
-import com.idigitronics.IDigi.response.vo.TataResponseVO;
 import com.idigitronics.IDigi.response.vo.Theme;
-import com.idigitronics.IDigi.utils.Encoding;
 import com.idigitronics.IDigi.utils.Signature;
 import com.itextpdf.io.font.FontConstants;
 import com.itextpdf.io.image.ImageDataFactory;
@@ -866,31 +865,60 @@ public class AccountDAO {
 		ResultSet rs = null;
 		PreparedStatement pstmt1 = null;
 		ResultSet rs1 = null;
-		int amount = 0;
+		List<BillingResponseVO> billlist = null;
+		List<IndividualBillingResponseVO> individualbills = null;
 		BillingResponseVO billingresponsevo = null;
+		IndividualBillingResponseVO individualBillingResponsevo = null;
+		
 		try {
 			con = getConnection();
 			
-			pstmt = con.prepareStatement("SELECT c.CommunityName, b.BlockName, CONCAT(cd.FirstName, cd.LastName) as Name, cd.HouseNumber, cd.CustomerID, cmd.CustomerMeterID, cmd.MIUID, cmd.MeterType, cmd.TariffID, t.Tariff, t.FixedCharges FROM customerdetails AS cd LEFT JOIN customermeterdetails AS cmd ON cd.CustomerID = cmd.CustomerID LEFT JOIN tariff AS t ON t.TariffID = cmd.TariffID LEFT JOIN community AS c ON c.CommunityID = cd.CommunityID LEFT JOIN block AS b ON b.BlockID = cd.BlockID WHERE cmd.PayType = 'Postpaid'");
+			pstmt = con.prepareStatement("SELECT c.CommunityName, b.BlockName, CONCAT(cd.FirstName, cd.LastName) as Name, cd.HouseNumber, cd.CustomerID, cbd.CustomerBillingID, cbd.TotalAmount, cbd.TotalConsumption, cbd.Status, cbd.BillMonth, cbd.BillYear, cbd.LogDate FROM customerdetails AS cd LEFT JOIN customerbillingdetails AS cbd ON cd.CustomerID = cbd.CustomerID LEFT JOIN community AS c ON c.CommunityID = cd.CommunityID LEFT JOIN block AS b ON b.BlockID = cd.BlockID");
 			rs = pstmt.executeQuery();
+			
+			billlist = new LinkedList<BillingResponseVO>();
 			while(rs.next()) {
 				
+				
 				billingresponsevo = new BillingResponseVO();
+				billingresponsevo.setCustomerBillingID(rs.getLong("CustomerBillingID"));
 				billingresponsevo.setCommunityName(rs.getString("CommunityName"));
 				billingresponsevo.setBlockName(rs.getString("BlockName"));
 				billingresponsevo.setCustomerName(rs.getString("Name"));
 				billingresponsevo.setHouseNumber(rs.getString("HouseNumber"));
+				billingresponsevo.setTotalAmount(rs.getInt("TotalAmount"));
+				billingresponsevo.setTotalConsumption(rs.getInt("TotalConsumption"));
+				billingresponsevo.setBillMonth(rs.getInt("BillMonth") == 1 ? "January" : rs.getInt("BillMonth") == 2 ? "February" : rs.getInt("BillMonth") == 3 ? "March" : rs.getInt("BillMonth") == 4 ? "April" : rs.getInt("BillMonth") == 5 ? "May" : rs.getInt("BillMonth") == 6 ? "June" : rs.getInt("BillMonth") == 7 ? "July" : rs.getInt("BillMonth") == 8 ? "August" : rs.getInt("BillMonth") == 9 ? "September" : rs.getInt("BillMonth") == 10 ? "October" : rs.getInt("BillMonth") == 11 ? "November" : rs.getInt("BillMonth") == 12 ? "December" : "");
+				billingresponsevo.setBillYear(rs.getInt("BillYear"));
+				billingresponsevo.setLogDate(rs.getString("LogDate"));
 				
 				LocalDate currentdate = LocalDate.now();
 				
 				pstmt1 = con.prepareStatement("SELECT * FROM billingdetails WHERE CustomerID = " + rs.getInt("CustomerID") + " AND BillMonth = "+ (currentdate.getMonthValue() - 1) + " AND BillYear = " + (currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear()));
 				rs1 = pstmt1.executeQuery();
+				individualbills = new LinkedList<IndividualBillingResponseVO>();
 				while (rs1.next()) {
-					amount = rs1.getInt("Amount") + amount;
+					
+					individualBillingResponsevo = new IndividualBillingResponseVO();
+					individualBillingResponsevo.setBillingID(rs1.getLong("BillingID"));
+					individualBillingResponsevo.setCustomerMeterID(rs1.getLong("CustomerMeterID"));
+					individualBillingResponsevo.setMiuID(rs1.getString("MIUID"));
+					individualBillingResponsevo.setMeterType(rs1.getString("MeterType"));
+					individualBillingResponsevo.setPreviousReading(rs1.getFloat("PreviousReading"));
+					individualBillingResponsevo.setPresentReading(rs1.getFloat("PresentReading"));
+					individualBillingResponsevo.setConsumption(rs1.getInt("Consumption"));
+					individualBillingResponsevo.setBillAmount(rs1.getInt("Amount"));
+					individualBillingResponsevo.setTariff(rs.getFloat("Tariff"));
+					individualBillingResponsevo.setFixedCharges(rs.getInt("FixedCharges"));
+					individualBillingResponsevo.setReconnectionCharges(rs1.getInt("ReconnectionCharges"));
+					individualBillingResponsevo.setBillingDate(rs1.getString("LogDate"));
+					
+					individualbills.add(individualBillingResponsevo);
+					
 
 				}
-				
-				billingresponsevo.setBillAmount(amount);
+				billingresponsevo.setIndividualbills(individualbills);
+				billlist.add(billingresponsevo);
 				
 			}
 
@@ -901,6 +929,11 @@ public class AccountDAO {
 			rs.close();
 			con.close();
 		}
+		return billlist;
+	}
+	
+	public ResponseVO paybill(PayBillRequestVO paybillRequestVO) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 	

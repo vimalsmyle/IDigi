@@ -8,11 +8,13 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 
 import com.idigitronics.IDigi.constants.DataBaseConstants;
 import com.idigitronics.IDigi.request.vo.LoginVO;
+import com.idigitronics.IDigi.response.vo.BillDetailsResponseVO;
 import com.idigitronics.IDigi.response.vo.TopupDetailsResponseVO;
 
 /**
@@ -161,6 +163,40 @@ public class DropDownDAO {
 		}
 		
 		return topupdetailsresponsevo;
+	}
+	
+	public BillDetailsResponseVO getbilldetails(String customerUniqueID) throws SQLException {
+		// TODO Auto-generated method stub
+		
+		Connection con = null;
+		BillDetailsResponseVO billDetailsResponseVO = new BillDetailsResponseVO();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		LocalDate currentdate = LocalDate.now();
+		
+		try {
+			con = getConnection();
+			pstmt = con.prepareStatement("SELECT * FROM customerbillingdetails WHERE CustomerUniqueID = '" + customerUniqueID + "' AND BillMonth = "+ (currentdate.getMonthValue() - 1) + " AND BillYear = " + (currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear()));
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				billDetailsResponseVO.setCustomerBillingID(rs.getLong("CustomerBillingID"));
+				billDetailsResponseVO.setTotalAmount(rs.getInt("TotalAmount"));
+				billDetailsResponseVO.setTotalConsumption(rs.getInt("TotalConsumption"));
+				billDetailsResponseVO.setBillMonth(rs.getInt("BillMonth") == 1 ? "January" : rs.getInt("BillMonth") == 2 ? "February" : rs.getInt("BillMonth") == 3 ? "March" : rs.getInt("BillMonth") == 4 ? "April" : rs.getInt("BillMonth") == 5 ? "May" : rs.getInt("BillMonth") == 6 ? "June" : rs.getInt("BillMonth") == 7 ? "July" : rs.getInt("BillMonth") == 8 ? "August" : rs.getInt("BillMonth") == 9 ? "September" : rs.getInt("BillMonth") == 10 ? "October" : rs.getInt("BillMonth") == 11 ? "November" : rs.getInt("BillMonth") == 12 ? "December" : "");
+				billDetailsResponseVO.setBillYear(rs.getInt("BillYear"));
+				billDetailsResponseVO.setBillingDate(rs.getString("LogDate"));
+			}
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+		}
+		 finally {
+			 	pstmt.close();
+				rs.close();
+				con.close();
+			}
+		
+		return billDetailsResponseVO;
 	}
 
 	public HashMap<Integer, String> getalltariffs() throws SQLException {

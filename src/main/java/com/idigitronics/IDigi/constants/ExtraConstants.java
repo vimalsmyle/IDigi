@@ -27,4 +27,5 @@ public class ExtraConstants {
 	public static final String CompanyName = "IDigitronics";
 	public static final int LowBalanceAlertCount  = 2;
 	public static final String Disclaimer = "*This is a computer generated statement and does not require any signature or stamp";
+	public static final int GST = 9;
 }

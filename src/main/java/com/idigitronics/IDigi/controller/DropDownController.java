@@ -74,6 +74,16 @@ public class DropDownController {
 		return responsevo;
 	}
 	
+	@RequestMapping(value = "/billdetails/{CustomerUniqueID}",method = RequestMethod.GET, 
+			produces="application/json")
+	public @ResponseBody ResponseVO getbilldetails(@PathVariable ("CustomerUniqueID") String CustomerUniqueID) throws SQLException {
+		
+		ResponseVO responsevo = new ResponseVO();
+		responsevo.setBilldetails(dropdowndao.getbilldetails(CustomerUniqueID));
+		
+		return responsevo;
+	}
+	
 	@RequestMapping(value = "/tariffs",method = RequestMethod.GET, produces="application/json")
 	public @ResponseBody ResponseVO getalltariffs() throws SQLException {
 		
