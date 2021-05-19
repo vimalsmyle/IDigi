@@ -13,6 +13,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Base64;
 import java.util.Properties;
 
@@ -202,7 +203,7 @@ public class ExtraMethodsDAO {
 			
 //			fetch reconnection charges from alertsettings after discussion
 			
-			pstmt = con.prepareStatement("SELECT cd.CommunityID, cd.BlockID, cd.CustomerID, cmd.CustomerMeterID, cmd.MIUID, cmd.TariffID, t.Tariff, t.FixedCharges FROM customerdetails AS cd LEFT JOIN customermeterdetails AS cmd ON cd.CustomerID = cmd.CustomerID LEFT JOIN tariff AS t ON t.TariffID = cmd.TariffID");
+			pstmt = con.prepareStatement("SELECT cd.CommunityID, cd.BlockID, cd.CustomerID, cd.CustomerUniqueID, cmd.CustomerMeterID, cmd.MIUID, cmd.MeterType, cmd.TariffID, t.Tariff, t.FixedCharges FROM customerdetails AS cd LEFT JOIN customermeterdetails AS cmd ON cd.CustomerID = cmd.CustomerID LEFT JOIN tariff AS t ON t.TariffID = cmd.TariffID WHERE cmd.PayType = 'Postpaid'");
 			rs = pstmt.executeQuery();
 			while(rs.next()) {
 				
@@ -217,25 +218,30 @@ public class ExtraMethodsDAO {
 					rs2 = pstmt2.executeQuery();
 					
 					if(rs2.next()) {
+						
+						LocalDate currentdate = LocalDate.now();
+						
 						consumption = rs2.getFloat("Reading") - rs1.getFloat("Reading");
 						billAmount = (int) (consumption * rs.getFloat("Tariff"));
 						
-						pstmt3 = con.prepareStatement("INSERT INTO billingdetails (CommunityID, BlockID, CustomerID, CustomerMeterID, MIUID, PreviousReading, PresentReading, Consumption, TariffID, Tariff, BillAmount, FixedCharges, ReconnectionCharges, BillMonth, BillYear) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+						pstmt3 = con.prepareStatement("INSERT INTO billingdetails (CommunityID, BlockID, CustomerID, CustomerUniqueID, CustomerMeterID, MeterType, MIUID, PreviousReading, PresentReading, Consumption, TariffID, Tariff, BillAmount, FixedCharges, ReconnectionCharges, BillMonth, BillYear) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 						pstmt3.setInt(1, rs.getInt("CommunityID"));
 						pstmt3.setInt(2, rs.getInt("BlockID"));
 						pstmt3.setInt(3, rs.getInt("CustomerID"));
-						pstmt3.setInt(4, rs.getInt("CustomerMeterID"));
-						pstmt3.setString(5, rs.getString("MIUID"));
-						pstmt3.setFloat(6, rs1.getFloat("Reading"));
-						pstmt3.setFloat(7, rs2.getFloat("Reading"));
-						pstmt3.setFloat(8, consumption);
-						pstmt3.setInt(9, rs.getInt("TariffID"));
-						pstmt3.setFloat(10, rs.getFloat("Tariff"));
-						pstmt3.setInt(11, billAmount);
-						pstmt3.setInt(12, rs.getInt("FixedCharges"));
-						pstmt3.setInt(13, 0); // add reconnection charges after discussion
-						pstmt3.setInt(14, 0);// add month
-						pstmt3.setInt(15, 2021);// add year 
+						pstmt3.setString(4, rs.getString("CustomerUniqueID"));
+						pstmt3.setInt(5, rs.getInt("CustomerMeterID"));
+						pstmt3.setString(6, rs.getString("MeterType"));
+						pstmt3.setString(7, rs.getString("MIUID"));
+						pstmt3.setFloat(8, rs1.getFloat("Reading"));
+						pstmt3.setFloat(9, rs2.getFloat("Reading"));
+						pstmt3.setFloat(10, consumption);
+						pstmt3.setInt(11, rs.getInt("TariffID"));
+						pstmt3.setFloat(12, rs.getFloat("Tariff"));
+						pstmt3.setInt(13, billAmount);
+						pstmt3.setInt(14, rs.getInt("FixedCharges"));
+						pstmt3.setInt(15, 0); // add reconnection charges after discussion
+						pstmt3.setInt(16, currentdate.getMonthValue() - 1);
+						pstmt3.setInt(17, currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear());// add year 
 						
 						if(pstmt3.executeUpdate() > 0) {
 //					perform some actions after discussion							
@@ -375,8 +381,8 @@ public class ExtraMethodsDAO {
 	
 	public static String datetimeformatter(String dateTime) throws ParseException {
 		
-		SimpleDateFormat IOTFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		SimpleDateFormat clientFormat = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
-		return clientFormat.format(IOTFormat.parse(dateTime));
+		SimpleDateFormat IdigiFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+		SimpleDateFormat clientFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		return clientFormat.format(IdigiFormat.parse(dateTime));
 	}
 }

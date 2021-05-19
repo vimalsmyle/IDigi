@@ -10,6 +10,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
@@ -488,9 +489,9 @@ public class AccountDAO {
 			con = getConnection();
 			statuslist = new LinkedList<StatusResponseVO>();
 
-			String query = "SELECT 	DISTINCT t.TransactionID, c.CommunityName, b.BlockName, cmd.FirstName, cmd.HouseNumber, cmd.CreatedByID, cmd.LastName, cmd.CRNNumber, t.MeterID, t.Amount, tr.AlarmCredit, tr.EmergencyCredit, t.Status, t.ModeOfPayment, t.PaymentStatus, t.RazorPayOrderID, t.RazorPayPaymentID, t.RazorPayRefundID, t.RazorPayRefundStatus, t.TransactionDate, t.AcknowledgeDate FROM topup AS t \r\n"
+			String query = "SELECT 	DISTINCT t.TransactionID, c.CommunityName, b.BlockName, cd.FirstName, cd.HouseNumber, cd.CreatedByID, cd.LastName, cd.CustomerUniqueID, t.MIUID, t.CustomerMeterID, t.Amount, tr.AlarmCredit, tr.EmergencyCredit, t.Status, t.ModeOfPayment, t.PaymentStatus, t.RazorPayOrderID, t.RazorPayPaymentID, t.RazorPayRefundID, t.RazorPayRefundStatus, t.TransactionDate, t.AcknowledgeDate FROM topup AS t \r\n"
 					+ "LEFT JOIN community AS c ON t.CommunityID = c.CommunityID LEFT JOIN block AS b ON t.BlockID = b.BlockID LEFT JOIN tariff AS tr ON tr.TariffID = t.tariffID \r\n"
-					+ "LEFT JOIN customermeterdetails AS cmd ON t.CRNNumber = cmd.CRNNumber WHERE t.TransactionDate BETWEEN CONCAT(CURDATE() <day>, ' 00:00:00') AND CONCAT(CURDATE(), ' 23:59:59') AND t.PaymentStatus !=0 <change>";
+					+ "LEFT JOIN customerdetails AS cd ON t.CustomerUniqueID = cd.CustomerUniqueID LEFT JOIN customermeterdetails as cmd ON cd.CustomerID = cmd.CustomerID WHERE t.TransactionDate BETWEEN CONCAT(CURDATE() <day>, ' 00:00:00') AND CONCAT(CURDATE(), ' 23:59:59') AND t.PaymentStatus !=0 <change>";
 			query = query.replaceAll("<day>", (day == 1) ? "" : "- INTERVAL 90 DAY");
 			pstmt = con.prepareStatement(query.replaceAll("<change>",
 					((roleid == 1 || roleid == 4) && (filterCid == -1)) ? "ORDER BY t.TransactionDate DESC"
@@ -499,7 +500,7 @@ public class AccountDAO {
 									: (roleid == 2 || roleid == 5)
 											? "AND t.BlockID = " + id + " ORDER BY t.TransactionDate DESC"
 											: (roleid == 3)
-													? "AND t.CRNNumber = '" + id + "' ORDER BY t.TransactionDate DESC"
+													? "AND t.CustomerUniqueID = '" + id + "' ORDER BY t.TransactionDate DESC"
 													: ""));
 			rs = pstmt.executeQuery();
 
@@ -511,8 +512,8 @@ public class AccountDAO {
 				statusvo.setFirstName(rs.getString("FirstName"));
 				statusvo.setLastName(rs.getString("LastName"));
 				statusvo.setHouseNumber(rs.getString("HouseNumber"));
-				statusvo.setCRNNumber(rs.getString("CRNNumber"));
-				statusvo.setMeterID(rs.getString("MeterID"));
+				statusvo.setCustomerUniqueID(rs.getString("CustomerUniqueID"));
+				statusvo.setMiuID(rs.getString("MIUID"));
 				statusvo.setAmount(rs.getString("Amount"));
 				statusvo.setModeOfPayment(rs.getString("ModeOfPayment"));
 				statusvo.setRazorPayOrderID(rs.getString("ModeOfPayment").equalsIgnoreCase("Cash") ? "---"
@@ -529,12 +530,9 @@ public class AccountDAO {
 				statusvo.setAlarmCredit(rs.getString("AlarmCredit"));
 				statusvo.setEmergencyCredit(rs.getString("EmergencyCredit"));
 				statusvo.setTransactionDate(ExtraMethodsDAO.datetimeformatter(rs.getString("TransactionDate")));
-				statusvo.setStatus((rs.getInt("Status") == 0) ? "Pending...waiting for acknowledge"
-						: (rs.getInt("Status") == 1) ? "Pending" : (rs.getInt("Status") == 2) ? "Passed" : "Failed");
+				statusvo.setStatus((rs.getInt("Status") == 10) ? "Pending" : (rs.getInt("Status") == 0) ? "Passed" : "Failed");
 
-				pstmt1 = con.prepareStatement(
-						"SELECT user.ID, user.UserName, userrole.RoleDescription FROM USER LEFT JOIN userrole ON user.RoleID = userrole.RoleID WHERE user.ID = "
-								+ rs.getInt("CreatedByID"));
+				pstmt1 = con.prepareStatement("SELECT user.ID, user.UserName, userrole.RoleDescription FROM USER LEFT JOIN userrole ON user.RoleID = userrole.RoleID WHERE user.ID = "+ rs.getInt("CreatedByID"));
 				rs1 = pstmt1.executeQuery();
 				if (rs1.next()) {
 					statusvo.setTransactedByUserName(rs1.getString("UserName"));
@@ -597,18 +595,15 @@ public class AccountDAO {
 		try {
 			con = getConnection();
 
-			String query = "SELECT 	DISTINCT t.TransactionID, c.CommunityName, b.BlockName, cmd.FirstName, cmd.HouseNumber, cmd.CreatedByID, cmd.LastName, cmd.CRNNumber, t.MeterID, t.Amount, tr.AlarmCredit, tr.EmergencyCredit, t.Status, t.FixedCharges, t.ReconnectionCharges, t.ModeOfPayment, t.PaymentStatus, t.RazorPayOrderID, t.RazorPayPaymentID, t.TransactionDate, t.AcknowledgeDate FROM topup AS t \r\n"
+			String query = "SELECT t.TransactionID, c.CommunityName, b.BlockName, cd.FirstName, cd.HouseNumber, cd.CreatedByID, cd.LastName, cd.CustomerUniqueID, t.MIUID, t.CustomerMeterID, t.Amount, tr.AlarmCredit, tr.EmergencyCredit, t.Status, t.ModeOfPayment, t.PaymentStatus, t.RazorPayOrderID, t.RazorPayPaymentID, t.RazorPayRefundID, t.RazorPayRefundStatus, t.TransactionDate, t.AcknowledgeDate FROM topup AS t \r\n"
 					+ "LEFT JOIN community AS c ON t.CommunityID = c.CommunityID LEFT JOIN block AS b ON t.BlockID = b.BlockID LEFT JOIN tariff AS tr ON tr.TariffID = t.tariffID \r\n"
-					+ "LEFT JOIN customermeterdetails AS cmd ON t.CRNNumber = cmd.CRNNumber WHERE t.TransactionID = "
-					+ transactionID;
+					+ "LEFT JOIN customerdetails AS cd ON t.CustomerUniqueID = cd.CustomerUniqueID LEFT JOIN customermeterdetails as cmd ON cd.CustomerID = cmd.CustomerID WHERE t.TransactionID = "+ transactionID;
 
 			pstmt = con.prepareStatement(query);
 			rs = pstmt.executeQuery();
 
 			if (rs.next()) {
-				pstmt1 = con.prepareStatement(
-						"SELECT user.ID, user.UserName, userrole.RoleDescription FROM USER LEFT JOIN userrole ON user.RoleID = userrole.RoleID WHERE user.ID = "
-								+ rs.getInt("CreatedByID"));
+				pstmt1 = con.prepareStatement("SELECT user.ID, user.UserName, userrole.RoleDescription FROM USER LEFT JOIN userrole ON user.RoleID = userrole.RoleID WHERE user.ID = "+ rs.getInt("CreatedByID"));
 				rs1 = pstmt1.executeQuery();
 				if (rs1.next()) {
 
@@ -668,11 +663,11 @@ public class AccountDAO {
 					Table table1 = new Table(headerWidths);
 
 					Cell table1cell1 = new Cell();
-					table1cell1.add("MIU ID: " + rs.getString("MeterID"));
+					table1cell1.add("MIU ID: " + rs.getString("MIUID"));
 					table1cell1.setTextAlignment(TextAlignment.LEFT);
 
 					Cell table1cell2 = new Cell();
-					table1cell2.add("CRN Number: " + rs.getString("CRNNumber"));
+					table1cell2.add("CRN/UAN Number: " + rs.getString("CustomerUniqueID"));
 					table1cell2.setTextAlignment(TextAlignment.CENTER);
 
 					Cell table1cell3 = new Cell();
@@ -864,8 +859,48 @@ public class AccountDAO {
 	
 	/* Billing Details*/
 	
-	public List<BillingResponseVO> getbillingdetails(int roleid, String id, int filterCid, int month) {
+	public List<BillingResponseVO> getbillingdetails(int roleid, String id, int filterCid) throws SQLException {
 		// TODO Auto-generated method stub
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		PreparedStatement pstmt1 = null;
+		ResultSet rs1 = null;
+		int amount = 0;
+		BillingResponseVO billingresponsevo = null;
+		try {
+			con = getConnection();
+			
+			pstmt = con.prepareStatement("SELECT c.CommunityName, b.BlockName, CONCAT(cd.FirstName, cd.LastName) as Name, cd.HouseNumber, cd.CustomerID, cmd.CustomerMeterID, cmd.MIUID, cmd.MeterType, cmd.TariffID, t.Tariff, t.FixedCharges FROM customerdetails AS cd LEFT JOIN customermeterdetails AS cmd ON cd.CustomerID = cmd.CustomerID LEFT JOIN tariff AS t ON t.TariffID = cmd.TariffID LEFT JOIN community AS c ON c.CommunityID = cd.CommunityID LEFT JOIN block AS b ON b.BlockID = cd.BlockID WHERE cmd.PayType = 'Postpaid'");
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				
+				billingresponsevo = new BillingResponseVO();
+				billingresponsevo.setCommunityName(rs.getString("CommunityName"));
+				billingresponsevo.setBlockName(rs.getString("BlockName"));
+				billingresponsevo.setCustomerName(rs.getString("Name"));
+				billingresponsevo.setHouseNumber(rs.getString("HouseNumber"));
+				
+				LocalDate currentdate = LocalDate.now();
+				
+				pstmt1 = con.prepareStatement("SELECT * FROM billingdetails WHERE CustomerID = " + rs.getInt("CustomerID") + " AND BillMonth = "+ (currentdate.getMonthValue() - 1) + " AND BillYear = " + (currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear()));
+				rs1 = pstmt1.executeQuery();
+				while (rs1.next()) {
+					amount = rs1.getInt("Amount") + amount;
+
+				}
+				
+				billingresponsevo.setBillAmount(amount);
+				
+			}
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			pstmt.close();
+			rs.close();
+			con.close();
+		}
 		return null;
 	}
 	

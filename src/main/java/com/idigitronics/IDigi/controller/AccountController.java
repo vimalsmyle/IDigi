@@ -136,13 +136,13 @@ public class AccountController {
 	
 	/* Billing Details */
 
-	@RequestMapping(value = "/billing/{roleid}/{id}/{filterCid}/{month}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/billing/{roleid}/{id}/{filterCid}", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody
-	BillingResponseVO billdetails(@PathVariable("roleid") int roleid, @PathVariable("id") String id, @PathVariable("filterCid") int filterCid, @PathVariable("month") int month) throws SQLException {
+	BillingResponseVO billdetails(@PathVariable("roleid") int roleid, @PathVariable("id") String id, @PathVariable("filterCid") int filterCid) throws SQLException {
 
 		BillingResponseVO billingresponsevo = new BillingResponseVO();
 
-		billingresponsevo.setData(accountdao.getbillingdetails(roleid, id, filterCid, month));
+		billingresponsevo.setData(accountdao.getbillingdetails(roleid, id, filterCid));
 
 		return billingresponsevo;
 	}

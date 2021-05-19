@@ -16,6 +16,7 @@ public class BillingResponseVO {
 	private String communityName;
 	private String blockName;
 	private String customerName;
+	private String houseNumber;
 	private String miuID;
 	private float previousReading;
 	private float presentReading;
@@ -138,6 +139,12 @@ public class BillingResponseVO {
 	}
 	public void setData(List<BillingResponseVO> data) {
 		this.data = data;
+	}
+	public String getHouseNumber() {
+		return houseNumber;
+	}
+	public void setHouseNumber(String houseNumber) {
+		this.houseNumber = houseNumber;
 	}
 	
 }
