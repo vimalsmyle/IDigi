@@ -14,6 +14,8 @@ public class PayBillRequestVO {
 	private long customerID;
 	private String customerUniqueID;
 	private int totalamount;
+	private int taxAmount;
+	private int lateFee;
 	private String source;
 	private String modeOfPayment;
 	private int paymentStatus;
@@ -107,6 +109,18 @@ public class PayBillRequestVO {
 	}
 	public void setTransactedByRoleID(int transactedByRoleID) {
 		this.transactedByRoleID = transactedByRoleID;
+	}
+	public int getTaxAmount() {
+		return taxAmount;
+	}
+	public void setTaxAmount(int taxAmount) {
+		this.taxAmount = taxAmount;
+	}
+	public int getLateFee() {
+		return lateFee;
+	}
+	public void setLateFee(int lateFee) {
+		this.lateFee = lateFee;
 	}
 
 }

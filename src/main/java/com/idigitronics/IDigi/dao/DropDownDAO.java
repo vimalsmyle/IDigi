@@ -176,12 +176,14 @@ public class DropDownDAO {
 		
 		try {
 			con = getConnection();
-			pstmt = con.prepareStatement("SELECT * FROM customerbillingdetails WHERE CustomerUniqueID = '" + customerUniqueID + "' AND BillMonth = "+ (currentdate.getMonthValue() - 1) + " AND BillYear = " + (currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear()));
+			pstmt = con.prepareStatement("SELECT CustomerBillingID, TotalAmount, TaxAmount, DueDate, DAY(DueDate) as DueDay, BillMonth, BillYear, LogDate, LateFee, DueDayCount FROM customerbillingdetails JOIN alertsettings WHERE CustomerUniqueID = '" + customerUniqueID + "' AND BillMonth = "+ (currentdate.getMonthValue() - 1) + " AND BillYear = " + (currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear()));
 			rs = pstmt.executeQuery();
 			if (rs.next()) {
 				billDetailsResponseVO.setCustomerBillingID(rs.getLong("CustomerBillingID"));
-				billDetailsResponseVO.setTotalAmount(rs.getInt("TotalAmount"));
+				billDetailsResponseVO.setTotalAmount(rs.getInt("TotalAmount") + rs.getInt("TaxAmount"));
 				billDetailsResponseVO.setTotalConsumption(rs.getInt("TotalConsumption"));
+				billDetailsResponseVO.setLateFee((currentdate.getDayOfMonth() - rs.getInt("DueDay")) >= 1 ? rs.getInt("LateFee") : 0);
+				billDetailsResponseVO.setDueDate(rs.getString("DueDate"));
 				billDetailsResponseVO.setBillMonth(rs.getInt("BillMonth") == 1 ? "January" : rs.getInt("BillMonth") == 2 ? "February" : rs.getInt("BillMonth") == 3 ? "March" : rs.getInt("BillMonth") == 4 ? "April" : rs.getInt("BillMonth") == 5 ? "May" : rs.getInt("BillMonth") == 6 ? "June" : rs.getInt("BillMonth") == 7 ? "July" : rs.getInt("BillMonth") == 8 ? "August" : rs.getInt("BillMonth") == 9 ? "September" : rs.getInt("BillMonth") == 10 ? "October" : rs.getInt("BillMonth") == 11 ? "November" : rs.getInt("BillMonth") == 12 ? "December" : "");
 				billDetailsResponseVO.setBillYear(rs.getInt("BillYear"));
 				billDetailsResponseVO.setBillingDate(rs.getString("LogDate"));

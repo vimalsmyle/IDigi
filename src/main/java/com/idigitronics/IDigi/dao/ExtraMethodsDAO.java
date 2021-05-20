@@ -279,14 +279,12 @@ public class ExtraMethodsDAO {
 			con = getConnection();
 			LocalDate currentdate = LocalDate.now();
 			
-			pstmt = con.prepareStatement("SELECT * FROM customerdetails");
+			pstmt = con.prepareStatement("SELECT * FROM customerdetails JOIN alertsettings");
 			rs = pstmt.executeQuery();
 			while(rs.next()) {
 				
 				int totalamount = 0;
 				int totalConsumption = 0;
-				int fixedCharges = 0;
-				int reconnectionCharges = 0;
 				
 				pstmt1 = con.prepareStatement("SELECT * FROM billingdetails WHERE CustomerID = " + rs.getInt("CustomerID") + " AND BillMonth = "+ (currentdate.getMonthValue() - 1) + " AND BillYear = " + (currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear()));
 				rs1 = pstmt1.executeQuery();
@@ -294,20 +292,20 @@ public class ExtraMethodsDAO {
 				
 				totalamount = rs1.getInt("Amount") + totalamount;
 				totalConsumption = rs1.getInt("Consumption") + totalConsumption;
-				fixedCharges = rs1.getInt("FixedCharges") + fixedCharges;
-				reconnectionCharges = rs1.getInt("ReconnectionCharges") + reconnectionCharges;
 				
 				}
 				
-				pstmt2 = con.prepareStatement("INSERT INTO customerbillingdetails (CommunityID, BlockID, CustomerID, CustomerUniqueID, TotalAmount, TotalConsumption, BillMonth, BillYear, ModifiedDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())");
+				pstmt2 = con.prepareStatement("INSERT INTO customerbillingdetails (CommunityID, BlockID, CustomerID, CustomerUniqueID, TotalAmount, TaxAmount, TotalConsumption, DueDate, BillMonth, BillYear, ModifiedDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
 				pstmt2.setInt(1, rs.getInt("CommunityID"));
 				pstmt2.setInt(2, rs.getInt("BlockID"));
 				pstmt2.setInt(3, rs.getInt("CustomerID"));
 				pstmt2.setString(4, rs.getString("CustomerUniqueID"));
-				pstmt2.setInt(5, totalamount + fixedCharges + reconnectionCharges); // add Taxes after discussion
-				pstmt2.setInt(6, totalConsumption);
-				pstmt2.setInt(7, currentdate.getMonthValue() - 1);
-				pstmt2.setInt(8, currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear());
+				pstmt2.setInt(5, totalamount);
+				pstmt2.setInt(6, (totalamount * ((rs.getInt("GST") * 2)/100)));
+				pstmt2.setInt(7, totalConsumption);
+				pstmt2.setString(8, currentdate.plusDays(rs.getInt("DueDayCount")).toString());
+				pstmt2.setInt(9, currentdate.getMonthValue() - 1);
+				pstmt2.setInt(10, currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear());
 				
 				pstmt2.executeUpdate();
 			}

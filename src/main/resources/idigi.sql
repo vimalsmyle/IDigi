@@ -26,7 +26,10 @@ CREATE TABLE `alertsettings` (
   `LowBatteryVoltage` decimal(10,2) NOT NULL,
   `TimeOut` int(11) NOT NULL,
   `PerUnitValue` float NOT NULL,
-  `ReconnectionCharges` int(11) DEFAULT NULL,
+  `ReconnectionCharges` int(11) NOT NULL,
+  `LateFee` int(10) NOT NULL,
+  `DueDayCount` int(10) NOT NULL,
+  `GST` int(10) NOT NULL,
   `RegisteredDate` datetime NOT NULL,
   `ModifiedDate` datetime NOT NULL,
   PRIMARY KEY (`AlertID`),
@@ -35,8 +38,8 @@ CREATE TABLE `alertsettings` (
 
 /*Data for the table `alertsettings` */
 
-insert  into `alertsettings`(`AlertID`,`NoAMRInterval`,`LowBatteryVoltage`,`TimeOut`,`PerUnitValue`,`ReconnectionCharges`,`RegisteredDate`,`ModifiedDate`) values 
-(1,2880,3.00,330,2.4,50,'2021-05-18 18:52:34','2021-05-18 18:52:37');
+insert  into `alertsettings`(`AlertID`,`NoAMRInterval`,`LowBatteryVoltage`,`TimeOut`,`PerUnitValue`,`ReconnectionCharges`,`LateFee`,`DueDayCount`,`GST`,`RegisteredDate`,`ModifiedDate`) values 
+(1,2880,3.00,330,2.4,50,50,10,9,'2021-05-18 18:52:34','2021-05-18 18:52:37');
 
 /*Table structure for table `balancelog` */
 
@@ -231,8 +234,10 @@ CREATE TABLE `customerbillingdetails` (
   `CustomerID` bigint(255) NOT NULL,
   `CustomerUniqueID` varchar(500) NOT NULL,
   `TotalAmount` int(100) NOT NULL,
+  `TaxAmount` int(100) NOT NULL,
   `TotalConsumption` int(100) NOT NULL,
   `Status` tinyint(5) NOT NULL DEFAULT '0',
+  `DueDate` date NOT NULL,
   `BillMonth` int(11) DEFAULT NULL,
   `BillYear` int(11) DEFAULT NULL,
   `LogDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -298,7 +303,7 @@ CREATE TABLE `customerdetails` (
   `CustomerID` int(255) NOT NULL AUTO_INCREMENT,
   `CommunityID` int(11) NOT NULL,
   `BlockID` int(255) NOT NULL,
-  `HouseNumber` varchar(30) NOT NULL,
+  `HouseNumber` varchar(50) NOT NULL,
   `FirstName` varchar(50) NOT NULL,
   `LastName` varchar(50) NOT NULL,
   `Email` varchar(100) NOT NULL,
@@ -646,7 +651,7 @@ DROP TABLE IF EXISTS `customermeterdetailsview`;
  `CommunityName` varchar(100) ,
  `BlockName` varchar(80) ,
  `CustomerID` int(255) ,
- `HouseNumber` varchar(30) ,
+ `HouseNumber` varchar(50) ,
  `FirstName` varchar(50) ,
  `LastName` varchar(50) ,
  `Email` varchar(100) ,

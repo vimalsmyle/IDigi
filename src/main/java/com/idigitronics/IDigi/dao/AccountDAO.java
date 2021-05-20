@@ -352,7 +352,7 @@ public class AccountDAO {
 		} else {
 			
 			if (generated_signature.equalsIgnoreCase(checkOutRequestVO.getRazorpay_signature())) {
-				ps = con.prepareStatement("UPDATE billingpaymentdetails SET PaymentStatus = 1 RazorPayPaymentID = ?, RazorPaySignature = ? WHERE RazorPayOrderID = ? AND TransactionID = ?");
+				ps = con.prepareStatement("UPDATE billingpaymentdetails SET PaymentStatus = 1, RazorPayPaymentID = ?, RazorPaySignature = ? WHERE RazorPayOrderID = ? AND TransactionID = ?");
 
 				ps.setString(1, checkOutRequestVO.getRazorpay_payment_id());
 				ps.setString(2, checkOutRequestVO.getRazorpay_signature());
@@ -992,7 +992,7 @@ public class AccountDAO {
 
 						// creating order in razor pay
 
-						razorPayOrderVO.setAmount(paybillRequestVO.getTotalamount() * 100);
+						razorPayOrderVO.setAmount((paybillRequestVO.getTotalamount() + paybillRequestVO.getTaxAmount() + paybillRequestVO.getLateFee()) * 100);
 						razorPayOrderVO.setCurrency("INR");
 						razorPayOrderVO.setPayment_capture(1);
 
@@ -1081,7 +1081,7 @@ public class AccountDAO {
 			pstmt.setLong(1, paybillRequestVO.getCustomerBillingID());
 			pstmt.setLong(2, paybillRequestVO.getCustomerID());
 			pstmt.setString(3, paybillRequestVO.getCustomerUniqueID());
-			pstmt.setInt(4, paybillRequestVO.getTotalamount());
+			pstmt.setInt(4, paybillRequestVO.getTotalamount() + paybillRequestVO.getTaxAmount() + paybillRequestVO.getLateFee());
 			pstmt.setString(5, paybillRequestVO.getSource());
 			pstmt.setString(6, paybillRequestVO.getModeOfPayment());
 			pstmt.setInt(7, paybillRequestVO.getPaymentStatus());

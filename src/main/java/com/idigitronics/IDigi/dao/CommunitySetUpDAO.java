@@ -821,7 +821,7 @@ public class CommunitySetUpDAO {
 						mailrequestvo.setToEmail(customervo.getEmail());
 						mailrequestvo.setUserID(usermanagementvo.getUserID());
 						mailrequestvo.setUserPassword(customervo.getLastName()+"@"+ customervo.getMobileNumber().substring(3, 7));
-						mailrequestvo.setSubject("Customer Login for CRN: " + mailrequestvo.getUserID());
+						mailrequestvo.setSubject("Customer Login for CRN/CAN/UAN: " + mailrequestvo.getUserID());
 						mailrequestvo.setMessage("Please Save the Credentials for further communications \n"
 								+ " UserID: " + mailrequestvo.getUserID() + "\n Password: " + mailrequestvo.getUserPassword() + "\n Use URL for login : "+ ExtraConstants.ApplicationURL);
 						
@@ -924,7 +924,7 @@ public class CommunitySetUpDAO {
 	            if (pstmt.executeUpdate() > 0) {
 	            	
 	            	for(int i = 0; i < customervo.getMeters().size(); i++) {
-	            		con.prepareStatement("UPDATE customermeterdetails SET MIUID = '"+customervo.getMeters().get(i).getMiuID()+"', ModifiedDate = NOW() WHERE CustomerMeterID = " + customervo.getMeters().get(i).getCustomerMeterID()).executeUpdate();
+	            		con.prepareStatement("UPDATE customermeterdetails SET MIUID = '"+customervo.getMeters().get(i).getMiuID()+"', GatewayID = " +customervo.getMeters().get(i).getGatewayID()+ "  ModifiedDate = NOW() WHERE CustomerMeterID = " + customervo.getMeters().get(i).getCustomerMeterID()).executeUpdate();
 	            	}
 	            	
 	            	PreparedStatement pstmt1 = con.prepareStatement("UPDATE USER SET UserName = CONCAT (?, (SELECT LastName FROM customerdetails WHERE CustomerUniqueID = ?)) WHERE CustomerUniqueID = ?");

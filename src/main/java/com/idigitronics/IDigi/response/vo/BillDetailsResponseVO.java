@@ -12,6 +12,8 @@ public class BillDetailsResponseVO {
 	private long customerBillingID;
 	private int totalConsumption;
 	private int totalAmount;
+	private int lateFee;
+	private String dueDate;
 	private String billingDate;
 	private String billMonth;
 	private int billYear;
@@ -52,4 +54,17 @@ public class BillDetailsResponseVO {
 	public void setBillYear(int billYear) {
 		this.billYear = billYear;
 	}
+	public int getLateFee() {
+		return lateFee;
+	}
+	public void setLateFee(int lateFee) {
+		this.lateFee = lateFee;
+	}
+	public String getDueDate() {
+		return dueDate;
+	}
+	public void setDueDate(String dueDate) {
+		this.dueDate = dueDate;
+	}
+	
 }

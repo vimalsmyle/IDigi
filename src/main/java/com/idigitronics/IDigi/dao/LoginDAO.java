@@ -160,7 +160,6 @@ public class LoginDAO {
 										// check for multiple transactionID after data insertion
 										
 										userDetails.setPendingTransactionID(resultSet1.getInt("TransactionID"));
-										
 
 									}
 								}
