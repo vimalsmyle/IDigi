@@ -10,7 +10,7 @@ package com.idigitronics.IDigi.request.vo;
 public class VacationRequestVO {
 	
 	private String customerUniqueID;
-	private int customerMeterID;
+	private long customerMeterID;
 	private String vacationName;
 	private String startDateTime;
 	private String endDateTime;
@@ -20,10 +20,10 @@ public class VacationRequestVO {
 	
 	private int communityID;
 	private int blockID;
-	private int customerID;
+	private long customerID;
 	private String miuID;
 	private int status;
-	private int vacationID;
+	private long vacationID;
 	private String mode;
 	
 	public int getCommunityID() {
@@ -45,10 +45,10 @@ public class VacationRequestVO {
 	public void setCustomerUniqueID(String customerUniqueID) {
 		this.customerUniqueID = customerUniqueID;
 	}
-	public int getCustomerMeterID() {
+	public long getCustomerMeterID() {
 		return customerMeterID;
 	}
-	public void setCustomerMeterID(int customerMeterID) {
+	public void setCustomerMeterID(long customerMeterID) {
 		this.customerMeterID = customerMeterID;
 	}
 	public String getMiuID() {
@@ -99,16 +99,16 @@ public class VacationRequestVO {
 	public void setStatus(int status) {
 		this.status = status;
 	}
-	public int getVacationID() {
+	public long getVacationID() {
 		return vacationID;
 	}
-	public void setVacationID(int vacationID) {
+	public void setVacationID(long vacationID) {
 		this.vacationID = vacationID;
 	}
-	public int getCustomerID() {
+	public long getCustomerID() {
 		return customerID;
 	}
-	public void setCustomerID(int customerID) {
+	public void setCustomerID(long customerID) {
 		this.customerID = customerID;
 	}
 	public String getMode() {

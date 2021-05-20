@@ -23,7 +23,7 @@ public class VacationResponseVO {
 	private String startDateForEdit;
 	private String endDateForEdit;
 	private String registeredDate;
-	private int vacationID;
+	private long vacationID;
 	private String vacationName;
 	private String source;
 	private String mode;
@@ -119,11 +119,11 @@ public class VacationResponseVO {
 		CRNNumber = cRNNumber;
 	}
 
-	public int getVacationID() {
+	public long getVacationID() {
 		return vacationID;
 	}
 
-	public void setVacationID(int vacationID) {
+	public void setVacationID(long vacationID) {
 		this.vacationID = vacationID;
 	}
 

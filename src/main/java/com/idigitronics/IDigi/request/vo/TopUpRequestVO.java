@@ -12,7 +12,7 @@ public class TopUpRequestVO {
 	private String source;
 	private int payType;
 	private String CustomerUniqueID;
-	private int customerMeterID;
+	private long customerMeterID;
 	private String miuID;
 	private int amount;
 	private String cardNumber;
@@ -22,7 +22,6 @@ public class TopUpRequestVO {
 	private int status;
 	private int transactedByID;
 	private int transactedByRoleID;
-	private long transactionIDForTata;
 	private int fixedCharges;
 	private int reconnectionCharges;
 	private long transactionID;
@@ -71,16 +70,10 @@ public class TopUpRequestVO {
 	public void setModeOfPayment(String modeOfPayment) {
 		this.modeOfPayment = modeOfPayment;
 	}
-	public long getTransactionIDForTata() {
-		return transactionIDForTata;
-	}
-	public void setTransactionIDForTata(long transactionIDForTata) {
-		this.transactionIDForTata = transactionIDForTata;
-	}
-	public int getCustomerMeterID() {
+	public long getCustomerMeterID() {
 		return customerMeterID;
 	}
-	public void setCustomerMeterID(int customerMeterID) {
+	public void setCustomerMeterID(long customerMeterID) {
 		this.customerMeterID = customerMeterID;
 	}
 	public String getMiuID() {

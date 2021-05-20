@@ -183,6 +183,7 @@ public class AccountDAO {
 									responsevo.setCheckoutDetails(checkoutDetails);
 
 									responsevo.setPaymentMode("Online");
+									responsevo.setPayType("Prepaid");
 									responsevo.setResult("Success");
 									responsevo.setMessage("Order Created Successfully. Proceed to CheckOut");
 								}
@@ -237,7 +238,7 @@ public class AccountDAO {
 				ps.setInt(2, rs.getInt("BlockID"));
 				ps.setInt(3, rs.getInt("CustomerID"));
 				ps.setString(4, rs.getString("MeterID"));
-				ps.setInt(5, topUpRequestVO.getCustomerMeterID());
+				ps.setLong(5, topUpRequestVO.getCustomerMeterID());
 				ps.setInt(6, rs.getInt("TariffID"));
 				ps.setFloat(7, topUpRequestVO.getAmount());
 				ps.setInt(8, topUpRequestVO.getFixedCharges());
@@ -269,7 +270,7 @@ public class AccountDAO {
 		return transactionID;
 	}
 
-	public ResponseVO updatetopup(CheckOutRequestVO checkOutRequestVO) throws SQLException, ClassNotFoundException {
+	public ResponseVO updatepayment(CheckOutRequestVO checkOutRequestVO) throws SQLException, ClassNotFoundException {
 
 		Connection con = null;
 		PreparedStatement ps = null;
@@ -282,7 +283,9 @@ public class AccountDAO {
 			String generated_signature = Signature.calculateRFC2104HMAC(
 					checkOutRequestVO.getRazorpay_order_id() + "|" + checkOutRequestVO.getRazorpay_payment_id(),
 					ExtraConstants.RZPKeySecret);
-
+			
+			if(checkOutRequestVO.getPayType().equalsIgnoreCase("Prepaid")) {
+				
 			if (generated_signature.equalsIgnoreCase(checkOutRequestVO.getRazorpay_signature())) {
 
 				ps = con.prepareStatement("UPDATE topup SET PaymentStatus = 1, RazorPayPaymentID = ?, RazorPaySignature = ? WHERE RazorPayOrderID = ? AND TransactionID = ?");
@@ -323,8 +326,7 @@ public class AccountDAO {
 								responseVO.setMessage("Payment Captured & Topup Request Submitted Successfully");
 							} else {
 								responseVO.setResult("Failure");
-								responseVO.setMessage(
-										"Payment Captured but Topup Request Submission Failed. Deducted Amount will be Refunded in 14 Days");
+								responseVO.setMessage("Payment Captured but Topup Request Submission Failed. Deducted Amount will be Refunded in 14 Days");
 							}
 						}
 
@@ -347,7 +349,37 @@ public class AccountDAO {
 				}
 
 			}
+		} else {
+			
+			if (generated_signature.equalsIgnoreCase(checkOutRequestVO.getRazorpay_signature())) {
+				ps = con.prepareStatement("UPDATE billingpaymentdetails SET PaymentStatus = 1 RazorPayPaymentID = ?, RazorPaySignature = ? WHERE RazorPayOrderID = ? AND TransactionID = ?");
 
+				ps.setString(1, checkOutRequestVO.getRazorpay_payment_id());
+				ps.setString(2, checkOutRequestVO.getRazorpay_signature());
+				ps.setString(3, checkOutRequestVO.getRazorpay_order_id());
+				ps.setLong(4, checkOutRequestVO.getTransactionID());
+
+				if (ps.executeUpdate() > 0) {
+					responseVO.setResult("Success");
+					responseVO.setMessage("Payment Captured Successfully");
+				} else {
+					ps = con.prepareStatement("UPDATE billingpaymentdetails SET PaymentStatus = 2, RazorPayPaymentID = ?, ErrorResponse = ? WHERE RazorPayOrderID = ? AND TransactionID = ?");
+
+					ps.setString(1, checkOutRequestVO.getError().getMetadata().getPaymentId());
+					ps.setString(2, checkOutRequestVO.getError().toString());
+					ps.setString(3, checkOutRequestVO.getError().getMetadata().getOrderId());
+					ps.setLong(4, checkOutRequestVO.getTransactionID());
+
+					if (ps.executeUpdate() > 0) {
+						responseVO.setResult("Success");
+						responseVO.setMessage("Payment Failed. Please Try After Sometime");
+
+					}
+				}
+			}
+			
+		}
+		
 		} catch (Exception e) {
 			e.printStackTrace();
 
@@ -408,7 +440,7 @@ public class AccountDAO {
 				ps.setInt(2, rs.getInt("BlockID"));
 				ps.setInt(3, rs.getInt("CustomerID"));
 				ps.setString(4, rs.getString("MeterID"));
-				ps.setInt(5, topUpRequestVO.getCustomerMeterID());
+				ps.setLong(5, topUpRequestVO.getCustomerMeterID());
 				ps.setInt(6, rs.getInt("TariffID"));
 				ps.setFloat(7, topUpRequestVO.getAmount());
 				ps.setInt(8, topUpRequestVO.getStatus());
@@ -932,9 +964,147 @@ public class AccountDAO {
 		return billlist;
 	}
 	
-	public ResponseVO paybill(PayBillRequestVO paybillRequestVO) {
+	public ResponseVO paybill(PayBillRequestVO paybillRequestVO) throws SQLException {
 		// TODO Auto-generated method stub
-		return null;
+		
+		Connection con = null;
+		ResponseVO responsevo = new ResponseVO();
+		ExtraMethodsDAO extramethodsdao = new ExtraMethodsDAO();
+		RazorPayOrderVO razorPayOrderVO = new RazorPayOrderVO();
+		CheckoutDetails checkoutDetails = new CheckoutDetails();
+		RazorpayRequestVO razorpayRequestVO = new RazorpayRequestVO();
+		Prefill prefill = new Prefill();
+		Notes notes = new Notes();
+		Theme theme = new Theme();
+
+		try {
+			con = getConnection();
+			
+			PreparedStatement pstmt1 = con.prepareStatement("SELECT CustomerUniqueID, CONCAT(FirstName, Last Name) AS CustomerName, HouseNumber, MobileNumber, Email FROM customerdetails WHERE CustomerUniqueID = '" + paybillRequestVO.getCustomerUniqueID() +"' AND CustomerID = " + paybillRequestVO.getCustomerID());
+			ResultSet rs1 = pstmt1.executeQuery();
+			
+			if(rs1.next()) {
+				if(paybillRequestVO.getModeOfPayment().equalsIgnoreCase("Online")) {
+					
+					long transactionID = insertbillingpayment(paybillRequestVO);
+					
+					if (transactionID != 0) {
+
+						// creating order in razor pay
+
+						razorPayOrderVO.setAmount(paybillRequestVO.getTotalamount() * 100);
+						razorPayOrderVO.setCurrency("INR");
+						razorPayOrderVO.setPayment_capture(1);
+
+						razorpayRequestVO.setApi("orders");
+						String rzpRestCallResponse = extramethodsdao.razorpaypost(razorPayOrderVO, razorpayRequestVO);
+
+						RazorPayResponseVO razorPayResponseVO = gson.fromJson(rzpRestCallResponse, RazorPayResponseVO.class);
+
+						paybillRequestVO.setRazorPayOrderID(razorPayResponseVO.getId());
+
+						PreparedStatement pstmt2 = con.prepareStatement("UPDATE billingpaymentdetails SET RazorPayOrderID = ? WHERE TransactionID = " + transactionID);
+						pstmt2.setString(1, paybillRequestVO.getRazorPayOrderID());
+						if (pstmt2.executeUpdate() > 0) {
+
+							checkoutDetails.setKey(ExtraConstants.RZPKeyID);
+							checkoutDetails.setAmount(paybillRequestVO.getTotalamount() * 100);
+							checkoutDetails.setCurrency(ExtraConstants.PaymentCurrency);
+							checkoutDetails.setOrder_id(paybillRequestVO.getRazorPayOrderID());
+							checkoutDetails.setButtonText(ExtraConstants.PaymentButtonText);
+							checkoutDetails.setName(ExtraConstants.CompanyName);
+							checkoutDetails.setDescription("Payment of INR " + paybillRequestVO.getTotalamount()
+									+ "/- for CRN/CAN: " + rs1.getString("CustomerUniqueID") + ".");
+							checkoutDetails.setImage(ExtraConstants.IDIGIIMAGEURL);
+
+							prefill.setName(rs1.getString("CustomerName"));
+							prefill.setEmail(rs1.getString("Email"));
+							prefill.setContact(rs1.getString("MobileNumber"));
+							checkoutDetails.setPrefill(prefill);
+
+							theme.setColor(ExtraConstants.PaymentThemeColor);
+							checkoutDetails.setTheme(theme);
+
+							notes.setAddress(rs1.getString("HouseNumber"));
+							checkoutDetails.setTransactionID(transactionID);
+
+							responsevo.setCheckoutDetails(checkoutDetails);
+							responsevo.setPayType("Postpaid");
+							responsevo.setPaymentMode("Online");
+							responsevo.setResult("Success");
+							responsevo.setMessage("Order Created Successfully. Proceed to CheckOut");
+						}
+					} else {
+
+						responsevo.setResult("Failure");
+						responsevo.setMessage("Order Creation Failed. Please Try After Sometime");
+					}
+					
+				} else {
+					paybillRequestVO.setPaymentStatus(1);
+					responsevo.setPaymentMode("Cash");
+
+					if(insertbillingpayment(paybillRequestVO) != 0) {
+						responsevo.setResult("Success");
+						responsevo.setMessage("Bill Paid Successfully");
+					} else {
+						responsevo.setResult("Failure");
+						responsevo.setMessage("Bill Payment Failed. Please Try After Sometime");
+					}
+					
+				}
+			}
+			
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			responsevo.setMessage("INTERNAL SERVER ERROR");
+			responsevo.setResult("Failure");
+		} finally {
+			// pstmt.close();
+			// ps.close();
+			con.close();
+		}
+
+		return responsevo;
+	}
+	
+	public long insertbillingpayment (PayBillRequestVO paybillRequestVO) throws SQLException {
+		// TODO Auto-generated method stub		
+		
+		Connection con = null;
+		long transactionID = 0;
+		
+		try {
+			con = getConnection();
+			
+			PreparedStatement pstmt = con.prepareStatement("INSERT INTO billingpaymentdetails (CustomerBillingID, CustomerID, CustomerUniqueID, TotalAmount, Source, ModeOfPayment, PaymentStatus, CreatedByID, CreatedByRoleID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+			pstmt.setLong(1, paybillRequestVO.getCustomerBillingID());
+			pstmt.setLong(2, paybillRequestVO.getCustomerID());
+			pstmt.setString(3, paybillRequestVO.getCustomerUniqueID());
+			pstmt.setInt(4, paybillRequestVO.getTotalamount());
+			pstmt.setString(5, paybillRequestVO.getSource());
+			pstmt.setString(6, paybillRequestVO.getModeOfPayment());
+			pstmt.setInt(7, paybillRequestVO.getPaymentStatus());
+			pstmt.setInt(8, paybillRequestVO.getTransactedByID());
+			pstmt.setInt(9, paybillRequestVO.getTransactedByRoleID());
+			
+			if (pstmt.executeUpdate() > 0) {
+				PreparedStatement pstmt1 = con.prepareStatement("SELECT MAX(TransactionID) as TransactionID from billingpaymentdetails");
+				ResultSet rs1 = pstmt1.executeQuery();
+				
+				if(rs1.next()) {
+					transactionID = rs1.getLong("TransactionID");
+				}
+			}
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+		} finally {
+			con.close();
+			
+		}
+		
+		return transactionID;
 	}
 	
 	public ResponseVO printbill(int billingID) {
@@ -1028,8 +1198,8 @@ public class AccountDAO {
 			RestCallVO restcallvo = new RestCallVO();
 			
 			ps = con.prepareStatement("INSERT INTO command (CustomerID, CustomerMeterID, MIUID, CustomerUniqueID) VALUES (?, ?, ?, ?)");
-			ps.setInt(1, configurationvo.getCustomerID());
-			ps.setInt(2, configurationvo.getCustomerMeterID());
+			ps.setLong(1, configurationvo.getCustomerID());
+			ps.setLong(2, configurationvo.getCustomerMeterID());
 			ps.setString(3, configurationvo.getMiuID());
 			ps.setString(4, configurationvo.getCustomerUniqueID());
 			
@@ -1088,7 +1258,7 @@ public class AccountDAO {
 							PreparedStatement pstmt2 = con.prepareStatement("UPDATE customermeterdetails SET TariffID = ? Where CustomerUniqueID = ? AND CustomerMeterID = ?");
 							pstmt2.setInt(1, Integer.parseInt(configurationvo.getCommands().get(0).getValue()));
 							pstmt2.setString(2, configurationvo.getCustomerUniqueID());
-							pstmt2.setInt(3, configurationvo.getCustomerMeterID());
+							pstmt2.setLong(3, configurationvo.getCustomerMeterID());
 							pstmt2.executeUpdate();
 
 						}
@@ -1222,7 +1392,7 @@ public class AccountDAO {
 		return result;
 	}
 
-	public boolean checktopup(int miuID) throws SQLException {
+	public boolean checktopup(long customerMeterId) throws SQLException {
 		// TODO Auto-generated method stub
 
 		Connection con = null;
@@ -1233,7 +1403,7 @@ public class AccountDAO {
 		try {
 			con = getConnection();
 			pstmt = con.prepareStatement("SELECT transactionID, MIUID, Status FROM topup WHERE CustomerMeterID = ? AND STATUS = 10 AND PaymentStatus = 1 AND Source = 'web' ORDER BY TransactionID DESC LIMIT 0,1");
-			pstmt.setInt(1, miuID);
+			pstmt.setLong(1, customerMeterId);
 			rs = pstmt.executeQuery();
 			if (rs.next()) {
 				result = true;
@@ -1260,7 +1430,7 @@ public class AccountDAO {
 		try {
 			con = getConnection();
 			pstmt = con.prepareStatement("SELECT tr.EmergencyCredit, tr.Tariff, tr.TariffID, cmd.CustomerUniqueID FROM customermeterdetails as cmd LEFT JOIN tariff AS tr ON tr.TariffID = cmd.TariffID WHERE cmd.CustomerMeterID = ?");
-			pstmt.setInt(1, topupvo.getCustomerMeterID());
+			pstmt.setLong(1, topupvo.getCustomerMeterID());
 			rs = pstmt.executeQuery();
 			if (rs.next()) {
 				if (topupvo.getAmount() < rs.getFloat("EmergencyCredit") || topupvo.getAmount() < rs.getFloat("Tariff"))

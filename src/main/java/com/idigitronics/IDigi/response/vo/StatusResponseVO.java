@@ -11,7 +11,7 @@ import java.util.List;
  */
 public class StatusResponseVO {
 	
-	private int transactionID;
+	private long transactionID;
 	private String communityName;
 	private String blockName;
 	private String houseNumber;
@@ -37,10 +37,10 @@ public class StatusResponseVO {
 
 	private List<StatusResponseVO> data;
 	
-	public int getTransactionID() {
+	public long getTransactionID() {
 		return transactionID;
 	}
-	public void setTransactionID(int transactionID) {
+	public void setTransactionID(long transactionID) {
 		this.transactionID = transactionID;
 	}
 	public String getCommunityName() {

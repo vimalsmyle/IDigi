@@ -9,7 +9,7 @@ package com.idigitronics.IDigi.request.vo;
  */
 public class DataRequestVO {
 	
-	private int readingID;
+	private long readingID;
 	private String miuID;
 	private int type;
 	private String sync_time;
@@ -29,10 +29,10 @@ public class DataRequestVO {
 	
 	private String source;
 	
-	public int getReadingID() {
+	public long getReadingID() {
 		return readingID;
 	}
-	public void setReadingID(int readingID) {
+	public void setReadingID(long readingID) {
 		this.readingID = readingID;
 	}
 	public String getMiuID() {

@@ -14,6 +14,7 @@ public class CheckOutRequestVO {
 	private String razorpay_signature;
 	private long transactionID;
 	public RazorPayError error;
+	private String payType;
 	
 	public String getRazorpay_order_id() {
 		return razorpay_order_id;
@@ -45,4 +46,11 @@ public class CheckOutRequestVO {
 	public void setError(RazorPayError error) {
 		this.error = error;
 	}
+	public String getPayType() {
+		return payType;
+	}
+	public void setPayType(String payType) {
+		this.payType = payType;
+	}
+	
 }

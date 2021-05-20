@@ -20,7 +20,7 @@ public class TopupDetailsResponseVO {
 	private int reconnectionCharges;
 	private int fixedCharges;
 	private int noOfMonths;
-	private int customerMeterID;
+	private long customerMeterID;
 	
 	public float getCurrentBalance() {
 		return currentBalance;
@@ -88,10 +88,10 @@ public class TopupDetailsResponseVO {
 	public void setCustomerUniqueID(String customerUniqueID) {
 		CustomerUniqueID = customerUniqueID;
 	}
-	public int getCustomerMeterID() {
+	public long getCustomerMeterID() {
 		return customerMeterID;
 	}
-	public void setCustomerMeterID(int customerMeterID) {
+	public void setCustomerMeterID(long customerMeterID) {
 		this.customerMeterID = customerMeterID;
 	}
 }

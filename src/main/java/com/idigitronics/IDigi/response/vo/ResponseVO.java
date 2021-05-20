@@ -27,6 +27,7 @@ public class ResponseVO {
 	private UserDetails userDetails;
 	private CheckoutDetails checkoutDetails;
 	private String paymentMode;
+	private String payType;
 	
 	public UserDetails getUserDetails() {
 		return userDetails;
@@ -117,6 +118,12 @@ public class ResponseVO {
 	}
 	public void setBilldetails(BillDetailsResponseVO billdetails) {
 		this.billdetails = billdetails;
+	}
+	public String getPayType() {
+		return payType;
+	}
+	public void setPayType(String payType) {
+		this.payType = payType;
 	}
 	
 }

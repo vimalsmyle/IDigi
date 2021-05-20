@@ -22,11 +22,11 @@ public class UserDetails {
 	private int communityID;
 	private String userName;
 	private int ID;
-	private int customerID;
+	private long customerID;
 	private String CustomerUniqueID;
 	private String communityName;
 	private List<CommandGroupRequestVO> pendingCommands;
-	private int pendingTransactionID;
+	private long pendingTransactionID;
 	private String blockName;
 	private List<MeterRequestVO> meters;
 	
@@ -60,10 +60,10 @@ public class UserDetails {
 	public void setuserName(String userName) {
 		this.userName = userName;
 	}
-	public int getCustomerID() {
+	public long getCustomerID() {
 		return customerID;
 	}
-	public void setCustomerID(int customerID) {
+	public void setCustomerID(long customerID) {
 		this.customerID = customerID;
 	}
 	public int getID() {
@@ -85,10 +85,10 @@ public class UserDetails {
 		this.userName = userName;
 	}
 	
-	public int getPendingTransactionID() {
+	public long getPendingTransactionID() {
 		return pendingTransactionID;
 	}
-	public void setPendingTransactionID(int pendingTransactionID) {
+	public void setPendingTransactionID(long pendingTransactionID) {
 		this.pendingTransactionID = pendingTransactionID;
 	}
 	public void setCommunityID(int communityID) {

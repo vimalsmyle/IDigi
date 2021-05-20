@@ -9,7 +9,7 @@ package com.idigitronics.IDigi.request.vo;
  */
 public class MeterRequestVO {
 
-	private int customerMeterID;
+	private long customerMeterID;
 	private String miuID;
 	private String meterSerialNumber;
 	private String meterType;
@@ -27,10 +27,10 @@ public class MeterRequestVO {
 	public void setMiuID(String miuID) {
 		this.miuID = miuID;
 	}
-	public int getCustomerMeterID() {
+	public long getCustomerMeterID() {
 		return customerMeterID;
 	}
-	public void setCustomerMeterID(int customerMeterID) {
+	public void setCustomerMeterID(long customerMeterID) {
 		this.customerMeterID = customerMeterID;
 	}
 	public String getMeterSerialNumber() {

@@ -138,7 +138,7 @@ public class ManagementSettingsDAO {
 						
 						pstmt.setInt(5, usermanagementvo.getCommunityID());
 						pstmt.setInt(6, usermanagementvo.getBlockID());
-						pstmt.setInt(7, usermanagementvo.getCustomerID());
+						pstmt.setLong(7, usermanagementvo.getCustomerID());
 						pstmt.setInt(8, rs.getInt("ID"));
 						pstmt.setInt(9, usermanagementvo.getLoggedInRoleID());
 						pstmt.setString(10, usermanagementvo.getCustomerUniqueID());
@@ -449,9 +449,9 @@ public class ManagementSettingsDAO {
 
 				pstmt.setInt(1, vacationRequestVO.getCommunityID());
 				pstmt.setInt(2, vacationRequestVO.getBlockID());
-				pstmt.setInt(3, vacationRequestVO.getCustomerID());
+				pstmt.setLong(3, vacationRequestVO.getCustomerID());
 				pstmt.setString(4, vacationRequestVO.getMiuID());
-				pstmt.setInt(5, vacationRequestVO.getCustomerMeterID());
+				pstmt.setLong(5, vacationRequestVO.getCustomerMeterID());
 				pstmt.setString(6, vacationRequestVO.getVacationName());
 				pstmt.setString(7, vacationRequestVO.getStartDateTime());
 				pstmt.setString(8, vacationRequestVO.getEndDateTime());
@@ -652,7 +652,7 @@ public class ManagementSettingsDAO {
 		try {
 			con = getConnection();
 			pstmt = con.prepareStatement("SELECT MIUID, Status, StartDate, EndDate, Mode FROM vacation WHERE CustomerMeterID = ? order by VacationID DESC LIMIT 0,1");
-			pstmt.setInt(1, vacationRequestVO.getCustomerMeterID());
+			pstmt.setLong(1, vacationRequestVO.getCustomerMeterID());
 			rs = pstmt.executeQuery();
 			if (rs.next()) {
 				if (rs.getString("Status").equals("10")) {

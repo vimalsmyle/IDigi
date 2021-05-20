@@ -14,7 +14,7 @@ public class ConfigurationResponseVO {
 	private String miuID;
 	private List<ConfigurationResponseVO> data;
 	private List<CommandGroupResponseVO> commands;
-	private int transactionID;
+	private long transactionID;
 	
 	public String getMiuID() {
 		return miuID;
@@ -34,10 +34,10 @@ public class ConfigurationResponseVO {
 	public void setCommands(List<CommandGroupResponseVO> commands) {
 		this.commands = commands;
 	}
-	public int getTransactionID() {
+	public long getTransactionID() {
 		return transactionID;
 	}
-	public void setTransactionID(int transactionID) {
+	public void setTransactionID(long transactionID) {
 		this.transactionID = transactionID;
 	}
 	

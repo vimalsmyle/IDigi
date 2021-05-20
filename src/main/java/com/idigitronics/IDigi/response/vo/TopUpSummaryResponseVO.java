@@ -16,7 +16,7 @@ public class TopUpSummaryResponseVO {
 	private String meterID;
 	private String firstName;
 	private String lastName;
-	private int transactionID;
+	private long transactionID;
 	private int rechargeAmount;
 	private String status;
 	private String modeOfPayment;
@@ -64,11 +64,11 @@ public class TopUpSummaryResponseVO {
 		this.lastName = lastName;
 	}
 
-	public int getTransactionID() {
+	public long getTransactionID() {
 		return transactionID;
 	}
 
-	public void setTransactionID(int transactionID) {
+	public void setTransactionID(long transactionID) {
 		this.transactionID = transactionID;
 	}
 

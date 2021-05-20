@@ -18,7 +18,7 @@ public class DashboardResponseVO {
 	private String lastName;
 	private String customerUniqueID;
 	private String miuID;
-	private int customerMeterID;
+	private long customerMeterID;
 	private String meterSerialNumber;
 	private String meterType;
 	private String payType;
@@ -328,11 +328,11 @@ public class DashboardResponseVO {
 		this.miuID = miuID;
 	}
 
-	public int getCustomerMeterID() {
+	public long getCustomerMeterID() {
 		return customerMeterID;
 	}
 
-	public void setCustomerMeterID(int customerMeterID) {
+	public void setCustomerMeterID(long customerMeterID) {
 		this.customerMeterID = customerMeterID;
 	}
 

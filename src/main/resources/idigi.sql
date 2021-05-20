@@ -122,11 +122,9 @@ DROP TABLE IF EXISTS `billingpaymentdetails`;
 CREATE TABLE `billingpaymentdetails` (
   `TransactionID` bigint(255) NOT NULL AUTO_INCREMENT,
   `CustomerBillingID` bigint(255) NOT NULL,
-  `CustomerID` bigint(20) NOT NULL,
-  `MIUID` varchar(50) NOT NULL,
-  `CustomerMeterID` bigint(255) NOT NULL,
+  `CustomerID` bigint(255) NOT NULL,
   `CustomerUniqueID` varchar(100) NOT NULL,
-  `Amount` decimal(10,0) NOT NULL,
+  `TotalAmount` decimal(10,0) NOT NULL,
   `Source` varchar(10) NOT NULL,
   `ModeOfPayment` varchar(50) NOT NULL,
   `PaymentStatus` tinyint(4) unsigned NOT NULL DEFAULT '0',
@@ -140,7 +138,7 @@ CREATE TABLE `billingpaymentdetails` (
   `CreatedByID` int(11) NOT NULL,
   `CreatedByRoleID` int(11) NOT NULL,
   `TransactionDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `AcknowledgeDate` datetime NOT NULL,
+  `AcknowledgeDate` datetime DEFAULT NULL,
   PRIMARY KEY (`TransactionID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 

@@ -69,7 +69,7 @@ public class AccountController {
 			BusinessException, SQLException {
 		ResponseVO responsevo = new ResponseVO();
 		try {
-			responsevo = accountdao.updatetopup(checkOutRequestVO);
+			responsevo = accountdao.updatepayment(checkOutRequestVO);
 		} catch (Exception e) {
 			responsevo.setResult("Failure");
 			responsevo.setMessage(e.getMessage());
