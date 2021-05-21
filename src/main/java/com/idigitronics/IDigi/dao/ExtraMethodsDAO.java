@@ -182,8 +182,7 @@ public class ExtraMethodsDAO {
 }
 	
 	
-//	@Scheduled(cron="0 0 * ? * *") // scheduled for 1 hour
-//	@Scheduled(cron="0 0/2 * * * ?") // scheduled for every 2 min
+//	@Scheduled(cron="0 30 1 1 * ? *") // scheduled for every month 1st day at 1:30
 	public void individualbillgeneration() throws SQLException {
 		
 		Connection con = null;
@@ -263,8 +262,7 @@ public class ExtraMethodsDAO {
 		
 	}
 	
-//	@Scheduled(cron="0 0 * ? * *") // scheduled for 1 hour
-//	@Scheduled(cron="0 0/2 * * * ?") // scheduled for every 2 min
+//	@Scheduled(cron="0 30 5 1 * ? *") // scheduled for every month 1st day at 5:30
 	public void billgeneration() throws SQLException {
 		
 		Connection con = null;
@@ -273,6 +271,7 @@ public class ExtraMethodsDAO {
 		PreparedStatement pstmt2 = null;
 		ResultSet rs = null;
 		ResultSet rs1 = null;
+		SMSRequestVO smsRequestVO = null;
 		
 		try {
 			
@@ -285,6 +284,7 @@ public class ExtraMethodsDAO {
 				
 				int totalamount = 0;
 				int totalConsumption = 0;
+				smsRequestVO = new SMSRequestVO();
 				
 				pstmt1 = con.prepareStatement("SELECT * FROM billingdetails WHERE CustomerID = " + rs.getInt("CustomerID") + " AND BillMonth = "+ (currentdate.getMonthValue() - 1) + " AND BillYear = " + (currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear()));
 				rs1 = pstmt1.executeQuery();
@@ -308,6 +308,12 @@ public class ExtraMethodsDAO {
 				pstmt2.setInt(10, currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear());
 				
 				pstmt2.executeUpdate();
+				
+				smsRequestVO.setMessage("Dear "+ rs.getString("FirstName") + " " + rs.getString("LastName") + ", \n \n Your Bill of Amount" + (totalamount + (totalamount * ((rs.getInt("GST") * 2)/100))) + "/- for the month of " + ((currentdate.getMonthValue() - 1 == 0) ? "January," : (currentdate.getMonthValue() - 1 == 1) ? "February," : (currentdate.getMonthValue() - 1 == 2) ? "March," : (currentdate.getMonthValue() - 1 == 3) ? "April," : (currentdate.getMonthValue() - 1 == 4) ? "May," : (currentdate.getMonthValue() - 1 == 5) ? "June," : (currentdate.getMonthValue() - 1 == 6) ? "July," : (currentdate.getMonthValue() - 1 == 7) ? "August," : (currentdate.getMonthValue() - 1 == 8) ? "Septmeber," : (currentdate.getMonthValue() - 1 == 9) ? "October," : (currentdate.getMonthValue() - 1 == 10) ? "November," : (currentdate.getMonthValue() - 1 == 11) ? "December," :"" ) + ((currentdate.getMonthValue() - 1 == 0) ? currentdate.getYear() - 1 : currentdate.getYear()) +" has been generated. Kindly pay the bill before " + currentdate.plusDays(rs.getInt("DueDayCount")).toString() + " to avoid late fee charges. Thank You");
+				smsRequestVO.setToMobileNumber(rs.getString("MobileNumber"));
+				
+//				sendsms(smsRequestVO);
+				
 			}
 			
 			
@@ -323,7 +329,7 @@ public class ExtraMethodsDAO {
 		
 	}
 	
-//	@Scheduled(cron="0 0/4 * * * ?") 
+//	@Scheduled(cron="0 30 6 2 * ? *") // every month on 2nd day at 6:30
 	public void sendingbill() throws SQLException {
 		
 		Connection con = null;
@@ -332,7 +338,8 @@ public class ExtraMethodsDAO {
 		
 		try {
 			con = getConnection();
-			pstmt = con.prepareStatement("");
+			LocalDate currentdate = LocalDate.now();
+			pstmt = con.prepareStatement("SELECT * FROM customerbillingdetails as cbd LEFT JOIN customerdetails as cd ON cbd.CustomerID = cd.CustomerID WHERE cbd.BillMonth = "+ (currentdate.getMonthValue() - 1) + " AND cbd.BillYear = " + (currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear()));
 			rs = pstmt.executeQuery();
 			while(rs.next()) {
 			
@@ -390,7 +397,7 @@ public class ExtraMethodsDAO {
 	}*/
 	
 //	@Scheduled(cron="0 0 7 ? * *")
-//	@Scheduled(cron="0 0 7 ? * TUE,FRI") 
+//	@Scheduled(cron="0 0 7 ? * TUE,FRI") //every tuesday and friday at 7:00
 	public void communicationfailurealert() throws SQLException {
 		
 		Connection con = null;

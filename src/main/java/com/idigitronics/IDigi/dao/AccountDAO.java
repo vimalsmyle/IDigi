@@ -905,7 +905,7 @@ public class AccountDAO {
 		try {
 			con = getConnection();
 			
-			pstmt = con.prepareStatement("SELECT c.CommunityName, b.BlockName, CONCAT(cd.FirstName, cd.LastName) as Name, cd.HouseNumber, cd.CustomerID, cbd.CustomerBillingID, cbd.TotalAmount, cbd.TotalConsumption, cbd.Status, cbd.BillMonth, cbd.BillYear, cbd.LogDate FROM customerdetails AS cd LEFT JOIN customerbillingdetails AS cbd ON cd.CustomerID = cbd.CustomerID LEFT JOIN community AS c ON c.CommunityID = cd.CommunityID LEFT JOIN block AS b ON b.BlockID = cd.BlockID");
+			pstmt = con.prepareStatement("SELECT c.CommunityName, b.BlockName, CONCAT(cd.FirstName, cd.LastName) as Name, cd.HouseNumber, cd.CustomerID, cbd.CustomerBillingID, cbd.TotalAmount, cbd.TaxAmount, cbd.TotalConsumption, cbd.Status, cbd.BillMonth, cbd.BillYear, cbd.LogDate FROM customerdetails AS cd LEFT JOIN customerbillingdetails AS cbd ON cd.CustomerID = cbd.CustomerID LEFT JOIN community AS c ON c.CommunityID = cd.CommunityID LEFT JOIN block AS b ON b.BlockID = cd.BlockID");
 			rs = pstmt.executeQuery();
 			
 			billlist = new LinkedList<BillingResponseVO>();
@@ -918,7 +918,7 @@ public class AccountDAO {
 				billingresponsevo.setBlockName(rs.getString("BlockName"));
 				billingresponsevo.setCustomerName(rs.getString("Name"));
 				billingresponsevo.setHouseNumber(rs.getString("HouseNumber"));
-				billingresponsevo.setTotalAmount(rs.getInt("TotalAmount"));
+				billingresponsevo.setTotalAmount(rs.getInt("TotalAmount") + rs.getInt("TaxAmount"));
 				billingresponsevo.setTotalConsumption(rs.getInt("TotalConsumption"));
 				billingresponsevo.setBillMonth(rs.getInt("BillMonth") == 1 ? "January" : rs.getInt("BillMonth") == 2 ? "February" : rs.getInt("BillMonth") == 3 ? "March" : rs.getInt("BillMonth") == 4 ? "April" : rs.getInt("BillMonth") == 5 ? "May" : rs.getInt("BillMonth") == 6 ? "June" : rs.getInt("BillMonth") == 7 ? "July" : rs.getInt("BillMonth") == 8 ? "August" : rs.getInt("BillMonth") == 9 ? "September" : rs.getInt("BillMonth") == 10 ? "October" : rs.getInt("BillMonth") == 11 ? "November" : rs.getInt("BillMonth") == 12 ? "December" : "");
 				billingresponsevo.setBillYear(rs.getInt("BillYear"));
@@ -992,7 +992,7 @@ public class AccountDAO {
 
 						// creating order in razor pay
 
-						razorPayOrderVO.setAmount((paybillRequestVO.getTotalamount() + paybillRequestVO.getTaxAmount() + paybillRequestVO.getLateFee()) * 100);
+						razorPayOrderVO.setAmount(((paybillRequestVO.getTotalamount() + paybillRequestVO.getTaxAmount() + paybillRequestVO.getLateFee()) * 100));
 						razorPayOrderVO.setCurrency("INR");
 						razorPayOrderVO.setPayment_capture(1);
 
@@ -1013,7 +1013,7 @@ public class AccountDAO {
 							checkoutDetails.setOrder_id(paybillRequestVO.getRazorPayOrderID());
 							checkoutDetails.setButtonText(ExtraConstants.PaymentButtonText);
 							checkoutDetails.setName(ExtraConstants.CompanyName);
-							checkoutDetails.setDescription("Payment of INR " + paybillRequestVO.getTotalamount()
+							checkoutDetails.setDescription("Payment of INR " + ((paybillRequestVO.getTotalamount() + paybillRequestVO.getTaxAmount() + paybillRequestVO.getLateFee()) * 100)
 									+ "/- for CRN/CAN: " + rs1.getString("CustomerUniqueID") + ".");
 							checkoutDetails.setImage(ExtraConstants.IDIGIIMAGEURL);
 
@@ -1077,11 +1077,12 @@ public class AccountDAO {
 		try {
 			con = getConnection();
 			
-			PreparedStatement pstmt = con.prepareStatement("INSERT INTO billingpaymentdetails (CustomerBillingID, CustomerID, CustomerUniqueID, TotalAmount, Source, ModeOfPayment, PaymentStatus, CreatedByID, CreatedByRoleID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+			PreparedStatement pstmt = con.prepareStatement("INSERT INTO billingpaymentdetails (CustomerBillingID, CustomerID, CustomerUniqueID, TotalAmount, LateFee, Source, ModeOfPayment, PaymentStatus, CreatedByID, CreatedByRoleID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 			pstmt.setLong(1, paybillRequestVO.getCustomerBillingID());
 			pstmt.setLong(2, paybillRequestVO.getCustomerID());
 			pstmt.setString(3, paybillRequestVO.getCustomerUniqueID());
-			pstmt.setInt(4, paybillRequestVO.getTotalamount() + paybillRequestVO.getTaxAmount() + paybillRequestVO.getLateFee());
+			pstmt.setInt(4, paybillRequestVO.getTotalamount() + paybillRequestVO.getTaxAmount());
+			pstmt.setInt(5, paybillRequestVO.getLateFee());
 			pstmt.setString(5, paybillRequestVO.getSource());
 			pstmt.setString(6, paybillRequestVO.getModeOfPayment());
 			pstmt.setInt(7, paybillRequestVO.getPaymentStatus());
