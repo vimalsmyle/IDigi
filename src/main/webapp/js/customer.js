@@ -140,6 +140,140 @@ $("div.addevent").html('<button type="button" id="customerAddd"'
 		+'<i class="fa fa-user-plus"></i>'
 		+'</button>');
 
+var rowCount = 0;
+$("#addMeter")
+.click(
+		function() {
+			rowCount++;
+			$("#template").append("<div class=row> " +
+					"<div class=col-md-4>" +
+					"<div class=form-group>"
+									+"<label class=bmd-label-floating>Meter ID</label> <input "
+									+"type=text class=form-control name=meterIDAdd[]"
+									+" id=meterIDAdd-"+rowCount+">"
+									+"</div></div>"+
+									
+									
+									"<div class=col-md-4>" +
+									"<div class=form-group>"
+													+"<label class=bmd-label-floating>MIU ID</label> <input "
+													+"type=text class=form-control name=miuIDAdd"
+													+" id=miuIDAdd-"+rowCount+">"
+													+"</div></div>"+
+									
+										
+
+										"<div class=col-md-4>" +
+										"<div class=form-group>"
+										+"<label class=bmd-label-floating>Meter Serial Number</label> <input "
+										+"type=text class=form-control name=meterSerialNumberAdd"
+										+" id=meterSerialNumberAdd-"+rowCount+">"
+										+"</div></div>"+
+																	
+																	
+																	
+
+									"<div class=col-md-4>" +
+									"<div class=form-group>"
+									+"<label class=bmd-label-floating>Meter Type</label> <input "
+									+"type=text class=form-control name=meterTypeAdd"
+									+" id=meterTypeAdd-"+rowCount+">"
+									+"</div></div>"+
+													
+									"<div class=col-md-4>" +
+									"<div class=form-group>"
+									+"<label class=bmd-label-floating>Meter Size</label> <input "
+									+"type=text class=form-control name=meterSizeAdd"
+									+" id=meterSizeAdd-"+rowCount+">"
+									+"</div></div>"+
+									
+									"<div class=col-md-4>" +
+									"<div class=form-group>"
+									+"<label class=bmd-label-floating>Pay Type</label> <input "
+									+"type=text class=form-control name=payTypeAdd"
+									+" id=payTypeAdd-"+rowCount+">"
+									+"</div></div>"+
+									
+									
+									"<div class=col-md-4>" +
+									"<div class=form-group>"
+									+"<label class=bmd-label-floating>Tariff Name</label> <input "
+									+"type=text class=form-control name=tariffNameAdd"
+									+" id=tariffNameAdd-"+rowCount+">"
+									+"</div></div>"+
+									
+									"<div class=col-md-4>" +
+									"<div class=form-group>"
+									+"<label class=bmd-label-floating>Gateway ID</label> <input "
+									+"type=text class=form-control name=gatewayIDAdd"
+									+" id=gatewayIDAdd-"+rowCount+">"
+									+"</div></div>"+
+									
+									"<div class=col-md-4>" +
+									"<div class=form-group>"
+									+"<label class=bmd-label-floating>Location</label> <input "
+									+"type=text class=form-control name=locationAdd"
+									+" id=locationAdd-"+rowCount+">"
+									+"</div></div>"+
+									
+									"<div class=col-md-4>" +
+									"<div class=form-group>"
+									+" <button type=button class='btn btn-primary submit-button' id='removeMeter'>Remove</button></div></div></div>");
+
+			
+			
+			var options = {
+				    fields: {
+				        'meterIDAdd[]': {
+				            validators: {
+				                notEmpty: {
+				                    message: 'Enter a value 1'
+				                }
+				            }
+				        },
+				        'secondField[]': {
+				            validators: {
+				                notEmpty: {
+				                    message: 'Enter a value 2'
+				                }
+				            }
+				        },
+				        'thirdField[]': {
+				            validators: {
+				                notEmpty: {
+				                    message: 'Enter a value 3'
+				                }
+				            }
+				        }
+				    }
+				};
+			
+			 //var inputs =  $("#template").find("input[name='meterSerialNumberAdd']");
+			 
+	            
+			// $('#customerDetails').bootstrapValidator('addField', inputs);
+			 $('#customerDetails').bootstrapValidator('addField', 'meterIDAdd[]', {
+		            validators: {
+	                    notEmpty: {
+	                        message: 'Enter a value 4'
+	                    }
+	                }
+	});
+		     
+
+
+		});
+
+$("body").on("click", "#removeMeter", function(e) {
+	rowCount--;
+
+	$(this).parent().parent().parent().remove();
+	
+  });
+
+
+
+
 });
 
 
@@ -226,7 +360,7 @@ $(document)
 															}
 														}
 													},
-													meterSerialAdd : {
+													meterSerialNumberAdd : {
 														message : 'MSN is not valid',
 														validators : {
 															notEmpty : {

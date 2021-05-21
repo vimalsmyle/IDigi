@@ -7,38 +7,15 @@
 	content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link rel="stylesheet" href="common/css/bootstrap.min.css">
 <link rel="icon" type="image/png" sizes="16x16" href="common/images/1-hanbit.png">
-<link href="common/css/materialize.fontawsome.css"
-	rel="stylesheet">
 <!-- Material Design for Bootstrap CSS -->
-<link rel="stylesheet"
-	href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css"
-	integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX"
-	crossorigin="anonymous">
-<link rel="stylesheet"
-	href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
-	integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU"
-	crossorigin="anonymous">
-<link rel="stylesheet" href="common/css/style.css">
+<!-- <link rel="stylesheet" href="common/css/style.css"> -->
 <link rel="stylesheet"
 	href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css">
 <link rel="stylesheet"
 	href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.bootstrap4.min.css">
 	
-	<link rel="stylesheet" href="common/css/bootstrap-material-datetimepicker.css" />
-	
-	<link href='http://fonts.googleapis.com/css?family=Roboto:400,500' rel='stylesheet' type='text/css'>
-		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-	
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" 
-	integrity="sha256-yMjaV542P+q1RnH6XByCPDfUFhmOafWbeLPmqKh11zo=" crossorigin="anonymous" />
-	
-	
-	<link href='http://fonts.googleapis.com/css?family=Roboto:400,500' rel='stylesheet' type='text/css'>
-		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-	
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" 
-	integrity="sha256-yMjaV542P+q1RnH6XByCPDfUFhmOafWbeLPmqKh11zo=" crossorigin="anonymous" />
-
+	<link href="common/css/materialize.fontawsome.css"
+	rel="stylesheet">
 <title>Customer Details</title>
 </head>
 
@@ -61,196 +38,99 @@
 	</div>
 
 	<jsp:include page="header.jsp" />
-	<div
-		class="container-fluid topspacing bottomspacing pl-0 pr-0 mr-0 ml-0">
-		<div class="row mr-0 ml-0">
-			<div class="left_nav col-md-2 pl-0 pr-0">
-
-				<jsp:include page="menu.jsp" />
-			</div>
-			<div class="right_data col-md-10 mt-4 mb-4">
-				<!--Right start-->
-				<!-- <div class="row mb-4">
-					<div class="col-md-6">
-						<h3>Customer Details</h3>
-					</div>
-				</div> -->
-				<div class="row">
-					<div class="col-md-12">
-						<table id="liveTable"
-							class="table table-striped table-bordered dt-responsive nowrap dataTable no-footer dtr-inline collapsed"
-							style="width: 100%">
-							<thead>
-								<tr>
-									<th>Community</th>
-									<th>Block</th>
-									<th>House No</th>
-									<th>CRN</th>
-									<th>MSN</th>
-									<th>MIU ID</th>
-									<th>Reading (M<sup>3</sup>)</th>
-									<th>Gas in KG</th>
-									<th>Balance</th>
-									<th>EC</th>
-									<th>Tariff</th>
-									<th>Valve</th>
-									<th>Tamper</th>
-									<th>Battery (%)</th>
-									<th>Vacation</th>
-									<th>Date</th>
-								</tr>
-							</thead>
-							<tbody>
-							</tbody>
-						</table>
-						
-						
-						<table id="liveTable1"
-							class="table table-striped table-bordered dt-responsive nowrap dataTable no-footer dtr-inline collapsed"
-							style="width: 100%">
-							<thead>
-								<tr>
-									<th>Community</th>
-									<th>Block</th>
-									<th>House No</th>
-									<th>CRN</th>
-									<th>MSN</th>
-									<th>MIU ID</th>
-									<th>Reading (M<sup>3</sup>)</th>
-									<th>Gas in KG</th>
-									<th>Balance</th>
-									<th>EC</th>
-									<th>Battery (%) </th>
-									<th>Valve</th>
-									<th>Tariff</th>
-									<th>Tamper</th>
-									<th>Vacation</th>
-									<th>Date</th>
-								</tr>
-							</thead>
-							<tbody>
-							</tbody>
-						</table>
-					</div>
-				</div>
-
-				<!--Right end-->
-			</div>
-		</div>
-	</div>
 	
-	 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
-		aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Advanced Search</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
+	<jsp:include page="slidebar.jsp" />
+	 <main class="col-md-10 float-left col px-5 pl-md-3 pt-2 pb-6 main">
+            <a href="#" class="sideHide"><i class="text-dark fa fa-navicon fa-lg py-2 p-1"></i></a>
+            <div class="page-header">
+                <h2 class="display-4 font-weight-light">Dashboard</h2>
+            </div>
+			<div class="row">
+			<div class="col-md-12">
+			<div class="box">
+            <div class="box-header with-border">
+              <h3 class="box-title">Monthly Recap Report</h3>
+			</div>
+            <div class="box-body">
+              <div class="row">
+                <div class="col-md-8">
+                  <p class="text-center">
+                    <strong>Sales: 1 Jan, 2014 - 30 Jul, 2014</strong>
+                  </p>
+				  <div class="chart">
+					 <canvas id="myChart" style="height:155px; width: 703px;" height="155" width="703"></canvas>
+				  </div>
+                </div>
+                <div class="col-md-4">
+                  <p class="text-center">
+                    <strong>Goal Completion</strong>
+                  </p>
+				  <div class="chart">
+					 <canvas id="myChart1" height="100" width="205" style="width: 205px; height: 100px;"></canvas>
+				  </div>
+				</div>
+              </div>
+            </div>
+            <div class="box-footer">
+              <div class="row">
+                <div class="col-sm-3 col-xs-6">
+                  <div class="description-block border-right text-center">
+                    <span class="description-percentage text-green"><i class="fa fa-caret-up"></i> 17%</span>
+                    <h5 class="description-header">$35,210.43</h5>
+                    <span class="description-text">TOTAL REVENUE</span>
+                  </div>
+                </div>
+               <div class="col-sm-3 col-xs-6">
+                  <div class="description-block border-right text-center">
+                    <span class="description-percentage text-yellow"><i class="fa fa-caret-left"></i> 0%</span>
+                    <h5 class="description-header">$10,390.90</h5>
+                    <span class="description-text">TOTAL COST</span>
+                  </div>
+                </div>
+                <div class="col-sm-3 col-xs-6">
+                  <div class="description-block border-right text-center">
+                    <span class="description-percentage text-green"><i class="fa fa-caret-up"></i> 20%</span>
+                    <h5 class="description-header">$24,813.53</h5>
+                    <span class="description-text">TOTAL PROFIT</span>
+                  </div>
+                </div>
+               <div class="col-sm-3 col-xs-6 moreBtnBlock">
+                  <div class="description-block text-center">
+				    <div class="center-con">
+						<div class="round">
+						<div id="cta">
+							<span class="arrow primera next "></span>
+							<span class="arrow segunda next "></span>
+						</div>
+						</div>
+					</div>
+                    <a href="#" class="moreBtn"><p>View More <i class="fa fa-arrow-right" aria-hidden="true"></i></p></a>
+                  </div>
+                </div>
+              </div>
+             </div>
+           </div>
+         </div>
         </div>
-        <div class="modal-body">
-          <div class="row">
-            <div class="col-md-6">
-              <div class="form-group">
-                <label class="bmd-label-floating">Date From</label>
-                 <input type="text" id="start_date" name="start_date" class="form-control" >
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label class="bmd-label-floating">Date To</label>
-                 <input type="text" id="end_date" name="end_date" class="form-control" >
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label class="bmd-label-floating">Reading from</label>
-                <input type="text" id="reading_from" name="reading_from" class="form-control" maxlength="7" >
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label class="bmd-label-floating">Reading To</label>
-                <input type="text" id="reading_to" name="reading_to" class="form-control" maxlength="7">
-              </div>
-            </div>
-            
-            <div class="col-md-6">
-              <div class="form-group">
-                <label class="bmd-label-floating">Battery (%) From</label>
-                <input type="text" class="form-control input_height" id="battery_from" name="battery_from">
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label class="bmd-label-floating">Battery (%) To</label>
-                <input type="text" class="form-control input_height" id="battery_to" name="battery_to">
-              </div>
-            </div>
-            
-            <div class="col-md-6">
-              <div class="form-group">
-                <label class="bmd-label-floating select-label">Tamper</label>
-                <select class="form-control" id="tamper" name="tamper">
-                  <option value="-1">Tamper Type</option>
-                  <option value="1">Magnetic Tamper</option>
-                  <option value="2">Door Open</option>
-                  <option value="3">MAG - Door </option>
-                </select>
-              </div>
-            </div>
-            <div class="col-md-6">
-            
-            </div>
-            
-          </div>
-        </div>
-        <div class="modal-footer m-auto">
-          <button type="button" class="btn btn-primary btn-raised mr-4" id="dashboardFilter">Filter</button>
-          <button type="button" class="btn btn-danger btn-raised mr-4" data-dismiss="modal">Close<div class="ripple-container"></div></button>
-          <button type="button" class="btn btn-secondary btn-raised mr-4" id="resetFilter">Reset</button>
-          
-        </div>
-      </div>
-    </div>
-  </div>
+		
+		
+		
+		
+		<!-- End-->
+		
+		
+		
+		</main>
   
 	<jsp:include page="footer.jsp" />
 	
 	<%} %>
-
-<!-- 	<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
-    integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
-    crossorigin="anonymous"></script> -->
-
-	<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
-
-	<!-- <script src="common/js/bootstrap.min.js"></script> -->
-	
-	<script type="text/javascript" src="http://momentjs.com/downloads/moment-with-locales.min.js"></script>
-		<script type="text/javascript" src="common/js/bootstrap-material-datetimepicker.js"></script>
-
-
-	<script type="text/javascript"
+<script type="text/javascript"
 		src="//cdn.jsdelivr.net/jquery.bootstrapvalidator/0.5.0/js/bootstrapValidator.min.js"></script>
 
-	<script src="js/live.js"></script>
+	<script src="js/community.js"></script>
 	<script src="js/common.js"></script>
 	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
-	<script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js"
-		integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U"
-		crossorigin="anonymous"></script>
-	<script
-		src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js"
-		integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9"
-		crossorigin="anonymous"></script>
-	<script>
-		$(document).ready(function() {
-			$('body').bootstrapMaterialDesign();
-		});
-	</script>
-	<!-- <script src="https://code.jquery.com/jquery-3.3.1.js"></script> -->
 	<script
 		src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
 		
@@ -301,7 +181,14 @@
 		
 		<script
 		src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/5.4.0/bootbox.min.js"></script>
-
+		
+		<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+		
+	<script>
+		$(document).ready(function() {
+			$('#communityTable').DataTable();
+		});
+	</script>
 	
 <script>
 $(document).ready(function(){
@@ -369,6 +256,75 @@ $(document).ready(function(){
 			$.material.init()
 		});
 		</script>
+		
+		
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+<script>
+	 
+	$(document).ready(function(){
+	  var table = $('#datetable').DataTable( {
+			fixedHeader: true
+		} );
+		$("#sidebar").addClass('whiteColor');    
+        $('.sideHide').on('click', function(e){
+			$("#sidebar").toggle();
+		  $("#sidebar").toggleClass('whiteColor yelolowCollor')
+		});
+		
+		
+	});
+</script>
+<script>
+var xValues = ["Italy", "France", "Spain", "USA", "Argentina"];
+var yValues = [55, 49, 44, 24, 15];
+var barColors = ["red", "green","blue","orange","brown"];
+
+new Chart("myChart", {
+  type: "bar",
+  data: {
+    labels: xValues,
+    datasets: [{
+      backgroundColor: barColors,
+      data: yValues
+    }]
+  },
+  options: {
+    legend: {display: false},
+    title: {
+      display: true,
+      text: "World Wine Production 2018"
+    }
+  }
+});
+</script>
+<script>
+var xValues = ["Italy", "France", "Spain", "USA", "Argentina"];
+var yValues = [55, 49, 44, 24, 15];
+var barColors = [
+  "#b91d47",
+  "#00aba9",
+  "#2b5797",
+  "#e8c3b9",
+  "#1e7145"
+];
+
+new Chart("myChart1", {
+  type: "pie",
+  data: {
+    labels: xValues,
+    datasets: [{
+      backgroundColor: barColors,
+      data: yValues
+    }]
+  },
+  options: {
+    title: {
+      display: true,
+      text: "World Wide Wine Production 2018"
+    }
+  }
+});
+</script>
 		
 </body>
 

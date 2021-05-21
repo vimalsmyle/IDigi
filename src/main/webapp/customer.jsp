@@ -51,7 +51,7 @@
 						Form</h5>
 						
 						<form id="customerDetails">
-						<div class="row">
+						<div class="row" id="template">
 						
 						<%if(!user_id.equalsIgnoreCase("2")) {%>
 							<div class="col-xs-4">
@@ -129,32 +129,32 @@
 										id="emailAdd">
 								</div>
 							</div>
-							<div class="col-md-4">
+							<!-- <div class="col-md-4">
 								<div class="form-group">
 									<label class="bmd-label-floating">MSN</label> <input
 										type="text" class="form-control" name="meterSerialAdd"
 										id="meterSerialAdd">
 								</div>
-							</div>
+							</div> -->
 							
 							
 							
 							
-							<div class="col-md-4">
+							<!-- <div class="col-md-4">
 								<div class="form-group">
 									<label class="bmd-label-floating">MIU ID</label> <input
 										type="text" class="form-control" name="amrAdd"
 										id="amrAdd">
 								</div>
-							</div>
-							<div class="col-md-4">
+							</div> -->
+							<!-- <div class="col-md-4">
 								<div class="form-group">
 									<label class="bmd-label-floating select-label">Tariff Name</label>  <select
 										class="form-control" id="selectTariffName" name="selectTariffName">
-										<!-- <option style = "color: Red" value="" disabled selected>Select Tariff</option> --><!--  <option>Select Community</option> --> 
+										<option style = "color: Red" value="" disabled selected>Select Tariff</option> --><!--  <option>Select Community</option> 
 									</select>
 								</div>
-							</div>
+							</div> -->
 							
 							
 							<div class="col-md-4">
@@ -165,11 +165,20 @@
 								</div>
 							</div>
 							
+							
+							
+							
 							<div class="col-md-4">
 							<button class="btn btn-primary submit-button"
 									 value="Add!" id="addMeter"
 									type="button">Add</button>
 							</div>
+							
+							
+						</div>
+							
+							<div class="row">
+							
 							<div class="col-md-4">
 									<button class="btn btn-secondary submit-button"
 									 value="Save!" id="customerAdd"
