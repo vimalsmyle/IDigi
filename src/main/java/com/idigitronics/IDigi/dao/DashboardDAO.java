@@ -759,7 +759,7 @@ public class DashboardDAO {
 			rs = pstmt.executeQuery();
 			
 			if(rs.next()) {
-				
+				mailRequestVO.setFileLocation("NoAttachment");
 				mailRequestVO.setToEmail(subject.equalsIgnoreCase("Low Balance Alert!!!") ? rs.getString("customerEmail") : rs.getString("adminEmail"));
 				mailRequestVO.setSubject(subject);
 				message = message.replaceAll("<CRN>", rs.getString("CustomerUniqueID"));

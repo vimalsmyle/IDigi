@@ -13,6 +13,7 @@ public class MailRequestVO {
 	private String userPassword;
 	private String subject;
 	private String message;
+	private String fileLocation;
 	
 	public String getToEmail() {
 		return toEmail;
@@ -43,6 +44,12 @@ public class MailRequestVO {
 	}
 	public void setMessage(String message) {
 		this.message = message;
+	}
+	public String getFileLocation() {
+		return fileLocation;
+	}
+	public void setFileLocation(String fileLocation) {
+		this.fileLocation = fileLocation;
 	}
 	
 }

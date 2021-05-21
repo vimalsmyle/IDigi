@@ -20,6 +20,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 
+import javax.activation.DataHandler;
+import javax.activation.DataSource;
+import javax.activation.FileDataSource;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.PasswordAuthentication;
@@ -100,6 +103,12 @@ public class ExtraMethodsDAO {
 			message.addRecipient(Message.RecipientType.TO, new InternetAddress(mailrequestvo.getToEmail()));
 			message.setSubject(mailrequestvo.getSubject());
 			message.setText(mailrequestvo.getMessage());
+			
+			if(!mailrequestvo.getFileLocation().equalsIgnoreCase("NoAttachment")) { 
+			 DataSource source = new FileDataSource(mailrequestvo.getFileLocation());  
+			 message.setDataHandler(new DataHandler(source));
+			 message.setFileName(new File(mailrequestvo.getFileLocation()).getName());
+			}
 
 			Transport.send(message);
 			result = "Success";
@@ -291,6 +300,7 @@ public class ExtraMethodsDAO {
 		ResultSet rs = null;
 		ResultSet rs1 = null;
 		SMSRequestVO smsRequestVO = null;
+		MailRequestVO mailRequestVO = null;
 		List<IndividualBillingResponseVO> individualBillsList = null;
 		IndividualBillingResponseVO individualBillingResponseVO = null;
 		
@@ -298,6 +308,7 @@ public class ExtraMethodsDAO {
 			
 			con = getConnection();
 			LocalDate currentdate = LocalDate.now();
+			String billMonthYear = ((currentdate.getMonthValue() - 1 == 0) ? "January," : (currentdate.getMonthValue() - 1 == 1) ? "February," : (currentdate.getMonthValue() - 1 == 2) ? "March," : (currentdate.getMonthValue() - 1 == 3) ? "April," : (currentdate.getMonthValue() - 1 == 4) ? "May," : (currentdate.getMonthValue() - 1 == 5) ? "June," : (currentdate.getMonthValue() - 1 == 6) ? "July," : (currentdate.getMonthValue() - 1 == 7) ? "August," : (currentdate.getMonthValue() - 1 == 8) ? "Septmeber," : (currentdate.getMonthValue() - 1 == 9) ? "October," : (currentdate.getMonthValue() - 1 == 10) ? "November," : (currentdate.getMonthValue() - 1 == 11) ? "December," :"" ) + "-" + ((currentdate.getMonthValue() - 1 == 0) ? currentdate.getYear() - 1 : currentdate.getYear());
 			String drivename = "D:/Bills/" + (currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear()+"/"+(currentdate.getMonthValue() - 1));
 			individualBillsList = new LinkedList<IndividualBillingResponseVO>();
 			pstmt = con.prepareStatement("SELECT * FROM customerdetails JOIN alertsettings");
@@ -307,6 +318,7 @@ public class ExtraMethodsDAO {
 				int totalamount = 0;
 				int totalConsumption = 0;
 				smsRequestVO = new SMSRequestVO();
+				mailRequestVO = new MailRequestVO();
 				
 				pstmt1 = con.prepareStatement("SELECT * FROM billingdetails WHERE CustomerID = " + rs.getInt("CustomerID") + " AND BillMonth = "+ (currentdate.getMonthValue() - 1) + " AND BillYear = " + (currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear()));
 				rs1 = pstmt1.executeQuery();
@@ -415,6 +427,23 @@ public class ExtraMethodsDAO {
 					table1.addCell(table1cell1.setBorder(Border.NO_BORDER));
 					table1.addCell(table1cell2.setBorder(Border.NO_BORDER));
 					table1.addCell(table1cell3.setBorder(Border.NO_BORDER));
+					table1.startNewRow();
+					
+					Cell table1cell4 = new Cell();
+					table1cell4.add("Billing Date: " + currentdate);
+					table1cell4.setTextAlignment(TextAlignment.CENTER);
+					
+					Cell table1cell5 = new Cell();
+					table1cell5.add("Bill Month-Year: " + billMonthYear);
+					table1cell5.setTextAlignment(TextAlignment.CENTER);
+					
+					Cell table1cell6 = new Cell();
+					table1cell6.add("Due Date: " + currentdate.plusDays(rs.getInt("DueDayCount")).toString());
+					table1cell6.setTextAlignment(TextAlignment.CENTER);
+					
+					table1.addCell(table1cell4.setBorder(Border.NO_BORDER));
+					table1.addCell(table1cell5.setBorder(Border.NO_BORDER));
+					table1.addCell(table1cell6.setBorder(Border.NO_BORDER));
 
 					document.add(table1.setHorizontalAlignment(HorizontalAlignment.CENTER));
 					document.add(newLine);
@@ -491,6 +520,12 @@ public class ExtraMethodsDAO {
 						datatablehead.startNewRow();
 					}
 					
+					document.add(datatablehead.setHorizontalAlignment(HorizontalAlignment.CENTER));
+					
+					float[] finaltableWidths = { 200F, 180F };
+
+					Table finaltable = new Table(finaltableWidths);
+					
 					Cell billAmountCell = new Cell();
 					billAmountCell.add("Bill Amount : ");
 					billAmountCell.setTextAlignment(TextAlignment.CENTER);
@@ -508,7 +543,7 @@ public class ExtraMethodsDAO {
 					CGSTAmount.setTextAlignment(TextAlignment.CENTER);
 
 					Cell SGSTCell = new Cell();
-					SGSTCell.add("CGST : ");
+					SGSTCell.add("SGST : ");
 					SGSTCell.setTextAlignment(TextAlignment.CENTER);
 
 					Cell SGSTAmount = new Cell();
@@ -520,31 +555,27 @@ public class ExtraMethodsDAO {
 					totalBillAmountCell.setTextAlignment(TextAlignment.CENTER);
 
 					Cell totalBillAmount = new Cell();
-					totalBillAmount.add(""+(totalamount * ((rs.getInt("GST") * 2)/100)));
+					totalBillAmount.add(""+(totalamount + (totalamount * ((rs.getInt("GST") * 2)/100))));
 					totalBillAmount.setTextAlignment(TextAlignment.CENTER);
 					
-					Cell cell8 = new Cell();
-					cell8.add("Date of Transaction: ");
-					cell8.setTextAlignment(TextAlignment.CENTER);
-
-					Cell transactionDate = new Cell();
-					transactionDate.add(ExtraMethodsDAO.datetimeformatter(rs.getString("TransactionDate")));
-					transactionDate.setTextAlignment(TextAlignment.CENTER);
-
-					datatable.addCell(cell8);
-					datatable.addCell(transactionDate);
-					datatable.startNewRow();
-
+					finaltable.addCell(billAmountCell);
+					finaltable.addCell(totalAmount);
+					finaltable.startNewRow();
+					
+					finaltable.addCell(CGSTCell);
+					finaltable.addCell(CGSTAmount);
+					finaltable.startNewRow();
+					
+					finaltable.addCell(SGSTCell);
+					finaltable.addCell(SGSTAmount);
+					finaltable.startNewRow();
+					
+					finaltable.addCell(totalBillAmountCell);
+					finaltable.addCell(totalBillAmount);
+					
 					document.add(datatable.setHorizontalAlignment(HorizontalAlignment.CENTER));
+					document.add(finaltable.setHorizontalAlignment(HorizontalAlignment.CENTER));
 					document.add(disclaimer.setHorizontalAlignment(HorizontalAlignment.CENTER).setFont(font));
-					document.add(newLine);
-					document.add(newLine);
-					document.add(newLine);
-					document.add(newLine);
-					document.add(newLine);
-					document.add(newLine);
-					document.add(newLine);
-					document.add(newLine);
 					document.add(newLine);
 					document.add(newLine);
 					document.add(newLine);
@@ -554,11 +585,18 @@ public class ExtraMethodsDAO {
 					
 				}
 				
-				smsRequestVO.setMessage("Dear "+ rs.getString("FirstName") + " " + rs.getString("LastName") + ", \n \n Your Bill of Amount" + (totalamount + (totalamount * ((rs.getInt("GST") * 2)/100))) + "/- for the month of " + ((currentdate.getMonthValue() - 1 == 0) ? "January," : (currentdate.getMonthValue() - 1 == 1) ? "February," : (currentdate.getMonthValue() - 1 == 2) ? "March," : (currentdate.getMonthValue() - 1 == 3) ? "April," : (currentdate.getMonthValue() - 1 == 4) ? "May," : (currentdate.getMonthValue() - 1 == 5) ? "June," : (currentdate.getMonthValue() - 1 == 6) ? "July," : (currentdate.getMonthValue() - 1 == 7) ? "August," : (currentdate.getMonthValue() - 1 == 8) ? "Septmeber," : (currentdate.getMonthValue() - 1 == 9) ? "October," : (currentdate.getMonthValue() - 1 == 10) ? "November," : (currentdate.getMonthValue() - 1 == 11) ? "December," :"" ) + ((currentdate.getMonthValue() - 1 == 0) ? currentdate.getYear() - 1 : currentdate.getYear()) +" has been generated. Kindly pay the bill before " + currentdate.plusDays(rs.getInt("DueDayCount")).toString() + " to avoid late fee charges. Thank You");
+				String message = "Dear "+ rs.getString("FirstName") + " " + rs.getString("LastName") + ", \n \n Your Bill of Amount" + (totalamount + (totalamount * ((rs.getInt("GST") * 2)/100))) + "/- for the consumption in the month of " + billMonthYear +" has been generated. Kindly pay the bill before " + currentdate.plusDays(rs.getInt("DueDayCount")).toString() + " to avoid late fee charges. Thank You";
+				smsRequestVO.setMessage(message);
 				smsRequestVO.setToMobileNumber(rs.getString("MobileNumber"));
 				
 //				sendsms(smsRequestVO);
 				
+				mailRequestVO.setSubject("Consumption Bill for the month,year: " + billMonthYear);
+				mailRequestVO.setToEmail(rs.getString("Email"));
+				mailRequestVO.setFileLocation(drivename);
+				mailRequestVO.setMessage(message);
+				
+//				sendmail(mailRequestVO);
 			}
 			
 			
@@ -642,6 +680,7 @@ public class ExtraMethodsDAO {
 						mailRequestVO = new MailRequestVO();
 						smsRequestVO = new SMSRequestVO();
 						
+						mailRequestVO.setFileLocation("NoAttachment");
 						mailRequestVO.setSubject("No Communication from MIU ID: "+rs.getString("MIUID"));
 						mailRequestVO.setToEmail(rs.getString("Email"));
 						mailRequestVO.setMessage("Dear Admin, \n \n CRN/CAN/UAN: "+rs.getString("CustomerUniqueID")+ " is not up to date for more than 3 days.");

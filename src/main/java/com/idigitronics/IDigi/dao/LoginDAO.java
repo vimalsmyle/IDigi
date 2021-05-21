@@ -223,6 +223,7 @@ public class LoginDAO {
 			con = getConnection();
 			ExtraMethodsDAO maildao = new ExtraMethodsDAO();
 			MailRequestVO mailrequestvo = new MailRequestVO();
+			mailrequestvo.setFileLocation("NoAttachment");
 			pstmt = con.prepareStatement(
 					"SELECT CustomerID, CustomerUniqueID, UserPassword, CommunityID, BlockID FROM user WHERE UserID = ?");
 			pstmt.setString(1, userid);
