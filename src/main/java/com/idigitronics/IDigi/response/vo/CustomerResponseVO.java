@@ -13,7 +13,7 @@ import com.idigitronics.IDigi.request.vo.MeterRequestVO;
  */
 public class CustomerResponseVO {
 	
-	private int customerID;
+	private long customerID;
 	private String communityName;
 	private String blockName;
 	private String houseNumber;
@@ -33,10 +33,10 @@ public class CustomerResponseVO {
 	private List<MeterRequestVO> meters;
 	private List<CustomerResponseVO> data;
 	
-	public int getCustomerID() {
+	public long getCustomerID() {
 		return customerID;
 	}
-	public void setCustomerID(int customerID) {
+	public void setCustomerID(long customerID) {
 		this.customerID = customerID;
 	}
 	public String getCommunityName() {

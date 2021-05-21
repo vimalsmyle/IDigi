@@ -2,6 +2,7 @@ package com.idigitronics.IDigi.dao;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -13,7 +14,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Base64;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Properties;
 
 import javax.mail.Message;
@@ -41,8 +45,23 @@ import com.idigitronics.IDigi.request.vo.RazorPayOrderVO;
 import com.idigitronics.IDigi.request.vo.RazorpayRequestVO;
 import com.idigitronics.IDigi.request.vo.RestCallVO;
 import com.idigitronics.IDigi.request.vo.SMSRequestVO;
+import com.idigitronics.IDigi.response.vo.IndividualBillingResponseVO;
 import com.idigitronics.IDigi.response.vo.RazorPayResponseVO;
-import com.idigitronics.IDigi.response.vo.TataResponseVO;
+import com.itextpdf.io.font.FontConstants;
+import com.itextpdf.io.image.ImageDataFactory;
+import com.itextpdf.kernel.font.PdfFont;
+import com.itextpdf.kernel.font.PdfFontFactory;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.border.Border;
+import com.itextpdf.layout.element.Cell;
+import com.itextpdf.layout.element.Image;
+import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.element.Table;
+import com.itextpdf.layout.property.HorizontalAlignment;
+import com.itextpdf.layout.property.TextAlignment;
+import com.itextpdf.layout.property.VerticalAlignment;
 /**
  * @author K VimaL Kumar
  * 
@@ -106,7 +125,7 @@ public class ExtraMethodsDAO {
 	
 	public int postdata(RestCallVO restcallvo) throws IOException {
 		
-	URL url = new URL(ExtraConstants.StaticIP+restcallvo.getMiuID()+"/"+restcallvo.getUrlExtension());
+	URL url = new URL("http://" + restcallvo.getGatewayIP() + ":" + restcallvo.getGatewayPort() +"/"+ restcallvo.getMiuID()+"/"+restcallvo.getUrlExtension());
     HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
     
     urlConnection.setRequestProperty("Content-Type", "application/json"); 
@@ -182,90 +201,75 @@ public class ExtraMethodsDAO {
 }
 	
 	
-//	@Scheduled(cron="0 0 * ? * *") // scheduled for 1 hour
-//	@Scheduled(cron="0 0/2 * * * ?") // scheduled for every 2 min
-/*	public void topupstatusupdatecall() throws SQLException {
+//	@Scheduled(cron="0 30 0 2 * ? *") // scheduled for every month 2nd day at 0:30
+	public void individualbillgeneration() throws SQLException {
 		
 		Connection con = null;
 		PreparedStatement pstmt = null;
+		PreparedStatement pstmt1 = null;
+		PreparedStatement pstmt2 = null;
+		PreparedStatement pstmt3 = null;
 		ResultSet rs = null;
-		SMSRequestVO smsRequestVO = new SMSRequestVO();
-		MailRequestVO mailRequestVO = new MailRequestVO();
-		RazorpayRequestVO razorpayRequestVO = new RazorpayRequestVO();
+		ResultSet rs1 = null;
+		ResultSet rs2 = null;
+		float consumption = 0;
+		int billAmount = 0;
 		
 		try {
 			
 			con = getConnection();
-			pstmt = con.prepareStatement("SELECT t.MeterID, t.TataReferenceNumber, t.PaymentStatus, cmd.MobileNumber, cmd.Email, cmd.CRNNumber, t.Amount, t.RazorPayPaymentID, t.TransactionID, t.ModeOfPayment FROM topup AS t LEFT JOIN customermeterdetails AS cmd ON cmd.CRNNumber = t.CRNNumber WHERE t.Status IN (0, 1) AND t.Source = 'web' AND t.TataReferenceNumber != 0");
+			
+//			fetch reconnection charges from alertsettings after discussion
+			
+			pstmt = con.prepareStatement("SELECT cd.CommunityID, cd.BlockID, cd.CustomerID, cd.CustomerUniqueID, cmd.CustomerMeterID, cmd.MIUID, cmd.MeterType, cmd.TariffID, t.Tariff, t.FixedCharges FROM customerdetails AS cd LEFT JOIN customermeterdetails AS cmd ON cd.CustomerID = cmd.CustomerID LEFT JOIN tariff AS t ON t.TariffID = cmd.TariffID WHERE cmd.PayType = 'Postpaid'");
 			rs = pstmt.executeQuery();
 			while(rs.next()) {
 				
-				RestCallVO restcallvo  = new RestCallVO();
-				restcallvo.setUrlExtension("/payloads/dl/");
-				restcallvo.setMiuID(rs.getString("MeterID").toLowerCase());
+				pstmt1 = con.prepareStatement("SELECT Reading, LogDate FROM balancelog WHERE CustomerMeterID = ? AND Logdate BETWEEN CONCAT((SELECT LAST_DAY(CURDATE() - INTERVAL 2 MONTH) + INTERVAL 1 DAY AS 'FIRST DAY OF PREVIOUS MONTH'), ' 00:00:00') AND CONCAT((SELECT DATE_SUB(LAST_DAY(NOW()),INTERVAL DAY(LAST_DAY(NOW()))- 1 DAY) AS 'FIRST DAY OF CURRENT MONTH'), ' 23:59:59') ORDER BY ReadingID ASC LIMIT 0,1");
+				pstmt1.setInt(1, rs.getInt("CustomerMeterID"));
+				rs1 = pstmt1.executeQuery();
 				
-				ResponseEntity<TataResponseVO> response = tataget(restcallvo);
-				
-				PreparedStatement pstmt1 = con.prepareStatement("UPDATE topup SET Status = ?, AcknowledgeDate= NOW() WHERE TataReferenceNumber = ?");
-
-				pstmt1.setInt(1, response.getBody().getTransmissionStatus());
-				pstmt1.setLong(2, response.getBody().getId());
-				if(pstmt1.executeUpdate() > 0){
+				if(rs1.next()) {
 					
-					smsRequestVO.setToMobileNumber(rs.getString("MobileNumber"));
-					smsRequestVO.setMessage(response.getBody().getTransmissionStatus() == 2 ? "Thank You for Recharging your CRN: "+ rs.getString("CRNNumber")+". Your request has been processed successfully." : response.getBody().getTransmissionStatus() > 2 ? "Your Recharge request has failed to reach the CRN: "+ rs.getString("CRNNumber")+". Kindly retry after sometime. Deducted Amount will be refunded in 5-10 working days. We regret the inconvenience caused." : "");
+					pstmt2 = con.prepareStatement("SELECT Reading, LogDate FROM balancelog WHERE CustomerMeterID = ? AND Logdate BETWEEN CONCAT((SELECT LAST_DAY(CURDATE() - INTERVAL 2 MONTH) + INTERVAL 1 DAY AS 'FIRST DAY OF PREVIOUS MONTH'), ' 00:00:00') AND CONCAT((SELECT DATE_SUB(LAST_DAY(NOW()),INTERVAL DAY(LAST_DAY(NOW()))- 1 DAY) AS 'FIRST DAY OF CURRENT MONTH'), ' 23:59:59') ORDER BY ReadingID DESC LIMIT 0,1");
+					pstmt2.setInt(1, rs.getInt("CustomerMeterID"));
+					rs2 = pstmt2.executeQuery();
 					
-					mailRequestVO.setToEmail(rs.getString("Email"));
-					mailRequestVO.setSubject("Recharge Status!!!");
-					mailRequestVO.setMessage(response.getBody().getTransmissionStatus() == 2 ? "Thank You for Recharging your CRN: "+ rs.getString("CRNNumber")+". Your request has been processed successfully." : response.getBody().getTransmissionStatus() > 2 ? "Your Recharge request has failed to reach the CRN: "+ rs.getString("CRNNumber")+". Kindly retry after sometime. Deducted Amount will be refunded in 5-10 working days. We regret the inconvenience caused." : "");
-					
-					if(response.getBody().getTransmissionStatus() >= 2) {
-						sendsms(smsRequestVO);
-						sendmail(mailRequestVO);
-					}
-					
-					
-					if(response.getBody().getTransmissionStatus() >= 3 && rs.getInt("PaymentStatus") == 1 && rs.getString("ModeOfPayment").equalsIgnoreCase("Online")) {
-						// initiate refund process
+					if(rs2.next()) {
 						
-						  razorpayRequestVO.setApi("payments");
-						  razorpayRequestVO.setId(rs.getString("RazorPayPaymentID"));
-						  razorpayRequestVO.setAmount(rs.getInt("Amount")*100);
-						  razorpayRequestVO.setExtension("refund");
-						  
-						  String rzpRestCallResponse = razorpaypost(null, razorpayRequestVO);
-						  
-						  RazorPayResponseVO razorPayResponseVO = gson.fromJson(rzpRestCallResponse, RazorPayResponseVO.class);
-						  
-						  PreparedStatement pstmt2 = con.
-						  prepareStatement("UPDATE topup SET PaymentStatus = 3, RazorPayRefundID = ?, RazorPayRefundStatus = ?, RazorPayRefundEntity = ? WHERE TransactionID = "+ rs.getLong("TransactionID"));
-						  pstmt2.setString(1,razorPayResponseVO.getId()); 
-						  pstmt2.setString(2,razorPayResponseVO.getStatus()); 
-						  pstmt2.setString(3,rzpRestCallResponse);
-						  
-						  if (pstmt2.executeUpdate() > 0) {
-						  
-						  smsRequestVO.setToMobileNumber(rs.getString("MobileNumber"));
-						  smsRequestVO.setMessage("Your Refund of Amount: "+rs.getInt("Amount")
-						  +"/- is initiated and will be credited to your original mode of payment in 5-10 working days. We regret the inconvenience caused."
-						  );
-						  
-						   sendsms(smsRequestVO);
-						  
-						  mailRequestVO.setToEmail(rs.getString("Email"));
-						  mailRequestVO.setSubject("Refund Initiated!!!");
-						  mailRequestVO.setMessage("Your Refund of Amount: "+rs.getInt("Amount")
-						  +"/- is initiated and will be credited to your original mode of payment in 5-10 working days. We regret the inconvenience caused."
-						  );
-						  
-						  sendmail(mailRequestVO);
-						  
-						  }
+						LocalDate currentdate = LocalDate.now();
+						
+						consumption = rs2.getFloat("Reading") - rs1.getFloat("Reading");
+						billAmount = (int) (consumption * rs.getFloat("Tariff"));
+						
+						pstmt3 = con.prepareStatement("INSERT INTO billingdetails (CommunityID, BlockID, CustomerID, CustomerUniqueID, CustomerMeterID, MeterType, MIUID, PreviousReading, PresentReading, Consumption, TariffID, Tariff, BillAmount, FixedCharges, ReconnectionCharges, BillMonth, BillYear) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+						pstmt3.setInt(1, rs.getInt("CommunityID"));
+						pstmt3.setInt(2, rs.getInt("BlockID"));
+						pstmt3.setInt(3, rs.getInt("CustomerID"));
+						pstmt3.setString(4, rs.getString("CustomerUniqueID"));
+						pstmt3.setInt(5, rs.getInt("CustomerMeterID"));
+						pstmt3.setString(6, rs.getString("MeterType"));
+						pstmt3.setString(7, rs.getString("MIUID"));
+						pstmt3.setFloat(8, rs1.getFloat("Reading"));
+						pstmt3.setFloat(9, rs2.getFloat("Reading"));
+						pstmt3.setFloat(10, consumption);
+						pstmt3.setInt(11, rs.getInt("TariffID"));
+						pstmt3.setFloat(12, rs.getFloat("Tariff"));
+						pstmt3.setInt(13, billAmount);
+						pstmt3.setInt(14, rs.getInt("FixedCharges"));
+						pstmt3.setInt(15, 0); // add reconnection charges after discussion
+						pstmt3.setInt(16, currentdate.getMonthValue() - 1);
+						pstmt3.setInt(17, currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear());// add year 
+						
+						if(pstmt3.executeUpdate() > 0) {
+//					perform some actions after discussion
+						}
+						
 					}
-					
 				}
-
-			} 
+				
+			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			
@@ -275,7 +279,300 @@ public class ExtraMethodsDAO {
 			con.close();
 		}
 		
-	}*/
+	}
+	
+//	@Scheduled(cron="0 30 4 2 * ? *") // scheduled for every month 2nd day at 4:30
+	public void billgeneration() throws SQLException {
+		
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		PreparedStatement pstmt1 = null;
+		PreparedStatement pstmt2 = null;
+		ResultSet rs = null;
+		ResultSet rs1 = null;
+		SMSRequestVO smsRequestVO = null;
+		List<IndividualBillingResponseVO> individualBillsList = null;
+		IndividualBillingResponseVO individualBillingResponseVO = null;
+		
+		try {
+			
+			con = getConnection();
+			LocalDate currentdate = LocalDate.now();
+			String drivename = "D:/Bills/" + (currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear()+"/"+(currentdate.getMonthValue() - 1));
+			individualBillsList = new LinkedList<IndividualBillingResponseVO>();
+			pstmt = con.prepareStatement("SELECT * FROM customerdetails JOIN alertsettings");
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				
+				int totalamount = 0;
+				int totalConsumption = 0;
+				smsRequestVO = new SMSRequestVO();
+				
+				pstmt1 = con.prepareStatement("SELECT * FROM billingdetails WHERE CustomerID = " + rs.getInt("CustomerID") + " AND BillMonth = "+ (currentdate.getMonthValue() - 1) + " AND BillYear = " + (currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear()));
+				rs1 = pstmt1.executeQuery();
+				while (rs1.next()) {
+					individualBillingResponseVO = new IndividualBillingResponseVO();
+					totalamount = rs1.getInt("BillAmount") + totalamount;
+					totalConsumption = rs1.getInt("Consumption") + totalConsumption;
+					individualBillingResponseVO.setBillingID(rs1.getLong("BillingID"));
+					individualBillingResponseVO.setCustomerMeterID(rs1.getLong("CustomerMeterID"));
+					individualBillingResponseVO.setMeterType(rs1.getString("MeterType"));
+					individualBillingResponseVO.setMiuID(rs1.getString("MIUID"));
+					individualBillingResponseVO.setPreviousReading(rs1.getFloat("PreviousReading"));
+					individualBillingResponseVO.setPresentReading(rs1.getFloat("PresentReading"));
+					individualBillingResponseVO.setConsumption(rs1.getInt("Consumption"));
+					individualBillingResponseVO.setTariff(rs1.getFloat("Tariff"));
+					individualBillingResponseVO.setBillAmount(rs1.getInt("BillAmount"));
+					
+					individualBillsList.add(individualBillingResponseVO);
+				
+				}
+				
+				pstmt2 = con.prepareStatement("INSERT INTO customerbillingdetails (CommunityID, BlockID, CustomerID, CustomerUniqueID, TotalAmount, TaxAmount, TotalConsumption, DueDate, BillMonth, BillYear, ModifiedDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
+				pstmt2.setInt(1, rs.getInt("CommunityID"));
+				pstmt2.setInt(2, rs.getInt("BlockID"));
+				pstmt2.setInt(3, rs.getInt("CustomerID"));
+				pstmt2.setString(4, rs.getString("CustomerUniqueID"));
+				pstmt2.setInt(5, totalamount);
+				pstmt2.setInt(6, (totalamount * ((rs.getInt("GST") * 2)/100)));
+				pstmt2.setInt(7, totalConsumption);
+				pstmt2.setString(8, currentdate.plusDays(rs.getInt("DueDayCount")).toString());
+				pstmt2.setInt(9, currentdate.getMonthValue() - 1);
+				pstmt2.setInt(10, currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear());
+				
+				if(pstmt2.executeUpdate() > 0) {
+					
+					File directory = new File(drivename);
+					if (!directory.exists()) {
+						directory.mkdir();
+					}
+
+					PdfWriter writer = new PdfWriter(drivename + rs.getString("CustomerUniqueID") + ".pdf");
+					PdfDocument pdfDocument = new PdfDocument(writer);
+					pdfDocument.addNewPage();
+					Document document = new Document(pdfDocument);
+					Paragraph newLine = new Paragraph("\n");
+					Paragraph head = new Paragraph("Bill");
+					Paragraph disclaimer = new Paragraph(ExtraConstants.Disclaimer);
+					Paragraph copyRight = new Paragraph("------------------------------------All  rights reserved by IDigitronics ® Hyderabad-----------------------------------");
+					PdfFont font = new PdfFontFactory().createFont(FontConstants.TIMES_BOLD);
+
+					// change according to the image directory
+
+					URL idigiurl = new URL(ExtraConstants.IDIGIIMAGEURL);
+					URL clienturl = new URL(ExtraConstants.CLIENTIMAGEURL);
+					Image idigi = new Image(ImageDataFactory.create(idigiurl));
+					Image client = new Image(ImageDataFactory.create(clienturl));
+
+					float[] headingWidths = { 200F, 130F, 200F };
+
+					Table headTable = new Table(headingWidths);
+
+					Cell headtable1 = new Cell();
+					headtable1.add(idigi);
+					headtable1.setTextAlignment(TextAlignment.LEFT);
+
+					Cell headtable2 = new Cell();
+					headtable2.add(head.setFontSize(20));
+					headtable2.setTextAlignment(TextAlignment.CENTER).setVerticalAlignment(VerticalAlignment.MIDDLE)
+							.setBold().setUnderline().setFont(font);
+
+					Cell headtable3 = new Cell();
+					headtable3.add(client);
+					headtable3.setTextAlignment(TextAlignment.RIGHT);
+
+					headTable.addCell(headtable1.setBorder(Border.NO_BORDER));
+					headTable.addCell(headtable2.setBorder(Border.NO_BORDER));
+					headTable.addCell(headtable3.setBorder(Border.NO_BORDER));
+
+					document.add(headTable);
+					document.add(newLine);
+
+					float[] headerWidths = { 200F, 180F, 170F };
+
+					Table table1 = new Table(headerWidths);
+
+					Cell table1cell1 = new Cell();
+					table1cell1.add("Customer Name: " +rs.getString("FirstName") + " " + rs.getString("LastName"));
+					table1cell1.setTextAlignment(TextAlignment.LEFT);
+
+					Cell table1cell2 = new Cell();
+					table1cell2.add("CAN Number: " + rs.getString("CustomerUniqueID"));
+					table1cell2.setTextAlignment(TextAlignment.CENTER);
+					
+					long invoiceNumber = 0;
+					PreparedStatement ps = con.prepareStatement("SELECT MAX(CustomerBillingID) AS InvoiceNumber FROM customerbillingdetails");
+					ResultSet rs2 = ps.executeQuery();
+					
+					if(rs2.next()) {
+						invoiceNumber = rs2.getInt("InvoiceNumber");
+					}
+					
+					Cell table1cell3 = new Cell();
+					table1cell3.add("Invoice No. : " + invoiceNumber);
+					table1cell3.setTextAlignment(TextAlignment.RIGHT);
+
+					table1.addCell(table1cell1.setBorder(Border.NO_BORDER));
+					table1.addCell(table1cell2.setBorder(Border.NO_BORDER));
+					table1.addCell(table1cell3.setBorder(Border.NO_BORDER));
+
+					document.add(table1.setHorizontalAlignment(HorizontalAlignment.CENTER));
+					document.add(newLine);
+
+					float[] columnWidths = { 100F, 100F, 100F, 100F, 100F, 100F };
+					
+					Table datatablehead = new Table(columnWidths);
+					
+					Cell datatablecell1 = new Cell();
+					datatablecell1.add("MIUID");
+					datatablecell1.setTextAlignment(TextAlignment.CENTER);
+					
+					Cell datatablecell2 = new Cell();
+					datatablecell2.add("Tariff");
+					datatablecell2.setTextAlignment(TextAlignment.CENTER);
+					
+					Cell datatablecell3 = new Cell();
+					datatablecell3.add("PreviousReading");
+					datatablecell3.setTextAlignment(TextAlignment.CENTER);
+					
+					Cell datatablecell4 = new Cell();
+					datatablecell4.add("PresentReading");
+					datatablecell4.setTextAlignment(TextAlignment.CENTER);
+					
+					Cell datatablecell5 = new Cell();
+					datatablecell5.add("Consumption");
+					datatablecell5.setTextAlignment(TextAlignment.CENTER);
+					
+					Cell datatablecell6 = new Cell();
+					datatablecell6.add("BillAmount");
+					datatablecell6.setTextAlignment(TextAlignment.CENTER);
+					
+					datatablehead.addCell(datatablecell1);
+					datatablehead.addCell(datatablecell2);
+					datatablehead.addCell(datatablecell3);
+					datatablehead.addCell(datatablecell4);
+					datatablehead.addCell(datatablecell5);
+					datatablehead.addCell(datatablecell6);
+
+					Table datatable = new Table(columnWidths);
+					
+					for(int i = 0; i<=individualBillsList.size(); i++) {
+						
+						Cell datacell1 = new Cell();
+						datacell1.add("" + individualBillsList.get(i).getMiuID());
+						datacell1.setTextAlignment(TextAlignment.CENTER);
+						datatablehead.addCell(datacell1);
+						
+						Cell datacell2 = new Cell();
+						datacell2.add("" +individualBillsList.get(i).getTariff());
+						datacell2.setTextAlignment(TextAlignment.CENTER);
+						datatablehead.addCell(datacell2);
+						
+						Cell datacell3 = new Cell();
+						datacell3.add("" +individualBillsList.get(i).getPreviousReading());
+						datacell3.setTextAlignment(TextAlignment.CENTER);
+						datatablehead.addCell(datacell3);
+						
+						Cell datacell4 = new Cell();
+						datacell4.add("" +individualBillsList.get(i).getPresentReading());
+						datacell4.setTextAlignment(TextAlignment.CENTER);
+						datatablehead.addCell(datacell4);
+						
+						Cell datacell5 = new Cell();
+						datacell5.add("" +individualBillsList.get(i).getConsumption());
+						datacell5.setTextAlignment(TextAlignment.CENTER);
+						datatablehead.addCell(datacell5);
+						
+						Cell datacell6 = new Cell();
+						datacell6.add("" +individualBillsList.get(i).getBillAmount());
+						datacell6.setTextAlignment(TextAlignment.CENTER);
+						datatablehead.addCell(datacell6);
+						
+						datatablehead.startNewRow();
+					}
+					
+					Cell billAmountCell = new Cell();
+					billAmountCell.add("Bill Amount : ");
+					billAmountCell.setTextAlignment(TextAlignment.CENTER);
+
+					Cell totalAmount = new Cell();
+					totalAmount.add(""+totalamount);
+					totalAmount.setTextAlignment(TextAlignment.CENTER);
+					
+					Cell CGSTCell = new Cell();
+					CGSTCell.add("CGST : ");
+					CGSTCell.setTextAlignment(TextAlignment.CENTER);
+
+					Cell CGSTAmount = new Cell();
+					CGSTAmount.add(""+(totalamount * ((rs.getInt("GST"))/100)));
+					CGSTAmount.setTextAlignment(TextAlignment.CENTER);
+
+					Cell SGSTCell = new Cell();
+					SGSTCell.add("CGST : ");
+					SGSTCell.setTextAlignment(TextAlignment.CENTER);
+
+					Cell SGSTAmount = new Cell();
+					SGSTAmount.add(""+(totalamount * ((rs.getInt("GST"))/100)));
+					SGSTAmount.setTextAlignment(TextAlignment.CENTER);
+					
+					Cell totalBillAmountCell = new Cell();
+					totalBillAmountCell.add("Total Amount : ");
+					totalBillAmountCell.setTextAlignment(TextAlignment.CENTER);
+
+					Cell totalBillAmount = new Cell();
+					totalBillAmount.add(""+(totalamount * ((rs.getInt("GST") * 2)/100)));
+					totalBillAmount.setTextAlignment(TextAlignment.CENTER);
+					
+					Cell cell8 = new Cell();
+					cell8.add("Date of Transaction: ");
+					cell8.setTextAlignment(TextAlignment.CENTER);
+
+					Cell transactionDate = new Cell();
+					transactionDate.add(ExtraMethodsDAO.datetimeformatter(rs.getString("TransactionDate")));
+					transactionDate.setTextAlignment(TextAlignment.CENTER);
+
+					datatable.addCell(cell8);
+					datatable.addCell(transactionDate);
+					datatable.startNewRow();
+
+					document.add(datatable.setHorizontalAlignment(HorizontalAlignment.CENTER));
+					document.add(disclaimer.setHorizontalAlignment(HorizontalAlignment.CENTER).setFont(font));
+					document.add(newLine);
+					document.add(newLine);
+					document.add(newLine);
+					document.add(newLine);
+					document.add(newLine);
+					document.add(newLine);
+					document.add(newLine);
+					document.add(newLine);
+					document.add(newLine);
+					document.add(newLine);
+					document.add(newLine);
+
+					document.add(copyRight.setHorizontalAlignment(HorizontalAlignment.CENTER).setFont(font));
+					document.close();
+					
+				}
+				
+				smsRequestVO.setMessage("Dear "+ rs.getString("FirstName") + " " + rs.getString("LastName") + ", \n \n Your Bill of Amount" + (totalamount + (totalamount * ((rs.getInt("GST") * 2)/100))) + "/- for the month of " + ((currentdate.getMonthValue() - 1 == 0) ? "January," : (currentdate.getMonthValue() - 1 == 1) ? "February," : (currentdate.getMonthValue() - 1 == 2) ? "March," : (currentdate.getMonthValue() - 1 == 3) ? "April," : (currentdate.getMonthValue() - 1 == 4) ? "May," : (currentdate.getMonthValue() - 1 == 5) ? "June," : (currentdate.getMonthValue() - 1 == 6) ? "July," : (currentdate.getMonthValue() - 1 == 7) ? "August," : (currentdate.getMonthValue() - 1 == 8) ? "Septmeber," : (currentdate.getMonthValue() - 1 == 9) ? "October," : (currentdate.getMonthValue() - 1 == 10) ? "November," : (currentdate.getMonthValue() - 1 == 11) ? "December," :"" ) + ((currentdate.getMonthValue() - 1 == 0) ? currentdate.getYear() - 1 : currentdate.getYear()) +" has been generated. Kindly pay the bill before " + currentdate.plusDays(rs.getInt("DueDayCount")).toString() + " to avoid late fee charges. Thank You");
+				smsRequestVO.setToMobileNumber(rs.getString("MobileNumber"));
+				
+//				sendsms(smsRequestVO);
+				
+			}
+			
+			
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+		} finally {
+			pstmt.close();
+			rs.close();
+			con.close();
+		}
+		
+	}
 	
 //	@Scheduled(cron="0 0 * ? * *")
 /*	@Scheduled(cron="0 0/4 * * * ?") 
@@ -319,7 +616,7 @@ public class ExtraMethodsDAO {
 	}*/
 	
 //	@Scheduled(cron="0 0 7 ? * *")
-//	@Scheduled(cron="0 0 7 ? * TUE,FRI") 
+//	@Scheduled(cron="0 0 7 ? * TUE,FRI") //every tuesday and friday at 7:00
 	public void communicationfailurealert() throws SQLException {
 		
 		Connection con = null;
@@ -332,12 +629,12 @@ public class ExtraMethodsDAO {
 		
 		try {
 			con = getConnection();
-			pstmt = con.prepareStatement("SELECT cmd.MeterID, b.Email, b.MobileNumber, cmd.HouseNumber, cmd.CRNNumber FROM customermeterdetails AS cmd LEFT JOIN block AS b ON cmd.BlockID = b.BlockID");
+			pstmt = con.prepareStatement("SELECT cmd.MIUID, b.Email, b.MobileNumber, cd.HouseNumber, cd.CustomerUniqueID, cmd.CustomerMeterID FROM customerdetails as cd LEFT JOIN customermeterdetails AS cmd on cd.CustomerID = cmd.CustomerID LEFT JOIN block AS b ON cd.BlockID = b.BlockID");
 			rs = pstmt.executeQuery();
 			while(rs.next()) {
 				
-				pstmt1 = con.prepareStatement("SELECT ((SELECT (TIMESTAMPDIFF (MINUTE, (SELECT IotTimeStamp FROM displaybalancelog WHERE MeterID = ?), NOW()))) - (SELECT NoAMRInterval FROM alertsettings)) AS diff");
-				pstmt1.setString(1, rs.getString("MeterID"));
+				pstmt1 = con.prepareStatement("SELECT ((SELECT (TIMESTAMPDIFF (MINUTE, (SELECT LogDate FROM displaybalancelog WHERE MIUID = ?), NOW()))) - (SELECT NoAMRInterval FROM alertsettings)) AS diff");
+				pstmt1.setString(1, rs.getString("MIUID"));
 				rs1 = pstmt1.executeQuery();
 				if(rs1.next()) {
 					if(rs1.getInt("diff") > 0) {
@@ -345,15 +642,15 @@ public class ExtraMethodsDAO {
 						mailRequestVO = new MailRequestVO();
 						smsRequestVO = new SMSRequestVO();
 						
-						mailRequestVO.setSubject("No Communication from MIU ID: "+rs.getString("MeterID"));
+						mailRequestVO.setSubject("No Communication from MIU ID: "+rs.getString("MIUID"));
 						mailRequestVO.setToEmail(rs.getString("Email"));
-						mailRequestVO.setMessage("Dear Admin, \n \n CRNNumber: "+rs.getString("CRNNumber")+ " is not up to date for more than 3 days.");
+						mailRequestVO.setMessage("Dear Admin, \n \n CRN/CAN/UAN: "+rs.getString("CustomerUniqueID")+ " is not up to date for more than 3 days.");
 						
-						smsRequestVO.setMessage("Dear Admin, \n \n CRNNumber: "+rs.getString("CRNNumber")+ " is not up to date for more than 3 days.");
+						smsRequestVO.setMessage("Dear Admin, \n \n CRN/CAN/UAN: "+rs.getString("CustomerUniqueID")+ " is not up to date for more than 3 days.");
 						smsRequestVO.setToMobileNumber(rs.getString("MobileNumber"));
 						
 						sendmail(mailRequestVO);
-						sendsms(smsRequestVO);
+//						sendsms(smsRequestVO);
 						
 					}
 				}
@@ -371,8 +668,8 @@ public class ExtraMethodsDAO {
 	
 	public static String datetimeformatter(String dateTime) throws ParseException {
 		
-		SimpleDateFormat IOTFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		SimpleDateFormat clientFormat = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
-		return clientFormat.format(IOTFormat.parse(dateTime));
+		SimpleDateFormat IdigiFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+		SimpleDateFormat clientFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		return clientFormat.format(IdigiFormat.parse(dateTime));
 	}
 }

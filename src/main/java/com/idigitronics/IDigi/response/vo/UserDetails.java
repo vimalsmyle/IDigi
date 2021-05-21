@@ -5,6 +5,7 @@ package com.idigitronics.IDigi.response.vo;
 
 import java.util.List;
 
+import com.idigitronics.IDigi.request.vo.CommandGroupRequestVO;
 import com.idigitronics.IDigi.request.vo.MeterRequestVO;
 
 /**
@@ -21,14 +22,13 @@ public class UserDetails {
 	private int communityID;
 	private String userName;
 	private int ID;
-	private int customerID;
+	private long customerID;
 	private String CustomerUniqueID;
 	private String communityName;
-	private int pendingCommandType;
-	private int pendingTransactionID;
+	private List<CommandGroupRequestVO> pendingCommands;
+	private long pendingTransactionID;
 	private String blockName;
 	private List<MeterRequestVO> meters;
-	private String dataFrame;
 	
 	public String getCommunityName() {
 		return communityName;
@@ -60,10 +60,10 @@ public class UserDetails {
 	public void setuserName(String userName) {
 		this.userName = userName;
 	}
-	public int getCustomerID() {
+	public long getCustomerID() {
 		return customerID;
 	}
-	public void setCustomerID(int customerID) {
+	public void setCustomerID(long customerID) {
 		this.customerID = customerID;
 	}
 	public int getID() {
@@ -85,16 +85,10 @@ public class UserDetails {
 		this.userName = userName;
 	}
 	
-	public int getPendingCommandType() {
-		return pendingCommandType;
-	}
-	public void setPendingCommandType(int pendingCommandType) {
-		this.pendingCommandType = pendingCommandType;
-	}
-	public int getPendingTransactionID() {
+	public long getPendingTransactionID() {
 		return pendingTransactionID;
 	}
-	public void setPendingTransactionID(int pendingTransactionID) {
+	public void setPendingTransactionID(long pendingTransactionID) {
 		this.pendingTransactionID = pendingTransactionID;
 	}
 	public void setCommunityID(int communityID) {
@@ -124,11 +118,11 @@ public class UserDetails {
 	public void setBlockName(String blockName) {
 		this.blockName = blockName;
 	}
-	public String getDataFrame() {
-		return dataFrame;
+	public List<CommandGroupRequestVO> getPendingCommands() {
+		return pendingCommands;
 	}
-	public void setDataFrame(String dataFrame) {
-		this.dataFrame = dataFrame;
+	public void setPendingCommands(List<CommandGroupRequestVO> pendingCommands) {
+		this.pendingCommands = pendingCommands;
 	}
 	public List<MeterRequestVO> getMeters() {
 		return meters;

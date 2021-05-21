@@ -9,36 +9,24 @@ package com.idigitronics.IDigi.response.vo;
  */
 public class TopupDetailsResponseVO {
 	
-	private String meterID;
+	private String miuID;
 	private float currentBalance;
-	private String IoTTimeStamp;
 	private String tariffName;
 	private float emergencyCredit;
 	private float alarmCredit;
 	private float tariff;
 	private int tariffID;
-	private String CRNNumber;
+	private String CustomerUniqueID;
 	private int reconnectionCharges;
 	private int fixedCharges;
 	private int noOfMonths;
+	private long customerMeterID;
 	
-	public String getMeterID() {
-		return meterID;
-	}
-	public void setMeterID(String meterID) {
-		this.meterID = meterID;
-	}
 	public float getCurrentBalance() {
 		return currentBalance;
 	}
 	public void setCurrentBalance(float currentBalance) {
 		this.currentBalance = currentBalance;
-	}
-	public String getIoTTimeStamp() {
-		return IoTTimeStamp;
-	}
-	public void setIoTTimeStamp(String ioTTimeStamp) {
-		IoTTimeStamp = ioTTimeStamp;
 	}
 	public String getTariffName() {
 		return tariffName;
@@ -70,12 +58,6 @@ public class TopupDetailsResponseVO {
 	public void setTariffID(int tariffID) {
 		this.tariffID = tariffID;
 	}
-	public String getCRNNumber() {
-		return CRNNumber;
-	}
-	public void setCRNNumber(String cRNNumber) {
-		CRNNumber = cRNNumber;
-	}
 	public int getReconnectionCharges() {
 		return reconnectionCharges;
 	}
@@ -94,5 +76,22 @@ public class TopupDetailsResponseVO {
 	public void setNoOfMonths(int noOfMonths) {
 		this.noOfMonths = noOfMonths;
 	}
-	
+	public String getMiuID() {
+		return miuID;
+	}
+	public void setMiuID(String miuID) {
+		this.miuID = miuID;
+	}
+	public String getCustomerUniqueID() {
+		return CustomerUniqueID;
+	}
+	public void setCustomerUniqueID(String customerUniqueID) {
+		CustomerUniqueID = customerUniqueID;
+	}
+	public long getCustomerMeterID() {
+		return customerMeterID;
+	}
+	public void setCustomerMeterID(long customerMeterID) {
+		this.customerMeterID = customerMeterID;
+	}
 }

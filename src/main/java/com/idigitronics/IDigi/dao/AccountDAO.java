@@ -10,10 +10,10 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Random;
 
 import com.google.gson.Gson;
 import com.idigitronics.IDigi.constants.DataBaseConstants;
@@ -22,20 +22,24 @@ import com.idigitronics.IDigi.exceptions.BusinessException;
 import com.idigitronics.IDigi.request.vo.CheckOutRequestVO;
 import com.idigitronics.IDigi.request.vo.CommandGroupRequestVO;
 import com.idigitronics.IDigi.request.vo.ConfigurationRequestVO;
+import com.idigitronics.IDigi.request.vo.DataRequestVO;
+import com.idigitronics.IDigi.request.vo.PayBillRequestVO;
 import com.idigitronics.IDigi.request.vo.RazorPayOrderVO;
 import com.idigitronics.IDigi.request.vo.RazorpayRequestVO;
 import com.idigitronics.IDigi.request.vo.RestCallVO;
 import com.idigitronics.IDigi.request.vo.TopUpRequestVO;
+import com.idigitronics.IDigi.response.vo.BillingResponseVO;
 import com.idigitronics.IDigi.response.vo.CheckoutDetails;
+import com.idigitronics.IDigi.response.vo.CommandGroupResponseVO;
 import com.idigitronics.IDigi.response.vo.ConfigurationResponseVO;
+import com.idigitronics.IDigi.response.vo.ConfigurationStatusResponseVO;
+import com.idigitronics.IDigi.response.vo.IndividualBillingResponseVO;
 import com.idigitronics.IDigi.response.vo.Notes;
 import com.idigitronics.IDigi.response.vo.Prefill;
 import com.idigitronics.IDigi.response.vo.RazorPayResponseVO;
 import com.idigitronics.IDigi.response.vo.ResponseVO;
 import com.idigitronics.IDigi.response.vo.StatusResponseVO;
-import com.idigitronics.IDigi.response.vo.TataResponseVO;
 import com.idigitronics.IDigi.response.vo.Theme;
-import com.idigitronics.IDigi.utils.Encoding;
 import com.idigitronics.IDigi.utils.Signature;
 import com.itextpdf.io.font.FontConstants;
 import com.itextpdf.io.image.ImageDataFactory;
@@ -87,131 +91,120 @@ public class AccountDAO {
 
 		try {
 			con = getConnection();
+			
+					PreparedStatement pstmt1 = con.prepareStatement("SELECT tr.EmergencyCredit, tr.AlarmCredit, tr.FixedCharges, tr.TariffID, tr.Tariff, CONCAT(cd.FirstName, ' ', cd.LastName) AS CustomerName, cd.Email, cd.MobileNumber, cd.CustomerUniqueID, cd.HouseNumber, cmd.CustomerMeterID, g.GatewayIP, g.GatewayPort FROM customerdetails AS cd LEFT JOIN customermeterdetails AS cmd on cmd.customerID = cd.CustomerID LEFT JOIN tariff AS tr ON tr.TariffID = cmd.TariffID LEFT JOIN gateways AS g ON g.GatewayID = cmd.GatewayID WHERE cd.CustomerUniqueID = '"
+									+ topUpRequestVO.getCustomerUniqueID() + "' AND CustomerMeterID = " + topUpRequestVO.getCustomerMeterID());
+					ResultSet rs1 = pstmt1.executeQuery();
+					if (rs1.next()) {
 
-			// if (topUpRequestVO.getSource().equalsIgnoreCase("web")) {
+						topUpRequestVO.setAlarmCredit(rs1.getFloat("AlarmCredit"));
+						topUpRequestVO.setEmergencyCredit(rs1.getFloat("EmergencyCredit"));
+						topUpRequestVO.setTariff(rs1.getFloat("Tariff"));
+						topUpRequestVO.setGatewayIP(rs1.getString("GatewayIP"));
+						topUpRequestVO.setGatewayPort(rs1.getInt("GatewayPort"));
 
-			// change the query accordingly after billing and topup discussion
-			PreparedStatement pstmt1 = con.prepareStatement(
-					"SELECT tr.EmergencyCredit, tr.AlarmCredit, tr.FixedCharges, tr.TariffID, tr.Tariff, CONCAT(cd.FirstName, ' ', cd.LastName) AS CustomerName, cd.Email, cd.MobileNumber, cd.CustomerUniqueID, cd.HouseNumber FROM customerdetails AS cd LEFT JOIN customermeterdetails AS cmd on cmd.customerID = cd.CustomerID LEFT JOIN tariff AS tr ON tr.TariffID = cd.TariffID WHERE cd.CustomerUniqueID = '"
-							+ topUpRequestVO.getCustomerUniqueID() + "'");
-			ResultSet rs1 = pstmt1.executeQuery();
-			if (rs1.next()) {
+						LocalDateTime dateTime = LocalDateTime.now();
 
-				topUpRequestVO.setAlarmCredit(rs1.getFloat("AlarmCredit"));
-				topUpRequestVO.setEmergencyCredit(rs1.getFloat("EmergencyCredit"));
-				topUpRequestVO.setTariff(rs1.getFloat("Tariff"));
+						PreparedStatement pstmt = con.prepareStatement("SELECT MONTH(TransactionDate) AS previoustopupmonth from topup WHERE Status = 0 and CustomerUniqueID = '"
+										+ topUpRequestVO.getCustomerUniqueID() + "' AND CustomerMeterID = " + topUpRequestVO.getCustomerMeterID() + " ORDER BY TransactionID DESC LIMIT 0,1");
+						ResultSet rs = pstmt.executeQuery();
 
-				LocalDateTime dateTime = LocalDateTime.now();
+						if (rs.next()) {
+							if (rs.getInt("previoustopupmonth") != dateTime.getMonthValue()) {
+								topUpRequestVO.setFixedCharges((rs1.getInt("FixedCharges")
+										* (dateTime.getMonthValue() - rs.getInt("previoustopupmonth"))));
+							}
 
-				PreparedStatement pstmt = con.prepareStatement(
-						"SELECT MONTH(TransactionDate) AS previoustopupmonth from topup WHERE Status = 2 and CRNNumber = '"
-								+ topUpRequestVO.getCustomerUniqueID() + "'" + "ORDER BY TransactionID DESC LIMIT 0,1");
-				ResultSet rs = pstmt.executeQuery();
-
-				if (rs.next()) {
-					if (rs.getInt("previoustopupmonth") != dateTime.getMonthValue()) {
-						topUpRequestVO.setFixedCharges((rs1.getInt("FixedCharges")
-								* (dateTime.getMonthValue() - rs.getInt("previoustopupmonth"))));
-					}
-
-				} else {
-					topUpRequestVO.setFixedCharges(rs1.getInt("FixedCharges"));
-				}
-
-				PreparedStatement pstmt2 = con.prepareStatement(
-						"SELECT al.ReconnectionCharges, dbl.Minutes FROM displaybalancelog AS dbl JOIN alertsettings AS al WHERE dbl.CRNNumber = '"
-								+ topUpRequestVO.getCustomerUniqueID() + "'");
-				ResultSet rs2 = pstmt2.executeQuery();
-
-				if (rs2.next()) {
-					if (rs2.getInt("Minutes") != 0) {
-						topUpRequestVO.setReconnectionCharges(rs2.getInt("ReconnectionCharges"));
-					}
-				}
-
-				if (topUpRequestVO.getAmount() <= topUpRequestVO.getFixedCharges()
-						|| topUpRequestVO.getAmount() <= topUpRequestVO.getReconnectionCharges()) {
-					throw new BusinessException(
-							"RECHARGE AMOUNT MUST BE GREATER THAN FIXED CHARGES & RECONNECTION CHARGES");
-				}
-
-				if (topUpRequestVO.getModeOfPayment().equalsIgnoreCase("Online")) {
-
-					// creating transactionID for payment process
-
-					long transactionID = inserttopuponline(topUpRequestVO);
-
-					if (transactionID != 0) {
-
-						// creating order in razor pay
-
-						razorPayOrderVO.setAmount(topUpRequestVO.getAmount() * 100);
-						razorPayOrderVO.setCurrency("INR");
-						razorPayOrderVO.setPayment_capture(1);
-
-						razorpayRequestVO.setApi("orders");
-						String rzpRestCallResponse = extramethodsdao.razorpaypost(razorPayOrderVO, razorpayRequestVO);
-
-						RazorPayResponseVO razorPayResponseVO = gson.fromJson(rzpRestCallResponse,
-								RazorPayResponseVO.class);
-
-						topUpRequestVO.setRazorPayOrderID(razorPayResponseVO.getId());
-
-						PreparedStatement pstmt4 = con.prepareStatement(
-								"UPDATE topup SET RazorPayOrderID = ? WHERE TransactionID = " + transactionID);
-						pstmt4.setString(1, topUpRequestVO.getRazorPayOrderID());
-						if (pstmt4.executeUpdate() > 0) {
-
-							checkoutDetails.setKey(ExtraConstants.RZPKeyID);
-							checkoutDetails.setAmount(topUpRequestVO.getAmount() * 100);
-							checkoutDetails.setCurrency(ExtraConstants.PaymentCurrency);
-							checkoutDetails.setOrder_id(topUpRequestVO.getRazorPayOrderID());
-							checkoutDetails.setButtonText(ExtraConstants.PaymentButtonText);
-							checkoutDetails.setName(ExtraConstants.CompanyName);
-							checkoutDetails.setDescription("Recharge of INR " + topUpRequestVO.getAmount()
-									+ "/- for CRN: " + rs1.getString("CRNNumber") + ".");
-							checkoutDetails.setImage(ExtraConstants.HANBITIMAGEURL);
-
-							prefill.setName(rs1.getString("CustomerName"));
-							prefill.setEmail(rs1.getString("Email"));
-							prefill.setContact(rs1.getString("MobileNumber"));
-							checkoutDetails.setPrefill(prefill);
-
-							theme.setColor(ExtraConstants.PaymentThemeColor);
-							checkoutDetails.setTheme(theme);
-
-							notes.setAddress(rs1.getString("HouseNumber"));
-							checkoutDetails.setTransactionID(transactionID);
-
-							responsevo.setCheckoutDetails(checkoutDetails);
-
-							responsevo.setPaymentMode("Online");
-							responsevo.setResult("Success");
-							responsevo.setMessage("Order Created Successfully. Proceed to CheckOut");
+						} else {
+							topUpRequestVO.setFixedCharges(rs1.getInt("FixedCharges"));
 						}
-					} else {
 
-						responsevo.setResult("Failure");
-						responsevo.setMessage("Order Creation Failed. Please Try After Sometime");
+						PreparedStatement pstmt2 = con.prepareStatement("SELECT al.ReconnectionCharges, dbl.Minutes FROM displaybalancelog AS dbl JOIN alertsettings AS al WHERE dbl.CustomerUniqueID = '"
+										+ topUpRequestVO.getCustomerUniqueID() + "' AND dbl.CustomerMeterID = " + topUpRequestVO.getCustomerMeterID());
+						ResultSet rs2 = pstmt2.executeQuery();
+
+						if (rs2.next()) {
+							if (rs2.getInt("Minutes") != 0) {
+								topUpRequestVO.setReconnectionCharges(rs2.getInt("ReconnectionCharges"));
+							}
+						}
+
+						if (topUpRequestVO.getAmount() <= topUpRequestVO.getFixedCharges()
+								|| topUpRequestVO.getAmount() <= topUpRequestVO.getReconnectionCharges()) {
+							throw new BusinessException("RECHARGE AMOUNT MUST BE GREATER THAN FIXED CHARGES & RECONNECTION CHARGES");
+						}
+
+						if (topUpRequestVO.getModeOfPayment().equalsIgnoreCase("Online")) {
+
+							// creating transactionID for payment process
+
+							long transactionID = inserttopup(topUpRequestVO);
+
+							if (transactionID != 0) {
+
+								// creating order in razor pay
+
+								razorPayOrderVO.setAmount(topUpRequestVO.getAmount() * 100);
+								razorPayOrderVO.setCurrency("INR");
+								razorPayOrderVO.setPayment_capture(1);
+
+								razorpayRequestVO.setApi("orders");
+								String rzpRestCallResponse = extramethodsdao.razorpaypost(razorPayOrderVO, razorpayRequestVO);
+
+								RazorPayResponseVO razorPayResponseVO = gson.fromJson(rzpRestCallResponse, RazorPayResponseVO.class);
+
+								topUpRequestVO.setRazorPayOrderID(razorPayResponseVO.getId());
+
+								PreparedStatement pstmt4 = con.prepareStatement("UPDATE topup SET RazorPayOrderID = ? WHERE TransactionID = " + transactionID);
+								pstmt4.setString(1, topUpRequestVO.getRazorPayOrderID());
+								if (pstmt4.executeUpdate() > 0) {
+
+									checkoutDetails.setKey(ExtraConstants.RZPKeyID);
+									checkoutDetails.setAmount(topUpRequestVO.getAmount() * 100);
+									checkoutDetails.setCurrency(ExtraConstants.PaymentCurrency);
+									checkoutDetails.setOrder_id(topUpRequestVO.getRazorPayOrderID());
+									checkoutDetails.setButtonText(ExtraConstants.PaymentButtonText);
+									checkoutDetails.setName(ExtraConstants.CompanyName);
+									checkoutDetails.setDescription("Recharge of INR " + topUpRequestVO.getAmount()
+											+ "/- for CRN/UAN: " + rs1.getString("CustomerUniqueID") + ".");
+									checkoutDetails.setImage(ExtraConstants.IDIGIIMAGEURL);
+
+									prefill.setName(rs1.getString("CustomerName"));
+									prefill.setEmail(rs1.getString("Email"));
+									prefill.setContact(rs1.getString("MobileNumber"));
+									checkoutDetails.setPrefill(prefill);
+
+									theme.setColor(ExtraConstants.PaymentThemeColor);
+									checkoutDetails.setTheme(theme);
+
+									notes.setAddress(rs1.getString("HouseNumber"));
+									checkoutDetails.setTransactionID(transactionID);
+
+									responsevo.setCheckoutDetails(checkoutDetails);
+
+									responsevo.setPaymentMode("Online");
+									responsevo.setPayType("Prepaid");
+									responsevo.setResult("Success");
+									responsevo.setMessage("Order Created Successfully. Proceed to CheckOut");
+								}
+							} else {
+
+								responsevo.setResult("Failure");
+								responsevo.setMessage("Order Creation Failed. Please Try After Sometime");
+							}
+						} else {
+							topUpRequestVO.setPaymentStatus(1);
+							responsevo.setPaymentMode("Cash");
+							if(sendPayLoadToGateway(topUpRequestVO) != 0) {
+								responsevo.setResult("Success");
+								responsevo.setMessage("Topup Request Submitted Successfully");	
+							} else {
+								responsevo.setResult("Failure");
+								responsevo.setMessage("Topup Request Failed. Please Try After Sometime");
+							}
+						}
 					}
-				} else {
-					topUpRequestVO.setPaymentStatus(1);
-					responsevo.setPaymentMode("Cash");
-					responsevo.setResult(sendPayLoadToTata(topUpRequestVO));
-					responsevo.setMessage("Topup Request Submitted Successfully");
-				}
-			}
-			/*
-			 * } else { topUpRequestVO.setTransactionIDForTata(0); if
-			 * (inserttopup(topUpRequestVO).equalsIgnoreCase("Success")) {
-			 * responsevo.setResult("Success");
-			 * responsevo.setMessage("Topup Request Inserted Successfully"); } else {
-			 * responsevo.setResult("Failure");
-			 * responsevo.setMessage("Topup Request Insertion Failed"); }
-			 * 
-			 * }
-			 */
-
+				 
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			responsevo.setMessage("INTERNAL SERVER ERROR");
@@ -225,47 +218,46 @@ public class AccountDAO {
 		return responsevo;
 	}
 
-	public long inserttopuponline(TopUpRequestVO topUpRequestVO) {
+	public int inserttopuponline(TopUpRequestVO topUpRequestVO) {
 
 		Connection con = null;
 		PreparedStatement ps = null;
-		long transactionID = 0;
+		int transactionID = 0;
 
 		try {
 			con = getConnection();
 
-			PreparedStatement pstmt = con.prepareStatement(
-					"SELECT CommunityID, BlockID, CustomerID, MeterID, TariffID FROM customermeterdetails WHERE CRNNumber = '"
-							+ topUpRequestVO.getCustomerUniqueID() + "'");
+			PreparedStatement pstmt = con.prepareStatement("SELECT cd.CommunityID, cd.BlockID, cd.CustomerID, cmd.MIUID, cmd.CustomerMeterID, cmd.TariffID FROM customerdetails AS cd LEFT JOIN customermeterdetails AS cmd ON cd.CustomerID = CMD.CustomerID WHERE cd.CustomerUniqueID = ? AND cmd.CustomerMeterID = " + topUpRequestVO.getCustomerMeterID());
+			pstmt.setString(1, topUpRequestVO.getCustomerUniqueID());
 			ResultSet rs = pstmt.executeQuery();
 			if (rs.next()) {
 
-				ps = con.prepareStatement(
-						"INSERT INTO topup (CommunityID, BlockID, CustomerID, MeterID, TariffID, Amount, FixedCharges, ReconnectionCharges, ModeOfPayment, Source, CreatedByID, CreatedByRoleID, CRNNumber, AcknowledgeDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
+				ps = con.prepareStatement("INSERT INTO topup (CommunityID, BlockID, CustomerID, MIUID, CustomerMeterID, TariffID, Amount, FixedCharges, ReconnectionCharges, Source, ModeOfPayment, CreatedByID, CreatedByRoleID, CustomerUniqueID, AcknowledgeDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
 
 				ps.setInt(1, rs.getInt("CommunityID"));
 				ps.setInt(2, rs.getInt("BlockID"));
 				ps.setInt(3, rs.getInt("CustomerID"));
 				ps.setString(4, rs.getString("MeterID"));
-				ps.setInt(5, rs.getInt("TariffID"));
-				ps.setFloat(6, topUpRequestVO.getAmount());
-				ps.setInt(7, topUpRequestVO.getFixedCharges());
-				ps.setFloat(8, topUpRequestVO.getReconnectionCharges());
-				ps.setString(9, topUpRequestVO.getModeOfPayment());
+				ps.setLong(5, topUpRequestVO.getCustomerMeterID());
+				ps.setInt(6, rs.getInt("TariffID"));
+				ps.setFloat(7, topUpRequestVO.getAmount());
+				ps.setInt(8, topUpRequestVO.getFixedCharges());
+				ps.setFloat(9, topUpRequestVO.getReconnectionCharges());
 				ps.setString(10, topUpRequestVO.getSource());
-				ps.setInt(11, topUpRequestVO.getTransactedByID());
-				ps.setInt(12, topUpRequestVO.getTransactedByRoleID());
-				ps.setString(13, topUpRequestVO.getCustomerUniqueID());
+				ps.setString(11, topUpRequestVO.getModeOfPayment());
+				ps.setInt(12, topUpRequestVO.getTransactedByID());
+				ps.setInt(13, topUpRequestVO.getTransactedByRoleID());
+				ps.setString(14, topUpRequestVO.getCustomerUniqueID());
 
 				if (ps.executeUpdate() > 0) {
 
 					PreparedStatement pstmt1 = con.prepareStatement(
-							"SELECT TransactionID FROM topup WHERE TataReferenceNumber = 0 AND CRNNumber = ? AND Source = ? AND ModeOfPayment = 'Online' AND STATUS = 0 AND PaymentStatus = 0 ORDER BY TransactionID DESC LIMIT 0,1");
+							"SELECT TransactionID FROM topup WHERE TataReferenceNumber = 0 AND CRNNumber = ? AND Source = ? AND ModeOfPayment = 'Online' AND STATUS = 10 AND PaymentStatus = 0 ORDER BY TransactionID DESC LIMIT 0,1");
 					pstmt1.setString(1, topUpRequestVO.getCustomerUniqueID());
 					pstmt1.setString(2, topUpRequestVO.getSource());
 					ResultSet rs1 = pstmt1.executeQuery();
 					if (rs1.next()) {
-						transactionID = rs1.getLong("TransactionID");
+						transactionID = rs1.getInt("TransactionID");
 					}
 
 				}
@@ -278,7 +270,7 @@ public class AccountDAO {
 		return transactionID;
 	}
 
-	public ResponseVO updatetopup(CheckOutRequestVO checkOutRequestVO) throws SQLException, ClassNotFoundException {
+	public ResponseVO updatepayment(CheckOutRequestVO checkOutRequestVO) throws SQLException, ClassNotFoundException {
 
 		Connection con = null;
 		PreparedStatement ps = null;
@@ -291,11 +283,12 @@ public class AccountDAO {
 			String generated_signature = Signature.calculateRFC2104HMAC(
 					checkOutRequestVO.getRazorpay_order_id() + "|" + checkOutRequestVO.getRazorpay_payment_id(),
 					ExtraConstants.RZPKeySecret);
-
+			
+			if(checkOutRequestVO.getPayType().equalsIgnoreCase("Prepaid")) {
+				
 			if (generated_signature.equalsIgnoreCase(checkOutRequestVO.getRazorpay_signature())) {
 
-				ps = con.prepareStatement(
-						"UPDATE topup SET PaymentStatus = 1, RazorPayPaymentID = ?, RazorPaySignature = ? WHERE RazorPayOrderID = ? AND TransactionID = ?");
+				ps = con.prepareStatement("UPDATE topup SET PaymentStatus = 1, RazorPayPaymentID = ?, RazorPaySignature = ? WHERE RazorPayOrderID = ? AND TransactionID = ?");
 
 				ps.setString(1, checkOutRequestVO.getRazorpay_payment_id());
 				ps.setString(2, checkOutRequestVO.getRazorpay_signature());
@@ -305,7 +298,7 @@ public class AccountDAO {
 				if (ps.executeUpdate() > 0) {
 
 					PreparedStatement pstmt = con.prepareStatement(
-							"SELECT t.TransactionID, t.MeterID, t.Amount, t.Source, t.FixedCharges, t.ReconnectionCharges, tr.Tariff, tr.AlarmCredit, tr.EmergencyCredit FROM topup AS t LEFT JOIN tariff AS tr ON tr.TariffID = t.TariffID WHERE t.RazorPayOrderID = '"
+							"SELECT t.TransactionID, t.MIUID, t.Amount, t.Source, t.FixedCharges, t.ReconnectionCharges, tr.Tariff, tr.AlarmCredit, tr.EmergencyCredit FROM topup AS t LEFT JOIN tariff AS tr ON tr.TariffID = t.TariffID WHERE t.RazorPayOrderID = '"
 									+ checkOutRequestVO.getRazorpay_order_id() + "' AND t.TransactionID = "
 									+ checkOutRequestVO.getTransactionID());
 
@@ -316,7 +309,7 @@ public class AccountDAO {
 
 						topUpRequestVO.setTransactionID(checkOutRequestVO.getTransactionID());
 						topUpRequestVO.setAmount(rs.getInt("Amount"));
-						topUpRequestVO.setMeterID(rs.getString("MeterID"));
+						topUpRequestVO.setMiuID(rs.getString("MIUID"));
 						topUpRequestVO.setFixedCharges(rs.getInt("FixedCharges"));
 						topUpRequestVO.setReconnectionCharges(rs.getInt("ReconnectionCharges"));
 						topUpRequestVO.setAlarmCredit(rs.getFloat("AlarmCredit"));
@@ -328,13 +321,12 @@ public class AccountDAO {
 							responseVO.setResult("Success");
 							responseVO.setMessage("Payment Captured Successfully");
 						} else {
-							if (sendPayLoadToTata(topUpRequestVO).equalsIgnoreCase("Success")) {
+							if (sendPayLoadToGateway(topUpRequestVO) != 0) {
 								responseVO.setResult("Success");
 								responseVO.setMessage("Payment Captured & Topup Request Submitted Successfully");
 							} else {
 								responseVO.setResult("Failure");
-								responseVO.setMessage(
-										"Payment Captured but Topup Request Submission Failed. Deducted Amount will be Refunded in 14 Days");
+								responseVO.setMessage("Payment Captured but Topup Request Submission Failed. Deducted Amount will be Refunded in 14 Days");
 							}
 						}
 
@@ -343,8 +335,7 @@ public class AccountDAO {
 				}
 
 			} else {
-				ps = con.prepareStatement(
-						"UPDATE topup SET PaymentStatus = 2, RazorPayPaymentID = ?, ErrorResponse = ? WHERE RazorPayOrderID = ? AND TransactionID = ?");
+				ps = con.prepareStatement("UPDATE topup SET PaymentStatus = 2, RazorPayPaymentID = ?, ErrorResponse = ? WHERE RazorPayOrderID = ? AND TransactionID = ?");
 
 				ps.setString(1, checkOutRequestVO.getError().getMetadata().getPaymentId());
 				ps.setString(2, checkOutRequestVO.getError().toString());
@@ -358,7 +349,37 @@ public class AccountDAO {
 				}
 
 			}
+		} else {
+			
+			if (generated_signature.equalsIgnoreCase(checkOutRequestVO.getRazorpay_signature())) {
+				ps = con.prepareStatement("UPDATE billingpaymentdetails SET PaymentStatus = 1, RazorPayPaymentID = ?, RazorPaySignature = ? WHERE RazorPayOrderID = ? AND TransactionID = ?");
 
+				ps.setString(1, checkOutRequestVO.getRazorpay_payment_id());
+				ps.setString(2, checkOutRequestVO.getRazorpay_signature());
+				ps.setString(3, checkOutRequestVO.getRazorpay_order_id());
+				ps.setLong(4, checkOutRequestVO.getTransactionID());
+
+				if (ps.executeUpdate() > 0) {
+					responseVO.setResult("Success");
+					responseVO.setMessage("Payment Captured Successfully");
+				} else {
+					ps = con.prepareStatement("UPDATE billingpaymentdetails SET PaymentStatus = 2, RazorPayPaymentID = ?, ErrorResponse = ? WHERE RazorPayOrderID = ? AND TransactionID = ?");
+
+					ps.setString(1, checkOutRequestVO.getError().getMetadata().getPaymentId());
+					ps.setString(2, checkOutRequestVO.getError().toString());
+					ps.setString(3, checkOutRequestVO.getError().getMetadata().getOrderId());
+					ps.setLong(4, checkOutRequestVO.getTransactionID());
+
+					if (ps.executeUpdate() > 0) {
+						responseVO.setResult("Success");
+						responseVO.setMessage("Payment Failed. Please Try After Sometime");
+
+					}
+				}
+			}
+			
+		}
+		
 		} catch (Exception e) {
 			e.printStackTrace();
 
@@ -366,95 +387,68 @@ public class AccountDAO {
 		return responseVO;
 	}
 
-	public String sendPayLoadToTata(TopUpRequestVO topUpRequestVO) throws SQLException {
+	public long sendPayLoadToGateway(TopUpRequestVO topUpRequestVO) throws SQLException {
 
-		Random randomNumber = new Random();
-		Gson gson = new Gson();
 		RestCallVO restcallvo = new RestCallVO();
 		ExtraMethodsDAO extramethodsdao = new ExtraMethodsDAO();
-		String result = "Failure";
-		Connection con = null;
+		int restcallresponse = 0;
 
 		try {
-			con = getConnection();
 
-			String hexaAmount = Integer
-					.toHexString(Float.floatToIntBits(topUpRequestVO.getAmount()
-							- (topUpRequestVO.getFixedCharges() + topUpRequestVO.getReconnectionCharges())))
-					.toUpperCase();
-
-			String hexaAlarmCredit = Integer.toHexString(Float.floatToIntBits(topUpRequestVO.getAlarmCredit()))
-					.toUpperCase();
-
-			String hexaEmergencyCredit = Integer.toHexString(Float.floatToIntBits(topUpRequestVO.getEmergencyCredit()))
-					.toUpperCase();
-
-			String hexaTariff = Integer.toHexString(Float.floatToIntBits(topUpRequestVO.getTariff())).toUpperCase();
-
-			String serialNumber = String.format("%04x", randomNumber.nextInt(65000));
-
-			String dataFrame = "0A1800" + serialNumber + "020C0023" + hexaAmount + hexaTariff + hexaEmergencyCredit
-					+ hexaAlarmCredit + "17";
-
-//			restcallvo.setDataFrame(Encoding.getHexBase644(dataFrame));
-			restcallvo.setMiuID(topUpRequestVO.getMeterID().toLowerCase());
-
-			// sending payload to tata gateway
-
-			int restcallresponse = extramethodsdao.postdata(restcallvo);
-
-			if (topUpRequestVO.getModeOfPayment().equalsIgnoreCase("Cash")) {
-				result = inserttopup(topUpRequestVO);
+			restcallvo.setMiuID(topUpRequestVO.getMiuID().toLowerCase());
+			restcallvo.setEmergency_credit(topUpRequestVO.getEmergencyCredit());
+			restcallvo.setCredit(topUpRequestVO.getAmount()	- (topUpRequestVO.getFixedCharges() + topUpRequestVO.getReconnectionCharges()));
+			restcallvo.setGatewayIP(topUpRequestVO.getGatewayIP());
+			restcallvo.setGatewayPort(topUpRequestVO.getGatewayPort());
+			restcallvo.setUrlExtension("/topup");
+			
+			// creating transaction id in topup
+			if(topUpRequestVO.getModeOfPayment().equalsIgnoreCase("Cash")) {
+				
+				restcallvo.setTransaction_id(inserttopup(topUpRequestVO));
+				restcallresponse = extramethodsdao.postdata(restcallvo);
 			} else {
-				PreparedStatement pstmt = con.prepareStatement(
-						"UPDATE topup SET TataReferenceNumber = ?, Status = ? WHERE TransactionID = ?");
-				pstmt.setLong(1, topUpRequestVO.getTransactionIDForTata());
-				pstmt.setInt(2, topUpRequestVO.getStatus());
-				pstmt.setLong(3, topUpRequestVO.getTransactionID());
-
-				if (pstmt.executeUpdate() > 0) {
-					result = "Success";
-				}
+				restcallvo.setTransaction_id(topUpRequestVO.getTransactionID());
+				restcallresponse = extramethodsdao.postdata(restcallvo);
 			}
-
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		return result;
+		return restcallresponse;
 	}
 
-	public String inserttopup(TopUpRequestVO topUpRequestVO) {
+	public int inserttopup(TopUpRequestVO topUpRequestVO) {
 
 		Connection con = null;
 		PreparedStatement ps = null;
-		String result = "Failure";
+		int transactionID = 0;
 
 		try {
 			con = getConnection();
 
-			PreparedStatement pstmt = con.prepareStatement(
-					"SELECT CommunityID, BlockID, CustomerID, MeterID, TariffID FROM customermeterdetails WHERE CRNNumber = ?");
+			PreparedStatement pstmt = con.prepareStatement("SELECT cd.CommunityID, cd.BlockID, cd.CustomerID, cmd.MIUID, cmd.CustomerMeterID, cmd.TariffID FROM customerdetails AS cd LEFT JOIN customermeterdetails AS cmd ON cd.CustomerID = CMD.CustomerID WHERE cd.CustomerUniqueID = ? AND cmd.CustomerMeterID = " + topUpRequestVO.getCustomerMeterID());
 			pstmt.setString(1, topUpRequestVO.getCustomerUniqueID());
 			ResultSet rs = pstmt.executeQuery();
 			if (rs.next()) {
 
-				String sql = "INSERT INTO topup (TataReferenceNumber, CommunityID, BlockID, CustomerID, MeterID, TariffID, Amount, FixedCharges, ReconnectionCharges, Status, ModeOfPayment, PaymentStatus, Source, RazorPayOrderID, RazorPayPaymentID, RazorPaySignature, CreatedByID, CreatedByRoleID, CRNNumber, AcknowledgeDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())";
+				String sql = "INSERT INTO topup (CommunityID, BlockID, CustomerID, MIUID, CustomerMeterID, TariffID, Amount, Status, FixedCharges, ReconnectionCharges, Source, ModeOfPayment, PaymentStatus, RazorPayOrderID, RazorPayPaymentID, RazorPaySignature, CreatedByID, CreatedByRoleID, CustomerUniqueID, AcknowledgeDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())";
 				ps = con.prepareStatement(sql);
 
-				ps.setLong(1, topUpRequestVO.getTransactionIDForTata());
-				ps.setInt(2, rs.getInt("CommunityID"));
-				ps.setInt(3, rs.getInt("BlockID"));
-				ps.setInt(4, rs.getInt("CustomerID"));
-				ps.setString(5, rs.getString("MeterID"));
+				ps.setInt(1, rs.getInt("CommunityID"));
+				ps.setInt(2, rs.getInt("BlockID"));
+				ps.setInt(3, rs.getInt("CustomerID"));
+				ps.setString(4, rs.getString("MeterID"));
+				ps.setLong(5, topUpRequestVO.getCustomerMeterID());
 				ps.setInt(6, rs.getInt("TariffID"));
 				ps.setFloat(7, topUpRequestVO.getAmount());
-				ps.setInt(8, topUpRequestVO.getFixedCharges());
-				ps.setFloat(9, topUpRequestVO.getReconnectionCharges());
-				ps.setInt(10, topUpRequestVO.getStatus());
-				ps.setString(11, topUpRequestVO.getModeOfPayment());
-				ps.setInt(12, topUpRequestVO.getPaymentStatus());
-				ps.setString(13, topUpRequestVO.getSource());
+				ps.setInt(8, topUpRequestVO.getStatus());
+				ps.setInt(9, topUpRequestVO.getFixedCharges());
+				ps.setFloat(10, topUpRequestVO.getReconnectionCharges());
+				ps.setString(11, topUpRequestVO.getSource());
+				ps.setString(12, topUpRequestVO.getModeOfPayment());
+				ps.setInt(13, topUpRequestVO.getPaymentStatus());
 				ps.setString(14, topUpRequestVO.getRazorPayOrderID());
 				ps.setString(15, topUpRequestVO.getRazorPayPaymentID());
 				ps.setString(16, topUpRequestVO.getRazorPaySignature());
@@ -463,8 +457,12 @@ public class AccountDAO {
 				ps.setString(19, topUpRequestVO.getCustomerUniqueID());
 
 				if (ps.executeUpdate() > 0) {
-					result = "Success";
-
+					PreparedStatement ps1 = con.prepareStatement("SELECT MAX(TransactionID) as TransactionID from topup");
+					ResultSet rs1 = ps1.executeQuery();
+					
+					if(rs1.next()) {
+						transactionID = rs1.getInt("TransactionID");
+					}
 				}
 			}
 
@@ -472,9 +470,40 @@ public class AccountDAO {
 			e.printStackTrace();
 
 		}
-		return result;
+		return transactionID;
 	}
 
+	public ResponseVO updatetopupstatus(DataRequestVO dataRequestVO, String miuID) throws SQLException {
+		// TODO Auto-generated method stub
+		
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResponseVO responsevo = new ResponseVO();
+		DashboardDAO dashboarddao = new DashboardDAO();
+
+		try {
+			con = getConnection();
+			
+			ps = con.prepareStatement("UPDATE topup SET ModifiedDate = NOW(), Status = "+ dataRequestVO.getCmd_status() +" WHERE TransactionID = "+ dataRequestVO.getTransaction_id());
+			
+			if(ps.executeUpdate() > 0) {
+				
+					responsevo = dashboarddao.postDashboarddetails(dataRequestVO, miuID);
+				
+			}
+			
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			responsevo.setMessage("INTERNAL SERVER ERROR");
+			responsevo.setResult("Failure");
+		} finally {
+			ps.close();
+			con.close();
+		}
+
+		return responsevo;
+	}
+	
 	/* Status */
 
 	public List<StatusResponseVO> getStatusdetails(int roleid, String id, int filterCid, int day) throws SQLException {
@@ -491,9 +520,9 @@ public class AccountDAO {
 			con = getConnection();
 			statuslist = new LinkedList<StatusResponseVO>();
 
-			String query = "SELECT 	DISTINCT t.TransactionID, c.CommunityName, b.BlockName, cmd.FirstName, cmd.HouseNumber, cmd.CreatedByID, cmd.LastName, cmd.CRNNumber, t.MeterID, t.Amount, tr.AlarmCredit, tr.EmergencyCredit, t.Status, t.ModeOfPayment, t.PaymentStatus, t.RazorPayOrderID, t.RazorPayPaymentID, t.RazorPayRefundID, t.RazorPayRefundStatus, t.TransactionDate, t.AcknowledgeDate FROM topup AS t \r\n"
+			String query = "SELECT 	DISTINCT t.TransactionID, c.CommunityName, b.BlockName, cd.FirstName, cd.HouseNumber, cd.CreatedByID, cd.LastName, cd.CustomerUniqueID, t.MIUID, t.CustomerMeterID, t.Amount, tr.AlarmCredit, tr.EmergencyCredit, t.Status, t.ModeOfPayment, t.PaymentStatus, t.RazorPayOrderID, t.RazorPayPaymentID, t.RazorPayRefundID, t.RazorPayRefundStatus, t.TransactionDate, t.AcknowledgeDate FROM topup AS t \r\n"
 					+ "LEFT JOIN community AS c ON t.CommunityID = c.CommunityID LEFT JOIN block AS b ON t.BlockID = b.BlockID LEFT JOIN tariff AS tr ON tr.TariffID = t.tariffID \r\n"
-					+ "LEFT JOIN customermeterdetails AS cmd ON t.CRNNumber = cmd.CRNNumber WHERE t.TransactionDate BETWEEN CONCAT(CURDATE() <day>, ' 00:00:00') AND CONCAT(CURDATE(), ' 23:59:59') AND t.PaymentStatus !=0 <change>";
+					+ "LEFT JOIN customerdetails AS cd ON t.CustomerUniqueID = cd.CustomerUniqueID LEFT JOIN customermeterdetails as cmd ON cd.CustomerID = cmd.CustomerID WHERE t.TransactionDate BETWEEN CONCAT(CURDATE() <day>, ' 00:00:00') AND CONCAT(CURDATE(), ' 23:59:59') AND t.PaymentStatus !=0 <change>";
 			query = query.replaceAll("<day>", (day == 1) ? "" : "- INTERVAL 90 DAY");
 			pstmt = con.prepareStatement(query.replaceAll("<change>",
 					((roleid == 1 || roleid == 4) && (filterCid == -1)) ? "ORDER BY t.TransactionDate DESC"
@@ -502,7 +531,7 @@ public class AccountDAO {
 									: (roleid == 2 || roleid == 5)
 											? "AND t.BlockID = " + id + " ORDER BY t.TransactionDate DESC"
 											: (roleid == 3)
-													? "AND t.CRNNumber = '" + id + "' ORDER BY t.TransactionDate DESC"
+													? "AND t.CustomerUniqueID = '" + id + "' ORDER BY t.TransactionDate DESC"
 													: ""));
 			rs = pstmt.executeQuery();
 
@@ -514,8 +543,8 @@ public class AccountDAO {
 				statusvo.setFirstName(rs.getString("FirstName"));
 				statusvo.setLastName(rs.getString("LastName"));
 				statusvo.setHouseNumber(rs.getString("HouseNumber"));
-				statusvo.setCRNNumber(rs.getString("CRNNumber"));
-				statusvo.setMeterID(rs.getString("MeterID"));
+				statusvo.setCustomerUniqueID(rs.getString("CustomerUniqueID"));
+				statusvo.setMiuID(rs.getString("MIUID"));
 				statusvo.setAmount(rs.getString("Amount"));
 				statusvo.setModeOfPayment(rs.getString("ModeOfPayment"));
 				statusvo.setRazorPayOrderID(rs.getString("ModeOfPayment").equalsIgnoreCase("Cash") ? "---"
@@ -532,12 +561,9 @@ public class AccountDAO {
 				statusvo.setAlarmCredit(rs.getString("AlarmCredit"));
 				statusvo.setEmergencyCredit(rs.getString("EmergencyCredit"));
 				statusvo.setTransactionDate(ExtraMethodsDAO.datetimeformatter(rs.getString("TransactionDate")));
-				statusvo.setStatus((rs.getInt("Status") == 0) ? "Pending...waiting for acknowledge"
-						: (rs.getInt("Status") == 1) ? "Pending" : (rs.getInt("Status") == 2) ? "Passed" : "Failed");
+				statusvo.setStatus((rs.getInt("Status") == 10) ? "Pending" : (rs.getInt("Status") == 0) ? "Passed" : "Failed");
 
-				pstmt1 = con.prepareStatement(
-						"SELECT user.ID, user.UserName, userrole.RoleDescription FROM USER LEFT JOIN userrole ON user.RoleID = userrole.RoleID WHERE user.ID = "
-								+ rs.getInt("CreatedByID"));
+				pstmt1 = con.prepareStatement("SELECT user.ID, user.UserName, userrole.RoleDescription FROM USER LEFT JOIN userrole ON user.RoleID = userrole.RoleID WHERE user.ID = "+ rs.getInt("CreatedByID"));
 				rs1 = pstmt1.executeQuery();
 				if (rs1.next()) {
 					statusvo.setTransactedByUserName(rs1.getString("UserName"));
@@ -600,18 +626,15 @@ public class AccountDAO {
 		try {
 			con = getConnection();
 
-			String query = "SELECT 	DISTINCT t.TransactionID, c.CommunityName, b.BlockName, cmd.FirstName, cmd.HouseNumber, cmd.CreatedByID, cmd.LastName, cmd.CRNNumber, t.MeterID, t.Amount, tr.AlarmCredit, tr.EmergencyCredit, t.Status, t.FixedCharges, t.ReconnectionCharges, t.ModeOfPayment, t.PaymentStatus, t.RazorPayOrderID, t.RazorPayPaymentID, t.TransactionDate, t.AcknowledgeDate FROM topup AS t \r\n"
+			String query = "SELECT t.TransactionID, c.CommunityName, b.BlockName, cd.FirstName, cd.HouseNumber, cd.CreatedByID, cd.LastName, cd.CustomerUniqueID, t.MIUID, t.CustomerMeterID, t.Amount, tr.AlarmCredit, tr.EmergencyCredit, t.Status, t.ModeOfPayment, t.PaymentStatus, t.RazorPayOrderID, t.RazorPayPaymentID, t.RazorPayRefundID, t.RazorPayRefundStatus, t.TransactionDate, t.AcknowledgeDate FROM topup AS t \r\n"
 					+ "LEFT JOIN community AS c ON t.CommunityID = c.CommunityID LEFT JOIN block AS b ON t.BlockID = b.BlockID LEFT JOIN tariff AS tr ON tr.TariffID = t.tariffID \r\n"
-					+ "LEFT JOIN customermeterdetails AS cmd ON t.CRNNumber = cmd.CRNNumber WHERE t.TransactionID = "
-					+ transactionID;
+					+ "LEFT JOIN customerdetails AS cd ON t.CustomerUniqueID = cd.CustomerUniqueID LEFT JOIN customermeterdetails as cmd ON cd.CustomerID = cmd.CustomerID WHERE t.TransactionID = "+ transactionID;
 
 			pstmt = con.prepareStatement(query);
 			rs = pstmt.executeQuery();
 
 			if (rs.next()) {
-				pstmt1 = con.prepareStatement(
-						"SELECT user.ID, user.UserName, userrole.RoleDescription FROM USER LEFT JOIN userrole ON user.RoleID = userrole.RoleID WHERE user.ID = "
-								+ rs.getInt("CreatedByID"));
+				pstmt1 = con.prepareStatement("SELECT user.ID, user.UserName, userrole.RoleDescription FROM USER LEFT JOIN userrole ON user.RoleID = userrole.RoleID WHERE user.ID = "+ rs.getInt("CreatedByID"));
 				rs1 = pstmt1.executeQuery();
 				if (rs1.next()) {
 
@@ -633,7 +656,7 @@ public class AccountDAO {
 
 					// change according to the image directory
 
-					URL hanbiturl = new URL(ExtraConstants.HANBITIMAGEURL);
+					URL hanbiturl = new URL(ExtraConstants.IDIGIIMAGEURL);
 					URL clienturl = new URL(ExtraConstants.CLIENTIMAGEURL);
 					Image hanbit = new Image(ImageDataFactory.create(hanbiturl));
 					Image client = new Image(ImageDataFactory.create(clienturl));
@@ -671,11 +694,11 @@ public class AccountDAO {
 					Table table1 = new Table(headerWidths);
 
 					Cell table1cell1 = new Cell();
-					table1cell1.add("MIU ID: " + rs.getString("MeterID"));
+					table1cell1.add("MIU ID: " + rs.getString("MIUID"));
 					table1cell1.setTextAlignment(TextAlignment.LEFT);
 
 					Cell table1cell2 = new Cell();
-					table1cell2.add("CRN Number: " + rs.getString("CRNNumber"));
+					table1cell2.add("CRN/UAN Number: " + rs.getString("CustomerUniqueID"));
 					table1cell2.setTextAlignment(TextAlignment.CENTER);
 
 					Cell table1cell3 = new Cell();
@@ -864,6 +887,231 @@ public class AccountDAO {
 		return responsevo;
 
 	}
+	
+	/* Billing Details*/
+	
+	public List<BillingResponseVO> getbillingdetails(int roleid, String id, int filterCid) throws SQLException {
+		// TODO Auto-generated method stub
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		PreparedStatement pstmt1 = null;
+		ResultSet rs1 = null;
+		List<BillingResponseVO> billlist = null;
+		List<IndividualBillingResponseVO> individualbills = null;
+		BillingResponseVO billingresponsevo = null;
+		IndividualBillingResponseVO individualBillingResponsevo = null;
+		
+		try {
+			con = getConnection();
+			
+			pstmt = con.prepareStatement("SELECT c.CommunityName, b.BlockName, CONCAT(cd.FirstName, cd.LastName) as Name, cd.HouseNumber, cd.CustomerID, cbd.CustomerBillingID, cbd.TotalAmount, cbd.TaxAmount, cbd.TotalConsumption, cbd.Status, cbd.BillMonth, cbd.BillYear, cbd.LogDate FROM customerdetails AS cd LEFT JOIN customerbillingdetails AS cbd ON cd.CustomerID = cbd.CustomerID LEFT JOIN community AS c ON c.CommunityID = cd.CommunityID LEFT JOIN block AS b ON b.BlockID = cd.BlockID");
+			rs = pstmt.executeQuery();
+			
+			billlist = new LinkedList<BillingResponseVO>();
+			while(rs.next()) {
+				
+				
+				billingresponsevo = new BillingResponseVO();
+				billingresponsevo.setCustomerBillingID(rs.getLong("CustomerBillingID"));
+				billingresponsevo.setCommunityName(rs.getString("CommunityName"));
+				billingresponsevo.setBlockName(rs.getString("BlockName"));
+				billingresponsevo.setCustomerName(rs.getString("Name"));
+				billingresponsevo.setHouseNumber(rs.getString("HouseNumber"));
+				billingresponsevo.setTotalAmount(rs.getInt("TotalAmount") + rs.getInt("TaxAmount"));
+				billingresponsevo.setTotalConsumption(rs.getInt("TotalConsumption"));
+				billingresponsevo.setBillMonth(rs.getInt("BillMonth") == 1 ? "January" : rs.getInt("BillMonth") == 2 ? "February" : rs.getInt("BillMonth") == 3 ? "March" : rs.getInt("BillMonth") == 4 ? "April" : rs.getInt("BillMonth") == 5 ? "May" : rs.getInt("BillMonth") == 6 ? "June" : rs.getInt("BillMonth") == 7 ? "July" : rs.getInt("BillMonth") == 8 ? "August" : rs.getInt("BillMonth") == 9 ? "September" : rs.getInt("BillMonth") == 10 ? "October" : rs.getInt("BillMonth") == 11 ? "November" : rs.getInt("BillMonth") == 12 ? "December" : "");
+				billingresponsevo.setBillYear(rs.getInt("BillYear"));
+				billingresponsevo.setLogDate(rs.getString("LogDate"));
+				
+				LocalDate currentdate = LocalDate.now();
+				
+				pstmt1 = con.prepareStatement("SELECT * FROM billingdetails WHERE CustomerID = " + rs.getInt("CustomerID") + " AND BillMonth = "+ (currentdate.getMonthValue() - 1) + " AND BillYear = " + (currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear()));
+				rs1 = pstmt1.executeQuery();
+				individualbills = new LinkedList<IndividualBillingResponseVO>();
+				while (rs1.next()) {
+					
+					individualBillingResponsevo = new IndividualBillingResponseVO();
+					individualBillingResponsevo.setBillingID(rs1.getLong("BillingID"));
+					individualBillingResponsevo.setCustomerMeterID(rs1.getLong("CustomerMeterID"));
+					individualBillingResponsevo.setMiuID(rs1.getString("MIUID"));
+					individualBillingResponsevo.setMeterType(rs1.getString("MeterType"));
+					individualBillingResponsevo.setPreviousReading(rs1.getFloat("PreviousReading"));
+					individualBillingResponsevo.setPresentReading(rs1.getFloat("PresentReading"));
+					individualBillingResponsevo.setConsumption(rs1.getInt("Consumption"));
+					individualBillingResponsevo.setBillAmount(rs1.getInt("Amount"));
+					individualBillingResponsevo.setTariff(rs.getFloat("Tariff"));
+					individualBillingResponsevo.setFixedCharges(rs.getInt("FixedCharges"));
+					individualBillingResponsevo.setReconnectionCharges(rs1.getInt("ReconnectionCharges"));
+					individualBillingResponsevo.setBillingDate(rs1.getString("LogDate"));
+					
+					individualbills.add(individualBillingResponsevo);
+					
+
+				}
+				billingresponsevo.setIndividualbills(individualbills);
+				billlist.add(billingresponsevo);
+				
+			}
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			pstmt.close();
+			rs.close();
+			con.close();
+		}
+		return billlist;
+	}
+	
+	public ResponseVO paybill(PayBillRequestVO paybillRequestVO) throws SQLException {
+		// TODO Auto-generated method stub
+		
+		Connection con = null;
+		ResponseVO responsevo = new ResponseVO();
+		ExtraMethodsDAO extramethodsdao = new ExtraMethodsDAO();
+		RazorPayOrderVO razorPayOrderVO = new RazorPayOrderVO();
+		CheckoutDetails checkoutDetails = new CheckoutDetails();
+		RazorpayRequestVO razorpayRequestVO = new RazorpayRequestVO();
+		Prefill prefill = new Prefill();
+		Notes notes = new Notes();
+		Theme theme = new Theme();
+
+		try {
+			con = getConnection();
+			
+			PreparedStatement pstmt1 = con.prepareStatement("SELECT CustomerUniqueID, CONCAT(FirstName, Last Name) AS CustomerName, HouseNumber, MobileNumber, Email FROM customerdetails WHERE CustomerUniqueID = '" + paybillRequestVO.getCustomerUniqueID() +"' AND CustomerID = " + paybillRequestVO.getCustomerID());
+			ResultSet rs1 = pstmt1.executeQuery();
+			
+			if(rs1.next()) {
+				if(paybillRequestVO.getModeOfPayment().equalsIgnoreCase("Online")) {
+					
+					long transactionID = insertbillingpayment(paybillRequestVO);
+					
+					if (transactionID != 0) {
+
+						// creating order in razor pay
+
+						razorPayOrderVO.setAmount(((paybillRequestVO.getTotalamount() + paybillRequestVO.getTaxAmount() + paybillRequestVO.getLateFee()) * 100));
+						razorPayOrderVO.setCurrency("INR");
+						razorPayOrderVO.setPayment_capture(1);
+
+						razorpayRequestVO.setApi("orders");
+						String rzpRestCallResponse = extramethodsdao.razorpaypost(razorPayOrderVO, razorpayRequestVO);
+
+						RazorPayResponseVO razorPayResponseVO = gson.fromJson(rzpRestCallResponse, RazorPayResponseVO.class);
+
+						paybillRequestVO.setRazorPayOrderID(razorPayResponseVO.getId());
+
+						PreparedStatement pstmt2 = con.prepareStatement("UPDATE billingpaymentdetails SET RazorPayOrderID = ? WHERE TransactionID = " + transactionID);
+						pstmt2.setString(1, paybillRequestVO.getRazorPayOrderID());
+						if (pstmt2.executeUpdate() > 0) {
+
+							checkoutDetails.setKey(ExtraConstants.RZPKeyID);
+							checkoutDetails.setAmount(paybillRequestVO.getTotalamount() * 100);
+							checkoutDetails.setCurrency(ExtraConstants.PaymentCurrency);
+							checkoutDetails.setOrder_id(paybillRequestVO.getRazorPayOrderID());
+							checkoutDetails.setButtonText(ExtraConstants.PaymentButtonText);
+							checkoutDetails.setName(ExtraConstants.CompanyName);
+							checkoutDetails.setDescription("Payment of INR " + ((paybillRequestVO.getTotalamount() + paybillRequestVO.getTaxAmount() + paybillRequestVO.getLateFee()) * 100)
+									+ "/- for CRN/CAN: " + rs1.getString("CustomerUniqueID") + ".");
+							checkoutDetails.setImage(ExtraConstants.IDIGIIMAGEURL);
+
+							prefill.setName(rs1.getString("CustomerName"));
+							prefill.setEmail(rs1.getString("Email"));
+							prefill.setContact(rs1.getString("MobileNumber"));
+							checkoutDetails.setPrefill(prefill);
+
+							theme.setColor(ExtraConstants.PaymentThemeColor);
+							checkoutDetails.setTheme(theme);
+
+							notes.setAddress(rs1.getString("HouseNumber"));
+							checkoutDetails.setTransactionID(transactionID);
+
+							responsevo.setCheckoutDetails(checkoutDetails);
+							responsevo.setPayType("Postpaid");
+							responsevo.setPaymentMode("Online");
+							responsevo.setResult("Success");
+							responsevo.setMessage("Order Created Successfully. Proceed to CheckOut");
+						}
+					} else {
+
+						responsevo.setResult("Failure");
+						responsevo.setMessage("Order Creation Failed. Please Try After Sometime");
+					}
+					
+				} else {
+					paybillRequestVO.setPaymentStatus(1);
+					responsevo.setPaymentMode("Cash");
+
+					if(insertbillingpayment(paybillRequestVO) != 0) {
+						responsevo.setResult("Success");
+						responsevo.setMessage("Bill Paid Successfully");
+					} else {
+						responsevo.setResult("Failure");
+						responsevo.setMessage("Bill Payment Failed. Please Try After Sometime");
+					}
+					
+				}
+			}
+			
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			responsevo.setMessage("INTERNAL SERVER ERROR");
+			responsevo.setResult("Failure");
+		} finally {
+			// pstmt.close();
+			// ps.close();
+			con.close();
+		}
+
+		return responsevo;
+	}
+	
+	public long insertbillingpayment (PayBillRequestVO paybillRequestVO) throws SQLException {
+		// TODO Auto-generated method stub		
+		
+		Connection con = null;
+		long transactionID = 0;
+		
+		try {
+			con = getConnection();
+			
+			PreparedStatement pstmt = con.prepareStatement("INSERT INTO billingpaymentdetails (CustomerBillingID, CustomerID, CustomerUniqueID, TotalAmount, LateFee, Source, ModeOfPayment, PaymentStatus, CreatedByID, CreatedByRoleID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+			pstmt.setLong(1, paybillRequestVO.getCustomerBillingID());
+			pstmt.setLong(2, paybillRequestVO.getCustomerID());
+			pstmt.setString(3, paybillRequestVO.getCustomerUniqueID());
+			pstmt.setInt(4, paybillRequestVO.getTotalamount() + paybillRequestVO.getTaxAmount());
+			pstmt.setInt(5, paybillRequestVO.getLateFee());
+			pstmt.setString(5, paybillRequestVO.getSource());
+			pstmt.setString(6, paybillRequestVO.getModeOfPayment());
+			pstmt.setInt(7, paybillRequestVO.getPaymentStatus());
+			pstmt.setInt(8, paybillRequestVO.getTransactedByID());
+			pstmt.setInt(9, paybillRequestVO.getTransactedByRoleID());
+			
+			if (pstmt.executeUpdate() > 0) {
+				PreparedStatement pstmt1 = con.prepareStatement("SELECT MAX(TransactionID) as TransactionID from billingpaymentdetails");
+				ResultSet rs1 = pstmt1.executeQuery();
+				
+				if(rs1.next()) {
+					transactionID = rs1.getLong("TransactionID");
+				}
+			}
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+		} finally {
+			con.close();
+			
+		}
+		
+		return transactionID;
+	}
+	
+	public ResponseVO printbill(int billingID) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 	/* Configuration */
 
@@ -873,46 +1121,53 @@ public class AccountDAO {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
+		PreparedStatement pstmt1 = null;
+		ResultSet rs1 = null;
 		List<ConfigurationResponseVO> configurationdetailslist = null;
+		List<CommandGroupResponseVO> commandslist = null;
 		try {
 			con = getConnection();
 			configurationdetailslist = new LinkedList<ConfigurationResponseVO>();
+			commandslist = new LinkedList<CommandGroupResponseVO>();
 
-			String query = "SELECT cmd.TransactionID, cmd.CustomerUniqueID, cmd.MIUID, cmd.CommandType, cmd.CustomerMeterID, cmd.ModifiedDate, cmd.Status, cmd.Value FROM command AS cmd \r\n"
-					+ "LEFT JOIN customerdetails AS cm ON cm.CustomerUniqueID = cmd.CustomerUniqueID\r\n"
+			String query = "SELECT cd.TransactionID, cd.CustomerUniqueID, cd.MIUID, cd.CustomerMeterID FROM command AS cd \r\n"
+					+ "LEFT JOIN customerdetails AS cm ON cm.CustomerUniqueID = cd.CustomerUniqueID\r\n"
 					+ "LEFT JOIN community AS c ON cm.CommunityID = c.CommunityID\r\n"
 					+ "LEFT JOIN block AS b ON cm.BlockID = b.blockID <change>";
 
 			pstmt = con.prepareStatement(query.replaceAll("<change>",
-					((roleid == 1 || roleid == 4) && (filterCid == -1)) ? " ORDER BY cmd.ModifiedDate DESC"
+					((roleid == 1 || roleid == 4) && (filterCid == -1)) ? " ORDER BY cd.TransactionID DESC"
 							: ((roleid == 1 || roleid == 4) && (filterCid != -1))
-									? " WHERE cm.CommunityID = " + filterCid + " ORDER BY cmd.ModifiedDate DESC"
+									? " WHERE cm.CommunityID = " + filterCid + " ORDER BY cd.TransactionID DESC"
 									: (roleid == 2 || roleid == 5)
-											? "WHERE cm.BlockID = " + id + " ORDER BY cmd.ModifiedDate DESC"
+											? "WHERE cm.BlockID = " + id + " ORDER BY cd.TransactionID DESC"
 											: (roleid == 3)
-													? "WHERE cm.CRNNumber = '" + id + "' ORDER BY cmd.ModifiedDate DESC"
+													? "WHERE cm.CustomerUniqueID = '" + id + "' ORDER BY cd.TransactionID DESC"
 													: ""));
 
 			rs = pstmt.executeQuery();
 			ConfigurationResponseVO configurationvo = null;
+			CommandGroupResponseVO commands = null;
 
 			while (rs.next()) {
 				configurationvo = new ConfigurationResponseVO();
-				configurationvo.setMeterID(rs.getString("MeterID"));
-				configurationvo.setCommandType((rs.getInt("CommandType") == 40) ? "Valve Open"
-						: (rs.getInt("CommandType") == 0) ? "Valve Close"
-								: (rs.getInt("CommandType") == 3) ? "Clear Meter"
-										: (rs.getInt("CommandType") == 1) ? "Clear Tamper"
-												: (rs.getInt("CommandType") == 5) ? "Set RTC"
-														: (rs.getInt("CommandType") == 6) ? "Set Meter Index"
-																: (rs.getInt("CommandType") == 10) ? "Set Tariff" : "");
-				configurationvo.setValue(
-						(rs.getInt("CommandType") == 6) || (rs.getInt("CommandType") == 10) ? rs.getString("Value")
-								: "---");
-				configurationvo.setModifiedDate(ExtraMethodsDAO.datetimeformatter(rs.getString("ModifiedDate")));
-				configurationvo.setStatus((rs.getInt("Status") == 0) ? "Pending...waiting for acknowledge"
-						: (rs.getInt("Status") == 1) ? "Pending" : (rs.getInt("Status") == 2) ? "Passed" : "Failed");
+				
+				configurationvo.setMiuID(rs.getString("MIUID"));
 				configurationvo.setTransactionID(rs.getInt("TransactionID"));
+				
+				pstmt1 = con.prepareStatement("SELECT * FROM commanddetails WHERE TransactionID = " + configurationvo.getTransactionID());
+				rs1 = pstmt1.executeQuery();
+				while(rs1.next()) {
+					commands = new CommandGroupResponseVO();
+					
+					commands.setCommandType(rs1.getInt("CommandType") == 1 ? "Meter Reset" : rs1.getInt("CommandType") == 3 ? "Tariff" : rs1.getInt("CommandType") == 5 ? "Valve" : rs1.getInt("CommandType") == 6 ? "RTC" : rs1.getInt("CommandType") == 8 ? "Sync Interval" : rs1.getInt("CommandType") == 9 ? "Meter Reading" : rs1.getInt("CommandType") == 10 ? "PrePaidPostPaid Mode" : rs1.getInt("CommandType") == 12 ? "Clear Tamper" : rs1.getInt("CommandType") == 13 ? "Sync Time" : "");
+					commands.setStatus(rs1.getInt("Status") == 0 ? "Passed" : rs1.getInt("Status") == 1 ? "Already Executed" : rs1.getInt("Status") == 2 ? "Invalid Syntax" : rs1.getInt("Status") == 3 ? "Invalid Parameters" : rs1.getInt("Status") == 4 ? "Value Cannot be Applied" : rs1.getInt("Status") == 5 ? "Value Not in Range" : rs1.getInt("Status") == 6 ? "Command Not Found" : rs1.getInt("Status") == 7 ? "Device Not Found" : rs1.getInt("Status") == 8 ? "Transaction Discarded" : rs1.getInt("Status") == 9 ? "Transaction not Found" : rs1.getInt("Status") == 10 ? "Pending" : "Unknown Failure");
+					commands.setValue(rs1.getString("Value"));
+					commands.setModifiedDate(rs1.getString("ModifiedDate"));
+					
+					commandslist.add(commands);
+					}
+				
 				configurationdetailslist.add(configurationvo);
 			}
 
@@ -943,9 +1198,9 @@ public class AccountDAO {
 			ExtraMethodsDAO extramethodsdao = new ExtraMethodsDAO();
 			RestCallVO restcallvo = new RestCallVO();
 			
-			ps = con.prepareStatement("INSERT INTO command (CustomerID, CustomerMeterID, MIUID, CustomerUniqueID, ModifiedDate) VALUES (?, ?, ?, ?, NOW())");
-			ps.setInt(1, configurationvo.getCustomerID());
-			ps.setInt(2, configurationvo.getCustomerMeterID());
+			ps = con.prepareStatement("INSERT INTO command (CustomerID, CustomerMeterID, MIUID, CustomerUniqueID) VALUES (?, ?, ?, ?)");
+			ps.setLong(1, configurationvo.getCustomerID());
+			ps.setLong(2, configurationvo.getCustomerMeterID());
 			ps.setString(3, configurationvo.getMiuID());
 			ps.setString(4, configurationvo.getCustomerUniqueID());
 			
@@ -956,6 +1211,12 @@ public class AccountDAO {
 			
 			if(rs.next()) {
 				
+				PreparedStatement pstmt = con.prepareStatement("SELECT g.GatewayIP, g.GatewayPort FROM gateways as g LEFT JOIN customermeterdetails as cmd ON g.GatewayID = cmd.GatewayID WHERE CustomerMeterID = " + configurationvo.getCustomerMeterID());
+				ResultSet rs2 = pstmt.executeQuery();
+				
+				if(rs2.next()) {
+				restcallvo.setGatewayIP(rs2.getString("GatewayIP"));
+				restcallvo.setGatewayPort(rs2.getInt("GatewayPort"));
 				restcallvo.setMiuID(configurationvo.getMiuID());
 				restcallvo.setTransaction_id(rs.getInt("TransactionID"));
 				
@@ -998,14 +1259,14 @@ public class AccountDAO {
 							PreparedStatement pstmt2 = con.prepareStatement("UPDATE customermeterdetails SET TariffID = ? Where CustomerUniqueID = ? AND CustomerMeterID = ?");
 							pstmt2.setInt(1, Integer.parseInt(configurationvo.getCommands().get(0).getValue()));
 							pstmt2.setString(2, configurationvo.getCustomerUniqueID());
-							pstmt2.setInt(3, configurationvo.getCustomerMeterID());
+							pstmt2.setLong(3, configurationvo.getCustomerMeterID());
 							pstmt2.executeUpdate();
 
 						}
 					}
 					
 				}
-				
+			}
 				}
 			}
 			
@@ -1038,7 +1299,7 @@ public class AccountDAO {
 
 	}
 	
-	public ResponseVO updateconfiguration(ConfigurationRequestVO configurationvo, String miuID) throws SQLException {
+	public ResponseVO updateconfiguration(ConfigurationStatusResponseVO configurationstatusvo, String miuID) throws SQLException {
 		// TODO Auto-generated method stub
 
 		Connection con = null;
@@ -1048,7 +1309,7 @@ public class AccountDAO {
 		try {
 			con = getConnection();
 			
-			ps = con.prepareStatement("UPDATE commanddetails SET ModifiedDate = NOW(), Status = "+ configurationvo.getCmd_status() +" WHERE TransactionID = "+ configurationvo.getTransactionID());
+			ps = con.prepareStatement("UPDATE commanddetails SET ModifiedDate = NOW(), Status = "+ configurationstatusvo.getCmd_status() +" WHERE TransactionID = "+ configurationstatusvo.getTransaction_id());
 			
 			if(ps.executeUpdate() > 0) {
 				
@@ -1117,7 +1378,7 @@ public class AccountDAO {
 			pstmt.setString(1, meterID);
 			rs = pstmt.executeQuery();
 			if (rs.next()) {
-				if (rs.getString("Status").equals("0")) {
+				if (rs.getString("Status").equals("10")) {
 					result = true;
 				}
 			}
@@ -1132,7 +1393,7 @@ public class AccountDAO {
 		return result;
 	}
 
-	public boolean checktopup(String meterID) throws SQLException {
+	public boolean checktopup(long customerMeterId) throws SQLException {
 		// TODO Auto-generated method stub
 
 		Connection con = null;
@@ -1142,9 +1403,8 @@ public class AccountDAO {
 
 		try {
 			con = getConnection();
-			pstmt = con.prepareStatement(
-					"SELECT transactionID, MeterID, STATUS FROM topup WHERE MeterID = ? AND STATUS IN (0,1) AND PaymentStatus = 1 AND Source = 'web' AND TataReferenceNumber !=0 ORDER BY TransactionID DESC LIMIT 0,1");
-			pstmt.setString(1, meterID);
+			pstmt = con.prepareStatement("SELECT transactionID, MIUID, Status FROM topup WHERE CustomerMeterID = ? AND STATUS = 10 AND PaymentStatus = 1 AND Source = 'web' ORDER BY TransactionID DESC LIMIT 0,1");
+			pstmt.setLong(1, customerMeterId);
 			rs = pstmt.executeQuery();
 			if (rs.next()) {
 				result = true;
@@ -1170,12 +1430,10 @@ public class AccountDAO {
 
 		try {
 			con = getConnection();
-			pstmt = con.prepareStatement(
-					"SELECT tr.EmergencyCredit, tr.Tariff, tr.TariffID, cmd.CRNNumber FROM customermeterdetails as cmd LEFT JOIN tariff AS tr ON tr.TariffID = cmd.TariffID WHERE cmd.CRNNumber = ?");
-			pstmt.setString(1, topupvo.getCustomerUniqueID());
+			pstmt = con.prepareStatement("SELECT tr.EmergencyCredit, tr.Tariff, tr.TariffID, cmd.CustomerUniqueID FROM customermeterdetails as cmd LEFT JOIN tariff AS tr ON tr.TariffID = cmd.TariffID WHERE cmd.CustomerMeterID = ?");
+			pstmt.setLong(1, topupvo.getCustomerMeterID());
 			rs = pstmt.executeQuery();
 			if (rs.next()) {
-				System.out.println(rs.getFloat("Tariff") + "==>@@@==>" + rs.getFloat("EmergencyCredit"));
 				if (topupvo.getAmount() < rs.getFloat("EmergencyCredit") || topupvo.getAmount() < rs.getFloat("Tariff"))
 
 					result = true;

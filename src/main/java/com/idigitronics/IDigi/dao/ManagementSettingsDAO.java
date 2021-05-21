@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Random;
 
 import com.google.gson.Gson;
 import com.idigitronics.IDigi.constants.DataBaseConstants;
@@ -26,9 +25,7 @@ import com.idigitronics.IDigi.request.vo.UserManagementRequestVO;
 import com.idigitronics.IDigi.response.vo.AlertResponseVO;
 import com.idigitronics.IDigi.response.vo.FeedbackResponseVO;
 import com.idigitronics.IDigi.response.vo.ResponseVO;
-import com.idigitronics.IDigi.response.vo.TataResponseVO;
 import com.idigitronics.IDigi.response.vo.VacationResponseVO;
-import com.idigitronics.IDigi.utils.Encoding;
 import com.idigitronics.IDigi.response.vo.UserManagementResponseVO;
 
 /**
@@ -141,7 +138,7 @@ public class ManagementSettingsDAO {
 						
 						pstmt.setInt(5, usermanagementvo.getCommunityID());
 						pstmt.setInt(6, usermanagementvo.getBlockID());
-						pstmt.setInt(7, usermanagementvo.getCustomerID());
+						pstmt.setLong(7, usermanagementvo.getCustomerID());
 						pstmt.setInt(8, rs.getInt("ID"));
 						pstmt.setInt(9, usermanagementvo.getLoggedInRoleID());
 						pstmt.setString(10, usermanagementvo.getCustomerUniqueID());
@@ -368,65 +365,59 @@ public class ManagementSettingsDAO {
 
 	}
 
-/*	public ResponseVO addvacation(VacationRequestVO vacationRequestVO) throws SQLException {
+	public ResponseVO addvacation(VacationRequestVO vacationRequestVO) throws SQLException {
 		// TODO Auto-generated method stub
 
-		Random randomNumber = new Random();
 		ResponseVO responsevo = new ResponseVO(); 
 		PreparedStatement pstmt1 = null;
 		Connection con = null;
 
 		try {
 			con = getConnection();
-			pstmt1 = con.prepareStatement("SELECT CommunityID, BlockID, CustomerID, MeterID FROM customermeterdetails WHERE CRNNumber = '"+vacationRequestVO.getCRNNumber()+"'");
+			pstmt1 = con.prepareStatement("SELECT cd.CommunityID, cd.BlockID, cd.CustomerID, cmd.MIUID, g.GatewayIP, g.GatewayPort FROM customerdetails AS cd LEFT JOIN customermeterdetails AS cmd on cd.CustomerID = cmd.CustomerID LEFT JOIN gateway AS g ON g.GatewayID = cmd.GatewayID WHERE CustomermeterID = '"+vacationRequestVO.getCustomerMeterID()+"'");
 			ResultSet rs1 = pstmt1.executeQuery();
 
 			if (rs1.next()) {
-				vacationRequestVO.setMeterID(rs1.getString("MeterID"));
+				vacationRequestVO.setMiuID(rs1.getString("MIUID"));
 				vacationRequestVO.setCommunityID(rs1.getInt("CommunityID"));
 				vacationRequestVO.setBlockID(rs1.getInt("BlockID"));
 				vacationRequestVO.setCustomerID(rs1.getInt("CustomerID"));
 				
 				if (vacationRequestVO.getSource().equalsIgnoreCase("web")) {
 					
-						String serialNumber = String.format("%04x", randomNumber.nextInt(65000));
-						System.out.println("serialNumber:-"+ serialNumber);
-
-						DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+						DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
 						LocalDateTime startDateTime = LocalDateTime.parse(vacationRequestVO.getStartDateTime()+":00", dtf);
 						LocalDateTime endDateTime = LocalDateTime.parse(vacationRequestVO.getEndDateTime()+":00", dtf);
 
-						String dataframe = "0A1600" + serialNumber + "020C0141" + String.format("%02x", startDateTime.getDayOfMonth()) + String.format("%02x", startDateTime.getMonthValue()) + 
-								String.format("%02x", (startDateTime.getYear()-2000)) + String.format("%02x", startDateTime.getHour()) + String.format("%02x", startDateTime.getMinute()) + 
-								String.format("%02x", 0) + String.format("%02x", vacationRequestVO.getStartDay()) + 
-								String.format("%02x", endDateTime.getDayOfMonth()) + String.format("%02x", endDateTime.getMonthValue()) + String.format("%02x", (endDateTime.getYear()-2000)) + 
-								String.format("%02x", endDateTime.getHour()) + String.format("%02x", endDateTime.getMinute()) +	String.format("%02x", 59) + String.format("%02x", vacationRequestVO.getEndDay()) + "17";
-						
-						System.out.println("dataframe in vacation:--"+dataframe);
 						ExtraMethodsDAO extramethodsdao = new ExtraMethodsDAO();
 						RestCallVO restcallvo = new RestCallVO();
 						
-						restcallvo.setDataFrame(Encoding.getHexBase644(dataframe));
-						restcallvo.setMeterID(vacationRequestVO.getMeterID().toLowerCase());
-
-						String restcallresponse = extramethodsdao.tatapost(restcallvo);
+						restcallvo.setMiuID(vacationRequestVO.getMiuID());
+						restcallvo.setParameter_id(7);
+						restcallvo.setValue(startDateTime.toString() +";" + endDateTime.toString());
+						restcallvo.setGatewayIP(rs1.getString("GatewayIP"));
+						restcallvo.setGatewayPort(rs1.getInt("GatewayPort"));
 						
-						TataResponseVO tataResponseVO = gson.fromJson(restcallresponse, TataResponseVO.class);
+						long transactionID = insertvacation(vacationRequestVO);
 						
-						vacationRequestVO.setTransactionIDForTata(tataResponseVO.getId());
-						vacationRequestVO.setStatus(tataResponseVO.getTransmissionStatus());
-						if(insertvacation(vacationRequestVO).equalsIgnoreCase("Success")) {
+						restcallvo.setTransaction_id(transactionID);
+						
+					if (transactionID != 0) {
+						
+						if (extramethodsdao.postdata(restcallvo) == 200) {
 							responsevo.setResult("Success");
 							responsevo.setMessage("Vacation Request Submitted Successfully");
-						}else {
+						} else {
 							responsevo.setResult("Failure");
 							responsevo.setMessage("Vacation Request Failed");
 						}
-						
+						} else {
+							responsevo.setResult("Failure");
+							responsevo.setMessage("Vacation Request Failed");
+						}
 
 					} else {
-						vacationRequestVO.setTransactionIDForTata(0);
-						if(insertvacation(vacationRequestVO).equalsIgnoreCase("Success")) {
+						if(insertvacation(vacationRequestVO) != 0) {
 							responsevo.setResult("Success");
 							responsevo.setMessage("Vacation Request Inserted Successfully");
 						}else {
@@ -444,37 +435,40 @@ public class ManagementSettingsDAO {
 		return responsevo;
 	}
 	
-	public String insertvacation(VacationRequestVO vacationRequestVO) {
+	public long insertvacation(VacationRequestVO vacationRequestVO) {
 		
 		Connection con = null;
 		PreparedStatement pstmt = null;
-		String result = "Failure";
+		long transactionID = 0;
 		
 		try {
 			con = getConnection();
 
 			pstmt = con.prepareStatement(
-						"INSERT INTO vacation (TataReferenceNumber, communityID, BlockID, CustomerID, MeterID, VacationName, StartDate, EndDate, Status, Source, CRNNumber, Mode, ModifiedDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'add', NOW())");
+						"INSERT INTO vacation (communityID, BlockID, CustomerID, MIUID, CustomerMeterID, VacationName, StartDate, EndDate, Source, CustomerUniqueID, Mode, ModifiedDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'add', NOW())");
 
-				pstmt.setLong(1, vacationRequestVO.getTransactionIDForTata());
-				pstmt.setInt(2, vacationRequestVO.getCommunityID());
-				pstmt.setInt(3, vacationRequestVO.getBlockID());
-				pstmt.setInt(4, vacationRequestVO.getCustomerID());
-				pstmt.setString(5, vacationRequestVO.getMeterID());
+				pstmt.setInt(1, vacationRequestVO.getCommunityID());
+				pstmt.setInt(2, vacationRequestVO.getBlockID());
+				pstmt.setLong(3, vacationRequestVO.getCustomerID());
+				pstmt.setString(4, vacationRequestVO.getMiuID());
+				pstmt.setLong(5, vacationRequestVO.getCustomerMeterID());
 				pstmt.setString(6, vacationRequestVO.getVacationName());
 				pstmt.setString(7, vacationRequestVO.getStartDateTime());
 				pstmt.setString(8, vacationRequestVO.getEndDateTime());
-				pstmt.setInt(9, vacationRequestVO.getStatus());
-				pstmt.setString(10, vacationRequestVO.getSource());
-				pstmt.setString(11, vacationRequestVO.getCRNNumber());
+				pstmt.setString(9, vacationRequestVO.getSource());
+				pstmt.setString(10, vacationRequestVO.getCustomerUniqueID());
 
 				if (pstmt.executeUpdate() > 0) {
-					result = "Success";
+					PreparedStatement pstmt1 = con.prepareStatement("SELECT Max(VacationID) as VacationID FROM vacation");
+					ResultSet rs = pstmt1.executeQuery();
+					if(rs.next()) {
+						transactionID = rs.getLong("VacationID");
+					}
 				}
 		} catch(Exception e){
 			e.printStackTrace();
 		}
-		return result;
+		return transactionID;
 	}
 	
 	public ResponseVO editvacation(VacationRequestVO vacationRequestVO) {
@@ -482,65 +476,47 @@ public class ManagementSettingsDAO {
 		
 		Connection con = null;
 		PreparedStatement pstmt = null;
-		Random randomNumber = new Random();
 		ResponseVO responsevo = new ResponseVO(); 
 		
 		try {
 			con = getConnection();
 
-			pstmt = con.prepareStatement(
-					"SELECT MeterID FROM vacation WHERE VacationID = " + vacationRequestVO.getVacationID());
+			pstmt = con.prepareStatement("SELECT v.MIUID, g.GatewayIP, g.GatewayPort FROM vacation AS v LEFT JOIN customermeterdetails AS cmd ON v.CustomerMeterID = cmd.CustomermeterID LEFT JOIN gateways AS g ON g.GatewayID = cmd.GatewayID WHERE VacationID = " + vacationRequestVO.getVacationID());
 			ResultSet rs = pstmt.executeQuery();
 
 			if (rs.next()) {
-				vacationRequestVO.setMeterID(rs.getString("MeterID"));
+				vacationRequestVO.setMiuID(rs.getString("MIUID"));
 				vacationRequestVO.setMode("edit");
 
 				if (vacationRequestVO.getSource().equalsIgnoreCase("web")) {
 
-					String serialNumber = String.format("%04x", randomNumber.nextInt(65000));
-					
-					System.out.println("serialNumber:-"+ serialNumber);
-
-					DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+					DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
 					LocalDateTime startDateTime = LocalDateTime.parse(vacationRequestVO.getStartDateTime()+":00", dtf);
 					LocalDateTime endDateTime = LocalDateTime.parse(vacationRequestVO.getEndDateTime()+":00", dtf);
 
-					String dataframe = "0A1600" + serialNumber + "020C0141"
-							+ String.format("%02x", startDateTime.getDayOfMonth())
-							+ String.format("%02x", startDateTime.getMonthValue())
-							+ String.format("%02x", (startDateTime.getYear()-2000))
-							+ String.format("%02x", startDateTime.getHour())
-							+ String.format("%02x", startDateTime.getMinute()) + String.format("%02x", 0)
-							+ String.format("%02x", vacationRequestVO.getStartDay())
-							+ String.format("%02x", endDateTime.getDayOfMonth())
-							+ String.format("%02x", endDateTime.getMonthValue())
-							+ String.format("%02x", (endDateTime.getYear()-2000))
-							+ String.format("%02x", endDateTime.getHour())
-							+ String.format("%02x", endDateTime.getMinute()) + String.format("%02x", 59)
-							+ String.format("%02x", vacationRequestVO.getEndDay()) + "17";
-
 					ExtraMethodsDAO extramethodsdao = new ExtraMethodsDAO();
 					RestCallVO restcallvo = new RestCallVO();
-					restcallvo.setDataFrame(dataframe);
-					restcallvo.setMeterID(vacationRequestVO.getMeterID().toLowerCase());
+					restcallvo.setValue(startDateTime.toString() +";" + endDateTime.toString());
+					restcallvo.setParameter_id(7);
+					restcallvo.setGatewayIP(rs.getString("GatewayIP"));
+					restcallvo.setGatewayPort(rs.getInt("GatewayPort"));
+					restcallvo.setMiuID(vacationRequestVO.getMiuID());
+					restcallvo.setTransaction_id(vacationRequestVO.getVacationID());
 
-					String restcallresponse = extramethodsdao.tatapost(restcallvo);
-
-					TataResponseVO tataResponseVO = gson.fromJson(restcallresponse, TataResponseVO.class);
-
-					vacationRequestVO.setTransactionIDForTata(tataResponseVO.getId());
-					vacationRequestVO.setStatus(tataResponseVO.getTransmissionStatus());
-
-					if (updatevacation(vacationRequestVO).equalsIgnoreCase("Success")) {
-						responsevo.setResult("Success");
-						responsevo.setMessage("Vacation Update request Submitted Successfully");
-					} else {
+					if(extramethodsdao.postdata(restcallvo) == 200) {
+						if (updatevacation(vacationRequestVO).equalsIgnoreCase("Success")) {
+							responsevo.setResult("Success");
+							responsevo.setMessage("Vacation Update request Submitted Successfully");
+						} else {
+							responsevo.setResult("Failure");
+							responsevo.setMessage("Vacation Update request Failed");
+						}
+					}  else {
 						responsevo.setResult("Failure");
 						responsevo.setMessage("Vacation Update request Failed");
 					}
+
 				} else {
-					vacationRequestVO.setTransactionIDForTata(0);
 					if (updatevacation(vacationRequestVO).equalsIgnoreCase("Success")) {
 						responsevo.setResult("Success");
 						responsevo.setMessage("Vacation Update request Inserted Successfully");
@@ -567,15 +543,13 @@ public class ManagementSettingsDAO {
 		try {
 			con = getConnection();
 
-			pstmt = con.prepareStatement("UPDATE vacation SET TataReferenceNumber = ?, VacationName = ?, StartDate = ?, EndDate = ?, Status = ?, Source = ?, Mode = ?, ModifiedDate = NOW() WHERE VacationID = "+ vacationRequestVO.getVacationID());
+			pstmt = con.prepareStatement("UPDATE vacation SET VacationName = ?, StartDate = ?, EndDate = ?, Status = 10, Source = ?, Mode = ?, ModifiedDate = NOW() WHERE VacationID = "+ vacationRequestVO.getVacationID());
 
-			pstmt.setLong(1, vacationRequestVO.getTransactionIDForTata());
-			pstmt.setString(2, vacationRequestVO.getVacationName());
-			pstmt.setString(3, vacationRequestVO.getStartDateTime());
-			pstmt.setString(4, vacationRequestVO.getEndDateTime());
-			pstmt.setInt(5, vacationRequestVO.getStatus());
-			pstmt.setString(6, vacationRequestVO.getSource());
-			pstmt.setString(7, vacationRequestVO.getMode());
+			pstmt.setString(1, vacationRequestVO.getVacationName());
+			pstmt.setString(2, vacationRequestVO.getStartDateTime());
+			pstmt.setString(3, vacationRequestVO.getEndDateTime());
+			pstmt.setString(4, vacationRequestVO.getSource());
+			pstmt.setString(5, vacationRequestVO.getMode());
 			
 			if(pstmt.executeUpdate() > 0) {
 				result = "Success";
@@ -594,18 +568,17 @@ public class ManagementSettingsDAO {
 		
 		Connection con = null;
 		PreparedStatement pstmt = null;
-		Random randomNumber = new Random();
 		VacationRequestVO vacationRequestVO = new VacationRequestVO();
 		ResponseVO responsevo = new ResponseVO();
 
 		try {
 			con = getConnection();
 
-			pstmt = con.prepareStatement("SELECT MeterID, StartDate, EndDate, VacationName FROM vacation WHERE VacationID = " + vacationID);
+			pstmt = con.prepareStatement("SELECT v.MIUID, g.GatewayIP, g.GatewayPort, v.StartDate, v.EndDate FROM vacation AS v LEFT JOIN customermeterdetails AS cmd ON v.CustomerMeterID = cmd.CustomermeterID LEFT JOIN gateways AS g ON g.GatewayID = cmd.GatewayID WHERE VacationID = " + vacationID);
 			ResultSet rs = pstmt.executeQuery();
 
 			if (rs.next()) {
-				vacationRequestVO.setMeterID(rs.getString("MeterID"));
+				vacationRequestVO.setMiuID(rs.getString("MIUID"));
 				vacationRequestVO.setMode("delete");
 				vacationRequestVO.setSource(source);
 				vacationRequestVO.setVacationName(rs.getString("VacationName"));
@@ -613,35 +586,36 @@ public class ManagementSettingsDAO {
 
 				if (source.equalsIgnoreCase("web")) {
 
-					String serialNumber = String.format("%04x", randomNumber.nextInt(65000));
-
-					String dataframe = "0A1600" + serialNumber + "020C0141FFFFFFFFFFFFFFFFFFFFFFFFFF17";
-
 					ExtraMethodsDAO extramethodsdao = new ExtraMethodsDAO();
 					RestCallVO restcallvo = new RestCallVO();
 
-					restcallvo.setMeterID(vacationRequestVO.getMeterID().toLowerCase());
-					restcallvo.setDataFrame(Encoding.getHexBase644(dataframe));
+					restcallvo.setMiuID(vacationRequestVO.getMiuID());
+					// set value after confirmation
+					restcallvo.setValue("");
+					restcallvo.setParameter_id(7);
+					restcallvo.setGatewayIP(rs.getString("GatewayIP"));
+					restcallvo.setGatewayPort(rs.getInt("GatewayPort"));
+					restcallvo.setMiuID(vacationRequestVO.getMiuID());
+					restcallvo.setTransaction_id(vacationID);
 
-					String restcallresponse = extramethodsdao.tatapost(restcallvo);
-
-					TataResponseVO tataResponseVO = gson.fromJson(restcallresponse, TataResponseVO.class);
-
-					vacationRequestVO.setTransactionIDForTata(tataResponseVO.getId());
-					vacationRequestVO.setStatus(tataResponseVO.getTransmissionStatus());
 					vacationRequestVO.setStartDateTime(rs.getString("StartDate"));
 					vacationRequestVO.setEndDateTime(rs.getString("EndDate"));
-
-					if (updatevacation(vacationRequestVO).equalsIgnoreCase("Success")) {
-						responsevo.setResult("Success");
-						responsevo.setMessage("Vacation Delete request Submitted Successfully");
+					
+					if(extramethodsdao.postdata(restcallvo) == 200) {
+						if (updatevacation(vacationRequestVO).equalsIgnoreCase("Success")) {
+							responsevo.setResult("Success");
+							responsevo.setMessage("Vacation Delete request Submitted Successfully");
+						} else {
+							responsevo.setResult("Failure");
+							responsevo.setMessage("Vacation delete request Failed");
+						}
 					} else {
 						responsevo.setResult("Failure");
 						responsevo.setMessage("Vacation delete request Failed");
 					}
+
 				} else {
-					vacationRequestVO.setTransactionIDForTata(0);
-					vacationRequestVO.setStatus(2);
+					vacationRequestVO.setStatus(0);
 					vacationRequestVO.setStartDateTime(rs.getString("StartDate"));
 					vacationRequestVO.setEndDateTime(rs.getString("EndDate"));
 					if (updatevacation(vacationRequestVO).equalsIgnoreCase("Success")) {
@@ -665,7 +639,7 @@ public class ManagementSettingsDAO {
 		}
 
 		return responsevo;
-	}*/
+	}
 
 	public boolean checkvacationsettings(VacationRequestVO vacationRequestVO) throws SQLException {
 		// TODO Auto-generated method stub
@@ -677,20 +651,22 @@ public class ManagementSettingsDAO {
 
 		try {
 			con = getConnection();
-			pstmt = con.prepareStatement("SELECT MeterID, Status, StartDate, EndDate, Mode FROM vacation WHERE CRNNumber = ? order by VacationID DESC LIMIT 0,1");
-			pstmt.setString(1, vacationRequestVO.getCRNNumber());
+			pstmt = con.prepareStatement("SELECT MIUID, Status, StartDate, EndDate, Mode FROM vacation WHERE CustomerMeterID = ? order by VacationID DESC LIMIT 0,1");
+			pstmt.setLong(1, vacationRequestVO.getCustomerMeterID());
 			rs = pstmt.executeQuery();
 			if (rs.next()) {
-				if (rs.getString("Status").equals("0") || rs.getString("Status").equals("1")) {
+				if (rs.getString("Status").equals("10")) {
 					result = true;
 				} else {
-					PreparedStatement pstmt1 = con.prepareStatement("SELECT VacationID FROM vacation WHERE Status BETWEEN 0 AND 1 AND ? BETWEEN StartDate AND EndDate ");
+					
+					// continue from here
+					PreparedStatement pstmt1 = con.prepareStatement("SELECT VacationID FROM vacation WHERE Status != 10 AND ? BETWEEN StartDate AND EndDate ");
 					pstmt1.setString(1, vacationRequestVO.getStartDateTime());
 					ResultSet rs1 = pstmt1.executeQuery();
 					if(rs1.next()) {
 						result = true;
 					}else {
-						pstmt1 = con.prepareStatement("SELECT VacationID FROM vacation WHERE Status BETWEEN 0 AND 1 AND ? BETWEEN StartDate AND EndDate");
+						pstmt1 = con.prepareStatement("SELECT VacationID FROM vacation WHERE Status != 10 AND ? BETWEEN StartDate AND EndDate");
 						pstmt1.setString(1, vacationRequestVO.getEndDateTime());
 						rs1 = pstmt1.executeQuery();
 						if(rs1.next()) {
@@ -723,7 +699,7 @@ public class ManagementSettingsDAO {
 			pstmt = con.prepareStatement("SELECT Status FROM vacation WHERE VacationID = "+vacationID);
 			rs = pstmt.executeQuery();
 			if (rs.next()) {
-				if (rs.getString("Status").equals("0") || rs.getString("Status").equals("1")) {
+				if (rs.getString("Status").equals("10")) {
 					result = true;
 				}
 			}

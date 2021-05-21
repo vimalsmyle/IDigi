@@ -11,7 +11,7 @@ import java.util.List;
  */
 public class UserManagementResponseVO {
 	
-	private int ID;
+	private long ID;
 	private String userID;
 	private String userName;
 	private String role;
@@ -21,10 +21,10 @@ public class UserManagementResponseVO {
 	private String blockName;
 	private List<UserManagementResponseVO> data;
 	
-	public int getID() {
+	public long getID() {
 		return ID;
 	}
-	public void setID(int iD) {
+	public void setID(long iD) {
 		ID = iD;
 	}
 	public String getUserID() {

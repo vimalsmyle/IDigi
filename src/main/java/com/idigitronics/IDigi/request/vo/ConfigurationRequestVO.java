@@ -14,10 +14,10 @@ public class ConfigurationRequestVO {
 	private String miuID;
 	private int communityID;
 	private int blockID;
-	private int customerID;
+	private long customerID;
 	private String customerUniqueID;
-	private int customerMeterID;
-	private int transactionID;
+	private long customerMeterID;
+	private long transactionID;
 	private int cmd_status;
 	
 	private List<CommandGroupRequestVO> commands;
@@ -34,18 +34,6 @@ public class ConfigurationRequestVO {
 	public void setBlockID(int blockID) {
 		this.blockID = blockID;
 	}
-	public int getCustomerID() {
-		return customerID;
-	}
-	public void setCustomerID(int customerID) {
-		this.customerID = customerID;
-	}
-	public int getTransactionID() {
-		return transactionID;
-	}
-	public void setTransactionID(int transactionID) {
-		this.transactionID = transactionID;
-	}
 	public String getMiuID() {
 		return miuID;
 	}
@@ -58,12 +46,6 @@ public class ConfigurationRequestVO {
 	public void setCustomerUniqueID(String customerUniqueID) {
 		this.customerUniqueID = customerUniqueID;
 	}
-	public int getCustomerMeterID() {
-		return customerMeterID;
-	}
-	public void setCustomerMeterID(int customerMeterID) {
-		this.customerMeterID = customerMeterID;
-	}
 	public List<CommandGroupRequestVO> getCommands() {
 		return commands;
 	}
@@ -75,6 +57,24 @@ public class ConfigurationRequestVO {
 	}
 	public void setCmd_status(int cmd_status) {
 		this.cmd_status = cmd_status;
+	}
+	public long getCustomerID() {
+		return customerID;
+	}
+	public void setCustomerID(long customerID) {
+		this.customerID = customerID;
+	}
+	public long getCustomerMeterID() {
+		return customerMeterID;
+	}
+	public void setCustomerMeterID(long customerMeterID) {
+		this.customerMeterID = customerMeterID;
+	}
+	public long getTransactionID() {
+		return transactionID;
+	}
+	public void setTransactionID(long transactionID) {
+		this.transactionID = transactionID;
 	}
 	
 }

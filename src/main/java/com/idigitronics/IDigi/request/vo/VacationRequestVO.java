@@ -9,7 +9,8 @@ package com.idigitronics.IDigi.request.vo;
  */
 public class VacationRequestVO {
 	
-	private String CRNNumber;
+	private String customerUniqueID;
+	private long customerMeterID;
 	private String vacationName;
 	private String startDateTime;
 	private String endDateTime;
@@ -19,11 +20,10 @@ public class VacationRequestVO {
 	
 	private int communityID;
 	private int blockID;
-	private int customerID;
-	private String meterID;
+	private long customerID;
+	private String miuID;
 	private int status;
-	private long transactionIDForTata;
-	private int vacationID;
+	private long vacationID;
 	private String mode;
 	
 	public int getCommunityID() {
@@ -39,17 +39,23 @@ public class VacationRequestVO {
 		this.blockID = blockID;
 	}
 
-	public String getCRNNumber() {
-		return CRNNumber;
+	public String getCustomerUniqueID() {
+		return customerUniqueID;
 	}
-	public void setCRNNumber(String cRNNumber) {
-		CRNNumber = cRNNumber;
+	public void setCustomerUniqueID(String customerUniqueID) {
+		this.customerUniqueID = customerUniqueID;
 	}
-	public String getMeterID() {
-		return meterID;
+	public long getCustomerMeterID() {
+		return customerMeterID;
 	}
-	public void setMeterID(String meterID) {
-		this.meterID = meterID;
+	public void setCustomerMeterID(long customerMeterID) {
+		this.customerMeterID = customerMeterID;
+	}
+	public String getMiuID() {
+		return miuID;
+	}
+	public void setMiuID(String miuID) {
+		this.miuID = miuID;
 	}
 	public String getVacationName() {
 		return vacationName;
@@ -87,28 +93,22 @@ public class VacationRequestVO {
 	public void setSource(String source) {
 		this.source = source;
 	}
-	public long getTransactionIDForTata() {
-		return transactionIDForTata;
-	}
-	public void setTransactionIDForTata(long transactionIDForTata) {
-		this.transactionIDForTata = transactionIDForTata;
-	}
 	public int getStatus() {
 		return status;
 	}
 	public void setStatus(int status) {
 		this.status = status;
 	}
-	public int getVacationID() {
+	public long getVacationID() {
 		return vacationID;
 	}
-	public void setVacationID(int vacationID) {
+	public void setVacationID(long vacationID) {
 		this.vacationID = vacationID;
 	}
-	public int getCustomerID() {
+	public long getCustomerID() {
 		return customerID;
 	}
-	public void setCustomerID(int customerID) {
+	public void setCustomerID(long customerID) {
 		this.customerID = customerID;
 	}
 	public String getMode() {

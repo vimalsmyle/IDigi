@@ -11,7 +11,7 @@ import java.util.List;
  */
 public class CustomerRequestVO {
 	
-	private int customerID;
+	private long customerID;
 	private int communityID;
 	private int blockID;
 	private String houseNumber;
@@ -25,10 +25,10 @@ public class CustomerRequestVO {
 	private int loggedInRoleID;
 	private String loggedInUserID;
 	
-	public int getCustomerID() {
+	public long getCustomerID() {
 		return customerID;
 	}
-	public void setCustomerID(int customerID) {
+	public void setCustomerID(long customerID) {
 		this.customerID = customerID;
 	}
 	public int getCommunityID() {

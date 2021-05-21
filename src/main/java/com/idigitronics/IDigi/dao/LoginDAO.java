@@ -16,6 +16,7 @@ import javax.mail.MessagingException;
 import com.idigitronics.IDigi.constants.DataBaseConstants;
 import com.idigitronics.IDigi.constants.ExtraConstants;
 import com.idigitronics.IDigi.exceptions.BusinessException;
+import com.idigitronics.IDigi.request.vo.CommandGroupRequestVO;
 import com.idigitronics.IDigi.request.vo.LoginVO;
 import com.idigitronics.IDigi.request.vo.MailRequestVO;
 import com.idigitronics.IDigi.request.vo.MeterRequestVO;
@@ -54,7 +55,6 @@ public class LoginDAO {
 
 		try {
 			con = getConnection();
-			
 			pstmt = con.prepareStatement(
 					"SELECT u.ID, u.UserID, u.UserName, u.UserPassword, u.RoleID, u.CommunityID, c.CommunityName, u.BlockID, u.CustomerID, u.CustomerUniqueID, b.BlockName, b.Email AS bemail, b.MobileNumber AS bmobile, cd.MobileNumber AS cmobile, cd.Email AS cemail FROM USER AS u LEFT JOIN community AS c ON c.CommunityID = u.CommunityID LEFT JOIN block AS b ON b.BlockID = u.BlockID LEFT JOIN customerdetails AS cd ON cd.CustomerUniqueID = u.CustomerUniqueID WHERE u.UserID = ? AND u.UserPassword = ?");
 			pstmt.setString(1, loginvo.getUserID());
@@ -109,8 +109,6 @@ public class LoginDAO {
 								userDetails.setCommunityName(resultSet.getString("CommunityName"));
 								userDetails.setBlockName(resultSet.getString("BlockName"));
 								
-								// fetch all meters for customer
-								
 								customer_meter_list = new LinkedList<MeterRequestVO>();
 								
 								PreparedStatement pstmt2 = con.prepareStatement("SELECT * FROM customermeterdetails WHERE CustomerUniqueID = '" + userDetails.getCustomerUniqueID().trim() + "'");
@@ -122,9 +120,11 @@ public class LoginDAO {
 									metervo = new MeterRequestVO();
 									
 									metervo.setMiuID(rs2.getString("MIUID"));
+									metervo.setCustomerMeterID(rs2.getInt("CustomerMeterID"));
 									metervo.setMeterSerialNumber(rs2.getString("MeterSerialNumber"));
 									metervo.setMeterType(rs2.getString("MeterType"));
 									metervo.setTariffID(rs2.getInt("TariffID"));
+									metervo.setGatewayID(rs2.getInt("GatewayID"));
 									
 									PreparedStatement pstmt3 = con.prepareStatement("SELECT TariffName from tariff WHERE TariffID = "+ metervo.getTariffID());
 									
@@ -141,18 +141,26 @@ public class LoginDAO {
 								
 								userDetails.setMeters(customer_meter_list);
 								
+								CommandGroupRequestVO commandGroupRequestVO = null;
+								List<CommandGroupRequestVO> pendingCommands = new LinkedList<>();
+								
 								userDetails.setID(resultSet.getInt("ID"));
 								if (userDetails.getCustomerUniqueID() != null) {
-									pstmt1 = con.prepareStatement("SELECT TransactionID, CommandType, DataFrame from command WHERE CustomerUniqueID = ? and Status = 0");
+									pstmt1 = con.prepareStatement("SELECT cd.TransactionID, cd.CommandType, cd.Value from commanddetails AS cd LEFT JOIN command AS c ON c.TransactionID = cd.TransactionID WHERE c.CustomerUniqueID = ? and cd.Status = 10");
 									pstmt1.setString(1, userDetails.getCustomerUniqueID());
 									resultSet1 = pstmt1.executeQuery();
-									if (resultSet1.next()) {
-										userDetails.setPendingCommandType(resultSet1.getInt("CommandType"));
+									while (resultSet1.next()) {
+										
+										commandGroupRequestVO = new CommandGroupRequestVO();
+										commandGroupRequestVO.setParameter_id(resultSet1.getInt("CommandType"));
+										commandGroupRequestVO.setValue(resultSet1.getString("Value"));
+										
+										pendingCommands.add(commandGroupRequestVO);
+										
+										// check for multiple transactionID after data insertion
+										
 										userDetails.setPendingTransactionID(resultSet1.getInt("TransactionID"));
-										userDetails.setDataFrame(resultSet1.getString("DataFrame"));
-									} else {
-										userDetails.setPendingCommandType(-1);
-										userDetails.setPendingTransactionID(-1);
+
 									}
 								}
 

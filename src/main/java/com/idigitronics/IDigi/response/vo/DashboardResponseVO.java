@@ -16,9 +16,12 @@ public class DashboardResponseVO {
 	private String HouseNumber;
 	private String firstName;
 	private String lastName;
-	private String CRNNumber;
-	private String meterID;
+	private String customerUniqueID;
+	private String miuID;
+	private long customerMeterID;
 	private String meterSerialNumber;
+	private String meterType;
+	private String payType;
 	private float reading;
 	private int consumption;
 	private float balance;
@@ -28,8 +31,9 @@ public class DashboardResponseVO {
 	private String valveStatusColor;
 	private float tariff;
 	private String tariffName;
-	private String tamperStatus;
-	private String tamperTimeStamp;
+	private String doorOpenTamper;
+	private String magneticTamper;
+	private String rtcFault;
 	private String timeStamp;
 	private String dateColor;
 	private String batteryColor;
@@ -37,7 +41,8 @@ public class DashboardResponseVO {
 	private int communicating;
 	private int total;
 	private String communicationStatus;
-	private String tamperColor;
+	private String dooropentamperColor;
+	private String magnetictamperColor;
 	private String vacationStatus;
 	private String vacationColor;
 	private String lastRechargeDate;
@@ -83,25 +88,6 @@ public class DashboardResponseVO {
 
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
-	}
-
-
-	public String getCRNNumber() {
-		return CRNNumber;
-	}
-
-
-	public void setCRNNumber(String cRNNumber) {
-		CRNNumber = cRNNumber;
-	}
-
-
-	public String getMeterID() {
-		return meterID;
-	}
-
-	public void setMeterID(String meterID) {
-		this.meterID = meterID;
 	}
 
 
@@ -173,16 +159,29 @@ public class DashboardResponseVO {
 		this.tariffName = tariffName;
 	}
 
-
-	public String getTamperStatus() {
-		return tamperStatus;
+	public String getDoorOpenTamper() {
+		return doorOpenTamper;
 	}
 
-
-	public void setTamperStatus(String tamperStatus) {
-		this.tamperStatus = tamperStatus;
+	public void setDoorOpenTamper(String doorOpenTamper) {
+		this.doorOpenTamper = doorOpenTamper;
 	}
 
+	public String getMagneticTamper() {
+		return magneticTamper;
+	}
+
+	public void setMagneticTamper(String magneticTamper) {
+		this.magneticTamper = magneticTamper;
+	}
+
+	public String getRtcFault() {
+		return rtcFault;
+	}
+
+	public void setRtcFault(String rtcFault) {
+		this.rtcFault = rtcFault;
+	}
 
 	public String getTimeStamp() {
 		return timeStamp;
@@ -265,12 +264,20 @@ public class DashboardResponseVO {
 	}
 
 
-	public String getTamperColor() {
-		return tamperColor;
+	public String getDooropentamperColor() {
+		return dooropentamperColor;
 	}
 
-	public void setTamperColor(String tamperColor) {
-		this.tamperColor = tamperColor;
+	public void setDooropentamperColor(String dooropentamperColor) {
+		this.dooropentamperColor = dooropentamperColor;
+	}
+
+	public String getMagnetictamperColor() {
+		return magnetictamperColor;
+	}
+
+	public void setMagnetictamperColor(String magnetictamperColor) {
+		this.magnetictamperColor = magnetictamperColor;
 	}
 
 	public String getVacationStatus() {
@@ -305,12 +312,44 @@ public class DashboardResponseVO {
 		this.lastTopupAmount = lastTopupAmount;
 	}
 
-	public String getTamperTimeStamp() {
-		return tamperTimeStamp;
+	public String getCustomerUniqueID() {
+		return customerUniqueID;
 	}
 
-	public void setTamperTimeStamp(String tamperTimeStamp) {
-		this.tamperTimeStamp = tamperTimeStamp;
+	public void setCustomerUniqueID(String customerUniqueID) {
+		this.customerUniqueID = customerUniqueID;
+	}
+
+	public String getMiuID() {
+		return miuID;
+	}
+
+	public void setMiuID(String miuID) {
+		this.miuID = miuID;
+	}
+
+	public long getCustomerMeterID() {
+		return customerMeterID;
+	}
+
+	public void setCustomerMeterID(long customerMeterID) {
+		this.customerMeterID = customerMeterID;
+	}
+
+	public String getMeterType() {
+		return meterType;
+	}
+
+	public void setMeterType(String meterType) {
+		this.meterType = meterType;
+	}
+
+	public String getPayType() {
+		return payType;
+	}
+
+	public void setPayType(String payType) {
+		this.payType = payType;
 	}
 
 }

@@ -11,43 +11,16 @@ import java.util.List;
  */
 public class ConfigurationResponseVO {
 	
-	private String meterID;
-	private String commandType;
-	private String modifiedDate;
-	private String status;
-	private String value;
+	private String miuID;
 	private List<ConfigurationResponseVO> data;
-	private int transactionID;
+	private List<CommandGroupResponseVO> commands;
+	private long transactionID;
 	
-	public int getTransactionID() {
-		return transactionID;
+	public String getMiuID() {
+		return miuID;
 	}
-	public void setTransactionID(int transactionID) {
-		this.transactionID = transactionID;
-	}
-	public String getMeterID() {
-		return meterID;
-	}
-	public void setMeterID(String meterID) {
-		this.meterID = meterID;
-	}
-	public String getCommandType() {
-		return commandType;
-	}
-	public void setCommandType(String commandType) {
-		this.commandType = commandType;
-	}
-	public String getModifiedDate() {
-		return modifiedDate;
-	}
-	public void setModifiedDate(String modifiedDate) {
-		this.modifiedDate = modifiedDate;
-	}
-	public String getStatus() {
-		return status;
-	}
-	public void setStatus(String status) {
-		this.status = status;
+	public void setMiuID(String miuID) {
+		this.miuID = miuID;
 	}
 	public List<ConfigurationResponseVO> getData() {
 		return data;
@@ -55,11 +28,17 @@ public class ConfigurationResponseVO {
 	public void setData(List<ConfigurationResponseVO> data) {
 		this.data = data;
 	}
-	public String getValue() {
-		return value;
+	public List<CommandGroupResponseVO> getCommands() {
+		return commands;
 	}
-	public void setValue(String value) {
-		this.value = value;
+	public void setCommands(List<CommandGroupResponseVO> commands) {
+		this.commands = commands;
+	}
+	public long getTransactionID() {
+		return transactionID;
+	}
+	public void setTransactionID(long transactionID) {
+		this.transactionID = transactionID;
 	}
 	
 }

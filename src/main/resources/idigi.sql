@@ -26,14 +26,20 @@ CREATE TABLE `alertsettings` (
   `LowBatteryVoltage` decimal(10,2) NOT NULL,
   `TimeOut` int(11) NOT NULL,
   `PerUnitValue` float NOT NULL,
-  `ReconnectionCharges` int(11) DEFAULT NULL,
+  `ReconnectionCharges` int(11) NOT NULL,
+  `LateFee` int(10) NOT NULL,
+  `DueDayCount` int(10) NOT NULL,
+  `GST` int(10) NOT NULL,
   `RegisteredDate` datetime NOT NULL,
   `ModifiedDate` datetime NOT NULL,
   PRIMARY KEY (`AlertID`),
   KEY `AlertID` (`AlertID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 MAX_ROWS=1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1 MAX_ROWS=1;
 
 /*Data for the table `alertsettings` */
+
+insert  into `alertsettings`(`AlertID`,`NoAMRInterval`,`LowBatteryVoltage`,`TimeOut`,`PerUnitValue`,`ReconnectionCharges`,`LateFee`,`DueDayCount`,`GST`,`RegisteredDate`,`ModifiedDate`) values 
+(1,2880,3.00,330,2.4,50,50,10,9,'2021-05-18 18:52:34','2021-05-18 18:52:37');
 
 /*Table structure for table `balancelog` */
 
@@ -48,10 +54,10 @@ CREATE TABLE `balancelog` (
   `CustomerMeterID` bigint(255) DEFAULT NULL,
   `MeterSerialNumber` varchar(100) DEFAULT NULL,
   `CustomerUniqueID` varchar(100) DEFAULT NULL,
-  `MeterType` int(255) NOT NULL,
+  `MeterType` varchar(100) NOT NULL,
   `SyncTime` varchar(100) NOT NULL,
   `SyncInterval` int(100) NOT NULL,
-  `PayType` int(100) NOT NULL,
+  `PayType` varchar(100) NOT NULL,
   `BatteryVoltage` decimal(10,2) NOT NULL,
   `ValveConfiguration` tinyint(2) NOT NULL,
   `ValveStatus` tinyint(2) NOT NULL,
@@ -61,13 +67,84 @@ CREATE TABLE `balancelog` (
   `EmergencyCredit` decimal(10,2) NOT NULL,
   `Minutes` bigint(255) DEFAULT NULL,
   `Reading` decimal(10,2) NOT NULL,
-  `TamperDetect` tinyint(2) DEFAULT NULL,
-  `TimeStamp` varchar(80) DEFAULT NULL,
+  `DoorOpenTamper` tinyint(2) DEFAULT NULL,
+  `MagneticTamper` tinyint(2) DEFAULT NULL,
+  `Vacation` tinyint(2) DEFAULT NULL,
+  `RTCFault` tinyint(2) DEFAULT NULL,
+  `LowBattery` tinyint(2) DEFAULT NULL,
+  `LowBalance` tinyint(2) DEFAULT NULL,
   `LogDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`ReadingID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
 
 /*Data for the table `balancelog` */
+
+insert  into `balancelog`(`ReadingID`,`MIUID`,`CommunityID`,`BlockID`,`CustomerID`,`CustomerMeterID`,`MeterSerialNumber`,`CustomerUniqueID`,`MeterType`,`SyncTime`,`SyncInterval`,`PayType`,`BatteryVoltage`,`ValveConfiguration`,`ValveStatus`,`Balance`,`TariffID`,`Tariff`,`EmergencyCredit`,`Minutes`,`Reading`,`DoorOpenTamper`,`MagneticTamper`,`Vacation`,`RTCFault`,`LowBattery`,`LowBalance`,`LogDate`) values 
+(1,'2233',1,1,1,2,'22334455','IDIGI1','Water','00:00:05',1440,'Postpaid',90.00,1,1,300.00,2,20.00,40.00,12,1.00,0,0,0,0,0,0,'2021-04-08 16:49:58'),
+(2,'1122',1,1,1,1,'11223344','IDIGI1','Gas','00:00:05',1440,'Prepaid',90.00,1,1,100.00,1,10.00,20.00,12,5.00,0,0,0,0,0,0,'2021-05-18 18:37:12'),
+(3,'2233',1,1,1,2,'22334455','IDIGI1','Water','00:00:05',1440,'Postpaid',90.00,1,1,0.00,2,20.00,40.00,10,10.00,0,0,0,0,0,0,'2021-04-29 19:00:27'),
+(4,'2233',1,1,1,2,'22334455','IDIGI1','Water','00:00:05',1440,'Postpaid',90.00,1,1,0.00,2,20.00,40.00,10,15.00,0,0,0,0,0,0,'2021-05-03 19:00:38'),
+(5,'2233',1,1,1,2,'22334455','IDIGI1','Water','00:00:05',1440,'Postpaid',90.00,1,1,0.00,2,20.00,40.00,10,20.00,0,0,0,0,0,0,'2021-05-18 19:00:44'),
+(6,'2233',1,1,1,2,'22334455','IDIGI1','Water','00:00:05',1440,'Postpaid',90.00,1,1,0.00,2,20.00,40.00,10,25.00,0,0,0,0,0,0,'2021-05-18 19:00:48'),
+(7,'2233',1,1,1,2,'22334455','IDIGI1','Water','00:00:05',1440,'Postpaid',90.00,1,1,0.00,2,20.00,40.00,10,30.00,0,0,0,0,0,0,'2021-05-18 19:00:53');
+
+/*Table structure for table `billingdetails` */
+
+DROP TABLE IF EXISTS `billingdetails`;
+
+CREATE TABLE `billingdetails` (
+  `BillingID` bigint(255) NOT NULL AUTO_INCREMENT,
+  `CommunityID` int(10) NOT NULL,
+  `BlockID` int(10) NOT NULL,
+  `CustomerID` bigint(255) NOT NULL,
+  `CustomerUniqueID` varchar(500) NOT NULL,
+  `CustomerMeterID` bigint(255) NOT NULL,
+  `MeterType` varchar(100) NOT NULL,
+  `MIUID` varchar(100) NOT NULL,
+  `PreviousReading` decimal(10,2) NOT NULL,
+  `PresentReading` decimal(10,2) NOT NULL,
+  `Consumption` int(100) NOT NULL,
+  `TariffID` int(10) NOT NULL,
+  `Tariff` float NOT NULL,
+  `BillAmount` int(100) NOT NULL,
+  `BillMonth` int(10) DEFAULT NULL,
+  `BillYear` int(10) DEFAULT NULL,
+  `LogDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `ModifiedDate` datetime DEFAULT NULL,
+  PRIMARY KEY (`BillingID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+/*Data for the table `billingdetails` */
+
+/*Table structure for table `billingpaymentdetails` */
+
+DROP TABLE IF EXISTS `billingpaymentdetails`;
+
+CREATE TABLE `billingpaymentdetails` (
+  `TransactionID` bigint(255) NOT NULL AUTO_INCREMENT,
+  `CustomerBillingID` bigint(255) NOT NULL,
+  `CustomerID` bigint(255) NOT NULL,
+  `CustomerUniqueID` varchar(100) NOT NULL,
+  `TotalAmount` int(100) NOT NULL,
+  `LateFee` int(100) DEFAULT NULL,
+  `Source` varchar(10) NOT NULL,
+  `ModeOfPayment` varchar(50) NOT NULL,
+  `PaymentStatus` tinyint(4) unsigned NOT NULL DEFAULT '0',
+  `RazorPayOrderID` varchar(50) DEFAULT NULL,
+  `RazorPayPaymentID` varchar(50) DEFAULT NULL,
+  `RazorPaySignature` varchar(5000) DEFAULT NULL,
+  `ErrorResponse` varchar(10000) DEFAULT NULL,
+  `RazorPayRefundID` varchar(50) DEFAULT NULL,
+  `RazorPayRefundStatus` varchar(50) DEFAULT NULL,
+  `RazorPayRefundEntity` varchar(10000) DEFAULT NULL,
+  `CreatedByID` int(11) NOT NULL,
+  `CreatedByRoleID` int(11) NOT NULL,
+  `TransactionDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `AcknowledgeDate` datetime DEFAULT NULL,
+  PRIMARY KEY (`TransactionID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+/*Data for the table `billingpaymentdetails` */
 
 /*Table structure for table `block` */
 
@@ -85,9 +162,12 @@ CREATE TABLE `block` (
   `CreatedDate` datetime NOT NULL,
   `ModifiedDate` datetime NOT NULL,
   PRIMARY KEY (`BlockID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 /*Data for the table `block` */
+
+insert  into `block`(`BlockID`,`BlockName`,`Location`,`MobileNumber`,`Email`,`CommunityID`,`CreatedByID`,`CreatedByRoleID`,`CreatedDate`,`ModifiedDate`) values 
+(1,'idigiblock','secunderabad','8498890001','vimal_smyle2006@yahoo.com',1,1,1,'2021-05-15 23:23:08','2021-05-15 23:24:59');
 
 /*Table structure for table `command` */
 
@@ -114,7 +194,7 @@ CREATE TABLE `commanddetails` (
   `TransactionID` bigint(255) NOT NULL,
   `CommandType` int(50) NOT NULL,
   `Value` varchar(500) NOT NULL,
-  `Status` tinyint(5) NOT NULL DEFAULT '0',
+  `Status` tinyint(5) NOT NULL DEFAULT '10',
   `RegisteredDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `ModifiedDate` datetime DEFAULT NULL,
   PRIMARY KEY (`CommandDetailsID`)
@@ -135,9 +215,36 @@ CREATE TABLE `community` (
   `CreatedDate` datetime NOT NULL,
   `ModifiedDate` datetime DEFAULT NULL,
   PRIMARY KEY (`CommunityID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 /*Data for the table `community` */
+
+insert  into `community`(`CommunityID`,`CommunityName`,`Email`,`MobileNumber`,`Address`,`CreatedDate`,`ModifiedDate`) values 
+(1,'Idigi','vimal_smyle2006@yahoo.com','8498890000','hyderabad','2021-05-15 23:21:57',NULL);
+
+/*Table structure for table `customerbillingdetails` */
+
+DROP TABLE IF EXISTS `customerbillingdetails`;
+
+CREATE TABLE `customerbillingdetails` (
+  `CustomerBillingID` bigint(255) NOT NULL AUTO_INCREMENT,
+  `CommunityID` int(100) NOT NULL,
+  `BlockID` int(100) NOT NULL,
+  `CustomerID` bigint(255) NOT NULL,
+  `CustomerUniqueID` varchar(500) NOT NULL,
+  `TotalAmount` int(100) NOT NULL,
+  `TaxAmount` int(100) NOT NULL,
+  `TotalConsumption` int(100) NOT NULL,
+  `Status` tinyint(5) NOT NULL DEFAULT '0',
+  `DueDate` date NOT NULL,
+  `BillMonth` int(11) DEFAULT NULL,
+  `BillYear` int(11) DEFAULT NULL,
+  `LogDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `ModifiedDate` datetime DEFAULT NULL,
+  PRIMARY KEY (`CustomerBillingID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+/*Data for the table `customerbillingdetails` */
 
 /*Table structure for table `customerdeletedetails` */
 
@@ -195,7 +302,7 @@ CREATE TABLE `customerdetails` (
   `CustomerID` int(255) NOT NULL AUTO_INCREMENT,
   `CommunityID` int(11) NOT NULL,
   `BlockID` int(255) NOT NULL,
-  `HouseNumber` varchar(30) NOT NULL,
+  `HouseNumber` varchar(50) NOT NULL,
   `FirstName` varchar(50) NOT NULL,
   `LastName` varchar(50) NOT NULL,
   `Email` varchar(100) NOT NULL,
@@ -208,9 +315,12 @@ CREATE TABLE `customerdetails` (
   `ModifiedDate` datetime DEFAULT NULL,
   PRIMARY KEY (`CustomerID`,`CustomerUniqueID`),
   UNIQUE KEY `CRNNumber` (`CustomerUniqueID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 /*Data for the table `customerdetails` */
+
+insert  into `customerdetails`(`CustomerID`,`CommunityID`,`BlockID`,`HouseNumber`,`FirstName`,`LastName`,`Email`,`MobileNumber`,`ActiveStatus`,`CustomerUniqueID`,`CreatedByID`,`CreatedByRoleID`,`RegistrationDate`,`ModifiedDate`) values 
+(1,1,1,'101','Vimal','Kumar','kvk9889@gmail.com','8498890000',1,'IDIGI1',2,2,'2021-05-17 23:20:44','2021-05-18 14:26:45');
 
 /*Table structure for table `customermeterdetails` */
 
@@ -231,9 +341,15 @@ CREATE TABLE `customermeterdetails` (
   `RegisteredDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `ModifiedDate` datetime NOT NULL,
   PRIMARY KEY (`CustomerMeterID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 
 /*Data for the table `customermeterdetails` */
+
+insert  into `customermeterdetails`(`CustomerMeterID`,`CustomerID`,`CustomerUniqueID`,`MIUID`,`MeterSerialNumber`,`MeterType`,`MeterSize`,`PayType`,`TariffID`,`GatewayID`,`Location`,`RegisteredDate`,`ModifiedDate`) values 
+(1,1,'IDIGI1','1122','11223344','Gas',NULL,'Prepaid',1,1,'Kitchen','2021-05-17 23:22:24','2021-05-17 23:24:13'),
+(2,1,'IDIGI1','2233','22334455','Water',NULL,'Postpaid',2,1,'Bathroom','2021-05-17 23:24:09','2021-05-17 23:24:17'),
+(3,1,'IDIGI1','3344','33445566','Water',NULL,'Postpaid',3,1,'Bedroom','2021-05-17 23:25:15','2021-05-17 23:25:13'),
+(4,1,'IDIGI1','4455','44556677','Water',NULL,'Postpaid',2,1,'Washarea','2021-05-17 23:26:11','2021-05-17 23:26:10');
 
 /*Table structure for table `displaybalancelog` */
 
@@ -249,26 +365,34 @@ CREATE TABLE `displaybalancelog` (
   `CustomerMeterID` bigint(255) DEFAULT NULL,
   `MeterSerialNumber` varchar(100) DEFAULT NULL,
   `CustomerUniqueID` varchar(100) DEFAULT NULL,
-  `MeterType` int(255) NOT NULL,
+  `MeterType` varchar(100) NOT NULL,
   `SyncTime` varchar(100) NOT NULL,
   `SyncInterval` int(100) NOT NULL,
-  `PayType` int(100) NOT NULL,
+  `PayType` varchar(100) NOT NULL,
   `BatteryVoltage` decimal(10,2) NOT NULL,
   `ValveConfiguration` tinyint(2) NOT NULL,
   `ValveStatus` tinyint(2) NOT NULL,
   `Balance` decimal(10,2) NOT NULL,
-  `TariffID` int(10) DEFAULT NULL,
+  `TariffID` int(255) DEFAULT NULL,
   `Tariff` decimal(10,2) NOT NULL,
   `EmergencyCredit` decimal(10,2) NOT NULL,
   `Minutes` bigint(255) DEFAULT NULL,
   `Reading` decimal(10,2) NOT NULL,
-  `TamperDetect` tinyint(2) NOT NULL,
-  `TimeStamp` varchar(80) NOT NULL,
-  `LogDate` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
+  `DoorOpenTamper` tinyint(2) DEFAULT NULL,
+  `MagneticTamper` tinyint(2) DEFAULT NULL,
+  `Vacation` tinyint(2) DEFAULT NULL,
+  `RTCFault` tinyint(2) DEFAULT NULL,
+  `LowBattery` tinyint(2) DEFAULT NULL,
+  `LowBalance` tinyint(2) DEFAULT NULL,
+  `LogDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`ReadingID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
 /*Data for the table `displaybalancelog` */
+
+insert  into `displaybalancelog`(`ReadingID`,`MainBalanceLogID`,`MIUID`,`CommunityID`,`BlockID`,`CustomerID`,`CustomerMeterID`,`MeterSerialNumber`,`CustomerUniqueID`,`MeterType`,`SyncTime`,`SyncInterval`,`PayType`,`BatteryVoltage`,`ValveConfiguration`,`ValveStatus`,`Balance`,`TariffID`,`Tariff`,`EmergencyCredit`,`Minutes`,`Reading`,`DoorOpenTamper`,`MagneticTamper`,`Vacation`,`RTCFault`,`LowBattery`,`LowBalance`,`LogDate`) values 
+(1,7,'2233',1,1,1,2,'22334455','IDIGI1','Water','00:00:05',1440,'Postpaid',90.00,1,1,0.00,2,20.00,40.00,10,30.00,0,0,0,0,0,0,'2021-05-18 19:00:53'),
+(2,2,'1122',1,1,1,1,'11223344','IDIGI1','Gas','00:00:05',1440,'Prepaid',90.00,1,1,100.00,1,10.00,20.00,12,5.00,0,0,0,0,0,0,'2021-05-18 18:37:12');
 
 /*Table structure for table `feedback` */
 
@@ -292,11 +416,11 @@ CREATE TABLE `feedback` (
 
 /*Data for the table `feedback` */
 
-/*Table structure for table `gateways` */
+/*Table structure for table `gateway` */
 
-DROP TABLE IF EXISTS `gateways`;
+DROP TABLE IF EXISTS `gateway`;
 
-CREATE TABLE `gateways` (
+CREATE TABLE `gateway` (
   `GatewayID` int(11) NOT NULL AUTO_INCREMENT,
   `GatewayName` varchar(100) DEFAULT NULL,
   `GatewaySerialNumber` varchar(100) NOT NULL,
@@ -305,9 +429,12 @@ CREATE TABLE `gateways` (
   `RegisteredDate` datetime NOT NULL,
   `ModifiedDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`GatewayID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
-/*Data for the table `gateways` */
+/*Data for the table `gateway` */
+
+insert  into `gateway`(`GatewayID`,`GatewayName`,`GatewaySerialNumber`,`GatewayIP`,`GatewayPort`,`RegisteredDate`,`ModifiedDate`) values 
+(1,'Gateway1','123','123.123.123.123',1234,'2021-05-17 23:23:10','2021-05-17 23:23:12');
 
 /*Table structure for table `mailsettings` */
 
@@ -368,24 +495,29 @@ CREATE TABLE `tariff` (
   `RegisteredDate` datetime NOT NULL,
   `ModifiedDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`TariffID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 
 /*Data for the table `tariff` */
+
+insert  into `tariff`(`TariffID`,`Tariff`,`TariffName`,`EmergencyCredit`,`AlarmCredit`,`FixedCharges`,`RegisteredDate`,`ModifiedDate`) values 
+(1,10,'tariff1',20,30,50,'2021-05-17 23:26:58','2021-05-17 23:27:01'),
+(2,20,'tariff2',40,50,100,'2021-05-17 23:27:23','2021-05-17 23:27:24'),
+(3,15,'tariff3',30,40,70,'2021-05-17 23:27:55','2021-05-17 23:27:57');
 
 /*Table structure for table `topup` */
 
 DROP TABLE IF EXISTS `topup`;
 
 CREATE TABLE `topup` (
-  `TransactionID` bigint(20) NOT NULL AUTO_INCREMENT,
-  `TataReferenceNumber` bigint(20) unsigned NOT NULL DEFAULT '0',
+  `TransactionID` bigint(255) NOT NULL AUTO_INCREMENT,
   `CommunityID` int(11) NOT NULL,
   `BlockID` int(11) NOT NULL,
   `CustomerID` bigint(20) NOT NULL,
-  `MeterID` varchar(50) NOT NULL,
+  `MIUID` varchar(50) NOT NULL,
+  `CustomerMeterID` bigint(255) NOT NULL,
   `TariffID` int(11) NOT NULL,
   `Amount` decimal(10,0) NOT NULL,
-  `Status` tinyint(4) unsigned NOT NULL DEFAULT '0',
+  `Status` int(4) unsigned NOT NULL DEFAULT '10',
   `FixedCharges` int(10) unsigned DEFAULT '0',
   `ReconnectionCharges` int(10) unsigned DEFAULT '0',
   `Source` varchar(10) NOT NULL,
@@ -450,16 +582,17 @@ CREATE TABLE `user` (
   `ModifiedDate` datetime DEFAULT NULL,
   PRIMARY KEY (`ID`),
   KEY `CommunityID` (`CommunityID`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 
 /*Data for the table `user` */
 
 insert  into `user`(`ID`,`UserID`,`UserName`,`UserPassword`,`RoleID`,`ActiveStatus`,`CommunityID`,`BlockID`,`CustomerID`,`CustomerUniqueID`,`CreatedByID`,`CreatedByRoleID`,`RegisteredDate`,`ModifiedDate`) values 
 (1,'Superadmin','Idigitronics','cvp/LzpadrQT+2k0WDjyOQ==',1,1,0,0,0,NULL,0,0,'2021-05-01 17:19:40','2021-05-01 17:19:37'),
-(2,'kvkadmin','Kvk\r\n','cvp/LzpadrQT+2k0WDjyOQ==\r\n',2,1,1,1,0,NULL,1,1,'2021-05-01 17:24:22','2021-05-01 17:24:12'),
-(3,'Vimal\r\n','Vimal Kumar\r\n','cvp/LzpadrQT+2k0WDjyOQ==\r\n',3,1,1,1,1,'IDIGI1',2,2,'2021-05-01 17:25:54','2021-05-01 17:25:56'),
-(4,'Superadminsupervisor\r\n','HanbitSuperadminsupervisor\r\n','cvp/LzpadrQT+2k0WDjyOQ==\r\n',4,1,0,0,0,NULL,1,1,'2021-05-01 17:26:45','2021-05-01 17:26:48'),
-(5,'Adminsupervisor\r\n','KvkAdminsupervisor\r\n','cvp/LzpadrQT+2k0WDjyOQ==\r\n',5,1,1,1,0,NULL,1,1,'2021-05-01 17:28:26','2021-05-01 17:28:29');
+(2,'kvkadmin','Kvk','cvp/LzpadrQT+2k0WDjyOQ==',2,1,1,1,0,NULL,1,1,'2021-05-01 17:24:22','2021-05-01 17:24:12'),
+(3,'IDIGI1','Vimal Kumar','cvp/LzpadrQT+2k0WDjyOQ==',3,1,1,1,1,'IDIGI1',2,2,'2021-05-01 17:25:54','2021-05-01 17:25:56'),
+(4,'Superadminsupervisor','Idigisuperadminsupervisor','cvp/LzpadrQT+2k0WDjyOQ==',4,1,0,0,0,NULL,1,1,'2021-05-01 17:26:45','2021-05-01 17:26:48'),
+(5,'Adminsupervisor','Kvkadminsupervisor','cvp/LzpadrQT+2k0WDjyOQ==',5,1,1,1,0,NULL,1,1,'2021-05-01 17:28:26','2021-05-01 17:28:29'),
+(6,'idigiblock','idigiblock','yotlEHVjsFQOtJ1njm6kXQ==',2,1,1,1,0,'NULL',1,1,'2021-05-15 23:23:08','2021-05-15 23:23:08');
 
 /*Table structure for table `userrole` */
 
@@ -486,16 +619,16 @@ insert  into `userrole`(`RoleID`,`RoleDescription`) values
 DROP TABLE IF EXISTS `vacation`;
 
 CREATE TABLE `vacation` (
-  `VacationID` bigint(20) NOT NULL AUTO_INCREMENT,
-  `TataReferenceNumber` bigint(20) NOT NULL,
+  `VacationID` bigint(255) NOT NULL AUTO_INCREMENT,
   `CommunityID` int(11) NOT NULL,
   `BlockID` int(11) NOT NULL,
   `CustomerID` int(11) NOT NULL,
-  `MeterID` varchar(20) NOT NULL,
+  `MIUID` varchar(20) NOT NULL,
+  `CustomerMeterID` bigint(255) NOT NULL,
   `VacationName` varchar(300) DEFAULT NULL,
   `StartDate` datetime NOT NULL,
   `EndDate` datetime NOT NULL,
-  `Status` tinyint(4) NOT NULL,
+  `Status` tinyint(4) NOT NULL DEFAULT '10',
   `Source` varchar(10) NOT NULL,
   `CustomerUniqueID` varchar(100) NOT NULL,
   `mode` varchar(100) NOT NULL,
@@ -517,7 +650,7 @@ DROP TABLE IF EXISTS `customermeterdetailsview`;
  `CommunityName` varchar(100) ,
  `BlockName` varchar(80) ,
  `CustomerID` int(255) ,
- `HouseNumber` varchar(30) ,
+ `HouseNumber` varchar(50) ,
  `FirstName` varchar(50) ,
  `LastName` varchar(50) ,
  `Email` varchar(100) ,

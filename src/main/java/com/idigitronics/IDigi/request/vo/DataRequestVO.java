@@ -9,9 +9,8 @@ package com.idigitronics.IDigi.request.vo;
  */
 public class DataRequestVO {
 	
-	private int readingID;
+	private long readingID;
 	private String miuID;
-	private String timestamp;
 	private int type;
 	private String sync_time;
 	private int sync_interval;
@@ -24,14 +23,16 @@ public class DataRequestVO {
 	private float emergency_credit;
 	private int min_elapsed_after_valve_trip;
 	private float reading;
-	private int status;
+	private Status status;
+	private int transaction_id;
+	private int cmd_status;
 	
 	private String source;
 	
-	public int getReadingID() {
+	public long getReadingID() {
 		return readingID;
 	}
-	public void setReadingID(int readingID) {
+	public void setReadingID(long readingID) {
 		this.readingID = readingID;
 	}
 	public String getMiuID() {
@@ -39,12 +40,6 @@ public class DataRequestVO {
 	}
 	public void setMiuID(String miuID) {
 		this.miuID = miuID;
-	}
-	public String getTimestamp() {
-		return timestamp;
-	}
-	public void setTimestamp(String timestamp) {
-		this.timestamp = timestamp;
 	}
 	public int getType() {
 		return type;
@@ -118,10 +113,10 @@ public class DataRequestVO {
 	public void setReading(float reading) {
 		this.reading = reading;
 	}
-	public int getStatus() {
+	public Status getStatus() {
 		return status;
 	}
-	public void setStatus(int status) {
+	public void setStatus(Status status) {
 		this.status = status;
 	}
 	public String getSource() {
@@ -129,6 +124,18 @@ public class DataRequestVO {
 	}
 	public void setSource(String source) {
 		this.source = source;
+	}
+	public int getTransaction_id() {
+		return transaction_id;
+	}
+	public void setTransaction_id(int transaction_id) {
+		this.transaction_id = transaction_id;
+	}
+	public int getCmd_status() {
+		return cmd_status;
+	}
+	public void setCmd_status(int cmd_status) {
+		this.cmd_status = cmd_status;
 	}
 	
 }

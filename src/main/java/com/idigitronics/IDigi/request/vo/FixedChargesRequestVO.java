@@ -25,7 +25,7 @@ public class FixedChargesRequestVO {
 	    private String modifedDate;    
 	    private String communityName;
 	    private String blockName;
-	    private int customerID;
+	    private long customerID;
 
 	    public String getMinimumDate() {
 			return minimumDate;
@@ -45,13 +45,13 @@ public class FixedChargesRequestVO {
 		public void setCommunityName(String communityName) {
 			this.communityName = communityName;
 		}
-		public int getCustomerID() {
+	    public long getCustomerID() {
 			return customerID;
 		}
-		public void setCustomerID(int customerID) {
+		public void setCustomerID(long customerID) {
 			this.customerID = customerID;
-		}    
-	    public String getHouseNo() {
+		}
+		public String getHouseNo() {
 			return houseNo;
 		}
 		public void setHouseNo(String houseNo) {

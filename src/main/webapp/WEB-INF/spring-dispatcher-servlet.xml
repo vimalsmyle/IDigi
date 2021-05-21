@@ -19,9 +19,8 @@
 	
 	<task:annotation-driven />
 	
-	<bean id="topupstatusupdatecall" class="com.idigitronics.IDigi.dao.ExtraMethodsDAO"></bean>
-	<bean id="commandstatusupdatecall" class="com.idigitronics.IDigi.dao.ExtraMethodsDAO"></bean>
-	<bean id="vacationstatusupdatecall" class="com.idigitronics.IDigi.dao.ExtraMethodsDAO"></bean>
+	<!-- <bean id="billgeneration" class="com.idigitronics.IDigi.dao.ExtraMethodsDAO"></bean>
 	<bean id="communicationfailurealert" class="com.idigitronics.IDigi.dao.ExtraMethodsDAO"></bean>
+	<bean id="individualbillgeneration" class="com.idigitronics.IDigi.dao.ExtraMethodsDAO"></bean> --> 
 	<!-- <bean id="razorpayPaymentCapture" class="com.idigitronics.IDigi.dao.ExtraMethodsDAO"></bean> -->
 </beans>

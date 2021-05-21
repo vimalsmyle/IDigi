@@ -10,8 +10,10 @@ package com.idigitronics.IDigi.request.vo;
 public class TopUpRequestVO {
 	
 	private String source;
+	private int payType;
 	private String CustomerUniqueID;
-	private String meterID;
+	private long customerMeterID;
+	private String miuID;
 	private int amount;
 	private String cardNumber;
 	private String cardType;
@@ -20,7 +22,6 @@ public class TopUpRequestVO {
 	private int status;
 	private int transactedByID;
 	private int transactedByRoleID;
-	private long transactionIDForTata;
 	private int fixedCharges;
 	private int reconnectionCharges;
 	private long transactionID;
@@ -30,6 +31,8 @@ public class TopUpRequestVO {
 	private float alarmCredit;
 	private float emergencyCredit;
 	private float tariff;
+	private String gatewayIP;
+	private int gatewayPort;
 	
 	public int getAmount() {
 		return amount;
@@ -67,17 +70,17 @@ public class TopUpRequestVO {
 	public void setModeOfPayment(String modeOfPayment) {
 		this.modeOfPayment = modeOfPayment;
 	}
-	public long getTransactionIDForTata() {
-		return transactionIDForTata;
+	public long getCustomerMeterID() {
+		return customerMeterID;
 	}
-	public void setTransactionIDForTata(long transactionIDForTata) {
-		this.transactionIDForTata = transactionIDForTata;
+	public void setCustomerMeterID(long customerMeterID) {
+		this.customerMeterID = customerMeterID;
 	}
-	public String getMeterID() {
-		return meterID;
+	public String getMiuID() {
+		return miuID;
 	}
-	public void setMeterID(String meterID) {
-		this.meterID = meterID;
+	public void setMiuID(String miuID) {
+		this.miuID = miuID;
 	}
 	public String getSource() {
 		return source;
@@ -156,6 +159,24 @@ public class TopUpRequestVO {
 	}
 	public void setTariff(float tariff) {
 		this.tariff = tariff;
+	}
+	public int getPayType() {
+		return payType;
+	}
+	public void setPayType(int payType) {
+		this.payType = payType;
+	}
+	public String getGatewayIP() {
+		return gatewayIP;
+	}
+	public void setGatewayIP(String gatewayIP) {
+		this.gatewayIP = gatewayIP;
+	}
+	public int getGatewayPort() {
+		return gatewayPort;
+	}
+	public void setGatewayPort(int gatewayPort) {
+		this.gatewayPort = gatewayPort;
 	}
 	
 }

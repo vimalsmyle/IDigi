@@ -24,8 +24,12 @@ import com.idigitronics.IDigi.dao.AccountDAO;
 import com.idigitronics.IDigi.exceptions.BusinessException;
 import com.idigitronics.IDigi.request.vo.CheckOutRequestVO;
 import com.idigitronics.IDigi.request.vo.ConfigurationRequestVO;
+import com.idigitronics.IDigi.request.vo.DataRequestVO;
+import com.idigitronics.IDigi.request.vo.PayBillRequestVO;
 import com.idigitronics.IDigi.request.vo.TopUpRequestVO;
+import com.idigitronics.IDigi.response.vo.BillingResponseVO;
 import com.idigitronics.IDigi.response.vo.ConfigurationResponseVO;
+import com.idigitronics.IDigi.response.vo.ConfigurationStatusResponseVO;
 import com.idigitronics.IDigi.response.vo.ResponseVO;
 import com.idigitronics.IDigi.response.vo.StatusResponseVO;
 
@@ -65,7 +69,24 @@ public class AccountController {
 			BusinessException, SQLException {
 		ResponseVO responsevo = new ResponseVO();
 		try {
-			responsevo = accountdao.updatetopup(checkOutRequestVO);
+			responsevo = accountdao.updatepayment(checkOutRequestVO);
+		} catch (Exception e) {
+			responsevo.setResult("Failure");
+			responsevo.setMessage(e.getMessage());
+		}
+
+		return responsevo;
+	}
+	
+	@RequestMapping(value = "/server/api/{device_eui}/topup/response", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	public @ResponseBody
+	ResponseVO updatetopup(@RequestBody DataRequestVO dataRequestVO, @PathVariable("device_eui") String miuID)
+			throws ClassNotFoundException, SQLException, BusinessException {
+
+		ResponseVO responsevo = new ResponseVO();
+		
+		try{
+			responsevo = accountdao.updatetopupstatus(dataRequestVO, miuID);
 		} catch (Exception e) {
 			responsevo.setResult("Failure");
 			responsevo.setMessage(e.getMessage());
@@ -114,6 +135,50 @@ public class AccountController {
 	
 	}
 	
+	/* Billing Details */
+
+	@RequestMapping(value = "/billing/{roleid}/{id}/{filterCid}", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody
+	BillingResponseVO billdetails(@PathVariable("roleid") int roleid, @PathVariable("id") String id, @PathVariable("filterCid") int filterCid) throws SQLException {
+
+		BillingResponseVO billingresponsevo = new BillingResponseVO();
+
+		billingresponsevo.setData(accountdao.getbillingdetails(roleid, id, filterCid));
+
+		return billingresponsevo;
+	}
+	
+	@RequestMapping(value = "/paybill", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	public @ResponseBody
+	ResponseVO paybill(@RequestBody PayBillRequestVO paybillRequestVO) throws ClassNotFoundException,
+			BusinessException, SQLException {
+		ResponseVO responsevo = new ResponseVO();
+		try {
+			responsevo = accountdao.paybill(paybillRequestVO);
+		} catch (Exception e) {
+			responsevo.setResult("Failure");
+			responsevo.setMessage(e.getMessage());
+		}
+
+		return responsevo;
+	}
+
+	@RequestMapping(value = "/billing/print/{billingID}", method = RequestMethod.GET, produces = "application/pdf")
+	 public ResponseEntity<InputStreamResource> downloadbill(@PathVariable("billingID") int billingID) throws IOException, SQLException {
+			
+		ResponseVO responsevo = new ResponseVO();
+		
+		responsevo = accountdao.printbill(billingID);
+	
+		File file = new File(responsevo.getLocation() + responsevo.getFileName());
+	    InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
+		
+		ResponseEntity<InputStreamResource> response = new ResponseEntity<InputStreamResource>(resource, HttpStatus.OK);
+		
+		return response;
+	
+	}
+	
 	/* Configuration */
 
 	@RequestMapping(value = "/configuration/{roleid}/{id}/{filterCid}", method = RequestMethod.GET, produces = "application/json")
@@ -146,12 +211,12 @@ public class AccountController {
 	
 	@RequestMapping(value = "/server/api/{device_eui}/set/response", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	public @ResponseBody
-	ResponseVO updateconfiguration(@RequestBody ConfigurationRequestVO configurationvo, @PathVariable("device_eui") String miuID)
+	ResponseVO updateconfiguration(@RequestBody ConfigurationStatusResponseVO configurationstatusvo, @PathVariable("device_eui") String miuID)
 			throws ClassNotFoundException, SQLException, BusinessException {
 
 		ResponseVO responsevo = new ResponseVO();
 		try{
-			responsevo = accountdao.updateconfiguration(configurationvo, miuID);
+			responsevo = accountdao.updateconfiguration(configurationstatusvo, miuID);
 		} catch (Exception e) {
 			responsevo.setResult("Failure");
 			responsevo.setMessage(e.getMessage());
@@ -162,12 +227,12 @@ public class AccountController {
 	
 	@RequestMapping(value = "/server/api/{device_eui}/group/set/response", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	public @ResponseBody
-	ResponseVO updategroupconfiguration(@RequestBody ConfigurationRequestVO configurationvo, @PathVariable("device_eui") String miuID)
+	ResponseVO updategroupconfiguration(@RequestBody ConfigurationStatusResponseVO configurationstatusvo, @PathVariable("device_eui") String miuID)
 			throws ClassNotFoundException, SQLException, BusinessException {
 
 		ResponseVO responsevo = new ResponseVO();
 		try{
-			responsevo = accountdao.updateconfiguration(configurationvo, miuID);
+			responsevo = accountdao.updateconfiguration(configurationstatusvo, miuID);
 		} catch (Exception e) {
 			responsevo.setResult("Failure");
 			responsevo.setMessage(e.getMessage());
