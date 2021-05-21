@@ -2,6 +2,7 @@ package com.idigitronics.IDigi.dao;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -15,6 +16,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Base64;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Properties;
 
 import javax.mail.Message;
@@ -42,7 +45,23 @@ import com.idigitronics.IDigi.request.vo.RazorPayOrderVO;
 import com.idigitronics.IDigi.request.vo.RazorpayRequestVO;
 import com.idigitronics.IDigi.request.vo.RestCallVO;
 import com.idigitronics.IDigi.request.vo.SMSRequestVO;
+import com.idigitronics.IDigi.response.vo.IndividualBillingResponseVO;
 import com.idigitronics.IDigi.response.vo.RazorPayResponseVO;
+import com.itextpdf.io.font.FontConstants;
+import com.itextpdf.io.image.ImageDataFactory;
+import com.itextpdf.kernel.font.PdfFont;
+import com.itextpdf.kernel.font.PdfFontFactory;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.border.Border;
+import com.itextpdf.layout.element.Cell;
+import com.itextpdf.layout.element.Image;
+import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.element.Table;
+import com.itextpdf.layout.property.HorizontalAlignment;
+import com.itextpdf.layout.property.TextAlignment;
+import com.itextpdf.layout.property.VerticalAlignment;
 /**
  * @author K VimaL Kumar
  * 
@@ -182,7 +201,7 @@ public class ExtraMethodsDAO {
 }
 	
 	
-//	@Scheduled(cron="0 30 1 1 * ? *") // scheduled for every month 1st day at 1:30
+//	@Scheduled(cron="0 30 0 2 * ? *") // scheduled for every month 2nd day at 0:30
 	public void individualbillgeneration() throws SQLException {
 		
 		Connection con = null;
@@ -262,7 +281,7 @@ public class ExtraMethodsDAO {
 		
 	}
 	
-//	@Scheduled(cron="0 30 5 1 * ? *") // scheduled for every month 1st day at 5:30
+//	@Scheduled(cron="0 30 4 2 * ? *") // scheduled for every month 2nd day at 4:30
 	public void billgeneration() throws SQLException {
 		
 		Connection con = null;
@@ -272,12 +291,15 @@ public class ExtraMethodsDAO {
 		ResultSet rs = null;
 		ResultSet rs1 = null;
 		SMSRequestVO smsRequestVO = null;
+		List<IndividualBillingResponseVO> individualBillsList = null;
+		IndividualBillingResponseVO individualBillingResponseVO = null;
 		
 		try {
 			
 			con = getConnection();
 			LocalDate currentdate = LocalDate.now();
-			
+			String drivename = "D:/Bills/" + (currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear()+"/"+(currentdate.getMonthValue() - 1));
+			individualBillsList = new LinkedList<IndividualBillingResponseVO>();
 			pstmt = con.prepareStatement("SELECT * FROM customerdetails JOIN alertsettings");
 			rs = pstmt.executeQuery();
 			while(rs.next()) {
@@ -289,9 +311,20 @@ public class ExtraMethodsDAO {
 				pstmt1 = con.prepareStatement("SELECT * FROM billingdetails WHERE CustomerID = " + rs.getInt("CustomerID") + " AND BillMonth = "+ (currentdate.getMonthValue() - 1) + " AND BillYear = " + (currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear()));
 				rs1 = pstmt1.executeQuery();
 				while (rs1.next()) {
-				
-				totalamount = rs1.getInt("Amount") + totalamount;
-				totalConsumption = rs1.getInt("Consumption") + totalConsumption;
+					individualBillingResponseVO = new IndividualBillingResponseVO();
+					totalamount = rs1.getInt("BillAmount") + totalamount;
+					totalConsumption = rs1.getInt("Consumption") + totalConsumption;
+					individualBillingResponseVO.setBillingID(rs1.getLong("BillingID"));
+					individualBillingResponseVO.setCustomerMeterID(rs1.getLong("CustomerMeterID"));
+					individualBillingResponseVO.setMeterType(rs1.getString("MeterType"));
+					individualBillingResponseVO.setMiuID(rs1.getString("MIUID"));
+					individualBillingResponseVO.setPreviousReading(rs1.getFloat("PreviousReading"));
+					individualBillingResponseVO.setPresentReading(rs1.getFloat("PresentReading"));
+					individualBillingResponseVO.setConsumption(rs1.getInt("Consumption"));
+					individualBillingResponseVO.setTariff(rs1.getFloat("Tariff"));
+					individualBillingResponseVO.setBillAmount(rs1.getInt("BillAmount"));
+					
+					individualBillsList.add(individualBillingResponseVO);
 				
 				}
 				
@@ -307,7 +340,219 @@ public class ExtraMethodsDAO {
 				pstmt2.setInt(9, currentdate.getMonthValue() - 1);
 				pstmt2.setInt(10, currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear());
 				
-				pstmt2.executeUpdate();
+				if(pstmt2.executeUpdate() > 0) {
+					
+					File directory = new File(drivename);
+					if (!directory.exists()) {
+						directory.mkdir();
+					}
+
+					PdfWriter writer = new PdfWriter(drivename + rs.getString("CustomerUniqueID") + ".pdf");
+					PdfDocument pdfDocument = new PdfDocument(writer);
+					pdfDocument.addNewPage();
+					Document document = new Document(pdfDocument);
+					Paragraph newLine = new Paragraph("\n");
+					Paragraph head = new Paragraph("Bill");
+					Paragraph disclaimer = new Paragraph(ExtraConstants.Disclaimer);
+					Paragraph copyRight = new Paragraph("------------------------------------All  rights reserved by IDigitronics ® Hyderabad-----------------------------------");
+					PdfFont font = new PdfFontFactory().createFont(FontConstants.TIMES_BOLD);
+
+					// change according to the image directory
+
+					URL idigiurl = new URL(ExtraConstants.IDIGIIMAGEURL);
+					URL clienturl = new URL(ExtraConstants.CLIENTIMAGEURL);
+					Image idigi = new Image(ImageDataFactory.create(idigiurl));
+					Image client = new Image(ImageDataFactory.create(clienturl));
+
+					float[] headingWidths = { 200F, 130F, 200F };
+
+					Table headTable = new Table(headingWidths);
+
+					Cell headtable1 = new Cell();
+					headtable1.add(idigi);
+					headtable1.setTextAlignment(TextAlignment.LEFT);
+
+					Cell headtable2 = new Cell();
+					headtable2.add(head.setFontSize(20));
+					headtable2.setTextAlignment(TextAlignment.CENTER).setVerticalAlignment(VerticalAlignment.MIDDLE)
+							.setBold().setUnderline().setFont(font);
+
+					Cell headtable3 = new Cell();
+					headtable3.add(client);
+					headtable3.setTextAlignment(TextAlignment.RIGHT);
+
+					headTable.addCell(headtable1.setBorder(Border.NO_BORDER));
+					headTable.addCell(headtable2.setBorder(Border.NO_BORDER));
+					headTable.addCell(headtable3.setBorder(Border.NO_BORDER));
+
+					document.add(headTable);
+					document.add(newLine);
+
+					float[] headerWidths = { 200F, 180F, 170F };
+
+					Table table1 = new Table(headerWidths);
+
+					Cell table1cell1 = new Cell();
+					table1cell1.add("Customer Name: " +rs.getString("FirstName") + " " + rs.getString("LastName"));
+					table1cell1.setTextAlignment(TextAlignment.LEFT);
+
+					Cell table1cell2 = new Cell();
+					table1cell2.add("CAN Number: " + rs.getString("CustomerUniqueID"));
+					table1cell2.setTextAlignment(TextAlignment.CENTER);
+					
+					long invoiceNumber = 0;
+					PreparedStatement ps = con.prepareStatement("SELECT MAX(CustomerBillingID) AS InvoiceNumber FROM customerbillingdetails");
+					ResultSet rs2 = ps.executeQuery();
+					
+					if(rs2.next()) {
+						invoiceNumber = rs2.getInt("InvoiceNumber");
+					}
+					
+					Cell table1cell3 = new Cell();
+					table1cell3.add("Invoice No. : " + invoiceNumber);
+					table1cell3.setTextAlignment(TextAlignment.RIGHT);
+
+					table1.addCell(table1cell1.setBorder(Border.NO_BORDER));
+					table1.addCell(table1cell2.setBorder(Border.NO_BORDER));
+					table1.addCell(table1cell3.setBorder(Border.NO_BORDER));
+
+					document.add(table1.setHorizontalAlignment(HorizontalAlignment.CENTER));
+					document.add(newLine);
+
+					float[] columnWidths = { 100F, 100F, 100F, 100F, 100F, 100F };
+					
+					Table datatablehead = new Table(columnWidths);
+					
+					Cell datatablecell1 = new Cell();
+					datatablecell1.add("MIUID");
+					datatablecell1.setTextAlignment(TextAlignment.CENTER);
+					
+					Cell datatablecell2 = new Cell();
+					datatablecell2.add("Tariff");
+					datatablecell2.setTextAlignment(TextAlignment.CENTER);
+					
+					Cell datatablecell3 = new Cell();
+					datatablecell3.add("PreviousReading");
+					datatablecell3.setTextAlignment(TextAlignment.CENTER);
+					
+					Cell datatablecell4 = new Cell();
+					datatablecell4.add("PresentReading");
+					datatablecell4.setTextAlignment(TextAlignment.CENTER);
+					
+					Cell datatablecell5 = new Cell();
+					datatablecell5.add("Consumption");
+					datatablecell5.setTextAlignment(TextAlignment.CENTER);
+					
+					Cell datatablecell6 = new Cell();
+					datatablecell6.add("BillAmount");
+					datatablecell6.setTextAlignment(TextAlignment.CENTER);
+					
+					datatablehead.addCell(datatablecell1);
+					datatablehead.addCell(datatablecell2);
+					datatablehead.addCell(datatablecell3);
+					datatablehead.addCell(datatablecell4);
+					datatablehead.addCell(datatablecell5);
+					datatablehead.addCell(datatablecell6);
+
+					Table datatable = new Table(columnWidths);
+					
+					for(int i = 0; i<=individualBillsList.size(); i++) {
+						
+						Cell datacell1 = new Cell();
+						datacell1.add("" + individualBillsList.get(i).getMiuID());
+						datacell1.setTextAlignment(TextAlignment.CENTER);
+						datatablehead.addCell(datacell1);
+						
+						Cell datacell2 = new Cell();
+						datacell2.add("" +individualBillsList.get(i).getTariff());
+						datacell2.setTextAlignment(TextAlignment.CENTER);
+						datatablehead.addCell(datacell2);
+						
+						Cell datacell3 = new Cell();
+						datacell3.add("" +individualBillsList.get(i).getPreviousReading());
+						datacell3.setTextAlignment(TextAlignment.CENTER);
+						datatablehead.addCell(datacell3);
+						
+						Cell datacell4 = new Cell();
+						datacell4.add("" +individualBillsList.get(i).getPresentReading());
+						datacell4.setTextAlignment(TextAlignment.CENTER);
+						datatablehead.addCell(datacell4);
+						
+						Cell datacell5 = new Cell();
+						datacell5.add("" +individualBillsList.get(i).getConsumption());
+						datacell5.setTextAlignment(TextAlignment.CENTER);
+						datatablehead.addCell(datacell5);
+						
+						Cell datacell6 = new Cell();
+						datacell6.add("" +individualBillsList.get(i).getBillAmount());
+						datacell6.setTextAlignment(TextAlignment.CENTER);
+						datatablehead.addCell(datacell6);
+						
+						datatablehead.startNewRow();
+					}
+					
+					Cell billAmountCell = new Cell();
+					billAmountCell.add("Bill Amount : ");
+					billAmountCell.setTextAlignment(TextAlignment.CENTER);
+
+					Cell totalAmount = new Cell();
+					totalAmount.add(""+totalamount);
+					totalAmount.setTextAlignment(TextAlignment.CENTER);
+					
+					Cell CGSTCell = new Cell();
+					CGSTCell.add("CGST : ");
+					CGSTCell.setTextAlignment(TextAlignment.CENTER);
+
+					Cell CGSTAmount = new Cell();
+					CGSTAmount.add(""+(totalamount * ((rs.getInt("GST"))/100)));
+					CGSTAmount.setTextAlignment(TextAlignment.CENTER);
+
+					Cell SGSTCell = new Cell();
+					SGSTCell.add("CGST : ");
+					SGSTCell.setTextAlignment(TextAlignment.CENTER);
+
+					Cell SGSTAmount = new Cell();
+					SGSTAmount.add(""+(totalamount * ((rs.getInt("GST"))/100)));
+					SGSTAmount.setTextAlignment(TextAlignment.CENTER);
+					
+					Cell totalBillAmountCell = new Cell();
+					totalBillAmountCell.add("Total Amount : ");
+					totalBillAmountCell.setTextAlignment(TextAlignment.CENTER);
+
+					Cell totalBillAmount = new Cell();
+					totalBillAmount.add(""+(totalamount * ((rs.getInt("GST") * 2)/100)));
+					totalBillAmount.setTextAlignment(TextAlignment.CENTER);
+					
+					Cell cell8 = new Cell();
+					cell8.add("Date of Transaction: ");
+					cell8.setTextAlignment(TextAlignment.CENTER);
+
+					Cell transactionDate = new Cell();
+					transactionDate.add(ExtraMethodsDAO.datetimeformatter(rs.getString("TransactionDate")));
+					transactionDate.setTextAlignment(TextAlignment.CENTER);
+
+					datatable.addCell(cell8);
+					datatable.addCell(transactionDate);
+					datatable.startNewRow();
+
+					document.add(datatable.setHorizontalAlignment(HorizontalAlignment.CENTER));
+					document.add(disclaimer.setHorizontalAlignment(HorizontalAlignment.CENTER).setFont(font));
+					document.add(newLine);
+					document.add(newLine);
+					document.add(newLine);
+					document.add(newLine);
+					document.add(newLine);
+					document.add(newLine);
+					document.add(newLine);
+					document.add(newLine);
+					document.add(newLine);
+					document.add(newLine);
+					document.add(newLine);
+
+					document.add(copyRight.setHorizontalAlignment(HorizontalAlignment.CENTER).setFont(font));
+					document.close();
+					
+				}
 				
 				smsRequestVO.setMessage("Dear "+ rs.getString("FirstName") + " " + rs.getString("LastName") + ", \n \n Your Bill of Amount" + (totalamount + (totalamount * ((rs.getInt("GST") * 2)/100))) + "/- for the month of " + ((currentdate.getMonthValue() - 1 == 0) ? "January," : (currentdate.getMonthValue() - 1 == 1) ? "February," : (currentdate.getMonthValue() - 1 == 2) ? "March," : (currentdate.getMonthValue() - 1 == 3) ? "April," : (currentdate.getMonthValue() - 1 == 4) ? "May," : (currentdate.getMonthValue() - 1 == 5) ? "June," : (currentdate.getMonthValue() - 1 == 6) ? "July," : (currentdate.getMonthValue() - 1 == 7) ? "August," : (currentdate.getMonthValue() - 1 == 8) ? "Septmeber," : (currentdate.getMonthValue() - 1 == 9) ? "October," : (currentdate.getMonthValue() - 1 == 10) ? "November," : (currentdate.getMonthValue() - 1 == 11) ? "December," :"" ) + ((currentdate.getMonthValue() - 1 == 0) ? currentdate.getYear() - 1 : currentdate.getYear()) +" has been generated. Kindly pay the bill before " + currentdate.plusDays(rs.getInt("DueDayCount")).toString() + " to avoid late fee charges. Thank You");
 				smsRequestVO.setToMobileNumber(rs.getString("MobileNumber"));
@@ -318,32 +563,6 @@ public class ExtraMethodsDAO {
 			
 			
 			
-		} catch (Exception e) {
-			e.printStackTrace();
-			
-		} finally {
-			pstmt.close();
-			rs.close();
-			con.close();
-		}
-		
-	}
-	
-//	@Scheduled(cron="0 30 6 2 * ? *") // every month on 2nd day at 6:30
-	public void sendingbill() throws SQLException {
-		
-		Connection con = null;
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		
-		try {
-			con = getConnection();
-			LocalDate currentdate = LocalDate.now();
-			pstmt = con.prepareStatement("SELECT * FROM customerbillingdetails as cbd LEFT JOIN customerdetails as cd ON cbd.CustomerID = cd.CustomerID WHERE cbd.BillMonth = "+ (currentdate.getMonthValue() - 1) + " AND cbd.BillYear = " + (currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear()));
-			rs = pstmt.executeQuery();
-			while(rs.next()) {
-			
-			} 
 		} catch (Exception e) {
 			e.printStackTrace();
 			

@@ -107,8 +107,6 @@ CREATE TABLE `billingdetails` (
   `TariffID` int(10) NOT NULL,
   `Tariff` float NOT NULL,
   `BillAmount` int(100) NOT NULL,
-  `FixedCharges` int(11) DEFAULT NULL,
-  `ReconnectionCharges` int(11) DEFAULT NULL,
   `BillMonth` int(10) DEFAULT NULL,
   `BillYear` int(10) DEFAULT NULL,
   `LogDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
