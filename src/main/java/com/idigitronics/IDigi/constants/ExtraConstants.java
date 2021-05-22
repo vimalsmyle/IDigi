@@ -8,7 +8,7 @@ public class ExtraConstants {
 	public static final String key1 = "Bar12345Bar12345"; // 128 bit key
 	public static final String key2 = "ThisIsASecretKet";
 	public static final String ApplicationURL = "http://183.82.122.196:8080/Idigi";
-	public static final String LocalURL = "http://localhost:8080/Idigi";
+	public static final String LocalURL = "http://localhost:8080/IDigi";
 //	public static final String StaticIP = "http://123.123.123.123:8084/";
 	public static final String IDIGIIMAGEURL=LocalURL+"/common/images/1-hanbit.png";
 //	public static final String IDIGIIMAGEURL= ApplicationURL+"/common/images/1-hanbit.png";

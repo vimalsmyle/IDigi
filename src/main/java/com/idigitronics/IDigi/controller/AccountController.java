@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.google.gson.Gson;
 import com.idigitronics.IDigi.bo.AccountBO;
 import com.idigitronics.IDigi.dao.AccountDAO;
+import com.idigitronics.IDigi.dao.ExtraMethodsDAO;
 import com.idigitronics.IDigi.exceptions.BusinessException;
 import com.idigitronics.IDigi.request.vo.CheckOutRequestVO;
 import com.idigitronics.IDigi.request.vo.ConfigurationRequestVO;
@@ -171,7 +172,7 @@ public class AccountController {
 		
 		LocalDate currentdate = LocalDate.now();
 		
-		responsevo.setLocation("D:/Bills/" + (currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear()+"/"+(currentdate.getMonthValue() - 1)));
+		responsevo.setLocation("D:/Bills/" + (currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear()+"/"+(currentdate.getMonthValue() - 1) + "/"));
 		responsevo.setFileName(customerUniqueID + ".pdf");
 	
 		File file = new File(responsevo.getLocation() + responsevo.getFileName());
@@ -271,5 +272,17 @@ public class AccountController {
 		return responsevo;
 	}
 	
+	@RequestMapping(value = "/test/{transactionID}", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody
+	ResponseVO testmethod(@PathVariable("transactionID") int transactionID)
+			throws ClassNotFoundException, SQLException {
+		ResponseVO responsevo = new ResponseVO();
+		ExtraMethodsDAO extramethods = new ExtraMethodsDAO();
+//		responsevo = accountdao.printbillreceipt(transactionID);
+		
+		extramethods.billgeneration();
+
+		return responsevo;
+	}
 
 }

@@ -222,15 +222,13 @@ public class ExtraMethodsDAO {
 		ResultSet rs1 = null;
 		ResultSet rs2 = null;
 		float consumption = 0;
-		int billAmount = 0;
+		float billAmount = 0;
 		
 		try {
 			
 			con = getConnection();
 			
-//			fetch reconnection charges from alertsettings after discussion
-			
-			pstmt = con.prepareStatement("SELECT cd.CommunityID, cd.BlockID, cd.CustomerID, cd.CustomerUniqueID, cmd.CustomerMeterID, cmd.MIUID, cmd.MeterType, cmd.TariffID, t.Tariff, t.FixedCharges FROM customerdetails AS cd LEFT JOIN customermeterdetails AS cmd ON cd.CustomerID = cmd.CustomerID LEFT JOIN tariff AS t ON t.TariffID = cmd.TariffID WHERE cmd.PayType = 'Postpaid'");
+			pstmt = con.prepareStatement("SELECT cd.CommunityID, cd.BlockID, cd.CustomerID, cd.CustomerUniqueID, cmd.CustomerMeterID, cmd.MIUID, cmd.MeterType, cmd.TariffID, t.Tariff FROM customerdetails AS cd LEFT JOIN customermeterdetails AS cmd ON cd.CustomerID = cmd.CustomerID LEFT JOIN tariff AS t ON t.TariffID = cmd.TariffID WHERE cmd.PayType = 'Postpaid'");
 			rs = pstmt.executeQuery();
 			while(rs.next()) {
 				
@@ -249,9 +247,9 @@ public class ExtraMethodsDAO {
 						LocalDate currentdate = LocalDate.now();
 						
 						consumption = rs2.getFloat("Reading") - rs1.getFloat("Reading");
-						billAmount = (int) (consumption * rs.getFloat("Tariff"));
+						billAmount = (consumption * rs.getFloat("Tariff"));
 						
-						pstmt3 = con.prepareStatement("INSERT INTO billingdetails (CommunityID, BlockID, CustomerID, CustomerUniqueID, CustomerMeterID, MeterType, MIUID, PreviousReading, PresentReading, Consumption, TariffID, Tariff, BillAmount, FixedCharges, ReconnectionCharges, BillMonth, BillYear) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+						pstmt3 = con.prepareStatement("INSERT INTO billingdetails (CommunityID, BlockID, CustomerID, CustomerUniqueID, CustomerMeterID, MeterType, MIUID, PreviousReading, PresentReading, Consumption, TariffID, Tariff, BillAmount, BillMonth, BillYear) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 						pstmt3.setInt(1, rs.getInt("CommunityID"));
 						pstmt3.setInt(2, rs.getInt("BlockID"));
 						pstmt3.setInt(3, rs.getInt("CustomerID"));
@@ -264,11 +262,9 @@ public class ExtraMethodsDAO {
 						pstmt3.setFloat(10, consumption);
 						pstmt3.setInt(11, rs.getInt("TariffID"));
 						pstmt3.setFloat(12, rs.getFloat("Tariff"));
-						pstmt3.setInt(13, billAmount);
-						pstmt3.setInt(14, rs.getInt("FixedCharges"));
-						pstmt3.setInt(15, 0); // add reconnection charges after discussion
-						pstmt3.setInt(16, currentdate.getMonthValue() - 1);
-						pstmt3.setInt(17, currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear());// add year 
+						pstmt3.setFloat(13, billAmount);
+						pstmt3.setInt(14, currentdate.getMonthValue() - 1);
+						pstmt3.setInt(15, currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear());
 						
 						if(pstmt3.executeUpdate() > 0) {
 //					perform some actions after discussion
@@ -308,15 +304,15 @@ public class ExtraMethodsDAO {
 			
 			con = getConnection();
 			LocalDate currentdate = LocalDate.now();
-			String billMonthYear = ((currentdate.getMonthValue() - 1 == 0) ? "January," : (currentdate.getMonthValue() - 1 == 1) ? "February," : (currentdate.getMonthValue() - 1 == 2) ? "March," : (currentdate.getMonthValue() - 1 == 3) ? "April," : (currentdate.getMonthValue() - 1 == 4) ? "May," : (currentdate.getMonthValue() - 1 == 5) ? "June," : (currentdate.getMonthValue() - 1 == 6) ? "July," : (currentdate.getMonthValue() - 1 == 7) ? "August," : (currentdate.getMonthValue() - 1 == 8) ? "Septmeber," : (currentdate.getMonthValue() - 1 == 9) ? "October," : (currentdate.getMonthValue() - 1 == 10) ? "November," : (currentdate.getMonthValue() - 1 == 11) ? "December," :"" ) + "-" + ((currentdate.getMonthValue() - 1 == 0) ? currentdate.getYear() - 1 : currentdate.getYear());
+			String billMonthYear = ((currentdate.getMonthValue() == 1) ? "December" : (currentdate.getMonthValue() == 2) ? "January" : (currentdate.getMonthValue() == 3) ? "February" : (currentdate.getMonthValue() == 4) ? "March" : (currentdate.getMonthValue() == 5) ? "April" : (currentdate.getMonthValue() == 6) ? "May" : (currentdate.getMonthValue() == 7) ? "June" : (currentdate.getMonthValue() == 8) ? "July" : (currentdate.getMonthValue() == 9) ? "August" : (currentdate.getMonthValue() == 10) ? "September" : (currentdate.getMonthValue() == 11) ? "October" : (currentdate.getMonthValue() == 12) ? "November" :"" ) + "-" + ((currentdate.getMonthValue() - 1 == 0) ? currentdate.getYear() - 1 : currentdate.getYear());
 			String drivename = "D:/Bills/" + (currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear()+"/"+(currentdate.getMonthValue() - 1));
 			individualBillsList = new LinkedList<IndividualBillingResponseVO>();
 			pstmt = con.prepareStatement("SELECT * FROM customerdetails JOIN alertsettings");
 			rs = pstmt.executeQuery();
 			while(rs.next()) {
 				
-				int totalamount = 0;
-				int totalConsumption = 0;
+				float totalamount = 0;
+				float totalConsumption = 0;
 				smsRequestVO = new SMSRequestVO();
 				mailRequestVO = new MailRequestVO();
 				
@@ -324,8 +320,8 @@ public class ExtraMethodsDAO {
 				rs1 = pstmt1.executeQuery();
 				while (rs1.next()) {
 					individualBillingResponseVO = new IndividualBillingResponseVO();
-					totalamount = rs1.getInt("BillAmount") + totalamount;
-					totalConsumption = rs1.getInt("Consumption") + totalConsumption;
+					totalamount = rs1.getFloat("BillAmount") + totalamount;
+					totalConsumption = rs1.getFloat("Consumption") + totalConsumption;
 					individualBillingResponseVO.setBillingID(rs1.getLong("BillingID"));
 					individualBillingResponseVO.setCustomerMeterID(rs1.getLong("CustomerMeterID"));
 					individualBillingResponseVO.setMeterType(rs1.getString("MeterType"));
@@ -345,9 +341,10 @@ public class ExtraMethodsDAO {
 				pstmt2.setInt(2, rs.getInt("BlockID"));
 				pstmt2.setInt(3, rs.getInt("CustomerID"));
 				pstmt2.setString(4, rs.getString("CustomerUniqueID"));
-				pstmt2.setInt(5, totalamount);
-				pstmt2.setInt(6, (totalamount * ((rs.getInt("GST") * 2)/100)));
-				pstmt2.setInt(7, totalConsumption);
+				pstmt2.setFloat(5, totalamount);
+				float tax = ((((rs.getFloat("GST")) * (2))/100) * totalamount);
+				pstmt2.setFloat(6, (totalamount + tax));
+				pstmt2.setFloat(7, totalConsumption);
 				pstmt2.setString(8, currentdate.plusDays(rs.getInt("DueDayCount")).toString());
 				pstmt2.setInt(9, currentdate.getMonthValue() - 1);
 				pstmt2.setInt(10, currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear());
@@ -356,17 +353,17 @@ public class ExtraMethodsDAO {
 					
 					File directory = new File(drivename);
 					if (!directory.exists()) {
-						directory.mkdir();
+						directory.mkdirs();
 					}
 
-					PdfWriter writer = new PdfWriter(drivename + rs.getString("CustomerUniqueID") + ".pdf");
+					PdfWriter writer = new PdfWriter(drivename + "/" +rs.getString("CustomerUniqueID") + ".pdf");
 					PdfDocument pdfDocument = new PdfDocument(writer);
 					pdfDocument.addNewPage();
 					Document document = new Document(pdfDocument);
 					Paragraph newLine = new Paragraph("\n");
 					Paragraph head = new Paragraph("Bill");
 					Paragraph disclaimer = new Paragraph(ExtraConstants.Disclaimer);
-					Paragraph copyRight = new Paragraph("------------------------------------All  rights reserved by IDigitronics ® Hyderabad-----------------------------------");
+					Paragraph copyRight = new Paragraph("----------------------------------All  rights reserved by IDigitronics ® Hyderabad---------------------------------");
 					PdfFont font = new PdfFontFactory().createFont(FontConstants.TIMES_BOLD);
 
 					// change according to the image directory
@@ -398,7 +395,6 @@ public class ExtraMethodsDAO {
 					headTable.addCell(headtable3.setBorder(Border.NO_BORDER));
 
 					document.add(headTable);
-					document.add(newLine);
 
 					float[] headerWidths = { 200F, 180F, 170F };
 
@@ -430,16 +426,16 @@ public class ExtraMethodsDAO {
 					table1.startNewRow();
 					
 					Cell table1cell4 = new Cell();
-					table1cell4.add("Billing Date: " + currentdate);
-					table1cell4.setTextAlignment(TextAlignment.CENTER);
+					table1cell4.add("Billing Date: " + ExtraMethodsDAO.dateformatter(currentdate.toString()));
+					table1cell4.setTextAlignment(TextAlignment.LEFT);
 					
 					Cell table1cell5 = new Cell();
 					table1cell5.add("Bill Month-Year: " + billMonthYear);
 					table1cell5.setTextAlignment(TextAlignment.CENTER);
 					
 					Cell table1cell6 = new Cell();
-					table1cell6.add("Due Date: " + currentdate.plusDays(rs.getInt("DueDayCount")).toString());
-					table1cell6.setTextAlignment(TextAlignment.CENTER);
+					table1cell6.add("Due Date: " + ExtraMethodsDAO.dateformatter(currentdate.plusDays(rs.getInt("DueDayCount")).toString()));
+					table1cell6.setTextAlignment(TextAlignment.RIGHT);
 					
 					table1.addCell(table1cell4.setBorder(Border.NO_BORDER));
 					table1.addCell(table1cell5.setBorder(Border.NO_BORDER));
@@ -448,9 +444,13 @@ public class ExtraMethodsDAO {
 					document.add(table1.setHorizontalAlignment(HorizontalAlignment.CENTER));
 					document.add(newLine);
 
-					float[] columnWidths = { 100F, 100F, 100F, 100F, 100F, 100F };
+					float[] columnWidths = { 35F, 100F, 40F, 100F, 100F, 90F, 60F };
 					
 					Table datatablehead = new Table(columnWidths);
+					
+					Cell datatablecell = new Cell();
+					datatablecell.add("S.No");
+					datatablecell.setTextAlignment(TextAlignment.CENTER);
 					
 					Cell datatablecell1 = new Cell();
 					datatablecell1.add("MIUID");
@@ -473,9 +473,10 @@ public class ExtraMethodsDAO {
 					datatablecell5.setTextAlignment(TextAlignment.CENTER);
 					
 					Cell datatablecell6 = new Cell();
-					datatablecell6.add("BillAmount");
+					datatablecell6.add("Amount");
 					datatablecell6.setTextAlignment(TextAlignment.CENTER);
 					
+					datatablehead.addCell(datatablecell);
 					datatablehead.addCell(datatablecell1);
 					datatablehead.addCell(datatablecell2);
 					datatablehead.addCell(datatablecell3);
@@ -485,7 +486,12 @@ public class ExtraMethodsDAO {
 
 					Table datatable = new Table(columnWidths);
 					
-					for(int i = 0; i<=individualBillsList.size(); i++) {
+					for(int i = 0; i<individualBillsList.size(); i++) {
+						
+						Cell datacell = new Cell();
+						datacell.add(""+(i+1));
+						datacell.setTextAlignment(TextAlignment.CENTER);
+						datatablehead.addCell(datacell);
 						
 						Cell datacell1 = new Cell();
 						datacell1.add("" + individualBillsList.get(i).getMiuID());
@@ -522,13 +528,13 @@ public class ExtraMethodsDAO {
 					
 					document.add(datatablehead.setHorizontalAlignment(HorizontalAlignment.CENTER));
 					
-					float[] finaltableWidths = { 200F, 180F };
+					float[] finaltableWidths = { 80F, 80F };
 
 					Table finaltable = new Table(finaltableWidths);
 					
 					Cell billAmountCell = new Cell();
 					billAmountCell.add("Bill Amount : ");
-					billAmountCell.setTextAlignment(TextAlignment.CENTER);
+					billAmountCell.setTextAlignment(TextAlignment.RIGHT);
 
 					Cell totalAmount = new Cell();
 					totalAmount.add(""+totalamount);
@@ -536,48 +542,70 @@ public class ExtraMethodsDAO {
 					
 					Cell CGSTCell = new Cell();
 					CGSTCell.add("CGST : ");
-					CGSTCell.setTextAlignment(TextAlignment.CENTER);
+					CGSTCell.setTextAlignment(TextAlignment.RIGHT);
 
 					Cell CGSTAmount = new Cell();
-					CGSTAmount.add(""+(totalamount * ((rs.getInt("GST"))/100)));
+					CGSTAmount.add(""+(tax/2));
 					CGSTAmount.setTextAlignment(TextAlignment.CENTER);
 
 					Cell SGSTCell = new Cell();
 					SGSTCell.add("SGST : ");
-					SGSTCell.setTextAlignment(TextAlignment.CENTER);
-
-					Cell SGSTAmount = new Cell();
-					SGSTAmount.add(""+(totalamount * ((rs.getInt("GST"))/100)));
-					SGSTAmount.setTextAlignment(TextAlignment.CENTER);
+					SGSTCell.setTextAlignment(TextAlignment.RIGHT);
 					
+					Cell SGSTAmount = new Cell();
+					SGSTAmount.add(""+(tax/2));
+					SGSTAmount.setTextAlignment(TextAlignment.CENTER);
+
 					Cell totalBillAmountCell = new Cell();
 					totalBillAmountCell.add("Total Amount : ");
-					totalBillAmountCell.setTextAlignment(TextAlignment.CENTER);
+					totalBillAmountCell.setTextAlignment(TextAlignment.RIGHT);
 
 					Cell totalBillAmount = new Cell();
-					totalBillAmount.add(""+(totalamount + (totalamount * ((rs.getInt("GST") * 2)/100))));
+					totalBillAmount.add(""+(totalamount + tax));
 					totalBillAmount.setTextAlignment(TextAlignment.CENTER);
 					
-					finaltable.addCell(billAmountCell);
-					finaltable.addCell(totalAmount);
+					finaltable.startNewRow();
+					finaltable.startNewRow();
 					finaltable.startNewRow();
 					
-					finaltable.addCell(CGSTCell);
-					finaltable.addCell(CGSTAmount);
-					finaltable.startNewRow();
+					Cell empytcell = new Cell();
+					empytcell.add("");
 					
-					finaltable.addCell(SGSTCell);
-					finaltable.addCell(SGSTAmount);
-					finaltable.startNewRow();
+					datatable.addCell(empytcell);
+					datatable.addCell(empytcell);
+					datatable.addCell(empytcell);
+					datatable.addCell(empytcell);
+					datatable.addCell(empytcell);
+					datatable.addCell(billAmountCell);
+					datatable.addCell(totalAmount);
 					
-					finaltable.addCell(totalBillAmountCell);
-					finaltable.addCell(totalBillAmount);
+					datatable.addCell(empytcell);
+					datatable.addCell(empytcell);
+					datatable.addCell(empytcell);
+					datatable.addCell(empytcell);
+					datatable.addCell(empytcell);
+					datatable.addCell(CGSTCell);
+					datatable.addCell(CGSTAmount);
+					
+					datatable.addCell(empytcell);
+					datatable.addCell(empytcell);
+					datatable.addCell(empytcell);
+					datatable.addCell(empytcell);
+					datatable.addCell(empytcell);
+					datatable.addCell(SGSTCell);
+					datatable.addCell(SGSTAmount);
+					
+					datatable.addCell(empytcell);
+					datatable.addCell(empytcell);
+					datatable.addCell(empytcell);
+					datatable.addCell(empytcell);
+					datatable.addCell(empytcell.setBorder(Border.NO_BORDER));
+					datatable.addCell(totalBillAmountCell);
+					datatable.addCell(totalBillAmount);
 					
 					document.add(datatable.setHorizontalAlignment(HorizontalAlignment.CENTER));
-					document.add(finaltable.setHorizontalAlignment(HorizontalAlignment.CENTER));
+//					document.add(finaltable.setHorizontalAlignment(HorizontalAlignment.RIGHT));
 					document.add(disclaimer.setHorizontalAlignment(HorizontalAlignment.CENTER).setFont(font));
-					document.add(newLine);
-					document.add(newLine);
 					document.add(newLine);
 
 					document.add(copyRight.setHorizontalAlignment(HorizontalAlignment.CENTER).setFont(font));
@@ -710,5 +738,12 @@ public class ExtraMethodsDAO {
 		SimpleDateFormat IdigiFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 		SimpleDateFormat clientFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 		return clientFormat.format(IdigiFormat.parse(dateTime));
+	}
+	
+	public static String dateformatter(String date) throws ParseException {
+		
+		SimpleDateFormat IdigiFormat = new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat clientFormat = new SimpleDateFormat("yyyy/MM/dd");
+		return clientFormat.format(IdigiFormat.parse(date));
 	}
 }
