@@ -473,6 +473,7 @@ public class CommunitySetUpDAO {
 					MailRequestVO mailrequestvo = new MailRequestVO();
 					SMSRequestVO smsRequestVO = new SMSRequestVO();
 					
+					mailrequestvo.setFileLocation("NoAttachment");
 					mailrequestvo.setToEmail(blockvo.getEmail());
 					mailrequestvo.setUserID(usermanagementvo.getUserID());
 					mailrequestvo.setUserPassword(blockvo.getBlockName() + "@" + blockvo.getMobileNumber().substring(3, 7));
@@ -818,6 +819,7 @@ public class CommunitySetUpDAO {
 						MailRequestVO mailrequestvo = new MailRequestVO();
 						SMSRequestVO smsRequestVO = new SMSRequestVO();
 						
+						mailrequestvo.setFileLocation("NoAttachment");
 						mailrequestvo.setToEmail(customervo.getEmail());
 						mailrequestvo.setUserID(usermanagementvo.getUserID());
 						mailrequestvo.setUserPassword(customervo.getLastName()+"@"+ customervo.getMobileNumber().substring(3, 7));

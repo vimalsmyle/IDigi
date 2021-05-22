@@ -621,7 +621,7 @@ public class AccountDAO {
 		ResultSet rs = null;
 		ResultSet rs1 = null;
 		ResponseVO responsevo = new ResponseVO();
-		String drivename = "C:/TopupReceipts/";
+		String drivename = "D:/TopupReceipts/";
 
 		try {
 			con = getConnection();
@@ -651,14 +651,14 @@ public class AccountDAO {
 					Paragraph head = new Paragraph("Receipt");
 					Paragraph disclaimer = new Paragraph(ExtraConstants.Disclaimer);
 					Paragraph copyRight = new Paragraph(
-							"------------------------------------All  rights reserved by HANBIT ® Hyderabad-----------------------------------");
+							"------------------------------------All  rights reserved by IDigitronics ® Hyderabad-----------------------------------");
 					PdfFont font = new PdfFontFactory().createFont(FontConstants.TIMES_BOLD);
 
 					// change according to the image directory
 
-					URL hanbiturl = new URL(ExtraConstants.IDIGIIMAGEURL);
+					URL idigiurl = new URL(ExtraConstants.IDIGIIMAGEURL);
 					URL clienturl = new URL(ExtraConstants.CLIENTIMAGEURL);
-					Image hanbit = new Image(ImageDataFactory.create(hanbiturl));
+					Image idigi = new Image(ImageDataFactory.create(idigiurl));
 					Image client = new Image(ImageDataFactory.create(clienturl));
 					// Image technology = new
 					// Image(ImageDataFactory.create("C:/TopupReceipts/lorawan.png"));
@@ -670,7 +670,7 @@ public class AccountDAO {
 					Table headTable = new Table(headingWidths);
 
 					Cell headtable1 = new Cell();
-					headtable1.add(hanbit);
+					headtable1.add(idigi);
 					headtable1.setTextAlignment(TextAlignment.LEFT);
 
 					Cell headtable2 = new Cell();
@@ -980,7 +980,7 @@ public class AccountDAO {
 		try {
 			con = getConnection();
 			
-			PreparedStatement pstmt1 = con.prepareStatement("SELECT CustomerUniqueID, CONCAT(FirstName, Last Name) AS CustomerName, HouseNumber, MobileNumber, Email FROM customerdetails WHERE CustomerUniqueID = '" + paybillRequestVO.getCustomerUniqueID() +"' AND CustomerID = " + paybillRequestVO.getCustomerID());
+			PreparedStatement pstmt1 = con.prepareStatement("SELECT CustomerUniqueID, FirstName, LastName, HouseNumber, MobileNumber, Email FROM customerdetails WHERE CustomerUniqueID = '" + paybillRequestVO.getCustomerUniqueID() +"' AND CustomerID = " + paybillRequestVO.getCustomerID());
 			ResultSet rs1 = pstmt1.executeQuery();
 			
 			if(rs1.next()) {
@@ -1017,7 +1017,7 @@ public class AccountDAO {
 									+ "/- for CRN/CAN: " + rs1.getString("CustomerUniqueID") + ".");
 							checkoutDetails.setImage(ExtraConstants.IDIGIIMAGEURL);
 
-							prefill.setName(rs1.getString("CustomerName"));
+							prefill.setName(rs1.getString("FirstName") + " " + rs1.getString("LastName"));
 							prefill.setEmail(rs1.getString("Email"));
 							prefill.setContact(rs1.getString("MobileNumber"));
 							checkoutDetails.setPrefill(prefill);
@@ -1108,9 +1108,272 @@ public class AccountDAO {
 		return transactionID;
 	}
 	
-	public ResponseVO printbill(int billingID) {
+	public ResponseVO printbillreceipt(int transactionID) throws SQLException {
 		// TODO Auto-generated method stub
-		return null;
+		
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		PreparedStatement pstmt1 = null;
+		ResultSet rs = null;
+		ResultSet rs1 = null;
+		ResponseVO responsevo = new ResponseVO();
+		String drivename = "D:/BillReceipts/";
+		
+		try {
+			con = getConnection();
+			
+			pstmt = con.prepareStatement("SELECT c.CommunityName, b.BlockName, cd.HouseNumber, cd.CustomerUniqueID, cd.FirstName, cd.LastName, bpd.TotalAmount, bpd.LateFee, bpd.ModeOfPayment, bpd.CreatedByID, bpd.RazorPayOrderID, bpd.RazorPayPaymentID, bpd.TransactionDate, bpd.AcknowledgeDate\r\n" + 
+					"FROM customerbillingdetails AS cbd LEFT JOIN billingpaymentdetails AS bpd ON cbd.CustomerBillingID = bpd.CustomerBillingID \r\n" + 
+					"LEFT JOIN customerdetails AS cd ON cd.CustomerID = cbd.CustomerID LEFT JOIN community AS c ON c.CommunityID = cbd.CommunityID\r\n" + 
+					"LEFT JOIN block AS b ON b.BlockID = cbd.BlockID WHERE bpd.TransactionID = " + transactionID);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				
+		File directory = new File(drivename);
+		if (!directory.exists()) {
+			directory.mkdir();
+		}
+
+		PdfWriter writer = new PdfWriter(drivename + transactionID + ".pdf");
+		PdfDocument pdfDocument = new PdfDocument(writer);
+		pdfDocument.addNewPage();
+		Document document = new Document(pdfDocument);
+		Paragraph newLine = new Paragraph("\n");
+		Paragraph head = new Paragraph("Receipt");
+		Paragraph disclaimer = new Paragraph(ExtraConstants.Disclaimer);
+		Paragraph copyRight = new Paragraph(
+				"------------------------------------All  rights reserved by IDigitronics ® Hyderabad-----------------------------------");
+		PdfFont font = new PdfFontFactory().createFont(FontConstants.TIMES_BOLD);
+
+		// change according to the image directory
+
+		URL idigiurl = new URL(ExtraConstants.IDIGIIMAGEURL);
+		URL clienturl = new URL(ExtraConstants.CLIENTIMAGEURL);
+		Image idigi = new Image(ImageDataFactory.create(idigiurl));
+		Image client = new Image(ImageDataFactory.create(clienturl));
+		
+		// continue from here
+
+		float[] headingWidths = { 200F, 130F, 200F };
+
+		Table headTable = new Table(headingWidths);
+
+		Cell headtable1 = new Cell();
+		headtable1.add(idigi);
+		headtable1.setTextAlignment(TextAlignment.LEFT);
+
+		Cell headtable2 = new Cell();
+		headtable2.add(head.setFontSize(20));
+		headtable2.setTextAlignment(TextAlignment.CENTER).setVerticalAlignment(VerticalAlignment.MIDDLE)
+				.setBold().setUnderline().setFont(font);
+
+		Cell headtable3 = new Cell();
+		headtable3.add(client);
+		headtable3.setTextAlignment(TextAlignment.RIGHT);
+
+		headTable.addCell(headtable1.setBorder(Border.NO_BORDER));
+		headTable.addCell(headtable2.setBorder(Border.NO_BORDER));
+		headTable.addCell(headtable3.setBorder(Border.NO_BORDER));
+
+		document.add(headTable);
+		document.add(newLine);
+
+		float[] headerWidths = { 200F, 180F, 170F };
+
+		Table table1 = new Table(headerWidths);
+
+		Cell table1cell1 = new Cell();
+		table1cell1.add("MIU ID: " + rs.getString("MIUID"));
+		table1cell1.setTextAlignment(TextAlignment.LEFT);
+
+		Cell table1cell2 = new Cell();
+		table1cell2.add("CAN Number: " + rs.getString("CustomerUniqueID"));
+		table1cell2.setTextAlignment(TextAlignment.CENTER);
+
+		Cell table1cell3 = new Cell();
+		table1cell3.add("Invoice No. : " + transactionID);
+		table1cell3.setTextAlignment(TextAlignment.RIGHT);
+
+		table1.addCell(table1cell1.setBorder(Border.NO_BORDER));
+		table1.addCell(table1cell2.setBorder(Border.NO_BORDER));
+		table1.addCell(table1cell3.setBorder(Border.NO_BORDER));
+
+		document.add(table1.setHorizontalAlignment(HorizontalAlignment.CENTER));
+		document.add(newLine);
+
+		float[] columnWidths = { 400F, 150F };
+
+		Table datatable = new Table(columnWidths);
+
+		Cell cell1 = new Cell();
+		cell1.add("Customer Name: ");
+		cell1.setTextAlignment(TextAlignment.CENTER);
+
+		Cell customerName = new Cell();
+		customerName.add(rs.getString("FirstName") + " " + rs.getString("LastName"));
+		customerName.setTextAlignment(TextAlignment.CENTER);
+
+		datatable.addCell(cell1);
+		datatable.addCell(customerName);
+		datatable.startNewRow();
+
+		Cell cell2 = new Cell();
+		cell2.add("Amount: ");
+		cell2.setTextAlignment(TextAlignment.CENTER);
+
+		Cell Amount = new Cell();
+		Amount.add(rs.getString("Amount"));
+		Amount.setTextAlignment(TextAlignment.CENTER);
+
+		datatable.addCell(cell2);
+		datatable.addCell(Amount);
+		datatable.startNewRow();
+
+		Cell cell3 = new Cell();
+		cell3.add("FixedCharges(if any): ");
+		cell3.setTextAlignment(TextAlignment.CENTER);
+
+		Cell fixedCharges = new Cell();
+		fixedCharges.add(rs.getString("FixedCharges"));
+		fixedCharges.setTextAlignment(TextAlignment.CENTER);
+
+		datatable.addCell(cell3);
+		datatable.addCell(fixedCharges);
+		datatable.startNewRow();
+
+		Cell cell4 = new Cell();
+		cell4.add("Reconnection Charges(if any): ");
+		cell4.setTextAlignment(TextAlignment.CENTER);
+
+		Cell reconnectionCharges = new Cell();
+		reconnectionCharges.add(rs.getString("ReconnectionCharges"));
+		reconnectionCharges.setTextAlignment(TextAlignment.CENTER);
+
+		datatable.addCell(cell4);
+		datatable.addCell(reconnectionCharges);
+		datatable.startNewRow();
+
+		Cell cell5 = new Cell();
+		cell5.add("Amount Updated to Device After Deductions (if any): ");
+		cell5.setTextAlignment(TextAlignment.CENTER);
+
+		Cell finalAmount = new Cell();
+		finalAmount.add(Integer.toString(
+				(rs.getInt("Amount") - (rs.getInt("FixedCharges") + rs.getInt("ReconnectionCharges")))));
+		finalAmount.setTextAlignment(TextAlignment.CENTER);
+
+		datatable.addCell(cell5);
+		datatable.addCell(finalAmount);
+		datatable.startNewRow();
+
+		Cell cell6 = new Cell();
+		cell6.add("Mode of Payment: ");
+		cell6.setTextAlignment(TextAlignment.CENTER);
+
+		Cell modeOfPayment = new Cell();
+		modeOfPayment.add(rs.getString("ModeOfPayment"));
+		modeOfPayment.setTextAlignment(TextAlignment.CENTER);
+
+		datatable.addCell(cell6);
+		datatable.addCell(modeOfPayment);
+		datatable.startNewRow();
+
+		Cell cell7 = new Cell();
+		cell7.add("Transaction Initiated By: ");
+		cell7.setTextAlignment(TextAlignment.CENTER);
+
+		Cell transactedBy = new Cell();
+		transactedBy.add(rs1.getString("UserName"));
+		transactedBy.setTextAlignment(TextAlignment.CENTER);
+
+		datatable.addCell(cell7);
+		datatable.addCell(transactedBy);
+		datatable.startNewRow();
+
+		Cell cell8 = new Cell();
+		cell8.add("Date of Transaction: ");
+		cell8.setTextAlignment(TextAlignment.CENTER);
+
+		Cell transactionDate = new Cell();
+		transactionDate.add(ExtraMethodsDAO.datetimeformatter(rs.getString("TransactionDate")));
+		transactionDate.setTextAlignment(TextAlignment.CENTER);
+
+		datatable.addCell(cell8);
+		datatable.addCell(transactionDate);
+		datatable.startNewRow();
+
+		Cell cell9 = new Cell();
+		cell9.add("Acknowledge Date: ");
+		cell9.setTextAlignment(TextAlignment.CENTER);
+
+		Cell acknowledgeDate = new Cell();
+		acknowledgeDate.add(ExtraMethodsDAO.datetimeformatter(rs.getString("AcknowledgeDate")));
+		acknowledgeDate.setTextAlignment(TextAlignment.CENTER);
+
+		datatable.addCell(cell9);
+		datatable.addCell(acknowledgeDate);
+		datatable.startNewRow();
+
+		Cell cell10 = new Cell();
+		cell10.add("Order ID: ");
+		cell10.setTextAlignment(TextAlignment.CENTER);
+
+		System.out.println(rs.getString("RazorPayOrderID"));
+
+		Cell OrderID = new Cell();
+		OrderID.add(rs.getString("RazorPayOrderID") == null ? "---" : rs.getString("RazorPayOrderID"));
+		OrderID.setTextAlignment(TextAlignment.CENTER);
+
+		datatable.addCell(cell10);
+		datatable.addCell(OrderID);
+		datatable.startNewRow();
+
+		Cell cell11 = new Cell();
+		cell11.add("Payment ID: ");
+		cell11.setTextAlignment(TextAlignment.CENTER);
+
+		Cell PaymentID = new Cell();
+		PaymentID
+				.add(rs.getString("RazorPayPaymentID") == null ? "---" : rs.getString("RazorPayPaymentID"));
+		PaymentID.setTextAlignment(TextAlignment.CENTER);
+
+		datatable.addCell(cell11);
+		datatable.addCell(PaymentID);
+		datatable.startNewRow();
+
+		document.add(datatable.setHorizontalAlignment(HorizontalAlignment.CENTER));
+		document.add(disclaimer.setHorizontalAlignment(HorizontalAlignment.CENTER).setFont(font));
+		document.add(newLine);
+		document.add(newLine);
+		document.add(newLine);
+		document.add(newLine);
+		document.add(newLine);
+		document.add(newLine);
+		document.add(newLine);
+		document.add(newLine);
+		document.add(newLine);
+		document.add(newLine);
+		document.add(newLine);
+
+		document.add(copyRight.setHorizontalAlignment(HorizontalAlignment.CENTER).setFont(font));
+		document.close();
+
+		responsevo.setResult("Success");
+		responsevo.setLocation(drivename);
+		responsevo.setFileName(transactionID + ".pdf");
+
+		}
+		
+	} catch (Exception ex) {
+		ex.printStackTrace();
+		responsevo.setResult("Failure");
+		responsevo.setMessage("INTERNAL SERVER ERROR");
+	} finally {
+		pstmt.close();
+		rs.close();
+		con.close();
+	}
+	return responsevo;
 	}
 
 	/* Configuration */

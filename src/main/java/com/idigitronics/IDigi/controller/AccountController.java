@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.LocalDate;
 
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpStatus;
@@ -163,12 +164,31 @@ public class AccountController {
 		return responsevo;
 	}
 
-	@RequestMapping(value = "/billing/print/{billingID}", method = RequestMethod.GET, produces = "application/pdf")
-	 public ResponseEntity<InputStreamResource> downloadbill(@PathVariable("billingID") int billingID) throws IOException, SQLException {
+	@RequestMapping(value = "/billing/print/{customerUniqueID}", method = RequestMethod.GET, produces = "application/pdf")
+	 public ResponseEntity<InputStreamResource> downloadbill(@PathVariable("customerUniqueID") String customerUniqueID) throws IOException, SQLException {
 			
 		ResponseVO responsevo = new ResponseVO();
 		
-		responsevo = accountdao.printbill(billingID);
+		LocalDate currentdate = LocalDate.now();
+		
+		responsevo.setLocation("D:/Bills/" + (currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear()+"/"+(currentdate.getMonthValue() - 1)));
+		responsevo.setFileName(customerUniqueID + ".pdf");
+	
+		File file = new File(responsevo.getLocation() + responsevo.getFileName());
+	    InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
+		
+		ResponseEntity<InputStreamResource> response = new ResponseEntity<InputStreamResource>(resource, HttpStatus.OK);
+		
+		return response;
+	
+	}
+	
+	@RequestMapping(value = "/billing/printreceipt/{transactionID}", method = RequestMethod.GET, produces = "application/pdf")
+	 public ResponseEntity<InputStreamResource> downloadreceipt(@PathVariable("transactionID") int transactionID) throws IOException, SQLException {
+			
+		ResponseVO responsevo = new ResponseVO();
+		
+		responsevo = accountdao.printbillreceipt(transactionID);
 	
 		File file = new File(responsevo.getLocation() + responsevo.getFileName());
 	    InputStreamResource resource = new InputStreamResource(new FileInputStream(file));

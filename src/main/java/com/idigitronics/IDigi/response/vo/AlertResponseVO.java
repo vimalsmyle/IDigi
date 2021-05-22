@@ -18,6 +18,9 @@ public class AlertResponseVO {
 	private String registeredDate;
 	private float perUnitValue;
 	private int reconnectionCharges;
+	private int lateFee;
+	private int GST;
+	private int dueDayCount;
 		
 	private List<AlertResponseVO> data;
 
@@ -83,6 +86,30 @@ public class AlertResponseVO {
 
 	public void setReconnectionCharges(int reconnectionCharges) {
 		this.reconnectionCharges = reconnectionCharges;
+	}
+
+	public int getLateFee() {
+		return lateFee;
+	}
+
+	public void setLateFee(int lateFee) {
+		this.lateFee = lateFee;
+	}
+
+	public int getGST() {
+		return GST;
+	}
+
+	public void setGST(int gST) {
+		GST = gST;
+	}
+
+	public int getDueDayCount() {
+		return dueDayCount;
+	}
+
+	public void setDueDayCount(int dueDayCount) {
+		this.dueDayCount = dueDayCount;
 	}
 
 }
