@@ -695,7 +695,7 @@ public class CommunitySetUpDAO {
 				customervo.setCustomerUniqueID(rs.getString("CustomerUniqueID"));
 				customervo.setCustomerID(rs.getInt("CustomerID"));
 				
-				PreparedStatement pstmt2 = con.prepareStatement("SELECT * FROM customermeterdetails WHERE CustomerID = " + customervo.getCustomerID());
+				PreparedStatement pstmt2 = con.prepareStatement("SELECT cmd.CustomerMeterID, cmd.MIUID, cmd.MeterSerialNumber, cmd.MeterType, cmd.PayType, cmd.Location, cmd.TariffID, cmd.GatewayID, g.GatewayName FROM customermeterdetails AS cmd LEFT JOIN gateway AS g ON g.GatewayID = cmd.GatewayID WHERE cmd.CustomerID = " + customervo.getCustomerID());
 				
 				ResultSet rs2 = pstmt2.executeQuery();
 				
@@ -707,9 +707,11 @@ public class CommunitySetUpDAO {
 					metervo.setMiuID(rs2.getString("MIUID"));
 					metervo.setMeterSerialNumber(rs2.getString("MeterSerialNumber"));
 					metervo.setMeterType(rs2.getString("MeterType"));
+					metervo.setPayType(rs2.getString("PayType"));
 					metervo.setLocation(rs2.getString("Location"));
 					metervo.setTariffID(rs2.getInt("TariffID"));
 					metervo.setGatewayID(rs2.getInt("GatewayID"));
+					metervo.setGatewayName(rs2.getString("GatewayName"));
 					
 					PreparedStatement pstmt3 = con.prepareStatement("SELECT TariffName from tariff WHERE TariffID = "+ metervo.getTariffID());
 					

@@ -1504,7 +1504,7 @@ public class AccountDAO {
 			}
 				}
 			}
-			
+			// modify the backend fields accordingly and set values for all parameters
 			if(extramethodsdao.postdata(restcallvo) == 200) {
 			responsevo.setResult("Success");
 			responsevo.setMessage("Command Request Submitted Successfully");
