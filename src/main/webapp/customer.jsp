@@ -52,14 +52,15 @@
 						Form</h5>
 						
 						<form id="customerDetails">
-						<div class="row" id="template">
+						<div id="template">
+						<div class="row">
 						
 						<%if(!user_id.equalsIgnoreCase("2")) {%>
-							<div class="col-xs-4">
+							<div class="col-md-4">
 								<div class="form-group has-feedback has-success bmd-form-group is-filled">
 									<label class="bmd-label-floating select-label">Community Name</label> 
 									<select
-										class="form-control select2" id="selectcommunityName" name="selectcommunityName" onchange="showBlockbyCommunity(this.value);">
+										class="form-control select3" id="selectcommunityName" name="selectcommunityName" onchange="showBlockbyCommunity(this.value);">
 									</select>
 								</div>
 							</div>
@@ -142,35 +143,40 @@
 							
 							
 							<div class="col-md-4">
-							<button class="button"
+							<div class="group form-group has-feedback has-success bmd-form-group is-filled">
+							<label class="bmd-label-floating"></label> 
+							<br/>
+							<button class="btn btn-primary"
 									 value="Add!" id="addMeter"
 									type="button">Add</button>
 									<input type="hidden" id="rowCount" name="rowCount">
+									</div>
 							</div>
 							
 							
 						</div>
+						</div>
 							
-							<div class="row">
+							<div class="row mt-2">
 							
-							<div class="col-md-4">
-									<button class="btn btn-secondary submit-button"
+							<div class="col-md-12 text-right">
+									<button class="btn btn-primary submit-button"
 									 value="Save!" id="customerAdd" 
 									type="button" disabled>Save</button>
+									<button type="button" class="btn btn-danger btn-raised resetFilter" id="resetFilter">Reset</button>
+							
 							</div>
 
-							<div class="col-md-3">
-								<button type="button" class="btn btn-secondary btn-raised mr-3 resetFilter" id="resetFilter">Reset</button>
-							</div>
+							
 
 
-							<div class="col-md-4">
+							<!-- <div class="col-md-4">
 								<button type="button" class="btn btn-danger btn-raised mr-4"
 									data-dismiss="modal">
 									Close
 									<div class="ripple-container"></div>
 								</button>
-							</div>
+							</div> -->
 						</div>
 					</form>
 						

@@ -13,9 +13,9 @@ $(document).ready(function() {
 			$("#formblockNameAdd").addClass("input-group form-group has-feedback has-success bmd-form-group is-filled")
 		}
 		$("#blockAddButton").show();
-		var dom1 = "<'row'<'col-sm-4 headname'><'col-sm-2'><'col-sm-1'><'col-sm-2'f>>" +"<'row'<'col-sm-4'B><'col-sm-2'l><'col-sm-2'><'col-sm-2'><'col-sm-1 addevent'>>" + "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-6 text-black'i><'col-sm-6 text-black'p>>";
+		var dom1 = "<'row'<'col-sm-6 headname'><'col-sm-6'f>>" +"<'row'<'col-sm-2'B><'col-sm-2'l><'col-sm-2'><'col-sm-2'><'col-sm-1 addevent'>>" + "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-6 text-black'i><'col-sm-6 text-black'p>>";
 	}else{
-		var dom1 = "<'row'<'col-sm-4 headname'><'col-sm-2'><'col-sm-1'><'col-sm-2'f>>" +"<'row'<'col-sm-4'B><'col-sm-2'l><'col-sm-2'><'col-sm-2'><'col-sm-1'>>" + "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-6 text-black'i><'col-sm-6 text-black'p>>";
+		var dom1 = "<'row'<'col-sm-6 headname'><'col-sm-6'f>>" +"<'row'<'col-sm-4'B><'col-sm-2'l><'col-sm-2'><'col-sm-2'><'col-sm-1'>>" + "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-6 text-black'i><'col-sm-6 text-black'p>>";
 	}
 	$("#customerTable1").hide();
 table = $('#customerTable')
@@ -32,7 +32,7 @@ table = $('#customerTable')
 	"order" : [ 0, "desc" ],
 	"lengthMenu" : [ 5, 10, 25, 30, 50, 75 ],
 	"pageLength" : 5,
-	"scrollY" : 324,
+	
 	"scrollX" : true,
 "ajax" : {
 "url":"./customer/"+sessionStorage.getItem("roleID")+"/"+sessionStorage.getItem("ID")+"/-1",
@@ -50,18 +50,28 @@ return json.data;
 },{
 "data" : "blockName"
 },{
-"data" : "CRNNumber"
+"data" : "CustomerUniqueID"
 },{
 "data" : "firstName"
 },{
 "data" : "lastName"
 },{
 "data" : "houseNumber"
-},{
-"data" : "meterSerialNumber"
-},{
-"data" : "meterID"
-},{
+},
+{
+	"mData" : "action",
+	"render" : function(data, type, row) {
+		
+		return "<a href=# id=CustomerMeters data-toggle=modal data-target=#myCustomerMeters onclick='getCustomerMeters(\""
+		+ row.CustomerUniqueID
+		+ "\")'>"
+		+ "Multiple"
+		+ "</a>"
+		
+	}
+
+},
+{
 "data" : "mobileNumber"
 },{
 "data" : "email"
@@ -105,9 +115,9 @@ return json.data;
 
 ],
 "columnDefs" : [ {
-	targets : 13, visible:  (((sessionStorage.getItem("roleID") == 1) || (sessionStorage.getItem("roleID") == 2)) && (!(sessionStorage.getItem("roleID") == 5) || !(sessionStorage.getItem("roleID") == 3) || !(sessionStorage.getItem("roleID") == 4))),
+	targets : 11, visible:  (((sessionStorage.getItem("roleID") == 1) || (sessionStorage.getItem("roleID") == 2)) && (!(sessionStorage.getItem("roleID") == 5) || !(sessionStorage.getItem("roleID") == 3) || !(sessionStorage.getItem("roleID") == 4))),
 },{
-	targets : 14, visible: (sessionStorage.getItem("roleID") == 3)
+	targets : 12, visible: (sessionStorage.getItem("roleID") == 3)
 //(!(sessionStorage.getItem("roleID") == 1) && (((sessionStorage.getItem("roleID") == 1) || (sessionStorage.getItem("roleID") == 2) || (sessionStorage.getItem("roleID") == 3)) && (!(sessionStorage.getItem("roleID") == 5) || !(sessionStorage.getItem("roleID") == 4))))
 },
 {
@@ -218,10 +228,10 @@ $("#addMeter")
 									+"<label class=bmd-label-floating>Location</label> <input "
 									+"type=text class=form-control name=locationAdd["+rowCount+"]"
 									+" id=locationAdd-"+rowCount+">"
-									+"</div></div>"+
-									"<div class=col-md-4>" +
-									"<div class=''>"
-									+" <button type=button class='btn btn-primary' id='removeMeter'>Remove</button></div></div></div>");
+									+"</div></div>   " +
+											" <div class='col-md-12 text-right'>" 
+									+" <button type=button class='btn btn-danger' id='removeMeter'>Remove</button></div></div>" +
+											"</div>");
 
 			
 			 $('#customerDetails').bootstrapValidator('addField', 'meterIDAdd['+rowCount+']', {
@@ -381,7 +391,7 @@ $("body").on("click", "#removeMeter", function(e) {
 	}else{
 		$("#addMeter").show();
 	}
-	$(this).parent().parent().parent().remove();
+	$(this).parent().parent().remove();
 	
 	$("#rowCount").val(rowCount);
 	
@@ -389,7 +399,12 @@ $("body").on("click", "#removeMeter", function(e) {
 
 
 
+$("#customerAddd").click(function(){
+	
+window.location ="customer.jsp";	
+	
 
+});
 });
 
 
@@ -705,11 +720,22 @@ $(document)
 																	"data" : "lastName"
 																	},{
 																	"data" : "houseNumber"
-																	},{
-																	"data" : "meterSerialNumber"
-																	},{
-																	"data" : "meterID"
-																	},{
+																	},
+																	{
+																		"mData" : "action",
+																		"render" : function(data, type, row) {
+																			
+																			return "<a href=# id=CustomerMeters data-toggle=modal data-target=#myCustomerMeters onclick='getCustomerMeters(\""
+																			+ row.CRNNumber
+																			+ "\")'>"
+																			+ "Multiple"
+																			+ "</a>"
+																			
+																		}
+																	
+																	},
+																	
+																	{
 																	"data" : "mobileNumber"
 																	},{
 																	"data" : "email"
@@ -743,12 +769,12 @@ $(document)
 																	],
 																	"columnDefs" : [ {
 																		//orderable : false,
-																		targets : 13, visible:  (((sessionStorage.getItem("roleID") == 1) || (sessionStorage.getItem("roleID") == 2)) && (!(sessionStorage.getItem("roleID") == 5) || !(sessionStorage.getItem("roleID") == 3) || !(sessionStorage.getItem("roleID") == 4))),
+																		targets : 11, visible:  (((sessionStorage.getItem("roleID") == 1) || (sessionStorage.getItem("roleID") == 2)) && (!(sessionStorage.getItem("roleID") == 5) || !(sessionStorage.getItem("roleID") == 3) || !(sessionStorage.getItem("roleID") == 4))),
 																		//targets : 14, visible:  (((sessionStorage.getItem("roleID") == 1) || (sessionStorage.getItem("roleID") == 2) || (sessionStorage.getItem("roleID") == 3)) && (!(sessionStorage.getItem("roleID") == 5) || !(sessionStorage.getItem("roleID") == 4))),
 																	},{
 																		//orderable : false,
 																		//targets : 13, visible:  (((sessionStorage.getItem("roleID") == 1) || (sessionStorage.getItem("roleID") == 2)) && (!(sessionStorage.getItem("roleID") == 5) || !(sessionStorage.getItem("roleID") == 3) || !(sessionStorage.getItem("roleID") == 4))),
-																		targets : 14, visible: ( !(sessionStorage.getItem("roleID") == 1) && (((sessionStorage.getItem("roleID") == 1) || (sessionStorage.getItem("roleID") == 2) || (sessionStorage.getItem("roleID") == 3)) && (!(sessionStorage.getItem("roleID") == 5) || !(sessionStorage.getItem("roleID") == 4))))
+																		targets : 12, visible: ( !(sessionStorage.getItem("roleID") == 1) && (((sessionStorage.getItem("roleID") == 1) || (sessionStorage.getItem("roleID") == 2) || (sessionStorage.getItem("roleID") == 3)) && (!(sessionStorage.getItem("roleID") == 5) || !(sessionStorage.getItem("roleID") == 4))))
 																	},
 																	{
 																		"className": "dt-center", "targets": "_all"
@@ -1119,3 +1145,93 @@ function getCustomerFormDelete(CRNNumber){
 		});
 	
 }
+
+function getCustomerMeters(CRNNumber){
+	$.getJSON("./customer/"+sessionStorage.getItem("roleID")+"/"+sessionStorage.getItem("ID")+"/-1", function(data) {
+		$.each(data.data, function(i, item) {
+			if (CRNNumber == item.CustomerUniqueID) {
+				
+				$('#customerMeterTable')
+				.DataTable(
+						{
+							"dom" : "<'row'<'col-sm-4 headname'><'col-sm-2'><'col-sm-1'><'col-sm-2'f>>" +"<'row'<'col-sm-4'B><'col-sm-2'l><'col-sm-2'><'col-sm-2'><'col-sm-1 addevent'>>" + "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-6 text-black'i><'col-sm-6 text-black'p>>",
+									
+									"language": {
+									      "emptyTable": "No data available in table"
+									    },
+									 
+									 "responsive" : true,
+										"serverSide" : false,
+										"bDestroy" : true,
+										"bPaginate": true,
+										"pagging" : true,
+										"bProcessing" : true,
+										"ordering" : true,
+										"order" : [ 0, "desc" ],
+										"lengthMenu" : [ 5, 10, 25, 30, 50, 75 ],
+										"pageLength" : 5,
+										
+										"scrollX" : true,
+										"data":item.meters,
+						
+							"columns" : [
+								
+									{
+										"data" : "customerMeterID"
+									},
+									{
+										"data" : "miuID"
+										
+									},
+									 {
+											"data" : "meterSerialNumber"
+									},
+									 {
+										"data" : "meterType"
+									}
+									,
+									{
+										"data" : "meterSize"
+										
+									},
+									 {
+											"data" : "payType"
+									},
+									 {
+										"data" : "tariffName"
+									},
+									 {
+										"data" : "gatewayID"
+								},
+								 {
+									"data" : "location"
+								}
+									
+									
+									],
+										"columnDefs" : [/* {
+											orderable : false,
+											//targets: 5, visible: !(sessionStorage.getItem("roleID") == 4)
+											"className": "dt-center", "targets": "_all"
+										},
+										{
+											targets: 4, 
+											visible: !(sessionStorage.getItem("roleID") == 5)
+										}*/],
+
+							"buttons" : [
+									]
+						})  
+				
+				
+			} 
+			else {
+			}
+		});
+		$('#myCustomerMeters').modal('show');
+	});
+	
+	
+}
+
+

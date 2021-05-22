@@ -3,7 +3,12 @@
  */
 
 $(document).ready(function () {
-	 $('.select2').select2();
+	// $('.select2').select2();
+	 $(".select2").forEach(function() {
+		
+		  $(this).select2();
+		});
+
     	var flag =true;
     /*  $('.button-left').click(function () {
         $('.left ').toggleClass('fliph');

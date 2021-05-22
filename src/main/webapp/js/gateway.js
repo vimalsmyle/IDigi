@@ -143,10 +143,10 @@ $(document)
 															stringLength : {
 																min : 4,
 																max : 30,
-																message : 'Locaton must be more than 4 and less than 30 characters long'
+																message : 'Serial Number must be more than 4 and less than 30 characters long'
 															},
 															regexp : {
-																regexp : /^[a-zA-Z ]+$/,
+																regexp : /^[0-9]+$/,
 																message : 'Serial Number can only consist of alphabetical'
 															}
 														}
@@ -215,8 +215,8 @@ $(document)
 														message : 'Serial Number must be more than 6 and less than 30 characters long'
 													},
 													regexp : {
-														regexp : /^[a-zA-Z0-9]+$/,
-														message : 'Serial Number can only consist of Alphanumaric'
+														regexp : /^[0-9]+$/,
+														message : 'Serial Number can only consist of Numaric'
 													}
 												}
 											},
@@ -252,7 +252,7 @@ $(document)
 											'status.field.bv',
 											function(e, data) {
 												formIsValid = true;
-												$('.form-group', $(this))
+												$('.group.form-group', $(this))
 														.each(
 																function() {
 																//	alert(this+"@@=>"+formIsValid);
@@ -284,7 +284,7 @@ $(document)
 									'status.field.bv',
 									function(e, data) {
 										formIsValid = true;
-										$('.form-group', $(this))
+										$('.group.form-group', $(this))
 												.each(
 														function() {
 														//	alert(this+"@@=>"+formIsValid);
@@ -460,18 +460,18 @@ function getGatewayFormEdit(id) {
 
  // alert(id);
 
-	$.getJSON("./gateway/"+sessionStorage.getItem("roleID")+"/"+sessionStorage.getItem("ID"), function(data) {
+	$.getJSON("./gateway", function(data) {
 		$.each(data.data, function(i, item) {
 			if (id == item.gatewayID) {
 				
-				$('#gatewayNameEdit').val(item.communityName).trigger("change");
-				$("#formgatewayName").addClass("input-group form-group has-feedback has-success bmd-form-group is-filled")
-				$('#serialNumberEdit').val(item.blockName).trigger("change");
-				$("#formserialNumber").addClass("input-group form-group has-feedback has-success bmd-form-group is-filled")
-				$('#ipEdit').val(item.Location).trigger("change");
-				$("#formip").addClass("input-group form-group has-feedback has-success bmd-form-group is-filled")
-			    $('#portEdit').val(item.mobile).trigger("change");
-				$("#formport").addClass("input-group form-group has-feedback has-success bmd-form-group is-filled")
+				$('#gatewayNameEdit').val(item.gatewayName);
+				$("#formgatewayName1").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
+				$('#serialNumberEdit').val(item.gatewaySerialNumber);
+				$("#formserialNumber").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
+				$('#ipEdit').val(item.gatewayIP);
+				$("#formip").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
+			    $('#portEdit').val(item.gatewayPort);
+				$("#formport").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
 				$("#gatewayIdhidden").val(item.gatewayID);
 			
 				$('#gatewayEditsave')
