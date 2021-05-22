@@ -5,10 +5,11 @@
 }
 body{
 	background-color: #fff;
-    font-family: "Roboto",sans-serif;
+	/* //font-family: 'Jost',Roboto,sans-serif; */
+	font-family: 'Montserrat', sans-serif;
     font-weight: 300;
-	padding-top: 4.5rem;
-	font-size:14px;
+	padding-top: 3.9rem;
+	font-size:12px;
 
 }
 .login_form{
@@ -233,9 +234,10 @@ body{
 }
 
 
-
-
-
+.headname h3{
+	font-size: 26px;
+    text-decoration: underline;
+}
 .sidingBlock{
 	background: #b2d136;
     -webkit-clip-path: polygon(0% 0%, 0% 100%, 73% 100%, 100% 61%, 100% 0%);
@@ -243,6 +245,13 @@ body{
     color: #3f3f3f;
 	border: 0px;
 }
+.activeurl{
+	
+	color: #b2d136;
+font-family: 'Roboto',sans-serif; 
+	
+}
+
 .f-30{
 	font-size:30px;
 }
@@ -597,4 +606,29 @@ body{
 }
 
 
+@media (min-width: 768px) {
+  .modal-xl {
+    width: 90%;
+   max-width:1200px;
+  }
+}
+
+
+.header{
+	background: #3f3f3fd4!important;
+}
+.header img{width:180px;}
+
+.submit-button:disabled {
+    color: #fff;
+    background-color: #6c757d;
+    border-color: #6c757d;
+}
+
+.help-block {
+    color: #dc3545!important;
+    line-height: 16px;
+    margin-top: 2px;
+    
+}
 

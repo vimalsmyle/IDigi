@@ -4,6 +4,8 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<link href="https://fonts.googleapis.com/css?family=Montserrat:100,200,300,500,600" rel="stylesheet">
+
 <title>Insert title here</title>
 </head>
 <body>
@@ -20,7 +22,7 @@
 	%>
 <!--Header Start-->
  <!-- bg-info -->
-	 <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark header">
+	 <nav class="navbar navbar-expand-md navbar-dark fixed-top header">
       <a class="navbar-brand mr-auto" href="#"><img src="common/images/logo-white.png" alt="logo" class="logo"></a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>

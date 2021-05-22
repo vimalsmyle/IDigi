@@ -38,9 +38,23 @@
 
 	<jsp:include page="header.jsp" />
 	<jsp:include page="slidebar.jsp" />
+	
+	
 		<main class="col-md-10 float-left col px-5 pl-md-3 pt-2 pb-6 main">
+		
+		
 	<div
 		class="container-fluid topspacing bottomspacing pl-0 pr-0 mr-0 ml-0">
+		
+		<div class="row">
+				<div class="col-md-12">
+					<a class="text-dark" href="#">Home</a>
+					<span>/</span>
+					<span class="activeurl">DashBoard</span>
+				</div>
+			</div>
+			
+			
 		<div class="row mr-0 ml-0">
 			
 			<div class="right_data col-md-12 mt-4 mb-4">
@@ -58,8 +72,7 @@
 									<th>First Name</th>
 									<th>Last Name</th>
 									<th>House No</th>
-									<th>MSN</th>
-									<th>MIU ID</th>
+									<th>Meters</th>
 									<th>Mobile</th>
 									<th>Email</th>
 									<th>Created By UserName</th>
@@ -86,8 +99,7 @@
 									<th>First Name</th>
 									<th>Last Name</th>
 									<th>House No</th>
-									<th>MSN</th>
-									<th>MIU ID</th>
+									<th>Meters</th>
 									<th>Mobile</th>
 									<th>Email</th>
 									<th>Created By UserName</th>
@@ -112,167 +124,6 @@
 	</main>
 	<jsp:include page="footer.jsp" />
 
-	<!-- Modal -->
-	<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
-		aria-labelledby="exampleModalLabel" aria-hidden="true">
-		<div class="modal-dialog modal-lg" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="exampleModalLabel">Customer Add
-						Form</h5>
-					<button type="button" class="close" data-dismiss="modal"
-						aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-				</div>
-				<div class="modal-body">
-					<form id="customerDetails">
-						<div class="row">
-						
-						<%if(!user_id.equalsIgnoreCase("2")) {%>
-							<div class="col-md-4">
-								<div class="form-group has-feedback has-success bmd-form-group is-filled">
-									<label class="bmd-label-floating select-label">Community Name</label> 
-									<select
-										class="form-control" id="selectcommunityName" name="selectcommunityName" onchange="showBlockbyCommunity(this.value);">
-									</select>
-								</div>
-							</div>
-							<div class="col-md-4">
-								<div class="form-group has-feedback has-success bmd-form-group is-filled">
-									<label class="bmd-label-floating select-label">Select Block</label> <select
-										class="form-control" id="selectBlockBasedonCommunity" name="selectBlockBasedonCommunity">
-									</select>
-								</div>
-							</div>
-							<%} else if(user_id.equalsIgnoreCase("2")){%>
-
-							<div class="col-md-4">
-								<div id = "formcommunityNameAdd" class="form-group">
-									<label class="bmd-label-floating">Community Name</label> <input
-										type="text" class="form-control" name="communityNameAdd"
-										id="communityNameAdd" disabled>
-								</div>
-							</div>
-							<div class="col-md-4">
-								<div id = "formblockNameAdd" class="form-group">
-									<label class="bmd-label-floating">Block Name</label> <input
-										type="text" class="form-control" name="blockNameAdd"
-										id="blockNameAdd"  disabled>
-								</div>
-							</div>
-
-<%} %>
-							<div class="col-md-4">
-								<div class="form-group">
-									<label class="bmd-label-floating">First Name</label> <input
-										type="text" class="form-control" name="firstNameAdd"
-										id="firstNameAdd">
-								</div>
-							</div>
-							<div class="col-md-4">
-								<div class="form-group">
-									<label class="bmd-label-floating">Last Name</label> <input
-										type="text" class="form-control" name="lastNameAdd"
-										id="lastNameAdd">
-								</div>
-							</div>
-							
-							
-							
-							<div class="col-md-4">
-								<div class="form-group">
-									<label class="bmd-label-floating">House No.</label> <input
-										type="text" class="form-control" name="houseNoAdd"
-										id="houseNoAdd">
-								</div>
-							</div>
-							<div class="col-md-4">
-								<div class="form-group">
-									<label class="bmd-label-floating">Mobile No</label> <input
-										type="text" class="form-control" name="mobileNoAdd"
-										id="mobileNoAdd">
-								</div>
-							</div>
-							
-							
-							
-							
-							<div class="col-md-4">
-								<div class="form-group">
-									<label class="bmd-label-floating">Email</label> <input
-										type="email" class="form-control" name="emailAdd"
-										id="emailAdd">
-								</div>
-							</div>
-							<div class="col-md-4">
-								<div class="form-group">
-									<label class="bmd-label-floating">MSN</label> <input
-										type="text" class="form-control" name="meterSerialAdd"
-										id="meterSerialAdd">
-								</div>
-							</div>
-							
-							
-							
-							
-							<div class="col-md-4">
-								<div class="form-group">
-									<label class="bmd-label-floating">MIU ID</label> <input
-										type="text" class="form-control" name="amrAdd"
-										id="amrAdd">
-								</div>
-							</div>
-							<div class="col-md-4">
-								<div class="form-group">
-									<label class="bmd-label-floating select-label">Tariff Name</label>  <select
-										class="form-control" id="selectTariffName" name="selectTariffName">
-										<!-- <option style = "color: Red" value="" disabled selected>Select Tariff</option> --><!--  <option>Select Community</option> --> 
-									</select>
-								</div>
-							</div>
-							
-							
-							<div class="col-md-4">
-								<div class="form-group">
-									<label class="bmd-label-floating">CRN Number</label> <input
-										type="text" class="form-control" name="CRNAdd"
-										id="CRNAdd">
-								</div>
-							</div>
-							
-							<div class="col-md-4">
-							<button class="btn btn-primary submit-button"
-									 value="Add!" id="addMeter"
-									type="button">Add</button>
-							</div>
-							<div class="col-md-4">
-									<button class="btn btn-secondary submit-button"
-									 value="Save!" id="customerAdd"
-									type="button" disabled>Save</button>
-							</div>
-
-							<div class="col-md-3">
-								<button type="button" class="btn btn-secondary btn-raised mr-3 resetFilter" id="resetFilter">Reset</button>
-							</div>
-
-
-							<div class="col-md-4">
-								<button type="button" class="btn btn-danger btn-raised mr-4"
-									data-dismiss="modal">
-									Close
-									<div class="ripple-container"></div>
-								</button>
-							</div>
-						</div>
-					</form>
-
-				</div>
-			</div>
-		</div>
-	</div>
-	
-	
 	<div class="modal fade" id="filter" tabindex="-1" role="dialog"
 		aria-labelledby="filterModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -400,15 +251,6 @@
 										id="amrEdit">
 								</div>
 							</div>
-							<!-- <div class="col-md-6">
-								<div class="form-group">
-									<label class="bmd-label-floating">Tariff Name</label>  <select
-										class="form-control" id="selectTariffNameEdit" name="selectTariffNameEdit">
-										<option style = "color: Red" value="" disabled selected>Select Tariff</option> --><!--  <option>Select Community</option> 
-									</select>
-								</div>
-							</div> -->
-							
 							
 							<div class="col-md-6">
 								<div id="formCRNEdit" class="form-group">
@@ -444,6 +286,70 @@
 			</div>
 		</div>
 	</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="modal fade bd-example-modal-xl" id="myCustomerMeters" role="dialog">
+		<div class="modal-dialog modal-xl
+		">
+
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title" align="center">List of Meters</h4>
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+				<div class="modal-body">
+					
+					
+					<table id="customerMeterTable"
+							class="table table-striped table-bordered dt-responsive nowrap dataTable no-footer dtr-inline collapsed"
+							style="width: 100%">
+							<thead>
+								<tr>
+									<th>Customer Meter ID</th>
+									<th>MIU ID</th>
+									<th>Meter Serial Number</th>
+									<th>Meter Type</th>
+									<th>Meter Size</th>
+										<th>Pay Type</th>
+									<th>Tariff Name</th>
+									<th>Gateway ID</th>
+									<th>Location</th>
+								</tr>
+							</thead>
+							<tbody>
+							</tbody>
+						</table>
+					
+					
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	<%} %>
    
 	<script type="text/javascript"
