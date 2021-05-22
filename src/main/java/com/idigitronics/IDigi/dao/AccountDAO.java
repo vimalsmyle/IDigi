@@ -921,6 +921,16 @@ public class AccountDAO {
 				billingresponsevo.setHouseNumber(rs.getString("HouseNumber"));
 				billingresponsevo.setTotalAmount(rs.getFloat("TotalAmount") + rs.getFloat("TaxAmount"));
 				billingresponsevo.setTotalConsumption(rs.getFloat("TotalConsumption"));
+				
+				PreparedStatement ps = con.prepareStatement("SELECT bpd.PaymentStatus, bpd.ModeofPayment, bpd.TransactionDate, u.UserName FROM billingpaymentdetails AS bpd LEFT JOIN user AS u ON u.ID = bpd.CreatedByID WHERE bpd.CustomerBillingID = " + rs.getLong("CustomerBillingID"));
+				ResultSet rs2 = ps.executeQuery();
+				if(rs2.next()) {
+					billingresponsevo.setStatus((rs2.getInt("PaymentStatus") == 1) ? "Paid" : "Pending");
+					billingresponsevo.setModeOfPayment(rs2.getString("ModeofPayment") != null ? rs2.getString("ModeofPayment") : "---");
+					billingresponsevo.setTransactedBy(rs2.getString("UserName") != null ? rs2.getString("UserName") : "---");
+					billingresponsevo.setPaidDate(rs2.getString("TransactionDate") != null ? ExtraMethodsDAO.datetimeformatter(rs2.getString("TransactionDate")) : "---");
+				}
+
 				billingresponsevo.setBillMonth(rs.getInt("BillMonth") == 1 ? "January" : rs.getInt("BillMonth") == 2 ? "February" : rs.getInt("BillMonth") == 3 ? "March" : rs.getInt("BillMonth") == 4 ? "April" : rs.getInt("BillMonth") == 5 ? "May" : rs.getInt("BillMonth") == 6 ? "June" : rs.getInt("BillMonth") == 7 ? "July" : rs.getInt("BillMonth") == 8 ? "August" : rs.getInt("BillMonth") == 9 ? "September" : rs.getInt("BillMonth") == 10 ? "October" : rs.getInt("BillMonth") == 11 ? "November" : rs.getInt("BillMonth") == 12 ? "December" : "");
 				billingresponsevo.setBillYear(rs.getInt("BillYear"));
 				billingresponsevo.setLogDate(rs.getString("LogDate"));
@@ -940,7 +950,7 @@ public class AccountDAO {
 					individualBillingResponsevo.setConsumption(rs1.getFloat("Consumption"));
 					individualBillingResponsevo.setBillAmount(rs1.getFloat("BillAmount"));
 					individualBillingResponsevo.setTariff(rs1.getFloat("Tariff"));
-					individualBillingResponsevo.setBillingDate(rs1.getString("LogDate"));
+					individualBillingResponsevo.setBillingDate(ExtraMethodsDAO.datetimeformatter(rs1.getString("LogDate")));
 					
 					individualbills.add(individualBillingResponsevo);
 
@@ -1143,8 +1153,7 @@ public class AccountDAO {
 					Paragraph newLine = new Paragraph("\n");
 					Paragraph head = new Paragraph("Receipt");
 					Paragraph disclaimer = new Paragraph(ExtraConstants.Disclaimer);
-					Paragraph copyRight = new Paragraph(
-							"------------------------------------All  rights reserved by IDigitronics ® Hyderabad-----------------------------------");
+					Paragraph copyRight = new Paragraph("----------------------------------All  rights reserved by IDigitronics ® Hyderabad---------------------------------");
 					PdfFont font = new PdfFontFactory().createFont(FontConstants.TIMES_BOLD);
 
 					// change according to the image directory
@@ -1176,9 +1185,8 @@ public class AccountDAO {
 					headTable.addCell(headtable3.setBorder(Border.NO_BORDER));
 
 					document.add(headTable);
-					document.add(newLine);
 
-					float[] headerWidths = { 180F, 180F, 180F, 180F };
+					float[] headerWidths = { 130F, 150F, 150F, 100F };
 
 					Table table1 = new Table(headerWidths);
 
@@ -1188,23 +1196,23 @@ public class AccountDAO {
 
 					Cell customerName = new Cell();
 					customerName.add(rs.getString("FirstName") + " " + rs.getString("LastName"));
-					customerName.setTextAlignment(TextAlignment.CENTER);
+					customerName.setTextAlignment(TextAlignment.LEFT);
 
 					Cell cell2 = new Cell();
-					cell2.add("CAN/UAN Number: ");
-					cell2.setTextAlignment(TextAlignment.CENTER);
+					cell2.add("CAN Number: ");
+					cell2.setTextAlignment(TextAlignment.RIGHT);
 
 					Cell customerUniqueID = new Cell();
 					customerUniqueID.add(rs.getString("CustomerUniqueID"));
-					customerUniqueID.setTextAlignment(TextAlignment.CENTER);
+					customerUniqueID.setTextAlignment(TextAlignment.LEFT);
 
 					Cell cell3 = new Cell();
 					cell3.add("House Number: ");
-					cell3.setTextAlignment(TextAlignment.CENTER);
+					cell3.setTextAlignment(TextAlignment.LEFT);
 
 					Cell houseNumber = new Cell();
 					houseNumber.add(rs.getString("HouseNumber"));
-					houseNumber.setTextAlignment(TextAlignment.CENTER);
+					houseNumber.setTextAlignment(TextAlignment.LEFT);
 
 					Cell cell4 = new Cell();
 					cell4.add("Invoice No. : ");
@@ -1212,64 +1220,64 @@ public class AccountDAO {
 
 					Cell InvoiceNumber = new Cell();
 					InvoiceNumber.add("" + transactionID);
-					InvoiceNumber.setTextAlignment(TextAlignment.RIGHT);
+					InvoiceNumber.setTextAlignment(TextAlignment.LEFT);
 
 					Cell cell5 = new Cell();
 					cell5.add("PaidAmount: ");
-					cell5.setTextAlignment(TextAlignment.CENTER);
+					cell5.setTextAlignment(TextAlignment.LEFT);
 
 					Cell Amount = new Cell();
 					Amount.add(rs.getString("TotalAmount"));
-					Amount.setTextAlignment(TextAlignment.CENTER);
+					Amount.setTextAlignment(TextAlignment.LEFT);
 
 					Cell cell6 = new Cell();
 					cell6.add("Late Fee(if any): ");
-					cell6.setTextAlignment(TextAlignment.CENTER);
+					cell6.setTextAlignment(TextAlignment.RIGHT);
 
 					Cell lateFee = new Cell();
 					lateFee.add(rs.getString("LateFee"));
-					lateFee.setTextAlignment(TextAlignment.CENTER);
+					lateFee.setTextAlignment(TextAlignment.LEFT);
 
 					Cell cell7 = new Cell();
-					cell7.add("Mode of Payment: ");
-					cell7.setTextAlignment(TextAlignment.CENTER);
+					cell7.add("Payment Mode: ");
+					cell7.setTextAlignment(TextAlignment.LEFT);
 
 					Cell modeOfPayment = new Cell();
 					modeOfPayment.add(rs.getString("ModeOfPayment"));
-					modeOfPayment.setTextAlignment(TextAlignment.CENTER);
+					modeOfPayment.setTextAlignment(TextAlignment.LEFT);
 
 					Cell cell8 = new Cell();
-					cell8.add("Transaction Initiated By: ");
-					cell8.setTextAlignment(TextAlignment.CENTER);
+					cell8.add("Transaction Done By: ");
+					cell8.setTextAlignment(TextAlignment.RIGHT);
 
 					Cell transactedBy = new Cell();
 					transactedBy.add(rs1.getString("UserName"));
-					transactedBy.setTextAlignment(TextAlignment.CENTER);
+					transactedBy.setTextAlignment(TextAlignment.LEFT);
 
 					Cell cell9 = new Cell();
 					cell9.add("Paid on: ");
-					cell9.setTextAlignment(TextAlignment.CENTER);
+					cell9.setTextAlignment(TextAlignment.LEFT);
 
 					Cell transactionDate = new Cell();
 					transactionDate.add(ExtraMethodsDAO.datetimeformatter(rs.getString("TransactionDate")));
-					transactionDate.setTextAlignment(TextAlignment.CENTER);
+					transactionDate.setTextAlignment(TextAlignment.LEFT);
 
 					Cell cell10 = new Cell();
 					cell10.add("Order ID: ");
-					cell10.setTextAlignment(TextAlignment.CENTER);
+					cell10.setTextAlignment(TextAlignment.RIGHT);
 
 					Cell OrderID = new Cell();
 					OrderID.add(rs.getString("RazorPayOrderID") == null ? "---" : rs.getString("RazorPayOrderID"));
-					OrderID.setTextAlignment(TextAlignment.CENTER);
+					OrderID.setTextAlignment(TextAlignment.LEFT);
 
 					Cell cell11 = new Cell();
 					cell11.add("Payment ID: ");
-					cell11.setTextAlignment(TextAlignment.CENTER);
+					cell11.setTextAlignment(TextAlignment.LEFT);
 
 					Cell PaymentID = new Cell();
 					PaymentID
 							.add(rs.getString("RazorPayPaymentID") == null ? "---" : rs.getString("RazorPayPaymentID"));
-					PaymentID.setTextAlignment(TextAlignment.CENTER);
+					PaymentID.setTextAlignment(TextAlignment.LEFT);
 
 					Cell cell12 = new Cell();
 					cell12.add("");
@@ -1317,12 +1325,6 @@ public class AccountDAO {
 
 					document.add(table1.setHorizontalAlignment(HorizontalAlignment.CENTER));
 					document.add(disclaimer.setHorizontalAlignment(HorizontalAlignment.CENTER).setFont(font));
-					document.add(newLine);
-					document.add(newLine);
-					document.add(newLine);
-					document.add(newLine);
-					document.add(newLine);
-					document.add(newLine);
 
 					document.add(copyRight.setHorizontalAlignment(HorizontalAlignment.CENTER).setFont(font));
 					document.close();
