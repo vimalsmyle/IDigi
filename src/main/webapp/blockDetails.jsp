@@ -96,7 +96,7 @@
 								
 								
 							<div class="col-md-6">
-								<div class="form-group">
+								<div class="group form-group">
 									<label for="text">Block Name:</label>
 									<input
 										type="text" class="form-control" name="blockNameAdd"
@@ -105,14 +105,14 @@
 							</div>
 
 							<div class="col-md-6">
-								<div class="form-group">
+								<div class="group form-group">
 									<label class="bmd-label-floating">Location</label> <input
 										type="text" class="form-control" name="blockLocationAdd"
 										id="blockLocationAdd">
 								</div>
 							</div>
 							<div class="col-md-6">
-								<div class="form-group">
+								<div class="group form-group">
 									<label class="bmd-label-floating">Mobile Number</label> <input
 										type="text" class="form-control" name="blockMobileAdd"
 										id="blockMobileAdd">
@@ -120,7 +120,7 @@
 							</div>
 
 							<div class="col-md-6">
-								<div class="form-group">
+								<div class="group form-group">
 									<label class="bmd-label-floating">Email</label> <input
 										type="email" class="form-control" name="blockEmailAdd"
 										id="blockEmailAdd">
@@ -170,14 +170,14 @@
 					<form id="blockEdit">
 						<div class="row">
 							<div class="col-md-6">
-								<div id="formcomunityName" class="form-group">
+								<div id="formcomunityName" class="group form-group">
 									<label class="bmd-label-floating">Community</label> <input
 										type="text" class="form-control select2" name="communityNameEdit"
 										id="communityNameEdit" disabled>
 								</div>
 							</div>
 							<div class="col-md-6">
-								<div id="formblockName" class="form-group">
+								<div id="formblockName" class="group form-group">
 									<label class="bmd-label-floating">Block Name</label> <input
 										type="text" class="form-control" name="blockNameEdit"
 										id="blockNameEdit">
@@ -185,14 +185,14 @@
 							</div>
 
 							<div class="col-md-6">
-								<div id="formblocklocation" class="form-group">
+								<div id="formblocklocation" class="group form-group">
 									<label class="bmd-label-floating">Location</label> <input
 										type="text" class="form-control" name="blockLocationEdit"
 										id="blockLocationEdit">
 								</div>
 							</div>
 							<div class="col-md-6">
-								<div id="formblockMobile" class="form-group">
+								<div id="formblockMobile" class="group form-group">
 									<label class="bmd-label-floating">Mobile Number</label> <input
 										type="text" class="form-control" name="blockMobileEdit"
 										id="blockMobileEdit">
@@ -200,7 +200,7 @@
 							</div>
 
 							<div class="col-md-6">
-								<div id="formblockEmail" class="form-group">
+								<div id="formblockEmail" class="group form-group">
 									<label class="bmd-label-floating">Email</label> <input
 										type="email" class="form-control" name="blockEmailEdit"
 										id="blockEmailEdit">

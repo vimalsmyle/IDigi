@@ -274,7 +274,7 @@ $(document)
 											'status.field.bv',
 											function(e, data) {
 												formIsValid = true;
-												$('.input-group.form-group', $(this))
+												$('.group.form-group', $(this))
 														.each(
 																function() {
 																//	alert(this+"@@=>"+formIsValid);
@@ -306,7 +306,7 @@ $(document)
 									'status.field.bv',
 									function(e, data) {
 										formIsValid = true;
-										$('.input-group.form-group', $(this))
+										$('.group.form-group', $(this))
 												.each(
 														function() {
 														//	alert(this+"@@=>"+formIsValid);
@@ -497,15 +497,15 @@ function getBlockFormEdit(id) {
 			if (id == item.blockID) {
 				
 				$('#communityNameEdit').val(item.communityName).trigger("change");
-				$("#formcomunityName").addClass("input-group form-group has-feedback has-success bmd-form-group is-filled")
+				$("#formcomunityName").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
 				$('#blockNameEdit').val(item.blockName).trigger("change");
-				$("#formblockName").addClass("input-group form-group has-feedback has-success bmd-form-group is-filled")
+				$("#formblockName").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
 				$('#blockLocationEdit').val(item.Location).trigger("change");
-				$("#formblocklocation").addClass("input-group form-group has-feedback has-success bmd-form-group is-filled")
+				$("#formblocklocation").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
 			    $('#blockMobileEdit').val(item.mobile).trigger("change");
-				$("#formblockMobile").addClass("input-group form-group has-feedback has-success bmd-form-group is-filled")
+				$("#formblockMobile").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
 				$('#blockEmailEdit').val(item.email).trigger("change");
-				$("#formblockEmail").addClass("input-group form-group has-feedback has-success bmd-form-group is-filled")
+				$("#formblockEmail").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
 				$("#blockIdhidden").val(item.blockID);
 			
 				$('#blockEditsave')
