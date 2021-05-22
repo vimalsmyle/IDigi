@@ -318,7 +318,7 @@ public class CommunitySetUpDAO {
 
 		try {
 			con = getConnection();
-			pstmt = con.prepareStatement("SELECT * FROM gateway WHERE GatewaySerialNumber = " + gatewaySerialNumber.trim());
+			pstmt = con.prepareStatement("SELECT * FROM gateway WHERE GatewaySerialNumber = '" + gatewaySerialNumber.trim() + "'");
 			rs = pstmt.executeQuery();
 			if (rs.next()) {
 				result = true;

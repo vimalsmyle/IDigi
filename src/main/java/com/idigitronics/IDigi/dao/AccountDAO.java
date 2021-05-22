@@ -901,11 +901,12 @@ public class AccountDAO {
 		List<IndividualBillingResponseVO> individualbills = null;
 		BillingResponseVO billingresponsevo = null;
 		IndividualBillingResponseVO individualBillingResponsevo = null;
+		LocalDate currentdate = LocalDate.now();
 		
 		try {
 			con = getConnection();
-			
-			pstmt = con.prepareStatement("SELECT c.CommunityName, b.BlockName, CONCAT(cd.FirstName, cd.LastName) as Name, cd.HouseNumber, cd.CustomerID, cbd.CustomerBillingID, cbd.TotalAmount, cbd.TaxAmount, cbd.TotalConsumption, cbd.Status, cbd.BillMonth, cbd.BillYear, cbd.LogDate FROM customerdetails AS cd LEFT JOIN customerbillingdetails AS cbd ON cd.CustomerID = cbd.CustomerID LEFT JOIN community AS c ON c.CommunityID = cd.CommunityID LEFT JOIN block AS b ON b.BlockID = cd.BlockID");
+			String query = "SELECT c.CommunityName, b.BlockName, cd.FirstName, cd.LastName, cd.HouseNumber, cd.CustomerID, cbd.CustomerBillingID, cbd.TotalAmount, cbd.TaxAmount, cbd.TotalConsumption, cbd.Status, cbd.BillMonth, cbd.BillYear, cbd.LogDate FROM customerdetails AS cd LEFT JOIN customerbillingdetails AS cbd ON cd.CustomerID = cbd.CustomerID LEFT JOIN community AS c ON c.CommunityID = cd.CommunityID LEFT JOIN block AS b ON b.BlockID = cd.BlockID WHERE cbd.BillMonth = "+ (currentdate.getMonthValue() - 1) +" AND cbd.BillYear = "+ (currentdate.getMonthValue() == 1 ? (currentdate.getYear() - 1) : currentdate.getYear()) +" <change>"; 
+			pstmt = con.prepareStatement(query.replaceAll("<change>", ((roleid == 1 || roleid == 4) && (filterCid == -1)) ? "ORDER BY cd.CustomerID DESC" : ((roleid == 1 || roleid == 4) && (filterCid != -1)) ? " AND cd.CommunityID = "+filterCid+" ORDER BY cd.CustomerID DESC" : (roleid == 2 || roleid == 5) ? "AND cd.BlockID = "+id+ " ORDER BY cd.CustomerID DESC" : (roleid == 3) ? "AND cd.CustomerUniqueID = '"+id+"'":""));
 			rs = pstmt.executeQuery();
 			
 			billlist = new LinkedList<BillingResponseVO>();
@@ -916,15 +917,13 @@ public class AccountDAO {
 				billingresponsevo.setCustomerBillingID(rs.getLong("CustomerBillingID"));
 				billingresponsevo.setCommunityName(rs.getString("CommunityName"));
 				billingresponsevo.setBlockName(rs.getString("BlockName"));
-				billingresponsevo.setCustomerName(rs.getString("Name"));
+				billingresponsevo.setCustomerName(rs.getString("FirstName") + " "+ rs.getString("LastName"));
 				billingresponsevo.setHouseNumber(rs.getString("HouseNumber"));
-				billingresponsevo.setTotalAmount(rs.getInt("TotalAmount") + rs.getInt("TaxAmount"));
-				billingresponsevo.setTotalConsumption(rs.getInt("TotalConsumption"));
+				billingresponsevo.setTotalAmount(rs.getFloat("TotalAmount") + rs.getFloat("TaxAmount"));
+				billingresponsevo.setTotalConsumption(rs.getFloat("TotalConsumption"));
 				billingresponsevo.setBillMonth(rs.getInt("BillMonth") == 1 ? "January" : rs.getInt("BillMonth") == 2 ? "February" : rs.getInt("BillMonth") == 3 ? "March" : rs.getInt("BillMonth") == 4 ? "April" : rs.getInt("BillMonth") == 5 ? "May" : rs.getInt("BillMonth") == 6 ? "June" : rs.getInt("BillMonth") == 7 ? "July" : rs.getInt("BillMonth") == 8 ? "August" : rs.getInt("BillMonth") == 9 ? "September" : rs.getInt("BillMonth") == 10 ? "October" : rs.getInt("BillMonth") == 11 ? "November" : rs.getInt("BillMonth") == 12 ? "December" : "");
 				billingresponsevo.setBillYear(rs.getInt("BillYear"));
 				billingresponsevo.setLogDate(rs.getString("LogDate"));
-				
-				LocalDate currentdate = LocalDate.now();
 				
 				pstmt1 = con.prepareStatement("SELECT * FROM billingdetails WHERE CustomerID = " + rs.getInt("CustomerID") + " AND BillMonth = "+ (currentdate.getMonthValue() - 1) + " AND BillYear = " + (currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear()));
 				rs1 = pstmt1.executeQuery();
@@ -938,15 +937,12 @@ public class AccountDAO {
 					individualBillingResponsevo.setMeterType(rs1.getString("MeterType"));
 					individualBillingResponsevo.setPreviousReading(rs1.getFloat("PreviousReading"));
 					individualBillingResponsevo.setPresentReading(rs1.getFloat("PresentReading"));
-					individualBillingResponsevo.setConsumption(rs1.getInt("Consumption"));
-					individualBillingResponsevo.setBillAmount(rs1.getInt("Amount"));
-					individualBillingResponsevo.setTariff(rs.getFloat("Tariff"));
-					individualBillingResponsevo.setFixedCharges(rs.getInt("FixedCharges"));
-					individualBillingResponsevo.setReconnectionCharges(rs1.getInt("ReconnectionCharges"));
+					individualBillingResponsevo.setConsumption(rs1.getFloat("Consumption"));
+					individualBillingResponsevo.setBillAmount(rs1.getFloat("BillAmount"));
+					individualBillingResponsevo.setTariff(rs1.getFloat("Tariff"));
 					individualBillingResponsevo.setBillingDate(rs1.getString("LogDate"));
 					
 					individualbills.add(individualBillingResponsevo);
-					
 
 				}
 				billingresponsevo.setIndividualbills(individualbills);
@@ -992,7 +988,7 @@ public class AccountDAO {
 
 						// creating order in razor pay
 
-						razorPayOrderVO.setAmount(((paybillRequestVO.getTotalamount() + paybillRequestVO.getTaxAmount() + paybillRequestVO.getLateFee()) * 100));
+						razorPayOrderVO.setAmount((int) ((paybillRequestVO.getTotalamount() + paybillRequestVO.getTaxAmount() + paybillRequestVO.getLateFee()) * 100));
 						razorPayOrderVO.setCurrency("INR");
 						razorPayOrderVO.setPayment_capture(1);
 
@@ -1008,7 +1004,7 @@ public class AccountDAO {
 						if (pstmt2.executeUpdate() > 0) {
 
 							checkoutDetails.setKey(ExtraConstants.RZPKeyID);
-							checkoutDetails.setAmount(paybillRequestVO.getTotalamount() * 100);
+							checkoutDetails.setAmount((long) (paybillRequestVO.getTotalamount() * 100));
 							checkoutDetails.setCurrency(ExtraConstants.PaymentCurrency);
 							checkoutDetails.setOrder_id(paybillRequestVO.getRazorPayOrderID());
 							checkoutDetails.setButtonText(ExtraConstants.PaymentButtonText);
@@ -1081,7 +1077,7 @@ public class AccountDAO {
 			pstmt.setLong(1, paybillRequestVO.getCustomerBillingID());
 			pstmt.setLong(2, paybillRequestVO.getCustomerID());
 			pstmt.setString(3, paybillRequestVO.getCustomerUniqueID());
-			pstmt.setInt(4, paybillRequestVO.getTotalamount() + paybillRequestVO.getTaxAmount());
+			pstmt.setFloat(4, paybillRequestVO.getTotalamount() + paybillRequestVO.getTaxAmount());
 			pstmt.setInt(5, paybillRequestVO.getLateFee());
 			pstmt.setString(5, paybillRequestVO.getSource());
 			pstmt.setString(6, paybillRequestVO.getModeOfPayment());
@@ -1121,259 +1117,233 @@ public class AccountDAO {
 		
 		try {
 			con = getConnection();
-			
-			pstmt = con.prepareStatement("SELECT c.CommunityName, b.BlockName, cd.HouseNumber, cd.CustomerUniqueID, cd.FirstName, cd.LastName, bpd.TotalAmount, bpd.LateFee, bpd.ModeOfPayment, bpd.CreatedByID, bpd.RazorPayOrderID, bpd.RazorPayPaymentID, bpd.TransactionDate, bpd.AcknowledgeDate\r\n" + 
-					"FROM customerbillingdetails AS cbd LEFT JOIN billingpaymentdetails AS bpd ON cbd.CustomerBillingID = bpd.CustomerBillingID \r\n" + 
-					"LEFT JOIN customerdetails AS cd ON cd.CustomerID = cbd.CustomerID LEFT JOIN community AS c ON c.CommunityID = cbd.CommunityID\r\n" + 
-					"LEFT JOIN block AS b ON b.BlockID = cbd.BlockID WHERE bpd.TransactionID = " + transactionID);
+
+			pstmt = con.prepareStatement(
+					"SELECT c.CommunityName, b.BlockName, cd.HouseNumber, cd.CustomerUniqueID, cd.FirstName, cd.LastName, bpd.TotalAmount, bpd.LateFee, bpd.ModeOfPayment, bpd.CreatedByID, bpd.RazorPayOrderID, bpd.RazorPayPaymentID, bpd.TransactionDate, bpd.AcknowledgeDate\r\n"
+							+ "FROM customerbillingdetails AS cbd LEFT JOIN billingpaymentdetails AS bpd ON cbd.CustomerBillingID = bpd.CustomerBillingID \r\n"
+							+ "LEFT JOIN customerdetails AS cd ON cd.CustomerID = cbd.CustomerID LEFT JOIN community AS c ON c.CommunityID = cbd.CommunityID\r\n"
+							+ "LEFT JOIN block AS b ON b.BlockID = cbd.BlockID WHERE bpd.TransactionID = "+ transactionID);
 			rs = pstmt.executeQuery();
-			if(rs.next()) {
-				
-		File directory = new File(drivename);
-		if (!directory.exists()) {
-			directory.mkdir();
+			if (rs.next()) {
+
+				pstmt1 = con.prepareStatement("SELECT UserName FROM user WHERE ID = " + rs.getLong("CreatedByID"));
+				rs1 = pstmt1.executeQuery();
+
+				if (rs1.next()) {
+
+					File directory = new File(drivename);
+					if (!directory.exists()) {
+						directory.mkdirs();
+					}
+
+					PdfWriter writer = new PdfWriter(drivename + transactionID + ".pdf");
+					PdfDocument pdfDocument = new PdfDocument(writer);
+					pdfDocument.addNewPage();
+					Document document = new Document(pdfDocument);
+					Paragraph newLine = new Paragraph("\n");
+					Paragraph head = new Paragraph("Receipt");
+					Paragraph disclaimer = new Paragraph(ExtraConstants.Disclaimer);
+					Paragraph copyRight = new Paragraph(
+							"------------------------------------All  rights reserved by IDigitronics ® Hyderabad-----------------------------------");
+					PdfFont font = new PdfFontFactory().createFont(FontConstants.TIMES_BOLD);
+
+					// change according to the image directory
+
+					URL idigiurl = new URL(ExtraConstants.IDIGIIMAGEURL);
+					URL clienturl = new URL(ExtraConstants.CLIENTIMAGEURL);
+					Image idigi = new Image(ImageDataFactory.create(idigiurl));
+					Image client = new Image(ImageDataFactory.create(clienturl));
+
+					float[] headingWidths = { 200F, 130F, 200F };
+
+					Table headTable = new Table(headingWidths);
+
+					Cell headtable1 = new Cell();
+					headtable1.add(idigi);
+					headtable1.setTextAlignment(TextAlignment.LEFT);
+
+					Cell headtable2 = new Cell();
+					headtable2.add(head.setFontSize(20));
+					headtable2.setTextAlignment(TextAlignment.CENTER).setVerticalAlignment(VerticalAlignment.MIDDLE)
+							.setBold().setUnderline().setFont(font);
+
+					Cell headtable3 = new Cell();
+					headtable3.add(client);
+					headtable3.setTextAlignment(TextAlignment.RIGHT);
+
+					headTable.addCell(headtable1.setBorder(Border.NO_BORDER));
+					headTable.addCell(headtable2.setBorder(Border.NO_BORDER));
+					headTable.addCell(headtable3.setBorder(Border.NO_BORDER));
+
+					document.add(headTable);
+					document.add(newLine);
+
+					float[] headerWidths = { 180F, 180F, 180F, 180F };
+
+					Table table1 = new Table(headerWidths);
+
+					Cell cell1 = new Cell();
+					cell1.add("Customer Name: ");
+					cell1.setTextAlignment(TextAlignment.LEFT);
+
+					Cell customerName = new Cell();
+					customerName.add(rs.getString("FirstName") + " " + rs.getString("LastName"));
+					customerName.setTextAlignment(TextAlignment.CENTER);
+
+					Cell cell2 = new Cell();
+					cell2.add("CAN/UAN Number: ");
+					cell2.setTextAlignment(TextAlignment.CENTER);
+
+					Cell customerUniqueID = new Cell();
+					customerUniqueID.add(rs.getString("CustomerUniqueID"));
+					customerUniqueID.setTextAlignment(TextAlignment.CENTER);
+
+					Cell cell3 = new Cell();
+					cell3.add("House Number: ");
+					cell3.setTextAlignment(TextAlignment.CENTER);
+
+					Cell houseNumber = new Cell();
+					houseNumber.add(rs.getString("HouseNumber"));
+					houseNumber.setTextAlignment(TextAlignment.CENTER);
+
+					Cell cell4 = new Cell();
+					cell4.add("Invoice No. : ");
+					cell4.setTextAlignment(TextAlignment.RIGHT);
+
+					Cell InvoiceNumber = new Cell();
+					InvoiceNumber.add("" + transactionID);
+					InvoiceNumber.setTextAlignment(TextAlignment.RIGHT);
+
+					Cell cell5 = new Cell();
+					cell5.add("PaidAmount: ");
+					cell5.setTextAlignment(TextAlignment.CENTER);
+
+					Cell Amount = new Cell();
+					Amount.add(rs.getString("TotalAmount"));
+					Amount.setTextAlignment(TextAlignment.CENTER);
+
+					Cell cell6 = new Cell();
+					cell6.add("Late Fee(if any): ");
+					cell6.setTextAlignment(TextAlignment.CENTER);
+
+					Cell lateFee = new Cell();
+					lateFee.add(rs.getString("LateFee"));
+					lateFee.setTextAlignment(TextAlignment.CENTER);
+
+					Cell cell7 = new Cell();
+					cell7.add("Mode of Payment: ");
+					cell7.setTextAlignment(TextAlignment.CENTER);
+
+					Cell modeOfPayment = new Cell();
+					modeOfPayment.add(rs.getString("ModeOfPayment"));
+					modeOfPayment.setTextAlignment(TextAlignment.CENTER);
+
+					Cell cell8 = new Cell();
+					cell8.add("Transaction Initiated By: ");
+					cell8.setTextAlignment(TextAlignment.CENTER);
+
+					Cell transactedBy = new Cell();
+					transactedBy.add(rs1.getString("UserName"));
+					transactedBy.setTextAlignment(TextAlignment.CENTER);
+
+					Cell cell9 = new Cell();
+					cell9.add("Paid on: ");
+					cell9.setTextAlignment(TextAlignment.CENTER);
+
+					Cell transactionDate = new Cell();
+					transactionDate.add(ExtraMethodsDAO.datetimeformatter(rs.getString("TransactionDate")));
+					transactionDate.setTextAlignment(TextAlignment.CENTER);
+
+					Cell cell10 = new Cell();
+					cell10.add("Order ID: ");
+					cell10.setTextAlignment(TextAlignment.CENTER);
+
+					Cell OrderID = new Cell();
+					OrderID.add(rs.getString("RazorPayOrderID") == null ? "---" : rs.getString("RazorPayOrderID"));
+					OrderID.setTextAlignment(TextAlignment.CENTER);
+
+					Cell cell11 = new Cell();
+					cell11.add("Payment ID: ");
+					cell11.setTextAlignment(TextAlignment.CENTER);
+
+					Cell PaymentID = new Cell();
+					PaymentID
+							.add(rs.getString("RazorPayPaymentID") == null ? "---" : rs.getString("RazorPayPaymentID"));
+					PaymentID.setTextAlignment(TextAlignment.CENTER);
+
+					Cell cell12 = new Cell();
+					cell12.add("");
+					cell12.setTextAlignment(TextAlignment.CENTER);
+
+					Cell cell12value = new Cell();
+					cell12value.add("");
+					cell12value.setTextAlignment(TextAlignment.CENTER);
+
+					table1.addCell(cell1.setBorder(Border.NO_BORDER));
+					table1.addCell(customerName.setBorder(Border.NO_BORDER));
+					table1.addCell(cell2.setBorder(Border.NO_BORDER));
+					table1.addCell(customerUniqueID.setBorder(Border.NO_BORDER));
+					table1.startNewRow();
+
+					table1.addCell(cell3.setBorder(Border.NO_BORDER));
+					table1.addCell(houseNumber.setBorder(Border.NO_BORDER));
+					table1.addCell(cell4.setBorder(Border.NO_BORDER));
+					table1.addCell(InvoiceNumber.setBorder(Border.NO_BORDER));
+					table1.startNewRow();
+
+					table1.addCell(cell5.setBorder(Border.NO_BORDER));
+					table1.addCell(Amount.setBorder(Border.NO_BORDER));
+					table1.addCell(cell6.setBorder(Border.NO_BORDER));
+					table1.addCell(lateFee.setBorder(Border.NO_BORDER));
+					table1.startNewRow();
+
+					table1.addCell(cell7.setBorder(Border.NO_BORDER));
+					table1.addCell(modeOfPayment.setBorder(Border.NO_BORDER));
+					table1.addCell(cell8.setBorder(Border.NO_BORDER));
+					table1.addCell(transactedBy.setBorder(Border.NO_BORDER));
+					table1.startNewRow();
+
+					table1.addCell(cell9.setBorder(Border.NO_BORDER));
+					table1.addCell(transactionDate.setBorder(Border.NO_BORDER));
+					table1.addCell(cell10.setBorder(Border.NO_BORDER));
+					table1.addCell(OrderID.setBorder(Border.NO_BORDER));
+					table1.startNewRow();
+
+					table1.addCell(cell11.setBorder(Border.NO_BORDER));
+					table1.addCell(PaymentID.setBorder(Border.NO_BORDER));
+					table1.addCell(cell12.setBorder(Border.NO_BORDER));
+					table1.addCell(cell12value.setBorder(Border.NO_BORDER));
+					table1.startNewRow();
+
+					document.add(table1.setHorizontalAlignment(HorizontalAlignment.CENTER));
+					document.add(disclaimer.setHorizontalAlignment(HorizontalAlignment.CENTER).setFont(font));
+					document.add(newLine);
+					document.add(newLine);
+					document.add(newLine);
+					document.add(newLine);
+					document.add(newLine);
+					document.add(newLine);
+
+					document.add(copyRight.setHorizontalAlignment(HorizontalAlignment.CENTER).setFont(font));
+					document.close();
+
+					responsevo.setResult("Success");
+					responsevo.setLocation(drivename);
+					responsevo.setFileName(transactionID + ".pdf");
+
+				}
+			}
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			responsevo.setResult("Failure");
+			responsevo.setMessage("INTERNAL SERVER ERROR");
+		} finally {
+			pstmt.close();
+			rs.close();
+			con.close();
 		}
-
-		PdfWriter writer = new PdfWriter(drivename + transactionID + ".pdf");
-		PdfDocument pdfDocument = new PdfDocument(writer);
-		pdfDocument.addNewPage();
-		Document document = new Document(pdfDocument);
-		Paragraph newLine = new Paragraph("\n");
-		Paragraph head = new Paragraph("Receipt");
-		Paragraph disclaimer = new Paragraph(ExtraConstants.Disclaimer);
-		Paragraph copyRight = new Paragraph(
-				"------------------------------------All  rights reserved by IDigitronics ® Hyderabad-----------------------------------");
-		PdfFont font = new PdfFontFactory().createFont(FontConstants.TIMES_BOLD);
-
-		// change according to the image directory
-
-		URL idigiurl = new URL(ExtraConstants.IDIGIIMAGEURL);
-		URL clienturl = new URL(ExtraConstants.CLIENTIMAGEURL);
-		Image idigi = new Image(ImageDataFactory.create(idigiurl));
-		Image client = new Image(ImageDataFactory.create(clienturl));
-		
-		// continue from here
-
-		float[] headingWidths = { 200F, 130F, 200F };
-
-		Table headTable = new Table(headingWidths);
-
-		Cell headtable1 = new Cell();
-		headtable1.add(idigi);
-		headtable1.setTextAlignment(TextAlignment.LEFT);
-
-		Cell headtable2 = new Cell();
-		headtable2.add(head.setFontSize(20));
-		headtable2.setTextAlignment(TextAlignment.CENTER).setVerticalAlignment(VerticalAlignment.MIDDLE)
-				.setBold().setUnderline().setFont(font);
-
-		Cell headtable3 = new Cell();
-		headtable3.add(client);
-		headtable3.setTextAlignment(TextAlignment.RIGHT);
-
-		headTable.addCell(headtable1.setBorder(Border.NO_BORDER));
-		headTable.addCell(headtable2.setBorder(Border.NO_BORDER));
-		headTable.addCell(headtable3.setBorder(Border.NO_BORDER));
-
-		document.add(headTable);
-		document.add(newLine);
-
-		float[] headerWidths = { 200F, 180F, 170F };
-
-		Table table1 = new Table(headerWidths);
-
-		Cell table1cell1 = new Cell();
-		table1cell1.add("MIU ID: " + rs.getString("MIUID"));
-		table1cell1.setTextAlignment(TextAlignment.LEFT);
-
-		Cell table1cell2 = new Cell();
-		table1cell2.add("CAN Number: " + rs.getString("CustomerUniqueID"));
-		table1cell2.setTextAlignment(TextAlignment.CENTER);
-
-		Cell table1cell3 = new Cell();
-		table1cell3.add("Invoice No. : " + transactionID);
-		table1cell3.setTextAlignment(TextAlignment.RIGHT);
-
-		table1.addCell(table1cell1.setBorder(Border.NO_BORDER));
-		table1.addCell(table1cell2.setBorder(Border.NO_BORDER));
-		table1.addCell(table1cell3.setBorder(Border.NO_BORDER));
-
-		document.add(table1.setHorizontalAlignment(HorizontalAlignment.CENTER));
-		document.add(newLine);
-
-		float[] columnWidths = { 400F, 150F };
-
-		Table datatable = new Table(columnWidths);
-
-		Cell cell1 = new Cell();
-		cell1.add("Customer Name: ");
-		cell1.setTextAlignment(TextAlignment.CENTER);
-
-		Cell customerName = new Cell();
-		customerName.add(rs.getString("FirstName") + " " + rs.getString("LastName"));
-		customerName.setTextAlignment(TextAlignment.CENTER);
-
-		datatable.addCell(cell1);
-		datatable.addCell(customerName);
-		datatable.startNewRow();
-
-		Cell cell2 = new Cell();
-		cell2.add("Amount: ");
-		cell2.setTextAlignment(TextAlignment.CENTER);
-
-		Cell Amount = new Cell();
-		Amount.add(rs.getString("Amount"));
-		Amount.setTextAlignment(TextAlignment.CENTER);
-
-		datatable.addCell(cell2);
-		datatable.addCell(Amount);
-		datatable.startNewRow();
-
-		Cell cell3 = new Cell();
-		cell3.add("FixedCharges(if any): ");
-		cell3.setTextAlignment(TextAlignment.CENTER);
-
-		Cell fixedCharges = new Cell();
-		fixedCharges.add(rs.getString("FixedCharges"));
-		fixedCharges.setTextAlignment(TextAlignment.CENTER);
-
-		datatable.addCell(cell3);
-		datatable.addCell(fixedCharges);
-		datatable.startNewRow();
-
-		Cell cell4 = new Cell();
-		cell4.add("Reconnection Charges(if any): ");
-		cell4.setTextAlignment(TextAlignment.CENTER);
-
-		Cell reconnectionCharges = new Cell();
-		reconnectionCharges.add(rs.getString("ReconnectionCharges"));
-		reconnectionCharges.setTextAlignment(TextAlignment.CENTER);
-
-		datatable.addCell(cell4);
-		datatable.addCell(reconnectionCharges);
-		datatable.startNewRow();
-
-		Cell cell5 = new Cell();
-		cell5.add("Amount Updated to Device After Deductions (if any): ");
-		cell5.setTextAlignment(TextAlignment.CENTER);
-
-		Cell finalAmount = new Cell();
-		finalAmount.add(Integer.toString(
-				(rs.getInt("Amount") - (rs.getInt("FixedCharges") + rs.getInt("ReconnectionCharges")))));
-		finalAmount.setTextAlignment(TextAlignment.CENTER);
-
-		datatable.addCell(cell5);
-		datatable.addCell(finalAmount);
-		datatable.startNewRow();
-
-		Cell cell6 = new Cell();
-		cell6.add("Mode of Payment: ");
-		cell6.setTextAlignment(TextAlignment.CENTER);
-
-		Cell modeOfPayment = new Cell();
-		modeOfPayment.add(rs.getString("ModeOfPayment"));
-		modeOfPayment.setTextAlignment(TextAlignment.CENTER);
-
-		datatable.addCell(cell6);
-		datatable.addCell(modeOfPayment);
-		datatable.startNewRow();
-
-		Cell cell7 = new Cell();
-		cell7.add("Transaction Initiated By: ");
-		cell7.setTextAlignment(TextAlignment.CENTER);
-
-		Cell transactedBy = new Cell();
-		transactedBy.add(rs1.getString("UserName"));
-		transactedBy.setTextAlignment(TextAlignment.CENTER);
-
-		datatable.addCell(cell7);
-		datatable.addCell(transactedBy);
-		datatable.startNewRow();
-
-		Cell cell8 = new Cell();
-		cell8.add("Date of Transaction: ");
-		cell8.setTextAlignment(TextAlignment.CENTER);
-
-		Cell transactionDate = new Cell();
-		transactionDate.add(ExtraMethodsDAO.datetimeformatter(rs.getString("TransactionDate")));
-		transactionDate.setTextAlignment(TextAlignment.CENTER);
-
-		datatable.addCell(cell8);
-		datatable.addCell(transactionDate);
-		datatable.startNewRow();
-
-		Cell cell9 = new Cell();
-		cell9.add("Acknowledge Date: ");
-		cell9.setTextAlignment(TextAlignment.CENTER);
-
-		Cell acknowledgeDate = new Cell();
-		acknowledgeDate.add(ExtraMethodsDAO.datetimeformatter(rs.getString("AcknowledgeDate")));
-		acknowledgeDate.setTextAlignment(TextAlignment.CENTER);
-
-		datatable.addCell(cell9);
-		datatable.addCell(acknowledgeDate);
-		datatable.startNewRow();
-
-		Cell cell10 = new Cell();
-		cell10.add("Order ID: ");
-		cell10.setTextAlignment(TextAlignment.CENTER);
-
-		System.out.println(rs.getString("RazorPayOrderID"));
-
-		Cell OrderID = new Cell();
-		OrderID.add(rs.getString("RazorPayOrderID") == null ? "---" : rs.getString("RazorPayOrderID"));
-		OrderID.setTextAlignment(TextAlignment.CENTER);
-
-		datatable.addCell(cell10);
-		datatable.addCell(OrderID);
-		datatable.startNewRow();
-
-		Cell cell11 = new Cell();
-		cell11.add("Payment ID: ");
-		cell11.setTextAlignment(TextAlignment.CENTER);
-
-		Cell PaymentID = new Cell();
-		PaymentID
-				.add(rs.getString("RazorPayPaymentID") == null ? "---" : rs.getString("RazorPayPaymentID"));
-		PaymentID.setTextAlignment(TextAlignment.CENTER);
-
-		datatable.addCell(cell11);
-		datatable.addCell(PaymentID);
-		datatable.startNewRow();
-
-		document.add(datatable.setHorizontalAlignment(HorizontalAlignment.CENTER));
-		document.add(disclaimer.setHorizontalAlignment(HorizontalAlignment.CENTER).setFont(font));
-		document.add(newLine);
-		document.add(newLine);
-		document.add(newLine);
-		document.add(newLine);
-		document.add(newLine);
-		document.add(newLine);
-		document.add(newLine);
-		document.add(newLine);
-		document.add(newLine);
-		document.add(newLine);
-		document.add(newLine);
-
-		document.add(copyRight.setHorizontalAlignment(HorizontalAlignment.CENTER).setFont(font));
-		document.close();
-
-		responsevo.setResult("Success");
-		responsevo.setLocation(drivename);
-		responsevo.setFileName(transactionID + ".pdf");
-
-		}
-		
-	} catch (Exception ex) {
-		ex.printStackTrace();
-		responsevo.setResult("Failure");
-		responsevo.setMessage("INTERNAL SERVER ERROR");
-	} finally {
-		pstmt.close();
-		rs.close();
-		con.close();
-	}
-	return responsevo;
+		return responsevo;
 	}
 
 	/* Configuration */

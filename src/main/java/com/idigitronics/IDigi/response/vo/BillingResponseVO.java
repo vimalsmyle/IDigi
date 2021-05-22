@@ -16,8 +16,8 @@ public class BillingResponseVO {
 	private String blockName;
 	private String customerName;
 	private String houseNumber;
-	private int totalConsumption;
-	private int totalAmount;
+	private float totalConsumption;
+	private float totalAmount;
 	private String billingDate;
 	private String billMonth;
 	private int billYear;
@@ -56,10 +56,10 @@ public class BillingResponseVO {
 	public void setHouseNumber(String houseNumber) {
 		this.houseNumber = houseNumber;
 	}
-	public int getTotalConsumption() {
+	public float getTotalConsumption() {
 		return totalConsumption;
 	}
-	public void setTotalConsumption(int totalConsumption) {
+	public void setTotalConsumption(float totalConsumption) {
 		this.totalConsumption = totalConsumption;
 	}
 	public String getBillingDate() {
@@ -98,10 +98,10 @@ public class BillingResponseVO {
 	public void setData(List<BillingResponseVO> data) {
 		this.data = data;
 	}
-	public int getTotalAmount() {
+	public float getTotalAmount() {
 		return totalAmount;
 	}
-	public void setTotalAmount(int totalAmount) {
+	public void setTotalAmount(float totalAmount) {
 		this.totalAmount = totalAmount;
 	}
 	

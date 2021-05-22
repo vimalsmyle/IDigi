@@ -15,11 +15,9 @@ public class IndividualBillingResponseVO {
 	private String meterType;
 	private float previousReading;
 	private float presentReading;
-	private int consumption;
+	private float consumption;
 	private float tariff;
-	private int billAmount;
-	private int fixedCharges;
-	private int reconnectionCharges;
+	private float billAmount;
 	private String billingDate;
 	
 	public long getBillingID() {
@@ -52,10 +50,10 @@ public class IndividualBillingResponseVO {
 	public void setPresentReading(float presentReading) {
 		this.presentReading = presentReading;
 	}
-	public int getConsumption() {
+	public float getConsumption() {
 		return consumption;
 	}
-	public void setConsumption(int consumption) {
+	public void setConsumption(float consumption) {
 		this.consumption = consumption;
 	}
 	public float getTariff() {
@@ -64,23 +62,11 @@ public class IndividualBillingResponseVO {
 	public void setTariff(float tariff) {
 		this.tariff = tariff;
 	}
-	public int getBillAmount() {
+	public float getBillAmount() {
 		return billAmount;
 	}
-	public void setBillAmount(int billAmount) {
+	public void setBillAmount(float billAmount) {
 		this.billAmount = billAmount;
-	}
-	public int getFixedCharges() {
-		return fixedCharges;
-	}
-	public void setFixedCharges(int fixedCharges) {
-		this.fixedCharges = fixedCharges;
-	}
-	public int getReconnectionCharges() {
-		return reconnectionCharges;
-	}
-	public void setReconnectionCharges(int reconnectionCharges) {
-		this.reconnectionCharges = reconnectionCharges;
 	}
 	public String getBillingDate() {
 		return billingDate;

@@ -13,8 +13,8 @@ public class PayBillRequestVO {
 	private long transactionID;
 	private long customerID;
 	private String customerUniqueID;
-	private int totalamount;
-	private int taxAmount;
+	private float totalamount;
+	private float taxAmount;
 	private int lateFee;
 	private String source;
 	private String modeOfPayment;
@@ -50,10 +50,10 @@ public class PayBillRequestVO {
 	public void setCustomerUniqueID(String customerUniqueID) {
 		this.customerUniqueID = customerUniqueID;
 	}
-	public int getTotalamount() {
+	public float getTotalamount() {
 		return totalamount;
 	}
-	public void setTotalamount(int totalamount) {
+	public void setTotalamount(float totalamount) {
 		this.totalamount = totalamount;
 	}
 	public String getSource() {
@@ -110,10 +110,10 @@ public class PayBillRequestVO {
 	public void setTransactedByRoleID(int transactedByRoleID) {
 		this.transactedByRoleID = transactedByRoleID;
 	}
-	public int getTaxAmount() {
+	public float getTaxAmount() {
 		return taxAmount;
 	}
-	public void setTaxAmount(int taxAmount) {
+	public void setTaxAmount(float taxAmount) {
 		this.taxAmount = taxAmount;
 	}
 	public int getLateFee() {

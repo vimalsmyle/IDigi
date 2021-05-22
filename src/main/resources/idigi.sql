@@ -103,18 +103,21 @@ CREATE TABLE `billingdetails` (
   `MIUID` varchar(100) NOT NULL,
   `PreviousReading` decimal(10,2) NOT NULL,
   `PresentReading` decimal(10,2) NOT NULL,
-  `Consumption` int(100) NOT NULL,
+  `Consumption` float NOT NULL,
   `TariffID` int(10) NOT NULL,
   `Tariff` float NOT NULL,
-  `BillAmount` int(100) NOT NULL,
+  `BillAmount` float NOT NULL,
   `BillMonth` int(10) DEFAULT NULL,
   `BillYear` int(10) DEFAULT NULL,
   `LogDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `ModifiedDate` datetime DEFAULT NULL,
   PRIMARY KEY (`BillingID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 /*Data for the table `billingdetails` */
+
+insert  into `billingdetails`(`BillingID`,`CommunityID`,`BlockID`,`CustomerID`,`CustomerUniqueID`,`CustomerMeterID`,`MeterType`,`MIUID`,`PreviousReading`,`PresentReading`,`Consumption`,`TariffID`,`Tariff`,`BillAmount`,`BillMonth`,`BillYear`,`LogDate`,`ModifiedDate`) values 
+(1,1,1,1,'IDIGI1',2,'Water','2233',1.00,10.00,9,2,20,180,4,2021,'2021-05-22 19:27:50',NULL);
 
 /*Table structure for table `billingpaymentdetails` */
 
@@ -125,8 +128,8 @@ CREATE TABLE `billingpaymentdetails` (
   `CustomerBillingID` bigint(255) NOT NULL,
   `CustomerID` bigint(255) NOT NULL,
   `CustomerUniqueID` varchar(100) NOT NULL,
-  `TotalAmount` int(100) NOT NULL,
-  `LateFee` int(100) DEFAULT NULL,
+  `TotalAmount` float NOT NULL,
+  `LateFee` float DEFAULT NULL,
   `Source` varchar(10) NOT NULL,
   `ModeOfPayment` varchar(50) NOT NULL,
   `PaymentStatus` tinyint(4) unsigned NOT NULL DEFAULT '0',
@@ -232,8 +235,8 @@ CREATE TABLE `customerbillingdetails` (
   `BlockID` int(100) NOT NULL,
   `CustomerID` bigint(255) NOT NULL,
   `CustomerUniqueID` varchar(500) NOT NULL,
-  `TotalAmount` int(100) NOT NULL,
-  `TaxAmount` int(100) NOT NULL,
+  `TotalAmount` float NOT NULL,
+  `TaxAmount` float NOT NULL,
   `TotalConsumption` int(100) NOT NULL,
   `Status` tinyint(5) NOT NULL DEFAULT '0',
   `DueDate` date NOT NULL,
@@ -242,9 +245,12 @@ CREATE TABLE `customerbillingdetails` (
   `LogDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `ModifiedDate` datetime DEFAULT NULL,
   PRIMARY KEY (`CustomerBillingID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 /*Data for the table `customerbillingdetails` */
+
+insert  into `customerbillingdetails`(`CustomerBillingID`,`CommunityID`,`BlockID`,`CustomerID`,`CustomerUniqueID`,`TotalAmount`,`TaxAmount`,`TotalConsumption`,`Status`,`DueDate`,`BillMonth`,`BillYear`,`LogDate`,`ModifiedDate`) values 
+(1,1,1,1,'IDIGI1',180,0,9,0,'2021-06-01',4,2021,'2021-05-22 19:34:29','2021-05-22 19:34:29');
 
 /*Table structure for table `customerdeletedetails` */
 
