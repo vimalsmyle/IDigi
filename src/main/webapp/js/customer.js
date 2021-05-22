@@ -145,129 +145,245 @@ $("#addMeter")
 .click(
 		function() {
 			rowCount++;
+			
+			if(rowCount>2){
+				$("#addMeter").hide();
+			}else{
+				$("#addMeter").show();
+			}
+			
+			
 			$("#template").append("<div class=row> " +
 					"<div class=col-md-4>" +
-					"<div class=form-group>"
+					"<div class='group form-group'>"
 									+"<label class=bmd-label-floating>Meter ID</label> <input "
-									+"type=text class=form-control name=meterIDAdd[]"
+									+"type=text class=form-control name=meterIDAdd["+rowCount+"]"
 									+" id=meterIDAdd-"+rowCount+">"
 									+"</div></div>"+
-									
-									
 									"<div class=col-md-4>" +
-									"<div class=form-group>"
+									"<div class='group form-group'>"
 													+"<label class=bmd-label-floating>MIU ID</label> <input "
-													+"type=text class=form-control name=miuIDAdd"
+													+"type=text class=form-control name=miuIDAdd["+rowCount+"]"
 													+" id=miuIDAdd-"+rowCount+">"
 													+"</div></div>"+
-									
-										
-
 										"<div class=col-md-4>" +
-										"<div class=form-group>"
+										"<div class='group form-group'>"
 										+"<label class=bmd-label-floating>Meter Serial Number</label> <input "
-										+"type=text class=form-control name=meterSerialNumberAdd"
+										+"type=text class=form-control name=meterSerialNumberAdd["+rowCount+"]"
 										+" id=meterSerialNumberAdd-"+rowCount+">"
 										+"</div></div>"+
-																	
-																	
-																	
-
 									"<div class=col-md-4>" +
-									"<div class=form-group>"
-									+"<label class=bmd-label-floating>Meter Type</label> <input "
-									+"type=text class=form-control name=meterTypeAdd"
-									+" id=meterTypeAdd-"+rowCount+">"
+									"<div class='group form-group has-feedback has-success bmd-form-group is-filled'>"
+									+"<label class=bmd-label-floating>Meter Type</label> " +
+									"<select class='form-control select2' id=selectMeterType-"+rowCount+" name=selectMeterType["+rowCount+"]>"+
+										"<option value='-1'>Select Meter Type</option>"+
+										"<option value='Gas'>Gas</option>"+
+										"<option value='Water'>Water</option>"+
+										"<option value='Energy'>Energy</option>"+
+									"</select>"
 									+"</div></div>"+
-													
 									"<div class=col-md-4>" +
-									"<div class=form-group>"
+									"<div class='group form-group'>"
 									+"<label class=bmd-label-floating>Meter Size</label> <input "
-									+"type=text class=form-control name=meterSizeAdd"
+									+"type=text class=form-control name=meterSizeAdd["+rowCount+"]"
 									+" id=meterSizeAdd-"+rowCount+">"
 									+"</div></div>"+
-									
 									"<div class=col-md-4>" +
-									"<div class=form-group>"
-									+"<label class=bmd-label-floating>Pay Type</label> <input "
-									+"type=text class=form-control name=payTypeAdd"
-									+" id=payTypeAdd-"+rowCount+">"
+									"<div class='group form-group has-feedback has-success bmd-form-group is-filled'>"
+									+"<label class=bmd-label-floating>Pay Type</label>" +
+									"<select class='form-control select2' id=payTypeAdd-"+rowCount+" name=payTypeAdd["+rowCount+"]>"+
+									"<option value='-1'>Select Pay Type</option>"+
+									"<option value='1'>Prepaid</option>"+
+									"<option value='2'>Postpaid</option>"+
+								"</select>"
 									+"</div></div>"+
-									
-									
 									"<div class=col-md-4>" +
-									"<div class=form-group>"
-									+"<label class=bmd-label-floating>Tariff Name</label> <input "
-									+"type=text class=form-control name=tariffNameAdd"
-									+" id=tariffNameAdd-"+rowCount+">"
+									"<div class='group form-group has-feedback has-success bmd-form-group is-filled'>"
+									+"<label class=bmd-label-floating>Tariff Name</label> " +
+									"<select "+
+									"class=form-control id=selectTariffName-"+rowCount+" name=selectTariffName["+rowCount+"]>"+
+									 
+									"</select>"
 									+"</div></div>"+
-									
 									"<div class=col-md-4>" +
-									"<div class=form-group>"
-									+"<label class=bmd-label-floating>Gateway ID</label> <input "
-									+"type=text class=form-control name=gatewayIDAdd"
-									+" id=gatewayIDAdd-"+rowCount+">"
+									"<div class='group form-group has-feedback has-success bmd-form-group is-filled'>"
+									+"<label class=bmd-label-floating>Gateway ID</label> " +
+									"<select "+
+									"class=form-control id=gatewayIDAdd-"+rowCount+" name=gatewayIDAdd["+rowCount+"]>"+
+									 
+									"</select>"
 									+"</div></div>"+
-									
 									"<div class=col-md-4>" +
-									"<div class=form-group>"
+									"<div class='group form-group'>"
 									+"<label class=bmd-label-floating>Location</label> <input "
-									+"type=text class=form-control name=locationAdd"
+									+"type=text class=form-control name=locationAdd["+rowCount+"]"
 									+" id=locationAdd-"+rowCount+">"
 									+"</div></div>"+
-									
 									"<div class=col-md-4>" +
-									"<div class=form-group>"
-									+" <button type=button class='btn btn-primary submit-button' id='removeMeter'>Remove</button></div></div></div>");
+									"<div class=''>"
+									+" <button type=button class='btn btn-primary' id='removeMeter'>Remove</button></div></div></div>");
 
 			
-			
-			var options = {
-				    fields: {
-				        'meterIDAdd[]': {
-				            validators: {
-				                notEmpty: {
-				                    message: 'Enter a value 1'
-				                }
-				            }
-				        },
-				        'secondField[]': {
-				            validators: {
-				                notEmpty: {
-				                    message: 'Enter a value 2'
-				                }
-				            }
-				        },
-				        'thirdField[]': {
-				            validators: {
-				                notEmpty: {
-				                    message: 'Enter a value 3'
-				                }
-				            }
-				        }
-				    }
-				};
-			
-			 //var inputs =  $("#template").find("input[name='meterSerialNumberAdd']");
-			 
-	            
-			// $('#customerDetails').bootstrapValidator('addField', inputs);
-			 $('#customerDetails').bootstrapValidator('addField', 'meterIDAdd[]', {
-		            validators: {
-	                    notEmpty: {
-	                        message: 'Enter a value 4'
-	                    }
-	                }
-	});
+			 $('#customerDetails').bootstrapValidator('addField', 'meterIDAdd['+rowCount+']', {
+		        	message : 'Meter ID is not valid',
+					validators : {
+						notEmpty : {
+							message : 'Meter ID is required and cannot be empty'
+						},
+						stringLength : {
+							min : 4,
+							max : 30,
+							message : 'Meter ID must be more than 4 and less than 30 characters long'
+						},
+						regexp : {
+							regexp : /^[a-zA-Z][a-zA-Z0-9.,$; ]+$/,
+							message : 'Meter ID can only consist of Alphanumaric'
+						}
+					}
+		        });
+			 $('#customerDetails').bootstrapValidator('addField' ,
+		        'miuIDAdd['+rowCount+']', {
+		        	message : 'MUI ID is not valid',
+					validators : {
+						notEmpty : {
+							message : 'MUI ID is required and cannot be empty'
+						},
+						stringLength : {
+							min : 4,
+							max : 30,
+							message : 'MUI ID must be more than 4 and less than 30 characters long'
+						},
+						regexp : {
+							regexp : /^[a-zA-Z][a-zA-Z0-9.,$; ]+$/,
+							message : 'MUI ID can only consist of Alphanumaric'
+						}
+					}
+		        });
+			 $('#customerDetails').bootstrapValidator('addField',
+		        'meterSerialNumberAdd['+rowCount+']', {
+		        	message : 'Meter Serial Number is not valid',
+					validators : {
+						notEmpty : {
+							message : 'Meter Serial Number is required and cannot be empty'
+						},
+						stringLength : {
+							min : 4,
+							max : 30,
+							message : 'Meter Serial Number must be more than 4 and less than 30 characters long'
+						},
+						regexp : {
+							regexp : /^[a-zA-Z][a-zA-Z0-9.,$; ]+$/,
+							message : 'Meter Serial Number can only consist of Alphanumaric'
+						}
+					}
+		        });
+			 $('#customerDetails').bootstrapValidator('addField',
+		        'meterSizeAdd['+rowCount+']', {
+		        	message : 'Meter Size is not valid',
+					validators : {
+						notEmpty : {
+							message : 'Meter Size is required and cannot be empty'
+						},
+						stringLength : {
+							min : 4,
+							max : 30,
+							message : 'Meter Size must be more than 4 and less than 30 characters long'
+						},
+						regexp : {
+							regexp : /^[a-zA-Z][a-zA-Z0-9.,$; ]+$/,
+							message : 'Meter Size can only consist of Alphanumaric'
+						}
+					}
+		        });
+			 $('#customerDetails').bootstrapValidator('addField',
+		        'tariffNameAdd['+rowCount+']', {
+		        	message : 'Tariff Name is not valid',
+					validators : {
+						notEmpty : {
+							message : 'Tariff Name is required and cannot be empty'
+						},
+						stringLength : {
+							min : 4,
+							max : 30,
+							message : 'Tariff Name must be more than 4 and less than 30 characters long'
+						},
+						regexp : {
+							regexp : /^[a-zA-Z][a-zA-Z0-9.,$; ]+$/,
+							message : 'Tariff Name can only consist of Alphanumaric'
+						}
+					}
+		        });
+			/* $('#customerDetails').bootstrapValidator('addField', 'gatewayIDAdd['+rowCount+']', {
+		        	message : 'Gateway is not valid',
+					validators : {
+						notEmpty : {
+							message : 'Gateway is required and cannot be empty'
+						},
+						stringLength : {
+							min : 4,
+							max : 30,
+							message : 'Gateway must be more than 4 and less than 30 characters long'
+						},
+						regexp : {
+							regexp : /^[a-zA-Z][a-zA-Z0-9.,$; ]+$/,
+							message : 'Gateway can only consist of Alphanumaric'
+						}
+					}
+		        });*/
+			 $('#customerDetails').bootstrapValidator('addField','locationAdd['+rowCount+']', {
+		        	message : 'Location is not valid',
+					validators : {
+						notEmpty : {
+							message : 'Location is required and cannot be empty'
+						},
+						stringLength : {
+							min : 4,
+							max : 30,
+							message : 'Location must be more than 4 and less than 30 characters long'
+						},
+						regexp : {
+							regexp : /^[a-zA-Z][a-zA-Z0-9.,$; ]+$/,
+							message : 'Location can only consist of Alphanumaric'
+						}
+					}
+		        }
+			 );
 		     
-
+			 
+			 $("#rowCount").val(rowCount);
+			 
+			 $.getJSON("./tariffs", function(data) {
+					var Options = '<option value=-1>Select  Tariff</option>';
+					$.each(data.dropDownTariffs, function(key, value) {
+						Options = Options + '<option value=' + key + '>' + value
+								+ '</option>';
+					});
+					$('#selectTariffName-'+rowCount).append(Options);
+				});
+			 
+			 
+			 $.getJSON("./gateways", function(data) {
+					var Options = "<option value='-1'>Select  Gateway</option>";
+					$.each(data.dropDownGateways, function(key, value) {
+						Options = Options + "<option value='" + key + "'>" + value
+								+ "</option>";
+					});
+					$('#gatewayIDAdd-'+rowCount).append(Options);
+				});
+			 
 
 		});
 
 $("body").on("click", "#removeMeter", function(e) {
 	rowCount--;
-
+	if(rowCount>2){
+		$("#addMeter").hide();
+	}else{
+		$("#addMeter").show();
+	}
 	$(this).parent().parent().parent().remove();
+	
+	$("#rowCount").val(rowCount);
 	
   });
 
@@ -360,48 +476,6 @@ $(document)
 															}
 														}
 													},
-													meterSerialNumberAdd : {
-														message : 'MSN is not valid',
-														validators : {
-															notEmpty : {
-																message : 'MSN is required and cannot be empty'
-															},
-															stringLength : {
-																min : 4,
-																max : 15,
-																message : 'MSN must be more than 4 and less than 15 characters long'
-															},
-															regexp : {
-																regexp : /^[^0][a-zA-Z0-9.,$; ]+$/,
-																message : 'MSN can only consist of Alphanumaric and Could not start with zero'
-															}
-														}
-													},
-													amrAdd : {
-														message : 'MIU ID. is not valid',
-														validators : {
-															notEmpty : {
-																message : 'MIU ID is required and cannot be empty'
-															},
-															stringLength : {
-																min : 4,
-																max : 16,
-																message : 'MIU ID must be more than 4 and less than 16 characters long'
-															},
-															regexp : {
-																regexp : /^[^0][a-zA-Z0-9.,$; ]+$/,
-																message : 'MIU ID can only consist of Alphanumaric and Could not start with zero'
-															}
-														}
-													},
-													
-													selectTariffName: {
-									                    validators: {
-									                        notEmpty: {
-									                            message: 'Please select your Tariff language.'
-									                        }
-									                    }
-									                },
 									                CRNAdd : {
 														message : 'CRN No. is not valid',
 														validators : {
@@ -713,16 +787,13 @@ $(document)
 											'status.field.bv',
 											function(e, data) {
 												formIsValid = true;
-												$('.input-group.form-group', $(this))
+												$('.group.form-group', $(this))
 														.each(
 																function() {
 																//	alert(this+"@@=>"+formIsValid);
 																	formIsValid = formIsValid
-																			&& $(
-																					this)
-																					.hasClass(
+																			&& $(this).hasClass(
 																							'has-success');
-																	
 																	//alert("!!@@=>"+formIsValid);
 																	
 																});
@@ -745,7 +816,7 @@ $(document)
 									'status.field.bv',
 									function(e, data) {
 										formIsValid = true;
-										$('.input-group.form-group', $(this))
+										$('.group.form-group', $(this))
 												.each(
 														function() {
 														//	alert(this+"@@=>"+formIsValid);
@@ -787,6 +858,23 @@ $(document)
 												let communityId = sessionStorage.getItem("roleID") == 2 ? sessionStorage.getItem("communityID") : $("#selectcommunityName").val();
 												let blockId = sessionStorage.getItem("roleID") == 2 ? sessionStorage.getItem("ID") : $("#selectBlockBasedonCommunity").val();
 												
+												var meterDetails = [];
+												for(var i=1;parseInt($("#rowCount").val())>=i;i++){
+													var array ={};
+													array["customerMeterID"] = $("#meterIDAdd-"+i).val();
+													array["miuID"] = $("#miuIDAdd-"+i).val();
+													array["meterSerialNumber"] = $("#meterSerialNumberAdd-"+i).val();
+													array["meterType"] = $("#selectMeterType-"+i).val();
+													array["meterSize"] = $("#meterSizeAdd-"+i).val();
+													array["payType"] = $("#payTypeAdd-"+i).val();
+													array["tariffID"] = $("#selectTariffName-"+i).val();
+													array["gatewayID"] = $("#gatewayIDAdd-"+i).val();
+													array["location"] = $("#locationAdd-"+i).val();
+													meterDetails.push(array);
+												}
+												
+												
+												
 												var data1 = {}
 												data1["communityID"] = communityId;
 												data1["blockID"] = blockId;
@@ -795,11 +883,8 @@ $(document)
 												data1["houseNumber"] = $("#houseNoAdd").val();
 												data1["mobileNumber"] = $("#mobileNoAdd").val();
 												data1["email"] = $("#emailAdd").val();
-												data1["meterSerialNumber"] = $("#meterSerialAdd").val();
-												data1["meterID"] = $("#amrAdd").val();
-												data1["tariffID"] = $("#selectTariffName").val();
-												data1["defaultReading"] = $("#defaultReadingAdd").val();
 												data1["CRNNumber"] = $("#CRNAdd").val();
+												data1["meters"] = meterDetails;
 												data1["createdByID"] = sessionStorage.getItem("createdByID");
 												data1["loggedInUserID"] = sessionStorage.getItem("userID");
 												data1["loggedInRoleID"] = sessionStorage.getItem("roleID");
@@ -813,7 +898,7 @@ $(document)
 														.ajax({
 															type : "POST",
 															contentType : "application/json",
-															url : "./customer/add",
+															url : "./customer/add1",
 															data : JSON
 																	.stringify(data1),
 															dataType : "JSON",

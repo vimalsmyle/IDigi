@@ -254,7 +254,7 @@ $(document)
 											'status.field.bv',
 											function(e, data) {
 												formIsValid = true;
-												$('.input-group.form-group', $(this))
+												$('.group.form-group', $(this))
 														.each(
 																function() {
 																//	alert(this+"@@=>"+formIsValid);
@@ -285,7 +285,7 @@ $(document)
 									'status.field.bv',
 									function(e, data) {
 										formIsValid = true;
-										$('.input-group.form-group', $(this))
+										$('.group.form-group', $(this))
 												.each(
 														function() {
 														//	alert(this+"@@=>"+formIsValid);

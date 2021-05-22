@@ -90,7 +90,7 @@
 					<form id="communityDetails">
 						<div class="row">
 							<div class="col-md-6">
-								 <div class="form-group">
+								 <div class="group form-group">
 									<label for="text">Name:</label>
 									<input type="text" class="form-control"  name="communityNameAdd"
 										id="communityNameAdd" placeholder = "Community Name">
@@ -99,7 +99,7 @@
 							
 							
 							<div class="col-md-6">
-								 <div class="form-group">
+								 <div class="group form-group">
 									<label for="text">Address:</label>
 									<input type="text" class="form-control" name="communityAddressAdd"
 										id="communityAddressAdd" placeholder = "Community Address">
@@ -107,7 +107,7 @@
 								</div>
 							
 							<div class="col-md-6">
-								<div class="form-group">
+								<div class="group form-group">
 									<label for="text">Mobile:</label>
 									<input type="text" class="form-control" name="communityMobileAdd"
 										id="communityMobileAdd" placeholder = "Community Mobile">
@@ -116,7 +116,7 @@
 							
 							
 							<div class="col-md-6">
-								<div class="form-group">
+								<div class="group form-group">
 									<label for="text">Email:</label>
 									<input type="text" class="form-control"  name="communityEmailAdd"
 										id="communityEmailAdd" placeholder = "Community Email">
@@ -162,14 +162,14 @@
 					<form id="communityEdit">
 						<div class="row">
 							<div class="col-md-6">
-								<div class="form-group">
+								<div class="group form-group">
 									<label for="text">Name:</label>
 									<input type="text" class="form-control"  name="communityNameEdit"
 										id="communityNameEdit" placeholder = "Community Name">
 								  </div>
 							</div>
 							<div class="col-md-6">
-								<div class="form-group">
+								<div class="group form-group">
 									<label for="text">Address:</label>
 									<input type="text" class="form-control"  name="communityAddressEdit"
 										id="communityAddressEdit" placeholder = "Community Address">
@@ -178,7 +178,7 @@
 
 							<div class="col-md-6">
 								
-								<div class="form-group">
+								<div class="group form-group">
 									<label for="text">Mobile:</label>
 									<input type="text" class="form-control"  name="communityMobileEdit"
 										id="communityMobileEdit" placeholder = "Community Mobile">
@@ -186,7 +186,7 @@
 							</div>
 							<div class="col-md-6">
 								
-								<div class="form-group">
+								<div class="group form-group">
 									<label for="text">Email:</label>
 									<input type="text" class="form-control"  name="communityEmailEdit"
 										id="communityEmailEdit" placeholder = "Community Email">

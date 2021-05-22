@@ -11,6 +11,7 @@
 <!-- <link rel="stylesheet" href="common/css/style.css"> -->
 <link rel="stylesheet"
 	href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css">
+		<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
 <link rel="stylesheet"
 	href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.bootstrap4.min.css">
 	
@@ -58,7 +59,7 @@
 								<div class="form-group has-feedback has-success bmd-form-group is-filled">
 									<label class="bmd-label-floating select-label">Community Name</label> 
 									<select
-										class="form-control" id="selectcommunityName" name="selectcommunityName" onchange="showBlockbyCommunity(this.value);">
+										class="form-control select2" id="selectcommunityName" name="selectcommunityName" onchange="showBlockbyCommunity(this.value);">
 									</select>
 								</div>
 							</div>
@@ -88,14 +89,14 @@
 
 <%} %>
 							<div class="col-md-4">
-								<div class="form-group">
+								<div class="group form-group">
 									<label class="bmd-label-floating">First Name</label> <input
 										type="text" class="form-control" name="firstNameAdd"
 										id="firstNameAdd">
 								</div>
 							</div>
 							<div class="col-md-4">
-								<div class="form-group">
+								<div class="group form-group">
 									<label class="bmd-label-floating">Last Name</label> <input
 										type="text" class="form-control" name="lastNameAdd"
 										id="lastNameAdd">
@@ -105,14 +106,14 @@
 							
 							
 							<div class="col-md-4">
-								<div class="form-group">
+								<div class="group form-group">
 									<label class="bmd-label-floating">House No.</label> <input
 										type="text" class="form-control" name="houseNoAdd"
 										id="houseNoAdd">
 								</div>
 							</div>
 							<div class="col-md-4">
-								<div class="form-group">
+								<div class="group form-group">
 									<label class="bmd-label-floating">Mobile No</label> <input
 										type="text" class="form-control" name="mobileNoAdd"
 										id="mobileNoAdd">
@@ -123,42 +124,14 @@
 							
 							
 							<div class="col-md-4">
-								<div class="form-group">
+								<div class="group form-group">
 									<label class="bmd-label-floating">Email</label> <input
 										type="email" class="form-control" name="emailAdd"
 										id="emailAdd">
 								</div>
 							</div>
-							<!-- <div class="col-md-4">
-								<div class="form-group">
-									<label class="bmd-label-floating">MSN</label> <input
-										type="text" class="form-control" name="meterSerialAdd"
-										id="meterSerialAdd">
-								</div>
-							</div> -->
-							
-							
-							
-							
-							<!-- <div class="col-md-4">
-								<div class="form-group">
-									<label class="bmd-label-floating">MIU ID</label> <input
-										type="text" class="form-control" name="amrAdd"
-										id="amrAdd">
-								</div>
-							</div> -->
-							<!-- <div class="col-md-4">
-								<div class="form-group">
-									<label class="bmd-label-floating select-label">Tariff Name</label>  <select
-										class="form-control" id="selectTariffName" name="selectTariffName">
-										<option style = "color: Red" value="" disabled selected>Select Tariff</option> --><!--  <option>Select Community</option> 
-									</select>
-								</div>
-							</div> -->
-							
-							
 							<div class="col-md-4">
-								<div class="form-group">
+								<div class="group form-group">
 									<label class="bmd-label-floating">CRN Number</label> <input
 										type="text" class="form-control" name="CRNAdd"
 										id="CRNAdd">
@@ -169,9 +142,10 @@
 							
 							
 							<div class="col-md-4">
-							<button class="btn btn-primary submit-button"
+							<button class="button"
 									 value="Add!" id="addMeter"
 									type="button">Add</button>
+									<input type="hidden" id="rowCount" name="rowCount">
 							</div>
 							
 							
@@ -181,7 +155,7 @@
 							
 							<div class="col-md-4">
 									<button class="btn btn-secondary submit-button"
-									 value="Save!" id="customerAdd"
+									 value="Save!" id="customerAdd" 
 									type="button" disabled>Save</button>
 							</div>
 
@@ -232,14 +206,14 @@
 								<div class="form-group has-feedback has-success bmd-form-group is-filled">
 									<label class="bmd-label-floating select-label">Community Name</label> 
 									<select
-										class="form-control" id="selectcommunityName" name="selectcommunityName" onchange="showBlockbyCommunity(this.value);">
+										class="form-control select2" id="selectcommunityName" name="selectcommunityName" onchange="showBlockbyCommunity(this.value);">
 									</select>
 								</div>
 							</div>
 							<div class="col-md-4">
 								<div class="form-group has-feedback has-success bmd-form-group is-filled">
 									<label class="bmd-label-floating select-label">Select Block</label> <select
-										class="form-control" id="selectBlockBasedonCommunity" name="selectBlockBasedonCommunity">
+										class="form-control select2" id="selectBlockBasedonCommunity" name="selectBlockBasedonCommunity">
 									</select>
 								</div>
 							</div>
@@ -323,7 +297,8 @@
 							</div>
 							<div class="col-md-4">
 								<div class="form-group">
-									<label class="bmd-label-floating select-label">Tariff Name</label>  <select
+									<label class="bmd-label-floating select-label">Tariff Name</label>  
+									<select
 										class="form-control" id="selectTariffName" name="selectTariffName">
 										<!-- <option style = "color: Red" value="" disabled selected>Select Tariff</option> --><!--  <option>Select Community</option> --> 
 									</select>
@@ -387,7 +362,7 @@
             <div class="form-group has-feedback has-success bmd-form-group is-filled">
 									<label class="bmd-label-floating select-label">Select Community</label> 
 									<select
-										class="form-control" id="filterselectcommunityName" name="filterselectcommunityName" onchange="showBlockbyCommunity(this.value);">
+										class="form-control select2" id="filterselectcommunityName" name="filterselectcommunityName" onchange="showBlockbyCommunity(this.value);">
 									</select>
 								</div>
 							</div>
@@ -544,6 +519,7 @@
 	</div>
 	<%} %>
    
+	
 	<script type="text/javascript"
 		src="//cdn.jsdelivr.net/jquery.bootstrapvalidator/0.5.0/js/bootstrapValidator.min.js"></script>
 
@@ -590,6 +566,9 @@
 	<script
 		src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
 		
+		
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+		
 	<script
 		src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
 		
@@ -604,6 +583,7 @@
 		src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/5.4.0/bootbox.min.js"></script>
 		
 		<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+		<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 		
 	<script>
 		$(document).ready(function() {
