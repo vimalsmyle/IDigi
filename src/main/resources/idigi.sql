@@ -145,9 +145,12 @@ CREATE TABLE `billingpaymentdetails` (
   `TransactionDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `AcknowledgeDate` datetime DEFAULT NULL,
   PRIMARY KEY (`TransactionID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 /*Data for the table `billingpaymentdetails` */
+
+insert  into `billingpaymentdetails`(`TransactionID`,`CustomerBillingID`,`CustomerID`,`CustomerUniqueID`,`TotalAmount`,`LateFee`,`Source`,`ModeOfPayment`,`PaymentStatus`,`RazorPayOrderID`,`RazorPayPaymentID`,`RazorPaySignature`,`ErrorResponse`,`RazorPayRefundID`,`RazorPayRefundStatus`,`RazorPayRefundEntity`,`CreatedByID`,`CreatedByRoleID`,`TransactionDate`,`AcknowledgeDate`) values 
+(1,1,1,'IDIGI1',212.4,0,'web','cash',1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,2,2,'2021-05-22 23:45:19','2021-05-22 23:45:17');
 
 /*Table structure for table `block` */
 
@@ -184,9 +187,13 @@ CREATE TABLE `command` (
   `CustomerUniqueID` varchar(100) NOT NULL,
   `CreatedDate` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`TransactionID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 
 /*Data for the table `command` */
+
+insert  into `command`(`TransactionID`,`CustomerID`,`CustomerMeterID`,`MIUID`,`CustomerUniqueID`,`CreatedDate`) values 
+(2,1,1,'1122','IDIGI1','2021-05-23 15:13:25'),
+(3,1,1,'1122','IDIGI1','2021-05-23 15:20:58');
 
 /*Table structure for table `commanddetails` */
 
@@ -201,9 +208,13 @@ CREATE TABLE `commanddetails` (
   `RegisteredDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `ModifiedDate` datetime DEFAULT NULL,
   PRIMARY KEY (`CommandDetailsID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
 /*Data for the table `commanddetails` */
+
+insert  into `commanddetails`(`CommandDetailsID`,`TransactionID`,`CommandType`,`Value`,`Status`,`RegisteredDate`,`ModifiedDate`) values 
+(1,2,3,'2',0,'2021-05-23 15:15:22','2021-05-23 15:15:22'),
+(2,3,3,'1',10,'2021-05-23 15:21:09','2021-05-23 15:21:09');
 
 /*Table structure for table `community` */
 
@@ -250,7 +261,7 @@ CREATE TABLE `customerbillingdetails` (
 /*Data for the table `customerbillingdetails` */
 
 insert  into `customerbillingdetails`(`CustomerBillingID`,`CommunityID`,`BlockID`,`CustomerID`,`CustomerUniqueID`,`TotalAmount`,`TaxAmount`,`TotalConsumption`,`Status`,`DueDate`,`BillMonth`,`BillYear`,`LogDate`,`ModifiedDate`) values 
-(1,1,1,1,'IDIGI1',180,0,9,0,'2021-06-01',4,2021,'2021-05-22 19:34:29','2021-05-22 19:34:29');
+(1,1,1,1,'IDIGI1',180,32.4,9,0,'2021-06-01',4,2021,'2021-05-22 19:34:29','2021-05-22 19:34:29');
 
 /*Table structure for table `customerdeletedetails` */
 
@@ -321,12 +332,13 @@ CREATE TABLE `customerdetails` (
   `ModifiedDate` datetime DEFAULT NULL,
   PRIMARY KEY (`CustomerID`,`CustomerUniqueID`),
   UNIQUE KEY `CRNNumber` (`CustomerUniqueID`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
 /*Data for the table `customerdetails` */
 
 insert  into `customerdetails`(`CustomerID`,`CommunityID`,`BlockID`,`HouseNumber`,`FirstName`,`LastName`,`Email`,`MobileNumber`,`ActiveStatus`,`CustomerUniqueID`,`CreatedByID`,`CreatedByRoleID`,`RegistrationDate`,`ModifiedDate`) values 
-(1,1,1,'101','Vimal','Kumar','kvk9889@gmail.com','8498890000',1,'IDIGI1',2,2,'2021-05-17 23:20:44','2021-05-18 14:26:45');
+(1,1,1,'101','Vimal','Kumar','kvk9889@gmail.com','8498890000',1,'IDIGI1',2,2,'2021-05-17 23:20:44','2021-05-18 14:26:45'),
+(2,1,1,'102','vml','kvk','vimal_smyle2006@yahoo.com','8498890000',1,'IDIGI2',1,1,'2021-05-23 16:30:27','2021-05-23 16:30:30');
 
 /*Table structure for table `customermeterdetails` */
 
@@ -347,7 +359,7 @@ CREATE TABLE `customermeterdetails` (
   `RegisteredDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `ModifiedDate` datetime NOT NULL,
   PRIMARY KEY (`CustomerMeterID`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 
 /*Data for the table `customermeterdetails` */
 
@@ -355,7 +367,8 @@ insert  into `customermeterdetails`(`CustomerMeterID`,`CustomerID`,`CustomerUniq
 (1,1,'IDIGI1','1122','11223344','Gas',NULL,'Prepaid',1,1,'Kitchen','2021-05-17 23:22:24','2021-05-17 23:24:13'),
 (2,1,'IDIGI1','2233','22334455','Water',NULL,'Postpaid',2,1,'Bathroom','2021-05-17 23:24:09','2021-05-17 23:24:17'),
 (3,1,'IDIGI1','3344','33445566','Water',NULL,'Postpaid',3,1,'Bedroom','2021-05-17 23:25:15','2021-05-17 23:25:13'),
-(4,1,'IDIGI1','4455','44556677','Water',NULL,'Postpaid',2,1,'Washarea','2021-05-17 23:26:11','2021-05-17 23:26:10');
+(4,1,'IDIGI1','4455','44556677','Water',NULL,'Postpaid',2,1,'Washarea','2021-05-17 23:26:11','2021-05-17 23:26:10'),
+(5,2,'IDIGI2','5566','55667788','Gas',NULL,'Prepaid',1,1,'Kitchen','2021-05-23 16:31:15','2021-05-23 16:31:18');
 
 /*Table structure for table `displaybalancelog` */
 
@@ -588,7 +601,7 @@ CREATE TABLE `user` (
   `ModifiedDate` datetime DEFAULT NULL,
   PRIMARY KEY (`ID`),
   KEY `CommunityID` (`CommunityID`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
 
 /*Data for the table `user` */
 
@@ -598,7 +611,8 @@ insert  into `user`(`ID`,`UserID`,`UserName`,`UserPassword`,`RoleID`,`ActiveStat
 (3,'IDIGI1','Vimal Kumar','cvp/LzpadrQT+2k0WDjyOQ==',3,1,1,1,1,'IDIGI1',2,2,'2021-05-01 17:25:54','2021-05-01 17:25:56'),
 (4,'Superadminsupervisor','Idigisuperadminsupervisor','cvp/LzpadrQT+2k0WDjyOQ==',4,1,0,0,0,NULL,1,1,'2021-05-01 17:26:45','2021-05-01 17:26:48'),
 (5,'Adminsupervisor','Kvkadminsupervisor','cvp/LzpadrQT+2k0WDjyOQ==',5,1,1,1,0,NULL,1,1,'2021-05-01 17:28:26','2021-05-01 17:28:29'),
-(6,'idigiblock','idigiblock','yotlEHVjsFQOtJ1njm6kXQ==',2,1,1,1,0,'NULL',1,1,'2021-05-15 23:23:08','2021-05-15 23:23:08');
+(6,'idigiblock','idigiblock','yotlEHVjsFQOtJ1njm6kXQ==',2,1,1,1,0,'NULL',1,1,'2021-05-15 23:23:08','2021-05-15 23:23:08'),
+(7,'IDIGI2','vml kvk','cvp/LzpadrQT+2k0WDjyOQ==',3,1,1,1,2,'IDIGI2',1,1,'2021-05-23 16:46:19','2021-05-23 16:46:22');
 
 /*Table structure for table `userrole` */
 
@@ -641,9 +655,13 @@ CREATE TABLE `vacation` (
   `RegisteredDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `ModifiedDate` datetime NOT NULL,
   PRIMARY KEY (`VacationID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
 /*Data for the table `vacation` */
+
+insert  into `vacation`(`VacationID`,`CommunityID`,`BlockID`,`CustomerID`,`MIUID`,`CustomerMeterID`,`VacationName`,`StartDate`,`EndDate`,`Status`,`Source`,`CustomerUniqueID`,`mode`,`RegisteredDate`,`ModifiedDate`) values 
+(1,1,1,1,'1122',1,'summer','2021-05-22 16:54:13','2021-05-24 16:54:25',0,'web','IDIGI1','add','2021-05-23 16:54:48','2021-05-23 16:54:46'),
+(2,1,1,1,'2233',2,'winter','2021-05-27 16:56:28','2021-05-31 16:56:34',0,'web','IDIGI1','add','2021-05-23 16:56:53','2021-05-23 16:56:56');
 
 /*Table structure for table `customermeterdetailsview` */
 

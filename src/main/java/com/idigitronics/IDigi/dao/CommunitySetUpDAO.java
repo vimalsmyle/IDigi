@@ -671,7 +671,6 @@ public class CommunitySetUpDAO {
 		try {
 			con = getConnection();
 			customer_list = new LinkedList<CustomerResponseVO>();
-			customer_meter_list = new LinkedList<MeterRequestVO>();
 		
 			// create a view for this
 			
@@ -685,6 +684,8 @@ public class CommunitySetUpDAO {
 			while (rs.next()) {
 				
 				customervo = new CustomerResponseVO();
+				customer_meter_list = new LinkedList<MeterRequestVO>();
+				
 				customervo.setCommunityName(rs.getString("CommunityName"));
 				customervo.setBlockName(rs.getString("BlockName"));
 				customervo.setFirstName(rs.getString("FirstName"));
@@ -693,7 +694,7 @@ public class CommunitySetUpDAO {
 				customervo.setMobileNumber(rs.getString("MobileNumber"));
 				customervo.setHouseNumber(rs.getString("HouseNumber"));
 				customervo.setCustomerUniqueID(rs.getString("CustomerUniqueID"));
-				customervo.setCustomerID(rs.getInt("CustomerID"));
+				customervo.setCustomerID(rs.getLong("CustomerID"));
 				
 				PreparedStatement pstmt2 = con.prepareStatement("SELECT cmd.CustomerMeterID, cmd.MIUID, cmd.MeterSerialNumber, cmd.MeterType, cmd.PayType, cmd.Location, cmd.TariffID, cmd.GatewayID, g.GatewayName FROM customermeterdetails AS cmd LEFT JOIN gateway AS g ON g.GatewayID = cmd.GatewayID WHERE cmd.CustomerID = " + customervo.getCustomerID());
 				

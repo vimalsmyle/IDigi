@@ -331,9 +331,9 @@ public class ManagementSettingsDAO {
 			con = getConnection();
 			vacationlist = new LinkedList<VacationResponseVO>();
 
-			String query = "SELECT v.VacationID, v.VacationName, c.CommunityName, b.BlockName, cmd.HouseNumber, cmd.FirstName, cmd.LastName, cmd.MeterID, cmd.CRNNumber, v.StartDate, v.EndDate, "
-					+ "v.Source, v.Status, v.Mode, v.RegisteredDate FROM Vacation AS V LEFT JOIN community AS C ON c.CommunityID = v.CommunityID LEFT JOIN block AS b ON b.blockID = v.BlockID "
-					+ "LEFT JOIN customermeterdetails AS cmd ON cmd.CustomerID = v.CustomerID <change>";
+			String query = "SELECT v.VacationID, v.VacationName, c.CommunityName, b.BlockName, cd.HouseNumber, cd.FirstName, cd.LastName, v.MIUID, v.CustomerUniqueID, v.CustomerMeterID, v.StartDate, v.EndDate, v.Source, v.Status, v.Mode, v.RegisteredDate \r\n" + 
+					"FROM Vacation AS v LEFT JOIN community AS c ON c.CommunityID = v.CommunityID \r\n" + 
+					"LEFT JOIN block AS b ON b.blockID = v.BlockID LEFT JOIN customerdetails AS cd ON cd.CustomerID = v.CustomerID <change>";
 							
 			pstmt = con.prepareStatement(query.replaceAll("<change>", ((roleid == 1 || roleid == 4) && (filterCid == -1)) ? "ORDER BY v.VacationID DESC" : 
 				((roleid == 1 || roleid == 4) && (filterCid != -1)) ? " WHERE v.CommunityID = "+filterCid+" ORDER BY v.VacationID DESC" : (roleid == 2 || roleid == 5) ?
@@ -350,8 +350,8 @@ public class ManagementSettingsDAO {
 				vacationResponseVO.setHouseNumber(rs.getString("HouseNumber"));
 				vacationResponseVO.setFirstName(rs.getString("FirstName"));
 				vacationResponseVO.setLastName(rs.getString("LastName"));
-				vacationResponseVO.setCRNNumber(rs.getString("CRNNumber"));
-				vacationResponseVO.setMeterID(rs.getString("MeterID"));
+				vacationResponseVO.setCustomerUniqueID(rs.getString("CustomerUniqueID"));
+				vacationResponseVO.setMiuID(rs.getString("MIUID"));
 				vacationResponseVO.setVacationName(rs.getString("VacationName"));
 				vacationResponseVO.setStartDate(ExtraMethodsDAO.datetimeformatter(rs.getString("StartDate")));
 				vacationResponseVO.setEndDate(ExtraMethodsDAO.datetimeformatter(rs.getString("EndDate")));
@@ -359,7 +359,7 @@ public class ManagementSettingsDAO {
 				vacationResponseVO.setEndDateForEdit(rs.getString("EndDate"));
 				vacationResponseVO.setMode(rs.getString("Mode"));
 				vacationResponseVO.setRegisteredDate(ExtraMethodsDAO.datetimeformatter(rs.getString("RegisteredDate")));
-				vacationResponseVO.setStatus((rs.getInt("Status") == 0) ? "Pending...waiting for acknowledge" : (rs.getInt("Status") == 1) ? "Pending" : (rs.getInt("Status") == 2) ? "Passed" :"Failed");
+				vacationResponseVO.setStatus(rs.getInt("Status") == 0 ? "Passed"	: rs.getInt("Status") == 1 ? "Already Executed" : rs.getInt("Status") == 2 ? "Invalid Syntax"	: rs.getInt("Status") == 3 ? "Invalid Parameters" : rs.getInt("Status") == 4 ? "Value Cannot be Applied" : rs.getInt("Status") == 5 ? "Value Not in Range" : rs.getInt("Status") == 6 ? "Command Not Found"	: rs.getInt("Status") == 7	? "Device Not Found" : rs.getInt("Status") == 8 ? "Transaction Discarded" : rs.getInt("Status") == 9 ? "Transaction not Found" : rs.getInt("Status") == 10 ? "Pending": "Unknown Failure");
 				vacationlist.add(vacationResponseVO);
 			}
 

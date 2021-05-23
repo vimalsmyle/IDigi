@@ -561,7 +561,7 @@ public class AccountDAO {
 				statusvo.setAlarmCredit(rs.getString("AlarmCredit"));
 				statusvo.setEmergencyCredit(rs.getString("EmergencyCredit"));
 				statusvo.setTransactionDate(ExtraMethodsDAO.datetimeformatter(rs.getString("TransactionDate")));
-				statusvo.setStatus((rs.getInt("Status") == 10) ? "Pending" : (rs.getInt("Status") == 0) ? "Passed" : "Failed");
+				statusvo.setStatus(rs.getInt("Status") == 0 ? "Passed"	: rs.getInt("Status") == 1 ? "Already Executed" : rs.getInt("Status") == 2 ? "Invalid Syntax"	: rs.getInt("Status") == 3 ? "Invalid Parameters" : rs.getInt("Status") == 4 ? "Value Cannot be Applied" : rs.getInt("Status") == 5 ? "Value Not in Range" : rs.getInt("Status") == 6 ? "Command Not Found"	: rs.getInt("Status") == 7	? "Device Not Found" : rs.getInt("Status") == 8 ? "Transaction Discarded" : rs.getInt("Status") == 9 ? "Transaction not Found" : rs.getInt("Status") == 10 ? "Pending": "Unknown Failure");
 
 				pstmt1 = con.prepareStatement("SELECT user.ID, user.UserName, userrole.RoleDescription FROM USER LEFT JOIN userrole ON user.RoleID = userrole.RoleID WHERE user.ID = "+ rs.getInt("CreatedByID"));
 				rs1 = pstmt1.executeQuery();
@@ -1356,16 +1356,15 @@ public class AccountDAO {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		PreparedStatement pstmt1 = null;
-		ResultSet rs1 = null;
 		List<ConfigurationResponseVO> configurationdetailslist = null;
 		List<CommandGroupResponseVO> commandslist = null;
+		ConfigurationResponseVO configurationvo = null;
+		CommandGroupResponseVO commands = null;
 		try {
 			con = getConnection();
 			configurationdetailslist = new LinkedList<ConfigurationResponseVO>();
-			commandslist = new LinkedList<CommandGroupResponseVO>();
 
-			String query = "SELECT cd.TransactionID, cd.CustomerUniqueID, cd.MIUID, cd.CustomerMeterID FROM command AS cd \r\n"
+			String query = "SELECT DISTINCT cd.TransactionID, cd.CustomerUniqueID, cd.MIUID, cd.CustomerMeterID FROM command AS cd \r\n"
 					+ "LEFT JOIN customerdetails AS cm ON cm.CustomerUniqueID = cd.CustomerUniqueID\r\n"
 					+ "LEFT JOIN community AS c ON cm.CommunityID = c.CommunityID\r\n"
 					+ "LEFT JOIN block AS b ON cm.BlockID = b.blockID <change>";
@@ -1377,31 +1376,32 @@ public class AccountDAO {
 									: (roleid == 2 || roleid == 5)
 											? "WHERE cm.BlockID = " + id + " ORDER BY cd.TransactionID DESC"
 											: (roleid == 3)
-													? "WHERE cm.CustomerUniqueID = '" + id + "' ORDER BY cd.TransactionID DESC"
+													? "WHERE cm.CustomerUniqueID = '" + id
+															+ "' ORDER BY cd.TransactionID DESC"
 													: ""));
 
 			rs = pstmt.executeQuery();
-			ConfigurationResponseVO configurationvo = null;
-			CommandGroupResponseVO commands = null;
 
 			while (rs.next()) {
+				commandslist = new LinkedList<CommandGroupResponseVO>();
 				configurationvo = new ConfigurationResponseVO();
-				
-				configurationvo.setMiuID(rs.getString("MIUID"));
-				configurationvo.setTransactionID(rs.getInt("TransactionID"));
-				
-				pstmt1 = con.prepareStatement("SELECT * FROM commanddetails WHERE TransactionID = " + configurationvo.getTransactionID());
-				rs1 = pstmt1.executeQuery();
-				while(rs1.next()) {
+
+				PreparedStatement pstmt1 = con.prepareStatement("SELECT * FROM commanddetails WHERE TransactionID = " + rs.getLong("TransactionID"));
+				ResultSet rs1 = pstmt1.executeQuery();
+				while (rs1.next()) {
 					commands = new CommandGroupResponseVO();
-					
-					commands.setCommandType(rs1.getInt("CommandType") == 1 ? "Meter Reset" : rs1.getInt("CommandType") == 3 ? "Tariff" : rs1.getInt("CommandType") == 5 ? "Valve" : rs1.getInt("CommandType") == 6 ? "RTC" : rs1.getInt("CommandType") == 8 ? "Sync Interval" : rs1.getInt("CommandType") == 9 ? "Meter Reading" : rs1.getInt("CommandType") == 10 ? "PrePaidPostPaid Mode" : rs1.getInt("CommandType") == 12 ? "Clear Tamper" : rs1.getInt("CommandType") == 13 ? "Sync Time" : "");
-					commands.setStatus(rs1.getInt("Status") == 0 ? "Passed" : rs1.getInt("Status") == 1 ? "Already Executed" : rs1.getInt("Status") == 2 ? "Invalid Syntax" : rs1.getInt("Status") == 3 ? "Invalid Parameters" : rs1.getInt("Status") == 4 ? "Value Cannot be Applied" : rs1.getInt("Status") == 5 ? "Value Not in Range" : rs1.getInt("Status") == 6 ? "Command Not Found" : rs1.getInt("Status") == 7 ? "Device Not Found" : rs1.getInt("Status") == 8 ? "Transaction Discarded" : rs1.getInt("Status") == 9 ? "Transaction not Found" : rs1.getInt("Status") == 10 ? "Pending" : "Unknown Failure");
+
+					commands.setCommandType(rs1.getInt("CommandType") == 1 ? "Meter Reset" : rs1.getInt("CommandType") == 3 ? "Tariff" : rs1.getInt("CommandType") == 5 ? "Valve" : rs1.getInt("CommandType") == 6 ? "RTC" : rs1.getInt("CommandType") == 8 ? "Sync Interval" : rs1.getInt("CommandType") == 9 ? "Meter Reading" : rs1.getInt("CommandType") == 10 ? "PrePaidPostPaid Mode"	: rs1.getInt("CommandType") == 12 ? "Clear Tamper" : rs1.getInt("CommandType") == 13 ? "Sync Time" : "");
+					commands.setStatus(rs1.getInt("Status") == 0 ? "Passed"	: rs1.getInt("Status") == 1 ? "Already Executed" : rs1.getInt("Status") == 2 ? "Invalid Syntax"	: rs1.getInt("Status") == 3 ? "Invalid Parameters" : rs1.getInt("Status") == 4 ? "Value Cannot be Applied" : rs1.getInt("Status") == 5 ? "Value Not in Range" : rs1.getInt("Status") == 6 ? "Command Not Found"	: rs1.getInt("Status") == 7	? "Device Not Found" : rs1.getInt("Status") == 8 ? "Transaction Discarded" : rs1.getInt("Status") == 9 ? "Transaction not Found" : rs1.getInt("Status") == 10 ? "Pending": "Unknown Failure");
 					commands.setValue(rs1.getString("Value"));
 					commands.setModifiedDate(rs1.getString("ModifiedDate"));
-					
+
 					commandslist.add(commands);
-					}
+				}
+				
+				configurationvo.setCommands(commandslist);
+				configurationvo.setMiuID(rs.getString("MIUID"));
+				configurationvo.setTransactionID(rs.getLong("TransactionID"));
 				
 				configurationdetailslist.add(configurationvo);
 			}
@@ -1446,7 +1446,7 @@ public class AccountDAO {
 			
 			if(rs.next()) {
 				
-				PreparedStatement pstmt = con.prepareStatement("SELECT g.GatewayIP, g.GatewayPort FROM gateways as g LEFT JOIN customermeterdetails as cmd ON g.GatewayID = cmd.GatewayID WHERE CustomerMeterID = " + configurationvo.getCustomerMeterID());
+				PreparedStatement pstmt = con.prepareStatement("SELECT g.GatewayIP, g.GatewayPort FROM gateway as g LEFT JOIN customermeterdetails as cmd ON g.GatewayID = cmd.GatewayID WHERE CustomerMeterID = " + configurationvo.getCustomerMeterID());
 				ResultSet rs2 = pstmt.executeQuery();
 				
 				if(rs2.next()) {
@@ -1486,17 +1486,22 @@ public class AccountDAO {
 					
 					if (ps2.executeUpdate() > 0) {
 						restcallvo.setParameter_id(configurationvo.getCommands().get(0).getParameter_id());
-						restcallvo.setValue(configurationvo.getCommands().get(0).getValue());
+						restcallvo.setValue(configurationvo.getCommands().get(0).getParameter_id() == 6 ? ExtraMethodsDAO.datetimeformatter(configurationvo.getCommands().get(0).getValue()) : configurationvo.getCommands().get(0).getValue());
 						restcallvo.setUrlExtension("/set");
 						
 						if (configurationvo.getCommands().get(0).getParameter_id() == 3) {
 
-							PreparedStatement pstmt2 = con.prepareStatement("UPDATE customermeterdetails SET TariffID = ? Where CustomerUniqueID = ? AND CustomerMeterID = ?");
+							PreparedStatement pstmt2 = con.prepareStatement("UPDATE customermeterdetails SET TariffID = ?, ModifiedDate = NOW() WHERE CustomerUniqueID = ? AND CustomerMeterID = ?");
 							pstmt2.setInt(1, Integer.parseInt(configurationvo.getCommands().get(0).getValue()));
 							pstmt2.setString(2, configurationvo.getCustomerUniqueID());
 							pstmt2.setLong(3, configurationvo.getCustomerMeterID());
 							pstmt2.executeUpdate();
-
+							
+							PreparedStatement pstmt3 = con.prepareStatement("SELECT Tariff FROM tariff WHERE TariffID = " + configurationvo.getCommands().get(0).getValue());
+							ResultSet rs3 = pstmt3.executeQuery();
+							if(rs3.next()) {
+								restcallvo.setValue(rs3.getString("Tariff"));
+							}
 						}
 					}
 					
@@ -1609,11 +1614,11 @@ public class AccountDAO {
 
 		try {
 			con = getConnection();
-			pstmt = con.prepareStatement("SELECT cd.MIUID, cmd.Status FROM command as cd LEFT JOIN commanddetails AS cmd ON cd.TransactionID = cmd.TransactionID WHERE MIUID = ? order by TransactionID DESC LIMIT 0,1");
+			pstmt = con.prepareStatement("SELECT cd.MIUID, cmd.Status FROM command as cd LEFT JOIN commanddetails AS cmd ON cd.TransactionID = cmd.TransactionID WHERE MIUID = ? order by cmd.TransactionID DESC LIMIT 0,1");
 			pstmt.setString(1, meterID);
 			rs = pstmt.executeQuery();
 			if (rs.next()) {
-				if (rs.getString("Status").equals("10")) {
+				if (rs.getString("Status") != null && rs.getString("Status").equals("10")) {
 					result = true;
 				}
 			}

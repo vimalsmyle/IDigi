@@ -11,8 +11,8 @@ import java.util.List;
  */
 public class UserConsumptionReportsResponseVO {
 	
-	private String CRNNumber;
-	private String meterID;
+	private String customerUniqueID;
+	private String miuID;
 	private float reading;
 	private float balance;
 	private float battery;
@@ -23,11 +23,17 @@ public class UserConsumptionReportsResponseVO {
 	
 	private List<UserConsumptionReportsResponseVO> data;
 	
-	public String getMeterID() {
-		return meterID;
+	public String getCustomerUniqueID() {
+		return customerUniqueID;
 	}
-	public void setMeterID(String meterID) {
-		this.meterID = meterID;
+	public void setCustomerUniqueID(String customerUniqueID) {
+		this.customerUniqueID = customerUniqueID;
+	}
+	public String getMiuID() {
+		return miuID;
+	}
+	public void setMiuID(String miuID) {
+		this.miuID = miuID;
 	}
 	public float getReading() {
 		return reading;
@@ -77,11 +83,4 @@ public class UserConsumptionReportsResponseVO {
 	public void setData(List<UserConsumptionReportsResponseVO> data) {
 		this.data = data;
 	}
-	public String getCRNNumber() {
-		return CRNNumber;
-	}
-	public void setCRNNumber(String cRNNumber) {
-		CRNNumber = cRNNumber;
-	}
-	
 }

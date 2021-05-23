@@ -14,10 +14,10 @@ public class VacationResponseVO {
 	private String communityName;
 	private String blockName;
 	private String houseNumber;
-	private String CRNNumber;
+	private String customerUniqueID;
 	private String firstName;
 	private String lastName;
-	private String meterID;
+	private String miuID;
 	private String startDate;
 	private String endDate;
 	private String startDateForEdit;
@@ -71,14 +71,6 @@ public class VacationResponseVO {
 		this.lastName = lastName;
 	}
 
-	public String getMeterID() {
-		return meterID;
-	}
-
-	public void setMeterID(String meterID) {
-		this.meterID = meterID;
-	}
-
 	public String getStartDate() {
 		return startDate;
 	}
@@ -111,12 +103,20 @@ public class VacationResponseVO {
 		this.data = data;
 	}
 
-	public String getCRNNumber() {
-		return CRNNumber;
+	public String getCustomerUniqueID() {
+		return customerUniqueID;
 	}
 
-	public void setCRNNumber(String cRNNumber) {
-		CRNNumber = cRNNumber;
+	public void setCustomerUniqueID(String customerUniqueID) {
+		this.customerUniqueID = customerUniqueID;
+	}
+
+	public String getMiuID() {
+		return miuID;
+	}
+
+	public void setMiuID(String miuID) {
+		this.miuID = miuID;
 	}
 
 	public long getVacationID() {

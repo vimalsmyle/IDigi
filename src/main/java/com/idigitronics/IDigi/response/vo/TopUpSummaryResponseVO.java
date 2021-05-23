@@ -12,8 +12,8 @@ import java.util.List;
 public class TopUpSummaryResponseVO {
 
 	private String houseNumber;
-	private String CRNNumber;
-	private String meterID;
+	private String customerUniqueID;
+	private String miuID;
 	private String firstName;
 	private String lastName;
 	private long transactionID;
@@ -40,12 +40,20 @@ public class TopUpSummaryResponseVO {
 		this.houseNumber = houseNumber;
 	}
 
-	public String getMeterID() {
-		return meterID;
+	public String getCustomerUniqueID() {
+		return customerUniqueID;
 	}
 
-	public void setMeterID(String meterID) {
-		this.meterID = meterID;
+	public void setCustomerUniqueID(String customerUniqueID) {
+		this.customerUniqueID = customerUniqueID;
+	}
+
+	public String getMiuID() {
+		return miuID;
+	}
+
+	public void setMiuID(String miuID) {
+		this.miuID = miuID;
 	}
 
 	public String getFirstName() {
@@ -126,14 +134,6 @@ public class TopUpSummaryResponseVO {
 
 	public void setModeOfPayment(String modeOfPayment) {
 		this.modeOfPayment = modeOfPayment;
-	}
-
-	public String getCRNNumber() {
-		return CRNNumber;
-	}
-
-	public void setCRNNumber(String cRNNumber) {
-		CRNNumber = cRNNumber;
 	}
 
 	public String getRazorPayOrderID() {

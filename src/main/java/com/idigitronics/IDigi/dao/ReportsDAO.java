@@ -61,8 +61,8 @@ public class ReportsDAO {
 
 			financialreportsresponselist = new ArrayList<FinancialReportsResponseVO>();
 			
-			String query = "SELECT c.CommunityName, b.BlockName, cmd.HouseNumber, cmd.FirstName, cmd.LastName, cmd.MeterID FROM customermeterdetails AS cmd LEFT JOIN community AS C on c.communityID = cmd.CommunityID LEFT JOIN block AS b on b.BlockID = cmd.BlockID <change>";
-			pstmt1 = con.prepareStatement(query.replaceAll("<change>", (financialreportsrequestvo.getBlockID() == 0 && (roleid==1 || roleid==4)) ? "WHERE cmd.CommunityID = "+financialreportsrequestvo.getCommunityID() + " ORDER BY cmd.CustomerID ASC" : (financialreportsrequestvo.getBlockID() != 0 && (roleid==1 || roleid==4)) ? "WHERE cmd.BlockID = "+financialreportsrequestvo.getBlockID() + " ORDER BY cmd.CustomerID ASC" :(roleid==2 || roleid==5) ? "WHERE cmd.CommunityID = "+financialreportsrequestvo.getCommunityID() + " AND cmd.BlockID = "+id+" ORDER BY cmd.CustomerID ASC":""));
+			String query = "SELECT c.CommunityName, b.BlockName, cd.HouseNumber, cd.FirstName, cd.LastName, cmd.MIUID FROM customerdetails AS cd LEFT JOIN customermeterdetails AS cmd ON cd.CustomerID = cmd.CustomerID LEFT JOIN community AS C on c.communityID = cd.CommunityID LEFT JOIN block AS b on b.BlockID = cd.BlockID WHERE cmd.PayType = 'Prepaid' <change>";
+			pstmt1 = con.prepareStatement(query.replaceAll("<change>", (financialreportsrequestvo.getBlockID() == 0 && (roleid==1 || roleid==4)) ? "AND cd.CommunityID = "+financialreportsrequestvo.getCommunityID() + " ORDER BY cd.CustomerID ASC" : (financialreportsrequestvo.getBlockID() != 0 && (roleid==1 || roleid==4)) ? "AND cd.BlockID = "+financialreportsrequestvo.getBlockID() + " ORDER BY cd.CustomerID ASC" :(roleid==2 || roleid==5) ? "AND cd.CommunityID = "+financialreportsrequestvo.getCommunityID() + " AND cd.BlockID = "+id+" ORDER BY cd.CustomerID ASC":""));
 			rs1 = pstmt1.executeQuery();
 			while(rs1.next()) {
 				
@@ -70,12 +70,12 @@ public class ReportsDAO {
 				financialreportsresponsevo.setCommunityName(rs1.getString("CommunityName"));
 				financialreportsresponsevo.setBlockName(rs1.getString("BlockName"));
 				financialreportsresponsevo.setHouseNumber(rs1.getString("HouseNumber"));
-				financialreportsresponsevo.setMeterID(rs1.getString("MeterID"));
+				financialreportsresponsevo.setMiuID(rs1.getString("MIUID"));
 				
-				String query1 = "SELECT SUM(Amount) AS Total FROM topup WHERE MeterID = ? AND YEAR(TransactionDate) = ? <change> AND STATUS = 2";
+				String query1 = "SELECT SUM(Amount) AS Total FROM topup WHERE MIUID = ? AND YEAR(TransactionDate) = ? <change> AND STATUS = 0";
 				query1 = query1.replaceAll("<change>", (financialreportsrequestvo.getMonth() > 0) ? "AND MONTH(TransactionDate) = "+financialreportsrequestvo.getMonth() : "");
 				pstmt = con.prepareStatement(query1);
-				pstmt.setString(1, rs1.getString("MeterID"));
+				pstmt.setString(1, rs1.getString("MIUID"));
 				pstmt.setInt(2, financialreportsrequestvo.getYear());
 				rs = pstmt.executeQuery();
 				if (rs.next()) {
@@ -133,11 +133,12 @@ public class ReportsDAO {
 		try {
 			con = getConnection();
 			userconsumptionreportsresponselist = new ArrayList<UserConsumptionReportsResponseVO>();
-
-			String query = "SELECT DISTINCT c.CommunityName, b.BlockName, cmd.FirstName, cmd.LastName, cmd.HouseNumber, cmd.MeterSerialNumber, cmd.CRNNumber, bl.ReadingID, bl.EmergencyCredit, \r\n" + 
-					"bl.MeterID, bl.Reading, bl.Balance, bl.BatteryVoltage, bl.TariffAmount, bl.SolonideStatus, bl.TamperDetect, bl.IoTTimeStamp, bl.LogDate\r\n" + 
+			
+			String query = "SELECT DISTINCT c.CommunityName, b.BlockName, cd.FirstName, cd.LastName, cd.HouseNumber, cd.CustomerUniqueID, bl.ReadingID, bl.EmergencyCredit, \r\n" + 
+					"bl.MIUID, bl.Reading, bl.Balance, bl.BatteryVoltage, bl.Tariff, bl.ValveStatus, bl.DoorOpenTamper, bl.MagneticTamper, bl.LowBattery, bl.LowBalance, bl.LogDate\r\n" + 
 					"FROM balancelog AS bl LEFT JOIN community AS c ON c.communityID = bl.CommunityID LEFT JOIN block AS b ON b.BlockID = bl.BlockID\r\n" + 
-					"LEFT JOIN customermeterdetails AS cmd ON cmd.CRNNumber = bl.CRNNumber WHERE bl.CRNNumber = ? AND bl.IoTTimeStamp BETWEEN ? AND ? ";
+					"LEFT JOIN customerdetails AS cd ON cd.CustomerUniqueID = bl.CustomerUniqueID WHERE bl.CustomerUniqueID = ? AND bl.LogDate BETWEEN ? AND ? ";
+			
 				pstmt = con.prepareStatement(query);
 				pstmt.setString(1, userconsumptionreportsrequestvo.getCRNNumber());
 				pstmt.setString(2, userconsumptionreportsrequestvo.getFromDate()+ " :00.001");
@@ -148,14 +149,14 @@ public class ReportsDAO {
 
 					userconsumptionreportsresponsevo = new UserConsumptionReportsResponseVO();
 					
-					userconsumptionreportsresponsevo.setCRNNumber(rs.getString("CRNNumber"));
-					userconsumptionreportsresponsevo.setMeterID(rs.getString("MeterID"));
+					userconsumptionreportsresponsevo.setCustomerUniqueID(rs.getString("CustomerUniqueID"));
+					userconsumptionreportsresponsevo.setMiuID(rs.getString("MIUID"));
 					userconsumptionreportsresponsevo.setReading(rs.getFloat("Reading"));
 					userconsumptionreportsresponsevo.setBalance(rs.getFloat("Balance"));
 					userconsumptionreportsresponsevo.setBattery(rs.getInt("BatteryVoltage"));
 					userconsumptionreportsresponsevo.setTariff(rs.getFloat("TariffAmount"));
 					userconsumptionreportsresponsevo.setEmergencyCredit(rs.getFloat("Emergencycredit"));
-					userconsumptionreportsresponsevo.setDateTime(ExtraMethodsDAO.datetimeformatter(rs.getString("IoTTimeStamp")));
+					userconsumptionreportsresponsevo.setDateTime(ExtraMethodsDAO.datetimeformatter(rs.getString("LogDate")));
 					
 					userconsumptionreportsresponselist.add(userconsumptionreportsresponsevo);
 				}
@@ -189,10 +190,10 @@ public class ReportsDAO {
 			con = getConnection();
 			topupsummarydetails = new LinkedList<TopUpSummaryResponseVO>();
 			
-			String query = "SELECT DISTINCT t.TransactionID, cmd.FirstName, cmd.LastName, cmd.HouseNumber, cmd.MeterID, cmd.CRNNumber, t.Amount, t.Status, t.ModeOfPayment, t.PaymentStatus, t.RazorPayOrderID, t.RazorPayPaymentID, t.RazorPayRefundID, t.RazorPayRefundStatus, t.TransactionDate, t.CreatedByID FROM topup AS t \r\n" + 
-					"LEFT JOIN customermeterdetails AS cmd ON cmd.CRNNumber = t.CRNNumber WHERE t.CommunityID = ? AND t.TransactionDate BETWEEN ? AND ? <change>";
+			String query = "SELECT DISTINCT t.TransactionID, cd.FirstName, cd.LastName, cd.HouseNumber, t.MIUID, cd.CustomerUniqueID, t.Amount, t.Status, t.ModeOfPayment, t.PaymentStatus, t.RazorPayOrderID, t.RazorPayPaymentID, t.RazorPayRefundID, t.RazorPayRefundStatus, t.TransactionDate, t.CreatedByID FROM topup AS t \r\n" + 
+					"LEFT JOIN customerdetails AS cd ON cd.CustomerUniqueID = t.CustomerUniqueID WHERE t.CommunityID = ? AND t.TransactionDate BETWEEN ? AND ? <change>";
 			
-				pstmt = con.prepareStatement(query.replaceAll("<change>", (topupsummaryrequestvo.getBlockID() > 0 && !topupsummaryrequestvo.getCRNNumber().isEmpty()) ? " AND t.CRNNumber = '"+topupsummaryrequestvo.getCRNNumber()+"'" : (topupsummaryrequestvo.getCRNNumber().isEmpty() && topupsummaryrequestvo.getBlockID() > 0) ? " AND t.BlockID = "+topupsummaryrequestvo.getBlockID() : ""));
+				pstmt = con.prepareStatement(query.replaceAll("<change>", (topupsummaryrequestvo.getBlockID() > 0 && !topupsummaryrequestvo.getCustomerUniqueID().isEmpty()) ? " AND t.CustomerUniqueID = '"+topupsummaryrequestvo.getCustomerUniqueID()+"'" : (topupsummaryrequestvo.getCustomerUniqueID().isEmpty() && topupsummaryrequestvo.getBlockID() > 0) ? " AND t.BlockID = "+topupsummaryrequestvo.getBlockID() : ""));
 				
 				pstmt.setInt(1, topupsummaryrequestvo.getCommunityID());
 				pstmt.setString(2, topupsummaryrequestvo.getFromDate()+ " 00:00:01.001");
@@ -207,8 +208,8 @@ public class ReportsDAO {
 					topupsummaryresponsevo.setFirstName(rs.getString("FirstName"));
 					topupsummaryresponsevo.setLastName(rs.getString("LastName"));
 					topupsummaryresponsevo.setHouseNumber(rs.getString("HouseNumber"));
-					topupsummaryresponsevo.setCRNNumber(rs.getString("CRNNumber"));
-					topupsummaryresponsevo.setMeterID(rs.getString("MeterID"));
+					topupsummaryresponsevo.setCustomerUniqueID(rs.getString("CustomerUniqueID"));
+					topupsummaryresponsevo.setMiuID(rs.getString("MIUID"));
 					topupsummaryresponsevo.setRechargeAmount(rs.getInt("Amount"));
 					topupsummaryresponsevo.setModeOfPayment(rs.getString("ModeOfPayment"));
 					topupsummaryresponsevo.setRazorPayOrderID(rs.getString("RazorPayOrderID"));
@@ -216,7 +217,7 @@ public class ReportsDAO {
 					topupsummaryresponsevo.setRazorPayRefundID((rs.getInt("PaymentStatus") == 3 ? rs.getString("RazorPayRefundID") : "---"));
 					topupsummaryresponsevo.setRazorPayRefundStatus((rs.getInt("PaymentStatus") == 3 ? rs.getString("RazorPayRefundStatus") : "---"));
 					topupsummaryresponsevo.setPaymentStatus((rs.getInt("PaymentStatus") == 1 ? "PAID" : (rs.getInt("PaymentStatus") == 2) ? "FAILED" : (rs.getInt("PaymentStatus") == 3) ? "REFUND INITITATED" : "NOT PAID"));
-					topupsummaryresponsevo.setStatus((rs.getInt("Status") == 0) ? "Pending...waiting for acknowledge" : (rs.getInt("Status") == 1) ? "Pending" : (rs.getInt("Status") == 2) ? "Passed" :"Failed");
+					topupsummaryresponsevo.setStatus(rs.getInt("Status") == 0 ? "Passed"	: rs.getInt("Status") == 1 ? "Already Executed" : rs.getInt("Status") == 2 ? "Invalid Syntax"	: rs.getInt("Status") == 3 ? "Invalid Parameters" : rs.getInt("Status") == 4 ? "Value Cannot be Applied" : rs.getInt("Status") == 5 ? "Value Not in Range" : rs.getInt("Status") == 6 ? "Command Not Found"	: rs.getInt("Status") == 7	? "Device Not Found" : rs.getInt("Status") == 8 ? "Transaction Discarded" : rs.getInt("Status") == 9 ? "Transaction not Found" : rs.getInt("Status") == 10 ? "Pending": "Unknown Failure");
 					topupsummaryresponsevo.setDateTime(ExtraMethodsDAO.datetimeformatter(rs.getString("TransactionDate")));
 					
 					pstmt1 = con.prepareStatement("SELECT user.ID, user.UserName, userrole.RoleDescription FROM USER LEFT JOIN userrole ON user.RoleID = userrole.RoleID WHERE user.ID = "+rs.getInt("CreatedByID"));
@@ -264,15 +265,15 @@ public class ReportsDAO {
 				noAMRInterval = rs1.getInt("NoAMRInterval");
 			}
 			
-			String query = "SELECT c.CommunityName, b.BlockName, cmd.HouseNumber, cmd.FirstName, cmd.LastName, cmd.MeterID, cmd.CRNNumber FROM customermeterdetails AS cmd LEFT JOIN community AS C on c.communityID = cmd.CommunityID LEFT JOIN block AS b on b.BlockID = cmd.BlockID <change>";
+			String query = "SELECT c.CommunityName, b.BlockName, cd.HouseNumber, cd.FirstName, cd.LastName, cmd.MIUID, cd.CustomerUniqueID FROM customerdetails AS cd LEFT JOIN customermeterdetails AS cmd ON cmd.CustomerID = cd.CustomerID LEFT JOIN community AS C on c.communityID = cd.CommunityID LEFT JOIN block AS b on b.BlockID = cd.BlockID <change>";
 			
-			pstmt = con.prepareStatement(query.replaceAll("<change>", ((roleid == 1 || roleid == 4) && (filterCid == -1)) ? " ORDER BY cmd.CustomerID ASC" : ((roleid == 1 || roleid == 4) && (filterCid != -1)) ? "WHERE cmd.CommunityID = "+filterCid+ " ORDER BY cmd.CustomerID ASC" : (roleid==2 || roleid==5) ? "WHERE cmd.BlockID = "+id : " ORDER BY cmd.CustomerID ASC"));
+			pstmt = con.prepareStatement(query.replaceAll("<change>", ((roleid == 1 || roleid == 4) && (filterCid == -1)) ? " ORDER BY cd.CustomerID ASC" : ((roleid == 1 || roleid == 4) && (filterCid != -1)) ? "WHERE cd.CommunityID = "+filterCid+ " ORDER BY cd.CustomerID ASC" : (roleid==2 || roleid==5) ? "WHERE cd.BlockID = "+id : " ORDER BY cd.CustomerID ASC"));
 			rs = pstmt.executeQuery();
 			
 			while(rs.next()) {
 				
-				PreparedStatement pstmt2 = con.prepareStatement("SELECT TIMESTAMPDIFF(MINUTE, (SELECT IoTTimeStamp FROM balancelog WHERE MeterID = ? ORDER BY ReadingID DESC LIMIT 1,1), NOW()) AS Minutes");
-				pstmt2.setString(1, rs.getString("MeterID"));
+				PreparedStatement pstmt2 = con.prepareStatement("SELECT TIMESTAMPDIFF(MINUTE, (SELECT LogDate FROM balancelog WHERE MIUID = ? ORDER BY ReadingID DESC LIMIT 1,1), NOW()) AS Minutes");
+				pstmt2.setString(1, rs.getString("MIUID"));
 				ResultSet rs2 = pstmt2.executeQuery();
 				if(rs2.next()) {
 					
@@ -282,25 +283,18 @@ public class ReportsDAO {
 						alarmsResponseVO.setCommunityName(rs.getString("CommunityName"));
 						alarmsResponseVO.setBlockName(rs.getString("BlockName"));
 						alarmsResponseVO.setHouseNumber(rs.getString("HouseNumber"));
-						alarmsResponseVO.setCRNNumber(rs.getString("CRNNumber"));
-						alarmsResponseVO.setMeterID(rs.getString("MeterID"));
+						alarmsResponseVO.setCustomerUniqueID(rs.getString("CustomerUniqueID"));
+						alarmsResponseVO.setMiuID(rs.getString("MIUID"));
 						alarmsResponseVO.setDifference(rs2.getInt("Minutes"));
-						PreparedStatement pstmt3 = con.prepareStatement("SELECT BatteryVoltage, TamperDetect, IoTTimeStamp, TamperDetect, LowBattery FROM displaybalancelog WHERE MeterID = ?");
-						pstmt3.setString(1, rs.getString("MeterID"));
+						PreparedStatement pstmt3 = con.prepareStatement("SELECT BatteryVoltage, DoorOpenTamper, MagneticTamper, LogDate, LowBattery, LowBalance FROM displaybalancelog WHERE MIUID = ?");
+						pstmt3.setString(1, rs.getString("MIUID"));
 						ResultSet rs3 = pstmt3.executeQuery();
 						if(rs3.next()) {
-							alarmsResponseVO.setDateTime(ExtraMethodsDAO.datetimeformatter(rs3.getString("IotTimeStamp")));
-							if(rs3.getInt("LowBattery")==1) {
-								alarmsResponseVO.setBatteryVoltage(rs3.getString("BatteryVoltage"));	
-							}else {
-								alarmsResponseVO.setBatteryVoltage("---");
-							}
-							if(rs3.getInt("TamperDetect")==1) {
-								alarmsResponseVO.setTamper("YES");	
-							}else {
-								alarmsResponseVO.setTamper("---");
-							}
-							
+							alarmsResponseVO.setDateTime(ExtraMethodsDAO.datetimeformatter(rs3.getString("LogDate")));
+							alarmsResponseVO.setBatteryVoltage(rs3.getInt("LowBattery")==1 ? rs3.getString("BatteryVoltage") : "---");	
+							alarmsResponseVO.setDoorOpenTamper(rs3.getInt("DoorOpenTamper")==1 ? "YES" : "NO");	
+							alarmsResponseVO.setMagneticTamper(rs3.getInt("MagneticTamper")==1 ? "YES" : "NO");
+							alarmsResponseVO.setLowBalance(rs3.getInt("LowBalance")==1 ? "YES" : "NO");
 						}
 						alarmsResponseList.add(alarmsResponseVO);
 					}
@@ -333,12 +327,12 @@ public class ReportsDAO {
 			alarmsResponseList = new LinkedList<AlarmsResponseVO>();
 			AlarmsResponseVO alarmsResponseVO = null;
 //			bl.SolonideStatus = 1 OR 
-			String query = "SELECT DISTINCT c.CommunityName, b.BlockName, cmd.FirstName, cmd.LastName, cmd.HouseNumber, cmd.MeterSerialNumber, cmd.CRNNumber, bl.ReadingID, bl.EmergencyCredit, \r\n" + 
-					"bl.MeterID, bl.Reading, bl.Balance, bl.BatteryVoltage, bl.TariffAmount, bl.SolonideStatus, bl.TamperDetect, bl.TamperTimeStamp, bl.DoorOpenTimeStamp, bl.LowBattery, bl.IotTimeStamp, bl.LogDate\r\n" + 
+			String query = "SELECT DISTINCT c.CommunityName, b.BlockName, cd.FirstName, cd.LastName, cd.HouseNumber, cd.CustomerUniqueID, bl.ReadingID, bl.EmergencyCredit, \r\n" + 
+					"bl.MIUID, bl.Reading, bl.Balance, bl.BatteryVoltage, bl.Tariff, bl.ValveStatus, bl.DoorOpenTamper, bl.MagneticTamper, bl.LowBattery, bl.LowBalance, bl.LogDate\r\n" + 
 					"FROM balancelog AS bl LEFT JOIN community AS c ON c.communityID = bl.CommunityID LEFT JOIN block AS b ON b.BlockID = bl.BlockID\r\n" + 
-					"LEFT JOIN customermeterdetails AS cmd ON cmd.CRNNumber = bl.CRNNumber WHERE bl.CRNNumber = ? AND bl.IoTTimeStamp BETWEEN ? AND ? AND (bl.TamperDetect IN (1, 2, 3) OR bl.LowBattery = 1)";
+					"LEFT JOIN customerdetails AS cd ON cd.CustomerUniqueID = bl.CustomerUniqueID WHERE bl.CustomerUniqueID = ? AND bl.LogDate BETWEEN ? AND ? AND (bl.DoorOpenTamper = 1 OR bl.MagneticTamper = 1 OR bl.LowBattery = 1 OR bl.LowBalance = 1)";
 				pstmt = con.prepareStatement(query);
-				pstmt.setString(1, alarmRequestVO.getCRNNumber());
+				pstmt.setString(1, alarmRequestVO.getCustomerUniqueID());
 				pstmt.setString(2, alarmRequestVO.getFromDate() + " :00.001");
 				pstmt.setString(3,alarmRequestVO.getToDate()+ " :59.999");
 
@@ -351,14 +345,15 @@ public class ReportsDAO {
 						alarmsResponseVO.setCommunityName(rs.getString("CommunityName"));
 						alarmsResponseVO.setBlockName(rs.getString("BlockName"));
 						alarmsResponseVO.setHouseNumber(rs.getString("HouseNumber"));
-						alarmsResponseVO.setCRNNumber(rs.getString("CRNNumber"));
-						alarmsResponseVO.setMeterID(rs.getString("MeterID"));
+						alarmsResponseVO.setCustomerUniqueID(rs.getString("CustomerUniqueID"));
+						alarmsResponseVO.setMiuID(rs.getString("MIUID"));
 						alarmsResponseVO.setBatteryVoltage(rs.getString("BatteryVoltage"));
-						alarmsResponseVO.setTamper((rs.getInt("TamperDetect") == 0) ? "NO" : (rs.getInt("TamperDetect") == 1) ? "MAG" : (rs.getInt("TamperDetect") == 2) ? "DOOR OPEN" : (rs.getInt("TamperDetect") == 3) ? "MAG;"+"DOOR OPEN" : "NO");
-						alarmsResponseVO.setTamperTimeStamp((rs.getInt("TamperDetect") == 1) ? rs.getString("TamperTimeStamp") : (rs.getInt("TamperDetect") == 2) ? rs.getString("DoorOpenTimeStamp") : (rs.getInt("TamperDetect") == 3) ? rs.getString("TamperTimeStamp") +";"+ rs.getString("DoorOpenTimeStamp") : "---");
+						alarmsResponseVO.setDoorOpenTamper((rs.getInt("DoorOpenTamper") == 0) ? "NO" : "YES");
+						alarmsResponseVO.setMagneticTamper((rs.getInt("MagneticTamper") == 0) ? "NO" : "YES");
 //						alarmsResponseVO.setSolonideStatus(rs.getInt("SolonideStatus") == 1 ? "CLOSED" : "OPEN");
-						alarmsResponseVO.setDateTime(ExtraMethodsDAO.datetimeformatter(rs.getInt("TamperDetect") == 1 ? rs.getString("TamperTimeStamp")+":00" : rs.getInt("TamperDetect") == 2 ? rs.getString("DoorOpenTimeStamp")+":00" : rs.getString("IotTimeStamp")));
+						alarmsResponseVO.setDateTime(ExtraMethodsDAO.datetimeformatter(rs.getString("LogDate")));
 						alarmsResponseVO.setBatteryColor((rs.getInt("LowBattery") == 1 ) ? "RED" : "GREEN");
+						alarmsResponseVO.setLowBalance((rs.getInt("LowBalance") == 1 ) ? "YES" : "NO");
 						alarmsResponseList.add(alarmsResponseVO);
 					}
 					
