@@ -10,9 +10,9 @@ public class ExtraConstants {
 	public static final String ApplicationURL = "http://183.82.122.196:8080/Idigi";
 	public static final String LocalURL = "http://localhost:8080/IDigi";
 //	public static final String StaticIP = "http://123.123.123.123:8084/";
-	public static final String IDIGIIMAGEURL=LocalURL+"/common/images/1-hanbit.png";
+	public static final String IDIGIIMAGEURL=LocalURL+"/common/images/logo-white.png";
 //	public static final String IDIGIIMAGEURL= ApplicationURL+"/common/images/1-hanbit.png";
-	public static final String CLIENTIMAGEURL= LocalURL+"/common/images/raychem.png";
+	public static final String CLIENTIMAGEURL= LocalURL+"/common/images/logo-white.png";
 //	public static final String CLIENTIMAGEURL=ApplicationURL+"/common/images/raychem.png";
 	public static final String fromEmail = "support@idigitronics.com";
 	public static final String fromEmailPassword = "M1rage@24"; 
