@@ -50,7 +50,7 @@
 				<div class="col-md-12">
 					<a class="text-dark" href="#">Home</a>
 					<span>/</span>
-					<span class="activeurl">DashBoard</span>
+					<span class="activeurl">Customer Details</span>
 				</div>
 			</div>
 			
@@ -152,6 +152,7 @@
 								</div>
 							</div>
         </div>
+        
         <div class="modal-footer m-auto">
           <button type="button" class="btn btn-primary btn-raised mr-4" id="customerFilter">Filter</button>
           <button type="button" class="btn btn-danger btn-raised mr-4" data-dismiss="modal">Close<div class="ripple-container"></div></button>

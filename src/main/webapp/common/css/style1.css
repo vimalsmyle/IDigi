@@ -239,11 +239,13 @@ body{
     text-decoration: underline;
 }
 .sidingBlock{
-	background: #b2d136;
-    -webkit-clip-path: polygon(0% 0%, 0% 100%, 73% 100%, 100% 61%, 100% 0%);
-    clip-path: polygon(0% 0%, 0% 100%, 73% 100%, 100% 61%, 100% 0%);
+	    box-shadow: 3px 3px 3px 3px rgb(0 0 0 / 20%);
     color: #3f3f3f;
 	border: 0px;
+}
+.sidingBlock a{
+	color: #3f3f3f;
+	text-decoration:none;
 }
 .activeurl{
 	
@@ -615,7 +617,7 @@ font-family: 'Roboto',sans-serif;
 
 
 .header{
-	background: #3f3f3fd4!important;
+	background: #3f3f3f!important;
 }
 .header img{width:180px;}
 
@@ -631,4 +633,22 @@ font-family: 'Roboto',sans-serif;
     margin-top: 2px;
     
 }
-
+.swal2-icon {
+  
+        margin: 1em auto .6em !important;
+}
+/* .swal2-icon .swal2-icon-content {
+   font-size: 2em !important;
+} */
+.swal2-title {
+    font-size: 16px !important;
+}
+.swal2-html-container {
+   font-size: 14px !important;
+}
+.swal2-popup {
+   
+    width: auto;
+   
+    padding: 20px;
+}

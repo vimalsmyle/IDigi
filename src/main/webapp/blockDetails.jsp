@@ -38,6 +38,15 @@
 		<main class="col-md-10 float-left col px-5 pl-md-3 pt-2 pb-6 main">
 	<div
 		class="container-fluid topspacing bottomspacing pl-0 pr-0 mr-0 ml-0">
+		
+		<div class="row">
+				<div class="col-md-12">
+					<a class="text-dark" href="home.jsp">Home</a>
+					<span>/</span>
+					<span class="activeurl">Block Details</span>
+				</div>
+			</div>
+		
 		<div class="row mr-0 ml-0">
 			<div class="right_data col-md-12 mt-4 mb-4">
 				<!--Right start-->
@@ -88,7 +97,7 @@
 								 <div class="form-group">
 									<label for="text">Community:</label>
 									<select
-										class="form-control select2" id="selectcommunityName" name="selectcommunityName">
+										class="form-control  form-control-sm select2" id="selectcommunityName" name="selectcommunityName">
 									</select>
 								  </div>
 								</div>
@@ -99,7 +108,7 @@
 								<div class="group form-group">
 									<label for="text">Block Name:</label>
 									<input
-										type="text" class="form-control" name="blockNameAdd"
+										type="text" class="form-control  form-control-sm" name="blockNameAdd"
 										id="blockNameAdd">
 								  </div>
 							</div>
@@ -107,14 +116,14 @@
 							<div class="col-md-6">
 								<div class="group form-group">
 									<label class="bmd-label-floating">Location</label> <input
-										type="text" class="form-control" name="blockLocationAdd"
+										type="text" class="form-control  form-control-sm  form-control  form-control-sm-sm" name="blockLocationAdd"
 										id="blockLocationAdd">
 								</div>
 							</div>
 							<div class="col-md-6">
 								<div class="group form-group">
 									<label class="bmd-label-floating">Mobile Number</label> <input
-										type="text" class="form-control" name="blockMobileAdd"
+										type="text" class="form-control  form-control-sm" name="blockMobileAdd"
 										id="blockMobileAdd">
 								</div>
 							</div>
@@ -122,22 +131,29 @@
 							<div class="col-md-6">
 								<div class="group form-group">
 									<label class="bmd-label-floating">Email</label> <input
-										type="email" class="form-control" name="blockEmailAdd"
+										type="email" class="form-control  form-control-sm" name="blockEmailAdd"
 										id="blockEmailAdd">
 								</div>
 							</div>
 							
 							<div class="col-md-6">
 							</div>
+								</div>
 							
-
-							<div class="col-md-4">
-								<button class="btn btn-secondary submit-button"
+<div class="row">
+							<div class="col-md-12 text-right">
+								<button class="btn btn-primary submit-button"
 									 value="Save!" id="blockAdd"
 									type="button" disabled>Save</button>
+									<button type="button" class="btn btn-danger btn-raised resetFilter" id="resetFilter">Reset</button>
+							<button type="button" class="btn btn-danger btn-raised"
+									data-dismiss="modal">
+									Close
+									<div class="ripple-container"></div>
+								</button>
 							</div>
 
-							<div class="col-md-3">
+							<!-- <div class="col-md-3">
 								<button type="button" class="btn btn-secondary btn-raised mr-3 resetFilter" id="resetFilter">Reset</button>
 							</div>
 
@@ -148,7 +164,7 @@
 									Close
 									<div class="ripple-container"></div>
 								</button>
-							</div>
+							</div> -->
 						</div>
 					</form>
 
@@ -172,14 +188,14 @@
 							<div class="col-md-6">
 								<div id="formcomunityName" class="group form-group">
 									<label class="bmd-label-floating">Community</label> <input
-										type="text" class="form-control select2" name="communityNameEdit"
+										type="text" class="form-control  form-control-sm select2" name="communityNameEdit"
 										id="communityNameEdit" disabled>
 								</div>
 							</div>
 							<div class="col-md-6">
 								<div id="formblockName" class="group form-group">
 									<label class="bmd-label-floating">Block Name</label> <input
-										type="text" class="form-control" name="blockNameEdit"
+										type="text" class="form-control  form-control-sm" name="blockNameEdit"
 										id="blockNameEdit">
 								</div>
 							</div>
@@ -187,14 +203,14 @@
 							<div class="col-md-6">
 								<div id="formblocklocation" class="group form-group">
 									<label class="bmd-label-floating">Location</label> <input
-										type="text" class="form-control" name="blockLocationEdit"
+										type="text" class="form-control  form-control-sm" name="blockLocationEdit"
 										id="blockLocationEdit">
 								</div>
 							</div>
 							<div class="col-md-6">
 								<div id="formblockMobile" class="group form-group">
 									<label class="bmd-label-floating">Mobile Number</label> <input
-										type="text" class="form-control" name="blockMobileEdit"
+										type="text" class="form-control  form-control-sm" name="blockMobileEdit"
 										id="blockMobileEdit">
 								</div>
 							</div>
@@ -202,7 +218,7 @@
 							<div class="col-md-6">
 								<div id="formblockEmail" class="group form-group">
 									<label class="bmd-label-floating">Email</label> <input
-										type="email" class="form-control" name="blockEmailEdit"
+										type="email" class="form-control  form-control-sm" name="blockEmailEdit"
 										id="blockEmailEdit">
 										
 										 <input
@@ -212,25 +228,23 @@
 							</div>
 							<div class="col-md-6">
 							</div>
-
-							<div class="col-md-4">
-									<button class="btn btn-secondary submit-button"
+							</div>
+<div class="row">
+							<div class="col-md-12 text-right">
+									<button class="btn btn-primary submit-button"
 									 value="Save!" id="blockEditsave"
 									type="button" disabled>Update</button>
-							</div>
-
-							<div class="col-md-3">
-								<button type="button" class="btn btn-secondary btn-raised mr-3 resetFilter" id="resetFilter">Reset</button>
-							</div>
-
-
-							<div class="col-md-4">
-								<button type="button" class="btn btn-danger btn-raised mr-4"
+									
+									<button type="button" class="btn btn-danger btn-raised resetFilter" id="resetFilter">Reset</button>
+							<button type="button" class="btn btn-danger btn-raised"
 									data-dismiss="modal">
 									Close
 									<div class="ripple-container"></div>
 								</button>
+							
 							</div>
+
+							
 						</div>
 					</form>
 				</div>
