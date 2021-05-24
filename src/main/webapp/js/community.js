@@ -38,7 +38,6 @@ table = $('#communityTable')
 	"order" : [ 0, "desc" ],
 	"lengthMenu" : [ 5, 10, 25, 30, 50, 75 ],
 	"pageLength" : 5,
-	"scrollY" : 324,
 	"scrollX" : true,
 "ajax" : {
 "url":"./community/"+sessionStorage.getItem("roleID")+"/"+sessionStorage.getItem("ID"),
@@ -102,15 +101,7 @@ $("div.addevent").html('<button type="button" id="communitypopup"'
 
 $(document)
 				.ready(
-						function() {							/*alert(sessionStorage.getItem("roleID"));
-							if(sessionStorage.getItem("roleID") == 1){
-								$("#thfiled,#tdfiled").show();
-							}else if(sessionStorage.getItem("roleID") == 4){
-								$("#thfiled").hide();
-								$("#tdfiled").hide();
-								
-							}*/
-								$('#communityDetails')
+						function() {								$('#communityDetails')
 									.bootstrapValidator(
 											{
 												feedbackIcons : {
@@ -437,13 +428,13 @@ function getCommunityFormEdit(id) {
 		$.each(data.data, function(i, item) {
 			if (id == item.communityID) {
 				$('#communityNameEdit').val(item.communityName).trigger("change");
-				$("#formcomunityName").addClass("input-group form-group has-feedback has-success bmd-form-group is-filled")
+				$("#formcomunityName").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
 				$('#communityEmailEdit').val(item.email).trigger("change");
-				$("#formcomunityEmail").addClass("input-group form-group has-feedback has-success bmd-form-group is-filled")
+				$("#formcomunityEmail").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
 				$('#communityMobileEdit').val(item.mobileNumber).trigger("change");
-				$("#formcomunityMobile").addClass("input-group form-group has-feedback has-success bmd-form-group is-filled")
+				$("#formcomunityMobile").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
 			    $('#communityAddressEdit').val(item.address).trigger("change");
-				$("#formcomunityAddress").addClass("input-group form-group has-feedback has-success bmd-form-group is-filled")
+				$("#formcomunityAddress").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
 				$("#communityIdhidden").val(item.communityID);
 			
 				$('#communityEditsave')

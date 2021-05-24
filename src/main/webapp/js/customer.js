@@ -13,9 +13,9 @@ $(document).ready(function() {
 			$("#formblockNameAdd").addClass("input-group form-group has-feedback has-success bmd-form-group is-filled")
 		}
 		$("#blockAddButton").show();
-		var dom1 = "<'row'<'col-sm-6 headname'><'col-sm-6'f>>" +"<'row'<'col-sm-2'B><'col-sm-2'l><'col-sm-2'><'col-sm-2'><'col-sm-1 addevent'>>" + "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-6 text-black'i><'col-sm-6 text-black'p>>";
+		var dom1 = "<'row'<'col-sm-6 headname'><'col-sm-6'f>>" +"<'row'<'col-sm-4'B><'col-sm-4'l><'col-sm-4 addevent'>>" + "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-6 text-black'i><'col-sm-6 text-black'p>>";
 	}else{
-		var dom1 = "<'row'<'col-sm-6 headname'><'col-sm-6'f>>" +"<'row'<'col-sm-4'B><'col-sm-2'l><'col-sm-2'><'col-sm-2'><'col-sm-1'>>" + "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-6 text-black'i><'col-sm-6 text-black'p>>";
+		var dom1 = "<'row'<'col-sm-6 headname'><'col-sm-6'f>>" +"<'row'<'col-sm-4'B><'col-sm-4'l><'col-sm-2'><'col-sm-2'><'col-sm-1'>>" + "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-6 text-black'i><'col-sm-6 text-black'p>>";
 	}
 	$("#customerTable1").hide();
 table = $('#customerTable')
@@ -686,7 +686,7 @@ $(document)
 															$("#customerTable_wrapper").hide();
 															$("#filter").modal("hide");
 															$("#customerTable1").show();
-															var dom1 = "<'row'<'col-sm-4 headname'><'col-sm-2'><'col-sm-1'><'col-sm-2'f>>" +"<'row'<'col-sm-4'B><'col-sm-2'l><'col-sm-2'><'col-sm-2'><'col-sm-1 addevent'>>" + "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-6 text-black'i><'col-sm-6 text-black'p>>";
+															var dom1 = "<'row'<'col-sm-6 headname'><'col-sm-6'f>>" +"<'row'<'col-sm-4'B><'col-sm-4'l><'col-sm-4 addevent'>>" + "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-6 text-black'i><'col-sm-6 text-black'p>>";
 															var hCols = [ 3, 4 ];
 															table = $('#customerTable1')
 															.DataTable(
@@ -704,7 +704,6 @@ $(document)
 																			"order" : [ 0, "desc" ],
 																			"lengthMenu" : [ 5, 10, 25, 30, 50, 75 ],
 																			"pageLength" : 5,
-																			"scrollY" : 324,
 																			"scrollX" : false,
 																			"data" : d.data,
 																			"columns" : [
@@ -713,7 +712,7 @@ $(document)
 																	},{
 																	"data" : "blockName"
 																	},{
-																	"data" : "CRNNumber"
+																	"data" : "CustomerUniqueID"
 																	},{
 																	"data" : "firstName"
 																	},{
@@ -726,7 +725,7 @@ $(document)
 																		"render" : function(data, type, row) {
 																			
 																			return "<a href=# id=CustomerMeters data-toggle=modal data-target=#myCustomerMeters onclick='getCustomerMeters(\""
-																			+ row.CRNNumber
+																			+ row.CustomerUniqueID
 																			+ "\")'>"
 																			+ "Multiple"
 																			+ "</a>"

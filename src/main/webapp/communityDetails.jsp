@@ -41,6 +41,15 @@
 		<main class="col-md-10 float-left col px-5 pl-md-3 pt-2 pb-6 main">
 	<div
 		class="container-fluid topspacing bottomspacing pl-0 pr-0 mr-0 ml-0">
+		
+		<div class="row">
+				<div class="col-md-12">
+					<a class="text-dark" href="home.jsp">Home</a>
+					<span>/</span>
+					<span class="activeurl">Community Details</span>
+				</div>
+			</div>
+		
 		<div class="row mr-0 ml-0">
 			
 			<div class="right_data col-md-12 mt-4 mb-4">
@@ -122,14 +131,21 @@
 										id="communityEmailAdd" placeholder = "Community Email">
 								  </div>
 							</div>
-
-							<div class="col-md-4">
-									<button class="btn btn-secondary submit-button"
+</div>
+<div class="row">
+							<div class="col-md-12 text-right">
+									<button class="btn btn-primary submit-button"
 									 value="Save!" id="communityAdd"
 									type="button" disabled>Save</button>
+									<button type="button" class="btn btn-danger btn-raised resetFilter" id="resetFilter">Reset</button>
+							<button type="button" class="btn btn-danger btn-raised"
+									data-dismiss="modal">
+									Close
+									<div class="ripple-container"></div>
+								</button>
 							</div>
 
-							<div class="col-md-3">
+							<!-- <div class="col-md-3">
 								<button type="button" class="btn btn-secondary btn-raised mr-3 resetFilter" id="resetFilter">Reset</button>
 							</div>
 
@@ -140,8 +156,8 @@
 									Close
 									<div class="ripple-container"></div>
 								</button>
+							</div> -->
 							</div>
-						</div>
 					</form>
 
 				</div>
@@ -162,14 +178,14 @@
 					<form id="communityEdit">
 						<div class="row">
 							<div class="col-md-6">
-								<div class="group form-group">
+								<div id="formcomunityName" class="group form-group">
 									<label for="text">Name:</label>
 									<input type="text" class="form-control"  name="communityNameEdit"
 										id="communityNameEdit" placeholder = "Community Name">
 								  </div>
 							</div>
 							<div class="col-md-6">
-								<div class="group form-group">
+								<div id="formcomunityAddress" class="group form-group">
 									<label for="text">Address:</label>
 									<input type="text" class="form-control"  name="communityAddressEdit"
 										id="communityAddressEdit" placeholder = "Community Address">
@@ -178,7 +194,7 @@
 
 							<div class="col-md-6">
 								
-								<div class="group form-group">
+								<div id="formcomunityMobile" class="group form-group">
 									<label for="text">Mobile:</label>
 									<input type="text" class="form-control"  name="communityMobileEdit"
 										id="communityMobileEdit" placeholder = "Community Mobile">
@@ -186,7 +202,7 @@
 							</div>
 							<div class="col-md-6">
 								
-								<div class="group form-group">
+								<div id="formcomunityEmail" class="group form-group">
 									<label for="text">Email:</label>
 									<input type="text" class="form-control"  name="communityEmailEdit"
 										id="communityEmailEdit" placeholder = "Community Email">
@@ -194,13 +210,21 @@
 										<input type = "hidden" id="communityIdhidden">
 							</div>
 
-							<div class="col-md-4">
-									<button class="btn btn-secondary submit-button"
+</div>
+							<div class="row">
+							<div class="col-md-12 text-right">
+									<button class="btn btn-primary submit-button"
 									 value="Save!" id="communityEditsave"
 									type="button" disabled>Update</button>
+										<button type="button" class="btn btn-danger btn-raised resetFilter" id="resetFilter">Reset</button>
+							<button type="button" class="btn btn-danger btn-raised "
+									data-dismiss="modal">
+									Close
+									<div class="ripple-container"></div>
+								</button>
 							</div>
 
-							<div class="col-md-3">
+							<!-- <div class="col-md-3">
 								<button type="button" class="btn btn-secondary btn-raised mr-3 resetFilter" id="resetFilter">Reset</button>
 							</div>
 
@@ -211,7 +235,7 @@
 									Close
 									<div class="ripple-container"></div>
 								</button>
-							</div>
+							</div> -->
 						</div>
 					</form>
 				</div>

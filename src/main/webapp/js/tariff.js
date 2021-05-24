@@ -6,10 +6,10 @@
 $(document).ready(function() {
 	if(sessionStorage.getItem("roleID") == 1){
 		$("#tariffAddd").show();
-		var dom1 ="<'row'<'col-sm-4 headname'><'col-sm-2'><'col-sm-1'><'col-sm-2'f>>" +"<'row'<'col-sm-4'B><'col-sm-2'l><'col-sm-2'><'col-sm-2'><'col-sm-1 addevent'>>" + "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-6 text-black'i><'col-sm-6 text-black'p>>";
+		var dom1 ="<'row'<'col-sm-6 headname'><'col-sm-6'f>>" +"<'row'<'col-sm-4'B><'col-sm-4'l><'col-sm-4 text-right addevent'>>" + "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-6 text-black'i><'col-sm-6 text-black'p>>";
 	}else{
 		$("#tariffAddd").remove();
-		var dom1 = "<'row'<'col-sm-4 headname'><'col-sm-2'><'col-sm-1'><'col-sm-2'f>>" +"<'row'<'col-sm-4'B><'col-sm-2'l><'col-sm-2'><'col-sm-2'><'col-sm-1'>>" + "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-6 text-black'i><'col-sm-6 text-black'p>>"
+		var dom1 = "<'row'<'col-sm-6 headname'><'col-sm-6'f>>" +"<'row'<'col-sm-4'B><'col-sm-4'l><'col-sm-4'>>" + "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-6 text-black'i><'col-sm-6 text-black'p>>"
 	}
 	
 	//alert(!(sessionStorage.getItem("roleID") == 4))
@@ -29,10 +29,9 @@ table = $('#tariffTable')
 	"order" : [ 0, "desc" ],
 	"lengthMenu" : [ 5, 10, 25, 30, 50, 75 ],
 	"pageLength" : 5,
-	"scrollY" : 324,
 	"scrollX" : true,
 "ajax" : {
-"url":"/PAYGTL_LORA_BLE/tariff",
+"url":"./tariff",
 "type" : "GET",
 "data" : function(search) {
 },
@@ -299,7 +298,7 @@ $(document)
 											'status.field.bv',
 											function(e, data) {
 												formIsValid = true;
-												$('.input-group.form-group', $(this))
+												$('.group.form-group', $(this))
 														.each(
 																function() {
 																//	alert(this+"@@=>"+formIsValid);
@@ -331,7 +330,7 @@ $(document)
 									'status.field.bv',
 									function(e, data) {
 										formIsValid = true;
-										$('.input-group.form-group', $(this))
+										$('.group.form-group', $(this))
 												.each(
 														function() {
 														//	alert(this+"@@=>"+formIsValid);
@@ -374,7 +373,7 @@ $(document)
 														.ajax({
 															type : "POST",
 															contentType : "application/json",
-															url : "/PAYGTL_LORA_BLE/tariff/add",
+															url : "./tariff/add",
 															data : JSON
 																	.stringify(data1),
 															dataType : "JSON",
@@ -389,18 +388,26 @@ $(document)
 																	/*alert( "data"
 																			+ data.result);*/
 																	
-																	bootbox.alert(data.Message,
-																			function(
-																					result) {
-																					
-																		//alert();
-																		window.location = "tariff.jsp";
-																		return false
-																	});
+																	swal.fire({
+																		  title: "Saved",
+																		  text: data.Message,
+																		  icon: "success"
+																		}).then(function() {
+																		    window.location = "tariff.jsp";
+																		    
+																		});
+																	return false;
 																	
 
 																} else {
-																	bootbox.alert(data.Message);
+																	swal.fire({
+																		  title: "error",
+																		  text: data.Message,
+																		  icon: "error"
+																		}).then(function() {
+																		    window.location = "tariff.jsp";
+																		    
+																		});
 																	return false;
 
 																}
@@ -428,44 +435,47 @@ $(document)
 												.ajax({
 													type : "POST",
 													contentType : "application/json",
-													url : "/PAYGTL_LORA_BLE/tariff/edit/"+$("#tariffIdhidden").val(),
+													url : "./tariff/edit/"+$("#tariffIdhidden").val(),
 													data : JSON
 															.stringify(data1),
 													dataType : "JSON",
 
 													success : function(
 															data) {
-														/*alert("data"
-																+ JSON
-																		.stringify(data));*/
+														
 														if (data.result == "Success") {
 
-															/*alert( "data"
-																	+ data.result);*/
-															
-															bootbox.alert("Updated Succesfully!",
-																	function(
-																			result) {
-																			
-																//alert();
-																window.location = "tariff.jsp";
-																		});
-															return false
+															swal.fire({
+																  title: "Saved",
+																  text: data.Message,
+																  icon: "success"
+																}).then(function() {
+																    window.location = "tariff.jsp";
+																    
+																});
+															return false;
 															
 
 														} else if(data.result == "Failure"){
 															
-															bootbox.alert(data.Message,
-																	function(
-																			result) {
-																			
-																//alert();
-																window.location = "tariff.jsp";
-																
-																		});
-															return false
+															swal.fire({
+																  title: "error",
+																  text: data.Message,
+																  icon: "error"
+																}).then(function() {
+																    window.location = "tariff.jsp";
+																    
+																});
+															return false;
 														}else {
-															bootbox.alert(data.Message);
+															swal.fire({
+																  title: "error",
+																  text: data.Message,
+																  icon: "error"
+																}).then(function() {
+																    window.location = "tariff.jsp";
+																    
+																});
 															return false;
 
 														}
@@ -483,20 +493,20 @@ function getTariffFormEdit(id) {
 
 //	 alert(id);
 
-	$.getJSON("/PAYGTL_LORA_BLE/tariff", function(data) {
+	$.getJSON("./tariff", function(data) {
 		$.each(data.data, function(i, item) {
 			if (id == item.tariffID) {
 				$('#tariffNameEdit').val(item.tariffName).trigger("change");
-				$("#formtariffName").addClass("input-group form-group has-feedback has-success bmd-form-group is-filled")
+				$("#formtariffName").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
 				$('#tariffRateEdit').val(item.tariff).trigger("change");
-				$("#formtariffRate").addClass("input-group form-group has-feedback has-success bmd-form-group is-filled")
+				$("#formtariffRate").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
 				$('#emergencyCreditEdit').val(item.emergencyCredit).trigger("change");
-				$("#formemergencyCredit").addClass("input-group form-group has-feedback has-success bmd-form-group is-filled")
+				$("#formemergencyCredit").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
 			    $('#alarmCreditEdit').val(item.alarmCredit).trigger("change");
-				$("#formalarmCredit").addClass("input-group form-group has-feedback has-success bmd-form-group is-filled")
+				$("#formalarmCredit").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
 				
 				$('#fixedChargeEdit').val(item.fixedCharges).trigger("change");
-				$("#formfixedCharge").addClass("input-group form-group has-feedback has-success bmd-form-group is-filled")
+				$("#formfixedCharge").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
 				
 				$("#tariffIdhidden").val(item.tariffID);
 			
@@ -514,39 +524,51 @@ function getTariffFormEdit(id) {
 
 function  getDeleteTraiff(id){
 	
-	bootbox
-	.confirm(
-			"ARE YOU SURE TO DELETE TARIFF",
-		function(
-			result) {
-			//	alert(result);
-			if(result == true){
+	swal.fire({
+		  title: "Are you sure?",
+		  text: "ARE YOU SURE TO DELETE Tariff!",
+		  icon: "warning",
+		  showCancelButton: true,
+		  confirmButtonClass: "btn-danger",
+		  confirmButtonText: "Yes, delete it!",
+		  cancelButtonText: "No, cancel!",
+		  closeOnConfirm: false,
+		  closeOnCancel: false
+		}).then(
+		function(isConfirm) {
+		  if (isConfirm.isConfirmed) {
 				$.ajax({
 					type : "POST",
 					contentType : "application/json",
-					url : "/PAYGTL_LORA_BLE/tariff/delete/" + id,
+					url : "./tariff/delete/" + id,
 					dataType : "JSON",
 					success : function(data) {
 						//alert("Success====" + data.result);
 						if (data.result == "Success") {
-							bootbox
-							.confirm(
-									data.Message,
-								function(
-									result) {
-									window.location = "tariff.jsp";
+							swal.fire({
+								  title: "Deleted",
+								  text: data.Message,
+								  icon: "success"
+								}).then(function() {
+								    window.location = "tariff.jsp";
 								});
+							return false;
 
 						} else {
-							bootbox
-							.alert(data.Message);
+							swal.fire({
+								  title: "error",
+								  text: data.Message,
+								  icon: "error"
+								}).then(function() {
+								    window.location = "tariff.jsp";
+								    
+								});
 							return false;
 						}
 					}
 				});
 			}else if(result==false){
-				//alert("@"+false)
-				
+				 swal.fire("Cancelled", "Your Tariff Details is safe :)", "error");
 			}
 		});
 	/*

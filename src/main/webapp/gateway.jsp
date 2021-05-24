@@ -38,6 +38,14 @@
 		<main class="col-md-10 float-left col px-5 pl-md-3 pt-2 pb-6 main">
 	<div
 		class="container-fluid topspacing bottomspacing pl-0 pr-0 mr-0 ml-0">
+		<div class="row">
+				<div class="col-md-12">
+					<a class="text-dark" href="home.jsp">Home</a>
+					<span>/</span>
+					<span class="activeurl">Gateway Details</span>
+				</div>
+			</div>
+			
 		<div class="row mr-0 ml-0">
 			<div class="right_data col-md-12 mt-4 mb-4">
 				<!--Right start-->
@@ -118,14 +126,23 @@
 										id="portAdd">
 								</div>
 							</div>
-
-							<div class="col-md-4">
-								<button class="btn btn-secondary submit-button"
+							</div>
+<div class="row">
+							<div class="col-md-12 text-right">
+								<button class="btn btn-primary submit-button"
 									 value="Save!" id="gatewayAdd"
 									type="button" disabled>Save</button>
+									
+									<button type="button" class="btn btn-danger btn-raised resetFilter" id="resetFilter">Reset</button>
+							<button type="button" class="btn btn-danger btn-raised"
+									data-dismiss="modal">
+									Close
+									<div class="ripple-container"></div>
+								</button>
+							
 							</div>
 
-							<div class="col-md-3">
+						<!-- 	<div class="col-md-3">
 								<button type="button" class="btn btn-secondary btn-raised mr-3 resetFilter" id="resetFilter">Reset</button>
 							</div>
 
@@ -136,7 +153,7 @@
 									Close
 									<div class="ripple-container"></div>
 								</button>
-							</div>
+							</div> -->
 						</div>
 					</form>
 
@@ -186,17 +203,26 @@
 										id="portEdit">
 								</div>
 							</div>
+								</div>
 
 								 <input
 										type="hidden" id="gatewayIdhidden">
-
-							<div class="col-md-4">
-									<button class="btn btn-secondary submit-button"
+<div class="row">
+							<div class="col-md-12 text-right">
+									<button class="btn btn-primary submit-button"
 									 value="Save!" id="gatewayEditsave"
 									type="button" disabled>Update</button>
+									
+										<button type="button" class="btn btn-danger btn-raised resetFilter" id="resetFilter">Reset</button>
+							
+							<button type="button" class="btn btn-danger btn-raised"
+									data-dismiss="modal">
+									Close
+									<div class="ripple-container"></div>
+								</button>
 							</div>
 
-							<div class="col-md-3">
+							<!-- <div class="col-md-3">
 								<button type="button" class="btn btn-secondary btn-raised mr-3 resetFilter" id="resetFilter">Reset</button>
 							</div>
 
@@ -207,7 +233,7 @@
 									Close
 									<div class="ripple-container"></div>
 								</button>
-							</div>
+							</div> -->
 						</div>
 					</form>
 				</div>
