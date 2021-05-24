@@ -18,6 +18,10 @@ public class BillingResponseVO {
 	private String houseNumber;
 	private float totalConsumption;
 	private float totalAmount;
+	private String status;
+	private String transactedBy;
+	private String paidDate;
+	private String modeOfPayment;
 	private String billingDate;
 	private String billMonth;
 	private int billYear;
@@ -103,6 +107,30 @@ public class BillingResponseVO {
 	}
 	public void setTotalAmount(float totalAmount) {
 		this.totalAmount = totalAmount;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	public String getTransactedBy() {
+		return transactedBy;
+	}
+	public void setTransactedBy(String transactedBy) {
+		this.transactedBy = transactedBy;
+	}
+	public String getModeOfPayment() {
+		return modeOfPayment;
+	}
+	public void setModeOfPayment(String modeOfPayment) {
+		this.modeOfPayment = modeOfPayment;
+	}
+	public String getPaidDate() {
+		return paidDate;
+	}
+	public void setPaidDate(String paidDate) {
+		this.paidDate = paidDate;
 	}
 	
 }

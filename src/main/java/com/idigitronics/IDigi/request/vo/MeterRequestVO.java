@@ -17,6 +17,7 @@ public class MeterRequestVO {
 	private String payType;
 	private int tariffID;
 	private int gatewayID;
+	private String gatewayName;
 	private String location;
 	private String tariffName;
 	private String modifiedDate;
@@ -86,6 +87,12 @@ public class MeterRequestVO {
 	}
 	public void setGatewayID(int gatewayID) {
 		this.gatewayID = gatewayID;
+	}
+	public String getGatewayName() {
+		return gatewayName;
+	}
+	public void setGatewayName(String gatewayName) {
+		this.gatewayName = gatewayName;
 	}
 	
 }

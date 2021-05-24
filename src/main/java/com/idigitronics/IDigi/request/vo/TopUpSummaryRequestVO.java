@@ -11,7 +11,7 @@ public class TopUpSummaryRequestVO {
 
 	private int communityID;
 	private int blockID;
-	private String CRNNumber;
+	private String customerUniqueID;
 	private String fromDate;
 	private String toDate;
 	
@@ -27,11 +27,11 @@ public class TopUpSummaryRequestVO {
 	public void setBlockID(int blockID) {
 		this.blockID = blockID;
 	}
-	public String getCRNNumber() {
-		return CRNNumber;
+	public String getCustomerUniqueID() {
+		return customerUniqueID;
 	}
-	public void setCRNNumber(String cRNNumber) {
-		CRNNumber = cRNNumber;
+	public void setCustomerUniqueID(String customerUniqueID) {
+		this.customerUniqueID = customerUniqueID;
 	}
 	public String getFromDate() {
 		return fromDate;

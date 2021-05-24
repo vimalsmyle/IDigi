@@ -561,7 +561,7 @@ public class AccountDAO {
 				statusvo.setAlarmCredit(rs.getString("AlarmCredit"));
 				statusvo.setEmergencyCredit(rs.getString("EmergencyCredit"));
 				statusvo.setTransactionDate(ExtraMethodsDAO.datetimeformatter(rs.getString("TransactionDate")));
-				statusvo.setStatus((rs.getInt("Status") == 10) ? "Pending" : (rs.getInt("Status") == 0) ? "Passed" : "Failed");
+				statusvo.setStatus(rs.getInt("Status") == 0 ? "Passed"	: rs.getInt("Status") == 1 ? "Already Executed" : rs.getInt("Status") == 2 ? "Invalid Syntax"	: rs.getInt("Status") == 3 ? "Invalid Parameters" : rs.getInt("Status") == 4 ? "Value Cannot be Applied" : rs.getInt("Status") == 5 ? "Value Not in Range" : rs.getInt("Status") == 6 ? "Command Not Found"	: rs.getInt("Status") == 7	? "Device Not Found" : rs.getInt("Status") == 8 ? "Transaction Discarded" : rs.getInt("Status") == 9 ? "Transaction not Found" : rs.getInt("Status") == 10 ? "Pending": "Unknown Failure");
 
 				pstmt1 = con.prepareStatement("SELECT user.ID, user.UserName, userrole.RoleDescription FROM USER LEFT JOIN userrole ON user.RoleID = userrole.RoleID WHERE user.ID = "+ rs.getInt("CreatedByID"));
 				rs1 = pstmt1.executeQuery();
@@ -921,6 +921,16 @@ public class AccountDAO {
 				billingresponsevo.setHouseNumber(rs.getString("HouseNumber"));
 				billingresponsevo.setTotalAmount(rs.getFloat("TotalAmount") + rs.getFloat("TaxAmount"));
 				billingresponsevo.setTotalConsumption(rs.getFloat("TotalConsumption"));
+				
+				PreparedStatement ps = con.prepareStatement("SELECT bpd.PaymentStatus, bpd.ModeofPayment, bpd.TransactionDate, u.UserName FROM billingpaymentdetails AS bpd LEFT JOIN user AS u ON u.ID = bpd.CreatedByID WHERE bpd.CustomerBillingID = " + rs.getLong("CustomerBillingID"));
+				ResultSet rs2 = ps.executeQuery();
+				if(rs2.next()) {
+					billingresponsevo.setStatus((rs2.getInt("PaymentStatus") == 1) ? "Paid" : "Pending");
+					billingresponsevo.setModeOfPayment(rs2.getString("ModeofPayment") != null ? rs2.getString("ModeofPayment") : "---");
+					billingresponsevo.setTransactedBy(rs2.getString("UserName") != null ? rs2.getString("UserName") : "---");
+					billingresponsevo.setPaidDate(rs2.getString("TransactionDate") != null ? ExtraMethodsDAO.datetimeformatter(rs2.getString("TransactionDate")) : "---");
+				}
+
 				billingresponsevo.setBillMonth(rs.getInt("BillMonth") == 1 ? "January" : rs.getInt("BillMonth") == 2 ? "February" : rs.getInt("BillMonth") == 3 ? "March" : rs.getInt("BillMonth") == 4 ? "April" : rs.getInt("BillMonth") == 5 ? "May" : rs.getInt("BillMonth") == 6 ? "June" : rs.getInt("BillMonth") == 7 ? "July" : rs.getInt("BillMonth") == 8 ? "August" : rs.getInt("BillMonth") == 9 ? "September" : rs.getInt("BillMonth") == 10 ? "October" : rs.getInt("BillMonth") == 11 ? "November" : rs.getInt("BillMonth") == 12 ? "December" : "");
 				billingresponsevo.setBillYear(rs.getInt("BillYear"));
 				billingresponsevo.setLogDate(rs.getString("LogDate"));
@@ -940,7 +950,7 @@ public class AccountDAO {
 					individualBillingResponsevo.setConsumption(rs1.getFloat("Consumption"));
 					individualBillingResponsevo.setBillAmount(rs1.getFloat("BillAmount"));
 					individualBillingResponsevo.setTariff(rs1.getFloat("Tariff"));
-					individualBillingResponsevo.setBillingDate(rs1.getString("LogDate"));
+					individualBillingResponsevo.setBillingDate(ExtraMethodsDAO.datetimeformatter(rs1.getString("LogDate")));
 					
 					individualbills.add(individualBillingResponsevo);
 
@@ -1143,8 +1153,7 @@ public class AccountDAO {
 					Paragraph newLine = new Paragraph("\n");
 					Paragraph head = new Paragraph("Receipt");
 					Paragraph disclaimer = new Paragraph(ExtraConstants.Disclaimer);
-					Paragraph copyRight = new Paragraph(
-							"------------------------------------All  rights reserved by IDigitronics ® Hyderabad-----------------------------------");
+					Paragraph copyRight = new Paragraph("----------------------------------All  rights reserved by IDigitronics ® Hyderabad---------------------------------");
 					PdfFont font = new PdfFontFactory().createFont(FontConstants.TIMES_BOLD);
 
 					// change according to the image directory
@@ -1176,9 +1185,8 @@ public class AccountDAO {
 					headTable.addCell(headtable3.setBorder(Border.NO_BORDER));
 
 					document.add(headTable);
-					document.add(newLine);
 
-					float[] headerWidths = { 180F, 180F, 180F, 180F };
+					float[] headerWidths = { 130F, 150F, 150F, 100F };
 
 					Table table1 = new Table(headerWidths);
 
@@ -1188,23 +1196,23 @@ public class AccountDAO {
 
 					Cell customerName = new Cell();
 					customerName.add(rs.getString("FirstName") + " " + rs.getString("LastName"));
-					customerName.setTextAlignment(TextAlignment.CENTER);
+					customerName.setTextAlignment(TextAlignment.LEFT);
 
 					Cell cell2 = new Cell();
-					cell2.add("CAN/UAN Number: ");
-					cell2.setTextAlignment(TextAlignment.CENTER);
+					cell2.add("CAN Number: ");
+					cell2.setTextAlignment(TextAlignment.RIGHT);
 
 					Cell customerUniqueID = new Cell();
 					customerUniqueID.add(rs.getString("CustomerUniqueID"));
-					customerUniqueID.setTextAlignment(TextAlignment.CENTER);
+					customerUniqueID.setTextAlignment(TextAlignment.LEFT);
 
 					Cell cell3 = new Cell();
 					cell3.add("House Number: ");
-					cell3.setTextAlignment(TextAlignment.CENTER);
+					cell3.setTextAlignment(TextAlignment.LEFT);
 
 					Cell houseNumber = new Cell();
 					houseNumber.add(rs.getString("HouseNumber"));
-					houseNumber.setTextAlignment(TextAlignment.CENTER);
+					houseNumber.setTextAlignment(TextAlignment.LEFT);
 
 					Cell cell4 = new Cell();
 					cell4.add("Invoice No. : ");
@@ -1212,64 +1220,64 @@ public class AccountDAO {
 
 					Cell InvoiceNumber = new Cell();
 					InvoiceNumber.add("" + transactionID);
-					InvoiceNumber.setTextAlignment(TextAlignment.RIGHT);
+					InvoiceNumber.setTextAlignment(TextAlignment.LEFT);
 
 					Cell cell5 = new Cell();
 					cell5.add("PaidAmount: ");
-					cell5.setTextAlignment(TextAlignment.CENTER);
+					cell5.setTextAlignment(TextAlignment.LEFT);
 
 					Cell Amount = new Cell();
 					Amount.add(rs.getString("TotalAmount"));
-					Amount.setTextAlignment(TextAlignment.CENTER);
+					Amount.setTextAlignment(TextAlignment.LEFT);
 
 					Cell cell6 = new Cell();
 					cell6.add("Late Fee(if any): ");
-					cell6.setTextAlignment(TextAlignment.CENTER);
+					cell6.setTextAlignment(TextAlignment.RIGHT);
 
 					Cell lateFee = new Cell();
 					lateFee.add(rs.getString("LateFee"));
-					lateFee.setTextAlignment(TextAlignment.CENTER);
+					lateFee.setTextAlignment(TextAlignment.LEFT);
 
 					Cell cell7 = new Cell();
-					cell7.add("Mode of Payment: ");
-					cell7.setTextAlignment(TextAlignment.CENTER);
+					cell7.add("Payment Mode: ");
+					cell7.setTextAlignment(TextAlignment.LEFT);
 
 					Cell modeOfPayment = new Cell();
 					modeOfPayment.add(rs.getString("ModeOfPayment"));
-					modeOfPayment.setTextAlignment(TextAlignment.CENTER);
+					modeOfPayment.setTextAlignment(TextAlignment.LEFT);
 
 					Cell cell8 = new Cell();
-					cell8.add("Transaction Initiated By: ");
-					cell8.setTextAlignment(TextAlignment.CENTER);
+					cell8.add("Transaction Done By: ");
+					cell8.setTextAlignment(TextAlignment.RIGHT);
 
 					Cell transactedBy = new Cell();
 					transactedBy.add(rs1.getString("UserName"));
-					transactedBy.setTextAlignment(TextAlignment.CENTER);
+					transactedBy.setTextAlignment(TextAlignment.LEFT);
 
 					Cell cell9 = new Cell();
 					cell9.add("Paid on: ");
-					cell9.setTextAlignment(TextAlignment.CENTER);
+					cell9.setTextAlignment(TextAlignment.LEFT);
 
 					Cell transactionDate = new Cell();
 					transactionDate.add(ExtraMethodsDAO.datetimeformatter(rs.getString("TransactionDate")));
-					transactionDate.setTextAlignment(TextAlignment.CENTER);
+					transactionDate.setTextAlignment(TextAlignment.LEFT);
 
 					Cell cell10 = new Cell();
 					cell10.add("Order ID: ");
-					cell10.setTextAlignment(TextAlignment.CENTER);
+					cell10.setTextAlignment(TextAlignment.RIGHT);
 
 					Cell OrderID = new Cell();
 					OrderID.add(rs.getString("RazorPayOrderID") == null ? "---" : rs.getString("RazorPayOrderID"));
-					OrderID.setTextAlignment(TextAlignment.CENTER);
+					OrderID.setTextAlignment(TextAlignment.LEFT);
 
 					Cell cell11 = new Cell();
 					cell11.add("Payment ID: ");
-					cell11.setTextAlignment(TextAlignment.CENTER);
+					cell11.setTextAlignment(TextAlignment.LEFT);
 
 					Cell PaymentID = new Cell();
 					PaymentID
 							.add(rs.getString("RazorPayPaymentID") == null ? "---" : rs.getString("RazorPayPaymentID"));
-					PaymentID.setTextAlignment(TextAlignment.CENTER);
+					PaymentID.setTextAlignment(TextAlignment.LEFT);
 
 					Cell cell12 = new Cell();
 					cell12.add("");
@@ -1317,12 +1325,6 @@ public class AccountDAO {
 
 					document.add(table1.setHorizontalAlignment(HorizontalAlignment.CENTER));
 					document.add(disclaimer.setHorizontalAlignment(HorizontalAlignment.CENTER).setFont(font));
-					document.add(newLine);
-					document.add(newLine);
-					document.add(newLine);
-					document.add(newLine);
-					document.add(newLine);
-					document.add(newLine);
 
 					document.add(copyRight.setHorizontalAlignment(HorizontalAlignment.CENTER).setFont(font));
 					document.close();
@@ -1354,16 +1356,15 @@ public class AccountDAO {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		PreparedStatement pstmt1 = null;
-		ResultSet rs1 = null;
 		List<ConfigurationResponseVO> configurationdetailslist = null;
 		List<CommandGroupResponseVO> commandslist = null;
+		ConfigurationResponseVO configurationvo = null;
+		CommandGroupResponseVO commands = null;
 		try {
 			con = getConnection();
 			configurationdetailslist = new LinkedList<ConfigurationResponseVO>();
-			commandslist = new LinkedList<CommandGroupResponseVO>();
 
-			String query = "SELECT cd.TransactionID, cd.CustomerUniqueID, cd.MIUID, cd.CustomerMeterID FROM command AS cd \r\n"
+			String query = "SELECT DISTINCT cd.TransactionID, cd.CustomerUniqueID, cd.MIUID, cd.CustomerMeterID FROM command AS cd \r\n"
 					+ "LEFT JOIN customerdetails AS cm ON cm.CustomerUniqueID = cd.CustomerUniqueID\r\n"
 					+ "LEFT JOIN community AS c ON cm.CommunityID = c.CommunityID\r\n"
 					+ "LEFT JOIN block AS b ON cm.BlockID = b.blockID <change>";
@@ -1375,31 +1376,32 @@ public class AccountDAO {
 									: (roleid == 2 || roleid == 5)
 											? "WHERE cm.BlockID = " + id + " ORDER BY cd.TransactionID DESC"
 											: (roleid == 3)
-													? "WHERE cm.CustomerUniqueID = '" + id + "' ORDER BY cd.TransactionID DESC"
+													? "WHERE cm.CustomerUniqueID = '" + id
+															+ "' ORDER BY cd.TransactionID DESC"
 													: ""));
 
 			rs = pstmt.executeQuery();
-			ConfigurationResponseVO configurationvo = null;
-			CommandGroupResponseVO commands = null;
 
 			while (rs.next()) {
+				commandslist = new LinkedList<CommandGroupResponseVO>();
 				configurationvo = new ConfigurationResponseVO();
-				
-				configurationvo.setMiuID(rs.getString("MIUID"));
-				configurationvo.setTransactionID(rs.getInt("TransactionID"));
-				
-				pstmt1 = con.prepareStatement("SELECT * FROM commanddetails WHERE TransactionID = " + configurationvo.getTransactionID());
-				rs1 = pstmt1.executeQuery();
-				while(rs1.next()) {
+
+				PreparedStatement pstmt1 = con.prepareStatement("SELECT * FROM commanddetails WHERE TransactionID = " + rs.getLong("TransactionID"));
+				ResultSet rs1 = pstmt1.executeQuery();
+				while (rs1.next()) {
 					commands = new CommandGroupResponseVO();
-					
-					commands.setCommandType(rs1.getInt("CommandType") == 1 ? "Meter Reset" : rs1.getInt("CommandType") == 3 ? "Tariff" : rs1.getInt("CommandType") == 5 ? "Valve" : rs1.getInt("CommandType") == 6 ? "RTC" : rs1.getInt("CommandType") == 8 ? "Sync Interval" : rs1.getInt("CommandType") == 9 ? "Meter Reading" : rs1.getInt("CommandType") == 10 ? "PrePaidPostPaid Mode" : rs1.getInt("CommandType") == 12 ? "Clear Tamper" : rs1.getInt("CommandType") == 13 ? "Sync Time" : "");
-					commands.setStatus(rs1.getInt("Status") == 0 ? "Passed" : rs1.getInt("Status") == 1 ? "Already Executed" : rs1.getInt("Status") == 2 ? "Invalid Syntax" : rs1.getInt("Status") == 3 ? "Invalid Parameters" : rs1.getInt("Status") == 4 ? "Value Cannot be Applied" : rs1.getInt("Status") == 5 ? "Value Not in Range" : rs1.getInt("Status") == 6 ? "Command Not Found" : rs1.getInt("Status") == 7 ? "Device Not Found" : rs1.getInt("Status") == 8 ? "Transaction Discarded" : rs1.getInt("Status") == 9 ? "Transaction not Found" : rs1.getInt("Status") == 10 ? "Pending" : "Unknown Failure");
+
+					commands.setCommandType(rs1.getInt("CommandType") == 1 ? "Meter Reset" : rs1.getInt("CommandType") == 3 ? "Tariff" : rs1.getInt("CommandType") == 5 ? "Valve" : rs1.getInt("CommandType") == 6 ? "RTC" : rs1.getInt("CommandType") == 8 ? "Sync Interval" : rs1.getInt("CommandType") == 9 ? "Meter Reading" : rs1.getInt("CommandType") == 10 ? "PrePaidPostPaid Mode"	: rs1.getInt("CommandType") == 12 ? "Clear Tamper" : rs1.getInt("CommandType") == 13 ? "Sync Time" : "");
+					commands.setStatus(rs1.getInt("Status") == 0 ? "Passed"	: rs1.getInt("Status") == 1 ? "Already Executed" : rs1.getInt("Status") == 2 ? "Invalid Syntax"	: rs1.getInt("Status") == 3 ? "Invalid Parameters" : rs1.getInt("Status") == 4 ? "Value Cannot be Applied" : rs1.getInt("Status") == 5 ? "Value Not in Range" : rs1.getInt("Status") == 6 ? "Command Not Found"	: rs1.getInt("Status") == 7	? "Device Not Found" : rs1.getInt("Status") == 8 ? "Transaction Discarded" : rs1.getInt("Status") == 9 ? "Transaction not Found" : rs1.getInt("Status") == 10 ? "Pending": "Unknown Failure");
 					commands.setValue(rs1.getString("Value"));
 					commands.setModifiedDate(rs1.getString("ModifiedDate"));
-					
+
 					commandslist.add(commands);
-					}
+				}
+				
+				configurationvo.setCommands(commandslist);
+				configurationvo.setMiuID(rs.getString("MIUID"));
+				configurationvo.setTransactionID(rs.getLong("TransactionID"));
 				
 				configurationdetailslist.add(configurationvo);
 			}
@@ -1444,7 +1446,7 @@ public class AccountDAO {
 			
 			if(rs.next()) {
 				
-				PreparedStatement pstmt = con.prepareStatement("SELECT g.GatewayIP, g.GatewayPort FROM gateways as g LEFT JOIN customermeterdetails as cmd ON g.GatewayID = cmd.GatewayID WHERE CustomerMeterID = " + configurationvo.getCustomerMeterID());
+				PreparedStatement pstmt = con.prepareStatement("SELECT g.GatewayIP, g.GatewayPort FROM gateway as g LEFT JOIN customermeterdetails as cmd ON g.GatewayID = cmd.GatewayID WHERE CustomerMeterID = " + configurationvo.getCustomerMeterID());
 				ResultSet rs2 = pstmt.executeQuery();
 				
 				if(rs2.next()) {
@@ -1484,17 +1486,22 @@ public class AccountDAO {
 					
 					if (ps2.executeUpdate() > 0) {
 						restcallvo.setParameter_id(configurationvo.getCommands().get(0).getParameter_id());
-						restcallvo.setValue(configurationvo.getCommands().get(0).getValue());
+						restcallvo.setValue(configurationvo.getCommands().get(0).getParameter_id() == 6 ? ExtraMethodsDAO.datetimeformatter(configurationvo.getCommands().get(0).getValue()) : configurationvo.getCommands().get(0).getValue());
 						restcallvo.setUrlExtension("/set");
 						
 						if (configurationvo.getCommands().get(0).getParameter_id() == 3) {
 
-							PreparedStatement pstmt2 = con.prepareStatement("UPDATE customermeterdetails SET TariffID = ? Where CustomerUniqueID = ? AND CustomerMeterID = ?");
+							PreparedStatement pstmt2 = con.prepareStatement("UPDATE customermeterdetails SET TariffID = ?, ModifiedDate = NOW() WHERE CustomerUniqueID = ? AND CustomerMeterID = ?");
 							pstmt2.setInt(1, Integer.parseInt(configurationvo.getCommands().get(0).getValue()));
 							pstmt2.setString(2, configurationvo.getCustomerUniqueID());
 							pstmt2.setLong(3, configurationvo.getCustomerMeterID());
 							pstmt2.executeUpdate();
-
+							
+							PreparedStatement pstmt3 = con.prepareStatement("SELECT Tariff FROM tariff WHERE TariffID = " + configurationvo.getCommands().get(0).getValue());
+							ResultSet rs3 = pstmt3.executeQuery();
+							if(rs3.next()) {
+								restcallvo.setValue(rs3.getString("Tariff"));
+							}
 						}
 					}
 					
@@ -1502,7 +1509,7 @@ public class AccountDAO {
 			}
 				}
 			}
-			
+			// modify the backend fields accordingly and set values for all parameters
 			if(extramethodsdao.postdata(restcallvo) == 200) {
 			responsevo.setResult("Success");
 			responsevo.setMessage("Command Request Submitted Successfully");
@@ -1607,11 +1614,11 @@ public class AccountDAO {
 
 		try {
 			con = getConnection();
-			pstmt = con.prepareStatement("SELECT cd.MIUID, cmd.Status FROM command as cd LEFT JOIN commanddetails AS cmd ON cd.TransactionID = cmd.TransactionID WHERE MIUID = ? order by TransactionID DESC LIMIT 0,1");
+			pstmt = con.prepareStatement("SELECT cd.MIUID, cmd.Status FROM command as cd LEFT JOIN commanddetails AS cmd ON cd.TransactionID = cmd.TransactionID WHERE MIUID = ? order by cmd.TransactionID DESC LIMIT 0,1");
 			pstmt.setString(1, meterID);
 			rs = pstmt.executeQuery();
 			if (rs.next()) {
-				if (rs.getString("Status").equals("10")) {
+				if (rs.getString("Status") != null && rs.getString("Status").equals("10")) {
 					result = true;
 				}
 			}

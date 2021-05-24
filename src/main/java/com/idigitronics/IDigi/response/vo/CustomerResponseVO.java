@@ -22,8 +22,6 @@ public class CustomerResponseVO {
 	private String lastName;
 	private String email;
 	private String mobileNumber;
-	private String meterID;
-	private String meterSerialNumber;
 	private String date;
 	private String createdByUserName;
 	private String createdByRoleDescription;
@@ -80,18 +78,6 @@ public class CustomerResponseVO {
 	}
 	public void setMobileNumber(String mobileNumber) {
 		this.mobileNumber = mobileNumber;
-	}
-	public String getMeterID() {
-		return meterID;
-	}
-	public void setMeterID(String meterID) {
-		this.meterID = meterID;
-	}
-	public String getMeterSerialNumber() {
-		return meterSerialNumber;
-	}
-	public void setMeterSerialNumber(String meterSerialNumber) {
-		this.meterSerialNumber = meterSerialNumber;
 	}
 	public String getDate() {
 		return date;

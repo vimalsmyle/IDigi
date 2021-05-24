@@ -9,17 +9,17 @@ package com.idigitronics.IDigi.request.vo;
  */
 public class AlarmRequestVO {
 	
-	private String CRNNumber;
+	private String customerUniqueID;
 	private int blockID;
-	private String customerID;
+	private long customerID;
 	private String fromDate;
 	private String toDate;
 	
-	public String getCRNNumber() {
-		return CRNNumber;
+	public String getCustomerUniqueID() {
+		return customerUniqueID;
 	}
-	public void setCRNNumber(String cRNNumber) {
-		CRNNumber = cRNNumber;
+	public void setCustomerUniqueID(String customerUniqueID) {
+		this.customerUniqueID = customerUniqueID;
 	}
 	public int getBlockID() {
 		return blockID;
@@ -27,10 +27,10 @@ public class AlarmRequestVO {
 	public void setBlockID(int blockID) {
 		this.blockID = blockID;
 	}
-	public String getCustomerID() {
+	public long getCustomerID() {
 		return customerID;
 	}
-	public void setCustomerID(String customerID) {
+	public void setCustomerID(long customerID) {
 		this.customerID = customerID;
 	}
 	public String getFromDate() {
