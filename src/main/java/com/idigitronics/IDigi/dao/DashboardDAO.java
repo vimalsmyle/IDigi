@@ -45,7 +45,7 @@ public class DashboardDAO {
 		return connection;
 	}
 
-	public List<DashboardResponseVO> getDashboarddetails(int roleid, String id, int filter)
+	public List<DashboardResponseVO> getDashboarddetails(int type, int roleid, String id, int filter)
 			throws SQLException {
 		Connection con = null;
 		PreparedStatement pstmt = null;
@@ -58,6 +58,7 @@ public class DashboardDAO {
 		
 		// write accordingly based on meter type and customer meter types
 		
+//		type path parameter: 1 = gas, 2= water, 3=energy 
 		try {
 			con = getConnection();
 			dashboard_list = new LinkedList<DashboardResponseVO>();
