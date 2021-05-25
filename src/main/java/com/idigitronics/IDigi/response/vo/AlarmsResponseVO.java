@@ -15,6 +15,7 @@ public class AlarmsResponseVO {
 	private String blockName;
 	private String houseNumber;
 	private String customerUniqueID;
+	
 	private String miuID;
 	private String dateTime;
 	private String doorOpenTamper;
@@ -26,6 +27,7 @@ public class AlarmsResponseVO {
 	private String solonideStatus;
 	private String batteryColor;
 	
+	private List<IndividualAlarmsResponseVO> alarms;
 	private List<AlarmsResponseVO> data;
 
 	public String getCommunityName() {
@@ -58,6 +60,22 @@ public class AlarmsResponseVO {
 
 	public void setCustomerUniqueID(String customerUniqueID) {
 		this.customerUniqueID = customerUniqueID;
+	}
+
+	public List<IndividualAlarmsResponseVO> getAlarms() {
+		return alarms;
+	}
+
+	public void setAlarms(List<IndividualAlarmsResponseVO> alarms) {
+		this.alarms = alarms;
+	}
+
+	public List<AlarmsResponseVO> getData() {
+		return data;
+	}
+
+	public void setData(List<AlarmsResponseVO> data) {
+		this.data = data;
 	}
 
 	public String getMiuID() {
@@ -108,6 +126,14 @@ public class AlarmsResponseVO {
 		this.lowBattery = lowBattery;
 	}
 
+	public String getLowBalance() {
+		return lowBalance;
+	}
+
+	public void setLowBalance(String lowBalance) {
+		this.lowBalance = lowBalance;
+	}
+
 	public long getDifference() {
 		return difference;
 	}
@@ -132,20 +158,4 @@ public class AlarmsResponseVO {
 		this.batteryColor = batteryColor;
 	}
 
-	public List<AlarmsResponseVO> getData() {
-		return data;
-	}
-
-	public void setData(List<AlarmsResponseVO> data) {
-		this.data = data;
-	}
-
-	public String getLowBalance() {
-		return lowBalance;
-	}
-
-	public void setLowBalance(String lowBalance) {
-		this.lowBalance = lowBalance;
-	}
-	
 }
