@@ -131,6 +131,8 @@ public class DashboardDAO {
 					individualDashboardResponseVO.setBatteryColor((rs3.getInt("LowBattery") == 1 ) ? "RED" : "GREEN");
 					individualDashboardResponseVO.setDoorOpenTamper((rs3.getInt("DoorOpenTamper") == 0) ? "NO" : (rs3.getInt("DoorOpenTamper") == 1) ? "YES" : "NO");
 					individualDashboardResponseVO.setDooropentamperColor((rs3.getInt("DoorOpenTamper") == 0) ? "GREEN" : "RED");
+					individualDashboardResponseVO.setMagneticTamper((rs3.getInt("MagneticTamper") == 0) ? "NO" : (rs3.getInt("MagneticTamper") == 1) ? "YES" : "NO");
+					individualDashboardResponseVO.setMagnetictamperColor((rs3.getInt("MagneticTamper") == 0) ? "GREEN" : "RED");
 					individualDashboardResponseVO.setVacationStatus(rs3.getInt("Vacation") == 1 ? "YES" : "NO");
 					individualDashboardResponseVO.setVacationColor(rs3.getInt("Vacation") == 1 ? "ORANGE" : "BLACK");
 					individualDashboardResponseVO.setTimeStamp(ExtraMethodsDAO.datetimeformatter(rs3.getString("LogDate")));
@@ -178,7 +180,7 @@ public class DashboardDAO {
 		return dashboard_list;
 	}
 	
-	public List<DashboardResponseVO> getFilterDashboarddetails(int roleid, String id, FilterVO filtervo) throws SQLException {
+	public List<DashboardResponseVO> getFilterDashboarddetails(int communityID, int blockID, FilterVO filtervo, int type) throws SQLException {
 		// TODO Auto-generated method stub
 
 		Connection con = null;
@@ -188,6 +190,8 @@ public class DashboardDAO {
 		DashboardResponseVO dashboardvo = null;
 		int noAMRInterval = 0;
 		float perUnitValue = 0.0f;
+		List<IndividualDashboardResponseVO> individualDashboardList = null;
+		IndividualDashboardResponseVO individualDashboardResponseVO = null;
 		
 		try {
 			con = getConnection();
@@ -201,80 +205,100 @@ public class DashboardDAO {
 				perUnitValue = rs1.getFloat("PerUnitValue");
 			}
 			
-			String query = "SELECT DISTINCT c.CommunityName, b.BlockName, cd.FirstName,cd.CustomerUniqueID, cd.LastName, cd.HouseNumber, cmd.MeterSerialNumber, dbl.ReadingID, dbl.MainBalanceLogID, dbl.EmergencyCredit, \r\n" + 
-					"dbl.MIUID, dbl.Reading, dbl.Balance, dbl.BatteryVoltage, dbl.LowBattery, dbl.Tariff, dbl.ValveStatus, dbl.DoorOpenTamper, dbl.MagneticTamper, dbl.RTCFault, dbl.Vacation, dbl.LowBalance, dbl.LogDate\r\n" + 
-					"FROM displaybalancelog AS dbl LEFT JOIN community AS c ON c.communityID = dbl.CommunityID LEFT JOIN block AS b ON b.BlockID = dbl.BlockID\r\n" + 
-					"LEFT JOIN customerdetails AS cd ON cd.CustomerID = dbl.CustomerID LEFT JOIN customermeterdetails AS cmd ON cmd.CustomerMeterID = dbl.CustomerMeterID WHERE 1=1 <change>";
+			String mainquery = "SELECT c.CommunityName, b.BlockName, cd.HouseNumber, cd.FirstName, cd.LastName, cd.CustomerUniqueID, cd.CustomerID FROM customerdetails AS cd LEFT JOIN community AS c ON cd.CommunityID = c.CommunityID LEFT JOIN block AS b ON b.BlockID = cd.BlockID <main>";
 			
-			query = query.replaceAll("<change>", (roleid == 1 || roleid == 4) ? "" : (roleid == 2 || roleid == 5) ? " AND dbl.BlockID = "+id : (roleid == 3) ? "AND dbl.CustomerUniquID = '"+id+"'":"");
-			StringBuilder stringBuilder = new StringBuilder(query);
-			if(roleid !=3) {
-				
-				LocalDateTime dateTime = LocalDateTime.now();  
-			    DateTimeFormatter dateTimeFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");  
-				
-				if(!filtervo.getDateFrom().equalsIgnoreCase("null") || !filtervo.getDateTo().equalsIgnoreCase("null")) {
-					stringBuilder.append(" AND dbl.LogDate BETWEEN '" + filtervo.getDateFrom() + "' AND '" + (filtervo.getDateTo() != null ? filtervo.getDateTo()+"'" : "'"+dateTime.format(dateTimeFormat)+"'"));
-				}
-				if(filtervo.getReadingFrom() != 0 || filtervo.getReadingTo() != 0) {
-					stringBuilder.append(" AND dbl.Reading BETWEEN " + (filtervo.getReadingFrom() != 0 ? filtervo.getReadingFrom() : 0) + " AND " + (filtervo.getReadingTo() != 0 ? filtervo.getReadingTo() : 9999999));
-				}
-				if(filtervo.getBatteryVoltageFrom() != 0 || filtervo.getBatteryVoltageFrom() != 0) {
-					stringBuilder.append(" AND dbl.BatteryVoltage BETWEEN " + (filtervo.getBatteryVoltageFrom() != 0 ? (filtervo.getBatteryVoltageFrom()) : 0) + " AND " + (filtervo.getBatteryVoltageTo() != 0 ? (filtervo.getBatteryVoltageTo()) : 100));
-				}
-				if(filtervo.getTamperType() > 0) {
-					stringBuilder.append(filtervo.getTamperType() == 1 ? " AND dbl.DoorOpenTamper = 1" : " AND dbl.MagneticTamper = 1");
-				}
-					stringBuilder.append(" ORDER BY dbl.LogDate DESC");
-			}
+			mainquery = mainquery.replaceAll("<main>", blockID ==0 ?"WHERE cd.CommunityID = "+communityID : blockID !=0 ? "WHERE cd.CommunityID = "+communityID +" AND cd.BlockID = "+blockID : "");
 			
-			pstmt = con.prepareStatement(stringBuilder.toString());
+			pstmt = con.prepareStatement(mainquery);
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
+				
 				dashboardvo = new DashboardResponseVO();
+				individualDashboardList = new LinkedList<IndividualDashboardResponseVO>();
+				
 				dashboardvo.setCommunityName(rs.getString("CommunityName"));
 				dashboardvo.setBlockName(rs.getString("BlockName"));
 				dashboardvo.setHouseNumber(rs.getString("HouseNumber"));
 				dashboardvo.setFirstName(rs.getString("FirstName"));
-				/*dashboardvo.setMeterSerialNumber(rs.getString("MeterSerialNumber"));
 				dashboardvo.setLastName(rs.getString("LastName"));
-				dashboardvo.setMiuID(rs.getString("MIUID"));
-				dashboardvo.setTariff((rs.getFloat("Tariff")));
 				dashboardvo.setCustomerUniqueID(rs.getString("CustomerUniqueID"));
-				dashboardvo.setReading(rs.getFloat("Reading"));
-				dashboardvo.setConsumption((int) (dashboardvo.getReading() * perUnitValue));
-				dashboardvo.setBalance(rs.getFloat("Balance"));
-				dashboardvo.setEmergencyCredit(rs.getFloat("EmergencyCredit"));
-				dashboardvo.setValveStatus((rs.getInt("ValveStatus") == 1) ? "OPEN" : (rs.getInt("ValveStatus") == 0) ? "CLOSED" : "");	
-				dashboardvo.setValveStatusColor((rs.getInt("ValveStatus") == 0) ? "GREEN" : (rs.getInt("ValveStatus") == 1) ? "RED" : "");
-//				dashboardvo.setBattery((int)((rs.getInt("BatteryVoltage"))*(100/3.5) > 100 ? 100 : (rs.getFloat("BatteryVoltage"))*(100/3.5)));
-				dashboardvo.setBattery(rs.getInt("BatteryVoltage"));
-				dashboardvo.setBatteryColor((rs.getInt("LowBattery") == 1 ) ? "RED" : "GREEN");
-				dashboardvo.setDoorOpenTamper((rs.getInt("DoorOpenTamper") == 0) ? "NO" : (rs.getInt("DoorOpenTamper") == 1) ? "YES" : "NO");
-				dashboardvo.setDooropentamperColor((rs.getInt("DoorOpenTamper") == 0) ? "GREEN" : "RED");
-				dashboardvo.setVacationStatus(rs.getInt("Vacation") == 1 ? "YES" : "NO");
-				dashboardvo.setVacationColor(rs.getInt("Vacation") == 1 ? "ORANGE" : "BLACK");
-				dashboardvo.setTimeStamp(ExtraMethodsDAO.datetimeformatter(rs.getString("LogDate")));
-				dashboardvo.setVacationStatus(rs.getInt("Vacation") == 1 ? "YES" : "NO");
-				dashboardvo.setVacationColor(rs.getInt("Vacation") == 1 ? "ORANGE" : "BLACK");
-				dashboardvo.setTimeStamp(ExtraMethodsDAO.datetimeformatter(rs.getString("IoTTimeStamp")));
 				
-				Date currentDateTime = new Date();
+				String query = "SELECT dbl.ReadingID, dbl.MainBalanceLogID, dbl.CustomerMeterID, dbl.MIUID, cmd.MeterSerialNumber, dbl.Tariff, dbl.Reading, dbl.Balance, dbl.EmergencyCredit, dbl.ValveStatus, dbl.BatteryVoltage, "
+						+ "dbl.LowBattery, dbl.DoorOpenTamper, dbl.MagneticTamper, dbl.RTCFault, dbl.Vacation, dbl.LowBalance, dbl.LogDate FROM displaybalancelog AS dbl LEFT JOIN customermeterdetails AS cmd ON cmd.CustomerMeterID = dbl.CustomerMeterID WHERE cmd.CustomerID = ? AND cmd.MeterType = " + (type == 1 ? "'Gas'" : type == 2 ? "'Water'" :"'Energy'");
 				
-				long minutes = TimeUnit.MILLISECONDS.toMinutes(currentDateTime.getTime() - (rs.getTimestamp("IoTTimeStamp")).getTime());
+				String oldquery = "SELECT DISTINCT c.CommunityName, b.BlockName, cd.FirstName,cd.CustomerUniqueID, cd.LastName, cd.HouseNumber, cmd.MeterSerialNumber, dbl.ReadingID, dbl.MainBalanceLogID, dbl.EmergencyCredit, \r\n" + 
+						"dbl.MIUID, dbl.Reading, dbl.Balance, dbl.BatteryVoltage, dbl.LowBattery, dbl.Tariff, dbl.ValveStatus, dbl.DoorOpenTamper, dbl.MagneticTamper, dbl.RTCFault, dbl.Vacation, dbl.LowBalance, dbl.LogDate\r\n" + 
+						"FROM displaybalancelog AS dbl LEFT JOIN community AS c ON c.communityID = dbl.CommunityID LEFT JOIN block AS b ON b.BlockID = dbl.BlockID\r\n" + 
+						"LEFT JOIN customerdetails AS cd ON cd.CustomerID = dbl.CustomerID LEFT JOIN customermeterdetails AS cmd ON cmd.CustomerMeterID = dbl.CustomerMeterID WHERE 1=1 <change>";
 				
-				if(minutes > noAMRInterval) {
-					dashboardvo.setDateColor("RED");
-					dashboardvo.setCommunicationStatus("NO");
-				}else if(minutes > 1440 && minutes < noAMRInterval) {
-					dashboardvo.setDateColor("ORANGE");
-					dashboardvo.setCommunicationStatus("YES");
-				} else {
-					dashboardvo.setDateColor("GREEN");
-					dashboardvo.setCommunicationStatus("YES");
-				}*/
+						StringBuilder stringBuilder = new StringBuilder(query);
+					
+						LocalDateTime dateTime = LocalDateTime.now();  
+					    DateTimeFormatter dateTimeFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");  
+						
+						if(!filtervo.getDateFrom().equalsIgnoreCase("null") || !filtervo.getDateTo().equalsIgnoreCase("null")) {
+							stringBuilder.append(" AND dbl.LogDate BETWEEN '" + filtervo.getDateFrom() + "' AND '" + (filtervo.getDateTo() != null ? filtervo.getDateTo()+"'" : "'"+dateTime.format(dateTimeFormat)+"'"));
+						}
+						if(filtervo.getReadingFrom() != 0 || filtervo.getReadingTo() != 0) {
+							stringBuilder.append(" AND dbl.Reading BETWEEN " + (filtervo.getReadingFrom() != 0 ? filtervo.getReadingFrom() : 0) + " AND " + (filtervo.getReadingTo() != 0 ? filtervo.getReadingTo() : 9999999));
+						}
+						if(filtervo.getBatteryVoltageFrom() != 0 || filtervo.getBatteryVoltageTo() != 0) {
+							stringBuilder.append(" AND dbl.BatteryVoltage BETWEEN " + (filtervo.getBatteryVoltageFrom() != 0 ? (filtervo.getBatteryVoltageFrom()) : 0) + " AND " + (filtervo.getBatteryVoltageTo() != 0 ? (filtervo.getBatteryVoltageTo()) : 100));
+						}
+						if(filtervo.getTamperType() > 0) {
+							stringBuilder.append(filtervo.getTamperType() == 1 ? " AND dbl.DoorOpenTamper = 1" : " AND dbl.MagneticTamper = 1");
+						}
+							stringBuilder.append(" ORDER BY dbl.LogDate DESC");
 
-				dashboard_list.add(dashboardvo);
+						PreparedStatement pstmt2 = con.prepareStatement(stringBuilder.toString());
+						pstmt2.setInt(1, rs.getInt("CustomerID"));
+						ResultSet rs2 = pstmt2.executeQuery();
+						while (rs2.next()) {
+							
+							individualDashboardResponseVO = new IndividualDashboardResponseVO();
+							
+							individualDashboardResponseVO.setMeterSerialNumber(rs2.getString("MeterSerialNumber"));
+							individualDashboardResponseVO.setMiuID(rs2.getString("MIUID"));
+							individualDashboardResponseVO.setTariff((rs2.getFloat("Tariff")));
+							individualDashboardResponseVO.setReading(rs2.getFloat("Reading"));
+							individualDashboardResponseVO.setConsumption((int) (individualDashboardResponseVO.getReading() * perUnitValue));
+							individualDashboardResponseVO.setBalance(rs2.getFloat("Balance"));
+							individualDashboardResponseVO.setEmergencyCredit(rs2.getFloat("EmergencyCredit"));
+							individualDashboardResponseVO.setValveStatus((rs2.getInt("ValveStatus") == 1) ? "OPEN" : (rs2.getInt("ValveStatus") == 0) ? "CLOSED" : "");	
+							individualDashboardResponseVO.setValveStatusColor((rs2.getInt("ValveStatus") == 0) ? "GREEN" : (rs2.getInt("ValveStatus") == 1) ? "RED" : "");
+							individualDashboardResponseVO.setBattery(rs2.getInt("BatteryVoltage"));
+							individualDashboardResponseVO.setBatteryColor((rs2.getInt("LowBattery") == 1 ) ? "RED" : "GREEN");
+							individualDashboardResponseVO.setDoorOpenTamper((rs2.getInt("DoorOpenTamper") == 0) ? "NO" : (rs2.getInt("DoorOpenTamper") == 1) ? "YES" : "NO");
+							individualDashboardResponseVO.setDooropentamperColor((rs2.getInt("DoorOpenTamper") == 0) ? "GREEN" : "RED");
+							individualDashboardResponseVO.setMagneticTamper((rs2.getInt("MagneticTamper") == 0) ? "NO" : (rs2.getInt("MagneticTamper") == 1) ? "YES" : "NO");
+							individualDashboardResponseVO.setMagnetictamperColor((rs2.getInt("MagneticTamper") == 0) ? "GREEN" : "RED");
+							individualDashboardResponseVO.setVacationStatus(rs2.getInt("Vacation") == 1 ? "YES" : "NO");
+							individualDashboardResponseVO.setVacationColor(rs2.getInt("Vacation") == 1 ? "ORANGE" : "BLACK");
+							individualDashboardResponseVO.setTimeStamp(ExtraMethodsDAO.datetimeformatter(rs2.getString("LogDate")));
+							individualDashboardResponseVO.setVacationStatus(rs2.getInt("Vacation") == 1 ? "YES" : "NO");
+							individualDashboardResponseVO.setVacationColor(rs2.getInt("Vacation") == 1 ? "ORANGE" : "BLACK");
+							individualDashboardResponseVO.setTimeStamp(ExtraMethodsDAO.datetimeformatter(rs2.getString("LogDate")));
+							
+							Date currentDateTime = new Date();
+							
+							long minutes = TimeUnit.MILLISECONDS.toMinutes(currentDateTime.getTime() - (rs2.getTimestamp("LogDate")).getTime());
+							
+							if(minutes > noAMRInterval) {
+								individualDashboardResponseVO.setDateColor("RED");
+								individualDashboardResponseVO.setCommunicationStatus("NO");
+							}else if(minutes > 1440 && minutes < noAMRInterval) {
+								individualDashboardResponseVO.setDateColor("ORANGE");
+								individualDashboardResponseVO.setCommunicationStatus("YES");
+							} else {
+								individualDashboardResponseVO.setDateColor("GREEN");
+								individualDashboardResponseVO.setCommunicationStatus("YES");
+							}
+							individualDashboardList.add(individualDashboardResponseVO);
+				
+			}
+			
+					dashboardvo.setDasboarddata(individualDashboardList);
+					dashboard_list.add(dashboardvo);
 			}
 		}
 
@@ -288,7 +312,7 @@ public class DashboardDAO {
 		return dashboard_list;
 	}
 	
-	public GraphResponseVO getGraphDashboardDetails(int year, int month, int communityID, int blockID) {
+	public GraphResponseVO getGraphDashboardDetails(int year, int month, int id, int type) {
 		// TODO Auto-generated method stub
 		
 		PreparedStatement pstmt = null;
@@ -653,7 +677,7 @@ public class DashboardDAO {
 				ResultSet rs = pstmt2.executeQuery();
 				if(rs.next()) {
 					
-					pstmt = con.prepareStatement("INSERT INTO balancelog (MIUID, CommunityID, BlockID, CustomerID, CustomerMeterID, MeterSerialNumber, CustomerUniqueID, MeterType, SyncTime, SyncInterval, PayType, BatteryVoltage, TariffID, Tariff, ValveConfiguration, ValveStatus, Balance, EmergencyCredit, Minutes, Reading, DoorOpenTamper, MagneticTamper, Vacation, RTCFault, LowBattery, LowBalance) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+					pstmt = con.prepareStatement("INSERT INTO balancelog (MIUID, CommunityID, BlockID, CustomerID, CustomerMeterID, MeterSerialNumber, CustomerUniqueID, MeterType, SyncTime, SyncInterval, PayType, BatteryVoltage, TariffID, Tariff, ValveConfiguration, ValveStatus, Balance, EmergencyCredit, Minutes, Reading, DoorOpenTamper, MagneticTamper, Vacation, RTCFault, LowBattery, LowBalance, LogDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
 					pstmt.setString(1, miuID);
 					pstmt.setInt(2, rs.getInt("CommunityID"));
 					pstmt.setInt(3, rs.getInt("BlockID"));
@@ -694,7 +718,7 @@ public class DashboardDAO {
 							ResultSet rs1 = pstmt3.executeQuery();
 							
 							if(rs1.next()) {
-								pstmt1 = con.prepareStatement("UPDATE displaybalancelog SET MainBalanceLogID = ?, MIUID = ?, CommunityID = ?, BlockID = ?, CustomerID = ?, CustomerMeterID = ?, MeterSerialNumber = ?, CustomerUniqueID = ?, MeterType = ?, SyncTime = ?, SyncInterval = ?, PayType = ?, BatteryVoltage = ?, TariffID = ?, Tariff = ?, ValveConfiguration = ?,  ValveStatus = ?, Balance = ?, EmergencyCredit = ?, Minutes = ?, Reading = ?, DoorOpenTamper = ?, MagneticTamper = ?, Vacation = ?, RTCFault = ?, LowBattery = ?, LowBalance = ? WHERE CustomerMeterID = ? ");
+								pstmt1 = con.prepareStatement("UPDATE displaybalancelog SET MainBalanceLogID = ?, MIUID = ?, CommunityID = ?, BlockID = ?, CustomerID = ?, CustomerMeterID = ?, MeterSerialNumber = ?, CustomerUniqueID = ?, MeterType = ?, SyncTime = ?, SyncInterval = ?, PayType = ?, BatteryVoltage = ?, TariffID = ?, Tariff = ?, ValveConfiguration = ?,  ValveStatus = ?, Balance = ?, EmergencyCredit = ?, Minutes = ?, Reading = ?, DoorOpenTamper = ?, MagneticTamper = ?, Vacation = ?, RTCFault = ?, LowBattery = ?, LowBalance = ?, LogDate = NOW() WHERE CustomerMeterID = ? ");
 								pstmt1.setInt(1, rs2.getInt("ReadingID"));
 								pstmt1.setString(2, miuID);
 								pstmt1.setInt(3, rs.getInt("CommunityID"));
@@ -726,7 +750,7 @@ public class DashboardDAO {
 								
 							} else {
 								
-									pstmt1 = con.prepareStatement("INSERT INTO displaybalancelog (MainBalanceLogID, MIUID, CommunityID, BlockID, CustomerID, CustomerMeterID, MeterSerialNumber, CustomerUniqueID, MeterType, SyncTime, SyncInterval, PayType, BatteryVoltage, TariffID, Tariff, ValveConfiguration, ValveStatus, Balance, EmergencyCredit, Minutes, Reading, DoorOpenTamper, MagneticTamper, Vacation, RTCFault, LowBattery, LowBalance) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+									pstmt1 = con.prepareStatement("INSERT INTO displaybalancelog (MainBalanceLogID, MIUID, CommunityID, BlockID, CustomerID, CustomerMeterID, MeterSerialNumber, CustomerUniqueID, MeterType, SyncTime, SyncInterval, PayType, BatteryVoltage, TariffID, Tariff, ValveConfiguration, ValveStatus, Balance, EmergencyCredit, Minutes, Reading, DoorOpenTamper, MagneticTamper, Vacation, RTCFault, LowBattery, LowBalance, LogDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
 									pstmt1.setInt(1, rs2.getInt("ReadingID"));
 									pstmt1.setString(2, miuID);
 									pstmt1.setInt(3, rs.getInt("CommunityID"));

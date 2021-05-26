@@ -50,6 +50,20 @@ public class DashboardController {
 		return dasboardresponsevo;
 	}
 	
+	@RequestMapping(value = "/filterdashboard/{type}/{communityID}/{blockID}", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	public @ResponseBody DashboardResponseVO filterdashboarddetails(@PathVariable("type") int type, @PathVariable("communityID") int communityID, @PathVariable("blockID") int blockID, @RequestBody FilterVO filtervo) throws SQLException {
+
+		DashboardDAO dashboarddao = new DashboardDAO();
+		DashboardResponseVO dasboardresponsevo = new DashboardResponseVO();
+
+		dasboardresponsevo.setData(dashboarddao.getFilterDashboarddetails(communityID, blockID, filtervo, type));
+		dasboardresponsevo.setTotal(dasboardresponsevo.getData().size());
+//		dasboardresponsevo.setNonCommunicating(dasboardresponsevo.getData().size() == 0 ? 0 : dasboardresponsevo.getData().get(dasboardresponsevo.getData().size()-1).getNonCommunicating());
+//		dasboardresponsevo.setCommunicating(dasboardresponsevo.getData().size()-dasboardresponsevo.getNonCommunicating());
+		
+		return dasboardresponsevo;
+	}
+	
 	@RequestMapping(value = "/homedashboard/{roleid}/{id}", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody HomeResponseVO homedashboarddetails(@PathVariable("roleid") int roleid, @PathVariable("id") String id) throws SQLException {
 
@@ -58,26 +72,20 @@ public class DashboardController {
 		return dashboarddao.getHomeDashboardDetails(roleid, id);
 	}
 	
+	@RequestMapping(value = "/graph/{type}/{year}/{month}/{id}", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody GraphResponseVO graphdashboarddetails(@PathVariable("type") int type, @PathVariable("year") int year, @PathVariable("month") int month, @PathVariable("id") int id) throws SQLException {
+
+		DashboardDAO dashboarddao = new DashboardDAO();
+
+		return dashboarddao.getGraphDashboardDetails(year, month, id, type);
+	}
+	
 	@RequestMapping(value = "/graph/{type}/{year}/{month}/{customerUniqueID}", method = RequestMethod.GET, produces = "application/json")
-	public @ResponseBody GraphResponseVO homedashboarddetails(@PathVariable("type") int type, @PathVariable("year") int year, @PathVariable("month") int month, @PathVariable("customerUniqueID") String customerUniqueID) throws SQLException {
+	public @ResponseBody GraphResponseVO customergraphdashboarddetails(@PathVariable("type") int type, @PathVariable("year") int year, @PathVariable("month") int month, @PathVariable("customerUniqueID") String customerUniqueID) throws SQLException {
 
 		DashboardDAO dashboarddao = new DashboardDAO();
 
 		return dashboarddao.getCustomerGraphDashboardDetails(year, month, customerUniqueID, type);
-	}
-	
-	@RequestMapping(value = "/filterdashboard/{roleid}/{id}", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
-	public @ResponseBody DashboardResponseVO filterdashboarddetails(@PathVariable("roleid") int roleid, @PathVariable("id") String id, @RequestBody FilterVO filtervo) throws SQLException {
-
-		DashboardDAO dashboarddao = new DashboardDAO();
-		DashboardResponseVO dasboardresponsevo = new DashboardResponseVO();
-
-		dasboardresponsevo.setData(dashboarddao.getFilterDashboarddetails(roleid, id, filtervo));
-		dasboardresponsevo.setTotal(dasboardresponsevo.getData().size());
-		dasboardresponsevo.setNonCommunicating(dasboardresponsevo.getData().size() == 0 ? 0 : dasboardresponsevo.getData().get(dasboardresponsevo.getData().size()-1).getNonCommunicating());
-		dasboardresponsevo.setCommunicating(dasboardresponsevo.getData().size()-dasboardresponsevo.getNonCommunicating());
-		
-		return dasboardresponsevo;
 	}
 	
 	@RequestMapping(value = "/server/api/{device_eui}/status", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")

@@ -10,8 +10,8 @@ package com.idigitronics.IDigi.response.vo;
 public class BillDetailsResponseVO {
 	
 	private long customerBillingID;
-	private int totalConsumption;
-	private int totalAmount;
+	private float totalConsumption;
+	private float totalAmount;
 	private int lateFee;
 	private String dueDate;
 	private String billingDate;
@@ -24,16 +24,16 @@ public class BillDetailsResponseVO {
 	public void setCustomerBillingID(long customerBillingID) {
 		this.customerBillingID = customerBillingID;
 	}
-	public int getTotalConsumption() {
+	public float getTotalConsumption() {
 		return totalConsumption;
 	}
-	public void setTotalConsumption(int totalConsumption) {
+	public void setTotalConsumption(float totalConsumption) {
 		this.totalConsumption = totalConsumption;
 	}
-	public int getTotalAmount() {
+	public float getTotalAmount() {
 		return totalAmount;
 	}
-	public void setTotalAmount(int totalAmount) {
+	public void setTotalAmount(float totalAmount) {
 		this.totalAmount = totalAmount;
 	}
 	public String getBillingDate() {

@@ -10,7 +10,7 @@ package com.idigitronics.IDigi.response.vo;
 public class CheckoutDetails {
 	
 	private String key;
-	private long amount;
+	private float amount;
 	private String currency;
 	private String order_id;
 	private String buttonText;
@@ -28,10 +28,10 @@ public class CheckoutDetails {
 	public void setKey(String key) {
 		this.key = key;
 	}
-	public long getAmount() {
+	public float getAmount() {
 		return amount;
 	}
-	public void setAmount(long amount) {
+	public void setAmount(float amount) {
 		this.amount = amount;
 	}
 	public String getCurrency() {

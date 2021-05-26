@@ -73,7 +73,7 @@ CREATE TABLE `balancelog` (
   `RTCFault` tinyint(2) DEFAULT NULL,
   `LowBattery` tinyint(2) DEFAULT NULL,
   `LowBalance` tinyint(2) DEFAULT NULL,
-  `LogDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `LogDate` datetime NOT NULL,
   PRIMARY KEY (`ReadingID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
 
@@ -404,14 +404,14 @@ CREATE TABLE `displaybalancelog` (
   `RTCFault` tinyint(2) DEFAULT NULL,
   `LowBattery` tinyint(2) DEFAULT NULL,
   `LowBalance` tinyint(2) DEFAULT NULL,
-  `LogDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `LogDate` datetime NOT NULL,
   PRIMARY KEY (`ReadingID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
 /*Data for the table `displaybalancelog` */
 
 insert  into `displaybalancelog`(`ReadingID`,`MainBalanceLogID`,`MIUID`,`CommunityID`,`BlockID`,`CustomerID`,`CustomerMeterID`,`MeterSerialNumber`,`CustomerUniqueID`,`MeterType`,`SyncTime`,`SyncInterval`,`PayType`,`BatteryVoltage`,`ValveConfiguration`,`ValveStatus`,`Balance`,`TariffID`,`Tariff`,`EmergencyCredit`,`Minutes`,`Reading`,`DoorOpenTamper`,`MagneticTamper`,`Vacation`,`RTCFault`,`LowBattery`,`LowBalance`,`LogDate`) values 
-(1,7,'2233',1,1,1,2,'22334455','IDIGI1','Water','00:00:05',1440,'Postpaid',90.00,1,1,0.00,2,20.00,40.00,10,30.00,0,0,0,0,0,0,'2021-05-18 19:00:53'),
+(1,7,'2233',1,1,1,2,'22334455','IDIGI1','Water','00:00:05',1440,'Postpaid',90.00,1,1,0.00,2,20.00,40.00,10,30.00,0,0,0,0,0,0,'2021-05-26 14:29:39'),
 (2,2,'1122',1,1,1,1,'11223344','IDIGI1','Gas','00:00:05',1440,'Prepaid',90.00,1,1,100.00,1,10.00,20.00,12,5.00,0,0,0,0,0,0,'2021-05-18 18:37:12');
 
 /*Table structure for table `feedback` */

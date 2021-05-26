@@ -18,6 +18,7 @@ public class BillingResponseVO {
 	private String houseNumber;
 	private float totalConsumption;
 	private float totalAmount;
+	private float previousDues;
 	private String status;
 	private String transactedBy;
 	private String paidDate;
@@ -131,6 +132,12 @@ public class BillingResponseVO {
 	}
 	public void setPaidDate(String paidDate) {
 		this.paidDate = paidDate;
+	}
+	public float getPreviousDues() {
+		return previousDues;
+	}
+	public void setPreviousDues(float previousDues) {
+		this.previousDues = previousDues;
 	}
 	
 }

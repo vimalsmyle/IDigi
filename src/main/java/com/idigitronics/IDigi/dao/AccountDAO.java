@@ -252,7 +252,7 @@ public class AccountDAO {
 				if (ps.executeUpdate() > 0) {
 
 					PreparedStatement pstmt1 = con.prepareStatement(
-							"SELECT TransactionID FROM topup WHERE TataReferenceNumber = 0 AND CRNNumber = ? AND Source = ? AND ModeOfPayment = 'Online' AND STATUS = 10 AND PaymentStatus = 0 ORDER BY TransactionID DESC LIMIT 0,1");
+							"SELECT TransactionID FROM topup WHERE CustomerUniqueID = ? AND Source = ? AND ModeOfPayment = 'Online' AND STATUS = 10 AND PaymentStatus = 0 ORDER BY TransactionID DESC LIMIT 0,1");
 					pstmt1.setString(1, topUpRequestVO.getCustomerUniqueID());
 					pstmt1.setString(2, topUpRequestVO.getSource());
 					ResultSet rs1 = pstmt1.executeQuery();
@@ -905,7 +905,7 @@ public class AccountDAO {
 		
 		try {
 			con = getConnection();
-			String query = "SELECT c.CommunityName, b.BlockName, cd.FirstName, cd.LastName, cd.HouseNumber, cd.CustomerID, cbd.CustomerBillingID, cbd.TotalAmount, cbd.TaxAmount, cbd.TotalConsumption, cbd.Status, cbd.BillMonth, cbd.BillYear, cbd.LogDate FROM customerdetails AS cd LEFT JOIN customerbillingdetails AS cbd ON cd.CustomerID = cbd.CustomerID LEFT JOIN community AS c ON c.CommunityID = cd.CommunityID LEFT JOIN block AS b ON b.BlockID = cd.BlockID WHERE cbd.BillMonth = "+ (currentdate.getMonthValue() - 1) +" AND cbd.BillYear = "+ (currentdate.getMonthValue() == 1 ? (currentdate.getYear() - 1) : currentdate.getYear()) +" <change>"; 
+			String query = "SELECT c.CommunityName, b.BlockName, cd.FirstName, cd.LastName, cd.HouseNumber, cd.CustomerID, cbd.CustomerBillingID, cbd.TotalAmount, cbd.TaxAmount, cbd.TotalConsumption, cbd.PreviousDues, cbd.Status, cbd.BillMonth, cbd.BillYear, cbd.LogDate FROM customerdetails AS cd LEFT JOIN customerbillingdetails AS cbd ON cd.CustomerID = cbd.CustomerID LEFT JOIN community AS c ON c.CommunityID = cd.CommunityID LEFT JOIN block AS b ON b.BlockID = cd.BlockID WHERE cbd.BillMonth = "+ (currentdate.getMonthValue() - 1) +" AND cbd.BillYear = "+ (currentdate.getMonthValue() == 1 ? (currentdate.getYear() - 1) : currentdate.getYear()) +" <change>"; 
 			pstmt = con.prepareStatement(query.replaceAll("<change>", ((roleid == 1 || roleid == 4) && (filterCid == -1)) ? "ORDER BY cd.CustomerID DESC" : ((roleid == 1 || roleid == 4) && (filterCid != -1)) ? " AND cd.CommunityID = "+filterCid+" ORDER BY cd.CustomerID DESC" : (roleid == 2 || roleid == 5) ? "AND cd.BlockID = "+id+ " ORDER BY cd.CustomerID DESC" : (roleid == 3) ? "AND cd.CustomerUniqueID = '"+id+"'":""));
 			rs = pstmt.executeQuery();
 			
@@ -921,6 +921,7 @@ public class AccountDAO {
 				billingresponsevo.setHouseNumber(rs.getString("HouseNumber"));
 				billingresponsevo.setTotalAmount(rs.getFloat("TotalAmount") + rs.getFloat("TaxAmount"));
 				billingresponsevo.setTotalConsumption(rs.getFloat("TotalConsumption"));
+				billingresponsevo.setPreviousDues(rs.getFloat("PreviousDues"));
 				
 				PreparedStatement ps = con.prepareStatement("SELECT bpd.PaymentStatus, bpd.ModeofPayment, bpd.TransactionDate, u.UserName FROM billingpaymentdetails AS bpd LEFT JOIN user AS u ON u.ID = bpd.CreatedByID WHERE bpd.CustomerBillingID = " + rs.getLong("CustomerBillingID"));
 				ResultSet rs2 = ps.executeQuery();
@@ -992,58 +993,68 @@ public class AccountDAO {
 			if(rs1.next()) {
 				if(paybillRequestVO.getModeOfPayment().equalsIgnoreCase("Online")) {
 					
-					long transactionID = insertbillingpayment(paybillRequestVO);
+					PreparedStatement pstmt3 = con.prepareStatement("SELECT cbd.TotalAmount, cbd.TaxAmount, cbd.PreviousDues, al.LateFee, DATEDIFF(NOW(),cbd.DueDate) AS DueDays FROM customerbillingdetails AS cbd JOIN alertsettings AS al WHERE cbd.CustomerBillingID = "+paybillRequestVO.getCustomerBillingID());
+					ResultSet rs3 = pstmt3.executeQuery();
 					
-					if (transactionID != 0) {
+					if(rs3.next()) {
+						
+						paybillRequestVO.setTotalamount(rs3.getFloat("TotalAmount") + rs3.getFloat("PreviousDues"));
+						paybillRequestVO.setTaxAmount(rs3.getFloat("TaxAmount"));
+						paybillRequestVO.setLateFee(rs3.getInt("DueDays") >= 1 ? (rs3.getInt("LateFee")*rs3.getInt("DueDays")) : 0);
+						
+						long transactionID = insertbillingpayment(paybillRequestVO);
+						
+						if (transactionID != 0) {
 
-						// creating order in razor pay
+							// creating order in razor pay
+							
+							razorPayOrderVO.setAmount((int) ((paybillRequestVO.getTotalamount() + paybillRequestVO.getTaxAmount() + + paybillRequestVO.getLateFee()) * 100));
+							razorPayOrderVO.setCurrency("INR");
+							razorPayOrderVO.setPayment_capture(1);
 
-						razorPayOrderVO.setAmount((int) ((paybillRequestVO.getTotalamount() + paybillRequestVO.getTaxAmount() + paybillRequestVO.getLateFee()) * 100));
-						razorPayOrderVO.setCurrency("INR");
-						razorPayOrderVO.setPayment_capture(1);
+							razorpayRequestVO.setApi("orders");
+							String rzpRestCallResponse = extramethodsdao.razorpaypost(razorPayOrderVO, razorpayRequestVO);
 
-						razorpayRequestVO.setApi("orders");
-						String rzpRestCallResponse = extramethodsdao.razorpaypost(razorPayOrderVO, razorpayRequestVO);
+							RazorPayResponseVO razorPayResponseVO = gson.fromJson(rzpRestCallResponse, RazorPayResponseVO.class);
 
-						RazorPayResponseVO razorPayResponseVO = gson.fromJson(rzpRestCallResponse, RazorPayResponseVO.class);
+							paybillRequestVO.setRazorPayOrderID(razorPayResponseVO.getId());
 
-						paybillRequestVO.setRazorPayOrderID(razorPayResponseVO.getId());
+							PreparedStatement pstmt2 = con.prepareStatement("UPDATE billingpaymentdetails SET RazorPayOrderID = ? WHERE TransactionID = " + transactionID);
+							pstmt2.setString(1, paybillRequestVO.getRazorPayOrderID());
+							if (pstmt2.executeUpdate() > 0) {
 
-						PreparedStatement pstmt2 = con.prepareStatement("UPDATE billingpaymentdetails SET RazorPayOrderID = ? WHERE TransactionID = " + transactionID);
-						pstmt2.setString(1, paybillRequestVO.getRazorPayOrderID());
-						if (pstmt2.executeUpdate() > 0) {
+								checkoutDetails.setKey(ExtraConstants.RZPKeyID);
+								checkoutDetails.setAmount((paybillRequestVO.getTotalamount() + paybillRequestVO.getTaxAmount() + + paybillRequestVO.getLateFee()) * 100);
+								checkoutDetails.setCurrency(ExtraConstants.PaymentCurrency);
+								checkoutDetails.setOrder_id(paybillRequestVO.getRazorPayOrderID());
+								checkoutDetails.setButtonText(ExtraConstants.PaymentButtonText);
+								checkoutDetails.setName(ExtraConstants.CompanyName);
+								checkoutDetails.setDescription("Payment of INR " + (paybillRequestVO.getTotalamount() + paybillRequestVO.getTaxAmount() + paybillRequestVO.getLateFee())
+										+ "/- for CRN/CAN: " + rs1.getString("CustomerUniqueID") + ".");
+								checkoutDetails.setImage(ExtraConstants.IDIGIIMAGEURL);
 
-							checkoutDetails.setKey(ExtraConstants.RZPKeyID);
-							checkoutDetails.setAmount((long) (paybillRequestVO.getTotalamount() * 100));
-							checkoutDetails.setCurrency(ExtraConstants.PaymentCurrency);
-							checkoutDetails.setOrder_id(paybillRequestVO.getRazorPayOrderID());
-							checkoutDetails.setButtonText(ExtraConstants.PaymentButtonText);
-							checkoutDetails.setName(ExtraConstants.CompanyName);
-							checkoutDetails.setDescription("Payment of INR " + ((paybillRequestVO.getTotalamount() + paybillRequestVO.getTaxAmount() + paybillRequestVO.getLateFee()) * 100)
-									+ "/- for CRN/CAN: " + rs1.getString("CustomerUniqueID") + ".");
-							checkoutDetails.setImage(ExtraConstants.IDIGIIMAGEURL);
+								prefill.setName(rs1.getString("FirstName") + " " + rs1.getString("LastName"));
+								prefill.setEmail(rs1.getString("Email"));
+								prefill.setContact(rs1.getString("MobileNumber"));
+								checkoutDetails.setPrefill(prefill);
 
-							prefill.setName(rs1.getString("FirstName") + " " + rs1.getString("LastName"));
-							prefill.setEmail(rs1.getString("Email"));
-							prefill.setContact(rs1.getString("MobileNumber"));
-							checkoutDetails.setPrefill(prefill);
+								theme.setColor(ExtraConstants.PaymentThemeColor);
+								checkoutDetails.setTheme(theme);
 
-							theme.setColor(ExtraConstants.PaymentThemeColor);
-							checkoutDetails.setTheme(theme);
+								notes.setAddress(rs1.getString("HouseNumber"));
+								checkoutDetails.setTransactionID(transactionID);
 
-							notes.setAddress(rs1.getString("HouseNumber"));
-							checkoutDetails.setTransactionID(transactionID);
+								responsevo.setCheckoutDetails(checkoutDetails);
+								responsevo.setPayType("Postpaid");
+								responsevo.setPaymentMode("Online");
+								responsevo.setResult("Success");
+								responsevo.setMessage("Order Created Successfully. Proceed to CheckOut");
+							}
+						} else {
 
-							responsevo.setCheckoutDetails(checkoutDetails);
-							responsevo.setPayType("Postpaid");
-							responsevo.setPaymentMode("Online");
-							responsevo.setResult("Success");
-							responsevo.setMessage("Order Created Successfully. Proceed to CheckOut");
+							responsevo.setResult("Failure");
+							responsevo.setMessage("Order Creation Failed. Please Try After Sometime");
 						}
-					} else {
-
-						responsevo.setResult("Failure");
-						responsevo.setMessage("Order Creation Failed. Please Try After Sometime");
 					}
 					
 				} else {

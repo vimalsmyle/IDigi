@@ -232,13 +232,13 @@ public class ExtraMethodsDAO {
 			rs = pstmt.executeQuery();
 			while(rs.next()) {
 				
-				pstmt1 = con.prepareStatement("SELECT Reading, LogDate FROM balancelog WHERE CustomerMeterID = ? AND Logdate BETWEEN CONCAT((SELECT LAST_DAY(CURDATE() - INTERVAL 2 MONTH) + INTERVAL 1 DAY AS 'FIRST DAY OF PREVIOUS MONTH'), ' 00:00:00') AND CONCAT((SELECT DATE_SUB(LAST_DAY(NOW()),INTERVAL DAY(LAST_DAY(NOW()))- 1 DAY) AS 'FIRST DAY OF CURRENT MONTH'), ' 23:59:59') ORDER BY ReadingID ASC LIMIT 0,1");
+				pstmt1 = con.prepareStatement("SELECT Reading, LogDate FROM balancelog WHERE CustomerMeterID = ? AND MONTH(LogDate) = MONTH(CURDATE() - INTERVAL 1 MONTH) ORDER BY LogDate DESC LIMIT 0,1)");
 				pstmt1.setInt(1, rs.getInt("CustomerMeterID"));
 				rs1 = pstmt1.executeQuery();
 				
 				if(rs1.next()) {
 					
-					pstmt2 = con.prepareStatement("SELECT Reading, LogDate FROM balancelog WHERE CustomerMeterID = ? AND Logdate BETWEEN CONCAT((SELECT LAST_DAY(CURDATE() - INTERVAL 2 MONTH) + INTERVAL 1 DAY AS 'FIRST DAY OF PREVIOUS MONTH'), ' 00:00:00') AND CONCAT((SELECT DATE_SUB(LAST_DAY(NOW()),INTERVAL DAY(LAST_DAY(NOW()))- 1 DAY) AS 'FIRST DAY OF CURRENT MONTH'), ' 23:59:59') ORDER BY ReadingID DESC LIMIT 0,1");
+					pstmt2 = con.prepareStatement("SELECT Reading, LogDate FROM balancelog WHERE CustomerMeterID = ? AND MONTH(LogDate) = MONTH(CURDATE() - INTERVAL 2 MONTH) ORDER BY LogDate DESC LIMIT 0,1)");
 					pstmt2.setInt(1, rs.getInt("CustomerMeterID"));
 					rs2 = pstmt2.executeQuery();
 					
@@ -268,6 +268,40 @@ public class ExtraMethodsDAO {
 						
 						if(pstmt3.executeUpdate() > 0) {
 //					perform some actions after discussion
+						}
+						
+					} else {
+						
+						pstmt2 = con.prepareStatement("SELECT Reading, LogDate FROM balancelog WHERE CustomerMeterID = ? AND MONTH(LogDate) = MONTH(CURDATE() - INTERVAL 1 MONTH) ORDER BY LogDate ASC LIMIT 0,1)");
+						pstmt2.setInt(1, rs.getInt("CustomerMeterID"));
+						rs2 = pstmt2.executeQuery();
+						
+						if(rs2.next()) {
+							LocalDate currentdate = LocalDate.now();
+							
+							consumption = rs2.getFloat("Reading") - rs1.getFloat("Reading");
+							billAmount = (consumption * rs.getFloat("Tariff"));
+							
+							pstmt3 = con.prepareStatement("INSERT INTO billingdetails (CommunityID, BlockID, CustomerID, CustomerUniqueID, CustomerMeterID, MeterType, MIUID, PreviousReading, PresentReading, Consumption, TariffID, Tariff, BillAmount, BillMonth, BillYear) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+							pstmt3.setInt(1, rs.getInt("CommunityID"));
+							pstmt3.setInt(2, rs.getInt("BlockID"));
+							pstmt3.setInt(3, rs.getInt("CustomerID"));
+							pstmt3.setString(4, rs.getString("CustomerUniqueID"));
+							pstmt3.setInt(5, rs.getInt("CustomerMeterID"));
+							pstmt3.setString(6, rs.getString("MeterType"));
+							pstmt3.setString(7, rs.getString("MIUID"));
+							pstmt3.setFloat(8, rs1.getFloat("Reading"));
+							pstmt3.setFloat(9, rs2.getFloat("Reading"));
+							pstmt3.setFloat(10, consumption);
+							pstmt3.setInt(11, rs.getInt("TariffID"));
+							pstmt3.setFloat(12, rs.getFloat("Tariff"));
+							pstmt3.setFloat(13, billAmount);
+							pstmt3.setInt(14, currentdate.getMonthValue() - 1);
+							pstmt3.setInt(15, currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear());
+							
+							if(pstmt3.executeUpdate() > 0) {
+//						perform some actions after discussion
+							}
 						}
 						
 					}
@@ -346,7 +380,16 @@ public class ExtraMethodsDAO {
 				float tax = ((((rs.getFloat("GST")) * (2))/100) * totalamount);
 				pstmt2.setFloat(6, (totalamount + tax));
 				pstmt2.setFloat(7, totalConsumption);
-				pstmt2.setFloat(8, 0);// add previous dues
+				
+				PreparedStatement pstmt3 = con.prepareStatement("SELECT SUM(cbd.TotalAmount) AS PreviousDues, SUM(cbd.TaxAmount) AS PreviousTaxDues FROM customerbillingdetails AS cbd LEFT JOIN billingpaymentdetails AS bpd ON bpd.CustomerBillingID = cbd.CustomerBillingID WHERE cbd.CustomerID = "+ rs.getInt("CustomerID") +" AND bpd.PaymentStatus != 1");
+				ResultSet rs3 = pstmt3.executeQuery();
+				
+				if(rs3.next()) {
+					previousDues = rs3.getFloat("PreviousDues") + rs3.getFloat("PreviousTaxDues");
+					pstmt2.setFloat(8, previousDues);
+				} else {
+					pstmt2.setFloat(8, 0);// add previous dues					
+				}
 				pstmt2.setString(9, currentdate.plusDays(rs.getInt("DueDayCount")).toString());
 				pstmt2.setInt(10, currentdate.getMonthValue() - 1);
 				pstmt2.setInt(11, currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear());
