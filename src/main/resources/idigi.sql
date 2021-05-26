@@ -249,6 +249,7 @@ CREATE TABLE `customerbillingdetails` (
   `TotalAmount` float NOT NULL,
   `TaxAmount` float NOT NULL,
   `TotalConsumption` int(100) NOT NULL,
+  `PreviousDues` float DEFAULT NULL,
   `Status` tinyint(5) NOT NULL DEFAULT '0',
   `DueDate` date NOT NULL,
   `BillMonth` int(11) DEFAULT NULL,
@@ -260,8 +261,8 @@ CREATE TABLE `customerbillingdetails` (
 
 /*Data for the table `customerbillingdetails` */
 
-insert  into `customerbillingdetails`(`CustomerBillingID`,`CommunityID`,`BlockID`,`CustomerID`,`CustomerUniqueID`,`TotalAmount`,`TaxAmount`,`TotalConsumption`,`Status`,`DueDate`,`BillMonth`,`BillYear`,`LogDate`,`ModifiedDate`) values 
-(1,1,1,1,'IDIGI1',180,32.4,9,0,'2021-06-01',4,2021,'2021-05-22 19:34:29','2021-05-22 19:34:29');
+insert  into `customerbillingdetails`(`CustomerBillingID`,`CommunityID`,`BlockID`,`CustomerID`,`CustomerUniqueID`,`TotalAmount`,`TaxAmount`,`TotalConsumption`,`PreviousDues`,`Status`,`DueDate`,`BillMonth`,`BillYear`,`LogDate`,`ModifiedDate`) values 
+(1,1,1,1,'IDIGI1',180,32.4,9,NULL,0,'2021-06-01',4,2021,'2021-05-22 19:34:29','2021-05-22 19:34:29');
 
 /*Table structure for table `customerdeletedetails` */
 

@@ -8,6 +8,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
@@ -25,6 +26,7 @@ import com.idigitronics.IDigi.request.vo.SMSRequestVO;
 import com.idigitronics.IDigi.response.vo.DashboardResponseVO;
 import com.idigitronics.IDigi.response.vo.GraphResponseVO;
 import com.idigitronics.IDigi.response.vo.HomeResponseVO;
+import com.idigitronics.IDigi.response.vo.IndividualDashboardResponseVO;
 import com.idigitronics.IDigi.response.vo.ResponseVO;
 
 
@@ -45,12 +47,16 @@ public class DashboardDAO {
 		return connection;
 	}
 
-	public List<DashboardResponseVO> getDashboarddetails(int roleid, String id, int filter)
+	public List<DashboardResponseVO> getDashboarddetails(int type, int communityID, int blockID, String customerUniqueID, int filter)
 			throws SQLException {
 		Connection con = null;
 		PreparedStatement pstmt = null;
+		PreparedStatement pstmt3 = null;
 		ResultSet rs = null;
+		ResultSet rs3 = null;
 		List<DashboardResponseVO> dashboard_list = null;
+		List<IndividualDashboardResponseVO> individualDashboardList = null;
+		IndividualDashboardResponseVO individualDashboardResponseVO = null;
 		DashboardResponseVO dashboardvo = null;
 		int noAMRInterval = 0;
 		int lowBatteryVoltage = 0;
@@ -58,6 +64,7 @@ public class DashboardDAO {
 		
 		// write accordingly based on meter type and customer meter types
 		
+//		type path parameter: 1 = gas, 2= water, 3=energy 
 		try {
 			con = getConnection();
 			dashboard_list = new LinkedList<DashboardResponseVO>();
@@ -72,76 +79,91 @@ public class DashboardDAO {
 				perUnitValue = rs1.getFloat("PerUnitValue");
 			}
 			
-			String query = "SELECT DISTINCT c.CommunityName, b.BlockName, cd.FirstName,cd.CustomerUniqueID, cd.LastName, cd.HouseNumber, cmd.CustomerMeterID, cmd.MeterSerialNumber, dbl.ReadingID, dbl.MainBalanceLogID, dbl.EmergencyCredit, \r\n" + 
-					"dbl.MIUID, dbl.Reading, dbl.Balance, dbl.BatteryVoltage, dbl.LowBattery, dbl.Tariff, dbl.ValveStatus, dbl.DoorOpenTamper, dbl.MagneticTamper, dbl.RTCFault, dbl.Vacation, dbl.LowBalance, dbl.LogDate\r\n" + 
-					"FROM displaybalancelog AS dbl LEFT JOIN community AS c ON c.communityID = dbl.CommunityID LEFT JOIN block AS b ON b.BlockID = dbl.BlockID\r\n" + 
-					"LEFT JOIN customerdetails AS cd ON cd.CustomerID = dbl.CustomerID LEFT JOIN customermeterdetails AS cmd ON cmd.CustomerMeterID = dbl.CustomerMeterID WHERE 1=1 <change>";
-		
-			query = query.replaceAll("<change>", (roleid == 1 || roleid == 4) ? "" : (roleid == 2 || roleid == 5) ? "AND dbl.BlockID = "+id : (roleid == 3) ? "AND dbl.CustomerUniqueID = '"+id+"'":"");
+			String mainquery = "SELECT c.CommunityName, b.BlockName, cd.HouseNumber, cd.FirstName, cd.LastName, cd.CustomerUniqueID, cd.CustomerID FROM customerdetails AS cd LEFT JOIN community AS c ON cd.CommunityID = c.CommunityID LEFT JOIN block AS b ON b.BlockID = cd.BlockID <main>";
 			
-			StringBuilder stringBuilder = new StringBuilder(query);
-			if(roleid !=3 && filter != 0) {
-				
-//				1 = valve open(active), 2 = valve close(inactive) 3 = communicating(live), 4 = non-communicating(non-live) 5 = low battery 6 = emergency credit
-				
-				stringBuilder.append((filter == 1 || filter == 2) ? " AND dbl.ValveStatus = "+ (filter == 1 ? 0 : 1) : (filter == 3 || filter == 4) ? (filter == 3 ? " AND dbl.LogDate >= (NOW() - INTERVAL (SELECT NoAMRInterval/(24*60) FROM alertsettings) DAY) " : " AND dbl.LogDate <= (NOW() - INTERVAL (SELECT NoAMRInterval/(24*60) FROM alertsettings) DAY) " ) :  (filter == 5) ? " AND dbl.BatteryVoltage < "+ lowBatteryVoltage : (filter == 6) ? " AND dbl.Balance <= 0" : "");
-				
-			}
-			stringBuilder.append(" ORDER BY dbl.LogDate DESC");
-			pstmt = con.prepareStatement(stringBuilder.toString());
+			mainquery = mainquery.replaceAll("<main>", (blockID ==0 && customerUniqueID.equalsIgnoreCase("0")) ?"WHERE cd.CommunityID = "+communityID : (blockID !=0 && customerUniqueID.equalsIgnoreCase("0")) ? "WHERE cd.CommunityID = "+communityID +" AND cd.BlockID = "+blockID : (blockID !=0 && !customerUniqueID.equalsIgnoreCase("0")) ? "WHERE cd.CommunityID = "+communityID +" AND cd.BlockID = "+blockID + " AND cd.CustomerUniqueID = '" + customerUniqueID +"'" : "");
+			
+			pstmt = con.prepareStatement(mainquery);
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
+				
 				dashboardvo = new DashboardResponseVO();
+				individualDashboardList = new LinkedList<IndividualDashboardResponseVO>();
+				
 				dashboardvo.setCommunityName(rs.getString("CommunityName"));
 				dashboardvo.setBlockName(rs.getString("BlockName"));
 				dashboardvo.setHouseNumber(rs.getString("HouseNumber"));
 				dashboardvo.setFirstName(rs.getString("FirstName"));
-				dashboardvo.setMeterSerialNumber(rs.getString("MeterSerialNumber"));
 				dashboardvo.setLastName(rs.getString("LastName"));
-				dashboardvo.setMiuID(rs.getString("MIUID"));
-				dashboardvo.setCustomerMeterID(rs.getInt("CustomerMeterID"));
-				dashboardvo.setTariff((rs.getFloat("Tariff")));
 				dashboardvo.setCustomerUniqueID(rs.getString("CustomerUniqueID"));
-				dashboardvo.setReading(rs.getFloat("Reading"));
-				dashboardvo.setConsumption((int) (dashboardvo.getReading() * perUnitValue));
-				dashboardvo.setBalance(rs.getFloat("Balance"));
-				dashboardvo.setEmergencyCredit(rs.getFloat("EmergencyCredit"));
-				dashboardvo.setValveStatus((rs.getInt("ValveStatus") == 0) ? "OPEN" : (rs.getInt("ValveStatus") == 1) ? "CLOSED" : "");
-				dashboardvo.setValveStatusColor((rs.getInt("ValveStatus") == 0) ? "GREEN" : (rs.getInt("ValveStatus") == 1) ? "RED" : "");
-				dashboardvo.setBattery(rs.getInt("BatteryVoltage"));
-				dashboardvo.setBatteryColor((rs.getInt("LowBattery") == 1 ) ? "RED" : "GREEN");
 				
-				dashboardvo.setDoorOpenTamper((rs.getInt("DoorOpenTamper") == 0) ? "NO" : (rs.getInt("DoorOpenTamper") == 1) ? "YES" : "NO");
-				dashboardvo.setDooropentamperColor((rs.getInt("DoorOpenTamper") == 0) ? "GREEN" : "RED");
-				dashboardvo.setVacationStatus(rs.getInt("Vacation") == 1 ? "YES" : "NO");
-				dashboardvo.setVacationColor(rs.getInt("Vacation") == 1 ? "ORANGE" : "BLACK");
-				dashboardvo.setTimeStamp(ExtraMethodsDAO.datetimeformatter(rs.getString("LogDate")));
+				String query = "SELECT dbl.ReadingID, dbl.MainBalanceLogID, dbl.CustomerMeterID, dbl.MIUID, cmd.MeterSerialNumber, dbl.Tariff, dbl.Reading, dbl.Balance, dbl.EmergencyCredit, dbl.ValveStatus, dbl.BatteryVoltage, "
+						+ "dbl.LowBattery, dbl.DoorOpenTamper, dbl.MagneticTamper, dbl.RTCFault, dbl.Vacation, dbl.LowBalance, dbl.LogDate FROM displaybalancelog AS dbl LEFT JOIN customermeterdetails AS cmd ON cmd.CustomerMeterID = dbl.CustomerMeterID WHERE cmd.CustomerID = ? AND cmd.MeterType = " + (type == 1 ? "'Gas'" : type == 2 ? "'Water'" :"'Energy'");
 				
-				Date currentDateTime = new Date();
+				StringBuilder stringBuilder = new StringBuilder(query);
+				if(filter != 0) {
+					
+//					1 = valve open(active), 2 = valve close(inactive) 3 = communicating(live), 4 = non-communicating(non-live) 5 = low battery 6 = emergency credit
+					
+					stringBuilder.append((filter == 1 || filter == 2) ? " AND dbl.ValveStatus = "+ (filter == 1 ? 0 : 1) : (filter == 3 || filter == 4) ? (filter == 3 ? " AND dbl.LogDate >= (NOW() - INTERVAL (SELECT NoAMRInterval/(24*60) FROM alertsettings) DAY) " : " AND dbl.LogDate <= (NOW() - INTERVAL (SELECT NoAMRInterval/(24*60) FROM alertsettings) DAY) " ) :  (filter == 5) ? " AND dbl.BatteryVoltage < "+ lowBatteryVoltage : (filter == 6) ? " AND dbl.Balance <= 0" : "");
+					
+				}
+				stringBuilder.append(" ORDER BY dbl.LogDate DESC");
+				pstmt3 = con.prepareStatement(stringBuilder.toString());
+				pstmt3.setInt(1, rs.getInt("CustomerID"));
+				rs3 = pstmt3.executeQuery();
 				
-				long minutes = TimeUnit.MILLISECONDS.toMinutes(currentDateTime.getTime() - (rs.getTimestamp("LogDate")).getTime());
+				while(rs3.next()) {
+					
+					individualDashboardResponseVO = new IndividualDashboardResponseVO();
+					
+					individualDashboardResponseVO.setMeterSerialNumber(rs3.getString("MeterSerialNumber"));
+					individualDashboardResponseVO.setMiuID(rs3.getString("MIUID"));
+					individualDashboardResponseVO.setCustomerMeterID(rs3.getInt("CustomerMeterID"));
+					individualDashboardResponseVO.setTariff((rs3.getFloat("Tariff")));
+					individualDashboardResponseVO.setReading(rs3.getFloat("Reading"));
+					individualDashboardResponseVO.setConsumption((int) (individualDashboardResponseVO.getReading() * perUnitValue));
+					individualDashboardResponseVO.setBalance(rs3.getFloat("Balance"));
+					individualDashboardResponseVO.setEmergencyCredit(rs3.getFloat("EmergencyCredit"));
+					individualDashboardResponseVO.setValveStatus((rs3.getInt("ValveStatus") == 0) ? "OPEN" : (rs3.getInt("ValveStatus") == 1) ? "CLOSED" : "");
+					individualDashboardResponseVO.setValveStatusColor((rs3.getInt("ValveStatus") == 0) ? "GREEN" : (rs3.getInt("ValveStatus") == 1) ? "RED" : "");
+					individualDashboardResponseVO.setBattery(rs3.getInt("BatteryVoltage"));
+					individualDashboardResponseVO.setBatteryColor((rs3.getInt("LowBattery") == 1 ) ? "RED" : "GREEN");
+					individualDashboardResponseVO.setDoorOpenTamper((rs3.getInt("DoorOpenTamper") == 0) ? "NO" : (rs3.getInt("DoorOpenTamper") == 1) ? "YES" : "NO");
+					individualDashboardResponseVO.setDooropentamperColor((rs3.getInt("DoorOpenTamper") == 0) ? "GREEN" : "RED");
+					individualDashboardResponseVO.setVacationStatus(rs3.getInt("Vacation") == 1 ? "YES" : "NO");
+					individualDashboardResponseVO.setVacationColor(rs3.getInt("Vacation") == 1 ? "ORANGE" : "BLACK");
+					individualDashboardResponseVO.setTimeStamp(ExtraMethodsDAO.datetimeformatter(rs3.getString("LogDate")));
+					
+					Date currentDateTime = new Date();
+					
+					long minutes = TimeUnit.MILLISECONDS.toMinutes(currentDateTime.getTime() - (rs3.getTimestamp("LogDate")).getTime());
 
-				if(minutes > noAMRInterval) {
-					nonCommunicating++;
-					dashboardvo.setDateColor("RED");
-					dashboardvo.setCommunicationStatus("NO");
-				}else if(minutes > 1440 && minutes < noAMRInterval) {
-					dashboardvo.setDateColor("ORANGE");
-					dashboardvo.setCommunicationStatus("YES");
-				} else {
-					dashboardvo.setDateColor("GREEN");
-					dashboardvo.setCommunicationStatus("YES");
+					if(minutes > noAMRInterval) {
+						nonCommunicating++;
+						individualDashboardResponseVO.setDateColor("RED");
+						individualDashboardResponseVO.setCommunicationStatus("NO");
+					}else if(minutes > 1440 && minutes < noAMRInterval) {
+						individualDashboardResponseVO.setDateColor("ORANGE");
+						individualDashboardResponseVO.setCommunicationStatus("YES");
+					} else {
+						individualDashboardResponseVO.setDateColor("GREEN");
+						individualDashboardResponseVO.setCommunicationStatus("YES");
+					}
+					
+					if(!customerUniqueID.isEmpty()) {
+						PreparedStatement pstmt2 = con.prepareStatement("SELECT Amount, TransactionDate FROM topup WHERE CustomerMeterID = "+rs3.getInt("CustomerMeterID")+" AND STATUS = 0 ORDER BY TransactionID DESC LIMIT 0,1") ;
+						ResultSet rs2 = pstmt2.executeQuery();
+						if(rs2.next()) {
+							individualDashboardResponseVO.setLastTopupAmount(rs2.getInt("Amount"));
+							individualDashboardResponseVO.setLastRechargeDate(ExtraMethodsDAO.datetimeformatter(rs2.getString("TransactionDate")));
+						}
+					}
+					
+					individualDashboardList.add(individualDashboardResponseVO);
 				}
 				dashboardvo.setNonCommunicating(nonCommunicating);
-				
-				if(roleid==3) {
-					PreparedStatement pstmt2 = con.prepareStatement("SELECT Amount, TransactionDate FROM topup WHERE CustomerMeterID = "+rs.getInt("CustomerMeterID")+" AND STATUS = 0 ORDER BY TransactionID DESC LIMIT 0,1") ;
-					ResultSet rs2 = pstmt2.executeQuery();
-					if(rs2.next()) {
-						dashboardvo.setLastTopupAmount(rs2.getInt("Amount"));
-						dashboardvo.setLastRechargeDate(ExtraMethodsDAO.datetimeformatter(rs2.getString("TransactionDate")));
-					}
-				}
+				dashboardvo.setDasboarddata(individualDashboardList);
 				dashboard_list.add(dashboardvo);
 			}
 		}
@@ -214,7 +236,7 @@ public class DashboardDAO {
 				dashboardvo.setBlockName(rs.getString("BlockName"));
 				dashboardvo.setHouseNumber(rs.getString("HouseNumber"));
 				dashboardvo.setFirstName(rs.getString("FirstName"));
-				dashboardvo.setMeterSerialNumber(rs.getString("MeterSerialNumber"));
+				/*dashboardvo.setMeterSerialNumber(rs.getString("MeterSerialNumber"));
 				dashboardvo.setLastName(rs.getString("LastName"));
 				dashboardvo.setMiuID(rs.getString("MIUID"));
 				dashboardvo.setTariff((rs.getFloat("Tariff")));
@@ -250,7 +272,7 @@ public class DashboardDAO {
 				} else {
 					dashboardvo.setDateColor("GREEN");
 					dashboardvo.setCommunicationStatus("YES");
-				}
+				}*/
 
 				dashboard_list.add(dashboardvo);
 			}
@@ -264,6 +286,100 @@ public class DashboardDAO {
 			con.close();
 		}
 		return dashboard_list;
+	}
+	
+	public GraphResponseVO getGraphDashboardDetails(int year, int month, int communityID, int blockID) {
+		// TODO Auto-generated method stub
+		
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		Connection con = null;
+		
+		GraphResponseVO graphResponseVO = new GraphResponseVO();
+		List<String> xAxis;
+		List<Integer> yAxis;
+		
+		try {
+			con = getConnection();
+			xAxis = new LinkedList<String>();
+			yAxis = new LinkedList<Integer>();
+			
+			if(year == 0 && month == 0) {
+				
+				for(int i = 30; i>0; i-- ) {
+					
+					String query = "SELECT ((SELECT Reading FROM balancelog WHERE CRNNumber = ? AND IoTTImeStamp BETWEEN CONCAT(CURDATE() - INTERVAL <day> DAY, ' 00:00:00') AND CONCAT(CURDATE() - INTERVAL <day> DAY, ' 23:59:59') ORDER BY ReadingID DESC LIMIT 0,1) \r\n" + 
+										 "- (SELECT Reading FROM balancelog WHERE CRNNumber = ? AND IoTTImeStamp BETWEEN CONCAT(CURDATE() - INTERVAL <day> DAY, ' 00:00:00') AND CONCAT(CURDATE() - INTERVAL <day> DAY, ' 23:59:59') ORDER BY ReadingID ASC LIMIT 0,1)) AS Units, CURDATE() - INTERVAL <day> DAY AS consumptiondate";
+					
+					pstmt = con.prepareStatement(query.replaceAll("<day>", ""+i));
+//					pstmt.setString(1, CRNNumber);
+//					pstmt.setString(2, CRNNumber);
+					rs = pstmt.executeQuery();
+					
+					if(rs.next()) {
+						
+						xAxis.add(rs.getString("consumptiondate"));
+						yAxis.add(rs.getString("Units") == null ? 0 : rs.getInt("Units"));
+						
+						}
+				}
+			} else if (year != 0 &&  month == 0) {
+				
+				for(int i = 1; i<=12; i++ ) {
+					
+					String query = "SELECT ((SELECT Reading FROM balancelog WHERE CRNNumber = ? AND YEAR(IotTimeStamp) = ? AND MONTH(IotTimeStamp) = <month> ORDER BY ReadingID DESC LIMIT 0,1) \r\n" + 
+									      "-(SELECT Reading FROM balancelog WHERE CRNNumber = ? AND YEAR(IotTimeStamp) = ? AND MONTH(IotTimeStamp) = <month> ORDER BY ReadingID ASC LIMIT 0,1)) AS Units";
+					
+					pstmt = con.prepareStatement(query.replaceAll("<month>", ""+i));
+//					pstmt.setString(1, CRNNumber);
+					pstmt.setInt(2, year);
+//					pstmt.setString(3, CRNNumber);
+					pstmt.setInt(4, year);
+					rs = pstmt.executeQuery();
+					
+					if(rs.next()) {
+						
+						xAxis.add(i==1 ? "JAN-"+year : i==2 ? "FEB-"+year : i==3 ? "MAR-"+year : i==4 ? "APR-"+year : i==5 ? "MAY-"+year : i==6 ? "JUN-"+year : i==7 ? "JUL-"+year : i==8 ? "AUG-"+year : i==9 ? "SEP-"+year : i==10 ? "OCT-"+year : i==11 ? "NOV-"+year : i==12 ? "DEC-"+year : "");
+						yAxis.add(rs.getString("Units") == null ? 0 : rs.getInt("Units"));
+						
+						}
+				}
+				
+			} else if(year != 0 && month != 0) {
+				
+				int j = (month == 2 ? 28 : (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12) ? 31 : 30);
+				
+				for(int i = 1; i <= j ; i++) {
+					
+					String query = "SELECT ((SELECT Reading FROM balancelog WHERE CRNNumber = ? AND YEAR(IotTimeStamp) = ? AND MONTH(IotTimeStamp) = ? AND DAY(IotTimeStamp) = <day> ORDER BY ReadingID DESC LIMIT 0,1) \r\n" + 
+										 "- (SELECT Reading FROM balancelog WHERE CRNNumber = ? AND YEAR(IotTimeStamp) = ? AND MONTH(IotTimeStamp) = ? AND DAY(IotTimeStamp) = <day> ORDER BY ReadingID ASC LIMIT 0,1)) AS Units";
+					
+					pstmt = con.prepareStatement(query.replaceAll("<day>", ""+i));
+//					pstmt.setString(1, CRNNumber);
+					pstmt.setInt(2, year);
+					pstmt.setInt(3, month);
+//					pstmt.setString(4, CRNNumber);
+					pstmt.setInt(5, year);
+					pstmt.setInt(6, month);
+					rs = pstmt.executeQuery();
+					
+					if(rs.next()) {
+						
+						xAxis.add(Integer.toString(i)+"-"+month+"-"+year);
+						yAxis.add(rs.getString("Units") == null ? 0 : rs.getInt("Units"));
+						
+						}
+					}
+				}
+			
+			graphResponseVO.setXAxis(xAxis);
+			graphResponseVO.setYAxis(yAxis);
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return graphResponseVO;
 	}
 	
 	public HomeResponseVO getHomeDashboardDetails(int roleid, String id)
@@ -370,11 +486,13 @@ public class DashboardDAO {
 		return homeResponseVO;
 	}
 	
-	public GraphResponseVO getGraphDashboardDetails(int year, int month, String CRNNumber) {
+	public GraphResponseVO getCustomerGraphDashboardDetails(int year, int month, String customerUniqueID, int type) {
 		// TODO Auto-generated method stub
 		
 		PreparedStatement pstmt = null;
+		PreparedStatement pstmt1 = null;
 		ResultSet rs = null;
+		ResultSet rs1 = null;
 		Connection con = null;
 		
 		GraphResponseVO graphResponseVO = new GraphResponseVO();
@@ -390,41 +508,59 @@ public class DashboardDAO {
 				
 				for(int i = 30; i>0; i-- ) {
 					
-					String query = "SELECT ((SELECT Reading FROM balancelog WHERE CRNNumber = ? AND IoTTImeStamp BETWEEN CONCAT(CURDATE() - INTERVAL <day> DAY, ' 00:00:00') AND CONCAT(CURDATE() - INTERVAL <day> DAY, ' 23:59:59') ORDER BY ReadingID DESC LIMIT 0,1) \r\n" + 
-										 "- (SELECT Reading FROM balancelog WHERE CRNNumber = ? AND IoTTImeStamp BETWEEN CONCAT(CURDATE() - INTERVAL <day> DAY, ' 00:00:00') AND CONCAT(CURDATE() - INTERVAL <day> DAY, ' 23:59:59') ORDER BY ReadingID ASC LIMIT 0,1)) AS Units, CURDATE() - INTERVAL <day> DAY AS consumptiondate";
+					int totalMetersConsumptionPerDay = 0;
 					
-					pstmt = con.prepareStatement(query.replaceAll("<day>", ""+i));
-					pstmt.setString(1, CRNNumber);
-					pstmt.setString(2, CRNNumber);
-					rs = pstmt.executeQuery();
+//					type path parameter: 1 = gas, 2= water, 3=energy 
 					
-					if(rs.next()) {
-						
-						xAxis.add(rs.getString("consumptiondate"));
-						yAxis.add(rs.getString("Units") == null ? 0 : rs.getInt("Units"));
-						
+					pstmt1 = con.prepareStatement("SELECT * FROM customermeterdetails WHERE CustomerUniqueID = '"+customerUniqueID+"' AND MeterType = '"+ (type == 1 ? "Gas'" : type == 2 ? "Water'" :"Energy'"));
+					rs1 = pstmt1.executeQuery();
+					while(rs1.next()) {
+						String query = "SELECT ((SELECT Reading FROM balancelog WHERE CustomerMeterID = ? AND LogDate BETWEEN CONCAT(CURDATE() - INTERVAL <day> DAY, ' 00:00:00') AND CONCAT(CURDATE() - INTERVAL <day> DAY, ' 23:59:59') ORDER BY ReadingID DESC LIMIT 0,1) \r\n" + 
+								 "- (SELECT Reading FROM balancelog WHERE CustomerMeterID = ? AND LogDate BETWEEN CONCAT(CURDATE() - INTERVAL <day> DAY, ' 00:00:00') AND CONCAT(CURDATE() - INTERVAL <day> DAY, ' 23:59:59') ORDER BY ReadingID ASC LIMIT 0,1)) AS Units, CURDATE() - INTERVAL <day> DAY AS consumptiondate";
+			
+						pstmt = con.prepareStatement(query.replaceAll("<day>", "" + i));
+						pstmt.setInt(1, rs1.getInt("CustomerMeterID"));
+						pstmt.setInt(2, rs1.getInt("CustomerMeterID"));
+						rs = pstmt.executeQuery();
+
+						if (rs.next()) {
+							
+							totalMetersConsumptionPerDay = totalMetersConsumptionPerDay + (rs.getString("Units") == null ? 0 : rs.getInt("Units"));
 						}
+					}
+					
+					xAxis.add(rs.getString("consumptiondate"));
+					yAxis.add(totalMetersConsumptionPerDay);
 				}
 			} else if (year != 0 &&  month == 0) {
 				
 				for(int i = 1; i<=12; i++ ) {
 					
-					String query = "SELECT ((SELECT Reading FROM balancelog WHERE CRNNumber = ? AND YEAR(IotTimeStamp) = ? AND MONTH(IotTimeStamp) = <month> ORDER BY ReadingID DESC LIMIT 0,1) \r\n" + 
-									      "-(SELECT Reading FROM balancelog WHERE CRNNumber = ? AND YEAR(IotTimeStamp) = ? AND MONTH(IotTimeStamp) = <month> ORDER BY ReadingID ASC LIMIT 0,1)) AS Units";
+					int totalMetersConsumption = 0;
 					
-					pstmt = con.prepareStatement(query.replaceAll("<month>", ""+i));
-					pstmt.setString(1, CRNNumber);
-					pstmt.setInt(2, year);
-					pstmt.setString(3, CRNNumber);
-					pstmt.setInt(4, year);
-					rs = pstmt.executeQuery();
-					
-					if(rs.next()) {
+					pstmt1 = con.prepareStatement("SELECT * FROM customermeterdetails WHERE CustomerUniqueID = '"+customerUniqueID+"' AND MeterType = '"+ (type == 1 ? "Gas'" : type == 2 ? "Water'" :"Energy'"));
+					rs1 = pstmt1.executeQuery();
+					while(rs1.next()) {
 						
-						xAxis.add(i==1 ? "JAN-"+year : i==2 ? "FEB-"+year : i==3 ? "MAR-"+year : i==4 ? "APR-"+year : i==5 ? "MAY-"+year : i==6 ? "JUN-"+year : i==7 ? "JUL-"+year : i==8 ? "AUG-"+year : i==9 ? "SEP-"+year : i==10 ? "OCT-"+year : i==11 ? "NOV-"+year : i==12 ? "DEC-"+year : "");
-						yAxis.add(rs.getString("Units") == null ? 0 : rs.getInt("Units"));
-						
+						String query = "SELECT ((SELECT Reading FROM balancelog WHERE CustomerMeterID = ? AND YEAR(LogDate) = ? AND MONTH(LogDate) = <month> ORDER BY ReadingID DESC LIMIT 0,1) \r\n" + 
+							      "-(SELECT Reading FROM balancelog WHERE CustomerMeterID = ? AND YEAR(LogDate) = ? AND MONTH(LogDate) = <month> ORDER BY ReadingID ASC LIMIT 0,1)) AS Units";
+			
+							pstmt = con.prepareStatement(query.replaceAll("<month>", ""+i));
+							pstmt.setInt(1, rs1.getInt("CustomerMeterID"));
+							pstmt.setInt(2, year);
+							pstmt.setInt(3, rs1.getInt("CustomerMeterID"));
+							pstmt.setInt(4, year);
+							rs = pstmt.executeQuery();
+			
+								if(rs.next()) {
+									
+									totalMetersConsumption = totalMetersConsumption + (rs.getString("Units") == null ? 0 : rs.getInt("Units"));
+									
+									}
 						}
+					xAxis.add(i==1 ? "JAN-"+year : i==2 ? "FEB-"+year : i==3 ? "MAR-"+year : i==4 ? "APR-"+year : i==5 ? "MAY-"+year : i==6 ? "JUN-"+year : i==7 ? "JUL-"+year : i==8 ? "AUG-"+year : i==9 ? "SEP-"+year : i==10 ? "OCT-"+year : i==11 ? "NOV-"+year : i==12 ? "DEC-"+year : "");
+					yAxis.add(totalMetersConsumption);
+					
 				}
 				
 			} else if(year != 0 && month != 0) {
@@ -433,24 +569,30 @@ public class DashboardDAO {
 				
 				for(int i = 1; i <= j ; i++) {
 					
-					String query = "SELECT ((SELECT Reading FROM balancelog WHERE CRNNumber = ? AND YEAR(IotTimeStamp) = ? AND MONTH(IotTimeStamp) = ? AND DAY(IotTimeStamp) = <day> ORDER BY ReadingID DESC LIMIT 0,1) \r\n" + 
-										 "- (SELECT Reading FROM balancelog WHERE CRNNumber = ? AND YEAR(IotTimeStamp) = ? AND MONTH(IotTimeStamp) = ? AND DAY(IotTimeStamp) = <day> ORDER BY ReadingID ASC LIMIT 0,1)) AS Units";
+					int totalMetersConsumption = 0;
 					
-					pstmt = con.prepareStatement(query.replaceAll("<day>", ""+i));
-					pstmt.setString(1, CRNNumber);
-					pstmt.setInt(2, year);
-					pstmt.setInt(3, month);
-					pstmt.setString(4, CRNNumber);
-					pstmt.setInt(5, year);
-					pstmt.setInt(6, month);
-					rs = pstmt.executeQuery();
+					pstmt1 = con.prepareStatement("SELECT * FROM customermeterdetails WHERE CustomerUniqueID = '"+customerUniqueID+"' AND MeterType = '"+ (type == 1 ? "Gas'" : type == 2 ? "Water'" :"Energy'"));
+					rs1 = pstmt1.executeQuery();
+					while(rs1.next()) {
+						String query = "SELECT ((SELECT Reading FROM balancelog WHERE CustomerMeterID = ? AND YEAR(LogDate) = ? AND MONTH(LogDate) = ? AND DAY(LogDate) = <day> ORDER BY ReadingID DESC LIMIT 0,1) \r\n" + 
+								 "- (SELECT Reading FROM balancelog WHERE CustomerMeterID = ? AND YEAR(LogDate) = ? AND MONTH(LogDate) = ? AND DAY(LogDate) = <day> ORDER BY ReadingID ASC LIMIT 0,1)) AS Units";
+			
+								pstmt = con.prepareStatement(query.replaceAll("<day>", ""+i));
+								pstmt.setInt(1, rs1.getInt("CustomerMeterID"));
+								pstmt.setInt(2, year);
+								pstmt.setInt(3, month);
+								pstmt.setInt(4, rs1.getInt("CustomerMeterID"));
+								pstmt.setInt(5, year);
+								pstmt.setInt(6, month);
+								rs = pstmt.executeQuery();
+			
+									if(rs.next()) {
+										totalMetersConsumption = totalMetersConsumption + (rs.getString("Units") == null ? 0 : rs.getInt("Units"));
+										}
+					}
+					xAxis.add(Integer.toString(i)+"-"+month+"-"+year);
+					yAxis.add(totalMetersConsumption);
 					
-					if(rs.next()) {
-						
-						xAxis.add(Integer.toString(i)+"-"+month+"-"+year);
-						yAxis.add(rs.getString("Units") == null ? 0 : rs.getInt("Units"));
-						
-						}
 					}
 				}
 			
@@ -463,7 +605,8 @@ public class DashboardDAO {
 		
 		return graphResponseVO;
 	}
-
+	
+	
 	public ResponseVO postDashboarddetails(DataRequestVO dataRequestVO, String miuID) throws SQLException {
 		// TODO Auto-generated method stub
 

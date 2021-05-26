@@ -14,11 +14,14 @@ import java.util.List;
 
 import com.idigitronics.IDigi.constants.DataBaseConstants;
 import com.idigitronics.IDigi.request.vo.AlarmRequestVO;
+import com.idigitronics.IDigi.request.vo.BillSummaryRequestVO;
 import com.idigitronics.IDigi.request.vo.FinancialReportsRequestVO;
 import com.idigitronics.IDigi.request.vo.TopUpSummaryRequestVO;
 import com.idigitronics.IDigi.request.vo.UserConsumptionRequestVO;
 import com.idigitronics.IDigi.response.vo.AlarmsResponseVO;
+import com.idigitronics.IDigi.response.vo.BillSummaryResponseVO;
 import com.idigitronics.IDigi.response.vo.FinancialReportsResponseVO;
+import com.idigitronics.IDigi.response.vo.IndividualAlarmsResponseVO;
 import com.idigitronics.IDigi.response.vo.TopUpSummaryResponseVO;
 import com.idigitronics.IDigi.response.vo.UserConsumptionReportsResponseVO;
 
@@ -242,6 +245,73 @@ public class ReportsDAO {
 		return topupsummarydetails;
 
 	}
+	
+	/* Bills */
+	
+	public List<BillSummaryResponseVO> getbillsummarydetails(BillSummaryRequestVO billSummaryRequestVO) throws SQLException {
+		// TODO Auto-generated method stub
+		
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		PreparedStatement pstmt1 = null;
+		ResultSet rs = null;
+		ResultSet rs1 = null;
+		List<BillSummaryResponseVO> billsResponseList = null;
+		BillSummaryResponseVO billSummaryResponseVO = null;
+		
+		try {
+
+			con = getConnection();
+			billsResponseList = new LinkedList<BillSummaryResponseVO>();
+			
+			String query = "SELECT bpd.TransactionID, cbd.CustomerBillingID, cbd.CommunityID, cd.FirstName, cd.LastName, cd.HouseNumber, cd.CustomerUniqueID, cbd.TotalAmount, cbd.TaxAmount, cbd.Status, bpd.ModeOfPayment,"
+					+ "bpd.PaymentStatus, bpd.RazorPayOrderID, bpd.RazorPayPaymentID, bpd.RazorPayRefundID, bpd.RazorPayRefundStatus, bpd.CreatedByID, cbd.LogDate, bpd.TransactionDate FROM customerbillingdetails as cbd LEFT JOIN billingpaymentdetails AS bpd ON cbd.CustomerBillingID = bpd.CustomerBillingID LEFT JOIN customerdetails as cd ON cd.CustomerID = cbd.CustomerID WHERE cbd.CommunityID = ? AND (MONTH(cbd.LogDate) BETWEEN ? AND ?) <change>";
+			
+			pstmt = con.prepareStatement(query.replaceAll("<change>", (billSummaryRequestVO.getBlockID() > 0 && !billSummaryRequestVO.getCustomerUniqueID().isEmpty()) ? " AND cbd.CustomerUniqueID = '"+billSummaryRequestVO.getCustomerUniqueID()+"'" : (billSummaryRequestVO.getCustomerUniqueID().isEmpty() && billSummaryRequestVO.getBlockID() > 0) ? " AND cbd.BlockID = "+billSummaryRequestVO.getBlockID() : ""));
+			
+			pstmt.setInt(1, billSummaryRequestVO.getCommunityID());
+			pstmt.setInt(2, billSummaryRequestVO.getFromMonth());
+			pstmt.setInt(3, billSummaryRequestVO.getToMonth());
+			
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				billSummaryResponseVO = new BillSummaryResponseVO();
+				
+				billSummaryResponseVO.setTransactionID(rs.getInt("TransactionID"));
+				billSummaryResponseVO.setFirstName(rs.getString("FirstName"));
+				billSummaryResponseVO.setLastName(rs.getString("LastName"));
+				billSummaryResponseVO.setHouseNumber(rs.getString("HouseNumber"));
+				billSummaryResponseVO.setCustomerUniqueID(rs.getString("CustomerUniqueID"));
+				billSummaryResponseVO.setBillAmount(rs.getInt("TotalAmount"));
+				billSummaryResponseVO.setModeOfPayment(rs.getString("ModeOfPayment"));
+				billSummaryResponseVO.setRazorPayOrderID(rs.getString("ModeOfPayment").equalsIgnoreCase("Online") ? rs.getString("RazorPayOrderID") : "---");
+				billSummaryResponseVO.setRazorPayPaymentID(rs.getString("ModeOfPayment").equalsIgnoreCase("Online") ? rs.getString("RazorPayPaymentID") : "---");
+				billSummaryResponseVO.setRazorPayRefundID((rs.getInt("PaymentStatus") == 3 ? rs.getString("RazorPayRefundID") : "---"));
+				billSummaryResponseVO.setRazorPayRefundStatus((rs.getInt("PaymentStatus") == 3 ? rs.getString("RazorPayRefundStatus") : "---"));
+				billSummaryResponseVO.setPaymentStatus((rs.getInt("PaymentStatus") == 1 ? "PAID" : (rs.getInt("PaymentStatus") == 2) ? "FAILED" : (rs.getInt("PaymentStatus") == 3) ? "REFUND INITITATED" : "NOT PAID"));
+				billSummaryResponseVO.setBillingDate(ExtraMethodsDAO.datetimeformatter(rs.getString("LogDate")));
+				billSummaryResponseVO.setPaymentDate(ExtraMethodsDAO.datetimeformatter(rs.getString("TransactionDate")));
+				
+				pstmt1 = con.prepareStatement("SELECT user.ID, user.UserName, userrole.RoleDescription FROM USER LEFT JOIN userrole ON user.RoleID = userrole.RoleID WHERE user.ID = "+rs.getInt("CreatedByID"));
+				rs1 = pstmt1.executeQuery();
+				if(rs1.next()) {
+					billSummaryResponseVO.setTransactedByUserName(rs1.getString("UserName"));
+					billSummaryResponseVO.setTransactedByRoleDescription(rs1.getString("RoleDescription"));
+				}
+				billsResponseList.add(billSummaryResponseVO);
+			}
+			
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			pstmt.close();
+			rs.close();
+			con.close();
+		}
+		
+		return billsResponseList;
+	}
 
 	/* Alarms */
 
@@ -250,6 +320,7 @@ public class ReportsDAO {
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		List<AlarmsResponseVO> alarmsResponseList = null;
+		List<IndividualAlarmsResponseVO> alarmsList = null;
 		int noAMRInterval = 0;
 		
 		try {
@@ -257,6 +328,7 @@ public class ReportsDAO {
 			con = getConnection();
 			alarmsResponseList = new LinkedList<AlarmsResponseVO>();
 			AlarmsResponseVO alarmsResponseVO = null;
+			IndividualAlarmsResponseVO individualAlarmsResponseVO = null;
 			
 			PreparedStatement pstmt1 = con.prepareStatement("SELECT NoAMRInterval, TimeOut FROM alertsettings");
 			ResultSet rs1 = pstmt1.executeQuery();
@@ -264,42 +336,58 @@ public class ReportsDAO {
 				
 				noAMRInterval = rs1.getInt("NoAMRInterval");
 			}
-			
-			String query = "SELECT c.CommunityName, b.BlockName, cd.HouseNumber, cd.FirstName, cd.LastName, cmd.MIUID, cd.CustomerUniqueID FROM customerdetails AS cd LEFT JOIN customermeterdetails AS cmd ON cmd.CustomerID = cd.CustomerID LEFT JOIN community AS C on c.communityID = cd.CommunityID LEFT JOIN block AS b on b.BlockID = cd.BlockID <change>";
+
+			String query = "SELECT c.CommunityName, b.BlockName, cd.HouseNumber, cd.FirstName, cd.LastName, cd.CustomerID, cd.CustomerUniqueID FROM customerdetails AS cd LEFT JOIN community AS C on c.communityID = cd.CommunityID LEFT JOIN block AS b on b.BlockID = cd.BlockID <change>";
 			
 			pstmt = con.prepareStatement(query.replaceAll("<change>", ((roleid == 1 || roleid == 4) && (filterCid == -1)) ? " ORDER BY cd.CustomerID ASC" : ((roleid == 1 || roleid == 4) && (filterCid != -1)) ? "WHERE cd.CommunityID = "+filterCid+ " ORDER BY cd.CustomerID ASC" : (roleid==2 || roleid==5) ? "WHERE cd.BlockID = "+id : " ORDER BY cd.CustomerID ASC"));
 			rs = pstmt.executeQuery();
 			
 			while(rs.next()) {
 				
-				PreparedStatement pstmt2 = con.prepareStatement("SELECT TIMESTAMPDIFF(MINUTE, (SELECT LogDate FROM balancelog WHERE MIUID = ? ORDER BY ReadingID DESC LIMIT 1,1), NOW()) AS Minutes");
-				pstmt2.setString(1, rs.getString("MIUID"));
-				ResultSet rs2 = pstmt2.executeQuery();
-				if(rs2.next()) {
+				alarmsResponseVO = new AlarmsResponseVO();
+				
+				alarmsList = new LinkedList<IndividualAlarmsResponseVO>();
+				
+				alarmsResponseVO.setCommunityName(rs.getString("CommunityName"));
+				alarmsResponseVO.setBlockName(rs.getString("BlockName"));
+				alarmsResponseVO.setHouseNumber(rs.getString("HouseNumber"));
+				alarmsResponseVO.setCustomerUniqueID(rs.getString("CustomerUniqueID"));
+				
+				PreparedStatement pstmt4 = con.prepareStatement("SELECT * FROM customermeterdetails WHERE CustomerID ="+rs.getInt("CustomerID"));
+				ResultSet rs4 = pstmt4.executeQuery();
+				
+				while (rs4.next()) {
 					
-					if(rs2.getInt("Minutes")>noAMRInterval) {
-						alarmsResponseVO = new AlarmsResponseVO();
+					PreparedStatement pstmt2 = con.prepareStatement("SELECT TIMESTAMPDIFF(MINUTE, (SELECT LogDate FROM balancelog WHERE MIUID = ? ORDER BY ReadingID DESC LIMIT 1,1), NOW()) AS Minutes");
+					pstmt2.setString(1, rs4.getString("MIUID"));
+					ResultSet rs2 = pstmt2.executeQuery();
+					if(rs2.next()) {
 						
-						alarmsResponseVO.setCommunityName(rs.getString("CommunityName"));
-						alarmsResponseVO.setBlockName(rs.getString("BlockName"));
-						alarmsResponseVO.setHouseNumber(rs.getString("HouseNumber"));
-						alarmsResponseVO.setCustomerUniqueID(rs.getString("CustomerUniqueID"));
-						alarmsResponseVO.setMiuID(rs.getString("MIUID"));
-						alarmsResponseVO.setDifference(rs2.getInt("Minutes"));
-						PreparedStatement pstmt3 = con.prepareStatement("SELECT BatteryVoltage, DoorOpenTamper, MagneticTamper, LogDate, LowBattery, LowBalance FROM displaybalancelog WHERE MIUID = ?");
-						pstmt3.setString(1, rs.getString("MIUID"));
-						ResultSet rs3 = pstmt3.executeQuery();
-						if(rs3.next()) {
-							alarmsResponseVO.setDateTime(ExtraMethodsDAO.datetimeformatter(rs3.getString("LogDate")));
-							alarmsResponseVO.setBatteryVoltage(rs3.getInt("LowBattery")==1 ? rs3.getString("BatteryVoltage") : "---");	
-							alarmsResponseVO.setDoorOpenTamper(rs3.getInt("DoorOpenTamper")==1 ? "YES" : "NO");	
-							alarmsResponseVO.setMagneticTamper(rs3.getInt("MagneticTamper")==1 ? "YES" : "NO");
-							alarmsResponseVO.setLowBalance(rs3.getInt("LowBalance")==1 ? "YES" : "NO");
+						if(rs2.getInt("Minutes")>noAMRInterval) {
+							
+							individualAlarmsResponseVO = new IndividualAlarmsResponseVO();
+							
+							individualAlarmsResponseVO.setMiuID(rs4.getString("MIUID"));
+							individualAlarmsResponseVO.setDifference(rs2.getInt("Minutes"));
+							PreparedStatement pstmt3 = con.prepareStatement("SELECT BatteryVoltage, DoorOpenTamper, MagneticTamper, LogDate, LowBattery, LowBalance FROM displaybalancelog WHERE MIUID = ?");
+							pstmt3.setString(1, rs4.getString("MIUID"));
+							ResultSet rs3 = pstmt3.executeQuery();
+							if(rs3.next()) {
+								individualAlarmsResponseVO.setDateTime(ExtraMethodsDAO.datetimeformatter(rs3.getString("LogDate")));
+								individualAlarmsResponseVO.setBatteryVoltage(rs3.getInt("LowBattery")==1 ? rs3.getString("BatteryVoltage") : "---");	
+								individualAlarmsResponseVO.setDoorOpenTamper(rs3.getInt("DoorOpenTamper")==1 ? "YES" : "NO");	
+								individualAlarmsResponseVO.setMagneticTamper(rs3.getInt("MagneticTamper")==1 ? "YES" : "NO");
+								individualAlarmsResponseVO.setLowBalance(rs3.getInt("LowBalance")==1 ? "YES" : "NO");
+							}
+							alarmsList.add(individualAlarmsResponseVO);
+							
 						}
-						alarmsResponseList.add(alarmsResponseVO);
+						
 					}
 					
 				}
+				alarmsResponseVO.setAlarms(alarmsList);
+				alarmsResponseList.add(alarmsResponseVO);
 				
 			}
 			

@@ -313,6 +313,7 @@ public class ExtraMethodsDAO {
 				
 				float totalamount = 0;
 				float totalConsumption = 0;
+				float previousDues = 0;
 				smsRequestVO = new SMSRequestVO();
 				mailRequestVO = new MailRequestVO();
 				
@@ -336,7 +337,7 @@ public class ExtraMethodsDAO {
 				
 				}
 				
-				pstmt2 = con.prepareStatement("INSERT INTO customerbillingdetails (CommunityID, BlockID, CustomerID, CustomerUniqueID, TotalAmount, TaxAmount, TotalConsumption, DueDate, BillMonth, BillYear, ModifiedDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
+				pstmt2 = con.prepareStatement("INSERT INTO customerbillingdetails (CommunityID, BlockID, CustomerID, CustomerUniqueID, TotalAmount, TaxAmount, TotalConsumption, PreviousDues, DueDate, BillMonth, BillYear, ModifiedDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
 				pstmt2.setInt(1, rs.getInt("CommunityID"));
 				pstmt2.setInt(2, rs.getInt("BlockID"));
 				pstmt2.setInt(3, rs.getInt("CustomerID"));
@@ -345,9 +346,10 @@ public class ExtraMethodsDAO {
 				float tax = ((((rs.getFloat("GST")) * (2))/100) * totalamount);
 				pstmt2.setFloat(6, (totalamount + tax));
 				pstmt2.setFloat(7, totalConsumption);
-				pstmt2.setString(8, currentdate.plusDays(rs.getInt("DueDayCount")).toString());
-				pstmt2.setInt(9, currentdate.getMonthValue() - 1);
-				pstmt2.setInt(10, currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear());
+				pstmt2.setFloat(8, 0);// add previous dues
+				pstmt2.setString(9, currentdate.plusDays(rs.getInt("DueDayCount")).toString());
+				pstmt2.setInt(10, currentdate.getMonthValue() - 1);
+				pstmt2.setInt(11, currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear());
 				
 				if(pstmt2.executeUpdate() > 0) {
 					
@@ -528,10 +530,6 @@ public class ExtraMethodsDAO {
 					
 					document.add(datatablehead.setHorizontalAlignment(HorizontalAlignment.CENTER));
 					
-					float[] finaltableWidths = { 80F, 80F };
-
-					Table finaltable = new Table(finaltableWidths);
-					
 					Cell billAmountCell = new Cell();
 					billAmountCell.add("Bill Amount : ");
 					billAmountCell.setTextAlignment(TextAlignment.RIGHT);
@@ -555,18 +553,22 @@ public class ExtraMethodsDAO {
 					Cell SGSTAmount = new Cell();
 					SGSTAmount.add(""+(tax/2));
 					SGSTAmount.setTextAlignment(TextAlignment.CENTER);
-
+					
+					Cell previousDuescell = new Cell();
+					previousDuescell.add("Previous Dues: ");
+					previousDuescell.setTextAlignment(TextAlignment.RIGHT);
+					
+					Cell previuosDuesAmount = new Cell();
+					previuosDuesAmount.add("" + previousDues);
+					previuosDuesAmount.setTextAlignment(TextAlignment.CENTER);
+					
 					Cell totalBillAmountCell = new Cell();
 					totalBillAmountCell.add("Total Amount : ");
 					totalBillAmountCell.setTextAlignment(TextAlignment.RIGHT);
 
 					Cell totalBillAmount = new Cell();
-					totalBillAmount.add(""+(totalamount + tax));
+					totalBillAmount.add(""+(totalamount + tax + previousDues));
 					totalBillAmount.setTextAlignment(TextAlignment.CENTER);
-					
-					finaltable.startNewRow();
-					finaltable.startNewRow();
-					finaltable.startNewRow();
 					
 					Cell empytcell = new Cell();
 					empytcell.add("");
@@ -599,12 +601,19 @@ public class ExtraMethodsDAO {
 					datatable.addCell(empytcell);
 					datatable.addCell(empytcell);
 					datatable.addCell(empytcell);
+					datatable.addCell(empytcell);
+					datatable.addCell(previousDuescell);
+					datatable.addCell(previuosDuesAmount);
+					
+					datatable.addCell(empytcell);
+					datatable.addCell(empytcell);
+					datatable.addCell(empytcell);
+					datatable.addCell(empytcell);
 					datatable.addCell(empytcell.setBorder(Border.NO_BORDER));
 					datatable.addCell(totalBillAmountCell);
 					datatable.addCell(totalBillAmount);
 					
 					document.add(datatable.setHorizontalAlignment(HorizontalAlignment.CENTER));
-//					document.add(finaltable.setHorizontalAlignment(HorizontalAlignment.RIGHT));
 					document.add(disclaimer.setHorizontalAlignment(HorizontalAlignment.CENTER).setFont(font));
 					document.add(newLine);
 
@@ -613,7 +622,7 @@ public class ExtraMethodsDAO {
 					
 				}
 				
-				String message = "Dear "+ rs.getString("FirstName") + " " + rs.getString("LastName") + ", \n \n Your Bill of Amount" + (totalamount + (totalamount * ((rs.getInt("GST") * 2)/100))) + "/- for the consumption in the month of " + billMonthYear +" has been generated. Kindly pay the bill before " + currentdate.plusDays(rs.getInt("DueDayCount")).toString() + " to avoid late fee charges. Thank You";
+				String message = "Dear "+ rs.getString("FirstName") + " " + rs.getString("LastName") + ", \n \n Your Bill of Amount" + (totalamount + tax + previousDues) + "/- for the consumption in the month of " + billMonthYear +" has been generated. Kindly pay the bill before " + currentdate.plusDays(rs.getInt("DueDayCount")).toString() + " to avoid late fee charges. Thank You";
 				smsRequestVO.setMessage(message);
 				smsRequestVO.setToMobileNumber(rs.getString("MobileNumber"));
 				

@@ -12,10 +12,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.google.gson.Gson;
 import com.idigitronics.IDigi.dao.ReportsDAO;
 import com.idigitronics.IDigi.request.vo.AlarmRequestVO;
+import com.idigitronics.IDigi.request.vo.BillSummaryRequestVO;
 import com.idigitronics.IDigi.request.vo.FinancialReportsRequestVO;
 import com.idigitronics.IDigi.request.vo.TopUpSummaryRequestVO;
 import com.idigitronics.IDigi.request.vo.UserConsumptionRequestVO;
 import com.idigitronics.IDigi.response.vo.AlarmsResponseVO;
+import com.idigitronics.IDigi.response.vo.BillSummaryResponseVO;
 import com.idigitronics.IDigi.response.vo.FinancialReportsResponseVO;
 import com.idigitronics.IDigi.response.vo.TopUpSummaryResponseVO;
 import com.idigitronics.IDigi.response.vo.UserConsumptionReportsResponseVO;
@@ -70,6 +72,19 @@ public class ReportsController {
 		topUpSummaryResponseVO.setData(reportsdao.gettopupsummarydetails(topupSummaryRequestVO));
 		
 		return topUpSummaryResponseVO;
+	}
+	
+	/* Billpayment Summary */
+	
+	@RequestMapping(value = "/billpaymentsummary", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	public @ResponseBody
+	BillSummaryResponseVO billpaymentsummary(@RequestBody BillSummaryRequestVO billSummaryRequestVO) throws SQLException {
+
+		BillSummaryResponseVO billSummaryResponseVO = new BillSummaryResponseVO();
+		
+		billSummaryResponseVO.setData(reportsdao.getbillsummarydetails(billSummaryRequestVO));
+		
+		return billSummaryResponseVO;
 	}
 	
 	/* Alarms */
