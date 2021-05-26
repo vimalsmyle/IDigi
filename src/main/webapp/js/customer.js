@@ -164,12 +164,6 @@ $("#addMeter")
 			
 			
 			$("#template").append("<div class=row> " +
-					"<div class=col-md-4>" +
-					"<div class='group form-group'>"
-									+"<label class=bmd-label-floating>Meter ID</label> <input "
-									+"type=text class=form-control name=meterIDAdd["+rowCount+"]"
-									+" id=meterIDAdd-"+rowCount+">"
-									+"</div></div>"+
 									"<div class=col-md-4>" +
 									"<div class='group form-group'>"
 													+"<label class=bmd-label-floating>MIU ID</label> <input "
@@ -234,23 +228,7 @@ $("#addMeter")
 											"</div>");
 
 			
-			 $('#customerDetails').bootstrapValidator('addField', 'meterIDAdd['+rowCount+']', {
-		        	message : 'Meter ID is not valid',
-					validators : {
-						notEmpty : {
-							message : 'Meter ID is required and cannot be empty'
-						},
-						stringLength : {
-							min : 4,
-							max : 30,
-							message : 'Meter ID must be more than 4 and less than 30 characters long'
-						},
-						regexp : {
-							regexp : /^[a-zA-Z][a-zA-Z0-9.,$; ]+$/,
-							message : 'Meter ID can only consist of Alphanumaric'
-						}
-					}
-		        });
+			
 			 $('#customerDetails').bootstrapValidator('addField' ,
 		        'miuIDAdd['+rowCount+']', {
 		        	message : 'MUI ID is not valid',
@@ -323,23 +301,7 @@ $("#addMeter")
 						}
 					}
 		        });
-			/* $('#customerDetails').bootstrapValidator('addField', 'gatewayIDAdd['+rowCount+']', {
-		        	message : 'Gateway is not valid',
-					validators : {
-						notEmpty : {
-							message : 'Gateway is required and cannot be empty'
-						},
-						stringLength : {
-							min : 4,
-							max : 30,
-							message : 'Gateway must be more than 4 and less than 30 characters long'
-						},
-						regexp : {
-							regexp : /^[a-zA-Z][a-zA-Z0-9.,$; ]+$/,
-							message : 'Gateway can only consist of Alphanumaric'
-						}
-					}
-		        });*/
+			
 			 $('#customerDetails').bootstrapValidator('addField','locationAdd['+rowCount+']', {
 		        	message : 'Location is not valid',
 					validators : {
@@ -886,7 +848,7 @@ $(document)
 												var meterDetails = [];
 												for(var i=1;parseInt($("#rowCount").val())>=i;i++){
 													var array ={};
-													array["customerMeterID"] = $("#meterIDAdd-"+i).val();
+													
 													array["miuID"] = $("#miuIDAdd-"+i).val();
 													array["meterSerialNumber"] = $("#meterSerialNumberAdd-"+i).val();
 													array["meterType"] = $("#selectMeterType-"+i).val();
@@ -923,7 +885,7 @@ $(document)
 														.ajax({
 															type : "POST",
 															contentType : "application/json",
-															url : "./customer/add1",
+															url : "./customer/add",
 															data : JSON
 																	.stringify(data1),
 															dataType : "JSON",
