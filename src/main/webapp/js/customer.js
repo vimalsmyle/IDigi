@@ -197,8 +197,8 @@ $("#addMeter")
 									+"<label class=bmd-label-floating>Pay Type</label>" +
 									"<select class='form-control select2' id=payTypeAdd-"+rowCount+" name=payTypeAdd["+rowCount+"]>"+
 									"<option value='-1'>Select Pay Type</option>"+
-									"<option value='1'>Prepaid</option>"+
-									"<option value='2'>Postpaid</option>"+
+									"<option value='Prepaid'>Prepaid</option>"+
+									"<option value='Postpaid'>Postpaid</option>"+
 								"</select>"
 									+"</div></div>"+
 									"<div class=col-md-4>" +
@@ -278,7 +278,7 @@ $("#addMeter")
 							message : 'Meter Size must be more than 4 and less than 30 characters long'
 						},
 						regexp : {
-							regexp : /^[a-zA-Z][a-zA-Z0-9.,$; ]+$/,
+							regexp : /^[0-9]+$/,
 							message : 'Meter Size can only consist of Alphanumaric'
 						}
 					}
@@ -870,7 +870,7 @@ $(document)
 												data1["houseNumber"] = $("#houseNoAdd").val();
 												data1["mobileNumber"] = $("#mobileNoAdd").val();
 												data1["email"] = $("#emailAdd").val();
-												data1["CRNNumber"] = $("#CRNAdd").val();
+												data1["customerUniqueID"] = $("#CRNAdd").val();
 												data1["meters"] = meterDetails;
 												data1["createdByID"] = sessionStorage.getItem("createdByID");
 												data1["loggedInUserID"] = sessionStorage.getItem("userID");
@@ -880,7 +880,8 @@ $(document)
 														+ JSON.stringify(data1));*/
 												
 												$('#customerAdd').prop('disabled', true).addClass('disabled').off( "click" );
-												
+												console.log(JSON
+														.stringify(data1));
 												$
 														.ajax({
 															type : "POST",
