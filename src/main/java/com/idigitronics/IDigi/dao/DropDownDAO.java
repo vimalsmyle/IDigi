@@ -233,7 +233,7 @@ public class DropDownDAO {
 		try {
 			con = getConnection();
 			PreparedStatement pstmt = con
-					.prepareStatement("SELECT GatewayID, GatewayName FROM gateways");
+					.prepareStatement("SELECT GatewayID, GatewayName FROM gateway");
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
 				gateways.put(rs.getInt("GatewayID"), rs.getString("GatewayName"));

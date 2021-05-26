@@ -80,7 +80,7 @@ public class DashboardController {
 		return dashboarddao.getGraphDashboardDetails(year, month, id, type);
 	}
 	
-	@RequestMapping(value = "/graph/{type}/{year}/{month}/{customerUniqueID}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/customergraph/{type}/{year}/{month}/{customerUniqueID}", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody GraphResponseVO customergraphdashboarddetails(@PathVariable("type") int type, @PathVariable("year") int year, @PathVariable("month") int month, @PathVariable("customerUniqueID") String customerUniqueID) throws SQLException {
 
 		DashboardDAO dashboarddao = new DashboardDAO();
