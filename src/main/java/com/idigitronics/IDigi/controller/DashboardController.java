@@ -73,19 +73,19 @@ public class DashboardController {
 	}
 	
 	@RequestMapping(value = "/graph/{type}/{year}/{month}/{id}", method = RequestMethod.GET, produces = "application/json")
-	public @ResponseBody GraphResponseVO graphdashboarddetails(@PathVariable("type") int type, @PathVariable("year") int year, @PathVariable("month") int month, @PathVariable("id") int id) throws SQLException {
+	public @ResponseBody GraphResponseVO graphdashboarddetails(@PathVariable("type") String type, @PathVariable("year") int year, @PathVariable("month") int month, @PathVariable("id") int id) throws SQLException {
 
 		DashboardDAO dashboarddao = new DashboardDAO();
 
-		return dashboarddao.getGraphDashboardDetails(year, month, id, type);
+		return dashboarddao.getGraphDashboardDetails(type, year, month, id);
 	}
 	
 	@RequestMapping(value = "/customergraph/{type}/{year}/{month}/{customerUniqueID}", method = RequestMethod.GET, produces = "application/json")
-	public @ResponseBody GraphResponseVO customergraphdashboarddetails(@PathVariable("type") int type, @PathVariable("year") int year, @PathVariable("month") int month, @PathVariable("customerUniqueID") String customerUniqueID) throws SQLException {
+	public @ResponseBody GraphResponseVO customergraphdashboarddetails(@PathVariable("type") String type, @PathVariable("year") int year, @PathVariable("month") int month, @PathVariable("customerUniqueID") String customerUniqueID) throws SQLException {
 
 		DashboardDAO dashboarddao = new DashboardDAO();
 
-		return dashboarddao.getCustomerGraphDashboardDetails(year, month, customerUniqueID, type);
+		return dashboarddao.getCustomerGraphDashboardDetails(type, year, month, customerUniqueID);
 	}
 	
 	@RequestMapping(value = "/server/api/{device_eui}/status", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
