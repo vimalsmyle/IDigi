@@ -86,7 +86,7 @@ public class ExtraMethodsDAO {
 		
 		String result = "Failure";
 		Properties props = new Properties();
-		props.put("mail.smtp.host", "smtp.gmail.com");
+		props.put("mail.smtp.host", "smtp.idigitronics.com");
 		props.put("mail.smtp.socketFactory.port", "465");
 		props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
 		props.put("mail.smtp.auth", "true");
@@ -137,9 +137,9 @@ public class ExtraMethodsDAO {
 	URL url = new URL("http://" + restcallvo.getGatewayIP() + ":" + restcallvo.getGatewayPort() +"/"+ restcallvo.getMiuID()+"/"+restcallvo.getUrlExtension());
     HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
     
-    urlConnection.setRequestProperty("Content-Type", "application/json"); 
+    urlConnection.setRequestProperty("Content-Type", "application/json");
     
-//    final String tataAuthenication = "Basic "	+ Base64.getEncoder().encodeToString((ExtraConstants.TataUserName + ':' + ExtraConstants.TataPassword).getBytes());
+//  final String tataAuthenication = "Basic "	+ Base64.getEncoder().encodeToString((ExtraConstants.TataUserName + ':' + ExtraConstants.TataPassword).getBytes());
 
 //	urlConnection.setRequestProperty("Authorization", tataAuthenication);
 	

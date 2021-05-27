@@ -779,7 +779,7 @@ public class CommunitySetUpDAO {
 				ManagementSettingsDAO managementsettingsdao = new ManagementSettingsDAO();
 				UserManagementRequestVO usermanagementvo = new UserManagementRequestVO();
 				
-				pstmt1 = con.prepareStatement("SELECT CustomerID from customermeterdetails WHERE CustomerUniqueID = ?");
+				pstmt1 = con.prepareStatement("SELECT CustomerID from customerdetails WHERE CustomerUniqueID = ?");
 				pstmt1.setString(1, customervo.getCustomerUniqueID());
 				ResultSet rs = pstmt1.executeQuery();
 				if(rs.next()) {
