@@ -7,23 +7,16 @@
 	content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link rel="stylesheet" href="common/css/bootstrap.min.css">
 <link rel="icon" type="image/png" sizes="16x16" href="common/images/1-hanbit.png">
-<link href="common/css/materialize.fontawsome.css"
-	rel="stylesheet">
 <!-- Material Design for Bootstrap CSS -->
-<link rel="stylesheet"
-	href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css"
-	integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX"
-	crossorigin="anonymous">
-<link rel="stylesheet"
-	href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
-	integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU"
-	crossorigin="anonymous">
-<link rel="stylesheet" href="common/css/style.css">
+<!-- <link rel="stylesheet" href="common/css/style.css"> -->
 <link rel="stylesheet"
 	href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css">
+		<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
 <link rel="stylesheet"
 	href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.bootstrap4.min.css">
-
+	
+	<link href="common/css/materialize.fontawsome.css"
+	rel="stylesheet">
 <title>Alert</title>
 </head>
 
@@ -42,27 +35,17 @@
 <div id="preloader">
   <div id="status">&nbsp;</div>
 </div>
-	<jsp:include page="header.jsp" />
+<jsp:include page="header.jsp" />
+	<jsp:include page="slidebar.jsp" />
+		<main class="col-md-10 float-left col px-5 pl-md-3 pt-2 pb-6 main">
 	<div
 		class="container-fluid topspacing bottomspacing pl-0 pr-0 mr-0 ml-0">
 		<div class="row mr-0 ml-0">
-			<div class="left_nav col-md-2 pl-0 pr-0">
-
-				<jsp:include page="menu.jsp" />
-			</div>
+			
 			<div class="right_data col-md-10 mt-4 mb-4">
 				<!--Right start-->
 				<div class="row mb-4">
-					<!-- <div class="col-md-6">
-						<h3>Alert Details</h3>
-					</div>
-					<div class="col-md-6">
-						<button type="button" id="alertAddbutton"
-							class="btn btn-raised btn-primary float-right"
-							data-toggle="modal" data-target="#exampleModal">
-							<i class="fa fa-user"></i>
-						</button>
-					</div> -->
+					
 				</div>
 				<div class="row">
 					<div class="col-md-12">
@@ -90,6 +73,7 @@
 			</div>
 		</div>
 	</div>
+	</main>
 	<jsp:include page="footer.jsp" />
 
 	<!-- Modal -->
@@ -109,29 +93,23 @@
 					<form id="alertDetails">
 						<div class="row">
 							<div class="col-md-6">
-								<div class="input-group form-group">
+								<div class="group form-group">
 									<label class="bmd-label-floating">No MIU ID Interval</label> <input
 										type="text" class="form-control" name="noamrintervalAdd"
 										id="noamrintervalAdd">
 								</div>
 							</div>
-							<!-- <div class="col-md-6">
-								<div class="input-group form-group">
-									<label class="bmd-label-floating">Low Battery (%)</label> <input
-										type="text" class="form-control" name="lowbatteryvoltageAdd"
-										id="lowbatteryvoltageAdd">
-								</div>
-							</div> -->
+							
 
 							<div class="col-md-6">
-								<div class="input-group form-group">
+								<div class="group form-group">
 									<label class="bmd-label-floating">ReCharge Time Out</label> <input
 										type="text" class="form-control" name="rechargetimeoutAdd"
 										id="rechargetimeoutAdd">
 								</div>
 							</div>
 							<div class="col-md-6">
-								<div class="input-group form-group">
+								<div class="group form-group">
 									<label class="bmd-label-floating">ReConnection Charge</label> <input
 										type="text" class="form-control" name="reconnectionAdd"
 										id="reconnectionAdd">
@@ -140,7 +118,7 @@
 							</div>
 
 								<div class="col-md-6">
-								<div class="input-group form-group">
+								<div class="group form-group">
 									<label class="bmd-label-floating">Per Unit Charge</label> <input
 										type="text" class="form-control" name="perUnitAdd"
 										id="perUnitAdd">
@@ -151,9 +129,7 @@
 							</div>
 
 							<div class="col-md-4">
-							<!--	<input class="btn btn-lg btn-success submit-button"
-									style="width: 100%;" value="Save!" id="alertAdd"
-									type="button" disabled></input> -->
+							
 									
 									<button class="btn btn-secondary submit-button"
 									 value="Save!" id="alertAdd"
@@ -196,22 +172,16 @@
 					<form id="alertEdit">
 						<div class="row">
 							<div class="col-md-6">
-								<div id="formnoamrintervalEdit" class="input-group form-group">
+								<div id="formnoamrintervalEdit" class="group form-group">
 									<label class="bmd-label-floating">No MIU ID Interval</label> <input
 										type="text" class="form-control" name="noamrintervalEdit"
 										id="noamrintervalEdit">
 								</div>
 							</div>
-							<!-- <div class="col-md-6">
-								<div id="formlowbatteryvoltageEdit" class="input-group form-group">
-									<label class="bmd-label-floating">Low Battery (%)</label> <input
-										type="text" class="form-control" name="lowbatteryvoltageEdit1"
-										id="lowbatteryvoltageEdit1">
-								</div>
-							</div> -->
+						
 
 							<div class="col-md-6">
-								<div id="formrechargetimeoutEdit" class="input-group form-group">
+								<div id="formrechargetimeoutEdit" class="group form-group">
 									<label class="bmd-label-floating">ReCharge Time Out</label> <input
 										type="text" class="form-control" name="rechargetimeoutEdit1"
 										id="rechargetimeoutEdit1">
@@ -219,7 +189,7 @@
 							</div>
 							
 							<div class="col-md-6">
-								<div id="formreconnectionEdit" class="input-group form-group">
+								<div id="formreconnectionEdit" class="group form-group">
 									<label class="bmd-label-floating">ReConnection Charge</label> <input
 										type="text" class="form-control" name="connectionEdit1"
 										id="connectionEdit1">
@@ -227,7 +197,7 @@
 							</div>
 							
 							<div class="col-md-6">
-								<div id="formperUnitEdit" class="input-group form-group">
+								<div id="formperUnitEdit" class="group form-group">
 									<label class="bmd-label-floating">Per Unit Charge</label> <input
 										type="text" class="form-control" name="perUnitEdit1"
 										id="perUnitEdit1">

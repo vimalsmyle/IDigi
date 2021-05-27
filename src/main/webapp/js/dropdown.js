@@ -100,9 +100,20 @@ function showCustomerbyBlock(blockId){
 	});
 }
 
-function showTopupDetails(customerId){
+function showMetersDetails(customerId){
+	$.getJSON("./customermeters/Prepaid" + customerId, function(data) {
+		var Options = "<option value='-1'>Select  Meters</option>";
+		$.each(data.dropDownCustomerMeters, function(key, value) {
+			Options = Options + "<option value='" + key + "'>" + key
+					+ "</option>";
+		});
+		$('#selectMeters').append(Options);
+	});
+}
+
+function showTopupDetails(meterId){
 	
-	$.getJSON("./topupdetails/" + customerId, function(data) {
+	$.getJSON("./topupdetails/" + $("#CustomerCRNNumber").val()+"/"+meterId, function(data) {
 		//var Options = "";
 		$("#AMR_topup").val(data.topupdetails.meterID).trigger("change");
 		$("#formAMR_topup").addClass("input-group form-group has-feedback has-success bmd-form-group is-filled")

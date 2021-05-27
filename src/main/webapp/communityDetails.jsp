@@ -101,7 +101,7 @@
 							<div class="col-md-6">
 								 <div class="group form-group">
 									<label for="text">Name:</label>
-									<input type="text" class="form-control"  name="communityNameAdd"
+									<input type="text" class="form-control form-control-sm"  name="communityNameAdd"
 										id="communityNameAdd" placeholder = "Community Name">
 								  </div>
 								</div>
@@ -110,7 +110,7 @@
 							<div class="col-md-6">
 								 <div class="group form-group">
 									<label for="text">Address:</label>
-									<input type="text" class="form-control" name="communityAddressAdd"
+									<input type="text" class="form-control form-control-sm" name="communityAddressAdd"
 										id="communityAddressAdd" placeholder = "Community Address">
 								  </div>
 								</div>
@@ -118,7 +118,7 @@
 							<div class="col-md-6">
 								<div class="group form-group">
 									<label for="text">Mobile:</label>
-									<input type="text" class="form-control" name="communityMobileAdd"
+									<input type="text" class="form-control form-control-sm" name="communityMobileAdd"
 										id="communityMobileAdd" placeholder = "Community Mobile">
 								  </div>
 							</div>
@@ -127,7 +127,7 @@
 							<div class="col-md-6">
 								<div class="group form-group">
 									<label for="text">Email:</label>
-									<input type="text" class="form-control"  name="communityEmailAdd"
+									<input type="text" class="form-control form-control-sm"  name="communityEmailAdd"
 										id="communityEmailAdd" placeholder = "Community Email">
 								  </div>
 							</div>
@@ -180,14 +180,14 @@
 							<div class="col-md-6">
 								<div id="formcomunityName" class="group form-group">
 									<label for="text">Name:</label>
-									<input type="text" class="form-control"  name="communityNameEdit"
+									<input type="text" class="form-control form-control-sm"  name="communityNameEdit"
 										id="communityNameEdit" placeholder = "Community Name">
 								  </div>
 							</div>
 							<div class="col-md-6">
 								<div id="formcomunityAddress" class="group form-group">
 									<label for="text">Address:</label>
-									<input type="text" class="form-control"  name="communityAddressEdit"
+									<input type="text" class="form-control form-control-sm"  name="communityAddressEdit"
 										id="communityAddressEdit" placeholder = "Community Address">
 								  </div>
 							</div>
@@ -196,7 +196,7 @@
 								
 								<div id="formcomunityMobile" class="group form-group">
 									<label for="text">Mobile:</label>
-									<input type="text" class="form-control"  name="communityMobileEdit"
+									<input type="text" class="form-control form-control-sm"  name="communityMobileEdit"
 										id="communityMobileEdit" placeholder = "Community Mobile">
 								  </div>
 							</div>
@@ -204,7 +204,7 @@
 								
 								<div id="formcomunityEmail" class="group form-group">
 									<label for="text">Email:</label>
-									<input type="text" class="form-control"  name="communityEmailEdit"
+									<input type="text" class="form-control form-control-sm"  name="communityEmailEdit"
 										id="communityEmailEdit" placeholder = "Community Email">
 								  </div>
 										<input type = "hidden" id="communityIdhidden">
@@ -223,19 +223,6 @@
 									<div class="ripple-container"></div>
 								</button>
 							</div>
-
-							<!-- <div class="col-md-3">
-								<button type="button" class="btn btn-secondary btn-raised mr-3 resetFilter" id="resetFilter">Reset</button>
-							</div>
-
-
-							<div class="col-md-4">
-								<button type="button" class="btn btn-danger btn-raised mr-4"
-									data-dismiss="modal">
-									Close
-									<div class="ripple-container"></div>
-								</button>
-							</div> -->
 						</div>
 					</form>
 				</div>

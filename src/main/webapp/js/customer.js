@@ -167,19 +167,19 @@ $("#addMeter")
 									"<div class=col-md-4>" +
 									"<div class='group form-group'>"
 													+"<label class=bmd-label-floating>MIU ID</label> <input "
-													+"type=text class=form-control name=miuIDAdd["+rowCount+"]"
+													+"type=text class='form-control form-control-sm' name=miuIDAdd["+rowCount+"]"
 													+" id=miuIDAdd-"+rowCount+">"
 													+"</div></div>"+
 										"<div class=col-md-4>" +
 										"<div class='group form-group'>"
 										+"<label class=bmd-label-floating>Meter Serial Number</label> <input "
-										+"type=text class=form-control name=meterSerialNumberAdd["+rowCount+"]"
+										+"type=text class='form-control form-control-sm' name=meterSerialNumberAdd["+rowCount+"]"
 										+" id=meterSerialNumberAdd-"+rowCount+">"
 										+"</div></div>"+
 									"<div class=col-md-4>" +
 									"<div class='group form-group has-feedback has-success bmd-form-group is-filled'>"
 									+"<label class=bmd-label-floating>Meter Type</label> " +
-									"<select class='form-control select2' id=selectMeterType-"+rowCount+" name=selectMeterType["+rowCount+"]>"+
+									"<select class='form-control form-control-sm select2'  id=selectMeterType-"+rowCount+" name=selectMeterType["+rowCount+"]>"+
 										"<option value='-1'>Select Meter Type</option>"+
 										"<option value='Gas'>Gas</option>"+
 										"<option value='Water'>Water</option>"+
@@ -189,13 +189,13 @@ $("#addMeter")
 									"<div class=col-md-4>" +
 									"<div class='group form-group'>"
 									+"<label class=bmd-label-floating>Meter Size</label> <input "
-									+"type=text class=form-control name=meterSizeAdd["+rowCount+"]"
+									+"type=text class='form-control form-control-sm' name=meterSizeAdd["+rowCount+"]"
 									+" id=meterSizeAdd-"+rowCount+">"
 									+"</div></div>"+
 									"<div class=col-md-4>" +
 									"<div class='group form-group has-feedback has-success bmd-form-group is-filled'>"
 									+"<label class=bmd-label-floating>Pay Type</label>" +
-									"<select class='form-control select2' id=payTypeAdd-"+rowCount+" name=payTypeAdd["+rowCount+"]>"+
+									"<select class='form-control form-control-sm select2' id=payTypeAdd-"+rowCount+" name=payTypeAdd["+rowCount+"]>"+
 									"<option value='-1'>Select Pay Type</option>"+
 									"<option value='Prepaid'>Prepaid</option>"+
 									"<option value='Postpaid'>Postpaid</option>"+
@@ -205,7 +205,7 @@ $("#addMeter")
 									"<div class='group form-group has-feedback has-success bmd-form-group is-filled'>"
 									+"<label class=bmd-label-floating>Tariff Name</label> " +
 									"<select "+
-									"class=form-control id=selectTariffName-"+rowCount+" name=selectTariffName["+rowCount+"]>"+
+									"class='form-control form-control-sm' id=selectTariffName-"+rowCount+" name=selectTariffName["+rowCount+"]>"+
 									 
 									"</select>"
 									+"</div></div>"+
@@ -213,14 +213,14 @@ $("#addMeter")
 									"<div class='group form-group has-feedback has-success bmd-form-group is-filled'>"
 									+"<label class=bmd-label-floating>Gateway ID</label> " +
 									"<select "+
-									"class=form-control id=gatewayIDAdd-"+rowCount+" name=gatewayIDAdd["+rowCount+"]>"+
+									"class='form-control form-control-sm' id=gatewayIDAdd-"+rowCount+" name=gatewayIDAdd["+rowCount+"]>"+
 									 
 									"</select>"
 									+"</div></div>"+
 									"<div class=col-md-4>" +
 									"<div class='group form-group'>"
 									+"<label class=bmd-label-floating>Location</label> <input "
-									+"type=text class=form-control name=locationAdd["+rowCount+"]"
+									+"type=text class='form-control form-control-sm' name=locationAdd["+rowCount+"]"
 									+" id=locationAdd-"+rowCount+">"
 									+"</div></div>   " +
 											" <div class='col-md-12 text-right'>" 

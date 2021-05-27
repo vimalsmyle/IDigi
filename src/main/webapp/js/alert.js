@@ -30,7 +30,7 @@ table = $('#alertTable')
 "scrollY" : 324,
 "scrollX" : true,
 "ajax" : {
-"url":"/PAYGTL_LORA_BLE/alert",
+"url":"./alert",
 "type" : "GET",
 "data" : function(search) {
 },
@@ -106,7 +106,7 @@ $("div.headname").html('<h3>Alert Details</h3>');
 $("div.addevent").html('<button type="button" id="alertAddbutton"'
 		+'class="btn btn-raised btn-primary float-right"'
 			+'data-toggle="modal" data-target="#exampleModal">'
-		+'	<i class="fa fa-user"></i>'
+		+'	<i class="fa fa-user-plus"></i>'
 		+'</button>');
 
 });
@@ -141,23 +141,6 @@ $(document)
 															}
 														}
 													},
-												/*	lowbatteryvoltageAdd : {
-														message : 'Low Battery (%) is not valid',
-														validators : {
-															notEmpty : {
-																message : 'Low Battery (%) is required and cannot be empty'
-															},
-															stringLength : {
-																min : 1,
-																max : 3,
-																message : 'Low Battery (%) must be more than 1 and less than 3 characters long'
-															},
-															regexp : {
-																regexp : /^[0-9]+$/,
-																message : 'Low Battery (%) can only consist of alphabetical and number'
-															}
-														}
-													},*/
 													rechargetimeoutAdd : {
 														message : 'Recharge Timeout is not valid',
 														validators : {
@@ -222,20 +205,6 @@ $(document)
 													}
 												}
 											},
-											/*lowbatteryvoltageEdit1 : {
-												message : 'Low Battery (%) is not valid',
-												validators : {
-													notEmpty : {
-														message : 'Low Battery (%) is required and cannot be empty'
-													},
-													stringLength : {
-														min : 2,
-														max : 30,
-														message : 'Low Battery (%) must be more than 6 and less than 30 characters long'
-													}
-													
-												}
-											},*/
 											rechargetimeoutEdit1 : {
 												message : 'Recharge Timeout is not valid',
 												validators : {

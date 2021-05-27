@@ -125,7 +125,7 @@ $(document)
 
 						$
 								.getJSON(
-										"/PAYGTL_LORA_BLE/topupdetails/"
+										"./topupdetails/"
 												+ sessionStorage.getItem("ID"),
 										function(data) {
 											// var Options = "";
@@ -253,6 +253,13 @@ $(document)
 													.alert("Please Select CRN Number");
 											return false;
 										}
+										
+										if ($("#selectMeters").val() == "Select  Meters") {
+
+											bootbox
+													.alert("Please Select Meters");
+											return false;
+										}
 
 										if ($("#recharge_topup").val() == "") {
 
@@ -355,7 +362,7 @@ $(document)
 																			.ajax({
 																				type : "POST",
 																				contentType : "application/json",
-																				url : "/PAYGTL_LORA_BLE/checkout",
+																				url : "./checkout",
 																				data : JSON
 																						.stringify(data2),
 																				dataType : "JSON",
@@ -477,7 +484,7 @@ $(document)
 										"scrollY" : 324,
 										"scrollX" : true,
 										"ajax" : {
-											"url" : "/PAYGTL_LORA_BLE/status/"
+											"url" : "./status/"
 													+ sessionStorage
 															.getItem("roleID")
 													+ "/"
@@ -708,7 +715,7 @@ $(document)
 												.ajax({
 													type : "GET",
 													contentType : "application/json",
-													url : "/PAYGTL_LORA_BLE/status/"
+													url : "./status/"
 															+ url,
 													dataType : "JSON",
 
@@ -978,7 +985,7 @@ function getDeleteTransactionID(transID) {
 			$.ajax({
 				type : "POST",
 				contentType : "application/json",
-				url : "/PAYGTL_LORA_BLE/status/delete/" + transID,
+				url : "./status/delete/" + transID,
 				dataType : "JSON",
 				success : function(data) {
 					// alert("Success====" + data.result);
