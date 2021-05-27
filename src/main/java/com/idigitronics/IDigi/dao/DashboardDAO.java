@@ -328,58 +328,76 @@ public class DashboardDAO {
 			xAxis = new LinkedList<String>();
 			yAxis = new LinkedList<Integer>();
 			
-			int totalConsumptionPerDayMonthYear = 0;
-			
 					if(year == 0 && month == 0) {
+						
+						int totalConsumptionPerDayMonthYear = 0;
+						
+						String start = "SELECT * FROM <tablename> ";
+						PreparedStatement pstmt3 = con.prepareStatement(start.replaceAll("<tablename>", id != 0 ? "block" : "community"));
+						ResultSet rs3 = pstmt3.executeQuery();
+						
+						while(rs3.next()) {
+						
+						// last 30 days	
 						
 						for(int i = 30; i>0; i-- ) {
 							
-							PreparedStatement pstmt3 = con.prepareStatement("SELECT * FROM community");
-							
-							
-							String mainquery = "SELECT * FROM customerdetails <main>";
-							
-							mainquery = mainquery.replaceAll("<main>", id != 0 ? "WHERE CommunityID = "+id+" ORDER BY CustomerID ASC" : "");
-							
-							PreparedStatement pstmt2 = con.prepareStatement(mainquery);
-							ResultSet rs2 = pstmt2.executeQuery();
-							while (rs2.next()) {
-								PreparedStatement pstmt1 =  con.prepareStatement("SELECT CustomerMeterID, MIUID FROM Customermeterdetails WHERE CustomerID = " + rs2.getLong("CustomerID") + " AND MeterType = '"+type+"'");
-								ResultSet rs1 = pstmt1.executeQuery();
+								int customerConsumption = 0;
 								
-								int individualCustomerConsumptionPerDay = 0;
+								String mainquery = "SELECT * FROM customerdetails <main>";
 								
-								while(rs1.next()) {
+								mainquery = mainquery.replaceAll("<main>", id != 0 ? "WHERE CommunityID = "+rs3.getInt("CommunityID")+" AND BlockID = "+ id+" ORDER BY CustomerID ASC" : "WHERE CommunityID = "+rs3.getInt("CommunityID"));
+								
+								PreparedStatement pstmt2 = con.prepareStatement(mainquery);
+								ResultSet rs2 = pstmt2.executeQuery();
+								while (rs2.next()) {
+									PreparedStatement pstmt1 =  con.prepareStatement("SELECT CustomerMeterID, MIUID FROM Customermeterdetails WHERE CustomerID = " + rs2.getLong("CustomerID") + " AND MeterType = '"+type+"'");
+									ResultSet rs1 = pstmt1.executeQuery();
 									
-									String query = "SELECT ((SELECT Reading FROM balancelog WHERE CustomerMeterID = ? AND LogDate BETWEEN CONCAT(CURDATE() - INTERVAL <day> DAY, ' 00:00:00') AND CONCAT(CURDATE() - INTERVAL <day> DAY, ' 23:59:59') ORDER BY ReadingID DESC LIMIT 0,1) \r\n" + 
-											 		"- (SELECT Reading FROM balancelog WHERE CustomerMeterID = ? AND LogDate BETWEEN CONCAT(CURDATE() - INTERVAL <day> DAY, ' 00:00:00') AND CONCAT(CURDATE() - INTERVAL <day> DAY, ' 23:59:59') ORDER BY ReadingID ASC LIMIT 0,1)) AS Units, CURDATE() - INTERVAL <day> DAY AS consumptiondate";
-						
-									pstmt = con.prepareStatement(query.replaceAll("<day>", ""+i));
-									pstmt.setInt(1, rs1.getInt("CustomerMeterID"));
-									pstmt.setInt(2, rs1.getInt("CustomerMeterID"));
-									rs = pstmt.executeQuery();
+									int individualMeterConsumption = 0;
 									
-									if(rs.next()) {
+									while(rs1.next()) {
 										
-										individualCustomerConsumptionPerDay = individualCustomerConsumptionPerDay + (rs.getString("Units") == null ? 0 : rs.getInt("Units"));
+										String query = "SELECT ((SELECT Reading FROM balancelog WHERE CustomerMeterID = ? AND LogDate BETWEEN CONCAT(CURDATE() - INTERVAL <day> DAY, ' 00:00:00') AND CONCAT(CURDATE() - INTERVAL <day> DAY, ' 23:59:59') ORDER BY ReadingID DESC LIMIT 0,1) \r\n" + 
+												 		"- (SELECT Reading FROM balancelog WHERE CustomerMeterID = ? AND LogDate BETWEEN CONCAT(CURDATE() - INTERVAL <day> DAY, ' 00:00:00') AND CONCAT(CURDATE() - INTERVAL <day> DAY, ' 23:59:59') ORDER BY ReadingID ASC LIMIT 0,1)) AS Units, CURDATE() - INTERVAL <day> DAY AS consumptiondate";
+							
+										pstmt = con.prepareStatement(query.replaceAll("<day>", ""+i));
+										pstmt.setInt(1, rs1.getInt("CustomerMeterID"));
+										pstmt.setInt(2, rs1.getInt("CustomerMeterID"));
+										rs = pstmt.executeQuery();
 										
+										if(rs.next()) {individualMeterConsumption = individualMeterConsumption + (rs.getString("Units") == null ? 0 : rs.getInt("Units"));}
 										}
+									
+									customerConsumption = customerConsumption +  individualMeterConsumption;
 								}
 								
-								totalConsumptionPerDayMonthYear = totalConsumptionPerDayMonthYear +  individualCustomerConsumptionPerDay;
+								totalConsumptionPerDayMonthYear = totalConsumptionPerDayMonthYear + customerConsumption;
+								
 							}
-							
-							xAxis.add(rs.getString("consumptiondate"));
-							yAxis.add(totalConsumptionPerDayMonthYear);
+						
+						xAxis.add(id != 0 ? rs3.getString("BlockName") : rs3.getString("CommunityName"));
+						yAxis.add(totalConsumptionPerDayMonthYear);
 							
 						}
-					} else if (year != 0 &&  month == 0) {
+					} 
+					else if (year != 0 &&  month == 0) {
+						
+						int totalConsumptionPerDayMonthYear = 0;
+
+						String start = "SELECT * FROM <tablename> ";
+						PreparedStatement pstmt3 = con.prepareStatement(start.replaceAll("<tablename>", id != 0 ? "block" : "community"));
+						ResultSet rs3 = pstmt3.executeQuery();
+						
+						while(rs3.next()) {
 						
 						for(int i = 1; i<=12; i++) {
 							
+							int customerConsumption = 0;
+							
 							String mainquery = "SELECT * FROM customerdetails <main>";
 							
-							mainquery = mainquery.replaceAll("<main>", id != 0 ? "WHERE CommunityID = "+id+" ORDER BY CustomerID ASC" : "");
+							mainquery = mainquery.replaceAll("<main>", id != 0 ? "WHERE CommunityID = "+rs3.getInt("CommunityID")+" AND BlockID = "+ id+" ORDER BY CustomerID ASC" : "WHERE CommunityID = "+rs3.getInt("CommunityID"));
 							
 							PreparedStatement pstmt2 = con.prepareStatement(mainquery);
 							ResultSet rs2 = pstmt2.executeQuery();
@@ -387,7 +405,7 @@ public class DashboardDAO {
 								PreparedStatement pstmt1 =  con.prepareStatement("SELECT CustomerMeterID, MIUID FROM Customermeterdetails WHERE CustomerID = " + rs2.getLong("CustomerID") + " AND MeterType = '"+type+"'");
 								ResultSet rs1 = pstmt1.executeQuery();
 								
-								int individualCustomerConsumptionPerYear = 0;
+								int individualMeterConsumption = 0;
 								
 								while(rs1.next()) {
 									
@@ -401,28 +419,36 @@ public class DashboardDAO {
 								pstmt.setInt(4, year);
 								rs = pstmt.executeQuery();
 								
-								if(rs.next()) {
-									
-									individualCustomerConsumptionPerYear = individualCustomerConsumptionPerYear + (rs.getString("Units") == null ? 0 : rs.getInt("Units"));
-									
-									}
-						}
-								totalConsumptionPerDayMonthYear = totalConsumptionPerDayMonthYear +  individualCustomerConsumptionPerYear;
+								if(rs.next()) {individualMeterConsumption = individualMeterConsumption + (rs.getString("Units") == null ? 0 : rs.getInt("Units"));}
+								}
 								
+								customerConsumption = customerConsumption +  individualMeterConsumption;
 							}
 							
-							xAxis.add(i==1 ? "JAN-"+year : i==2 ? "FEB-"+year : i==3 ? "MAR-"+year : i==4 ? "APR-"+year : i==5 ? "MAY-"+year : i==6 ? "JUN-"+year : i==7 ? "JUL-"+year : i==8 ? "AUG-"+year : i==9 ? "SEP-"+year : i==10 ? "OCT-"+year : i==11 ? "NOV-"+year : i==12 ? "DEC-"+year : "");
+							totalConsumptionPerDayMonthYear = totalConsumptionPerDayMonthYear + customerConsumption;
+						}
+							
+							xAxis.add(id != 0 ? rs3.getString("BlockName") : rs3.getString("CommunityName"));
 							yAxis.add(totalConsumptionPerDayMonthYear);
 						}
 					} else if(year != 0 && month != 0) {
 						
+						int totalConsumptionPerDayMonthYear = 0;
 						int j = (month == 2 ? 28 : (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12) ? 31 : 30);
+						
+						String start = "SELECT * FROM <tablename> ";
+						PreparedStatement pstmt3 = con.prepareStatement(start.replaceAll("<tablename>", id != 0 ? "block" : "community"));
+						ResultSet rs3 = pstmt3.executeQuery();
+						
+						while(rs3.next()) {
 						
 						for(int i = 1; i <= j ; i++) {
 							
+							int customerConsumption = 0;
+							
 							String mainquery = "SELECT * FROM customerdetails <main>";
 							
-							mainquery = mainquery.replaceAll("<main>", id != 0 ? "WHERE CommunityID = "+id+" ORDER BY CustomerID ASC" : "");
+							mainquery = mainquery.replaceAll("<main>", id != 0 ? "WHERE CommunityID = "+rs3.getInt("CommunityID")+" AND BlockID = "+ id+" ORDER BY CustomerID ASC" : "WHERE CommunityID = "+rs3.getInt("CommunityID"));
 							
 							PreparedStatement pstmt2 = con.prepareStatement(mainquery);
 							ResultSet rs2 = pstmt2.executeQuery();
@@ -430,9 +456,9 @@ public class DashboardDAO {
 								PreparedStatement pstmt1 =  con.prepareStatement("SELECT CustomerMeterID, MIUID FROM Customermeterdetails WHERE CustomerID = " + rs2.getLong("CustomerID") + " AND MeterType = '"+type+"'");
 								ResultSet rs1 = pstmt1.executeQuery();
 								
-							int individualCustomerConsumptionPerMonth = 0;
-							
-							while(rs1.next()) {
+								int individualMeterConsumption = 0;
+								
+								while(rs1.next()) {
 								
 								String query = "SELECT ((SELECT Reading FROM balancelog WHERE CustomerMeterID = ? AND YEAR(LogDate) = ? AND MONTH(LogDate) = ? AND DAY(LogDate) = <day> ORDER BY ReadingID DESC LIMIT 0,1) \r\n" + 
 										 "- (SELECT Reading FROM balancelog WHERE CustomerMeterID = ? AND YEAR(LogDate) = ? AND MONTH(LogDate) = ? AND DAY(LogDate) = <day> ORDER BY ReadingID ASC LIMIT 0,1)) AS Units";
@@ -446,17 +472,19 @@ public class DashboardDAO {
 								pstmt.setInt(6, month);
 								rs = pstmt.executeQuery();
 								
-								if(rs.next()) {
-									
-									individualCustomerConsumptionPerMonth = individualCustomerConsumptionPerMonth + (rs.getString("Units") == null ? 0 : rs.getInt("Units"));
-									
-									}
+								if(rs.next()) {individualMeterConsumption = individualMeterConsumption + (rs.getString("Units") == null ? 0 : rs.getInt("Units"));}
 								}
+								
+								customerConsumption = customerConsumption +  individualMeterConsumption;
 							}
-							xAxis.add(Integer.toString(i)+"-"+month+"-"+year);
-							yAxis.add(totalConsumptionPerDayMonthYear);
+							
+							totalConsumptionPerDayMonthYear = totalConsumptionPerDayMonthYear + customerConsumption;
+							
 							}
+						xAxis.add(id != 0 ? rs3.getString("BlockName") : rs3.getString("CommunityName"));
+						yAxis.add(totalConsumptionPerDayMonthYear);
 						}
+					}
 			graphResponseVO.setXAxis(xAxis);
 			graphResponseVO.setYAxis(yAxis);
 
@@ -467,7 +495,7 @@ public class DashboardDAO {
 		return graphResponseVO;
 	}
 	
-	public HomeResponseVO getHomeDashboardDetails(int roleid, String id)
+	public HomeResponseVO getHomeDashboardDetails(String type, int roleid, String id)
 			throws SQLException {
 		Connection con = null;
 		PreparedStatement pstmt = null;
@@ -501,9 +529,9 @@ public class DashboardDAO {
 				noAMRInterval = rs1.getInt("NoAMRInterval");
 			}
 			
-			String query = "SELECT DISTINCT cmd.CRNNumber, dbl.ReadingID, dbl.MainBalanceLogID, dbl.EmergencyCredit, dbl.MeterID, dbl.Reading, dbl.Balance, dbl.LowBattery, dbl.SolonideStatus, dbl.TamperDetect, dbl.Minutes, dbl.IoTTimeStamp, dbl.LogDate FROM displaybalancelog AS dbl LEFT JOIN customermeterdetails AS cmd ON cmd.CRNNumber = dbl.CRNNumber <change>";
+			String query = "SELECT DISTINCT dbl.CustomerUniqueID, dbl.ReadingID, dbl.MainBalanceLogID, dbl.EmergencyCredit, dbl.CustomerMeterID, dbl.MIUID, dbl.PayType, dbl.MeterType, dbl.Reading, dbl.Balance, dbl.LowBattery, dbl.ValveStatus, dbl.ValveConfiguration, dbl.DoorOpenTamper, dbl.MagneticTamper, dbl.Vacation, dbl.RTCFault, dbl.LowBalance, dbl.Minutes, dbl.LogDate FROM displaybalancelog AS dbl WHERE dbl.MeterType = '"+type+"' <change>";
 
-			pstmt = con.prepareStatement(query.replaceAll("<change>", (roleid == 1 || roleid == 4) ? "ORDER BY dbl.IoTTimeStamp DESC" : (roleid == 2 || roleid == 5) ? "WHERE dbl.BlockID = "+id+ " ORDER BY dbl.IoTTimeStamp DESC" : (roleid == 3) ? "WHERE dbl.CRNNumber = '"+id+"'":""));
+			pstmt = con.prepareStatement(query.replaceAll("<change>", (roleid == 1 || roleid == 4) ? "ORDER BY dbl.LogDate DESC" : (roleid == 2 || roleid == 5) ? "AND dbl.BlockID = "+id+ " ORDER BY dbl.LogDate DESC" : (roleid == 3) ? "AND dbl.CustomerUniqueID = '"+id+"'":""));
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
 				
@@ -511,11 +539,11 @@ public class DashboardDAO {
 
 				Date currentDateTime = new Date();
 				
-				long minutes = TimeUnit.MILLISECONDS.toMinutes(currentDateTime.getTime() - (rs.getTimestamp("IoTTimeStamp")).getTime());
+				long minutes = TimeUnit.MILLISECONDS.toMinutes(currentDateTime.getTime() - (rs.getTimestamp("LogDate")).getTime());
 				
 				if(minutes > noAMRInterval) { nonLive++; } else { live++; }
-				if(rs.getInt("SolonideStatus") == 0) { active++; } else { inActive++; }
-				if(rs.getInt("Balance") <= 0) { emergency++; }
+				if(rs.getInt("ValveStatus") == 1) { active++; } else { inActive++; }
+				if(rs.getInt("Balance") <= 0 && rs.getString("MeterType").equalsIgnoreCase("Prepaid")) { emergency++; }
 				if(rs.getInt("LowBattery") == 1) { lowBattery++; }
 				
 			}
@@ -535,22 +563,22 @@ public class DashboardDAO {
 			homeResponseVO.setAmr(amr);
 			homeResponseVO.setAmrPercentage(100);
 			
-			String query1 = "SELECT SUM(Amount) AS topup FROM topup WHERE Status = 2 AND PaymentStatus = 1 AND TransactionDate BETWEEN CONCAT(CURDATE(), ' 00:00:00') AND CONCAT(CURDATE(), ' 23:59:59') <change>";
+			String query1 = "SELECT SUM(Amount) AS topup FROM topup WHERE Status = 0 AND PaymentStatus = 1 AND TransactionDate BETWEEN CONCAT(CURDATE(), ' 00:00:00') AND CONCAT(CURDATE(), ' 23:59:59') <change>";
 			pstmt2 = con.prepareStatement(query1.replaceAll("<change>", (roleid == 2 || roleid == 5) ? "AND BlockID = "+id :""));
 			rs2 = pstmt2.executeQuery();
 			if(rs2.next()) { homeResponseVO.setTopup(rs2.getInt("topup")); } else { homeResponseVO.setTopup(0); }
 			
-			String query2 = "SELECT MeterID FROM customermeterdetails <change>";
-			pstmt3 = con.prepareStatement(query2.replaceAll("<change>", (roleid == 2 || roleid == 5) ? "WHERE BlockID = "+id + " ORDER BY CustomerID ASC" :""));
+			String query2 = "SELECT cmd.CustomerMeterID, cd.CustomerID FROM customermeterdetails AS cmd LEFT JOIN customerdetails AS cd ON cd.CustomerID = cmd.CustomerID WHERE cmd.MeterType = '"+type+"' <change>";
+			pstmt3 = con.prepareStatement(query2.replaceAll("<change>", (roleid == 2 || roleid == 5) ? "AND BlockID = "+id + " ORDER BY CustomerID ASC" :""));
 			rs3 = pstmt3.executeQuery();
 			while(rs3.next()) {
 				
-				String query3 = "SELECT ABS((SELECT Reading FROM balancelog WHERE MeterID = ? AND IoTTImeStamp BETWEEN (NOW() - INTERVAL 1 DAY) AND NOW() ORDER BY ReadingID DESC LIMIT 0,1)\r\n" + 
-						"- (SELECT Reading FROM balancelog WHERE MeterID = ? AND IoTTImeStamp BETWEEN (NOW() - INTERVAL 1 DAY) AND NOW() ORDER BY ReadingID ASC LIMIT 0,1)) AS Units";
+				String query3 = "SELECT ABS((SELECT Reading FROM balancelog WHERE CustomerMeterID = ? AND LogDate BETWEEN (NOW() - INTERVAL 1 DAY) AND NOW() ORDER BY ReadingID DESC LIMIT 0,1)\r\n" + 
+						"- (SELECT Reading FROM balancelog WHERE CustomerMeterID = ? AND LogDate BETWEEN (NOW() - INTERVAL 1 DAY) AND NOW() ORDER BY ReadingID ASC LIMIT 0,1)) AS Units";
 
 				pstmt4 = con.prepareStatement(query3);
-				pstmt4.setString(1, rs3.getString("MeterID"));
-				pstmt4.setString(2, rs3.getString("MeterID"));
+				pstmt4.setInt(1, rs3.getInt("CustomerMeterID"));
+				pstmt4.setInt(2, rs3.getInt("CustomerMeterID"));
 				rs4 = pstmt4.executeQuery();
 				if(rs4.next()) {
 					consumption = rs4.getInt("Units") + consumption;

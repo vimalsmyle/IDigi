@@ -64,12 +64,12 @@ public class DashboardController {
 		return dasboardresponsevo;
 	}
 	
-	@RequestMapping(value = "/homedashboard/{roleid}/{id}", method = RequestMethod.GET, produces = "application/json")
-	public @ResponseBody HomeResponseVO homedashboarddetails(@PathVariable("roleid") int roleid, @PathVariable("id") String id) throws SQLException {
+	@RequestMapping(value = "/homedashboard/{type}/{roleid}/{id}", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody HomeResponseVO homedashboarddetails(@PathVariable("type") String type, @PathVariable("roleid") int roleid, @PathVariable("id") String id) throws SQLException {
 
 		DashboardDAO dashboarddao = new DashboardDAO();
 
-		return dashboarddao.getHomeDashboardDetails(roleid, id);
+		return dashboarddao.getHomeDashboardDetails(type, roleid, id);
 	}
 	
 	@RequestMapping(value = "/graph/{type}/{year}/{month}/{id}", method = RequestMethod.GET, produces = "application/json")
