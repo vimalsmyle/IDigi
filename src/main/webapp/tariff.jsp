@@ -101,14 +101,14 @@
 							<div class="col-md-6">
 								<div class="group form-group">
 									<label class="bmd-label-floating">Name</label> <input
-										type="text" class="form-control" name="tariffNameAdd"
+										type="text" class="form-control form-control-sm" name="tariffNameAdd"
 										id="tariffNameAdd">
 								</div>
 							</div>
 							<div class="col-md-6">
 								<div class="group form-group">
 									<label class="bmd-label-floating">Rate</label> <input
-										type="text" class="form-control" name="tariffRateAdd"
+										type="text" class="form-control form-control-sm" name="tariffRateAdd"
 										id="tariffRateAdd">
 								</div>
 							</div>
@@ -116,14 +116,14 @@
 							<div class="col-md-6">
 								<div class="group form-group">
 									<label class="bmd-label-floating">Emergency Credit</label> <input
-										type="text" class="form-control" name="emergencyCreditAdd"
+										type="text" class="form-control form-control-sm" name="emergencyCreditAdd"
 										id="emergencyCreditAdd">
 								</div>
 							</div>
 							<div class="col-md-6">
 								<div class="group form-group">
 									<label class="bmd-label-floating">Alarm Credit</label> <input
-										type="text" class="form-control" name="alarmCreditAdd"
+										type="text" class="form-control form-control-sm" name="alarmCreditAdd"
 										id="alarmCreditAdd">
 								</div>
 							</div>
@@ -131,7 +131,7 @@
 							<div class="col-md-6">
 								<div class="group form-group">
 									<label class="bmd-label-floating">Fixed Charge</label> <input
-										type="text" class="form-control" name="fixedChargeAdd"
+										type="text" class="form-control form-control-sm" name="fixedChargeAdd"
 										id="fixedChargeAdd">
 								</div>
 							</div>
@@ -175,14 +175,14 @@
 							<div class="col-md-6">
 								<div id="formtariffName" class="group form-group">
 									<label class="bmd-label-floating">Name</label> <input
-										type="text" class="form-control" name="tariffNameEdit"
+										type="text" class="form-control form-control-sm" name="tariffNameEdit"
 										id="tariffNameEdit">
 								</div>
 							</div>
 							<div class="col-md-6">
 								<div id="formtariffRate" class="group form-group">
 									<label class="bmd-label-floating">Rate</label> <input
-										type="text" class="form-control" name="tariffRateEdit"
+										type="text" class="form-control form-control-sm" name="tariffRateEdit"
 										id="tariffRateEdit">
 								</div>
 							</div>
@@ -190,14 +190,14 @@
 							<div class="col-md-6">
 								<div id="formemergencyCredit" class="group form-group">
 									<label class="bmd-label-floating">Emergency Credit</label> <input
-										type="text" class="form-control" name="emergencyCreditEdit"
+										type="text" class="form-control form-control-sm" name="emergencyCreditEdit"
 										id="emergencyCreditEdit">
 								</div>
 							</div>
 							<div class="col-md-6">
 								<div id="formalarmCredit" class="group form-group">
 									<label class="bmd-label-floating">Alarm Credit</label> <input
-										type="text" class="form-control" name="alarmCreditEdit"
+										type="text" class="form-control form-control-sm" name="alarmCreditEdit"
 										id="alarmCreditEdit"> <input type="hidden"
 										id="tariffIdhidden">
 								</div>
@@ -207,7 +207,7 @@
 							<div class="col-md-6">
 								<div id="formfixedCharge" class="group form-group">
 									<label class="bmd-label-floating">Fixed Charge</label> <input
-										type="text" class="form-control" name="fixedChargeEdit"
+										type="text" class="form-control form-control-sm" name="fixedChargeEdit"
 										id="fixedChargeEdit">
 								</div>
 							</div>

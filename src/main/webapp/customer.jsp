@@ -60,14 +60,14 @@
 								<div class="form-group has-feedback has-success bmd-form-group is-filled">
 									<label class="bmd-label-floating select-label">Community Name</label> 
 									<select
-										class="form-control select3" id="selectcommunityName" name="selectcommunityName" onchange="showBlockbyCommunity(this.value);">
+										class="form-control select3 form-control-sm" id="selectcommunityName" name="selectcommunityName" onchange="showBlockbyCommunity(this.value);">
 									</select>
 								</div>
 							</div>
 							<div class="col-md-4">
 								<div class="form-group has-feedback has-success bmd-form-group is-filled">
 									<label class="bmd-label-floating select-label">Select Block</label> <select
-										class="form-control" id="selectBlockBasedonCommunity" name="selectBlockBasedonCommunity">
+										class="form-control form-control-sm" id="selectBlockBasedonCommunity" name="selectBlockBasedonCommunity">
 									</select>
 								</div>
 							</div>
@@ -76,14 +76,14 @@
 							<div class="col-md-4">
 								<div id = "formcommunityNameAdd" class="form-group">
 									<label class="bmd-label-floating">Community Name</label> <input
-										type="text" class="form-control" name="communityNameAdd"
+										type="text" class="form-control form-control-sm" name="communityNameAdd"
 										id="communityNameAdd" disabled>
 								</div>
 							</div>
 							<div class="col-md-4">
 								<div id = "formblockNameAdd" class="form-group">
 									<label class="bmd-label-floating">Block Name</label> <input
-										type="text" class="form-control" name="blockNameAdd"
+										type="text" class="form-control form-control-sm" name="blockNameAdd"
 										id="blockNameAdd"  disabled>
 								</div>
 							</div>
@@ -92,14 +92,14 @@
 							<div class="col-md-4">
 								<div class="group form-group">
 									<label class="bmd-label-floating">First Name</label> <input
-										type="text" class="form-control" name="firstNameAdd"
+										type="text" class="form-control form-control-sm" name="firstNameAdd"
 										id="firstNameAdd">
 								</div>
 							</div>
 							<div class="col-md-4">
 								<div class="group form-group">
 									<label class="bmd-label-floating">Last Name</label> <input
-										type="text" class="form-control" name="lastNameAdd"
+										type="text" class="form-control form-control-sm" name="lastNameAdd"
 										id="lastNameAdd">
 								</div>
 							</div>
@@ -109,14 +109,14 @@
 							<div class="col-md-4">
 								<div class="group form-group">
 									<label class="bmd-label-floating">House No.</label> <input
-										type="text" class="form-control" name="houseNoAdd"
+										type="text" class="form-control form-control-sm" name="houseNoAdd"
 										id="houseNoAdd">
 								</div>
 							</div>
 							<div class="col-md-4">
 								<div class="group form-group">
 									<label class="bmd-label-floating">Mobile No</label> <input
-										type="text" class="form-control" name="mobileNoAdd"
+										type="text" class="form-control form-control-sm" name="mobileNoAdd"
 										id="mobileNoAdd">
 								</div>
 							</div>
@@ -127,14 +127,14 @@
 							<div class="col-md-4">
 								<div class="group form-group">
 									<label class="bmd-label-floating">Email</label> <input
-										type="email" class="form-control" name="emailAdd"
+										type="email" class="form-control form-control-sm" name="emailAdd"
 										id="emailAdd">
 								</div>
 							</div>
 							<div class="col-md-4">
 								<div class="group form-group">
 									<label class="bmd-label-floating">CRN Number</label> <input
-										type="text" class="form-control" name="CRNAdd"
+										type="text" class="form-control form-control-sm" name="CRNAdd"
 										id="CRNAdd">
 								</div>
 							</div>
@@ -166,17 +166,6 @@
 									<button type="button" class="btn btn-danger btn-raised resetFilter" id="resetFilter">Reset</button>
 							
 							</div>
-
-							
-
-
-							<!-- <div class="col-md-4">
-								<button type="button" class="btn btn-danger btn-raised mr-4"
-									data-dismiss="modal">
-									Close
-									<div class="ripple-container"></div>
-								</button>
-							</div> -->
 						</div>
 					</form>
 						
@@ -212,14 +201,14 @@
 								<div class="form-group has-feedback has-success bmd-form-group is-filled">
 									<label class="bmd-label-floating select-label">Community Name</label> 
 									<select
-										class="form-control select2" id="selectcommunityName" name="selectcommunityName" onchange="showBlockbyCommunity(this.value);">
+										class="form-control form-control-sm select2" id="selectcommunityName" name="selectcommunityName" onchange="showBlockbyCommunity(this.value);">
 									</select>
 								</div>
 							</div>
 							<div class="col-md-4">
 								<div class="form-group has-feedback has-success bmd-form-group is-filled">
 									<label class="bmd-label-floating select-label">Select Block</label> <select
-										class="form-control select2" id="selectBlockBasedonCommunity" name="selectBlockBasedonCommunity">
+										class="form-control form-control-sm select2" id="selectBlockBasedonCommunity" name="selectBlockBasedonCommunity">
 									</select>
 								</div>
 							</div>
@@ -228,14 +217,14 @@
 							<div class="col-md-4">
 								<div id = "formcommunityNameAdd" class="form-group">
 									<label class="bmd-label-floating">Community Name</label> <input
-										type="text" class="form-control" name="communityNameAdd"
+										type="text" class="form-control form-control-sm" name="communityNameAdd"
 										id="communityNameAdd" disabled>
 								</div>
 							</div>
 							<div class="col-md-4">
 								<div id = "formblockNameAdd" class="form-group">
 									<label class="bmd-label-floating">Block Name</label> <input
-										type="text" class="form-control" name="blockNameAdd"
+										type="text" class="form-control form-control-sm" name="blockNameAdd"
 										id="blockNameAdd"  disabled>
 								</div>
 							</div>
@@ -244,14 +233,14 @@
 							<div class="col-md-4">
 								<div class="form-group">
 									<label class="bmd-label-floating">First Name</label> <input
-										type="text" class="form-control" name="firstNameAdd"
+										type="text" class="form-control form-control-sm" name="firstNameAdd"
 										id="firstNameAdd">
 								</div>
 							</div>
 							<div class="col-md-4">
 								<div class="form-group">
 									<label class="bmd-label-floating">Last Name</label> <input
-										type="text" class="form-control" name="lastNameAdd"
+										type="text" class="form-control form-control-sm" name="lastNameAdd"
 										id="lastNameAdd">
 								</div>
 							</div>
@@ -261,14 +250,14 @@
 							<div class="col-md-4">
 								<div class="form-group">
 									<label class="bmd-label-floating">House No.</label> <input
-										type="text" class="form-control" name="houseNoAdd"
+										type="text" class="form-control form-control-sm" name="houseNoAdd"
 										id="houseNoAdd">
 								</div>
 							</div>
 							<div class="col-md-4">
 								<div class="form-group">
 									<label class="bmd-label-floating">Mobile No</label> <input
-										type="text" class="form-control" name="mobileNoAdd"
+										type="text" class="form-control form-control-sm" name="mobileNoAdd"
 										id="mobileNoAdd">
 								</div>
 							</div>
@@ -279,14 +268,14 @@
 							<div class="col-md-4">
 								<div class="form-group">
 									<label class="bmd-label-floating">Email</label> <input
-										type="email" class="form-control" name="emailAdd"
+										type="email" class="form-control form-control-sm" name="emailAdd"
 										id="emailAdd">
 								</div>
 							</div>
 							<div class="col-md-4">
 								<div class="form-group">
 									<label class="bmd-label-floating">MSN</label> <input
-										type="text" class="form-control" name="meterSerialAdd"
+										type="text" class="form-control form-control-sm" name="meterSerialAdd"
 										id="meterSerialAdd">
 								</div>
 							</div>
@@ -297,7 +286,7 @@
 							<div class="col-md-4">
 								<div class="form-group">
 									<label class="bmd-label-floating">MIU ID</label> <input
-										type="text" class="form-control" name="amrAdd"
+										type="text" class="form-control form-control-sm" name="amrAdd"
 										id="amrAdd">
 								</div>
 							</div>
@@ -305,7 +294,7 @@
 								<div class="form-group">
 									<label class="bmd-label-floating select-label">Tariff Name</label>  
 									<select
-										class="form-control" id="selectTariffName" name="selectTariffName">
+										class="form-control form-control-sm" id="selectTariffName" name="selectTariffName">
 										<!-- <option style = "color: Red" value="" disabled selected>Select Tariff</option> --><!--  <option>Select Community</option> --> 
 									</select>
 								</div>
@@ -315,7 +304,7 @@
 							<div class="col-md-4">
 								<div class="form-group">
 									<label class="bmd-label-floating">CRN Number</label> <input
-										type="text" class="form-control" name="CRNAdd"
+										type="text" class="form-control form-control-sm" name="CRNAdd"
 										id="CRNAdd">
 								</div>
 							</div>

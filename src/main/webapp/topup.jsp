@@ -60,14 +60,14 @@
                         <div class="col-md-4">
                             <div class="group form-group">
                               <label class="bmd-label-floating select-label">Community<sup class="imp">*</sup></label>
-                              <select class="form-control" id="selectcommunityName" name="selectcommunityName" onchange="showBlockbyCommunity(this.value);">
+                              <select class="form-control form-control-sm" id="selectcommunityName" name="selectcommunityName" onchange="showBlockbyCommunity(this.value);">
                               </select>
                             </div>
                           </div>
                           <div class="col-md-4">
                             <div class="group form-group">
                               <label class="bmd-label-floating select-label">Select Block<sup class="imp">*</sup></label>
-                              <select class="form-control" id="selectBlockBasedonCommunity" name="selectBlockBasedonCommunity" onchange="showCustomerbyBlock(this.value);">
+                              <select class="form-control form-control-sm" id="selectBlockBasedonCommunity" name="selectBlockBasedonCommunity" onchange="showCustomerbyBlock(this.value);">
                               
                               </select>
                             </div>
@@ -75,7 +75,7 @@
                           <div class="col-md-4">
                             <div class="group form-group">
                               <label class="bmd-label-floating select-label">Select CRN<sup class="imp">*</sup></label>
-                              <select class="form-control" id="selectHouseBasedonBlock" name="selectHouseBasedonBlock" onchange="showTopupDetails(this.value);">
+                              <select class="form-control form-control-sm" id="selectHouseBasedonBlock" name="selectHouseBasedonBlock" onchange="showTopupDetails(this.value);">
                               </select>
                             </div>
                           </div>
@@ -84,14 +84,14 @@
                           <div class="col-md-4">
 								<div id = "formcommunityNameAdd" class="group form-group">
 									<label class="bmd-label-floating">Community Name</label> <input
-										type="text" class="form-control" name="communityNameAdd"
+										type="text" class="form-control form-control-sm" name="communityNameAdd"
 										id="communityNameAdd" disabled>
 								</div>
 							</div>
 							<div class="col-md-4">
 								<div id = "formblockNameAdd" class="group form-group">
 									<label class="bmd-label-floating">Block Name</label> <input
-										type="text" class="form-control" name="blockNameAdd"
+										type="text" class="form-control form-control-sm" name="blockNameAdd"
 										id="blockNameAdd"  disabled>
 								</div>
 							</div>
@@ -99,7 +99,7 @@
 							<div class="col-md-4">
                             <div class="group form-group">
                               <label class="bmd-label-floating select-label">Select CRN<sup class="imp">*</sup></label>
-                              <select class="form-control" id="selectHouseBasedonBlock" name="selectHouseBasedonBlock" onchange="showTopupDetails(this.value);">
+                              <select class="form-control form-control-sm" id="selectHouseBasedonBlock" name="selectHouseBasedonBlock" onchange="showMetersDetails(this.value);">
                               </select>
                             </div>
                           </div>
@@ -108,45 +108,54 @@
                           <div class="col-md-4">
                             <div id="formCRNNumber" class="group form-group">
                               <label class="bmd-label-floating">CRN Number</label>
-                              <input type="text" class="form-control" id="CustomerCRNNumber" name="CustomerCRNNumber" disabled>
+                              <input type="text" class="form-control form-control-sm" id="CustomerCRNNumber" name="CustomerCRNNumber" disabled>
                             </div>
                           </div>
                           
                           <%} %>
+                          
+                          <div class="col-md-4">
+                            <div class="group form-group">
+                              <label class="bmd-label-floating select-label">Select Meters<sup class="imp">*</sup></label>
+                              <select class="form-control form-control-sm" id="selectMeters" name="selectMeters" onchange="showTopupDetails(this.value);">
+                              </select>
+                            </div>
+                          </div>
+                          
                           <div class="col-md-4">
                             <div id="formAMR_topup" class="group form-group">
                               <label class="bmd-label-floating">MIU ID</label>
-                              <input type="text" class="form-control" id="AMR_topup" name="AMR_topup" disabled>
+                              <input type="text" class="form-control form-control-sm" id="AMR_topup" name="AMR_topup" disabled>
                             </div>
                           </div>
                           <div class="col-md-4">
                             <div id="formcurrentBalance_topup" class="group form-group">
                               <label class="bmd-label-floating">Current Balance</label>
-                              <input type="text" class="form-control" id="currentBalance_topup" name="currentBalance_topup" disabled>
+                              <input type="text" class="form-control form-control-sm" id="currentBalance_topup" name="currentBalance_topup" disabled>
                             </div>
                           </div>
                           <div class="col-md-4">
                             <div id="formdateTime_topup" class="group form-group">
                               <label class="bmd-label-floating">Date & Time</label>
-                              <input type="text" class="form-control" id="dateTime_topup" name="dateTime_topup" disabled>
+                              <input type="text" class="form-control form-control-sm" id="dateTime_topup" name="dateTime_topup" disabled>
                             </div>
                           </div>
                           <div class="col-md-4">
                             <div id="formunit_topup" class="group form-group">
                               <label class="bmd-label-floating">Unit Rate</label>
-                              <input type="text" class="form-control" id="unit_topup" name="unit_topup" disabled>
+                              <input type="text" class="form-control form-control-sm" id="unit_topup" name="unit_topup" disabled>
                             </div>
                           </div>
                           <div class="col-md-4">
                             <div id="formemergency_topup" class="group form-group">
                               <label class="bmd-label-floating">Emergency Credit</label>
-                              <input type="text" class="form-control" id="emergency_topup" name="emergency_topup" disabled>
+                              <input type="text" class="form-control form-control-sm" id="emergency_topup" name="emergency_topup" disabled>
                             </div>
                           </div>
                           <div class="col-md-4">
                             <div id="formalarm_topup" class="group form-group">
                               <label class="bmd-label-floating">Alarm Credit</label>
-                              <input type="text" class="form-control" id="alarm_topup" name="alarm_topup" disabled>
+                              <input type="text" class="form-control form-control-sm" id="alarm_topup" name="alarm_topup" disabled>
                               <input type = "hidden" id="tariffID">
                             </div>
                           </div>
@@ -154,27 +163,27 @@
                           <div class="col-md-4">
                             <div id="formreconnection_topup" class="group form-group">
                               <label class="bmd-label-floating">Reconnection Charges</label>
-                              <input type="text" class="form-control" id="reconnection_topup" name="reconnection_topup" disabled>
+                              <input type="text" class="form-control form-control-sm" id="reconnection_topup" name="reconnection_topup" disabled>
                             </div>
                           </div>
                           
                           <div class="col-md-4">
                             <div id="formfixed_topup" class="group form-group">
                               <label class="bmd-label-floating">Fixed Charge</label>
-                              <input type="text" class="form-control" id="fixed_topup" name="fixed_topup" disabled>
+                              <input type="text" class="form-control form-control-sm" id="fixed_topup" name="fixed_topup" disabled>
                             </div>
                           </div>
                           
                           <div class="col-md-4">
                             <div id="formmonth_topup" class="group form-group">
                               <label class="bmd-label-floating">No. of Months</label>
-                              <input type="text" class="form-control" id="month_topup" name="month_topup" disabled>
+                              <input type="text" class="form-control form-control-sm" id="month_topup" name="month_topup" disabled>
                             </div>
                           </div>
                           <div class="col-md-4">
                             <div class="group form-group">
                               <label class="bmd-label-floating">ReCharge Amount</label>
-                              <input type="text" class="form-control" id="recharge_topup" name="recharge_topup">
+                              <input type="text" class="form-control form-control-sm" id="recharge_topup" name="recharge_topup">
                             </div>
                           </div>
                           <%if(!user_id.equalsIgnoreCase("3")){ %>
@@ -182,7 +191,7 @@
                             <div class="group form-group">
                               <label class="bmd-label-floating">Payment Mode</label>
                              <select
-										class="form-control" id="paymentMode" name="paymentMode">
+										class="form-control form-control-sm" id="paymentMode" name="paymentMode">
 							 			<option value = "-1">Select Mode</option>
 							 			<option value = "Cash">Cash</option>
 							  			<option value = "Online">Online</option>
