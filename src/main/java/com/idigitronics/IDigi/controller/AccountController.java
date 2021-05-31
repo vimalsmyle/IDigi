@@ -27,6 +27,7 @@ import com.idigitronics.IDigi.exceptions.BusinessException;
 import com.idigitronics.IDigi.request.vo.CheckOutRequestVO;
 import com.idigitronics.IDigi.request.vo.ConfigurationRequestVO;
 import com.idigitronics.IDigi.request.vo.DataRequestVO;
+import com.idigitronics.IDigi.request.vo.MailRequestVO;
 import com.idigitronics.IDigi.request.vo.PayBillRequestVO;
 import com.idigitronics.IDigi.request.vo.TopUpRequestVO;
 import com.idigitronics.IDigi.response.vo.BillingResponseVO;
@@ -277,10 +278,15 @@ public class AccountController {
 	ResponseVO testmethod(@PathVariable("transactionID") int transactionID)
 			throws ClassNotFoundException, SQLException {
 		ResponseVO responsevo = new ResponseVO();
+		MailRequestVO mailrequestvo = new MailRequestVO();
+		mailrequestvo.setToEmail("kvk9889@gmail.com");
+		mailrequestvo.setSubject("testmail");
+		mailrequestvo.setMessage("hello test");
+		mailrequestvo.setFileLocation("NoAttachment");
 		ExtraMethodsDAO extramethods = new ExtraMethodsDAO();
 //		responsevo = accountdao.printbillreceipt(transactionID);
-		
-		extramethods.billgeneration();
+		responsevo.setMessage(extramethods.sendmail(mailrequestvo));
+//		extramethods.billgeneration();
 
 		return responsevo;
 	}

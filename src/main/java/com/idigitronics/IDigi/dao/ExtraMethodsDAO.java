@@ -31,6 +31,7 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import org.apache.log4j.Logger;
 import org.json.JSONObject;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -72,6 +73,8 @@ import com.itextpdf.layout.property.VerticalAlignment;
 @EnableScheduling
 public class ExtraMethodsDAO {
 	
+	private static final Logger logger = Logger.getLogger(ExtraMethodsDAO.class);
+	
 	public static Connection getConnection() throws ClassNotFoundException, SQLException {
 		Connection connection = null;
 		Class.forName(DataBaseConstants.DRIVER_CLASS);
@@ -86,11 +89,11 @@ public class ExtraMethodsDAO {
 		
 		String result = "Failure";
 		Properties props = new Properties();
-		props.put("mail.smtp.host", "smtp.idigitronics.com");
-		props.put("mail.smtp.socketFactory.port", "465");
+		props.put("mail.smtp.host", "mail.idigitronics.com");
+		props.put("mail.smtp.socketFactory.port", "587");
 		props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
 		props.put("mail.smtp.auth", "true");
-		props.put("mail.smtp.port", "465");
+		props.put("mail.smtp.port", "587");
 
 		Session session = Session.getDefaultInstance(props, new javax.mail.Authenticator() {
 			protected PasswordAuthentication getPasswordAuthentication() {
@@ -210,7 +213,7 @@ public class ExtraMethodsDAO {
 }
 	
 	
-//	@Scheduled(cron="0 30 0 2 * ? *") // scheduled for every month 2nd day at 0:30
+	@Scheduled(cron="30 0 2 * * *") // scheduled for every month 2nd day at 0:30
 	public void individualbillgeneration() throws SQLException {
 		
 		Connection con = null;
@@ -231,7 +234,7 @@ public class ExtraMethodsDAO {
 			pstmt = con.prepareStatement("SELECT cd.CommunityID, cd.BlockID, cd.CustomerID, cd.CustomerUniqueID, cmd.CustomerMeterID, cmd.MIUID, cmd.MeterType, cmd.TariffID, t.Tariff FROM customerdetails AS cd LEFT JOIN customermeterdetails AS cmd ON cd.CustomerID = cmd.CustomerID LEFT JOIN tariff AS t ON t.TariffID = cmd.TariffID WHERE cmd.PayType = 'Postpaid'");
 			rs = pstmt.executeQuery();
 			while(rs.next()) {
-				
+				logger.debug("in individualbillgeneration" + LocalDate.now());
 				pstmt1 = con.prepareStatement("SELECT Reading, LogDate FROM balancelog WHERE CustomerMeterID = ? AND MONTH(LogDate) = MONTH(CURDATE() - INTERVAL 1 MONTH) ORDER BY LogDate DESC LIMIT 0,1)");
 				pstmt1.setInt(1, rs.getInt("CustomerMeterID"));
 				rs1 = pstmt1.executeQuery();
@@ -320,7 +323,7 @@ public class ExtraMethodsDAO {
 		
 	}
 	
-//	@Scheduled(cron="0 30 4 2 * ? *") // scheduled for every month 2nd day at 4:30
+	@Scheduled(cron="30 4 2 * * *") // scheduled for every month 2nd day at 4:30
 	public void billgeneration() throws SQLException {
 		
 		Connection con = null;
@@ -344,7 +347,7 @@ public class ExtraMethodsDAO {
 			pstmt = con.prepareStatement("SELECT * FROM customerdetails JOIN alertsettings");
 			rs = pstmt.executeQuery();
 			while(rs.next()) {
-				
+				logger.debug("in billgeneration" + LocalDate.now());
 				float totalamount = 0;
 				float totalConsumption = 0;
 				float previousDues = 0;
