@@ -275,14 +275,14 @@ $(document)
 											}
 										}
 
-										if ($("#paymentMode").val() == "Select Mode") {
+										if ($("#paymentMode").val() == "Select Mode" || $("#paymentMode").val() == "-1") {
 
 											bootbox.alert("Please Select Mode");
 											return false;
 										}
 
 										if (sessionStorage.getItem("roleID") == 3) {
-											data1["CRNNumber"] = $(
+											data1["CustomerUniqueID"] = $(
 													"#CustomerCRNNumber")
 													.val();
 										} else {
@@ -297,7 +297,7 @@ $(document)
 													.val();
 										}
 
-										data1["meterID"] = $("#AMR_topup")
+										data1["miuID"] = $("#AMR_topup")
 												.val();
 										data1["currentBalance"] = $(
 												"#currentBalance_topup").val();
@@ -322,7 +322,7 @@ $(document)
 												.ajax({
 													type : "POST",
 													contentType : "application/json",
-													url : "/PAYGTL_LORA_BLE/topup",
+													url : "./topup",
 													data : JSON
 															.stringify(data1),
 													dataType : "JSON",

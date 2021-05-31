@@ -92,7 +92,7 @@ public class AccountDAO {
 		try {
 			con = getConnection();
 			
-					PreparedStatement pstmt1 = con.prepareStatement("SELECT tr.EmergencyCredit, tr.AlarmCredit, tr.FixedCharges, tr.TariffID, tr.Tariff, CONCAT(cd.FirstName, ' ', cd.LastName) AS CustomerName, cd.Email, cd.MobileNumber, cd.CustomerUniqueID, cd.HouseNumber, cmd.CustomerMeterID, g.GatewayIP, g.GatewayPort FROM customerdetails AS cd LEFT JOIN customermeterdetails AS cmd on cmd.customerID = cd.CustomerID LEFT JOIN tariff AS tr ON tr.TariffID = cmd.TariffID LEFT JOIN gateways AS g ON g.GatewayID = cmd.GatewayID WHERE cd.CustomerUniqueID = '"
+					PreparedStatement pstmt1 = con.prepareStatement("SELECT tr.EmergencyCredit, tr.AlarmCredit, tr.FixedCharges, tr.TariffID, tr.Tariff, CONCAT(cd.FirstName, ' ', cd.LastName) AS CustomerName, cd.Email, cd.MobileNumber, cd.CustomerUniqueID, cd.HouseNumber, cmd.CustomerMeterID, g.GatewayIP, g.GatewayPort FROM customerdetails AS cd LEFT JOIN customermeterdetails AS cmd on cmd.customerID = cd.CustomerID LEFT JOIN tariff AS tr ON tr.TariffID = cmd.TariffID LEFT JOIN gateway AS g ON g.GatewayID = cmd.GatewayID WHERE cd.CustomerUniqueID = '"
 									+ topUpRequestVO.getCustomerUniqueID() + "' AND CustomerMeterID = " + topUpRequestVO.getCustomerMeterID());
 					ResultSet rs1 = pstmt1.executeQuery();
 					if (rs1.next()) {

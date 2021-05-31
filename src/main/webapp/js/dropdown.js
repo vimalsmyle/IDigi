@@ -101,7 +101,7 @@ function showCustomerbyBlock(blockId){
 }
 
 function showMetersDetails(customerId){
-	$.getJSON("./customermeters/Prepaid" + customerId, function(data) {
+	$.getJSON("./customermeters/Prepaid/" + customerId, function(data) {
 		var Options = "<option value='-1'>Select  Meters</option>";
 		$.each(data.dropDownCustomerMeters, function(key, value) {
 			Options = Options + "<option value='" + key + "'>" + key
@@ -115,32 +115,32 @@ function showTopupDetails(meterId){
 	
 	$.getJSON("./topupdetails/" + $("#CustomerCRNNumber").val()+"/"+meterId, function(data) {
 		//var Options = "";
-		$("#AMR_topup").val(data.topupdetails.meterID).trigger("change");
-		$("#formAMR_topup").addClass("input-group form-group has-feedback has-success bmd-form-group is-filled")
+		$("#AMR_topup").val(data.topupdetails.miuID).trigger("change");
+		$("#formAMR_topup").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
 		
 		$("#currentBalance_topup").val(data.topupdetails.currentBalance).trigger("change");
-		$("#formcurrentBalance_topup").addClass("input-group form-group has-feedback has-success bmd-form-group is-filled")
+		$("#formcurrentBalance_topup").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
 		
 		$("#dateTime_topup").val(data.topupdetails.IoTTimeStamp).trigger("change");
-		$("#formdateTime_topup").addClass("input-group form-group has-feedback has-success bmd-form-group is-filled")
+		$("#formdateTime_topup").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
 		
 		$("#unit_topup").val(data.topupdetails.tariff).trigger("change");
-		$("#formunit_topup").addClass("input-group form-group has-feedback has-success bmd-form-group is-filled")
+		$("#formunit_topup").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
 		
 		$("#emergency_topup").val(data.topupdetails.emergencyCredit).trigger("change");
-		$("#formemergency_topup").addClass("input-group form-group has-feedback has-success bmd-form-group is-filled")
+		$("#formemergency_topup").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
 		
 		$("#alarm_topup").val(data.topupdetails.alarmCredit).trigger("change");
-		$("#formalarm_topup").addClass("input-group form-group has-feedback has-success bmd-form-group is-filled")
+		$("#formalarm_topup").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
 		
 		$("#reconnection_topup").val(data.topupdetails.reconnectionCharges).trigger("change");
-		$("#formreconnection_topup").addClass("input-group form-group has-feedback has-success bmd-form-group is-filled")
+		$("#formreconnection_topup").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
 		
 		$("#fixed_topup").val(data.topupdetails.fixedCharges).trigger("change");
-		$("#formfixed_topup").addClass("input-group form-group has-feedback has-success bmd-form-group is-filled")
+		$("#formfixed_topup").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
 		
 		$("#month_topup").val(data.topupdetails.noOfMonths).trigger("change");
-		$("#formmonth_topup").addClass("input-group form-group has-feedback has-success bmd-form-group is-filled")
+		$("#formmonth_topup").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
 		
 	});
 	

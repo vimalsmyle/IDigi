@@ -1,6 +1,144 @@
 /**
  * 
  */
+$(document).ready(function() {
+
+	var rowCount = 0;
+	$.getJSON("./customer/"+sessionStorage.getItem("roleID")+"/"+sessionStorage.getItem("ID")+"/-1", function(data) {
+	$.each(data.data, function(i, item) {
+		if ($("#custUniqueId").val() == item.CustomerUniqueID) {
+			$('#communityNameEdit').val(item.communityName).trigger("change");
+			$("#formcommunityNameEdit").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
+			
+			$('#blockNameEdit').val(item.blockName).trigger("change");
+			$("#formblockNameEdit").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
+			
+			$('#firstNameEdit').val(item.firstName).trigger("change");
+			$("#formfirstNameEdit").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
+			
+			$('#lastNameEdit').val(item.lastName).trigger("change");
+			$("#formlastNameEdit").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
+			
+			$('#houseNoEdit').val(item.houseNumber).trigger("change");
+			$("#formhouseNoEdit").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
+			
+			
+			$('#mobileNoEdit').val(item.mobileNumber).trigger("change");
+			$("#formmobileNoEdit").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
+			
+			
+			$('#emailEdit').val(item.email).trigger("change");
+			$("#formemailEdit").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
+			
+			
+			$('#meterSerialEdit').val(item.meterSerialNumber).trigger("change");
+			$("#formmeterSerialEdit").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
+			
+			
+			$('#amrEdit').val(item.meterID).trigger("change");
+			$("#formamrEdit").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
+			
+			if(sessionStorage.getItem("roleID") == 3){
+				$('#amrEdit')
+				.attr('disabled',
+						true);
+			}
+			$('#CRNEdit').val(item.CustomerUniqueID).trigger("change");
+			$("#formCRNEdit").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
+		    
+			$("#customerIdhidden").val(item.CRNNumber);
+		
+			$('#customerEditsave')
+			.attr('disabled',
+					false);
+			if(sessionStorage.getItem("roleID") == 3){
+			
+				$('#amrEdit', '#amrEdit')
+				.attr('disabled',
+						true);
+				$('#houseNoEdit')
+				.attr('disabled',
+						true);
+				
+			}
+			
+			
+		} 
+		$.each(item.meters, function(i, meter) {
+		rowCount++;
+		
+		$("#template").append("<div class=row> " +
+				"<div class=col-md-4>" +
+				"<div class='group form-group'>"
+								+"<label class=bmd-label-floating>MIU ID</label> <input "
+								+"type=text class='form-control form-control-sm' name=miuIDEdit["+rowCount+"]"
+								+" id=miuIDEdit-"+rowCount+">"
+								+"</div></div>"+
+					"<div class=col-md-4>" +
+					"<div class='group form-group'>"
+					+"<label class=bmd-label-floating>Meter Serial Number</label> <input "
+					+"type=text class='form-control form-control-sm' name=meterSerialNumberEdit["+rowCount+"]"
+					+" id=meterSerialNumberEdit-"+rowCount+">"
+					+"</div></div>"+
+				"<div class=col-md-4>" +
+				"<div class='group form-group has-feedback has-success bmd-form-group is-filled'>"
+				+"<label class=bmd-label-floating>Meter Type</label> " +
+				"<select class='form-control form-control-sm select2'  id=selectMeterType-"+rowCount+" name=selectMeterType["+rowCount+"]>"+
+					"<option value='-1'>Select Meter Type</option>"+
+					"<option value='Gas'>Gas</option>"+
+					"<option value='Water'>Water</option>"+
+					"<option value='Energy'>Energy</option>"+
+				"</select>"
+				+"</div></div>"+
+				"<div class=col-md-4>" +
+				"<div class='group form-group'>"
+				+"<label class=bmd-label-floating>Meter Size</label> <input "
+				+"type=text class='form-control form-control-sm' name=meterSizeEdit["+rowCount+"]"
+				+" id=meterSizeEdit-"+rowCount+">"
+				+"</div></div>"+
+				"<div class=col-md-4>" +
+				"<div class='group form-group has-feedback has-success bmd-form-group is-filled'>"
+				+"<label class=bmd-label-floating>Pay Type</label>" +
+				"<select class='form-control form-control-sm select2' id=payTypeEdit-"+rowCount+" name=payTypeEdit["+rowCount+"]>"+
+				"<option value='-1'>Select Pay Type</option>"+
+				"<option value='Prepaid'>Prepaid</option>"+
+				"<option value='Postpaid'>Postpaid</option>"+
+			"</select>"
+				+"</div></div>"+
+				"<div class=col-md-4>" +
+				"<div class='group form-group has-feedback has-success bmd-form-group is-filled'>"
+				+"<label class=bmd-label-floating>Tariff Name</label> " +
+				"<select "+
+				"class='form-control form-control-sm' id=selectTariffName-"+rowCount+" name=selectTariffName["+rowCount+"]>"+
+				 
+				"</select>"
+				+"</div></div>"+
+				"<div class=col-md-4>" +
+				"<div class='group form-group has-feedback has-success bmd-form-group is-filled'>"
+				+"<label class=bmd-label-floating>Gateway ID</label> " +
+				"<select "+
+				"class='form-control form-control-sm' id=gatewayIDEdit-"+rowCount+" name=gatewayIDEdit["+rowCount+"]>"+
+				 
+				"</select>"
+				+"</div></div>"+
+				"<div class=col-md-4>" +
+				"<div class='group form-group'>"
+				+"<label class=bmd-label-floating>Location</label> <input "
+				+"type=text class='form-control form-control-sm' name=locationEdit["+rowCount+"]"
+				+" id=locationEdit-"+rowCount+">"
+				+"</div></div>   " +
+						" <div class='col-md-12 text-right'>" 
+				+" <button type=button class='btn btn-danger' id='removeMeter'>Remove</button></div></div>" +
+						"</div>");
+		
+		
+		});
+		
+		
+	});
+});
+
+});
 
 
 $(document).ready(function() {
@@ -8,9 +146,9 @@ $(document).ready(function() {
 	if(sessionStorage.getItem("roleID") == 1 || sessionStorage.getItem("roleID") == 2){
 		if(sessionStorage.getItem("roleID") == 2){
 			$("#communityNameAdd").val(sessionStorage.getItem("communityName"));
-			$("#formcommunityNameAdd").addClass("input-group form-group has-feedback has-success bmd-form-group is-filled")
+			$("#formcommunityNameAdd").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
 			$("#blockNameAdd").val(sessionStorage.getItem("blockName"));
-			$("#formblockNameAdd").addClass("input-group form-group has-feedback has-success bmd-form-group is-filled")
+			$("#formblockNameAdd").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
 		}
 		$("#blockAddButton").show();
 		var dom1 = "<'row'<'col-sm-6 headname'><'col-sm-6'f>>" +"<'row'<'col-sm-4'B><'col-sm-4'l><'col-sm-4 addevent'>>" + "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-6 text-black'i><'col-sm-6 text-black'p>>";
@@ -86,13 +224,11 @@ return json.data;
 	"mData" : "action",
 	"render" : function(data, type, row) {
 		
-		return "<a href=# id=CustomerEdit data-toggle=modal data-target=#myCustomerEdit onclick='getCustomerFormEdit(\""
-																	+ row.CRNNumber
-																	+ "\")'>"
+		return "<a href='customerEdit.jsp?cust='"+row.CustomerUniqueID+"'>"
 																	+ "<i class='material-icons' style='color:#17e9e9'>edit</i>"
 																	+ "</a>"
 																	+"<a onclick='getCustomerFormDelete(\""
-																	+ row.CRNNumber
+																	+ row.CustomerUniqueID
 																	+ "\")'>"
 																	+ "<i class='material-icons' style='color:#17e9e9;cursor:pointer;'>delete</i>"
 																	+ "</a>"
@@ -103,9 +239,7 @@ return json.data;
 		"mData" : "action",
 		"render" : function(data, type, row) {
 			
-			return "<a href=# id=CustomerEdit data-toggle=modal data-target=#myCustomerEdit onclick='getCustomerFormEdit(\""
-																		+ row.CRNNumber
-																		+ "\")'>"
+			return "<a href='customerEdit.jsp?cust="+row.CustomerUniqueID+"'>"
 																		+ "<i class='material-icons' style='color:#17e9e9'>edit</i>"
 																		+ "</a>"
 		}
@@ -718,7 +852,7 @@ $(document)
 																			"render" : function(data, type, row) {
 																				
 																				return "<a href=# id=CustomerEdit data-toggle=modal data-target=#myCustomerEdit onclick='getCustomerFormEdit(\""
-																																			+ row.CRNNumber
+																																			+ row.CustomerUniqueID
 																																			+ "\")'>"
 																																			+ "<i class='material-icons' style='color:#17e9e9'>edit</i>"
 																																			+ "</a>"
@@ -1000,71 +1134,8 @@ $(document)
 
 function getCustomerFormEdit(id) {
 
+	window.location("customerEdit.jsp?cust="+id);
 
-	$.getJSON("./customer/"+sessionStorage.getItem("roleID")+"/"+sessionStorage.getItem("ID")+"/-1", function(data) {
-		$.each(data.data, function(i, item) {
-			if (id == item.CRNNumber) {
-				$('#communityNameEdit').val(item.communityName).trigger("change");
-				$("#formcommunityNameEdit").addClass("input-group form-group has-feedback has-success bmd-form-group is-filled")
-				
-				$('#blockNameEdit').val(item.blockName).trigger("change");
-				$("#formblockNameEdit").addClass("input-group form-group has-feedback has-success bmd-form-group is-filled")
-				
-				$('#firstNameEdit').val(item.firstName).trigger("change");
-				$("#formfirstNameEdit").addClass("input-group form-group has-feedback has-success bmd-form-group is-filled")
-				
-				$('#lastNameEdit').val(item.lastName).trigger("change");
-				$("#formlastNameEdit").addClass("input-group form-group has-feedback has-success bmd-form-group is-filled")
-				
-				$('#houseNoEdit').val(item.houseNumber).trigger("change");
-				$("#formhouseNoEdit").addClass("input-group form-group has-feedback has-success bmd-form-group is-filled")
-				
-				
-				$('#mobileNoEdit').val(item.mobileNumber).trigger("change");
-				$("#formmobileNoEdit").addClass("input-group form-group has-feedback has-success bmd-form-group is-filled")
-				
-				
-				$('#emailEdit').val(item.email).trigger("change");
-				$("#formemailEdit").addClass("input-group form-group has-feedback has-success bmd-form-group is-filled")
-				
-				
-				$('#meterSerialEdit').val(item.meterSerialNumber).trigger("change");
-				$("#formmeterSerialEdit").addClass("input-group form-group has-feedback has-success bmd-form-group is-filled")
-				
-				
-				$('#amrEdit').val(item.meterID).trigger("change");
-				$("#formamrEdit").addClass("input-group form-group has-feedback has-success bmd-form-group is-filled")
-				
-				if(sessionStorage.getItem("roleID") == 3){
-					$('#amrEdit')
-					.attr('disabled',
-							true);
-				}
-				$('#CRNEdit').val(item.CRNNumber).trigger("change");
-				$("#formCRNEdit").addClass("input-group form-group has-feedback has-success bmd-form-group is-filled")
-			    
-				$("#customerIdhidden").val(item.CRNNumber);
-			
-				$('#customerEditsave')
-				.attr('disabled',
-						false);
-				if(sessionStorage.getItem("roleID") == 3){
-				
-					$('#amrEdit', '#amrEdit')
-					.attr('disabled',
-							true);
-					$('#houseNoEdit')
-					.attr('disabled',
-							true);
-					
-				}
-				
-				
-			} else {
-			}
-		});
-		$('#myCustomerEdit').modal('show');
-	});
 }
 
 
