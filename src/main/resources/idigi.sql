@@ -75,7 +75,7 @@ CREATE TABLE `balancelog` (
   `LowBalance` tinyint(2) DEFAULT NULL,
   `LogDate` datetime NOT NULL,
   PRIMARY KEY (`ReadingID`)
-) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=latin1;
 
 /*Data for the table `balancelog` */
 
@@ -101,7 +101,27 @@ insert  into `balancelog`(`ReadingID`,`MIUID`,`CommunityID`,`BlockID`,`CustomerI
 (19,'1122',1,1,1,1,'11223344','IDIGI1','Gas','00:00:05',1440,'Prepaid',90.00,1,1,50.00,1,10.00,20.00,12,55.00,0,0,0,0,0,0,'2021-05-27 19:03:16'),
 (20,'2233',1,1,1,2,'22334455','IDIGI1','Water','00:00:05',1440,'Postpaid',90.00,1,1,0.00,2,20.00,40.00,10,35.00,0,0,0,0,0,0,'2021-05-27 20:55:25'),
 (21,'2233',1,1,1,2,'22334455','IDIGI1','Water','00:00:05',1440,'Postpaid',90.00,1,1,0.00,2,20.00,40.00,10,40.00,0,0,0,0,0,0,'2021-05-27 22:14:19'),
-(22,'2233',1,1,1,2,'22334455','IDIGI1','Water','00:00:05',1440,'Postpaid',90.00,1,1,0.00,2,20.00,40.00,10,45.00,0,0,0,0,0,0,'2021-05-27 22:39:14');
+(22,'2233',1,1,1,2,'22334455','IDIGI1','Water','00:00:05',1440,'Postpaid',90.00,1,1,0.00,2,20.00,40.00,10,45.00,0,0,0,0,0,0,'2021-05-27 22:39:14'),
+(23,'3344',1,1,1,3,'33445566','IDIGI1','Water','00:00:05',1440,'Postpaid',90.00,1,1,0.00,3,20.00,40.00,10,1.00,0,0,0,0,0,0,'2021-05-01 00:54:33'),
+(24,'3344',1,1,1,3,'33445566','IDIGI1','Water','00:00:05',1440,'Postpaid',90.00,1,1,0.00,3,20.00,40.00,10,3.00,0,0,0,0,0,0,'2021-05-01 20:54:55'),
+(25,'3344',1,1,1,3,'33445566','IDIGI1','Water','00:00:05',1440,'Postpaid',90.00,1,1,0.00,3,20.00,40.00,10,5.00,0,0,0,0,0,0,'2021-05-03 10:55:02'),
+(26,'3344',1,1,1,3,'33445566','IDIGI1','Water','00:00:05',1440,'Postpaid',90.00,1,1,0.00,3,20.00,40.00,10,8.00,0,0,0,0,0,0,'2021-05-03 20:55:06'),
+(27,'3344',1,1,1,3,'33445566','IDIGI1','Water','00:00:05',1440,'Postpaid',90.00,1,1,0.00,3,20.00,40.00,10,10.00,0,0,0,0,0,0,'2021-05-04 11:55:10'),
+(28,'3344',1,1,1,3,'33445566','IDIGI1','Water','00:00:05',1440,'Postpaid',90.00,1,1,0.00,3,20.00,40.00,10,14.00,0,0,0,0,0,0,'2021-05-04 20:55:27'),
+(29,'3344',1,1,1,3,'33445566','IDIGI1','Water','00:00:05',1440,'Postpaid',90.00,1,1,0.00,3,20.00,40.00,10,19.00,0,0,0,0,0,0,'2021-05-06 12:55:32'),
+(30,'3344',1,1,1,3,'33445566','IDIGI1','Water','00:00:05',1440,'Postpaid',90.00,1,1,0.00,3,20.00,40.00,10,22.00,0,0,0,0,0,0,'2021-05-06 20:55:35'),
+(31,'3344',1,1,1,3,'33445566','IDIGI1','Water','00:00:05',1440,'Postpaid',90.00,1,1,0.00,3,20.00,40.00,10,25.00,0,0,0,0,0,0,'2021-05-10 13:55:40'),
+(32,'3344',1,1,1,3,'33445566','IDIGI1','Water','00:00:05',1440,'Postpaid',90.00,1,1,0.00,3,20.00,40.00,10,29.00,0,0,0,0,0,0,'2021-05-10 20:55:49'),
+(33,'3344',1,1,1,3,'33445566','IDIGI1','Water','00:00:05',1440,'Postpaid',90.00,1,1,0.00,3,20.00,40.00,10,34.00,0,0,0,0,0,0,'2021-05-15 15:57:21'),
+(34,'3344',1,1,1,3,'33445566','IDIGI1','Water','00:00:05',1440,'Postpaid',90.00,1,1,0.00,3,20.00,40.00,10,38.00,0,0,0,0,0,0,'2021-05-15 20:57:26'),
+(35,'3344',1,1,1,3,'33445566','IDIGI1','Water','00:00:05',1440,'Postpaid',90.00,1,1,0.00,3,20.00,40.00,10,41.00,0,0,0,0,0,0,'2021-05-20 17:57:32'),
+(36,'3344',1,1,1,3,'33445566','IDIGI1','Water','00:00:05',1440,'Postpaid',90.00,1,1,0.00,3,20.00,40.00,10,47.00,0,0,0,0,0,0,'2021-05-20 20:57:38'),
+(37,'3344',1,1,1,3,'33445566','IDIGI1','Water','00:00:05',1440,'Postpaid',90.00,1,1,0.00,3,20.00,40.00,10,49.00,0,0,0,0,0,0,'2021-05-25 18:57:44'),
+(38,'3344',1,1,1,3,'33445566','IDIGI1','Water','00:00:05',1440,'Postpaid',90.00,1,1,0.00,3,20.00,40.00,10,53.00,0,0,0,0,0,0,'2021-05-25 20:57:51'),
+(39,'3344',1,1,1,3,'33445566','IDIGI1','Water','00:00:05',1440,'Postpaid',90.00,1,1,0.00,3,20.00,40.00,10,57.00,0,0,0,0,0,0,'2021-05-27 19:57:54'),
+(40,'3344',1,1,1,3,'33445566','IDIGI1','Water','00:00:05',1440,'Postpaid',90.00,1,1,0.00,3,20.00,40.00,10,58.00,0,0,0,0,0,0,'2021-05-27 20:57:58'),
+(41,'3344',1,1,1,3,'33445566','IDIGI1','Water','00:00:05',1440,'Postpaid',90.00,1,1,0.00,3,20.00,40.00,10,59.00,0,0,0,0,0,0,'2021-05-29 20:58:02'),
+(42,'3344',1,1,1,3,'33445566','IDIGI1','Water','00:00:05',1440,'Postpaid',90.00,1,1,0.00,3,20.00,40.00,10,62.00,0,0,0,0,0,0,'2021-06-01 20:58:06');
 
 /*Table structure for table `billingdetails` */
 
@@ -127,7 +147,7 @@ CREATE TABLE `billingdetails` (
   `LogDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `ModifiedDate` datetime DEFAULT NULL,
   PRIMARY KEY (`BillingID`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
 
 /*Data for the table `billingdetails` */
 
@@ -272,7 +292,7 @@ CREATE TABLE `customerbillingdetails` (
   `LogDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `ModifiedDate` datetime DEFAULT NULL,
   PRIMARY KEY (`CustomerBillingID`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
 
 /*Data for the table `customerbillingdetails` */
 
@@ -423,13 +443,14 @@ CREATE TABLE `displaybalancelog` (
   `LowBalance` tinyint(2) DEFAULT NULL,
   `LogDate` datetime NOT NULL,
   PRIMARY KEY (`ReadingID`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 
 /*Data for the table `displaybalancelog` */
 
 insert  into `displaybalancelog`(`ReadingID`,`MainBalanceLogID`,`MIUID`,`CommunityID`,`BlockID`,`CustomerID`,`CustomerMeterID`,`MeterSerialNumber`,`CustomerUniqueID`,`MeterType`,`SyncTime`,`SyncInterval`,`PayType`,`BatteryVoltage`,`ValveConfiguration`,`ValveStatus`,`Balance`,`TariffID`,`Tariff`,`EmergencyCredit`,`Minutes`,`Reading`,`DoorOpenTamper`,`MagneticTamper`,`Vacation`,`RTCFault`,`LowBattery`,`LowBalance`,`LogDate`) values 
 (1,22,'2233',1,1,1,2,'22334455','IDIGI1','Water','00:00:05',1440,'Postpaid',90.00,1,1,0.00,2,20.00,40.00,10,45.00,0,0,0,0,0,0,'2021-05-27 22:39:14'),
-(2,19,'1122',1,1,1,1,'11223344','IDIGI1','Gas','00:00:05',1440,'Prepaid',90.00,1,1,50.00,1,10.00,20.00,12,55.00,0,0,0,0,0,0,'2021-05-27 15:03:16');
+(2,19,'1122',1,1,1,1,'11223344','IDIGI1','Gas','00:00:05',1440,'Prepaid',90.00,1,1,50.00,1,10.00,20.00,12,55.00,0,0,0,0,0,0,'2021-05-27 15:03:16'),
+(3,42,'3344',1,1,1,3,'33445566','IDIGI1','Water','00:00:05',1440,'Postpaid',90.00,1,1,0.00,3,20.00,40.00,10,62.00,0,0,0,0,0,0,'2021-06-01 20:58:06');
 
 /*Table structure for table `feedback` */
 
