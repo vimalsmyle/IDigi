@@ -147,12 +147,14 @@ CREATE TABLE `billingdetails` (
   `LogDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `ModifiedDate` datetime DEFAULT NULL,
   PRIMARY KEY (`BillingID`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 
 /*Data for the table `billingdetails` */
 
 insert  into `billingdetails`(`BillingID`,`CommunityID`,`BlockID`,`CustomerID`,`CustomerUniqueID`,`CustomerMeterID`,`MeterType`,`MIUID`,`PreviousReading`,`PresentReading`,`Consumption`,`TariffID`,`Tariff`,`BillAmount`,`BillMonth`,`BillYear`,`LogDate`,`ModifiedDate`) values 
-(1,1,1,1,'IDIGI1',2,'Water','2233',1.00,10.00,9,2,20,180,4,2021,'2021-05-22 19:27:50',NULL);
+(1,1,1,1,'IDIGI1',2,'Water','2233',1.00,10.00,9,2,20,180,4,2021,'2021-05-22 19:27:50',NULL),
+(2,1,1,1,'IDIGI1',2,'Water','2233',10.00,45.00,35,2,20,700,5,2021,'2021-06-03 23:34:27',NULL),
+(3,1,1,1,'IDIGI1',3,'Water','3344',1.00,59.00,58,3,15,870,5,2021,'2021-06-03 23:34:28',NULL);
 
 /*Table structure for table `billingpaymentdetails` */
 
@@ -292,12 +294,13 @@ CREATE TABLE `customerbillingdetails` (
   `LogDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `ModifiedDate` datetime DEFAULT NULL,
   PRIMARY KEY (`CustomerBillingID`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
 /*Data for the table `customerbillingdetails` */
 
 insert  into `customerbillingdetails`(`CustomerBillingID`,`CommunityID`,`BlockID`,`CustomerID`,`CustomerUniqueID`,`TotalAmount`,`TaxAmount`,`TotalConsumption`,`PreviousDues`,`Status`,`DueDate`,`BillMonth`,`BillYear`,`LogDate`,`ModifiedDate`) values 
-(1,1,1,1,'IDIGI1',180,32.4,9,NULL,0,'2021-06-01',4,2021,'2021-05-22 19:34:29','2021-05-22 19:34:29');
+(1,1,1,1,'IDIGI1',180,32.4,9,NULL,0,'2021-06-01',4,2021,'2021-05-22 19:34:29','2021-05-22 19:34:29'),
+(2,1,1,1,'IDIGI1',1570,282.6,93,0,0,'2021-06-13',5,2021,'2021-06-03 23:34:28','2021-06-03 23:34:28');
 
 /*Table structure for table `customerdeletedetails` */
 
