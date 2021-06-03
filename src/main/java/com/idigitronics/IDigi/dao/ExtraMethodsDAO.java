@@ -214,7 +214,7 @@ public class ExtraMethodsDAO {
 }
 	
 	
-	@Scheduled(cron="30 1 3 * * *") // scheduled for every month 3rd day at 00:30
+	@Scheduled(cron="30 0 2 * * *") // scheduled for every month 2nd day at 00:30
 	public void individualbillgeneration() throws SQLException {
 		
 		Connection con = null;
