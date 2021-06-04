@@ -15,17 +15,17 @@ public class FinancialReportsResponseVO {
 	private String blockName;
 	private String houseNumber;
 	private String miuID;
-	private int totalAmount;
-	private int totalAmountForSelectedPeriod;
-	private int totalUnits;
-	private int totalUnitsForSelectedPeriod;
+	private float totalAmount;
+	private float totalAmountForSelectedPeriod;
+	private float totalUnits;
+	private float totalUnitsForSelectedPeriod;
 	private List<FinancialReportsResponseVO> data;
 
-	public int getTotalAmount() {
+	public float getTotalAmount() {
 		return totalAmount;
 	}
 
-	public void setTotalAmount(int totalAmount) {
+	public void setTotalAmount(float totalAmount) {
 		this.totalAmount = totalAmount;
 	}
 
@@ -61,7 +61,6 @@ public class FinancialReportsResponseVO {
 		this.houseNumber = houseNumber;
 	}
 
-
 	public String getMiuID() {
 		return miuID;
 	}
@@ -70,27 +69,27 @@ public class FinancialReportsResponseVO {
 		this.miuID = miuID;
 	}
 
-	public int getTotalAmountForSelectedPeriod() {
+	public float getTotalAmountForSelectedPeriod() {
 		return totalAmountForSelectedPeriod;
 	}
 
-	public void setTotalAmountForSelectedPeriod(int totalAmountForSelectedPeriod) {
+	public void setTotalAmountForSelectedPeriod(float totalAmountForSelectedPeriod) {
 		this.totalAmountForSelectedPeriod = totalAmountForSelectedPeriod;
 	}
 
-	public int getTotalUnits() {
+	public float getTotalUnits() {
 		return totalUnits;
 	}
 
-	public void setTotalUnits(int totalUnits) {
+	public void setTotalUnits(float totalUnits) {
 		this.totalUnits = totalUnits;
 	}
 
-	public int getTotalUnitsForSelectedPeriod() {
+	public float getTotalUnitsForSelectedPeriod() {
 		return totalUnitsForSelectedPeriod;
 	}
 
-	public void setTotalUnitsForSelectedPeriod(int totalUnitsForSelectedPeriod) {
+	public void setTotalUnitsForSelectedPeriod(float totalUnitsForSelectedPeriod) {
 		this.totalUnitsForSelectedPeriod = totalUnitsForSelectedPeriod;
 	}
 	

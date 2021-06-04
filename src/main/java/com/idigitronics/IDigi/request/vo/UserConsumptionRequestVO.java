@@ -9,18 +9,18 @@ package com.idigitronics.IDigi.request.vo;
  */
 public class UserConsumptionRequestVO {
 
-	private String CRNNumber;
+	private String customerUniqueID;
 	private int blockID;
 	private String customerID;
 	private String fromDate;
 	private String toDate;
 	
 	
-	public String getCRNNumber() {
-		return CRNNumber;
+	public String getCustomerUniqueID() {
+		return customerUniqueID;
 	}
-	public void setCRNNumber(String cRNNumber) {
-		CRNNumber = cRNNumber;
+	public void setCustomerUniqueID(String customerUniqueID) {
+		this.customerUniqueID = customerUniqueID;
 	}
 	public int getBlockID() {
 		return blockID;
