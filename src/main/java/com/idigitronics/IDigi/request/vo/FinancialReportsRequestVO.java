@@ -11,7 +11,7 @@ public class FinancialReportsRequestVO {
 	
 	private int communityID;
 	private int blockID;
-	private String customerID;
+	private String payType;
 	private int year;
 	private int month;
 	
@@ -28,12 +28,6 @@ public class FinancialReportsRequestVO {
 		this.blockID = blockID;
 	}
 	
-	public String getCustomerID() {
-		return customerID;
-	}
-	public void setCustomerID(String customerID) {
-		this.customerID = customerID;
-	}
 	public int getYear() {
 		return year;
 	}
@@ -46,6 +40,11 @@ public class FinancialReportsRequestVO {
 	public void setMonth(int month) {
 		this.month = month;
 	}
-	
+	public String getPayType() {
+		return payType;
+	}
+	public void setPayType(String payType) {
+		this.payType = payType;
+	}
 	
 }

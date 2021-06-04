@@ -278,15 +278,15 @@ public class AccountController {
 	ResponseVO testmethod(@PathVariable("transactionID") int transactionID)
 			throws ClassNotFoundException, SQLException {
 		ResponseVO responsevo = new ResponseVO();
-		MailRequestVO mailrequestvo = new MailRequestVO();
+		/*MailRequestVO mailrequestvo = new MailRequestVO();
 		mailrequestvo.setToEmail("kvk9889@gmail.com");
 		mailrequestvo.setSubject("testmail");
 		mailrequestvo.setMessage("hello test");
-		mailrequestvo.setFileLocation("NoAttachment");
+		mailrequestvo.setFileLocation("NoAttachment");*/
 		ExtraMethodsDAO extramethods = new ExtraMethodsDAO();
 //		responsevo = accountdao.printbillreceipt(transactionID);
-		responsevo.setMessage(extramethods.sendmail(mailrequestvo));
-//		extramethods.billgeneration();
+//		responsevo.setMessage(extramethods.sendmail(mailrequestvo));
+		extramethods.individualbillgeneration();
 
 		return responsevo;
 	}

@@ -48,69 +48,71 @@ public class ReportsDAO {
 	 
 	 Connection con = null; 
 	 PreparedStatement pstmt = null; 
-	 PreparedStatement pstmt1 = null;
-	 PreparedStatement pstmt2 = null;
 	 ResultSet rs = null;
-	 ResultSet rs1 = null;
-	 ResultSet rs2 = null;
 	 
 	 FinancialReportsResponseVO financialreportsresponsevo = null;
 	 List<FinancialReportsResponseVO> financialreportsresponselist = null;
-	 int totalAmountForSelectedPeriod = 0;
-	 int totalUnitsForSelectedPeriod = 0;
+	 float totalAmountForSelectedPeriod = 0;
+	 float totalUnitsForSelectedPeriod = 0;
 	 
 		try {
 			con = getConnection();
 
-			financialreportsresponselist = new ArrayList<FinancialReportsResponseVO>();
+				financialreportsresponselist = new ArrayList<FinancialReportsResponseVO>();
 			
-			String query = "SELECT c.CommunityName, b.BlockName, cd.HouseNumber, cd.FirstName, cd.LastName, cmd.MIUID FROM customerdetails AS cd LEFT JOIN customermeterdetails AS cmd ON cd.CustomerID = cmd.CustomerID LEFT JOIN community AS C on c.communityID = cd.CommunityID LEFT JOIN block AS b on b.BlockID = cd.BlockID WHERE cmd.PayType = 'Prepaid' <change>";
-			pstmt1 = con.prepareStatement(query.replaceAll("<change>", (financialreportsrequestvo.getBlockID() == 0 && (roleid==1 || roleid==4)) ? "AND cd.CommunityID = "+financialreportsrequestvo.getCommunityID() + " ORDER BY cd.CustomerID ASC" : (financialreportsrequestvo.getBlockID() != 0 && (roleid==1 || roleid==4)) ? "AND cd.BlockID = "+financialreportsrequestvo.getBlockID() + " ORDER BY cd.CustomerID ASC" :(roleid==2 || roleid==5) ? "AND cd.CommunityID = "+financialreportsrequestvo.getCommunityID() + " AND cd.BlockID = "+id+" ORDER BY cd.CustomerID ASC":""));
-			rs1 = pstmt1.executeQuery();
-			while(rs1.next()) {
-				
-				financialreportsresponsevo = new FinancialReportsResponseVO();
-				financialreportsresponsevo.setCommunityName(rs1.getString("CommunityName"));
-				financialreportsresponsevo.setBlockName(rs1.getString("BlockName"));
-				financialreportsresponsevo.setHouseNumber(rs1.getString("HouseNumber"));
-				financialreportsresponsevo.setMiuID(rs1.getString("MIUID"));
-				
-				String query1 = "SELECT SUM(Amount) AS Total FROM topup WHERE MIUID = ? AND YEAR(TransactionDate) = ? <change> AND STATUS = 0";
-				query1 = query1.replaceAll("<change>", (financialreportsrequestvo.getMonth() > 0) ? "AND MONTH(TransactionDate) = "+financialreportsrequestvo.getMonth() : "");
-				pstmt = con.prepareStatement(query1);
-				pstmt.setString(1, rs1.getString("MIUID"));
-				pstmt.setInt(2, financialreportsrequestvo.getYear());
+				String query = "SELECT c.CommunityName, b.BlockName, cd.HouseNumber, cd.FirstName, cd.LastName, cd.CustomerID FROM customerdetails AS cd LEFT JOIN community AS C ON c.communityID = cd.CommunityID LEFT JOIN block AS b ON b.BlockID = cd.BlockID WHERE cd.CustomerID IN (SELECT CustomerID FROM customermeterdetails WHERE PayType = '"+ financialreportsrequestvo.getPayType() + "') <change>";
+				pstmt = con.prepareStatement(query.replaceAll("<change>", (financialreportsrequestvo.getBlockID() == 0 && (roleid==1 || roleid==4)) ? "AND cd.CommunityID = "+financialreportsrequestvo.getCommunityID() + " ORDER BY cd.CustomerID ASC" : (financialreportsrequestvo.getBlockID() != 0 && (roleid==1 || roleid==4)) ? "AND cd.BlockID = "+financialreportsrequestvo.getBlockID() + " ORDER BY cd.CustomerID ASC" :(roleid==2 || roleid==5) ? "AND cd.CommunityID = "+financialreportsrequestvo.getCommunityID() + " AND cd.BlockID = "+id+" ORDER BY cd.CustomerID ASC":""));
 				rs = pstmt.executeQuery();
-				if (rs.next()) {
-					financialreportsresponsevo.setTotalAmount(rs.getInt("Total"));
-					totalAmountForSelectedPeriod = financialreportsresponsevo.getTotalAmount() + totalAmountForSelectedPeriod;
+				while(rs.next()) {
+					
+					financialreportsresponsevo = new FinancialReportsResponseVO();
+					financialreportsresponsevo.setCommunityName(rs.getString("CommunityName"));
+					financialreportsresponsevo.setBlockName(rs.getString("BlockName"));
+					financialreportsresponsevo.setHouseNumber(rs.getString("HouseNumber"));
+					
+					String amountquery  = "";
+					if(financialreportsrequestvo.getPayType().equalsIgnoreCase("Postpaid")) {
+						amountquery = "SELECT SUM(TotalAmount) AS Total FROM billingpaymentdetails WHERE CustomerID = ? AND YEAR(TransactionDate) = ? <change> AND PaymentStatus = 1 ";
+					} else {
+						amountquery = "SELECT SUM(Amount) AS Total FROM topup WHERE CustomerID = ? AND YEAR(TransactionDate) = ? <change> AND PaymentStatus = 1 ";
+					}
+						PreparedStatement pstmt1 = con.prepareStatement(amountquery.replaceAll("<change>", (financialreportsrequestvo.getMonth() > 0) ? "AND MONTH(TransactionDate) = "+financialreportsrequestvo.getMonth() : ""));
+						pstmt1.setLong(1, rs.getLong("CustomerID"));
+						pstmt1.setInt(2, financialreportsrequestvo.getYear());
+						ResultSet rs1 = pstmt1.executeQuery();
+						
+						if(rs1.next()) {
+							financialreportsresponsevo.setTotalAmount(rs1.getFloat("Total"));
+							totalAmountForSelectedPeriod = totalAmountForSelectedPeriod + financialreportsresponsevo.getTotalAmount();
+						}
+						float customerUnits = 0;
+						ResultSet rs2 = con.prepareStatement("SELECT CustomerMeterID, MIUID FROM customermeterdetails WHERE PayType = '"+financialreportsrequestvo.getPayType()+"' AND CustomerID = "+rs.getLong("CustomerID")).executeQuery();
+						while(rs2.next()) {
+							String consumptionquery = "SELECT ABS((SELECT Reading FROM balancelog WHERE CustomerMeterID = ? AND YEAR(LogDate) = ? <change> ORDER BY ReadingID DESC LIMIT 0,1)\r\n" + 
+									"- (SELECT Reading FROM balancelog WHERE CustomerMeterID = ? AND YEAR(LogDate) = ? <change> ORDER BY ReadingID ASC LIMIT 0,1)) AS Units";
+							PreparedStatement pstmt2 = con.prepareStatement(consumptionquery.replaceAll("<change>", (financialreportsrequestvo.getMonth() > 0) ? "AND MONTH(LogDate) = "+financialreportsrequestvo.getMonth() : ""));
+							pstmt2.setLong(1, rs2.getLong("CustomerMeterID"));
+							pstmt2.setInt(2, financialreportsrequestvo.getYear());
+							pstmt2.setLong(3, rs2.getLong("CustomerMeterID"));
+							pstmt2.setInt(4, financialreportsrequestvo.getYear());
+							ResultSet rs3 = pstmt2.executeQuery();
+							if(rs3.next()) {
+								customerUnits = customerUnits + rs3.getInt("Units");
+							}
+						}
+						financialreportsresponsevo.setTotalUnits(customerUnits);
+						totalUnitsForSelectedPeriod = totalUnitsForSelectedPeriod + financialreportsresponsevo.getTotalUnits();
+					
+					financialreportsresponselist.add(financialreportsresponsevo);
 				}
-				
-				String query2 = "SELECT ABS((SELECT Reading FROM balancelog WHERE MeterID = ? AND YEAR(IoTTimeStamp) = ? <change> ORDER BY ReadingID DESC LIMIT 0,1)\r\n" + 
-						"- (SELECT Reading FROM balancelog WHERE MeterID = ? AND YEAR(IoTTimeStamp) = ? <change> ORDER BY ReadingID ASC LIMIT 0,1)) AS Units";
-				query2 = query2.replaceAll("<change>", (financialreportsrequestvo.getMonth() > 0) ? "AND MONTH(IoTTimeStamp) = "+financialreportsrequestvo.getMonth() : "");
-				pstmt2 = con.prepareStatement(query2);
-				pstmt2.setString(1, rs1.getString("MeterID"));
-				pstmt2.setInt(2, financialreportsrequestvo.getYear());
-				pstmt2.setString(3, rs1.getString("MeterID"));
-				pstmt2.setInt(4, financialreportsrequestvo.getYear());
-				rs2 = pstmt2.executeQuery();
-				if(rs2.next()) {
-					financialreportsresponsevo.setTotalUnits(rs2.getInt("Units"));
-					totalUnitsForSelectedPeriod = financialreportsresponsevo.getTotalUnits() + totalUnitsForSelectedPeriod;
-				}
-				financialreportsresponselist.add(financialreportsresponsevo);
-			}
-			financialreportsresponsevo.setTotalAmountForSelectedPeriod(totalAmountForSelectedPeriod);
-			financialreportsresponsevo.setTotalUnitsForSelectedPeriod(totalUnitsForSelectedPeriod);
+				financialreportsresponsevo.setTotalAmountForSelectedPeriod(totalAmountForSelectedPeriod);
+				financialreportsresponsevo.setTotalUnitsForSelectedPeriod(totalUnitsForSelectedPeriod);
 			
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		} finally {
 			pstmt.close();
-			pstmt1.close();
 			rs.close();
-			rs1.close();
 			con.close();
 		}
 		
@@ -143,7 +145,7 @@ public class ReportsDAO {
 					"LEFT JOIN customerdetails AS cd ON cd.CustomerUniqueID = bl.CustomerUniqueID WHERE bl.CustomerUniqueID = ? AND bl.LogDate BETWEEN ? AND ? ";
 			
 				pstmt = con.prepareStatement(query);
-				pstmt.setString(1, userconsumptionreportsrequestvo.getCRNNumber());
+				pstmt.setString(1, userconsumptionreportsrequestvo.getCustomerUniqueID());
 				pstmt.setString(2, userconsumptionreportsrequestvo.getFromDate()+ " :00.001");
 				pstmt.setString(3,userconsumptionreportsrequestvo.getToDate()+ " :59.999");
 

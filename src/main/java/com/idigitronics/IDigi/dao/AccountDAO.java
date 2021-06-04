@@ -406,7 +406,7 @@ public class AccountDAO {
 			if(topUpRequestVO.getModeOfPayment().equalsIgnoreCase("Cash")) {
 				
 				restcallvo.setTransaction_id(inserttopup(topUpRequestVO));
-				restcallresponse = extramethodsdao.postdata(restcallvo);
+	//			restcallresponse = extramethodsdao.postdata(restcallvo);
 			} else {
 				restcallvo.setTransaction_id(topUpRequestVO.getTransactionID());
 				restcallresponse = extramethodsdao.postdata(restcallvo);
@@ -433,13 +433,13 @@ public class AccountDAO {
 			ResultSet rs = pstmt.executeQuery();
 			if (rs.next()) {
 
-				String sql = "INSERT INTO topup (CommunityID, BlockID, CustomerID, MIUID, CustomerMeterID, TariffID, Amount, Status, FixedCharges, ReconnectionCharges, Source, ModeOfPayment, PaymentStatus, RazorPayOrderID, RazorPayPaymentID, RazorPaySignature, CreatedByID, CreatedByRoleID, CustomerUniqueID, AcknowledgeDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())";
+				String sql = "INSERT INTO topup (CommunityID, BlockID, CustomerID, MIUID, CustomerMeterID, TariffID, Amount, Status, FixedCharges, ReconnectionCharges, Source, ModeOfPayment, PaymentStatus, RazorPayOrderID, RazorPayPaymentID, RazorPaySignature, CreatedByID, CreatedByRoleID, CustomerUniqueID, AcknowledgeDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())";
 				ps = con.prepareStatement(sql);
 
 				ps.setInt(1, rs.getInt("CommunityID"));
 				ps.setInt(2, rs.getInt("BlockID"));
 				ps.setInt(3, rs.getInt("CustomerID"));
-				ps.setString(4, rs.getString("MeterID"));
+				ps.setString(4, rs.getString("MIUID"));
 				ps.setLong(5, topUpRequestVO.getCustomerMeterID());
 				ps.setInt(6, rs.getInt("TariffID"));
 				ps.setFloat(7, topUpRequestVO.getAmount());
