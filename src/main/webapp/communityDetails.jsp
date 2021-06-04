@@ -21,7 +21,7 @@
 </head>
 
 
-<body class="innerbody">
+<body class="main-sidebar-show">
 <%
 		String user_id = (String) session.getAttribute("roleID");
 
@@ -36,12 +36,15 @@
   <div id="status">&nbsp;</div>
 </div>
 
-	<jsp:include page="header.jsp" />
+<jsp:include page="header.jsp" />
+	
 	<jsp:include page="slidebar.jsp" />
-		<main class="col-md-10 float-left col px-5 pl-md-3 pt-2 pb-6 main">
-	<div
-		class="container-fluid topspacing bottomspacing pl-0 pr-0 mr-0 ml-0">
-		
+		 <div class="top-spacing"></div>
+	 <div class="main-content side-content pt-0">
+			<div class="container-fluid">
+				<div class="inner-body custom-scrollbar-js" id="content-5">
+				  <div class="row custom-scrollbar-css">
+	<div class="col-md-12">
 		<div class="row">
 				<div class="col-md-12">
 					<a class="text-dark" href="home.jsp">Home</a>
@@ -79,7 +82,11 @@
 			</div>
 		</div>
 	</div>
-	</main>
+	</div>
+	</div>
+	</div>
+	</div>
+	
 	<jsp:include page="footer.jsp" />
 
 	<!-- Modal -->

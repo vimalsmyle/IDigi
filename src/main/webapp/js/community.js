@@ -81,7 +81,14 @@ return json.data;
 	"className": "dt-center", "targets": "_all"
 }], "buttons": [
    
-]
+],
+language: {
+    paginate: {
+      next: '<i class="fa fa-angle-right"></i>', // or '→'
+      previous: '<i class="fa fa-angle-left"></i>;' // or '←' 
+    }
+  }
+
 });
 $("div.headname").html('<h3>Community Management</h3>');
 
@@ -394,7 +401,7 @@ $(document)
 																}).then(function() {
 																    window.location = "communityDetails.jsp";
 																});
-															return false
+															return false;
 															
 
 														} else if(data.result == "Failure"){

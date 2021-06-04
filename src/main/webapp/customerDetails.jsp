@@ -21,7 +21,7 @@
 </head>
 
 
-<body class="innerbody">
+<body class="main-sidebar-show">
 <%
 		String user_id = (String) session.getAttribute("roleID");
 
@@ -40,12 +40,12 @@
 	<jsp:include page="slidebar.jsp" />
 	
 	
-		<main class="col-md-10 float-left col px-5 pl-md-3 pt-2 pb-6 main">
-		
-		
-	<div
-		class="container-fluid topspacing bottomspacing pl-0 pr-0 mr-0 ml-0">
-		
+			 <div class="top-spacing"></div>
+	 <div class="main-content side-content pt-0">
+			<div class="container-fluid">
+				<div class="inner-body custom-scrollbar-js" id="content-5">
+				  <div class="row custom-scrollbar-css">
+	<div class="col-md-12">
 		<div class="row">
 				<div class="col-md-12">
 					<a class="text-dark" href="#">Home</a>
@@ -121,7 +121,11 @@
 			</div>
 		</div>
 	</div>
-	</main>
+	</div>
+	</div>
+	</div>
+	</div>
+	
 	<jsp:include page="footer.jsp" />
 
 	<div class="modal fade" id="filter" tabindex="-1" role="dialog"
@@ -164,140 +168,6 @@
     </div>
   </div>
 
-	<div class="modal fade" id="myCustomerEdit" role="dialog">
-		<div class="modal-dialog">
-
-			<!-- Modal content-->
-			<div class="modal-content">
-				<div class="modal-header">
-					<h4 class="modal-title" align="center">Edit Customer</h4>
-					<button type="button" class="close" data-dismiss="modal">&times;</button>
-				</div>
-				<div class="modal-body">
-					<form id="customerEdit">
-						<div class="row">
-							<div class="col-md-6">
-								<div id="formcommunityNameEdit" class="form-group">
-									<label class="bmd-label-floating">Community</label> 
-									 <input
-										type="text" class="form-control" name="communityNameEdit"
-										id="communityNameEdit" disabled>
-								</div>
-							</div>
-							<div class="col-md-6">
-								<div id="formblockNameEdit" class="form-group">
-									<label class="bmd-label-floating">Block</label> <input
-										type="text" class="form-control" name="blockNameEdit"
-										id="blockNameEdit" disabled>
-								</div>
-							</div>
-
-							<div class="col-md-6">
-								<div id="formfirstNameEdit" class="form-group">
-									<label class="bmd-label-floating">First Name</label> <input
-										type="text" class="form-control" name="firstNameEdit"
-										id="firstNameEdit">
-								</div>
-							</div>
-							<div class="col-md-6">
-								<div id="formlastNameEdit" class="form-group">
-									<label class="bmd-label-floating">Last Name</label> <input
-										type="text" class="form-control" name="lastNameEdit"
-										id="lastNameEdit" disabled>
-								</div>
-							</div>
-							
-							
-							
-							<div class="col-md-6">
-								<div id="formhouseNoEdit" class="form-group">
-									<label class="bmd-label-floating">House No.</label> <input
-										type="text" class="form-control" name="houseNoEdit"
-										id="houseNoEdit">
-								</div>
-							</div>
-							<div class="col-md-6">
-								<div id="formmobileNoEdit" class="form-group">
-									<label class="bmd-label-floating">Mobile No</label> <input
-										type="text" class="form-control" name="mobileNoEdit"
-										id="mobileNoEdit">
-								</div>
-							</div>
-							
-							
-							
-							
-							<div class="col-md-6">
-								<div id="formemailEdit" class="form-group">
-									<label class="bmd-label-floating">Email</label> <input
-										type="email" class="form-control" name="emailEdit"
-										id="emailEdit">
-								</div>
-							</div>
-							<div class="col-md-6">
-								<div id="formmeterSerialEdit" class="form-group">
-									<label class="bmd-label-floating">MSN</label> <input
-										type="text" class="form-control" name="meterSerialEdit"
-										id="meterSerialEdit" disabled>
-								</div>
-							</div>
-							
-							
-							
-							
-							<div class="col-md-6">
-								<div id="formamrEdit" class="form-group">
-									<label class="bmd-label-floating">MIU ID</label> <input
-										type="text" class="form-control" name="amrEdit"
-										id="amrEdit">
-								</div>
-							</div>
-							
-							<div class="col-md-6">
-								<div id="formCRNEdit" class="form-group">
-									<label class="bmd-label-floating">CRN Number</label> <input
-										type="text" class="form-control" name="CRNEdit"
-										id="CRNEdit" disabled>
-										<input type = "hidden" id="customerIdhidden" />
-								</div>
-							</div>
-
-							<div class="col-md-4">
-								<input class="btn btn-success submit-button"
-									 value="Update" id="customerEditsave"
-									type="button" disabled />
-							</div>
-
-							<div class="col-md-3">
-								<button type="button" class="btn btn-secondary btn-raised mr-3 resetFilter" id="resetFilter">Reset</button>
-							</div>
-
-
-							<div class="col-md-4">
-								<button type="button" class="btn btn-danger btn-raised mr-4"
-									data-dismiss="modal">
-									Close
-									<div class="ripple-container"></div>
-								</button>
-							</div>
-							
-						</div>
-					</form>
-				</div>
-			</div>
-		</div>
-	</div>
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	<div class="modal fade bd-example-modal-xl" id="myCustomerMeters" role="dialog">
 		<div class="modal-dialog modal-xl
 		">
@@ -336,20 +206,6 @@
 			</div>
 		</div>
 	</div>
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	<%} %>
    

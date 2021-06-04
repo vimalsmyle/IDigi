@@ -34,7 +34,7 @@
 </head>
 
 
-<body class="innerbody">
+<body class="main-sidebar-show">
 <%
 		String user_id = (String) session.getAttribute("roleID");
 

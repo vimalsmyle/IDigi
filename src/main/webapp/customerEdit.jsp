@@ -21,7 +21,7 @@
 </head>
 
 
-<body class="innerbody">
+<body class="main-sidebar-show">
 <%
 		String user_id = (String) session.getAttribute("roleID");
 		String cust_id = request.getParameter("cust");
@@ -38,9 +38,12 @@
 <input type="hidden" value=<%=cust_id%> id="custUniqueId">
 	<jsp:include page="header.jsp" />
 	<jsp:include page="slidebar.jsp" />
-		<main class="col-md-10 float-left col px-5 pl-md-3 pt-2 pb-6 main">
-	<div
-		class="container-fluid topspacing bottomspacing pl-0 pr-0 mr-0 ml-0">
+		<div class="top-spacing"></div>
+	 <div class="main-content side-content pt-0">
+			<div class="container-fluid">
+				<div class="inner-body custom-scrollbar-js" id="content-5">
+				  <div class="row custom-scrollbar-css">
+	<div class="col-md-12">
 		<div class="row mr-0 ml-0">
 			
 			<div class="right_data col-md-12 mt-4 mb-4">
@@ -117,7 +120,7 @@
 								<div class="group form-group">
 									<label class="bmd-label-floating">CRN Number</label> <input
 										type="text" class="form-control form-control-sm" name="CRNEdit"
-										id="CRNEdit">
+										id="CRNEdit" disabled>
 								</div>
 							</div>
 							
@@ -158,342 +161,14 @@
 			</div>
 		</div>
 	</div>
-	</main>
+		</div>
+			</div>
+				</div>
+					</div>
+
 	<jsp:include page="footer.jsp" />
 
-	<!-- Modal -->
-	<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
-		aria-labelledby="exampleModalLabel" aria-hidden="true">
-		<div class="modal-dialog modal-lg" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="exampleModalLabel">Customer Add
-						Form</h5>
-					<button type="button" class="close" data-dismiss="modal"
-						aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-				</div>
-				<div class="modal-body">
-					<form id="customerDetails">
-						<div class="row">
-						
-						<%if(!user_id.equalsIgnoreCase("2")) {%>
-							<div class="col-md-4">
-								<div class="form-group has-feedback has-success bmd-form-group is-filled">
-									<label class="bmd-label-floating select-label">Community Name</label> 
-									<select
-										class="form-control form-control-sm select2" id="selectcommunityName" name="selectcommunityName" onchange="showBlockbyCommunity(this.value);">
-									</select>
-								</div>
-							</div>
-							<div class="col-md-4">
-								<div class="form-group has-feedback has-success bmd-form-group is-filled">
-									<label class="bmd-label-floating select-label">Select Block</label> <select
-										class="form-control form-control-sm select2" id="selectBlockBasedonCommunity" name="selectBlockBasedonCommunity">
-									</select>
-								</div>
-							</div>
-							<%} else if(user_id.equalsIgnoreCase("2")){%>
-
-							<div class="col-md-4">
-								<div id = "formcommunityNameAdd" class="form-group">
-									<label class="bmd-label-floating">Community Name</label> <input
-										type="text" class="form-control form-control-sm" name="communityNameAdd"
-										id="communityNameAdd" disabled>
-								</div>
-							</div>
-							<div class="col-md-4">
-								<div id = "formblockNameAdd" class="form-group">
-									<label class="bmd-label-floating">Block Name</label> <input
-										type="text" class="form-control form-control-sm" name="blockNameAdd"
-										id="blockNameAdd"  disabled>
-								</div>
-							</div>
-
-<%} %>
-							<div class="col-md-4">
-								<div class="form-group">
-									<label class="bmd-label-floating">First Name</label> <input
-										type="text" class="form-control form-control-sm" name="firstNameAdd"
-										id="firstNameAdd">
-								</div>
-							</div>
-							<div class="col-md-4">
-								<div class="form-group">
-									<label class="bmd-label-floating">Last Name</label> <input
-										type="text" class="form-control form-control-sm" name="lastNameAdd"
-										id="lastNameAdd">
-								</div>
-							</div>
-							
-							
-							
-							<div class="col-md-4">
-								<div class="form-group">
-									<label class="bmd-label-floating">House No.</label> <input
-										type="text" class="form-control form-control-sm" name="houseNoAdd"
-										id="houseNoAdd">
-								</div>
-							</div>
-							<div class="col-md-4">
-								<div class="form-group">
-									<label class="bmd-label-floating">Mobile No</label> <input
-										type="text" class="form-control form-control-sm" name="mobileNoAdd"
-										id="mobileNoAdd">
-								</div>
-							</div>
-							
-							
-							
-							
-							<div class="col-md-4">
-								<div class="form-group">
-									<label class="bmd-label-floating">Email</label> <input
-										type="email" class="form-control form-control-sm" name="emailAdd"
-										id="emailAdd">
-								</div>
-							</div>
-							<div class="col-md-4">
-								<div class="form-group">
-									<label class="bmd-label-floating">MSN</label> <input
-										type="text" class="form-control form-control-sm" name="meterSerialAdd"
-										id="meterSerialAdd">
-								</div>
-							</div>
-							
-							
-							
-							
-							<div class="col-md-4">
-								<div class="form-group">
-									<label class="bmd-label-floating">MIU ID</label> <input
-										type="text" class="form-control form-control-sm" name="amrAdd"
-										id="amrAdd">
-								</div>
-							</div>
-							<div class="col-md-4">
-								<div class="form-group">
-									<label class="bmd-label-floating select-label">Tariff Name</label>  
-									<select
-										class="form-control form-control-sm" id="selectTariffName" name="selectTariffName">
-										<!-- <option style = "color: Red" value="" disabled selected>Select Tariff</option> --><!--  <option>Select Community</option> --> 
-									</select>
-								</div>
-							</div>
-							
-							
-							<div class="col-md-4">
-								<div class="form-group">
-									<label class="bmd-label-floating">CRN Number</label> <input
-										type="text" class="form-control form-control-sm" name="CRNAdd"
-										id="CRNAdd">
-								</div>
-							</div>
-							
-							<div class="col-md-4">
-							<button class="btn btn-primary submit-button"
-									 value="Add!" id="addMeter"
-									type="button">Add</button>
-							</div>
-							<div class="col-md-4">
-									<button class="btn btn-secondary submit-button"
-									 value="Save!" id="customerAdd"
-									type="button" disabled>Save</button>
-							</div>
-
-							<div class="col-md-3">
-								<button type="button" class="btn btn-secondary btn-raised mr-3 resetFilter" id="resetFilter">Reset</button>
-							</div>
-
-
-							<div class="col-md-4">
-								<button type="button" class="btn btn-danger btn-raised mr-4"
-									data-dismiss="modal">
-									Close
-									<div class="ripple-container"></div>
-								</button>
-							</div>
-						</div>
-					</form>
-
-				</div>
-			</div>
-		</div>
-	</div>
 	
-	
-	<div class="modal fade" id="filter" tabindex="-1" role="dialog"
-		aria-labelledby="filterModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Customer Management Filter</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <div class="row">
-          <div class="col-md-6">
-            <div class="form-group has-feedback has-success bmd-form-group is-filled">
-									<label class="bmd-label-floating select-label">Select Community</label> 
-									<select
-										class="form-control select2" id="filterselectcommunityName" name="filterselectcommunityName" onchange="showBlockbyCommunity(this.value);">
-									</select>
-								</div>
-							</div>
-							<div class="col-md-6">
-								<div class="form-group has-feedback has-success bmd-form-group is-filled">
-									<label class="bmd-label-floating select-label">Select Block</label> <select
-										class="form-control" id="filterselectBlockBasedonCommunity" name="filterselectBlockBasedonCommunity">
-									</select>
-								</div>
-							</div>
-        </div>
-        <div class="modal-footer m-auto">
-          <button type="button" class="btn btn-primary btn-raised mr-4" id="customerFilter">Filter</button>
-          <button type="button" class="btn btn-danger btn-raised mr-4" data-dismiss="modal">Close<div class="ripple-container"></div></button>
-          <button type="button" class="btn btn-secondary btn-raised mr-4" id="resetFilter">Reset</button>
-          
-        </div>
-      </div>
-    </div>
-    </div>
-  </div>
-
-	<div class="modal fade" id="myCustomerEdit" role="dialog">
-		<div class="modal-dialog">
-
-			<!-- Modal content-->
-			<div class="modal-content">
-				<div class="modal-header">
-					<h4 class="modal-title" align="center">Edit Customer</h4>
-					<button type="button" class="close" data-dismiss="modal">&times;</button>
-				</div>
-				<div class="modal-body">
-					<form id="customerEdit">
-						<div class="row">
-							<div class="col-md-6">
-								<div id="formcommunityNameEdit" class="form-group">
-									<label class="bmd-label-floating">Community</label> 
-									 <input
-										type="text" class="form-control" name="communityNameEdit"
-										id="communityNameEdit" disabled>
-								</div>
-							</div>
-							<div class="col-md-6">
-								<div id="formblockNameEdit" class="form-group">
-									<label class="bmd-label-floating">Block</label> <input
-										type="text" class="form-control" name="blockNameEdit"
-										id="blockNameEdit" disabled>
-								</div>
-							</div>
-
-							<div class="col-md-6">
-								<div id="formfirstNameEdit" class="form-group">
-									<label class="bmd-label-floating">First Name</label> <input
-										type="text" class="form-control" name="firstNameEdit"
-										id="firstNameEdit">
-								</div>
-							</div>
-							<div class="col-md-6">
-								<div id="formlastNameEdit" class="form-group">
-									<label class="bmd-label-floating">Last Name</label> <input
-										type="text" class="form-control" name="lastNameEdit"
-										id="lastNameEdit" disabled>
-								</div>
-							</div>
-							
-							
-							
-							<div class="col-md-6">
-								<div id="formhouseNoEdit" class="form-group">
-									<label class="bmd-label-floating">House No.</label> <input
-										type="text" class="form-control" name="houseNoEdit"
-										id="houseNoEdit">
-								</div>
-							</div>
-							<div class="col-md-6">
-								<div id="formmobileNoEdit" class="form-group">
-									<label class="bmd-label-floating">Mobile No</label> <input
-										type="text" class="form-control" name="mobileNoEdit"
-										id="mobileNoEdit">
-								</div>
-							</div>
-							
-							
-							
-							
-							<div class="col-md-6">
-								<div id="formemailEdit" class="form-group">
-									<label class="bmd-label-floating">Email</label> <input
-										type="email" class="form-control" name="emailEdit"
-										id="emailEdit">
-								</div>
-							</div>
-							<div class="col-md-6">
-								<div id="formmeterSerialEdit" class="form-group">
-									<label class="bmd-label-floating">MSN</label> <input
-										type="text" class="form-control" name="meterSerialEdit"
-										id="meterSerialEdit" disabled>
-								</div>
-							</div>
-							
-							
-							
-							
-							<div class="col-md-6">
-								<div id="formamrEdit" class="form-group">
-									<label class="bmd-label-floating">MIU ID</label> <input
-										type="text" class="form-control" name="amrEdit"
-										id="amrEdit">
-								</div>
-							</div>
-							<!-- <div class="col-md-6">
-								<div class="form-group">
-									<label class="bmd-label-floating">Tariff Name</label>  <select
-										class="form-control" id="selectTariffNameEdit" name="selectTariffNameEdit">
-										<option style = "color: Red" value="" disabled selected>Select Tariff</option> --><!--  <option>Select Community</option> 
-									</select>
-								</div>
-							</div> -->
-							
-							
-							<div class="col-md-6">
-								<div id="formCRNEdit" class="form-group">
-									<label class="bmd-label-floating">CRN Number</label> <input
-										type="text" class="form-control" name="CRNEdit"
-										id="CRNEdit" disabled>
-										<input type = "hidden" id="customerIdhidden" />
-								</div>
-							</div>
-
-							<div class="col-md-4">
-								<input class="btn btn-success submit-button"
-									 value="Update" id="customerEditsave"
-									type="button" disabled />
-							</div>
-
-							<div class="col-md-3">
-								<button type="button" class="btn btn-secondary btn-raised mr-3 resetFilter" id="resetFilter">Reset</button>
-							</div>
-
-
-							<div class="col-md-4">
-								<button type="button" class="btn btn-danger btn-raised mr-4"
-									data-dismiss="modal">
-									Close
-									<div class="ripple-container"></div>
-								</button>
-							</div>
-							
-						</div>
-					</form>
-				</div>
-			</div>
-		</div>
-	</div>
 	<%} %>
    
 	

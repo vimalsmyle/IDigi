@@ -254,7 +254,7 @@ $(document)
 											return false;
 										}
 										
-										if ($("#selectMeters").val() == "Select  Meters") {
+										if ($("#selectMeters").val() == "-1") {
 
 											bootbox
 													.alert("Please Select Meters");
@@ -283,7 +283,7 @@ $(document)
 
 										if (sessionStorage.getItem("roleID") == 3) {
 											data1["CustomerUniqueID"] = $(
-													"#CustomerCRNNumber")
+													"#selectHouseBasedonBlock")
 													.val();
 										} else {
 											data1["communityID"] = $(
@@ -292,9 +292,9 @@ $(document)
 											data1["blockID"] = $(
 													"#selectBlockBasedonCommunity")
 													.val();
-											data1["CRNNumber"] = $(
-													"#selectHouseBasedonBlock")
-													.val();
+											data1["CustomerUniqueID"] = $(
+											"#selectHouseBasedonBlock")
+											.val();
 										}
 
 										data1["miuID"] = $("#AMR_topup")

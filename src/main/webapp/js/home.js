@@ -9,24 +9,39 @@ $(document)
 
   if(sessionStorage.getItem("roleID") != 3){
 	  
-	  $.getJSON("/PAYGTL_LORA_BLE/homedashboard/" +sessionStorage.getItem("roleID")+"/"+sessionStorage.getItem("ID"), function(data) {
+	  $.getJSON("./homedashboard/Gas/" +sessionStorage.getItem("roleID")+"/"+sessionStorage.getItem("ID"), function(data) {
 			//var Options = "";
-  	  document.querySelector("#adminActive").innerText = data.active;
-  	  document.querySelector("#adminInActive").innerText = data.inActive;
-  	  document.querySelector("#adminNonLive").innerText = data.nonLive;
-  	  document.querySelector("#adminLive").innerText = data.live;
-  	  document.querySelector("#adminBattery").innerText = data.lowBattery;
-  	  document.querySelector("#adminEmergency").innerText = data.emergency;
-  	  document.querySelector("#admincomption").innerText = data.consumption;
-  	  document.querySelector("#admindayTopup").innerText = data.topup;
-  	  document.querySelector("#adminAMR").innerText = data.amr;
+  	  document.querySelector("#gasActive").innerText = data.active;
+  	  document.querySelector("#gasInactive").innerText = data.inActive;
+  	  document.querySelector("#gasLive").innerText = data.nonLive;
+  	  document.querySelector("#gasnonLive").innerText = data.live;
+  	  document.querySelector("#gasemergency").innerText = data.emergency;
+  	  document.querySelector("#gasLowbattery").innerText = data.lowBattery;
+  	  document.querySelector("#gasActivePercentage").innerText = data.activePercentage;
+  	  document.querySelector("#inactivePercentage").innerText = data.inActivePercentage;
+			
+		});
+	  
+	  
+	  
+	  $.getJSON("./homedashboard/Postpaid/" +sessionStorage.getItem("roleID")+"/"+sessionStorage.getItem("ID"), function(data) {
+			//var Options = "";
+	  document.querySelector("#adminActive").innerText = data.active;
+	  document.querySelector("#adminInActive").innerText = data.inActive;
+	  document.querySelector("#adminNonLive").innerText = data.nonLive;
+	  document.querySelector("#adminLive").innerText = data.live;
+	  document.querySelector("#adminBattery").innerText = data.lowBattery;
+	  document.querySelector("#adminEmergency").innerText = data.emergency;
+	  document.querySelector("#admincomption").innerText = data.consumption;
+	  document.querySelector("#admindayTopup").innerText = data.topup;
+	  document.querySelector("#adminAMR").innerText = data.amr;
 			
 		});
 		
 		$.ajax({
 			type : "GET",
 			contentType : "application/json",
-			url : "/PAYGTL_LORA_BLE/homedashboard/"
+			url : "./homedashboard/"
 					+ sessionStorage.getItem("roleID") + "/"
 					+ sessionStorage.getItem("ID"),
 			dataType : "JSON",
@@ -84,19 +99,6 @@ $(document)
 									}
 								}
 							},
-							/*
-							legend: {
-							    layout: 'vertical',
-							    align: 'right',
-							    verticalAlign: 'top',
-							    x: -40,
-							    y: 100,
-							    floating: true,
-							    borderWidth: 1,
-							    backgroundColor: ((Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'),
-							    shadow: true
-							},
-							 */
 							credits : {
 								enabled : false
 							},
@@ -136,7 +138,7 @@ $(document)
 				$.ajax({
 					type : "GET",
 					contentType : "application/json",
-					url : "/PAYGTL_LORA_BLE/graph/"
+					url : "./graph/"
 							+ $("#start_date").val() + "/"
 							+ $("#month").val()+"/"+sessionStorage.getItem("ID"),
 					dataType : "JSON",
@@ -211,7 +213,7 @@ $(document)
 				
 				
 			});
-			 $.getJSON("/PAYGTL_LORA_BLE/dashboard/" +sessionStorage.getItem("roleID")+"/"+sessionStorage.getItem("ID")+"/-1", function(data) {
+			 $.getJSON("./dashboard/" +sessionStorage.getItem("roleID")+"/"+sessionStorage.getItem("ID")+"/-1", function(data) {
 				 $.each(data.data, function(i, item) {
 //					 alert();
 		    	  document.querySelector("#lastBillAmount").innerText = item.lastTopupAmount;
@@ -235,7 +237,7 @@ $(document)
 				});
 			 
 			 
-			 $.getJSON("/PAYGTL_LORA_BLE/customer/"+sessionStorage.getItem("roleID")+"/"+sessionStorage.getItem("ID")+"/-1", function(data) {
+			 $.getJSON("./customer/"+sessionStorage.getItem("roleID")+"/"+sessionStorage.getItem("ID")+"/-1", function(data) {
 					$.each(data.data, function(i, item) {
 						
 							document.querySelector(".community").innerText = item.communityName;
@@ -250,7 +252,7 @@ $(document)
 		$.ajax({
 			type : "GET",
 			contentType : "application/json",
-			url : "/PAYGTL_LORA_BLE/graph/"
+			url : "./graph/"
 					+ 0 + "/"
 					+ 0+"/"+sessionStorage.getItem("ID"),
 			dataType : "JSON",

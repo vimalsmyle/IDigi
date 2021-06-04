@@ -24,6 +24,7 @@ $(document).ready(function () {
 		}
       });*/
       
+    	
       
       
       var pageURL = $(location). attr("href");
@@ -68,5 +69,12 @@ function redirection(obj){
 	}
 	
 }
-
+$(document).on('click', '#mainSidebarToggle' ,function(event) {
+	event.preventDefault();
+	if (window.matchMedia('(min-width: 300px)').matches) {
+		$('body').toggleClass('main-sidebar-hide');
+	} else {
+		$('body').toggleClass('main-sidebar-show');
+	}
+});
 

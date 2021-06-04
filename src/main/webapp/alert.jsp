@@ -21,7 +21,7 @@
 </head>
 
 
-<body  class="innerbody">
+<body  class="main-sidebar-show">
 <%
 		String user_id = (String) session.getAttribute("roleID");
 
@@ -37,9 +37,12 @@
 </div>
 <jsp:include page="header.jsp" />
 	<jsp:include page="slidebar.jsp" />
-		<main class="col-md-10 float-left col px-5 pl-md-3 pt-2 pb-6 main">
-	<div
-		class="container-fluid topspacing bottomspacing pl-0 pr-0 mr-0 ml-0">
+			 <div class="top-spacing"></div>
+	 <div class="main-content side-content pt-0">
+			<div class="container-fluid">
+				<div class="inner-body custom-scrollbar-js" id="content-5">
+				  <div class="row custom-scrollbar-css">
+	<div class="col-md-12">
 		<div class="row mr-0 ml-0">
 			
 			<div class="right_data col-md-10 mt-4 mb-4">
@@ -73,7 +76,10 @@
 			</div>
 		</div>
 	</div>
-	</main>
+	</div>
+	</div>
+	</div>
+	</div>
 	<jsp:include page="footer.jsp" />
 
 	<!-- Modal -->
@@ -203,22 +209,16 @@
 										id="perUnitEdit1">
 								</div>
 							</div>
-							<!-- <div class="col-md-6">
 								
-							</div> -->
-
-							<div class="col-md-4">
-									<button class="btn btn-secondary submit-button"
+							</div> 
+						<div class="row">
+							<div class="col-md-12 text-right">
+									<button class="btn btn-primary submit-button"
 									 value="Save!" id="alertEditsave"
 									type="button" disabled>Update</button>
-							</div>
-
-							<div class="col-md-3">
-								<button type="button" class="btn btn-secondary btn-raised mr-3 resetFilter" id="resetFilter">Reset</button>
-							</div>
-
-
-							<div class="col-md-4">
+							
+								<button type="button" class="btn btn-danger btn-raised mr-3 resetFilter" id="resetFilter">Reset</button>
+							
 								<button type="button" class="btn btn-danger btn-raised mr-4"
 									data-dismiss="modal">
 									Close
@@ -274,7 +274,8 @@
 		
 		<script
 		src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/5.4.0/bootbox.min.js"></script>
-
+	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+		<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
 
 </html>

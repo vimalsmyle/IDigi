@@ -25,7 +25,7 @@ Material Design for Bootstrap CSS
 <title>Home</title>
 </head>
 
-<body class="innerbody">
+<body class ="main-sidebar-show">
 	<%
 		String user_id = (String) session.getAttribute("roleID");
 	%>
@@ -721,6 +721,7 @@ Material Design for Bootstrap CSS
 	<!-- <script src="https://code.jquery.com/jquery-3.3.1.js"></script> -->
 
 
+	<script src="js/common.js"></script>
 
 
 	<!-- <script

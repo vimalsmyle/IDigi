@@ -4,6 +4,8 @@
 $(document).ready(function() {
 
 	var rowCount = 0;
+	
+	
 	$.getJSON("./customer/"+sessionStorage.getItem("roleID")+"/"+sessionStorage.getItem("ID")+"/-1", function(data) {
 	$.each(data.data, function(i, item) {
 		if ($("#custUniqueId").val() == item.CustomerUniqueID) {
@@ -61,78 +63,107 @@ $(document).ready(function() {
 						true);
 				
 			}
-			
-			
+			$.each(item.meters, function(i, meter) {
+				rowCount++;
+				
+				$("#template").append("<div class=row> " +
+						"<div class=col-md-4>" +
+						"<div class='group form-group'>"
+										+"<label class=bmd-label-floating>MIU ID</label> <input "
+										+"type=text class='form-control form-control-sm' name=miuIDEdit["+rowCount+"]"
+										+" id=miuIDEdit-"+rowCount+">"
+										+"</div></div>"+
+							"<div class=col-md-4>" +
+							"<div class='group form-group'>"
+							+"<label class=bmd-label-floating>Meter Serial Number</label> <input "
+							+"type=text class='form-control form-control-sm' name=meterSerialNumberEdit["+rowCount+"]"
+							+" disabled id=meterSerialNumberEdit-"+rowCount+">"
+							+"</div></div>"+
+						"<div class=col-md-4>" +
+						"<div class='group form-group has-feedback has-success bmd-form-group is-filled'>"
+						+"<label class=bmd-label-floating>Meter Type</label> " +
+						"<select class='form-control form-control-sm select2'  disabled id=selectMeterType-"+rowCount+" name=selectMeterType["+rowCount+"]>"+
+							"<option value='-1'>Select Meter Type</option>"+
+							"<option value='Gas'>Gas</option>"+
+							"<option value='Water'>Water</option>"+
+							"<option value='Energy'>Energy</option>"+
+						"</select>"
+						+"</div></div>"+
+						"<div class=col-md-4>" +
+						"<div class='group form-group'>"
+						+"<label class=bmd-label-floating>Meter Size</label> <input "
+						+"type=text class='form-control form-control-sm' disabled name=meterSizeEdit["+rowCount+"]"
+						+" id=meterSizeEdit-"+rowCount+">"
+						+"</div></div>"+
+						"<div class=col-md-4>" +
+						"<div class='group form-group has-feedback has-success bmd-form-group is-filled'>"
+						+"<label class=bmd-label-floating>Pay Type</label>" +
+						"<select class='form-control form-control-sm select2' disabled id=payTypeEdit-"+rowCount+" name=payTypeEdit["+rowCount+"]>"+
+						"<option value='-1'>Select Pay Type</option>"+
+						"<option value='Prepaid'>Prepaid</option>"+
+						"<option value='Postpaid'>Postpaid</option>"+
+					"</select>"
+						+"</div></div>"+
+						"<div class=col-md-4>" +
+						"<div class='group form-group has-feedback has-success bmd-form-group is-filled'>"
+						+"<label class=bmd-label-floating>Tariff Name</label> " +
+						"<select "+
+						"class='form-control form-control-sm selectTariffName' disabled id=selectTariffName-"+rowCount+" name=selectTariffName["+rowCount+"]>"+
+						 
+						"</select>"
+						+"</div></div>"+
+						"<div class=col-md-4>" +
+						"<div class='group form-group has-feedback has-success bmd-form-group is-filled'>"
+						+"<label class=bmd-label-floating>Gateway ID</label> " +
+						"<select "+
+						"class='form-control form-control-sm gatewayIDEdit' id=gatewayIDEdit-"+rowCount+" name=gatewayIDEdit["+rowCount+"]>"+
+						 
+						"</select>"
+						+"</div></div>"+
+						"<div class=col-md-4>" +
+						"<div class='group form-group'>"
+						+"<label class=bmd-label-floating>Location</label> <input "
+						+"type=text class='form-control form-control-sm' disabled name=locationEdit["+rowCount+"]"
+						+" id=locationEdit-"+rowCount+">"
+						+"</div></div>   " +
+								"</div>" +
+								"</div>");
+				
+				 
+				$.getJSON("./tariffs", function(data) {
+					var Optionstariff = '<option value=-1>Select  Tariff</option>';
+					$.each(data.dropDownTariffs, function(key, value) {
+						Optionstariff = Optionstariff + '<option value=' + key + '>' + value
+								+ '</option>';
+					});
+					$('.selectTariffName').append(Optionstariff);
+				
+			 
+			 
+			 $.getJSON("./gateways", function(data) {
+					var OptionsGateway = "<option value='-1'>Select  Gateway</option>";
+					$.each(data.dropDownGateways, function(key, value) {
+						OptionsGateway = OptionsGateway + "<option value='" + key + "'>" + value
+								+ "</option>";
+					});
+					$('.gatewayIDEdit').append(OptionsGateway);
+				
+				
+				$("#miuIDEdit-"+rowCount).val(meter.miuID);
+				$("#meterSerialNumberEdit-"+rowCount).val(meter.meterSerialNumber);
+				$("#selectMeterType-"+rowCount).val(meter.meterType);
+				$("#meterSizeEdit-"+rowCount).val(meter.meterSize);
+				$("#payTypeEdit-"+rowCount).val(meter.payType);
+				$("#selectTariffName-"+rowCount).val(meter.tariffID);
+				$("#gatewayIDEdit-"+rowCount).val(meter.gatewayID);
+				$("#selectTariffName-"+rowCount).val(meter.tariffID);
+				$("#gatewayIDEdit-"+rowCount).val(meter.gatewayID);
+				$("#locationEdit-"+rowCount).val(meter.location);
+				});
+			});
+			});
 		} 
-		$.each(item.meters, function(i, meter) {
-		rowCount++;
 		
-		$("#template").append("<div class=row> " +
-				"<div class=col-md-4>" +
-				"<div class='group form-group'>"
-								+"<label class=bmd-label-floating>MIU ID</label> <input "
-								+"type=text class='form-control form-control-sm' name=miuIDEdit["+rowCount+"]"
-								+" id=miuIDEdit-"+rowCount+">"
-								+"</div></div>"+
-					"<div class=col-md-4>" +
-					"<div class='group form-group'>"
-					+"<label class=bmd-label-floating>Meter Serial Number</label> <input "
-					+"type=text class='form-control form-control-sm' name=meterSerialNumberEdit["+rowCount+"]"
-					+" id=meterSerialNumberEdit-"+rowCount+">"
-					+"</div></div>"+
-				"<div class=col-md-4>" +
-				"<div class='group form-group has-feedback has-success bmd-form-group is-filled'>"
-				+"<label class=bmd-label-floating>Meter Type</label> " +
-				"<select class='form-control form-control-sm select2'  id=selectMeterType-"+rowCount+" name=selectMeterType["+rowCount+"]>"+
-					"<option value='-1'>Select Meter Type</option>"+
-					"<option value='Gas'>Gas</option>"+
-					"<option value='Water'>Water</option>"+
-					"<option value='Energy'>Energy</option>"+
-				"</select>"
-				+"</div></div>"+
-				"<div class=col-md-4>" +
-				"<div class='group form-group'>"
-				+"<label class=bmd-label-floating>Meter Size</label> <input "
-				+"type=text class='form-control form-control-sm' name=meterSizeEdit["+rowCount+"]"
-				+" id=meterSizeEdit-"+rowCount+">"
-				+"</div></div>"+
-				"<div class=col-md-4>" +
-				"<div class='group form-group has-feedback has-success bmd-form-group is-filled'>"
-				+"<label class=bmd-label-floating>Pay Type</label>" +
-				"<select class='form-control form-control-sm select2' id=payTypeEdit-"+rowCount+" name=payTypeEdit["+rowCount+"]>"+
-				"<option value='-1'>Select Pay Type</option>"+
-				"<option value='Prepaid'>Prepaid</option>"+
-				"<option value='Postpaid'>Postpaid</option>"+
-			"</select>"
-				+"</div></div>"+
-				"<div class=col-md-4>" +
-				"<div class='group form-group has-feedback has-success bmd-form-group is-filled'>"
-				+"<label class=bmd-label-floating>Tariff Name</label> " +
-				"<select "+
-				"class='form-control form-control-sm' id=selectTariffName-"+rowCount+" name=selectTariffName["+rowCount+"]>"+
-				 
-				"</select>"
-				+"</div></div>"+
-				"<div class=col-md-4>" +
-				"<div class='group form-group has-feedback has-success bmd-form-group is-filled'>"
-				+"<label class=bmd-label-floating>Gateway ID</label> " +
-				"<select "+
-				"class='form-control form-control-sm' id=gatewayIDEdit-"+rowCount+" name=gatewayIDEdit["+rowCount+"]>"+
-				 
-				"</select>"
-				+"</div></div>"+
-				"<div class=col-md-4>" +
-				"<div class='group form-group'>"
-				+"<label class=bmd-label-floating>Location</label> <input "
-				+"type=text class='form-control form-control-sm' name=locationEdit["+rowCount+"]"
-				+" id=locationEdit-"+rowCount+">"
-				+"</div></div>   " +
-						" <div class='col-md-12 text-right'>" 
-				+" <button type=button class='btn btn-danger' id='removeMeter'>Remove</button></div></div>" +
-						"</div>");
-		
-		
-		});
 		
 		
 	});

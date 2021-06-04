@@ -27,7 +27,6 @@ table = $('#alertTable')
 "order" : [ 0, "desc" ],
 "lengthMenu" : [ 5, 10, 25, 30, 50, 75 ],
 "pageLength" : "5",
-"scrollY" : 324,
 "scrollX" : true,
 "ajax" : {
 "url":"./alert",
@@ -249,7 +248,7 @@ $(document)
 											'status.field.bv',
 											function(e, data) {
 												formIsValid = true;
-												$('.input-group.form-group', $(this))
+												$('.group.form-group', $(this))
 														.each(
 																function() {
 																//	alert(this+"@@=>"+formIsValid);
@@ -281,7 +280,7 @@ $(document)
 									'status.field.bv',
 									function(e, data) {
 										formIsValid = true;
-										$('.input-group.form-group', $(this))
+										$('.group.form-group', $(this))
 												.each(
 														function() {
 														//	alert(this+"@@=>"+formIsValid);
@@ -324,7 +323,7 @@ $(document)
 														.ajax({
 															type : "POST",
 															contentType : "application/json",
-															url : "/PAYGTL_LORA_BLE/alert/add",
+															url : "./alert/add",
 															data : JSON
 																	.stringify(data1),
 															dataType : "JSON",
@@ -334,30 +333,26 @@ $(document)
 																
 																if (data.result == "Success") {
 
-																	/*alert( "data"
-																			+ data.result);*/
-																	
-																	bootbox.alert(data.Message,
-																			function(
-																					result) {
-																					
-																		//alert();
-																		window.location = "alert.jsp";
-																				});
-																	return false
+																	swal({
+																		  title: "Saved",
+																		  text: data.Message,
+																		  icon: "success"
+																		}).then(function() {
+																		    window.location = "alert.jsp";
+																		});
+																	return false;
 																	
 
 																} else if(data.result == "Failure"){
 																	
-																	bootbox.alert(data.Message,
-																			function(
-																					result) {
-																					
-																		//alert();
-																		//window.location = "alert.jsp";
-																		
-																				});
-																	//return false
+																	swal({
+																		  title: "error",
+																		  text: data.Message,
+																		  icon: "error"
+																		}).then(function() {
+																		    window.location = "alert.jsp";
+																		    return false;
+																		});
 																}
 															}
 														});
@@ -374,7 +369,6 @@ $(document)
 										
 										data1["noAMRInterval"] = $("#noamrintervalEdit")
 										.val();
-										/*data1["lowBatteryVoltage"] = $("#lowbatteryvoltageEdit1").val();*/
 										data1["timeOut"] = $("#rechargetimeoutEdit1")
 										.val();
 								
@@ -385,7 +379,7 @@ $(document)
 												.ajax({
 													type : "POST",
 													contentType : "application/json",
-													url : "/PAYGTL_LORA_BLE/alert/edit/"+$("#alertIdhidden").val(),
+													url : "./alert/edit/"+$("#alertIdhidden").val(),
 													data : JSON
 															.stringify(data1),
 													dataType : "JSON",
@@ -398,27 +392,26 @@ $(document)
 															/*alert( "data"
 																	+ data.result);*/
 															
-															bootbox.alert(data.Message,
-																	function(
-																			result) {
-																			
-																//alert();
-																window.location = "alert.jsp";
-																		});
-															return false
+															swal({
+																  title: "Saved",
+																  text: data.Message,
+																  icon: "success"
+																}).then(function() {
+																    window.location = "alert.jsp";
+																});
+															return false;
 															
 
 														} else if(data.result == "Failure"){
 															
-															bootbox.alert(data.Message,
-																	function(
-																			result) {
-																			
-																//alert();
-																window.location = "alert.jsp";
-																
-																		});
-															return false
+															swal({
+																  title: "error",
+																  text: data.Message,
+																  icon: "error"
+																}).then(function() {
+																    window.location = "alert.jsp";
+																    return false;
+																});
 														}
 													}
 												});
@@ -435,21 +428,21 @@ function getAlertFormEdit(id) {
 
 //	 alert(id);
 
-	$.getJSON("/PAYGTL_LORA_BLE/alert", function(data) {
+	$.getJSON("./alert", function(data) {
 		$.each(data.data, function(i, item) {
 			if (id == item.alertID) {
 			//	alert(item.lowBatteryVoltage);
 				$('#noamrintervalEdit').val(item.noAMRInterval).trigger("change");
-				$("#formnoamrintervalEdit").addClass("input-group form-group has-feedback has-success bmd-form-group is-filled")
+				$("#formnoamrintervalEdit").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
 			/*	$('#lowbatteryvoltageEdit1').val(item.lowBatteryVoltage).trigger("change");
 				$("#formlowbatteryvoltageEdit").addClass("input-group form-group has-feedback has-success bmd-form-group is-filled")*/
 				$('#rechargetimeoutEdit1').val(item.timeOut).trigger("change");
-				$("#formrechargetimeoutEdit").addClass("input-group form-group has-feedback has-success bmd-form-group is-filled")
+				$("#formrechargetimeoutEdit").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
 			
 				$('#connectionEdit1').val(item.reconnectionCharges).trigger("change");
-				$("#formreconnectionEdit").addClass("input-group form-group has-feedback has-success bmd-form-group is-filled")
+				$("#formreconnectionEdit").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
 				$('#perUnitEdit1').val(item.perUnitValue).trigger("change");
-				$("#formperUnitEdit").addClass("input-group form-group has-feedback has-success bmd-form-group is-filled")
+				$("#formperUnitEdit").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
 				$("#alertIdhidden").val(item.alertID);
 				$('#alertEditsave')
 				.attr('disabled',

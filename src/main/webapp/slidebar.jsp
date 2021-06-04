@@ -7,7 +7,7 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	<link rel="stylesheet" href="common/css/style1.css">
   </head>
-   <body>
+   <body class="main-sidebar-show">
    <%
 		String user_id = (String) session.getAttribute("roleID");
 
@@ -18,82 +18,94 @@
 			response.sendRedirect("login.jsp");
 		}else {
 	%>
-	<div class="container-fluid">
+<!-- 	<div class="container-fluid">
     <div class="row d-flex d-md-block flex-nowrap wrapper">
         <div class="col-md-2 float-left col-1 pl-0 pr-0 collapse width show" id="sidebar">
-            <div class="list-group border-0 text-center text-md-left">
-            
+            <div class="list-group border-0 text-center text-md-left"> -->
+            <div class="main-sidebar main-sidebar-sticky">
+		<div class="sidemenu-logo">
+			<a class="main-logo" href="home.jsp"> 
+				<img src="common/images/logo-white.png" class="header-brand-img desktop-logo img-fluid" alt="logo"> 
+				<img src="common/images/logoIcon.png" class="header-brand-img main-sidebar-Hidelogo img-fluid" alt="logo"> 
+			</a> 
+		</div>
+	
+		<div class="main-sidebar-body custom-scrollbar-js" id="sidebar">
+		   
+			<div class="list-group border-0 text-center text-md-left">
              <%
 			if (user_id.equalsIgnoreCase("1") || user_id.equalsIgnoreCase("4")) {
 				%>	
             
-                <a href="dashboard.jsp" class="list-group-item d-inline-block collapsed"><i class="fa fa-film"></i> <span class="d-none d-md-inline">DashBoard</span></a>
-                <a href="#menu3" class="list-group-item d-inline-block collapsed" data-toggle="collapse" aria-expanded="false"><i class="fa fa-book"></i> <span class="d-none d-md-inline">Customer Setup </span></a>
+                <a href="LiveDashBoard.jsp" class="list-group-item d-inline-block collapsed"><i class="fa fa-film"></i> <span class="textData">DashBoard</span></a>
+                <a href="#menu3" class="list-group-item d-inline-block collapsed" data-toggle="collapse" aria-expanded="false"><i class="fa fa-book"></i> <span class="textData">Customer Setup </span></a>
                 <div class="collapse" id="menu3" data-parent="#sidebar">
-                    <a href="communityDetails.jsp" class="list-group-item" data-parent="#menu3">Community Details</a>
-                     <a href="blockDetails.jsp" class="list-group-item" data-parent="#menu3">Block Details</a>
-                      <a href="customerDetails.jsp" class="list-group-item" data-parent="#menu3">Customer Details</a>
-                       <a href="gateway.jsp" class="list-group-item" data-parent="#menu3">Gateway Details</a>
+                    <a href="communityDetails.jsp" class="list-group-item" data-parent="#menu3"><i class="fa fa-film"></i><span class="textData">Community Details </span></a>
+                     <a href="blockDetails.jsp" class="list-group-item" data-parent="#menu3"><i class="fa fa-film"></i><span class="textData">Block Details </span></a>
+                      <a href="customerDetails.jsp" class="list-group-item" data-parent="#menu3"><i class="fa fa-film"></i><span class="textData">Customer Details </span></a>
+                       <a href="gateway.jsp" class="list-group-item" data-parent="#menu3"><i class="fa fa-film"></i><span class="textData">Gateway Details </span></a>
                 </div>
-                <a href="tariff.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-heart"></i> <span class="d-none d-md-inline">Tariff </span></a>
-                <a href="alert.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-list"></i> <span class="d-none d-md-inline">Alert Configuration</span></a>
+                <a href="tariff.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-heart"></i> <span class="textData">Tariff </span></a>
+                <a href="alert.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-list"></i> <span class="textData">Alert Configuration</span></a>
                 
                 <%if(user_id.equalsIgnoreCase("1")){ %>
-                <a href="configuration.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-clock-o"></i> <span class="d-none d-md-inline">Meter Commands</span></a>
+                <a href="configuration.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-clock-o"></i> <span class="textData">Meter Commands</span></a>
                 <%}%>
                 
-                <a href="configurationStatus.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-th"></i> <span class="d-none d-md-inline">Meter Commands Status</span></a>
+                <a href="configurationStatus.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-th"></i> <span class="textData">Meter Commands Status</span></a>
                 
                 <%if(user_id.equalsIgnoreCase("1")){ %>
-                <a href="topup.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-gear"></i> <span class="d-none d-md-inline">ReCharge</span></a>
+                <a href="topup.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-gear"></i> <span class="textData">ReCharge</span></a>
                 <%}%>
-                <a href="topupStatus.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-calendar"></i> <span class="d-none d-md-inline">ReCharge Status</span></a>
-                <a href="holiday.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-envelope"></i> <span class="d-none d-md-inline">Vacation</span></a>
-                <a href="reports.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-bar-chart-o"></i> <span class="d-none d-md-inline">Reports</span></a>
+                <a href="topupStatus.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-calendar"></i> <span class="textData">ReCharge Status</span></a>
+                <a href="holiday.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-envelope"></i> <span class="textData">Vacation</span></a>
+                <a href="reports.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-bar-chart-o"></i> <span class="textData">Reports</span></a>
                 
                 	<%if(user_id.equalsIgnoreCase("1")){ %>
-                <a href="Mgmt.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-star"></i> <span class="d-none d-md-inline">User Management</span></a>
+                <a href="Mgmt.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-star"></i> <span class="textData">User Management</span></a>
             <%}%>
             <% } else if (user_id.equalsIgnoreCase("2") || user_id.equalsIgnoreCase("5")) {
                 %>
-             <a href="approval.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-calendar"></i> <span class="d-none d-md-inline">Approval</span></a>
+             <a href="approval.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-calendar"></i> <span class="textData">Approval</span></a>
               <a href="customerDetails.jsp" class="list-group-item" data-parent="#menu3">Customer Details</a>   
-                 <a href="tariff.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-heart"></i> <span class="d-none d-md-inline">Tariff </span></a>
-                <a href="alert.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-list"></i> <span class="d-none d-md-inline">Alert Configuration</span></a>
+                 <a href="tariff.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-heart"></i> <span class="textData">Tariff </span></a>
+                <a href="alert.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-list"></i> <span class="textData">Alert Configuration</span></a>
                 
                 
                    <%if(user_id.equalsIgnoreCase("2")){ %>
-                <a href="configuration.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-clock-o"></i> <span class="d-none d-md-inline">Meter Commands</span></a>
+                <a href="configuration.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-clock-o"></i> <span class="textData">Meter Commands</span></a>
                 <%}%>
                 
-                 <a href="configurationStatus.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-th"></i> <span class="d-none d-md-inline">Meter Commands Status</span></a>
-                 <a href="dashboard.jsp" class="list-group-item d-inline-block collapsed"><i class="fa fa-film"></i> <span class="d-none d-md-inline">DashBoard</span></a>
+                 <a href="configurationStatus.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-th"></i> <span class="textData">Meter Commands Status</span></a>
+                 <a href="dashboard.jsp" class="list-group-item d-inline-block collapsed"><i class="fa fa-film"></i> <span class="textData">DashBoard</span></a>
                 
                 <%if(user_id.equalsIgnoreCase("2")){ %>
-                <a href="topup.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-gear"></i> <span class="d-none d-md-inline">ReCharge</span></a>
+                <a href="topup.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-gear"></i> <span class="textData">ReCharge</span></a>
                 <%}%>
                 
-                 <a href="topupStatus.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-calendar"></i> <span class="d-none d-md-inline">ReCharge Status</span></a>
-                <a href="holiday.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-envelope"></i> <span class="d-none d-md-inline">Vacation</span></a>
-                <a href="reports.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-bar-chart-o"></i> <span class="d-none d-md-inline">Reports</span></a>
+                 <a href="topupStatus.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-calendar"></i> <span class="textData">ReCharge Status</span></a>
+                <a href="holiday.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-envelope"></i> <span class="textData">Vacation</span></a>
+                <a href="reports.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-bar-chart-o"></i> <span class="textData">Reports</span></a>
                 
                 		<%if(user_id.equalsIgnoreCase("2")){ %>
-                 <a href="feedbackStatus.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-envelope"></i> <span class="d-none d-md-inline">Feedback Status</span></a>
+                 <a href="feedbackStatus.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-envelope"></i> <span class="textData">Feedback Status</span></a>
                <%}%>
                 <% } else if (user_id.equalsIgnoreCase("3")) {%>
                 
-                <a href="topup.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-gear"></i> <span class="d-none d-md-inline">ReCharge</span></a>
-                 <a href="topupStatus.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-calendar"></i> <span class="d-none d-md-inline">ReCharge Status</span></a>
-                <a href="holiday.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-envelope"></i> <span class="d-none d-md-inline">Vacation</span></a>
-                 <a href="userConsumptions.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-envelope"></i> <span class="d-none d-md-inline">User Consumptions</span></a>
+                <a href="topup.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-gear"></i> <span class="textData">ReCharge</span></a>
+                 <a href="topupStatus.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-calendar"></i> <span class="textData">ReCharge Status</span></a>
+                <a href="holiday.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-envelope"></i> <span class="textData">Vacation</span></a>
+                 <a href="userConsumptions.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-envelope"></i> <span class="textData">User Consumptions</span></a>
                 
-                <a href="feedback.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-bar-chart-o"></i> <span class="d-none d-md-inline">Feedback/Compliant</span></a>
+                <a href="feedback.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-bar-chart-o"></i> <span class="textData">Feedback/Compliant</span></a>
               <% } %>
-            
             </div>
         </div>
     </div>
-</div>
+       <!--      </div>
+        </div>
+    </div>
+</div> -->
 	<%
 		}
 	%>

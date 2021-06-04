@@ -55,7 +55,7 @@ $(document)
 												    "scrollY" : 300,
 													"scrollX" : true,
 										"ajax" : {
-											"url" : "/PAYGTL_LORA_BLE/dashboard/"
+											"url" : "./dashboard/"
 													+ sessionStorage
 															.getItem("roleID")
 													+ "/"
@@ -335,7 +335,7 @@ $(document)
 										.ajax({
 											type : "POST",
 											contentType : "application/json",
-											url : "/PAYGTL_LORA_BLE/filterdashboard/"+ sessionStorage
+											url : "./filterdashboard/"+ sessionStorage
 											.getItem("roleID")
 											+ "/"
 											+ sessionStorage
