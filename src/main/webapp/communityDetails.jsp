@@ -49,6 +49,8 @@
 				<div class="col-md-12">
 					<a class="text-dark" href="home.jsp">Home</a>
 					<span>/</span>
+					<a class="text-dark" href="setup.jsp">Customer Setup</a>
+					<span>/</span>
 					<span class="activeurl">Community Details</span>
 				</div>
 			</div>

@@ -8,6 +8,7 @@ body{
 	/* //font-family: 'Jost',Roboto,sans-serif; */
 	font-family: 'Montserrat', sans-serif;
     font-weight: 300;
+    font-size: 14px;
 	min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -165,11 +166,16 @@ body{
 .pb-6{padding-bottom: 5rem !important;}
 /*new Css add*/
 .sidingBlock{
-	background: #b2d136;
-    -webkit-clip-path: polygon(0% 0%, 0% 100%, 73% 100%, 100% 61%, 100% 0%);
-    clip-path: polygon(0% 0%, 0% 100%, 73% 100%, 100% 61%, 100% 0%);
+	background: #fff;
+   /*  -webkit-clip-path: polygon(0% 0%, 0% 100%, 73% 100%, 100% 61%, 100% 0%);
+    clip-path: polygon(0% 0%, 0% 100%, 73% 100%, 100% 61%, 100% 0%); */
     color: #3f3f3f;
-	border: 0px;
+	
+}
+.sidingBlock a{
+	 color: #3f3f3f;
+    text-decoration: none;
+    text-align: left;
 }
 .f-30{font-size:30px;}
 .box {
@@ -521,7 +527,7 @@ body{
     animation-timing-function:linear;
 }
 .table td{
-  padding: .10rem .50rem;
+  padding: .5rem .50rem;
 }
 .table th {
 	 padding: .75rem .50rem;
@@ -593,6 +599,7 @@ body{
     width: 100%;
     padding-left: 240px;
 	height:65px;
+	background-color: #fff;
 }
 .main-sidebar-show .main-header-left {
     display: flex;
@@ -702,6 +709,7 @@ body{
     bottom: 0;
     position: relative;
     height: 100%;
+        margin-bottom: 50px;
 }
 .top-spacing{
  padding-top: 100px;
@@ -810,4 +818,162 @@ body{
 }
 .main-sidebar-show .textData{display: none;}
 
+}
+.flexNoWrap{
+	flex-wrap: nowrap !important;
+}
+
+
+.scroll-block{
+	
+	overflow: auto;
+	
+}
+
+/* Slider */
+.slick-slide {
+  margin: 0px 20px;
+}
+
+.logo-carousel {
+  overflow: inherit;
+  
+}
+
+.slick-slide img {
+  width: 100%;
+}
+
+.slick-track::before,
+.slick-track::after {
+  display: table;
+  content: '';
+}
+
+.slick-track::after {
+  clear: both;
+}
+
+.slick-track {
+  padding: 1rem 0;
+}
+
+.slick-loading .slick-track {
+  visibility: hidden;
+}
+
+element.style {
+}
+.slick-arrow.slick-next {
+    right: -20px;
+    transform: rotate(
+180deg
+);
+    border: 0px;
+}
+[type=reset], [type=submit], button, html [type=button] {
+    -webkit-appearance: button;
+}
+button:focus {
+    outline: 1px dotted;
+    outline: 0px auto -webkit-focus-ring-color;
+}
+
+button:focus {
+    outline: 0px dotted;
+    outline: 0px auto -webkit-focus-ring-color;
+}
+
+.slick-slide.slick-loading img {
+  display: none;
+}
+
+.slick-slide.dragging img {
+  pointer-events: none;
+}
+
+.slick-loading .slick-slide {
+  visibility: hidden;
+}
+
+.slick-arrow {
+  position: absolute;
+  top: 50%;
+  background: url(https://raw.githubusercontent.com/solodev/infinite-logo-carousel/master/images/arrow.svg?sanitize=true) center no-repeat;
+  color: #fff;
+  filter: invert(77%) sepia(32%) saturate(1%) hue-rotate(344deg) brightness(105%) contrast(103%);
+  border: none;
+  width: 2rem;
+  height: 1.5rem;
+  text-indent: -10000px;
+  margin-top: -16px;
+  z-index: 99;
+}
+
+.slick-arrow.slick-next {
+  right: -20px;
+  transform: rotate(180deg);
+}
+
+.slick-arrow.slick-prev {
+  left: -20px;
+}
+
+/* Media Queries */
+
+@media (max-width: 768px) {
+  .slick-arrow {
+    width: 1rem;
+    height: 1rem;
+  }
+}
+
+
+
+
+.collapse:not(.show) {
+    display: none;
+}
+.card .card-header a:not(.collapsed) .reportarrow {
+    -webkit-transform: rotate(
+180deg
+);
+    transform: rotate(
+180deg
+);
+}
+
+.md-accordion .card .card-header a:not(.collapsed) .rotate-icon {
+    -webkit-transform: rotate(
+180deg
+);
+    transform: rotate(
+180deg
+);
+}
+
+
+.sliding-block{
+	    border: 1px solid #ddd;
+    flex: 1;
+    padding: 10px 20px;
+    text-align: center;
+    line-height: 1;
+    box-shadow: 0px 1px 5px rgb(0 0 0 / 10%);
+    border-radius: 4px;
+    height: 80px;
+}
+.description-header{
+	    font-size: 16px;
+    font-weight: 600;
+    margin: 6px;
+}
+.description-text{font-size:12px;}
+.d-flex{display:flex;}
+
+
+.reportarrow{
+	font-size: 24px;
+	color:  #b2d136;
+	font-weight: bold;
 }

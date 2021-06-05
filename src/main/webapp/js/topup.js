@@ -248,36 +248,49 @@ $(document)
 										var regTopup = /[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$/
 
 										if ($("#selectHouseBasedonBlock").val() == "Select CRN") {
-
-											bootbox
-													.alert("Please Select CRN Number");
+											swal.fire({
+												  title: "error",
+												  text: "Please Select CRN Number",
+												  icon: "error"
+												});
 											return false;
 										}
 										
 										if ($("#selectMeters").val() == "-1") {
-
-											bootbox
-													.alert("Please Select Meters");
+											swal.fire({
+												  title: "error",
+												  text: "Please Select Meters",
+												  icon: "error"
+												});
 											return false;
 										}
 
 										if ($("#recharge_topup").val() == "") {
-
-											bootbox
-													.alert("Please Enter Amount");
+											swal.fire({
+												  title: "error",
+												  text: "Please Enter Amount",
+												  icon: "error"
+												});
 											return false;
 										} else {
 											if (!regTopup.test($(
 													"#recharge_topup").val())) {
-												bootbox
-														.alert('Enter Valid Amount');
+												swal.fire({
+													  title: "error",
+													  text: "Enter Valid Amount",
+													  icon: "error"
+													});
 												return false;
+												
 											}
 										}
 
 										if ($("#paymentMode").val() == "Select Mode" || $("#paymentMode").val() == "-1") {
-
-											bootbox.alert("Please Select Mode");
+											swal.fire({
+												  title: "error",
+												  text: "Please Select Mode",
+												  icon: "error"
+												});
 											return false;
 										}
 
@@ -299,6 +312,7 @@ $(document)
 
 										data1["miuID"] = $("#AMR_topup")
 												.val();
+										data1["customerMeterID"] = $("#selectMeters").val();
 										data1["currentBalance"] = $(
 												"#currentBalance_topup").val();
 										data1["tariffID"] = $("#tariffID")
@@ -332,15 +346,17 @@ $(document)
 
 															if (data.paymentMode == "Cash") {
 
-																bootbox
-																		.alert(
-																				data.Message,
-																				function(
-																						result) {
-																					window.location = "topupStatus.jsp";
-																					return false
-																				});
-
+																
+																swal.fire({
+																	  title: "Saved",
+																	  text: data.Message,
+																	  icon: "success"
+																	}).then(function() {
+																	    window.location = "topupStatus.jsp";
+																	    
+																	});
+																return false;
+																
 															} else if (data.paymentMode == "Online") {
 
 																sessionStorage
@@ -370,25 +386,25 @@ $(document)
 																				success : function(
 																						data) {
 																					if (data.result == "Success") {
-
-																						bootbox
-																								.alert(
-																										data.Message,
-																										function(
-																												result) {
-																											window.location = "topupStatus.jsp";
-																											return false
-																										});
-
+																						swal.fire({
+																							  title: "Saved",
+																							  text: data.Message,
+																							  icon: "success"
+																							}).then(function() {
+																							    window.location = "topupStatus.jsp";
+																							    
+																							});
+																						return false;
 																					} else {
-																						bootbox
-																								.alert(
-																										data.Message,
-																										function(
-																												result) {
-																											window.location = "topupStatus.jsp";
-																											return false
-																										});
+																						swal.fire({
+																							  title: "error",
+																							  text: data.Message,
+																							  icon: "error"
+																							}).then(function() {
+																							    window.location = "topupStatus.jsp";
+																							    
+																							});
+																						return false;
 																					}
 																				}
 																			});
@@ -402,9 +418,14 @@ $(document)
 															rzp1.open();
 														} else if (data.result == "Failure") {
 
-															bootbox
-																	.alert(data.Message)
-
+															swal.fire({
+																  title: "error",
+																  text: data.Message,
+																  icon: "error"
+																}).then(function() {
+																    window.location = "topupStatus.jsp";
+																    
+																});
 															return false
 														}
 													}

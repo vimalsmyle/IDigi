@@ -11,11 +11,17 @@
 <!-- <link rel="stylesheet" href="common/css/style.css"> -->
 <link rel="stylesheet"
 	href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css">
+	
+	<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+	
 <link rel="stylesheet"
 	href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.bootstrap4.min.css">
 	
 	<link href="common/css/materialize.fontawsome.css"
 	rel="stylesheet">
+
+
+
 <title>Customer Details</title>
 </head>
 
@@ -41,7 +47,7 @@
 	
 	<jsp:include page="slidebar.jsp" />
 	   <div class="top-spacing"></div>
-	 <div class="main-content side-content pt-0">
+	 <div class="main-content side-content pt-0 custom-scrollbar-js">
 			<div class="container-fluid">
 				<div class="inner-body custom-scrollbar-js" id="content-5">
 				  <div class="row custom-scrollbar-css">
@@ -62,121 +68,95 @@
                 </div>
               </div>
             </div>
-           <div class="box-footer scroll-block">
-              <div class="row" id="gasTile">
-                <div class="col">
-					<div class="card border-left-warning shadow sidingBlock">
-						<div class="card-body p-3">
-							<div class="row no-gutters justify-content-start">
-								<div class="text-xs font-weight-bold text-uppercase">
-                                  <h5 class="description-header" id="gasActive"></h5>
+           <div class="box-footer">
+          
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                
+                <section class="logo-carousel slider" data-arrows="true">
+      <div class="slide sliding-block">
+	  
+	    <div class="text-xs font-weight-bold text-uppercase">
+                                <h5 class="description-header" id="gasActive"></h5>
                     			  <span class="description-text">Active</span>
 								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				
-				<div class="col">
-					<div class="card border-left-warning shadow sidingBlock">
-						<div class="card-body p-3">
-							<div class="row no-gutters justify-content-start">
-								<div class="text-xs font-weight-bold text-uppercase">
+									
+	  </div>
+      
+		      <div class="slide sliding-block">
+	  
+	    <div class="text-xs font-weight-bold text-uppercase">
                                   <h5 class="description-header" id="gasInactive"></h5>
                     			  <span class="description-text">In-Active</span>
 								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				
-				<div class="col">
-					<div class="card border-left-warning shadow sidingBlock">
-						<div class="card-body p-3">
-							<div class="row no-gutters justify-content-start">
-								<div class="text-xs font-weight-bold text-uppercase">
-                                 <h5 class="description-header" id="gasLive"></h5>
+									
+	  </div>
+	        <div class="slide sliding-block">
+	  
+	    <div class="text-xs font-weight-bold text-uppercase">
+                                <h5 class="description-header" id="gasLive"></h5>
                     			  <span class="description-text">Live</span>
 								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				
-				
-				<div class="col">
-					<div class="card border-left-warning shadow sidingBlock">
-						<div class="card-body p-3">
-							<div class="row no-gutters justify-content-start">
-								<div class="text-xs font-weight-bold text-uppercase">
-                                  <h5 class="description-header" id="gasnonLive"></h5>
+									
+	  </div>
+	  
+	        <div class="slide sliding-block">
+	  
+	    <div class="text-xs font-weight-bold text-uppercase">
+                                 <h5 class="description-header" id="gasnonLive"></h5>
                     			  <span class="description-text">Non-Live</span>
 								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				
-				
-				<div class="col">
-					<div class="card border-left-warning shadow sidingBlock">
-						<div class="card-body p-3">
-							<div class="row no-gutters justify-content-start">
-								<div class="text-xs font-weight-bold text-uppercase">
-                                   <h5 class="description-header" id="gasemergency"></h5>
+									
+	  </div>
+	  
+	        <div class="slide sliding-block">
+	  
+	    <div class="text-xs font-weight-bold text-uppercase">
+                                  <h5 class="description-header" id="gasemergency"></h5>
                     			  <span class="description-text">Emergency</span>
 								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				
-				
-				<div class="col">
-					<div class="card border-left-warning shadow sidingBlock">
-						<div class="card-body p-3">
-							<div class="row no-gutters justify-content-start">
-								<div class="text-xs font-weight-bold text-uppercase">
+									
+	  </div>
+	  
+	        <div class="slide sliding-block">
+	  
+	    <div class="text-xs font-weight-bold text-uppercase">
                                   <h5 class="description-header" id="gasLowbattery"></h5>
                     			  <span class="description-text">Low Battery</span>
 								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				
-				<div class="col">
-					<div class="card border-left-warning shadow sidingBlock">
-						<div class="card-body p-3">
-							<div class="row no-gutters justify-content-start">
-								<div class="text-xs font-weight-bold text-uppercase">
-                                   <h5 class="description-header" id="gasActivePercentage"></h5>
+									
+	  </div>
+	  
+	        <div class="slide sliding-block">
+	  
+	    <div class="text-xs font-weight-bold text-uppercase">
+                                <h5 class="description-header" id="gasActivePercentage"></h5>
                     			  <span class="description-text">Active Percentage</span>
 								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				
-				
-				<div class="col">
-					<div class="card border-left-warning shadow sidingBlock">
-						<div class="card-body p-3">
-							<div class="row no-gutters justify-content-start">
-								<div class="text-xs font-weight-bold text-uppercase">
-                                  <h5 class="description-header" id="inactivePercentage">$10,390.90</h5>
+									
+	  </div>
+	  
+	  
+	        <div class="slide sliding-block">
+	  
+	    <div class="text-xs font-weight-bold text-uppercase">
+                                 <h5 class="description-header" id="gasinactivePercentage"></h5>
                     			  <span class="description-text">in-Active Percentage</span>
 								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				
-				
-				
-              
-				
-              </div>
+									
+	  </div>
+	  
+	  
+	      
+
+	  </section>
+                
+                
+            </div>
+        </div>
+    </div>
+
              </div>
            </div>
          </div>
@@ -203,56 +183,83 @@
               </div>
             </div>
            <div class="box-footer">
-              <div class="row">
-                <div class="col-sm-2 col-xs-2">
-                  <div class="description-block border-right text-center">
-                    <span class="description-percentage text-green"><i class="fa fa-caret-up"></i> 17%</span>
-                    <h5 class="description-header">$35,210.43</h5>
-                    <span class="description-text">TOTAL REVENUE</span>
-                  </div>
-                </div>
-               <div class="col-sm-2 col-xs-2">
-                  <div class="description-block border-right text-center">
-                    <span class="description-percentage text-yellow"><i class="fa fa-caret-left"></i> 0%</span>
-                    <h5 class="description-header">$10,390.90</h5>
-                    <span class="description-text">TOTAL COST</span>
-                  </div>
-                </div>
-                <div class="col-sm-2 col-xs-2">
-                  <div class="description-block border-right text-center">
-                    <span class="description-percentage text-green"><i class="fa fa-caret-up"></i> 20%</span>
-                    <h5 class="description-header">$24,813.53</h5>
-                    <span class="description-text">TOTAL PROFIT</span>
-                  </div>
-                </div>
-				 <div class="col-sm-2 col-xs-2">
-                  <div class="description-block border-right text-center">
-                    <span class="description-percentage text-green"><i class="fa fa-caret-up"></i> 20%</span>
-                    <h5 class="description-header">$24,813.53</h5>
-                    <span class="description-text">TOTAL PROFIT</span>
-                  </div>
-                </div>
-				 <div class="col-sm-2 col-xs-2">
-                  <div class="description-block border-right text-center">
-                    <span class="description-percentage text-green"><i class="fa fa-caret-up"></i> 20%</span>
-                    <h5 class="description-header">$24,813.53</h5>
-                    <span class="description-text">TOTAL PROFIT</span>
-                  </div>
-                </div>
-				<div class="col-sm-2 col-xs-2 moreBtnBlock">
-                  <div class="description-block text-center">
-				    <div class="center-con">
-						<div class="round">
-						<div id="cta">
-							<span class="arrow primera next "></span>
-							<span class="arrow segunda next "></span>
-						</div>
-						</div>
-					</div>
-                    <a href="#" class="moreBtn"><p>View More <i class="fa fa-arrow-right" aria-hidden="true"></i></p></a>
-                  </div>
-                </div>
-              </div>
+              <div class="box-footer">
+          
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                
+                <section class="logo-carousel slider" data-arrows="true">
+      <div class="slide sliding-block">
+	  
+	    <div class="text-xs font-weight-bold text-uppercase">
+                                <h5 class="description-header" id="waterActive"></h5>
+                    			  <span class="description-text">Active</span>
+								</div>
+									
+	  </div>
+      
+		      <div class="slide sliding-block">
+	  
+	    <div class="text-xs font-weight-bold text-uppercase">
+                                  <h5 class="description-header" id="waterInactive"></h5>
+                    			  <span class="description-text">In-Active</span>
+								</div>
+									
+	  </div>
+	        <div class="slide sliding-block">
+	  
+	    <div class="text-xs font-weight-bold text-uppercase">
+                                <h5 class="description-header" id="waterLive"></h5>
+                    			  <span class="description-text">Live</span>
+								</div>
+									
+	  </div>
+	  
+	        <div class="slide sliding-block">
+	  
+	    <div class="text-xs font-weight-bold text-uppercase">
+                                 <h5 class="description-header" id="waternonLive"></h5>
+                    			  <span class="description-text">Non-Live</span>
+								</div>
+									
+	  </div>
+	  
+	        <div class="slide sliding-block">
+	  
+	    <div class="text-xs font-weight-bold text-uppercase">
+                                  <h5 class="description-header" id="wateremergency"></h5>
+                    			  <span class="description-text">Emergency</span>
+								</div>
+									
+	  </div>
+	  
+	        <div class="slide sliding-block">
+	  
+	    <div class="text-xs font-weight-bold text-uppercase">
+                                  <h5 class="description-header" id="waterLowbattery"></h5>
+                    			  <span class="description-text">Low Battery</span>
+								</div>
+									
+	  </div>
+	  
+	        <div class="slide sliding-block">
+	  
+	    <div class="text-xs font-weight-bold text-uppercase">
+                                <h5 class="description-header" id="waterActivePercentage"></h5>
+                    			  <span class="description-text">Active Percentage</span>
+								</div>
+									
+	  </div>
+	  
+	  
+	  </section>
+                
+                
+            </div>
+        </div>
+    </div>
+             </div>
              </div>
            </div>
          </div>
@@ -305,6 +312,9 @@
 		<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 		
 			<script src = "https://code.highcharts.com/highcharts.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.js"></script>
+
+
               <script language = "JavaScript">
          $(document).ready(function() {  
             var chart = {
@@ -381,6 +391,32 @@
             $('#container1').highcharts(json);
   
          });
+       
+
+         $(document).ready(function() {
+           $('.logo-carousel').slick({
+        	   infinite: false,
+             slidesToShow: 6,
+             slidesToScroll: 1,
+             autoplay: false,
+             autoplaySpeed: 1000,
+             arrows: true,
+             dots: false,
+             pauseOnHover: false,
+             responsive: [{
+               breakpoint: 768,
+               settings: {
+                 slidesToShow: 4
+               }
+             }, {
+               breakpoint: 520,
+               settings: {
+                 slidesToShow: 2
+               }
+             }]
+           });
+         });
+         
       </script>
 	
 

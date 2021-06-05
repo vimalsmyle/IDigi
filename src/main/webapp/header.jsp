@@ -5,7 +5,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <link href="https://fonts.googleapis.com/css?family=Montserrat:100,200,300,500,600" rel="stylesheet">
-
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
 <title>Insert title here</title>
 </head>
 <body>
@@ -49,9 +49,5 @@
 	<!--Header end-->
 </body>
 
-<script>
-
-
-</script>
-
+	
 </html>

@@ -47,9 +47,7 @@
 			
 			<div class="right_data col-md-10 mt-4 mb-4">
 				<!--Right start-->
-				<div class="row mb-4">
-					
-				</div>
+				   
 				<div class="row">
 					<div class="col-md-12">
 						<table id="alertTable"

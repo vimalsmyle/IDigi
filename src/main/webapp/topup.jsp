@@ -63,14 +63,14 @@
                         <div class="col-md-4">
                             <div class="group form-group">
                               <label class="bmd-label-floating select-label">Community<sup class="imp">*</sup></label>
-                              <select class="form-control form-control-sm" id="selectcommunityName" name="selectcommunityName" onchange="showBlockbyCommunity(this.value);">
+                              <select class="form-control form-control-sm select2" id="selectcommunityName" name="selectcommunityName" onchange="showBlockbyCommunity(this.value);">
                               </select>
                             </div>
                           </div>
                           <div class="col-md-4">
                             <div class="group form-group">
                               <label class="bmd-label-floating select-label">Select Block<sup class="imp">*</sup></label>
-                              <select class="form-control form-control-sm" id="selectBlockBasedonCommunity" name="selectBlockBasedonCommunity" onchange="showCustomerbyBlock(this.value);">
+                              <select class="form-control form-control-sm select2" id="selectBlockBasedonCommunity" name="selectBlockBasedonCommunity" onchange="showCustomerbyBlock(this.value);">
                               
                               </select>
                             </div>
@@ -315,7 +315,8 @@
 		<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 		
 		<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-
+		<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+		<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 	<script>
 		$(document).ready(function() {
 			$('.button-left').click(function() {

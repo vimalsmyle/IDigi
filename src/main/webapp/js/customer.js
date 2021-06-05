@@ -3,12 +3,13 @@
  */
 $(document).ready(function() {
 
-	var rowCount = 0;
+	
 	
 	
 	$.getJSON("./customer/"+sessionStorage.getItem("roleID")+"/"+sessionStorage.getItem("ID")+"/-1", function(data) {
 	$.each(data.data, function(i, item) {
 		if ($("#custUniqueId").val() == item.CustomerUniqueID) {
+			var rowCount = 0;
 			$('#communityNameEdit').val(item.communityName).trigger("change");
 			$("#formcommunityNameEdit").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
 			
@@ -74,7 +75,7 @@ $(document).ready(function() {
 										+" id=miuIDEdit-"+rowCount+">"
 										+"</div></div>"+
 							"<div class=col-md-4>" +
-							"<div class='group form-group'>"
+							"<div class='group form-group has-feedback has-success bmd-form-group is-filled'>"
 							+"<label class=bmd-label-floating>Meter Serial Number</label> <input "
 							+"type=text class='form-control form-control-sm' name=meterSerialNumberEdit["+rowCount+"]"
 							+" disabled id=meterSerialNumberEdit-"+rowCount+">"
@@ -90,7 +91,7 @@ $(document).ready(function() {
 						"</select>"
 						+"</div></div>"+
 						"<div class=col-md-4>" +
-						"<div class='group form-group'>"
+						"<div class='group form-group has-feedback has-success bmd-form-group is-filled'>"
 						+"<label class=bmd-label-floating>Meter Size</label> <input "
 						+"type=text class='form-control form-control-sm' disabled name=meterSizeEdit["+rowCount+"]"
 						+" id=meterSizeEdit-"+rowCount+">"
@@ -121,7 +122,7 @@ $(document).ready(function() {
 						"</select>"
 						+"</div></div>"+
 						"<div class=col-md-4>" +
-						"<div class='group form-group'>"
+						"<div class='group form-group has-feedback has-success bmd-form-group is-filled'>"
 						+"<label class=bmd-label-floating>Location</label> <input "
 						+"type=text class='form-control form-control-sm' disabled name=locationEdit["+rowCount+"]"
 						+" id=locationEdit-"+rowCount+">"
@@ -130,23 +131,7 @@ $(document).ready(function() {
 								"</div>");
 				
 				 
-				$.getJSON("./tariffs", function(data) {
-					var Optionstariff = '<option value=-1>Select  Tariff</option>';
-					$.each(data.dropDownTariffs, function(key, value) {
-						Optionstariff = Optionstariff + '<option value=' + key + '>' + value
-								+ '</option>';
-					});
-					$('.selectTariffName').append(Optionstariff);
-				
-			 
-			 
-			 $.getJSON("./gateways", function(data) {
-					var OptionsGateway = "<option value='-1'>Select  Gateway</option>";
-					$.each(data.dropDownGateways, function(key, value) {
-						OptionsGateway = OptionsGateway + "<option value='" + key + "'>" + value
-								+ "</option>";
-					});
-					$('.gatewayIDEdit').append(OptionsGateway);
+			
 				
 				
 				$("#miuIDEdit-"+rowCount).val(meter.miuID);
@@ -159,16 +144,133 @@ $(document).ready(function() {
 				$("#selectTariffName-"+rowCount).val(meter.tariffID);
 				$("#gatewayIDEdit-"+rowCount).val(meter.gatewayID);
 				$("#locationEdit-"+rowCount).val(meter.location);
-				});
-			});
-			});
-		} 
-		
-		
-		
-	});
-});
 
+				 $('#customerEdit').bootstrapValidator('addField' ,
+			        'miuIDEdit['+rowCount+']', {
+			        	message : 'MUI ID is not valid',
+						validators : {
+							notEmpty : {
+								message : 'MUI ID is required and cannot be empty'
+							},
+							stringLength : {
+								min : 4,
+								max : 30,
+								message : 'MUI ID must be more than 4 and less than 30 characters long'
+							},
+							regexp : {
+								regexp : /^[a-zA-Z][a-zA-Z0-9.,$; ]+$/,
+								message : 'MUI ID can only consist of Alphanumaric'
+							}
+						}
+			        });
+				 $('#customerEdit').bootstrapValidator('addField',
+			        'meterSerialNumberEdit['+rowCount+']', {
+			        	message : 'Meter Serial Number is not valid',
+						validators : {
+							notEmpty : {
+								message : 'Meter Serial Number is required and cannot be empty'
+							},
+							stringLength : {
+								min : 4,
+								max : 30,
+								message : 'Meter Serial Number must be more than 4 and less than 30 characters long'
+							},
+							regexp : {
+								regexp : /^[a-zA-Z][a-zA-Z0-9.,$; ]+$/,
+								message : 'Meter Serial Number can only consist of Alphanumaric'
+							}
+						}
+			        });
+				 $('#customerEdit').bootstrapValidator('addField',
+			        'meterSizeEdit['+rowCount+']', {
+			        	message : 'Meter Size is not valid',
+						validators : {
+							notEmpty : {
+								message : 'Meter Size is required and cannot be empty'
+							},
+							stringLength : {
+								min : 1,
+								max : 30,
+								message : 'Meter Size must be more than 4 and less than 30 characters long'
+							},
+							regexp : {
+								regexp : /^[0-9]+$/,
+								message : 'Meter Size can only consist of Numaric'
+							}
+						}
+			        });
+				 $('#customerEdit').bootstrapValidator('addField',
+			        'tariffNameEdit['+rowCount+']', {
+			        	message : 'Tariff Name is not valid',
+						validators : {
+							notEmpty : {
+								message : 'Tariff Name is required and cannot be empty'
+							},
+							stringLength : {
+								min : 4,
+								max : 30,
+								message : 'Tariff Name must be more than 4 and less than 30 characters long'
+							},
+							regexp : {
+								regexp : /^[a-zA-Z][a-zA-Z0-9.,$; ]+$/,
+								message : 'Tariff Name can only consist of Alphanumaric'
+							}
+						}
+			        });
+				
+				 $('#customerEdit').bootstrapValidator('addField','locationEdit['+rowCount+']', {
+			        	message : 'Location is not valid',
+						validators : {
+							notEmpty : {
+								message : 'Location is required and cannot be empty'
+							},
+							stringLength : {
+								min : 4,
+								max : 30,
+								message : 'Location must be more than 4 and less than 30 characters long'
+							},
+							regexp : {
+								regexp : /^[a-zA-Z][a-zA-Z0-9.,$; ]+$/,
+								message : 'Location can only consist of Alphanumaric'
+							}
+						}
+			        }
+				 );
+				 rowCount++;
+			});
+			
+			if(rowCount>2){
+				$("#addMeter").hide();
+			}else{
+				$("#addMeter").show();
+			}
+			
+		} 
+	});
+	
+	$.getJSON("./tariffs", function(data) {
+		var Optionstariff = '<option value=-1>Select  Tariff</option>';
+		$.each(data.dropDownTariffs, function(key, value) {
+			Optionstariff = Optionstariff + '<option value=' + key + '>' + value
+					+ '</option>';
+		});
+		$('.selectTariffName').append(Optionstariff);
+	});
+ 
+ 
+ $.getJSON("./gateways", function(data) {
+		var OptionsGateway = "<option value='-1'>Select  Gateway</option>";
+		$.each(data.dropDownGateways, function(key, value) {
+			OptionsGateway = OptionsGateway + "<option value='" + key + "'>" + value
+					+ "</option>";
+		});
+		$('.gatewayIDEdit').append(OptionsGateway);
+ });
+ 
+});
+	
+ 
+ 
 });
 
 
@@ -438,13 +540,13 @@ $("#addMeter")
 							message : 'Meter Size is required and cannot be empty'
 						},
 						stringLength : {
-							min : 4,
+							min : 1,
 							max : 30,
 							message : 'Meter Size must be more than 4 and less than 30 characters long'
 						},
 						regexp : {
 							regexp : /^[0-9]+$/,
-							message : 'Meter Size can only consist of Alphanumaric'
+							message : 'Meter Size can only consist of Numaric'
 						}
 					}
 		        });
@@ -722,48 +824,6 @@ $(document)
 													}*/
 												}
 											},
-											meterSerialEdit : {
-												message : 'MSN is not valid',
-												validators : {
-													notEmpty : {
-														message : 'MSN is required and cannot be empty'
-													},
-													stringLength : {
-														min : 4,
-														max : 15,
-														message : 'MSN must be more than 4 and less than 15 characters long'
-													},
-													regexp : {
-														regexp : /^[^0][a-zA-Z0-9.,$; ]+$/,
-														message : 'MSN can only consist of Alphanumaric and Could not start with zero'
-													}
-												}
-											},
-											amrEdit : {
-												message : 'MIU ID is not valid',
-												validators : {
-													notEmpty : {
-														message : 'MIU ID is required and cannot be empty'
-													},
-													stringLength : {
-														min : 4,
-														max : 16,
-														message : 'MIU ID must be more than 4 and less than 16 characters long'
-													},
-													regexp : {
-														regexp : /^[^0][a-zA-Z0-9.,$; ]+$/,
-														message : 'MIU ID can only consist of Alphanumaric and Could not start with zero'
-													}
-												}
-											},
-											
-											/*selectTariffNameEdit: {
-							                    validators: {
-							                        notEmpty: {
-							                            message: 'Please select your Tariff language.'
-							                        }
-							                    }
-							                },*/
 							                CRNEdit : {
 												message : 'CRN No. is not valid',
 												validators : {
@@ -1006,6 +1066,15 @@ $(document)
 													.alert("Select Block Id");
 													return false;
 												}
+												
+												if(parseInt($("#rowCount").val()) == 0 || $("#rowCount").val() == ""){
+													swal.fire({
+														  title: "error",
+														  text: "Please add atleast one meter",
+														  icon: "error"
+														});
+													return false;
+												}
 }			
 												let communityId = sessionStorage.getItem("roleID") == 2 ? sessionStorage.getItem("communityID") : $("#selectcommunityName").val();
 												let blockId = sessionStorage.getItem("roleID") == 2 ? sessionStorage.getItem("ID") : $("#selectBlockBasedonCommunity").val();
@@ -1063,29 +1132,40 @@ $(document)
 																				.stringify(data));*/
 																if (data.result == "Success") {
 
-																	/*alert( "data"
-																			+ data.result);*/
-																	
-																	bootbox.alert(data.Message,
-																			function(
-																					result) {
-																					
-																		//alert();
-																		window.location = "customerDetails.jsp";
-																		return false
-																	});
+																	swal.fire({
+																		  title: "Saved",
+																		  text: data.Message,
+																		  icon: "success"
+																		}).then(function() {
+																		    window.location = "customerDetails.jsp";
+																		    
+																		});
+																	return false;
 																	
 																	
 
 																} else if(data.result == "Failure"){
 																	
-																	bootbox.alert(data.Message);
+																	swal.fire({
+																		  title: "error",
+																		  text: data.Message,
+																		  icon: "error"
+																		}).then(function() {
+																		    window.location = "customerDetails.jsp";
+																		    
+																		});
 																	return false;
 																				//});
 																}else {
 																	
-																	bootbox.alert(data.Message);
-																	return false;
+																	swal.fire({
+																		  title: "error",
+																		  text: data.Message,
+																		  icon: "error"
+																		}).then(function() {
+																		    window.location = "customerDetails.jsp";
+																		    
+																		});
 																}
 															}
 														});
@@ -1130,27 +1210,36 @@ $(document)
 																		.stringify(data));*/
 														if (data.result == "Success") {
 
-															/*alert( "data"
-																	+ data.result);*/
-															
-															bootbox.alert(data.Message,
-																	function(
-																			result) {
-																location.reload();		
-																//alert();
-																//window.location = "customerDetails.jsp";
-																return false
-															});
+															swal.fire({
+																  title: "Saved",
+																  text: data.Message,
+																  icon: "success"
+																}).then(function() {
+																    window.location = "customerDetails.jsp";
+																    
+																});
+															return false;
 														} else if(data.result == "Failure" && data.Message == undefined){
 															
-															bootbox.alert(data.Message);
-															return false;
+															swal.fire({
+																  title: "error",
+																  text: data.Message,
+																  icon: "error"
+																}).then(function() {
+																    window.location = "customerDetails.jsp";
+																    
+																});
 															
 														}else {
 															
-															bootbox.alert(data.Message);
-															return false;
-															//return false;
+															swal.fire({
+																  title: "error",
+																  text: data.Message,
+																  icon: "error"
+																}).then(function() {
+																    window.location = "customerDetails.jsp";
+																    
+																});
 														}
 													}
 												});

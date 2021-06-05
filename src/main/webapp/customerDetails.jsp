@@ -50,6 +50,8 @@
 				<div class="col-md-12">
 					<a class="text-dark" href="#">Home</a>
 					<span>/</span>
+						<a class="text-dark" href="setup.jsp">Customer Setup</a>
+					<span>/</span>
 					<span class="activeurl">Customer Details</span>
 				</div>
 			</div>
@@ -68,8 +70,8 @@
 								<tr>
 									<th>Community</th>
 									<th>Block</th>
-									<th>CRN Number</th>
-									<th>First Name</th>
+									<th>CRN/CAN</th>
+									<th>First Name</th> 
 									<th>Last Name</th>
 									<th>House No</th>
 									<th>Meters</th>
@@ -95,7 +97,7 @@
 								<tr>
 									<th>Community</th>
 									<th>Block</th>
-									<th>CRN Number</th>
+									<th>CRN/CAN</th>
 									<th>First Name</th>
 									<th>Last Name</th>
 									<th>House No</th>
@@ -169,7 +171,7 @@
   </div>
 
 	<div class="modal fade bd-example-modal-xl" id="myCustomerMeters" role="dialog">
-		<div class="modal-dialog modal-xl
+		<div class="modal-dialog modal-lg
 		">
 
 			<!-- Modal content-->

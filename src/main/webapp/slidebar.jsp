@@ -38,13 +38,14 @@
 				%>	
             
                 <a href="LiveDashBoard.jsp" class="list-group-item d-inline-block collapsed"><i class="fa fa-film"></i> <span class="textData">DashBoard</span></a>
-                <a href="#menu3" class="list-group-item d-inline-block collapsed" data-toggle="collapse" aria-expanded="false"><i class="fa fa-book"></i> <span class="textData">Customer Setup </span></a>
-                <div class="collapse" id="menu3" data-parent="#sidebar">
+             	 <a href="setup.jsp" class="list-group-item" data-parent="#menu3"><i class="fa fa-film"></i><span class="textData">Customer Setup </span></a>
+                   
+              <!--   <div class="collapse" id="menu3" data-parent="#sidebar">
                     <a href="communityDetails.jsp" class="list-group-item" data-parent="#menu3"><i class="fa fa-film"></i><span class="textData">Community Details </span></a>
                      <a href="blockDetails.jsp" class="list-group-item" data-parent="#menu3"><i class="fa fa-film"></i><span class="textData">Block Details </span></a>
                       <a href="customerDetails.jsp" class="list-group-item" data-parent="#menu3"><i class="fa fa-film"></i><span class="textData">Customer Details </span></a>
                        <a href="gateway.jsp" class="list-group-item" data-parent="#menu3"><i class="fa fa-film"></i><span class="textData">Gateway Details </span></a>
-                </div>
+                </div> -->
                 <a href="tariff.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-heart"></i> <span class="textData">Tariff </span></a>
                 <a href="alert.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-list"></i> <span class="textData">Alert Configuration</span></a>
                 
@@ -113,9 +114,12 @@
 <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+	
 <script>
 	 
-	$(document).ready(function(){
+	/* $(document).ready(function(){
 	  var table = $('#datetable').DataTable( {
 			fixedHeader: true
 		} );
@@ -123,7 +127,11 @@
 		function(){$(".footer").css({"margin-left": "0px"});},
 		function(){$(".footer").css({"margin-left": "16.66%"});
 	});
-	});
+	}); */
+	
+
+
+	
 </script>
 
   </body>

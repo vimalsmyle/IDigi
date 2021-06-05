@@ -101,8 +101,11 @@ function showCustomerbyBlock(blockId){
 }
 
 function showMetersDetails(customerId){
+	$("#selectMeters").find('option').remove();
+
+	$("#selectMeters").append("<option>" + "Select Meters" + "</option>");
 	$.getJSON("./customermeters/Prepaid/" + customerId, function(data) {
-		var Options = "<option value='-1'>Select  Meters</option>";
+		var Options = "";
 		$.each(data.dropDownCustomerMeters, function(key, value) {
 			Options = Options + "<option value='" + key + "'>" + key
 					+ "</option>";
@@ -151,12 +154,12 @@ function showCommunitybyTypeuser(id){
 	
 	if(id=="Super"){
 		$("#usercommunityId,#userblockId").hide();
-	$("#formcomunityName").addClass("input-group form-group has-feedback has-success bmd-form-group is-filled");
-	$("#formblockName").addClass("input-group form-group has-feedback has-success bmd-form-group is-filled");
+	$("#formcomunityName").addClass("group form-group has-feedback has-success bmd-form-group is-filled");
+	$("#formblockName").addClass("group form-group has-feedback has-success bmd-form-group is-filled");
 	}else if(id =="Admin")
 		{
-		$("#formcomunityName").addClass("input-group form-group has-feedback has-success bmd-form-group is-filled");
-		$("#formblockName").addClass("input-group form-group has-feedback has-success bmd-form-group is-filled");
+		$("#formcomunityName").addClass("group form-group has-feedback has-success bmd-form-group is-filled");
+		$("#formblockName").addClass("group form-group has-feedback has-success bmd-form-group is-filled");
 		$("#usercommunityId").show();
 		$("#userblockId").show();
 		
@@ -185,8 +188,8 @@ function showFieldsBasedONCommand(id){
 		}	else {
 			$("#conftariff").hide();
 			$("#confdefaultReading").hide();
-			$("#formtariff").addClass("input-group form-group has-feedback has-success bmd-form-group is-filled");
-			$("#formdefaultReading").addClass("input-group form-group has-feedback has-success bmd-form-group is-filled");
+			$("#formtariff").addClass("group form-group has-feedback has-success bmd-form-group is-filled");
+			$("#formdefaultReading").addClass("group form-group has-feedback has-success bmd-form-group is-filled");
 		}
 		
 }

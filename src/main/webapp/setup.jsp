@@ -17,7 +17,7 @@
 	<link href="common/css/materialize.fontawsome.css"
 	rel="stylesheet">
 
-<title>Community Management</title>
+<title>Setup </title>
 </head>
 
 
@@ -44,18 +44,15 @@
 				<div class="inner-body custom-scrollbar-js" id="content-5">
 				  <div class="row custom-scrollbar-css">
 						<div class="col-md-12">
-            <div class="page-header">
-                <h3>Gas</h3>
-            </div>
 			<div class="row">
 				<div class="col-xl-3 col-md-6 mb-4 d-flex">
 				
 				
 					<div class="card border-left-warning shadow sidingBlock">
-					<a href="userReport.jsp"><div class="card-body p-3 ">
+					<a href="communityDetails.jsp"><div class="card-body p-3 ">
 							<div class="row m-0">
 								<div class="text-xs font-weight-bold text-uppercase  justify-content-start col p-0">
-                                    User Management Report
+                                    Community Details
 								</div>
 								<div class="justify-content-end f-30 d-flex"><i class="fa fa-dashboard"></i></div>
 							</div>
@@ -66,10 +63,10 @@
 				</div>
 				<div class="col-xl-3 col-md-6 mb-4 d-flex">
 					<div class="card border-left-warning shadow sidingBlock">
-						<a href="#"><div class="card-body p-3">
+						<a href="blockDetails.jsp"><div class="card-body p-3">
 						<div class="row m-0">
 								<div class="text-xs font-weight-bold text-uppercase  justify-content-start col p-0">
-                                   reChrage Summary
+                                   Block Details
 								</div>
 								<div class="justify-content-end f-30 d-flex"><i class="fa fa-dashboard"></i></div>
 							</div>
@@ -79,10 +76,10 @@
 				</div>
 				<div class="col-xl-3 col-md-6 mb-4 d-flex">
 					<div class="card border-left-warning shadow sidingBlock">
-						<a href="#"><div class="card-body p-3">
+						<a href="customerDetails.jsp"><div class="card-body p-3">
 						<div class="row m-0">
 								<div class="text-xs font-weight-bold text-uppercase  justify-content-start col p-0">
-                                   reChrage Summary reChrage Summary
+                                   Customer Details
 								</div>
 								<div class="justify-content-end f-30 d-flex"><i class="fa fa-dashboard"></i></div>
 							</div>
@@ -92,10 +89,10 @@
 				</div>
 				<div class="col-xl-3 col-md-6 mb-4 d-flex">
 					<div class="card border-left-warning shadow sidingBlock">
-						<a href="#"><div class="card-body p-3">
+						<a href="gateway.jsp"><div class="card-body p-3">
 						<div class="row m-0">
 								<div class="text-xs font-weight-bold text-uppercase  justify-content-start col p-0">
-                                   reChrage Summary
+                                   Gateway Details
 								</div>
 								<div class="justify-content-end f-30 d-flex"><i class="fa fa-dashboard"></i></div>
 							</div>

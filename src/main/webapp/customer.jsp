@@ -63,14 +63,14 @@
 								<div class="form-group has-feedback has-success bmd-form-group is-filled">
 									<label class="bmd-label-floating select-label">Community Name</label> 
 									<select
-										class="form-control select3 form-control-sm" id="selectcommunityName" name="selectcommunityName" onchange="showBlockbyCommunity(this.value);">
+										class="form-control select3 form-control-sm select2" id="selectcommunityName" name="selectcommunityName" onchange="showBlockbyCommunity(this.value);">
 									</select>
 								</div>
 							</div>
 							<div class="col-md-4">
 								<div class="form-group has-feedback has-success bmd-form-group is-filled">
 									<label class="bmd-label-floating select-label">Select Block</label> <select
-										class="form-control form-control-sm" id="selectBlockBasedonCommunity" name="selectBlockBasedonCommunity">
+										class="form-control form-control-sm select2" id="selectBlockBasedonCommunity" name="selectBlockBasedonCommunity">
 									</select>
 								</div>
 							</div>

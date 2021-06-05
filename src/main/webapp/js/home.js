@@ -18,23 +18,22 @@ $(document)
   	  document.querySelector("#gasemergency").innerText = data.emergency;
   	  document.querySelector("#gasLowbattery").innerText = data.lowBattery;
   	  document.querySelector("#gasActivePercentage").innerText = data.activePercentage;
-  	  document.querySelector("#inactivePercentage").innerText = data.inActivePercentage;
+  	  document.querySelector("#gasinactivePercentage").innerText = data.inActivePercentage;
 			
 		});
 	  
 	  
 	  
-	  $.getJSON("./homedashboard/Postpaid/" +sessionStorage.getItem("roleID")+"/"+sessionStorage.getItem("ID"), function(data) {
+	  $.getJSON("./homedashboard/water/" +sessionStorage.getItem("roleID")+"/"+sessionStorage.getItem("ID"), function(data) {
 			//var Options = "";
-	  document.querySelector("#adminActive").innerText = data.active;
-	  document.querySelector("#adminInActive").innerText = data.inActive;
-	  document.querySelector("#adminNonLive").innerText = data.nonLive;
-	  document.querySelector("#adminLive").innerText = data.live;
-	  document.querySelector("#adminBattery").innerText = data.lowBattery;
-	  document.querySelector("#adminEmergency").innerText = data.emergency;
-	  document.querySelector("#admincomption").innerText = data.consumption;
-	  document.querySelector("#admindayTopup").innerText = data.topup;
-	  document.querySelector("#adminAMR").innerText = data.amr;
+		  document.querySelector("#waterActive").innerText = data.active;
+	  	  document.querySelector("#waterInactive").innerText = data.inActive;
+	  	  document.querySelector("#waterLive").innerText = data.nonLive;
+	  	  document.querySelector("#waternonLive").innerText = data.live;
+	  	  document.querySelector("#wateremergency").innerText = data.emergency;
+	  	  document.querySelector("#waterLowbattery").innerText = data.lowBattery;
+	  	  document.querySelector("#waterActivePercentage").innerText = data.activePercentage;
+	  	  document.querySelector("#waterinactivePercentage").innerText = data.inActivePercentage;
 			
 		});
 		
