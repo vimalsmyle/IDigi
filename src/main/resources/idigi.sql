@@ -80,7 +80,7 @@ CREATE TABLE `balancelog` (
 /*Data for the table `balancelog` */
 
 insert  into `balancelog`(`ReadingID`,`MIUID`,`CommunityID`,`BlockID`,`CustomerID`,`CustomerMeterID`,`MeterSerialNumber`,`CustomerUniqueID`,`MeterType`,`SyncTime`,`SyncInterval`,`PayType`,`BatteryVoltage`,`ValveConfiguration`,`ValveStatus`,`Balance`,`TariffID`,`Tariff`,`EmergencyCredit`,`Minutes`,`Reading`,`DoorOpenTamper`,`MagneticTamper`,`Vacation`,`RTCFault`,`LowBattery`,`LowBalance`,`LogDate`) values 
-(1,'2233',1,1,1,2,'22334455','IDIGI1','Water','00:00:05',1440,'Postpaid',90.00,1,1,300.00,2,20.00,40.00,12,1.00,0,0,0,0,0,0,'2021-04-08 16:49:58'),
+(1,'2233',1,1,1,2,'22334455','IDIGI1','Water','00:00:05',1440,'Postpaid',90.00,1,1,300.00,2,20.00,40.00,12,1.00,1,0,0,0,0,0,'2021-04-08 16:49:58'),
 (2,'1122',1,1,1,1,'11223344','IDIGI1','Gas','00:00:05',1440,'Prepaid',90.00,1,1,100.00,1,10.00,20.00,12,5.00,0,0,0,0,0,0,'2021-05-18 18:37:12'),
 (3,'2233',1,1,1,2,'22334455','IDIGI1','Water','00:00:05',1440,'Postpaid',90.00,1,1,0.00,2,20.00,40.00,10,10.00,0,0,0,0,0,0,'2021-04-29 19:00:27'),
 (4,'2233',1,1,1,2,'22334455','IDIGI1','Water','00:00:05',1440,'Postpaid',90.00,1,1,0.00,2,20.00,40.00,10,15.00,0,0,0,0,0,0,'2021-05-03 19:00:38'),
