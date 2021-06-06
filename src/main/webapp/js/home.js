@@ -40,87 +40,73 @@ $(document)
 		$.ajax({
 			type : "GET",
 			contentType : "application/json",
-			url : "./graph/"
-					+ sessionStorage.getItem("roleID") + "/2021/06"
-					+ sessionStorage.getItem("ID"),
+			url : "./graph/Gas/0/0/"+ sessionStorage.getItem("ID"),
 			dataType : "JSON",
 
 			success : function(d) {
 
-				$('#container12').highcharts(
+				$('#container').highcharts(
 						{
-							chart : {
-								type : 'bar',
-									backgroundColor: 'transparent'
-							},
+							chart: {
+		        		        type: 'column'
+		        		    },
 							title : {
 								text : ''
 							},
-							/*subtitle : {
-								text : 'Status'
-							},*/
-							xAxis : {
-								categories : [ 'Active',
-										'In-Active', 'Live',
-										'Non-Live', 'Low Battery',
-										'Emergency Credit' ],
-										labels: {
-							                style: {
-							                    fontWeight: 'bold',
-							                    color: 'black'
-							                }
-							            },
+		        		    xAxis: {
+		        		        categories: d.xAxis
+		        		    },
 
-								title : {
-									text : null
-								},
-							},
-							yAxis : {
-								min : 0,
-								title : {
-									text : 'Chart',
-									align : 'high'
-								},
-								labels : {
-									overflow : 'justify'
-								},
-								min : 0,
-								max : 100
+		        		    plotOptions: {
+		        		        series: {
+		        		            pointWidth: 20
+		        		        }
+		        		    },
 
-							},
-							tooltip : {
-								valueSuffix : ''
-							},
-							plotOptions : {
-								bar : {
-									dataLabels : {
-										enabled : true
-									}
-								}
-							},
-							credits : {
-								enabled : false
-							},
-							series : [ {
-								data : [ d.activePercentage,
-										d.inActivePercentage,
-										d.livePercentage,
-										d.nonLivePercentage,
-										d.lowBatteryPercentage, 
-										d.emergencyPercentage
-										],
-										labels: {
-							                style: {
-							                    fontWeight: 'bold',
-							                    color: 'black'
-							                }
-							            },
-								name : '(%)'
-							} ]
+		        		    series: [{
+		        		        data: d.yAxis
+		        		    }]
 
 						});
 			}
 		});
+		
+		
+		$.ajax({
+			type : "GET",
+			contentType : "application/json",
+			url : "./graph/Water/0/0/"+ sessionStorage.getItem("ID"),
+			dataType : "JSON",
+
+			success : function(d) {
+
+				$('#container1').highcharts(
+						{
+							chart: {
+		        		        type: 'column'
+		        		    },
+							title : {
+								text : ''
+							},
+		        		    xAxis: {
+		        		        categories: d.xAxis
+		        		    },
+
+		        		    plotOptions: {
+		        		        series: {
+		        		            pointWidth: 20
+		        		        }
+		        		    },
+
+		        		    series: [{
+		        		        data: d.yAxis
+		        		    }]
+
+						});
+			}
+		});
+		
+		
 		}
 		if(sessionStorage.getItem("roleID") == 3){
 			

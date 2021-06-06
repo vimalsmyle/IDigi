@@ -314,7 +314,7 @@
 
               <script language = "JavaScript">
          $(document).ready(function() {  
-        	 Highcharts.chart('container', {
+        	 Highcharts.chart('container12', {
         		    chart: {
         		        type: 'column'
         		    },
@@ -335,30 +335,6 @@
         		        data: [29.9, 71.5, 106.4, 129.2]
         		    }]
         		});
-            
-        	 Highcharts.chart('container1', {
-        		    chart: {
-        		        type: 'column'
-        		    },
-					title : {
-						text : ''
-					},
-        		    xAxis: {
-        		    	 categories: ['com1', 'com2', 'com3', 'com4']
-        		    },
-
-        		    plotOptions: {
-        		        series: {
-        		            pointWidth: 20
-        		        }
-        		    },
-
-        		    series: [{
-        		    	 data: [29.9, 71.5, 106.4, 129.2]
-        		    }]
-        		});
-        	 
-  
          });
        
 

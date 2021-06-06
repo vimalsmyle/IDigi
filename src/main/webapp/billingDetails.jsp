@@ -105,6 +105,7 @@
 									<th>Bill Year</th>
 									<th>Log Date</th>
 									<th>Multiple</th>
+									<th>Action</th>
 								</tr>
 							</thead>
 							<tbody>

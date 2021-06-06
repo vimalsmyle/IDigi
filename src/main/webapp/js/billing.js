@@ -83,7 +83,7 @@ $(document)
 											"complete" : function(json) {
 												console.log(json);
 
-												if (sessionStorage
+												/*if (sessionStorage
 														.getItem("roleID") == 3) {
 													$("div.total")
 															.html(
@@ -92,7 +92,7 @@ $(document)
 																			+ ' <b>CRN Number:</b> '
 																			+ sessionStorage
 																					.getItem("ID"));
-												}
+												}*/
 												return json.data;
 											},
 										},
@@ -110,11 +110,11 @@ $(document)
 													"defaultContent" : ""
 												},
 												{
-													"data" : "meterID",
+													"data" : "totalConsumption",
 													"defaultContent" : ""
 												},
 												{
-													"data" : "amount",
+													"data" : "totalAmount",
 													"defaultContent" : ""
 												},
 												{

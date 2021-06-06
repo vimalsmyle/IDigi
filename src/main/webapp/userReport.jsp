@@ -57,69 +57,56 @@
 						<form>
 							<div class="row">
 								<div class="col-md-4">
-								 <div class="form-group">
-									<label for="text">First Name:</label>
-									<input type="text" class="form-control form-control-sm" placeholder="First Name">
-								  </div>
-								</div>
-								<div class="col-sm-4">
-								 <div class="form-group">
-									<label for="text">Middle Name:</label>
-									<input type="text" class="form-control form-control-sm" placeholder="Middle Name">
-								  </div>
-								</div>
-								<div class="col-sm-4">
-								 <div class="form-group">
-									<label for="text">Last Name:</label>
-									<input type="text" class="form-control form-control-sm" placeholder="Last Name">
-								  </div>
-								</div>
-								</div>
+                            <div class="group form-group">
+                              <label class="bmd-label-floating select-label">Community<sup class="imp">*</sup></label>
+                              <select class="form-control form-control-sm select2" id="selectcommunityName" name="selectcommunityName" onchange="showBlockbyCommunity(this.value);">
+                              </select>
+                            </div>
+                          </div>
+                          <div class="col-md-4">
+                            <div class="group form-group">
+                              <label class="bmd-label-floating select-label">Select Block<sup class="imp">*</sup></label>
+                              <select class="form-control form-control-sm select2" id="selectBlockBasedonCommunity" name="selectBlockBasedonCommunity" onchange="showCustomerbyBlock(this.value);">
+                              
+                              </select>
+                            </div>
+                          </div>
+                          <div class="col-md-4">
+                            <div class="group form-group">
+                              <label class="bmd-label-floating select-label">Select CRN<sup class="imp">*</sup></label>
+                              <select class="form-control form-control-sm" id="selectHouseBasedonBlock" name="selectHouseBasedonBlock" onchange="showMetersDetails(this.value);">
+                              </select>
+                            </div>
+                          </div>
+                          
+                           <div class="col-md-4">
+                            <div id="formcurrentBalance_topup" class="input-group form-group">
+                            <label class="bmd-label-floating">Start Date Time<sup class="imp">*</sup></label> 
+                             <!--  <input type="text" class="form-control datepicker" id="start_date" name="start_date"> -->
+                             <input type="text" id="start_date" name="start_date" class="form-control" >
+                            </div>
+                          </div>
+                          <div class="col-md-4">
+                            <div id="formdateTime_topup" class="input-group form-group">
+                              <label class="bmd-label-floating">End Date Time<sup class="imp">*</sup></label>
+                              <input type="text" class="form-control" id="end_date" name="end_date">
+                            </div>
+                          </div>
+                          </div>
+                          
+                          <div class="row">
+                        <div class="col-md-11">
+                            <button type="button" id="userconsumption" class="btn btn-primary submit-button btn-raised float-right mr-4">Submit<div class="ripple-container"></div></button>
+                        </div>
+                        
+                         <div class="col-md-1">
+								<button type="button" class="btn btn-secondary btn-raised mr-3 resetFilter" id="resetFilter">Reset</button>
+							</div>
 							
-								<div class="row">
-								<div class="col-sm-4">
-								 <div class="form-group">
-									<label for="text">Select DropDown:</label>
-									<select class="form-control  form-control-sm select2">
-									<option>Select</option> 
-									<option>Car</option> 
-									<option>Bike</option> 
-									<option>Scooter</option> 
-									<option>Cycle</option>										 
-									<option>Horse</option> 		
-									</select>
-								  </div>
-								</div>
-								<div class="col-sm-4">
-								 <div class="form-group">
-									<label for="text">Select DropDown:</label>
-									<select class="form-control  form-control-sm select2">
-									<option>Select</option> 
-									<option>Car</option> 
-									<option>Bike</option> 
-									<option>Scooter</option> 
-									<option>Cycle</option>										 
-									<option>Horse</option> 		
-									</select>
-								  </div>
-								</div>
-							</div>
-							<hr>
-							<div class="row">
-							 <div class="col-sm-12">
-							  <div class="form-group">
-		<label for="text">Select DropDown:</label>
-		<div class="custom-control custom-radio custom-control-inline">
-  <input type="radio" id="customRadioInline1" name="customRadioInline1" class="custom-control-input">
-  <label class="custom-control-label" for="customRadioInline1">Toggle this custom radio</label>
-</div>
-<div class="custom-control custom-radio custom-control-inline">
-  <input type="radio" id="customRadioInline2" name="customRadioInline1" class="custom-control-input">
-  <label class="custom-control-label" for="customRadioInline2">Or toggle this other custom radio</label>
-</div>
-</div>
-							 </div>
-							</div>
+                    </div>
+                          
+                          
+							
 						</form>
 						</div>
 						 </div>
