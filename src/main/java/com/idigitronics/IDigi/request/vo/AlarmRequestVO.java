@@ -10,8 +10,6 @@ package com.idigitronics.IDigi.request.vo;
 public class AlarmRequestVO {
 	
 	private String customerUniqueID;
-	private int blockID;
-	private long customerID;
 	private String fromDate;
 	private String toDate;
 	
@@ -20,18 +18,6 @@ public class AlarmRequestVO {
 	}
 	public void setCustomerUniqueID(String customerUniqueID) {
 		this.customerUniqueID = customerUniqueID;
-	}
-	public int getBlockID() {
-		return blockID;
-	}
-	public void setBlockID(int blockID) {
-		this.blockID = blockID;
-	}
-	public long getCustomerID() {
-		return customerID;
-	}
-	public void setCustomerID(long customerID) {
-		this.customerID = customerID;
 	}
 	public String getFromDate() {
 		return fromDate;

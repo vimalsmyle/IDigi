@@ -10,8 +10,6 @@ package com.idigitronics.IDigi.request.vo;
 public class UserConsumptionRequestVO {
 
 	private String customerUniqueID;
-	private int blockID;
-	private String customerID;
 	private String fromDate;
 	private String toDate;
 	
@@ -21,19 +19,6 @@ public class UserConsumptionRequestVO {
 	}
 	public void setCustomerUniqueID(String customerUniqueID) {
 		this.customerUniqueID = customerUniqueID;
-	}
-	public int getBlockID() {
-		return blockID;
-	}
-	public void setBlockID(int blockID) {
-		this.blockID = blockID;
-	}
-	
-	public String getCustomerID() {
-		return customerID;
-	}
-	public void setCustomerID(String customerID) {
-		this.customerID = customerID;
 	}
 	public String getFromDate() {
 		return fromDate;
