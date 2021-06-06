@@ -12,8 +12,7 @@ public class UserConsumptionRequestVO {
 	private String customerUniqueID;
 	private String fromDate;
 	private String toDate;
-	private int fromYear;
-	private int toYear;
+	private int year;
 	private int fromMonth;
 	private int toMonth;
 	
@@ -35,18 +34,6 @@ public class UserConsumptionRequestVO {
 	public void setToDate(String toDate) {
 		this.toDate = toDate;
 	}
-	public int getFromYear() {
-		return fromYear;
-	}
-	public void setFromYear(int fromYear) {
-		this.fromYear = fromYear;
-	}
-	public int getToYear() {
-		return toYear;
-	}
-	public void setToYear(int toYear) {
-		this.toYear = toYear;
-	}
 	public int getFromMonth() {
 		return fromMonth;
 	}
@@ -58,6 +45,12 @@ public class UserConsumptionRequestVO {
 	}
 	public void setToMonth(int toMonth) {
 		this.toMonth = toMonth;
+	}
+	public int getYear() {
+		return year;
+	}
+	public void setYear(int year) {
+		this.year = year;
 	}
 		
 }
