@@ -930,6 +930,11 @@ public class AccountDAO {
 					billingresponsevo.setModeOfPayment(rs2.getString("ModeofPayment") != null ? rs2.getString("ModeofPayment") : "---");
 					billingresponsevo.setTransactedBy(rs2.getString("UserName") != null ? rs2.getString("UserName") : "---");
 					billingresponsevo.setPaidDate(rs2.getString("TransactionDate") != null ? ExtraMethodsDAO.datetimeformatter(rs2.getString("TransactionDate")) : "---");
+				}else {
+					billingresponsevo.setStatus("Pending");
+					billingresponsevo.setModeOfPayment("---");
+					billingresponsevo.setTransactedBy("---");
+					billingresponsevo.setPaidDate("---");
 				}
 
 				billingresponsevo.setBillMonth(rs.getInt("BillMonth") == 1 ? "January" : rs.getInt("BillMonth") == 2 ? "February" : rs.getInt("BillMonth") == 3 ? "March" : rs.getInt("BillMonth") == 4 ? "April" : rs.getInt("BillMonth") == 5 ? "May" : rs.getInt("BillMonth") == 6 ? "June" : rs.getInt("BillMonth") == 7 ? "July" : rs.getInt("BillMonth") == 8 ? "August" : rs.getInt("BillMonth") == 9 ? "September" : rs.getInt("BillMonth") == 10 ? "October" : rs.getInt("BillMonth") == 11 ? "November" : rs.getInt("BillMonth") == 12 ? "December" : "");
