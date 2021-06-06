@@ -88,7 +88,7 @@ return json.data;
 	]
 });
 
-$("div.headname").html('<h3>Block Managemnent</h3>');
+$("div.headname").html('<h3>Block Management</h3>');
 
 $("div.addevent").html('<button type="button" id="blockAddButton"'
 		+'class="btn btn-raised btn-primary float-right"'

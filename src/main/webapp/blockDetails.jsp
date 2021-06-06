@@ -47,7 +47,7 @@
 					<span>/</span>
 						<a class="text-dark" href="setup.jsp">Customer Setup</a>
 					<span>/</span>
-					<span class="activeurl">Block Details</span>
+					<span class="activeurl">Block Management</span>
 				</div>
 			</div>
 		

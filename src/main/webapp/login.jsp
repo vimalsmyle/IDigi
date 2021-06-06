@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 	<link rel="stylesheet" href="common/css/style1.css">
-	<title>Digitronics</title>
+	<title>IDigitronics</title>
   </head>
    <body class="login_form">
      <main class="d-flex align-items-center min-vh-100 py-3 py-md-0">
@@ -33,8 +33,6 @@
                   <input name="login" id="login" class="btn btn-block login-btn mb-4" type="button" value="Login">
                 </form>
                 <a href="#!" class="forgot-password-link">Forgot password?</a>
-                <p class="login-card-footer-text">Don't have an account? <a href="#!" class="text-reset">Register here</a></p>
-                
             </div>
           </div>
         </div>

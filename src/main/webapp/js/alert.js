@@ -54,6 +54,12 @@ return json.data;
 },{
 "data" : "perUnitValue"
 },{
+"data" : "lateFee"
+},{
+"data" : "GST"
+},{
+"data" : "dueDayCount"
+},{
 "data" : "registeredDate"
 },{
 	"mData" : "action",
@@ -100,7 +106,7 @@ initComplete: function() {
 
 
 
-$("div.headname").html('<h3>Alert Details</h3>');
+$("div.headname").html('<h3>Alert Settings</h3>');
 
 $("div.addevent").html('<button type="button" id="alertAddbutton"'
 		+'class="btn btn-raised btn-primary float-right"'
@@ -175,6 +181,44 @@ $(document)
 																message : 'Per Unit Charge can only consist of number'
 															}
 														}
+													},
+													
+													lateFeeAdd : {
+														message : 'Late Fee is not valid',
+														validators : {
+															notEmpty : {
+																message : 'Late Fee is required and cannot be empty'
+															},
+															regexp : {
+																regexp : /[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$/,
+																message : 'Late Fee can only consist of number'
+															}
+														}
+													},
+													
+													gstAdd : {
+														message : 'GST Charge is not valid',
+														validators : {
+															notEmpty : {
+																message : 'GST Charge is required and cannot be empty'
+															},
+															regexp : {
+																regexp : /[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$/,
+																message : 'GST Charge can only consist of number'
+															}
+														}
+													},
+													duedatecountAdd : {
+														message : 'Due Date Count is not valid',
+														validators : {
+															notEmpty : {
+																message : 'Due Date Count is required and cannot be empty'
+															},
+															regexp : {
+																regexp : /[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$/,
+																message : 'Due Date Count can only consist of number'
+															}
+														}
 													}
 												}
 											});
@@ -233,6 +277,44 @@ $(document)
 													regexp : {
 														regexp : /[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$/,
 														message : 'Per Unit Charge can only consist of number'
+													}
+												}
+											},
+											
+											lateFeeEdit1 : {
+												message : 'Late Fee is not valid',
+												validators : {
+													notEmpty : {
+														message : 'Late Fee is required and cannot be empty'
+													},
+													regexp : {
+														regexp : /[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$/,
+														message : 'Late Fee can only consist of number'
+													}
+												}
+											},
+											
+											gstEdit1 : {
+												message : 'GST Charge is not valid',
+												validators : {
+													notEmpty : {
+														message : 'GST Charge is required and cannot be empty'
+													},
+													regexp : {
+														regexp : /[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$/,
+														message : 'GST Charge can only consist of number'
+													}
+												}
+											},
+											duedatecountEdit1 : {
+												message : 'Due Date Count is not valid',
+												validators : {
+													notEmpty : {
+														message : 'Due Date Count is required and cannot be empty'
+													},
+													regexp : {
+														regexp : /[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$/,
+														message : 'Due Date Count can only consist of number'
 													}
 												}
 											}
@@ -319,6 +401,13 @@ $(document)
 												data1["reconnectionCharges"] = $("#reconnectionAdd").val();
 												data1["perUnitValue"] = $("#perUnitAdd").val();
 												
+												data1["lateFee"] = $("#lateFeeAdd")
+												.val();
+										
+												data1["GST"] = $("#gstAdd").val();
+												data1["dueDayCount"] = $("#duedatecountAdd").val();
+												
+												
 												$
 														.ajax({
 															type : "POST",
@@ -333,7 +422,7 @@ $(document)
 																
 																if (data.result == "Success") {
 
-																	swal({
+																	swal.fire({
 																		  title: "Saved",
 																		  text: data.Message,
 																		  icon: "success"
@@ -345,7 +434,7 @@ $(document)
 
 																} else if(data.result == "Failure"){
 																	
-																	swal({
+																	swal.fire({
 																		  title: "error",
 																		  text: data.Message,
 																		  icon: "error"
@@ -375,6 +464,13 @@ $(document)
 										data1["reconnectionCharges"] = $("#connectionEdit1").val();
 										data1["perUnitValue"] = $("#perUnitEdit1").val();
 										
+										
+										data1["lateFee"] = $("#lateFeeEdit1")
+										.val();
+								
+										data1["GST"] = $("#gstEdit1").val();
+										data1["dueDayCount"] = $("#duedatecountEdit1").val();
+										
 										$
 												.ajax({
 													type : "POST",
@@ -392,7 +488,7 @@ $(document)
 															/*alert( "data"
 																	+ data.result);*/
 															
-															swal({
+															swal.fire({
 																  title: "Saved",
 																  text: data.Message,
 																  icon: "success"
@@ -404,7 +500,7 @@ $(document)
 
 														} else if(data.result == "Failure"){
 															
-															swal({
+															swal.fire({
 																  title: "error",
 																  text: data.Message,
 																  icon: "error"
@@ -443,6 +539,21 @@ function getAlertFormEdit(id) {
 				$("#formreconnectionEdit").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
 				$('#perUnitEdit1').val(item.perUnitValue).trigger("change");
 				$("#formperUnitEdit").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
+				
+				
+				$('#lateFeeEdit1').val(item.lateFee).trigger("change");
+				$("#formlateFeeEdit").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
+				
+				
+				$('#gstEdit1').val(item.GST).trigger("change");
+				$("#formgstEdit").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
+				
+				
+				$('#duedatecountEdit1').val(item.dueDayCount).trigger("change");
+				$("#formduedatecountEdit").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
+				
+				
+				
 				$("#alertIdhidden").val(item.alertID);
 				$('#alertEditsave')
 				.attr('disabled',

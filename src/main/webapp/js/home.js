@@ -40,14 +40,14 @@ $(document)
 		$.ajax({
 			type : "GET",
 			contentType : "application/json",
-			url : "./homedashboard/"
-					+ sessionStorage.getItem("roleID") + "/"
+			url : "./graph/"
+					+ sessionStorage.getItem("roleID") + "/2021/06"
 					+ sessionStorage.getItem("ID"),
 			dataType : "JSON",
 
 			success : function(d) {
 
-				$('#highchart_container').highcharts(
+				$('#container12').highcharts(
 						{
 							chart : {
 								type : 'bar',

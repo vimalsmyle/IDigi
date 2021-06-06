@@ -33,14 +33,6 @@ $(document).ready(function() {
 			$('#emailEdit').val(item.email).trigger("change");
 			$("#formemailEdit").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
 			
-			
-			$('#meterSerialEdit').val(item.meterSerialNumber).trigger("change");
-			$("#formmeterSerialEdit").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
-			
-			
-			$('#amrEdit').val(item.meterID).trigger("change");
-			$("#formamrEdit").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
-			
 			if(sessionStorage.getItem("roleID") == 3){
 				$('#amrEdit')
 				.attr('disabled',
@@ -69,17 +61,17 @@ $(document).ready(function() {
 				
 				$("#template").append("<div class=row> " +
 						"<div class=col-md-4>" +
-						"<div class='group form-group'>"
+						"<div id='formmiuIDEdit' class='group form-group has-feedback has-success bmd-form-group is-filled'>"
 										+"<label class=bmd-label-floating>MIU ID</label> <input "
 										+"type=text class='form-control form-control-sm' name=miuIDEdit["+rowCount+"]"
 										+" id=miuIDEdit-"+rowCount+">"
 										+"</div></div>"+
 							"<div class=col-md-4>" +
-							"<div class='group form-group has-feedback has-success bmd-form-group is-filled'>"
+							"<div id='formmeterSerialNumberEdit' class='group form-group has-feedback has-success bmd-form-group is-filled'>"
 							+"<label class=bmd-label-floating>Meter Serial Number</label> <input "
 							+"type=text class='form-control form-control-sm' name=meterSerialNumberEdit["+rowCount+"]"
 							+" disabled id=meterSerialNumberEdit-"+rowCount+">"
-							+"</div></div>"+
+							+"<input type='hidden' id=customerMeterIDEdit-"+rowCount+"></div></div>"+
 						"<div class=col-md-4>" +
 						"<div class='group form-group has-feedback has-success bmd-form-group is-filled'>"
 						+"<label class=bmd-label-floating>Meter Type</label> " +
@@ -91,7 +83,7 @@ $(document).ready(function() {
 						"</select>"
 						+"</div></div>"+
 						"<div class=col-md-4>" +
-						"<div class='group form-group has-feedback has-success bmd-form-group is-filled'>"
+						"<div id='formmeterSizeEdit' class='group form-group has-feedback has-success bmd-form-group is-filled'>"
 						+"<label class=bmd-label-floating>Meter Size</label> <input "
 						+"type=text class='form-control form-control-sm' disabled name=meterSizeEdit["+rowCount+"]"
 						+" id=meterSizeEdit-"+rowCount+">"
@@ -106,12 +98,10 @@ $(document).ready(function() {
 					"</select>"
 						+"</div></div>"+
 						"<div class=col-md-4>" +
-						"<div class='group form-group has-feedback has-success bmd-form-group is-filled'>"
-						+"<label class=bmd-label-floating>Tariff Name</label> " +
-						"<select "+
-						"class='form-control form-control-sm selectTariffName' disabled id=selectTariffName-"+rowCount+" name=selectTariffName["+rowCount+"]>"+
-						 
-						"</select>"
+						"<div id=formtariffNameEdit class='group form-group has-feedback has-success bmd-form-group is-filled'>"
+						+"<label class=bmd-label-floating>Tariff Name</label> <input "
+						+"type=text class='form-control form-control-sm' name=tariffNameEdit["+rowCount+"]"
+						+" disabled id=tariffNameEdit-"+rowCount+">"
 						+"</div></div>"+
 						"<div class=col-md-4>" +
 						"<div class='group form-group has-feedback has-success bmd-form-group is-filled'>"
@@ -122,11 +112,11 @@ $(document).ready(function() {
 						"</select>"
 						+"</div></div>"+
 						"<div class=col-md-4>" +
-						"<div class='group form-group has-feedback has-success bmd-form-group is-filled'>"
+						"<div id='formlocationEdit' class='group form-group has-feedback has-success bmd-form-group is-filled'>"
 						+"<label class=bmd-label-floating>Location</label> <input "
 						+"type=text class='form-control form-control-sm' disabled name=locationEdit["+rowCount+"]"
 						+" id=locationEdit-"+rowCount+">"
-						+"</div></div>   " +
+						+"<hr></div></div>   " +
 								"</div>" +
 								"</div>");
 				
@@ -135,17 +125,23 @@ $(document).ready(function() {
 				
 				
 				$("#miuIDEdit-"+rowCount).val(meter.miuID);
+				$("#customerMeterIDEdit-"+rowCount).val(meter.customerMeterID);
+				$("#formmiuIDEdit").removeClass().addClass("group form-group has-feedback has-success bmd-form-group is-filled");
 				$("#meterSerialNumberEdit-"+rowCount).val(meter.meterSerialNumber);
+				$("#formmeterSerialNumberEdit").addClass("group form-group has-feedback has-success bmd-form-group is-filled");
 				$("#selectMeterType-"+rowCount).val(meter.meterType);
 				$("#meterSizeEdit-"+rowCount).val(meter.meterSize);
+				$("#formmeterSizeEdit").addClass("group form-group has-feedback has-success bmd-form-group is-filled");
 				$("#payTypeEdit-"+rowCount).val(meter.payType);
 				$("#selectTariffName-"+rowCount).val(meter.tariffID);
 				$("#gatewayIDEdit-"+rowCount).val(meter.gatewayID);
-				$("#selectTariffName-"+rowCount).val(meter.tariffID);
+				$("#tariffNameEdit-"+rowCount).val(meter.tariffName);
 				$("#gatewayIDEdit-"+rowCount).val(meter.gatewayID);
 				$("#locationEdit-"+rowCount).val(meter.location);
+				$("#formlocationEdit").addClass("group form-group has-feedback has-success bmd-form-group is-filled");
+				
 
-				 $('#customerEdit').bootstrapValidator('addField' ,
+				$('#customerEdit').bootstrapValidator('addField' ,
 			        'miuIDEdit['+rowCount+']', {
 			        	message : 'MUI ID is not valid',
 						validators : {
@@ -237,6 +233,15 @@ $(document).ready(function() {
 			        }
 				 );
 				 rowCount++;
+				 
+				 $("#rowCount").val(rowCount);
+				 
+				 	$("#formmiuIDEdit").removeClass().addClass("group form-group has-feedback has-success bmd-form-group is-filled");
+					$("#formmeterSerialNumberEdit").addClass("group form-group has-feedback has-success bmd-form-group is-filled");
+					$("#formmeterSizeEdit").addClass("group form-group has-feedback has-success bmd-form-group is-filled");
+					$("#formlocationEdit").addClass("group form-group has-feedback has-success bmd-form-group is-filled");
+					$("#formtariffNameEdit").addClass("group form-group has-feedback has-success bmd-form-group is-filled");
+				 
 			});
 			
 			if(rowCount>2){
@@ -405,7 +410,7 @@ return json.data;
 ]
 });
 
-$("div.headname").html('<h3>Customer Managemnent</h3>');
+$("div.headname").html('<h3>Customer Management</h3>');
 
 if(sessionStorage.getItem("roleID") == 3 || sessionStorage.getItem("roleID") == 2 || sessionStorage.getItem("roleID") == 5){
 	table.buttons( $('a.customButton') ).remove();	
@@ -489,7 +494,7 @@ $("#addMeter")
 									+"<label class=bmd-label-floating>Location</label> <input "
 									+"type=text class='form-control form-control-sm' name=locationAdd["+rowCount+"]"
 									+" id=locationAdd-"+rowCount+">"
-									+"</div></div>   " +
+									+"<hr></div></div>   " +
 											" <div class='col-md-12 text-right'>" 
 									+" <button type=button class='btn btn-danger' id='removeMeter'>Remove</button></div></div>" +
 											"</div>");
@@ -979,7 +984,7 @@ $(document)
 															            }
 																	]
 																	})
-																	$("div.headname").html('<h3>Customer Managemnent</h3>');
+																	$("div.headname").html('<h3>Customer Management</h3>');
 													}
 												});
 										return false;
@@ -1056,8 +1061,12 @@ $(document)
 												$(document).on('click', '#customerAdd', function () {
 													if(sessionStorage.getItem("roleID") != 2){
 												if($("#selectcommunityName").val() == -1 || $("#selectcommunityName").val() == null || $("#selectcommunityName").val() == "Select Community"){
-													bootbox
-													.alert("Select Community Id");
+													
+													swal.fire({
+														  title: "error",
+														  text: "Select Community Id",
+														  icon: "error"
+														});
 													return false;
 												} 
 												
@@ -1175,6 +1184,23 @@ $(document)
 							
 										$(document).on('click', '#customerEditsave', function () {
 											
+											
+											var meterDetails = [];
+											for(var i=1;parseInt($("#rowCount").val())>i;i++){
+												var array ={};
+												
+												array["miuID"] = $("#miuIDEdit-"+i).val();
+												array["meterSerialNumber"] = $("#meterSerialNumberEdit-"+i).val();
+												array["meterType"] = $("#selectMeterType-"+i).val();
+												array["meterSize"] = $("#meterSizeEdit-"+i).val();
+												array["payType"] = $("#payTypeEdit-"+i).val();
+												array["gatewayID"] = $("#gatewayIDEdit-"+i).val();
+												array["customerMeterID"] = $("#customerMeterIDEdit-"+i).val();
+												array["location"] = $("#locationEdit-"+i).val();
+												meterDetails.push(array);
+											}
+											
+											
 										var data1 = {}
 										
 										data1["firstName"] = $("#firstNameEdit").val();
@@ -1183,6 +1209,7 @@ $(document)
 										data1["email"] = $("#emailEdit").val();
 										data1["CRNNumber"] = $("#CRNEdit").val();
 										data1["houseNumber"] = $("#houseNoEdit").val();
+										data1["meters"] = meterDetails;
 										if(sessionStorage.getItem("roleID") == 1 || sessionStorage.getItem("roleID") == 2 ){
 											data1["meterID"] = $("#amrEdit").val();
 											
@@ -1205,9 +1232,6 @@ $(document)
 
 													success : function(
 															data) {
-														/*alert("data"
-																+ JSON
-																		.stringify(data));*/
 														if (data.result == "Success") {
 
 															swal.fire({
@@ -1328,10 +1352,6 @@ function getCustomerMeters(CRNNumber){
 										"data":item.meters,
 						
 							"columns" : [
-								
-									{
-										"data" : "customerMeterID"
-									},
 									{
 										"data" : "miuID"
 										
@@ -1354,7 +1374,7 @@ function getCustomerMeters(CRNNumber){
 										"data" : "tariffName"
 									},
 									 {
-										"data" : "gatewayID"
+										"data" : "gatewayName"
 								},
 								 {
 									"data" : "location"

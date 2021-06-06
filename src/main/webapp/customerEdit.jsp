@@ -58,7 +58,7 @@
 						<div class="row">
 						
 						<div class="col-md-4">
-								<div id="formcommunityNameEdit" class="form-group">
+								<div id="formcommunityNameEdit" class="group">
 									<label class="bmd-label-floating">Community</label> 
 									 <input
 										type="text" class="form-control" name="communityNameEdit"
@@ -66,7 +66,7 @@
 								</div>
 							</div>
 							<div class="col-md-4">
-								<div id="formblockNameEdit" class="form-group">
+								<div id="formblockNameEdit" class="group">
 									<label class="bmd-label-floating">Block</label> <input
 										type="text" class="form-control" name="blockNameEdit"
 										id="blockNameEdit" disabled>
@@ -74,7 +74,7 @@
 							</div>
 
 							<div class="col-md-4">
-								<div id="formfirstNameEdit" class="form-group">
+								<div id="formfirstNameEdit" class="group">
 									<label class="bmd-label-floating">First Name</label> <input
 										type="text" class="form-control" name="firstNameEdit"
 										id="firstNameEdit">
@@ -91,14 +91,14 @@
 							
 							
 							<div class="col-md-4">
-								<div id="formhouseNoEdit" class="form-group">
+								<div id="formhouseNoEdit" class="group">
 									<label class="bmd-label-floating">House No.</label> <input
 										type="text" class="form-control" name="houseNoEdit"
 										id="houseNoEdit">
 								</div>
 							</div>
 							<div class="col-md-4">
-								<div id="formmobileNoEdit" class="form-group">
+								<div id="formmobileNoEdit" class="group">
 									<label class="bmd-label-floating">Mobile No</label> <input
 										type="text" class="form-control" name="mobileNoEdit"
 										id="mobileNoEdit">
@@ -109,7 +109,7 @@
 							
 							
 							<div class="col-md-4">
-								<div id="formemailEdit" class="form-group">
+								<div id="formemailEdit" class="group">
 									<label class="bmd-label-floating">Email</label> <input
 										type="email" class="form-control" name="emailEdit"
 										id="emailEdit">
@@ -117,7 +117,7 @@
 							</div>
 							
 							<div class="col-md-4">
-								<div class="group form-group">
+								<div id="formCRNEdit" class="group">
 									<label class="bmd-label-floating">CRN Number</label> <input
 										type="text" class="form-control form-control-sm" name="CRNEdit"
 										id="CRNEdit" disabled>
@@ -146,7 +146,7 @@
 							
 							<div class="col-md-12 text-right">
 									<button class="btn btn-primary submit-button"
-									 value="Save!" id="customerAdd" 
+									 value="Save!" id="customerEditsave" 
 									type="button" disabled>Save</button>
 									<button type="button" class="btn btn-danger btn-raised resetFilter" id="resetFilter">Reset</button>
 							

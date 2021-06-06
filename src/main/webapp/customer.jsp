@@ -136,7 +136,7 @@
 							</div>
 							<div class="col-md-4">
 								<div class="group form-group">
-									<label class="bmd-label-floating">CRN Number</label> <input
+									<label class="bmd-label-floating">CRN/CAN</label> <input
 										type="text" class="form-control form-control-sm" name="CRNAdd"
 										id="CRNAdd">
 								</div>

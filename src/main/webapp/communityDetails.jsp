@@ -51,7 +51,7 @@
 					<span>/</span>
 					<a class="text-dark" href="setup.jsp">Customer Setup</a>
 					<span>/</span>
-					<span class="activeurl">Community Details</span>
+					<span class="activeurl">Community Management</span>
 				</div>
 			</div>
 		

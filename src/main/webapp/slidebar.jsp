@@ -50,16 +50,25 @@
                 <a href="alert.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-list"></i> <span class="textData">Alert Configuration</span></a>
                 
                 <%if(user_id.equalsIgnoreCase("1")){ %>
-                <a href="configuration.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-clock-o"></i> <span class="textData">Meter Commands</span></a>
-                <%}%>
+                <!-- <a href="configuration.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-clock-o"></i> <span class="textData">Meter Commands</span></a>
+                 -->
+                 <a href="#" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-clock-o"></i> <span class="textData">Meter Commands</span></a>
                 
-                <a href="configurationStatus.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-th"></i> <span class="textData">Meter Commands Status</span></a>
+                 <%}%>
                 
+                <!-- <a href="configurationStatus.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-th"></i> <span class="textData">Meter Commands Status</span></a>
+                 -->
+                 <a href="#" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-th"></i> <span class="textData">Meter Commands Status</span></a>
+                 
                 <%if(user_id.equalsIgnoreCase("1")){ %>
                 <a href="topup.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-gear"></i> <span class="textData">ReCharge</span></a>
                 <%}%>
                 <a href="topupStatus.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-calendar"></i> <span class="textData">ReCharge Status</span></a>
-                <a href="holiday.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-envelope"></i> <span class="textData">Vacation</span></a>
+                
+                <a href="billingDetails.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-calendar"></i> <span class="textData">Billing Status</span></a>
+                
+                
+                <a href="#" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-envelope"></i> <span class="textData">Vacation</span></a>
                 <a href="reports.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-bar-chart-o"></i> <span class="textData">Reports</span></a>
                 
                 	<%if(user_id.equalsIgnoreCase("1")){ %>
@@ -85,8 +94,8 @@
                 <%}%>
                 
                  <a href="topupStatus.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-calendar"></i> <span class="textData">ReCharge Status</span></a>
-                <a href="holiday.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-envelope"></i> <span class="textData">Vacation</span></a>
-                <a href="reports.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-bar-chart-o"></i> <span class="textData">Reports</span></a>
+                <a href="#" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-envelope"></i> <span class="textData">Vacation</span></a>
+                <a href="#" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-bar-chart-o"></i> <span class="textData">Reports</span></a>
                 
                 		<%if(user_id.equalsIgnoreCase("2")){ %>
                  <a href="feedbackStatus.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-envelope"></i> <span class="textData">Feedback Status</span></a>
@@ -95,10 +104,10 @@
                 
                 <a href="topup.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-gear"></i> <span class="textData">ReCharge</span></a>
                  <a href="topupStatus.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-calendar"></i> <span class="textData">ReCharge Status</span></a>
-                <a href="holiday.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-envelope"></i> <span class="textData">Vacation</span></a>
+                <a href="#" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-envelope"></i> <span class="textData">Vacation</span></a>
                  <a href="userConsumptions.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-envelope"></i> <span class="textData">User Consumptions</span></a>
                 
-                <a href="feedback.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-bar-chart-o"></i> <span class="textData">Feedback/Compliant</span></a>
+                <a href="#" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-bar-chart-o"></i> <span class="textData">Feedback/Compliant</span></a>
               <% } %>
             </div>
         </div>

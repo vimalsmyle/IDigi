@@ -52,7 +52,7 @@
 					<span>/</span>
 						<a class="text-dark" href="setup.jsp">Customer Setup</a>
 					<span>/</span>
-					<span class="activeurl">Customer Details</span>
+					<span class="activeurl">Customer Management</span>
 				</div>
 			</div>
 			
@@ -188,14 +188,13 @@
 							style="width: 100%">
 							<thead>
 								<tr>
-									<th>Customer Meter ID</th>
 									<th>MIU ID</th>
 									<th>Meter Serial Number</th>
 									<th>Meter Type</th>
 									<th>Meter Size</th>
 										<th>Pay Type</th>
 									<th>Tariff Name</th>
-									<th>Gateway ID</th>
+									<th>Gateway Name</th>
 									<th>Location</th>
 								</tr>
 							</thead>

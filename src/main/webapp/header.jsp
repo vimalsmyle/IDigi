@@ -34,8 +34,8 @@
 				 </span>
 				  <div class="dropdown-menu main-profile-menu">
 				    <div class="header-navheading"> 
-						<h6 class="main-notification-title">idigitronics</h6> 
-						<p class="main-notification-text">Company Name</p>
+						<h6 class="main-notification-title" id="navbardrop"></h6> 
+						<p class="main-notification-text">idigitronics</p>
 					</div>
 					<div class="dropdown-divider"></div>
 					<a class="dropdown-item" href="profile.html"> <i class="fa fa-user"></i> My Profile </a>
@@ -47,7 +47,12 @@
 			</div>
 	   </div>
 	<!--Header end-->
+	<script>
+
+document.querySelector("#navbardrop").innerText = "  "+sessionStorage.getItem("userID");
+</script>
 </body>
+
 
 	
 </html>

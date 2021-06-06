@@ -977,3 +977,7 @@ button:focus {
 	color:  #b2d136;
 	font-weight: bold;
 }
+
+.bmd-label-floating{
+	font-weight: 400 !important;
+}

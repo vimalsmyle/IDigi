@@ -1,438 +1,3 @@
-/**
- * 
- */
-
-$(document)
-		.ready(
-				function() {
-
-					if (sessionStorage.getItem("roleID") == 1
-							|| sessionStorage.getItem("roleID") == 2) {
-
-						$('#topupDetails')
-								.bootstrapValidator(
-										{
-											feedbackIcons : {
-												valid : 'glyphicon glyphicon-ok',
-												invalid : 'glyphicon glyphicon-remove',
-												validating : 'glyphicon glyphicon-refresh'
-											},
-											fields : {
-
-												selectcommunityName : {
-													validators : {
-														notEmpty : {
-															message : 'Please select your native language.'
-														}
-													}
-												},
-												selectBlockBasedonCommunity : {
-													validators : {
-														notEmpty : {
-															message : 'Please select your native language.'
-														}
-													}
-												},
-
-												selectHouseBasedonBlock : {
-													validators : {
-														notEmpty : {
-															message : 'Please select your native language.'
-														}
-													}
-												},
-
-												AMR_topup : {
-													message : 'MIU ID is not valid',
-													validators : {
-														notEmpty : {
-															message : 'MIU ID is required and cannot be empty'
-														}
-													}
-												},
-												currentBalance_topup : {
-													message : 'Current Balance is not valid',
-													validators : {
-														notEmpty : {
-															message : 'Current Balance is required and cannot be empty'
-														},
-														stringLength : {
-															min : 2,
-															max : 30,
-															message : 'Last Name must be more than 2 and less than 30 characters long'
-														}
-													}
-												},
-												dateTime_topup : {
-													message : 'Date Time is not valid',
-													validators : {
-														notEmpty : {
-															message : 'Date Time is required and cannot be empty'
-														}
-													}
-												},
-												unit_topup : {
-													message : 'Unit Rate is not valid',
-													validators : {
-														notEmpty : {
-															message : 'Unit Rate is required and cannot be empty'
-														}
-													}
-												},
-												emergency_topup : {
-													message : 'Emergency Credit is not valid',
-													validators : {
-														notEmpty : {
-															message : 'Emergency Credit is required and cannot be empty'
-														}
-													}
-												},
-												alarm_topup : {
-													message : 'Alarm Topup No. is not valid',
-													validators : {
-														notEmpty : {
-															message : 'Alarm Topup No. is required and cannot be empty'
-														}
-													}
-												},
-												recharge_topup : {
-													message : 'Recharge Amount is not valid',
-													validators : {
-														notEmpty : {
-															message : 'Recharge Amount is required and cannot be empty'
-														},
-														stringLength : {
-															min : 2,
-															max : 10,
-															message : 'Recharge Amount must be more than 2 and less than 10 characters long'
-														},
-														regexp : {
-															regexp : /[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$/,
-															message : 'Recharge Amount can only consist of number'
-														}
-													}
-												},
-												paymentMode : {
-													validators : {
-														notEmpty : {
-															message : 'Please select your native language.'
-														}
-													}
-												},
-											}
-										});
-					} else if (sessionStorage.getItem("roleID") == 3) {
-
-						$
-								.getJSON(
-										"./topupdetails/"
-												+ sessionStorage.getItem("ID"),
-										function(data) {
-											// var Options = "";
-											$("#CustomerCRNNumber").val(
-													sessionStorage
-															.getItem("ID"))
-													.trigger("change");
-											$("#formCRNNumber")
-													.addClass(
-															"input-group form-group has-feedback has-success bmd-form-group is-filled")
-
-											$("#AMR_topup").val(
-													data.topupdetails.meterID)
-													.trigger("change");
-											$("#formAMR_topup")
-													.addClass(
-															"input-group form-group has-feedback has-success bmd-form-group is-filled")
-
-											$("#currentBalance_topup")
-													.val(
-															data.topupdetails.currentBalance)
-													.trigger("change");
-											$("#formcurrentBalance_topup")
-													.addClass(
-															"input-group form-group has-feedback has-success bmd-form-group is-filled")
-
-											$("#dateTime_topup")
-													.val(
-															data.topupdetails.IoTTimeStamp)
-													.trigger("change");
-											$("#formdateTime_topup")
-													.addClass(
-															"input-group form-group has-feedback has-success bmd-form-group is-filled")
-
-											$("#unit_topup").val(
-													data.topupdetails.tariff)
-													.trigger("change");
-											$("#formunit_topup")
-													.addClass(
-															"input-group form-group has-feedback has-success bmd-form-group is-filled")
-
-											$("#emergency_topup")
-													.val(
-															data.topupdetails.emergencyCredit)
-													.trigger("change");
-											$("#formemergency_topup")
-													.addClass(
-															"input-group form-group has-feedback has-success bmd-form-group is-filled")
-
-											$("#alarm_topup")
-													.val(
-															data.topupdetails.alarmCredit)
-													.trigger("change");
-											$("#formalarm_topup")
-													.addClass(
-															"input-group form-group has-feedback has-success bmd-form-group is-filled")
-
-											$("#reconnection_topup")
-													.val(
-															data.topupdetails.reconnectionCharges)
-													.trigger("change");
-											$("#formreconnection_topup")
-													.addClass(
-															"input-group form-group has-feedback has-success bmd-form-group is-filled")
-
-											$("#fixed_topup")
-													.val(
-															data.topupdetails.fixedCharges)
-													.trigger("change");
-											$("#formfixed_topup")
-													.addClass(
-															"input-group form-group has-feedback has-success bmd-form-group is-filled")
-
-											$("#month_topup")
-													.val(
-															data.topupdetails.noOfMonths)
-													.trigger("change");
-											$("#formmonth_topup")
-													.addClass(
-															"input-group form-group has-feedback has-success bmd-form-group is-filled")
-
-											$('#topup').attr('disabled', false);
-
-										});
-
-					}
-
-					$('#topupDetails').on(
-							'status.field.bv',
-							function(e, data) {
-								formIsValid = true;
-								$('.input-group.form-group', $(this)).each(
-										function() {
-											// alert(this+"@@=>"+formIsValid);
-											formIsValid = formIsValid
-													&& $(this).hasClass(
-															'has-success');
-
-											// alert("!!@@=>"+formIsValid);
-
-										});
-
-								if (formIsValid) {
-									$('.submit-button', $(this)).attr(
-											'disabled', false);
-								} else {
-									$('.submit-button', $(this)).attr(
-											'disabled', true);
-								}
-							});
-
-					$(document)
-							.on(
-									'click',
-									'#topup',
-									function() {
-
-										var data1 = {}
-
-										var regTopup = /[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$/
-
-										if ($("#selectHouseBasedonBlock").val() == "Select CRN") {
-											swal.fire({
-												  title: "error",
-												  text: "Please Select CRN Number",
-												  icon: "error"
-												});
-											return false;
-										}
-										
-										if ($("#selectMeters").val() == "-1") {
-											swal.fire({
-												  title: "error",
-												  text: "Please Select Meters",
-												  icon: "error"
-												});
-											return false;
-										}
-
-										if ($("#recharge_topup").val() == "") {
-											swal.fire({
-												  title: "error",
-												  text: "Please Enter Amount",
-												  icon: "error"
-												});
-											return false;
-										} else {
-											if (!regTopup.test($(
-													"#recharge_topup").val())) {
-												swal.fire({
-													  title: "error",
-													  text: "Enter Valid Amount",
-													  icon: "error"
-													});
-												return false;
-												
-											}
-										}
-
-										if ($("#paymentMode").val() == "Select Mode" || $("#paymentMode").val() == "-1") {
-											swal.fire({
-												  title: "error",
-												  text: "Please Select Mode",
-												  icon: "error"
-												});
-											return false;
-										}
-
-										if (sessionStorage.getItem("roleID") == 3) {
-											data1["CustomerUniqueID"] = $(
-													"#selectHouseBasedonBlock")
-													.val();
-										} else {
-											data1["communityID"] = $(
-													"#selectcommunityName")
-													.val();
-											data1["blockID"] = $(
-													"#selectBlockBasedonCommunity")
-													.val();
-											data1["CustomerUniqueID"] = $(
-											"#selectHouseBasedonBlock")
-											.val();
-										}
-
-										data1["miuID"] = $("#AMR_topup")
-												.val();
-										data1["customerMeterID"] = $("#selectMeters").val();
-										data1["currentBalance"] = $(
-												"#currentBalance_topup").val();
-										data1["tariffID"] = $("#tariffID")
-												.val();
-										data1["amount"] = $("#recharge_topup")
-												.val();
-										if(sessionStorage.getItem("roleID") == 3){
-											data1["modeOfPayment"] = "Online";
-										}
-										else if(sessionStorage.getItem("roleID") == 1 || sessionStorage.getItem("roleID") == 2){
-										data1["modeOfPayment"] = $(
-												"#paymentMode").val()
-										}
-										data1["source"] = "web"
-										data1["transactedByID"] = sessionStorage
-												.getItem("createdByID");
-										data1["transactedByRoleID"] = sessionStorage
-												.getItem("roleID");
-
-										$
-												.ajax({
-													type : "POST",
-													contentType : "application/json",
-													url : "./topup",
-													data : JSON
-															.stringify(data1),
-													dataType : "JSON",
-
-													success : function(data) {
-														if (data.result == "Success") {
-
-															if (data.paymentMode == "Cash") {
-
-																
-																swal.fire({
-																	  title: "Saved",
-																	  text: data.Message,
-																	  icon: "success"
-																	}).then(function() {
-																	    window.location = "topupStatus.jsp";
-																	    
-																	});
-																return false;
-																
-															} else if (data.paymentMode == "Online") {
-
-																sessionStorage
-																		.setItem(
-																				"transactionID",
-																				data.checkoutDetails.transactionID);
-
-																data.checkoutDetails.handler = function processRazorpayResponse(
-																		response) {
-
-																	data2 = {}
-																	data2["razorpay_order_id"] = response.razorpay_order_id
-																	data2["razorpay_payment_id"] = response.razorpay_payment_id
-																	data2["razorpay_signature"] = response.razorpay_signature
-																	data2["transactionID"] = sessionStorage
-																			.getItem("transactionID");
-
-																	$
-																			.ajax({
-																				type : "POST",
-																				contentType : "application/json",
-																				url : "./checkout",
-																				data : JSON
-																						.stringify(data2),
-																				dataType : "JSON",
-
-																				success : function(
-																						data) {
-																					if (data.result == "Success") {
-																						swal.fire({
-																							  title: "Saved",
-																							  text: data.Message,
-																							  icon: "success"
-																							}).then(function() {
-																							    window.location = "topupStatus.jsp";
-																							    
-																							});
-																						return false;
-																					} else {
-																						swal.fire({
-																							  title: "error",
-																							  text: data.Message,
-																							  icon: "error"
-																							}).then(function() {
-																							    window.location = "topupStatus.jsp";
-																							    
-																							});
-																						return false;
-																					}
-																				}
-																			});
-																	return false;
-																}
-															}
-															;
-
-															var rzp1 = new Razorpay(
-																	data.checkoutDetails);
-															rzp1.open();
-														} else if (data.result == "Failure") {
-
-															swal.fire({
-																  title: "error",
-																  text: data.Message,
-																  icon: "error"
-																}).then(function() {
-																    window.location = "topupStatus.jsp";
-																    
-																});
-															return false
-														}
-													}
-												});
-										return false;
-									});
-				});
 
 $(document)
 		.ready(
@@ -444,12 +9,12 @@ $(document)
 								sessionStorage.getItem("communityName"));
 						$("#formcommunityNameAdd")
 								.addClass(
-										"input-group form-group has-feedback has-success bmd-form-group is-filled")
+										"group form-group has-feedback has-success bmd-form-group is-filled")
 						$("#blockNameAdd").val(
 								sessionStorage.getItem("blockName"));
 						$("#formblockNameAdd")
 								.addClass(
-										"input-group form-group has-feedback has-success bmd-form-group is-filled")
+										"group form-group has-feedback has-success bmd-form-group is-filled")
 					}
 
 					if (sessionStorage.getItem("roleID") == 1
@@ -486,8 +51,8 @@ $(document)
 							: 0;
 					sessionStorage.removeItem("day")
 
-					$('#topstatusTable1').hide();
-					table = $('#topstatusTable')
+					$('#billingstatusTable1').hide();
+					table = $('#billingstatusTable')
 							.DataTable(
 									{
 										"dom" : dom1,
@@ -505,13 +70,13 @@ $(document)
 										"scrollY" : 324,
 										"scrollX" : true,
 										"ajax" : {
-											"url" : "./status/"
+											"url" : "./billing/"
 													+ sessionStorage
 															.getItem("roleID")
 													+ "/"
 													+ sessionStorage
 															.getItem("ID")
-													+ "/-1/" + filterId,
+													+ "/" + filterId,
 											"type" : "GET",
 											"data" : function(search) {
 											},
@@ -736,21 +301,21 @@ $(document)
 												.ajax({
 													type : "GET",
 													contentType : "application/json",
-													url : "./status/"
+													url : "./billing/"
 															+ url,
 													dataType : "JSON",
 
 													success : function(d) {
 
-														$('#topstatusTable')
+														$('#billingstatusTable')
 																.dataTable()
 																._fnAjaxUpdate();
 														$(
-																"#topstatusTable_wrapper")
+																"#billingstatusTable_wrapper")
 																.hide();
 														$("#filter").modal(
 																"hide");
-														$("#topstatusTable1")
+														$("#billingstatusTable1")
 																.show();
 														var dom1 = "<'row'<'col-sm-4 headname'><'col-sm-2'><'col-sm-1'><'col-sm-2'f>>"
 																+ "<'row'<'col-sm-4'B><'col-sm-2'l><'col-sm-2'><'col-sm-2'><'col-sm-1'>>"
@@ -758,7 +323,7 @@ $(document)
 																+ "<'row'<'col-sm-6 text-black'i><'col-sm-6 text-black'p>>";
 														var hCols = [ 3, 4 ];
 														table = $(
-																'#topstatusTable1')
+																'#billingstatusTable1')
 																.DataTable(
 																		{
 
@@ -922,7 +487,7 @@ $(document)
 																									14,
 																									15 ]
 																						},
-																						title : 'ReCharge Status'
+																						title : 'Billing Status'
 																					},
 
 																					{
@@ -950,7 +515,7 @@ $(document)
 																						},
 																						//text : 'pdf',
 																						orientation : 'landscape',
-																						title : 'ReCharge Status',
+																						title : 'Billing Status',
 																						pageSize : 'LEGAL'
 																					},
 																					{
@@ -970,7 +535,7 @@ $(document)
 																								button,
 																								config) {
 
-																							window.location = "topupStatus.jsp"
+																							window.location = "billingDetails.jsp"
 																						}
 																					} ],
 																					 initComplete: function() {
@@ -987,7 +552,7 @@ $(document)
 														}
 														$("div.headname")
 																.html(
-																		'<h3>ReCharge Status</h3>');
+																		'<h3>Billing Status</h3>');
 													}
 												});
 										return false;
@@ -997,51 +562,3 @@ $(document)
 						$("input:text").val("");
 					});
 				});
-
-function getDeleteTransactionID(transID) {
-
-	bootbox.confirm("ARE YOU SURE TO DELETE RECORD", function(result) {
-		// alert(result);
-		if (result == true) {
-			$.ajax({
-				type : "POST",
-				contentType : "application/json",
-				url : "./status/delete/" + transID,
-				dataType : "JSON",
-				success : function(data) {
-					// alert("Success====" + data.result);
-					if (data.result == "Success") {
-						bootbox.confirm(data.Message, function(result) {
-							window.location = "topupStatus.jsp";
-						});
-
-					} else {
-						bootbox.alert(data.Message);
-						return false;
-					}
-				}
-			});
-		} else if (result == false) {
-			// alert("@"+false)
-
-		}
-	});
-}
-
-function getReceiptTransactionID(transID) {
-	bootbox.confirm("ARE YOU SURE TO DOWNLOAD RECEIPT", function(result) {
-		// alert(result);
-		window.open("./status/print/" + transID);
-		/*
-		 * if(result == true){ $.ajax({ type : "GET", contentType :
-		 * "application/json", url : "/PAYGTL_LORA_BLE/status/print/" + transID,
-		 * dataType : "JSON", success : function(data) { //alert("Success====" +
-		 * data.result); if (data.result == "Success") { bootbox .confirm(
-		 * data.Message, function( result) { window.location =
-		 * "topupStatus.jsp"; });
-		 *  } else { bootbox .alert(data.Message); return false; } } }); }else
-		 * if(result==false){ //alert("@"+false)
-		 *  }
-		 */
-	});
-}

@@ -17,7 +17,7 @@
 	<link href="common/css/materialize.fontawsome.css"
 	rel="stylesheet">
 	
-<title>ReCharge Details</title>
+<title>Billing Details</title>
 </head>
 
 
@@ -49,7 +49,7 @@
 				<div class="col-md-12">
 					<a class="text-dark" href="#">Home</a>
 					<span>/</span>
-					<span class="activeurl">Topup Details</span>
+					<span class="activeurl">Billing Details</span>
 				</div>
 			</div>
 			
@@ -61,7 +61,7 @@
 				<div class="row">
 				<div class="row">
 					<div class="col-md-12">
-						<table id="topstatusTable"
+						<table id="billingstatusTable"
 							class="table table-striped table-bordered dt-responsive nowrap dataTable no-footer dtr-inline collapsed"
 							style="width: 100%">
 							<thead>
@@ -69,19 +69,16 @@
 									<th>Community</th>
 									<th>Block</th>
 									<th>House No</th>
-									<th>MIU ID</th>
-									<th>Amount</th>
-									<th>EC</th>
-									<th>Alarm Credit</th>
+									<th>Total Consumption</th>
+									<th>Total Amount</th>
+									<th>status</th>
+									<th>Transacted By</th>
 									<th>Mode of Payment</th>
-									<th>Order ID</th>
-									<th>Payment ID</th>
-									<th>Refund ID</th>
-									<th>Refund Status</th>
-									<th>Date</th>
-									<th>By UserName</th>
-									<th>By Role Description</th>
-									<th>Status</th>
+									<th>Paid Date</th>
+									<th>Bill Month</th>
+									<th>Bill Year</th>
+									<th>Log Date</th>
+									<th>Multiple</th>
 									<th>Action</th>
 								</tr>
 							</thead>
@@ -90,7 +87,7 @@
 						</table>
 						
 						
-						<table id="topstatusTable1"
+						<table id="billingstatusTable1"
 							class="table table-striped table-bordered dt-responsive nowrap dataTable no-footer dtr-inline collapsed"
 							style="width: 100%">
 							<thead>
@@ -98,20 +95,16 @@
 									<th>Community</th>
 									<th>Block</th>
 									<th>House No</th>
-									<th>MIU ID</th>
-									<th>Amount</th>
-									<th>EC</th>
-									<th>Alarm Credit</th>
+									<th>Total Consumption</th>
+									<th>Total Amount</th>
+									<th>status</th>
+									<th>Transacted By</th>
 									<th>Mode of Payment</th>
-									<th>Order ID</th>
-									<th>Payment ID</th>
-									<th>Refund ID</th>
-									<th>Refund Status</th>
-									<th>Date</th>
-									<th>By UserName</th>
-									<th>By Role Description</th>
-									<th>Status</th>
-									<th>Action</th>
+									<th>Paid Date</th>
+									<th>Bill Month</th>
+									<th>Bill Year</th>
+									<th>Log Date</th>
+									<th>Multiple</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -138,7 +131,7 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Topup Filter</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Billing Filter</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -181,7 +174,7 @@
 
 
 	<script src="js/dropdown.js"></script>
-	<script src="js/topup.js"></script>
+	<script src="js/billing.js"></script>
 	<script src="js/common.js"></script>
 	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
 	<script

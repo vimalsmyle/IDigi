@@ -43,11 +43,19 @@
 				<div class="inner-body custom-scrollbar-js" id="content-5">
 				  <div class="row custom-scrollbar-css">
 	<div class="col-md-12">
+		<div class="row">
+				<div class="col-md-12">
+					<a class="text-dark" href="#">Home</a>
+					<span>/</span>
+					<span class="activeurl">Alert Settings</span>
+				</div>
+			</div>
+			
+			
 		<div class="row mr-0 ml-0">
 			
-			<div class="right_data col-md-10 mt-4 mb-4">
+			<div class="right_data col-md-12 mt-4 mb-4">
 				<!--Right start-->
-				   
 				<div class="row">
 					<div class="col-md-12">
 						<table id="alertTable"
@@ -60,6 +68,9 @@
 									<th>Timeout</th>
 									<th>ReConnection Charge</th>
 									<th>Per Unit Value (KG)</th>
+									<th>Late Fee</th>
+									<th>GST</th>
+									<th>Due Date Count</th>
 									<th>Date</th>
 									<th>Edit</th>
 								</tr>
@@ -126,6 +137,30 @@
 									<label class="bmd-label-floating">Per Unit Charge</label> <input
 										type="text" class="form-control" name="perUnitAdd"
 										id="perUnitAdd">
+								</div>
+							</div>
+							
+							<div class="col-md-6">
+								<div class="group form-group">
+									<label class="bmd-label-floating">Late Fee</label> <input
+										type="text" class="form-control" name="lateFeeAdd"
+										id="lateFeeAdd">
+								</div>
+							</div>
+							
+							<div class="col-md-6">
+								<div class="group form-group">
+									<label class="bmd-label-floating">GST</label> <input
+										type="text" class="form-control" name="gstAdd"
+										id="gstAdd">
+								</div>
+							</div>
+							
+							<div class="col-md-6">
+								<div class="group form-group">
+									<label class="bmd-label-floating">Due Date Count</label> <input
+										type="text" class="form-control" name="duedatecountAdd"
+										id="duedatecountAdd">
 								</div>
 							</div>
 							<div class="col-md-6">
@@ -207,6 +242,32 @@
 										id="perUnitEdit1">
 								</div>
 							</div>
+							
+							
+							<div class="col-md-6">
+								<div id="formlateFeeEdit" class="group form-group">
+									<label class="bmd-label-floating">Late Fee</label> <input
+										type="text" class="form-control" name="lateFeeEdit1"
+										id="lateFeeEdit1">
+								</div>
+							</div>
+							
+							<div class="col-md-6">
+								<div id="formgstEdit" class="group form-group">
+									<label class="bmd-label-floating">GST</label> <input
+										type="text" class="form-control" name="gstEdit1"
+										id="gstEdit1">
+								</div>
+							</div>
+							
+							<div class="col-md-6">
+								<div id="formduedatecountEdit" class="group form-group">
+									<label class="bmd-label-floating">Due Date Count</label> <input
+										type="text" class="form-control" name="duedatecountEdit1"
+										id="duedatecountEdit1">
+								</div>
+							</div>
+							
 								
 							</div> 
 						<div class="row">

@@ -89,7 +89,7 @@ return json.data;
 	]
 });
 
-$("div.headname").html('<h3>Gateway Managemnent</h3>');
+$("div.headname").html('<h3>Gateway Management</h3>');
 
 $("div.addevent").html('<button type="button" id="gatewayAddButton"'
 		+'class="btn btn-raised btn-primary float-right"'
