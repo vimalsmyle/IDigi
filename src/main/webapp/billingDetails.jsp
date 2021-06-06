@@ -71,13 +71,13 @@
 									<th>House No</th>
 									<th>Total Consumption</th>
 									<th>Total Amount</th>
+									<th>Multiple</th>
 									<th>Transacted By</th>
 									<th>Mode of Payment</th>
 									<th>Paid Date</th>
 									<th>Bill Month</th>
 									<th>Bill Year</th>
 									<th>Log Date</th>
-									<th>Multiple</th>
 									<th>status</th>
 									<th>Action</th>
 								</tr>
@@ -97,13 +97,13 @@
 									<th>House No</th>
 									<th>Total Consumption</th>
 									<th>Total Amount</th>
+									<th>Multiple</th>
 									<th>Transacted By</th>
 									<th>Mode of Payment</th>
 									<th>Paid Date</th>
 									<th>Bill Month</th>
 									<th>Bill Year</th>
 									<th>Log Date</th>
-									<th>Multiple</th>
 									<th>status</th>
 									<th>Action</th>
 								</tr>
