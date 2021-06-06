@@ -49,7 +49,7 @@
 				<div class="col-md-12">
 					<a class="text-dark" href="#">Home</a>
 					<span>/</span>
-					<span class="activeurl">Billing Details</span>
+					<span class="activeurl">Billing Status</span>
 				</div>
 			</div>
 			
@@ -71,7 +71,6 @@
 									<th>House No</th>
 									<th>Total Consumption</th>
 									<th>Total Amount</th>
-									<th>status</th>
 									<th>Transacted By</th>
 									<th>Mode of Payment</th>
 									<th>Paid Date</th>
@@ -79,6 +78,7 @@
 									<th>Bill Year</th>
 									<th>Log Date</th>
 									<th>Multiple</th>
+									<th>status</th>
 									<th>Action</th>
 								</tr>
 							</thead>
@@ -97,7 +97,6 @@
 									<th>House No</th>
 									<th>Total Consumption</th>
 									<th>Total Amount</th>
-									<th>status</th>
 									<th>Transacted By</th>
 									<th>Mode of Payment</th>
 									<th>Paid Date</th>
@@ -105,6 +104,7 @@
 									<th>Bill Year</th>
 									<th>Log Date</th>
 									<th>Multiple</th>
+									<th>status</th>
 									<th>Action</th>
 								</tr>
 							</thead>
@@ -167,6 +167,44 @@
   </div>
   
 	<jsp:include page="footer.jsp" />
+	
+	<div class="modal fade bd-example-modal-xl" id="myCustomerMeters" role="dialog">
+		<div class="modal-dialog modal-lg
+		">
+	
+	<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title" align="center">List of Meters</h4>
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+				<div class="modal-body">
+					
+					
+					<table id="customerMeterTable"
+							class="table table-striped table-bordered dt-responsive nowrap dataTable no-footer dtr-inline collapsed"
+							style="width: 100%">
+							<thead>
+								<tr>
+									<th>MIU ID</th>
+									<th>Meter Type</th>
+									<th>Previous Reading</th>
+									<th>present Reading</th>
+									<th>Consumption</th>
+									<th>Tariff</th>
+									<th>Bill Amount</th>
+									<th>Billing Date</th>
+								</tr>
+							</thead>
+							<tbody>
+							</tbody>
+						</table>
+					
+					
+				</div>
+			</div>
+			</div>
+			</div>
 	
 	<%} %>
 

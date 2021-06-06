@@ -48,9 +48,9 @@ $(document)
 					// !(sessionStorage.getItem("roleID") == 4))));
 
 					var filterId = sessionStorage.getItem("day") == "day" ? "1"
-							: 0;
+							: "-1";
 					sessionStorage.removeItem("day")
-
+					
 					$('#billingstatusTable1').hide();
 					table = $('#billingstatusTable')
 							.DataTable(
@@ -67,7 +67,6 @@ $(document)
 										"order" : [ 0, "desc" ],
 										"lengthMenu" : [ 5, 10, 25, 30, 50, 75 ],
 										"pageLength" : 5,
-										"scrollY" : 324,
 										"scrollX" : true,
 										"ajax" : {
 											"url" : "./billing/"
@@ -118,11 +117,7 @@ $(document)
 													"defaultContent" : ""
 												},
 												{
-													"data" : "emergencyCredit",
-													"defaultContent" : ""
-												},
-												{
-													"data" : "alarmCredit",
+													"data" : "transactedBy",
 													"defaultContent" : ""
 												},
 												{
@@ -130,56 +125,57 @@ $(document)
 													"defaultContent" : ""
 												},
 												{
-													"data" : "razorPayOrderID",
+													"data" : "paidDate",
 													"defaultContent" : ""
 												},
 												{
-													"data" : "razorPayPaymentID",
+													"data" : "billMonth",
 													"defaultContent" : ""
 												},
 												{
-													"data" : "razorPayRefundID",
+													"data" : "billYear",
 													"defaultContent" : ""
 												},
 												{
-													"data" : "RazorPayRefundStatus",
+													"data" : "logDate",
 													"defaultContent" : ""
 												},
 												{
-													"data" : "transactionDate",
-													"defaultContent" : ""
+													"mData" : "action",
+													"render" : function(data, type, row) {
+														
+														return "<a href=# id=CustomerMeters data-toggle=modal data-target=#myCustomerMeters onclick='getCustomerMeters(\""
+														+ row.customerBillingID
+														+ "\")'>"
+														+ "Multiple"
+														+ "</a>"
+														
+													}
+
 												},
 												{
-													"data" : "transactedByUserName",
-													"defaultContent" : ""
-												},
-												{
-													"data" : "transactedByRoleDescription",
-													"defaultContent" : ""
-												},
-												{
-													"data" : "Status",
+													"data" : "status",
 													"defaultContent" : ""
 												},
 												{
 													"mData" : "action",
 													"render" : function(data,
 															type, row) {
-														if (row.Status == "Failed") {
+														if (row.status == "Failed") {
 															return "<a onclick='getDeleteTransactionID("
-																	+ row.transactionID
+																	+ row.customerBillingID
 																	+ ")'>"
 																	+ "<i class='material-icons' style='color:#17e9e9;cursor:pointer'>delete</i>"
 																	+ "</a>";
 
-														} else if (row.Status == "Passed"
-																|| row.Status == "Pending") {
+														} else if (row.status == "Passed"
+																|| row.status == "Pending") {
 															return "<a onclick='getReceiptTransactionID("
-																	+ row.transactionID
+																	+ row.customerBillingID
 																	+ ")'>"
 																	+ "<i class='material-icons' style='color:#17e9e9;cursor:pointer'>receipt</i>"
 																	+ "</a>"
-														} else if (row.Status == "Pending...waiting for acknowledge") {
+														} else if (row.status == "Pending...waiting for acknowledge") {
 															return "---"
 														}
 
@@ -235,7 +231,7 @@ $(document)
 													orientation : 'landscape',
 													title : 'ReCharge Status',
 													pageSize : 'LEGAL'
-												},
+												}/*,
 												{
 
 													className : 'customButton',
@@ -249,7 +245,7 @@ $(document)
 																			"data-target" : "#filter"
 																		});
 													}
-												} ],
+												}*/ ],
 												 initComplete: function() {
 													   $('.buttons-excel').html('<i class="fa fa-file-excel-o" />')
 													   $('.buttons-pdf').html('<i class="fa fa-file-pdf-o" />')
@@ -264,7 +260,7 @@ $(document)
 						}else{
 						table.buttons($('a.customButton')).remove();
 					}}
-					$("div.headname").html('<h3>ReCharge Status</h3>');
+					$("div.headname").html('<h3>Billing Status</h3>');
 					// $("div.total").html('MUI ID: '+data.meterID+ ' Total
 					// Units: '+data.meterID);
 
@@ -562,3 +558,94 @@ $(document)
 						$("input:text").val("");
 					});
 				});
+
+
+
+
+
+function getCustomerMeters(customerBillingID){
+	var filterId = sessionStorage.getItem("day") == "day" ? "1"
+			: "-1";
+	$.getJSON("./billing/"+sessionStorage.getItem("roleID")+"/"+sessionStorage.getItem("ID")+"/"+filterId, function(data) {
+		console.log(data.data)
+		$.each(data.data, function(i, item) {
+			if (customerBillingID == item.customerBillingID) {
+				
+				$('#customerMeterTable')
+				.DataTable(
+						{
+							"dom" : "<'row'<'col-sm-4 headname'><'col-sm-2'><'col-sm-1'><'col-sm-2'f>>" +"<'row'<'col-sm-4'B><'col-sm-2'l><'col-sm-2'><'col-sm-2'><'col-sm-1 addevent'>>" + "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-6 text-black'i><'col-sm-6 text-black'p>>",
+									
+									"language": {
+									      "emptyTable": "No data available in table"
+									    },
+									 
+									 "responsive" : true,
+										"serverSide" : false,
+										"bDestroy" : true,
+										"bPaginate": true,
+										"pagging" : true,
+										"bProcessing" : true,
+										"ordering" : true,
+										"order" : [ 0, "desc" ],
+										"lengthMenu" : [ 5, 10, 25, 30, 50, 75 ],
+										"pageLength" : 5,
+										
+										"scrollX" : true,
+										"data":item.individualbills,
+						
+							"columns" : [
+									{
+										"data" : "miuID"
+										
+									},
+									 {
+											"data" : "meterType"
+									},
+									 {
+										"data" : "previousReading"
+									}
+									,
+									{
+										"data" : "presentReading"
+										
+									},
+									 {
+											"data" : "consumption"
+									},
+									 {
+										"data" : "tariff"
+									},
+									 {
+										"data" : "billAmount"
+								},
+								 {
+									"data" : "billingDate"
+								}
+									
+									
+									],
+										"columnDefs" : [/* {
+											orderable : false,
+											//targets: 5, visible: !(sessionStorage.getItem("roleID") == 4)
+											"className": "dt-center", "targets": "_all"
+										},
+										{
+											targets: 4, 
+											visible: !(sessionStorage.getItem("roleID") == 5)
+										}*/],
+
+							"buttons" : [
+									]
+						})  
+				
+				
+			} 
+			else {
+			}
+		});
+		$('#myCustomerMeters').modal('show');
+	});
+	
+	
+}
