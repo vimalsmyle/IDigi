@@ -185,7 +185,7 @@ public class ManagementSettingsDAO {
 			con = getConnection();
 			AlertResponseVO alertvo = null;
 			alert_settings_list = new LinkedList<AlertResponseVO>();
-			pstmt = con.prepareStatement("SELECT AlertID, NoAMRInterval, TimeOut, PerUnitValue, ReconnectionCharges, LateFee, DueDayCount, GST, ModifiedDate FROM alertsettings");
+			pstmt = con.prepareStatement("SELECT AlertID, NoAMRInterval, TimeOut, PerUnitValue, ReconnectionCharges, LateFee, DueDayCount, GST, VendorGSTNumber, CustomerGSTNumber ModifiedDate FROM alertsettings");
 			rs = pstmt.executeQuery();
 
 			while (rs.next()) {
@@ -197,6 +197,8 @@ public class ManagementSettingsDAO {
 				alertvo.setLateFee(rs.getInt("LateFee"));
 				alertvo.setDueDayCount(rs.getInt("DueDayCount"));
 				alertvo.setGST(rs.getInt("GST"));
+				alertvo.setVendorGSTNumber(rs.getString("VendorGSTNumber"));
+				alertvo.setCustomerGSTNumber(rs.getString("CustomerGSTNumber"));
 				alertvo.setRegisteredDate(ExtraMethodsDAO.datetimeformatter(rs.getString("ModifiedDate")));
 				alertvo.setAlertID(rs.getInt("AlertID"));
 				alert_settings_list.add(alertvo);
@@ -223,7 +225,7 @@ public class ManagementSettingsDAO {
 		try {
 			con = getConnection();
 
-			ps = con.prepareStatement("INSERT INTO alertsettings (NoAMRInterval, TimeOut, PerUnitValue, ReconnectionCharges, LateFee, DueDayCount, GST, RegisteredDate, ModifiedDate) VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), NOW())");
+			ps = con.prepareStatement("INSERT INTO alertsettings (NoAMRInterval, TimeOut, PerUnitValue, ReconnectionCharges, LateFee, DueDayCount, GST, VendorGSTNumber, CustomerGSTNumber, RegisteredDate, ModifiedDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())");
 			ps.setInt(1, alertvo.getNoAMRInterval());
 			ps.setInt(2, alertvo.getTimeOut());
 			ps.setFloat(3, alertvo.getPerUnitValue());
@@ -231,6 +233,8 @@ public class ManagementSettingsDAO {
 			ps.setInt(5, alertvo.getLateFee());
 			ps.setInt(6, alertvo.getDueDayCount());
 			ps.setInt(7, alertvo.getGST());
+			ps.setString(8, alertvo.getVendorGSTNumber());
+			ps.setString(9, alertvo.getCustomerGSTNumber());
 
 			if (ps.executeUpdate() > 0) {
 				responsevo.setResult("Success");
@@ -259,7 +263,7 @@ public class ManagementSettingsDAO {
 		try {
 			con = getConnection();
 
-			ps = con.prepareStatement("UPDATE alertsettings SET NoAMRInterval = ?, TimeOut = ?, PerUnitValue = ?, ReconnectionCharges = ?, LateFee = ?, DueDayCount = ?, GST = ?, ModifiedDate = NOW() WHERE AlertID = ?");
+			ps = con.prepareStatement("UPDATE alertsettings SET NoAMRInterval = ?, TimeOut = ?, PerUnitValue = ?, ReconnectionCharges = ?, LateFee = ?, DueDayCount = ?, GST = ?, VendorGSTNumber = ?, CustomerGSTNumber = ?, ModifiedDate = NOW() WHERE AlertID = ?");
 			ps.setInt(1, alertvo.getNoAMRInterval());
 			ps.setInt(2, alertvo.getTimeOut());
 			ps.setFloat(3, alertvo.getPerUnitValue());
@@ -267,7 +271,9 @@ public class ManagementSettingsDAO {
 			ps.setInt(5, alertvo.getLateFee());
 			ps.setInt(6, alertvo.getDueDayCount());
 			ps.setInt(7, alertvo.getGST());
-			ps.setInt(8, alertvo.getAlertID());
+			ps.setString(8, alertvo.getVendorGSTNumber());
+			ps.setString(9, alertvo.getCustomerGSTNumber());
+			ps.setInt(10, alertvo.getAlertID());
 
 			if (ps.executeUpdate() > 0) {
 				responsevo.setResult("Success");

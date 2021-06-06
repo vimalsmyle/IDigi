@@ -124,7 +124,7 @@ public class ReportsDAO {
 	/* User Consumption Reports */
 
 	public List<UserConsumptionReportsResponseVO> getuserconsumptionreportsdetails(
-			UserConsumptionRequestVO userconsumptionreportsrequestvo)
+			UserConsumptionRequestVO userconsumptionreportsrequestvo, String type)
 			throws SQLException {
 		// TODO Auto-generated method stub
 
@@ -139,33 +139,41 @@ public class ReportsDAO {
 			con = getConnection();
 			userconsumptionreportsresponselist = new ArrayList<UserConsumptionReportsResponseVO>();
 			
-			String query = "SELECT DISTINCT c.CommunityName, b.BlockName, cd.FirstName, cd.LastName, cd.HouseNumber, cd.CustomerUniqueID, bl.ReadingID, bl.EmergencyCredit, \r\n" + 
-					"bl.MIUID, bl.Reading, bl.Balance, bl.BatteryVoltage, bl.Tariff, bl.ValveStatus, bl.DoorOpenTamper, bl.MagneticTamper, bl.LowBattery, bl.LowBalance, bl.LogDate\r\n" + 
-					"FROM balancelog AS bl LEFT JOIN community AS c ON c.communityID = bl.CommunityID LEFT JOIN block AS b ON b.BlockID = bl.BlockID\r\n" + 
-					"LEFT JOIN customerdetails AS cd ON cd.CustomerUniqueID = bl.CustomerUniqueID WHERE bl.CustomerUniqueID = ? AND bl.LogDate BETWEEN ? AND ? ";
+			if(type.equalsIgnoreCase("Tabular")) {
+				
+				String query = "SELECT DISTINCT c.CommunityName, b.BlockName, cd.FirstName, cd.LastName, cd.HouseNumber, cd.CustomerUniqueID, bl.ReadingID, bl.EmergencyCredit, \r\n" + 
+						"bl.MIUID, bl.Reading, bl.Balance, bl.BatteryVoltage, bl.Tariff, bl.ValveStatus, bl.DoorOpenTamper, bl.MagneticTamper, bl.LowBattery, bl.LowBalance, bl.LogDate\r\n" + 
+						"FROM balancelog AS bl LEFT JOIN community AS c ON c.communityID = bl.CommunityID LEFT JOIN block AS b ON b.BlockID = bl.BlockID\r\n" + 
+						"LEFT JOIN customerdetails AS cd ON cd.CustomerUniqueID = bl.CustomerUniqueID WHERE bl.CustomerUniqueID = ? AND bl.LogDate BETWEEN ? AND ? ";
+				
+					pstmt = con.prepareStatement(query);
+					pstmt.setString(1, userconsumptionreportsrequestvo.getCustomerUniqueID());
+					pstmt.setString(2, userconsumptionreportsrequestvo.getFromDate()+ ":00.001");
+					pstmt.setString(3,userconsumptionreportsrequestvo.getToDate()+ ":59.999");
+
+					rs = pstmt.executeQuery();
+					while (rs.next()) {
+
+						userconsumptionreportsresponsevo = new UserConsumptionReportsResponseVO();
+						
+						userconsumptionreportsresponsevo.setCustomerUniqueID(rs.getString("CustomerUniqueID"));
+						userconsumptionreportsresponsevo.setMiuID(rs.getString("MIUID"));
+						userconsumptionreportsresponsevo.setReading(rs.getFloat("Reading"));
+						userconsumptionreportsresponsevo.setBalance(rs.getFloat("Balance"));
+						userconsumptionreportsresponsevo.setBattery(rs.getInt("BatteryVoltage"));
+						userconsumptionreportsresponsevo.setTariff(rs.getFloat("Tariff"));
+						userconsumptionreportsresponsevo.setEmergencyCredit(rs.getFloat("Emergencycredit"));
+						userconsumptionreportsresponsevo.setDateTime(ExtraMethodsDAO.datetimeformatter(rs.getString("LogDate")));
+						
+						userconsumptionreportsresponselist.add(userconsumptionreportsresponsevo);
+					}
+				
+			} else {
+				
+				
+				
+			}
 			
-				pstmt = con.prepareStatement(query);
-				pstmt.setString(1, userconsumptionreportsrequestvo.getCustomerUniqueID());
-				pstmt.setString(2, userconsumptionreportsrequestvo.getFromDate()+ ":00.001");
-				pstmt.setString(3,userconsumptionreportsrequestvo.getToDate()+ ":59.999");
-
-				rs = pstmt.executeQuery();
-				while (rs.next()) {
-
-					userconsumptionreportsresponsevo = new UserConsumptionReportsResponseVO();
-					
-					userconsumptionreportsresponsevo.setCustomerUniqueID(rs.getString("CustomerUniqueID"));
-					userconsumptionreportsresponsevo.setMiuID(rs.getString("MIUID"));
-					userconsumptionreportsresponsevo.setReading(rs.getFloat("Reading"));
-					userconsumptionreportsresponsevo.setBalance(rs.getFloat("Balance"));
-					userconsumptionreportsresponsevo.setBattery(rs.getInt("BatteryVoltage"));
-					userconsumptionreportsresponsevo.setTariff(rs.getFloat("Tariff"));
-					userconsumptionreportsresponsevo.setEmergencyCredit(rs.getFloat("Emergencycredit"));
-					userconsumptionreportsresponsevo.setDateTime(ExtraMethodsDAO.datetimeformatter(rs.getString("LogDate")));
-					
-					userconsumptionreportsresponselist.add(userconsumptionreportsresponsevo);
-				}
-
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		} finally {

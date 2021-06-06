@@ -286,7 +286,9 @@ public class AccountController {
 		ExtraMethodsDAO extramethods = new ExtraMethodsDAO();
 //		responsevo = accountdao.printbillreceipt(transactionID);
 //		responsevo.setMessage(extramethods.sendmail(mailrequestvo));
-		extramethods.individualbillgeneration();
+//		extramethods.individualbillgeneration();
+		
+		extramethods.billgeneration();
 
 		return responsevo;
 	}

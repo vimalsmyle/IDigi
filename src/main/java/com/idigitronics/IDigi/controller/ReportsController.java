@@ -50,13 +50,13 @@ public class ReportsController {
 	
 	/* User Consumption Reports */
 	
-	@RequestMapping(value = "/userconsumptionreports", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	@RequestMapping(value = "/userconsumptionreports/{type}", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	public @ResponseBody
-	UserConsumptionReportsResponseVO userconsumptionreports(@RequestBody UserConsumptionRequestVO userConsumptionRequestVO) throws SQLException {
+	UserConsumptionReportsResponseVO userconsumptionreports(@RequestBody UserConsumptionRequestVO userConsumptionRequestVO, @PathVariable("type") String type) throws SQLException {
 
 		UserConsumptionReportsResponseVO userConsumptionReportsResponseVO = new UserConsumptionReportsResponseVO();
 		
-		userConsumptionReportsResponseVO.setData(reportsdao.getuserconsumptionreportsdetails(userConsumptionRequestVO));
+		userConsumptionReportsResponseVO.setData(reportsdao.getuserconsumptionreportsdetails(userConsumptionRequestVO, type));
 		
 		return userConsumptionReportsResponseVO;
 	}

@@ -18,6 +18,8 @@ public class AlertRequestVO {
 	private int reconnectionCharges;
 	private int lateFee;
 	private int GST;
+	private String vendorGSTNumber;
+	private String customerGSTNumber;
 	private int dueDayCount;
 	
 	public int getAlertID() {
@@ -79,6 +81,18 @@ public class AlertRequestVO {
 	}
 	public void setDueDayCount(int dueDayCount) {
 		this.dueDayCount = dueDayCount;
+	}
+	public String getVendorGSTNumber() {
+		return vendorGSTNumber;
+	}
+	public void setVendorGSTNumber(String vendorGSTNumber) {
+		this.vendorGSTNumber = vendorGSTNumber;
+	}
+	public String getCustomerGSTNumber() {
+		return customerGSTNumber;
+	}
+	public void setCustomerGSTNumber(String customerGSTNumber) {
+		this.customerGSTNumber = customerGSTNumber;
 	}
 	
 }
