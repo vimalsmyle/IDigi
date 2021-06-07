@@ -148,8 +148,8 @@ public class ReportsDAO {
 				
 					pstmt = con.prepareStatement(query);
 					pstmt.setString(1, userconsumptionreportsrequestvo.getCustomerUniqueID());
-					pstmt.setString(2, userconsumptionreportsrequestvo.getFromDate()+ ":00.001");
-					pstmt.setString(3,userconsumptionreportsrequestvo.getToDate()+ ":59.999");
+					pstmt.setString(2, userconsumptionreportsrequestvo.getFromDate()+ " 00:00:01.001");
+					pstmt.setString(3,userconsumptionreportsrequestvo.getToDate()+ " 23:59:59.999");
 
 					rs = pstmt.executeQuery();
 					while (rs.next()) {
@@ -431,8 +431,8 @@ public class ReportsDAO {
 					"LEFT JOIN customerdetails AS cd ON cd.CustomerUniqueID = bl.CustomerUniqueID WHERE bl.CustomerUniqueID = ? AND bl.LogDate BETWEEN ? AND ? AND (bl.DoorOpenTamper = 1 OR bl.MagneticTamper = 1 OR bl.LowBattery = 1 OR bl.LowBalance = 1)";
 				pstmt = con.prepareStatement(query);
 				pstmt.setString(1, alarmRequestVO.getCustomerUniqueID());
-				pstmt.setString(2, alarmRequestVO.getFromDate() + ":00.001");
-				pstmt.setString(3,alarmRequestVO.getToDate()+ ":59.999");
+				pstmt.setString(2, alarmRequestVO.getFromDate() + " 00:00:01.001");
+				pstmt.setString(3,alarmRequestVO.getToDate()+ " 23:59:59.999");
 
 				rs = pstmt.executeQuery();
 			
