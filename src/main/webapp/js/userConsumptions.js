@@ -65,11 +65,7 @@ $(document)
 										
 										
 										var data1 = {}
-										/*data1["communityID"] = $(
-												"#selectcommunityName").val();
-										data1["blockID"] = $(
-												"#selectBlockBasedonCommunity")
-												.val();*/
+										
 										data1["CRNNumber"] = $(
 												"#selectHouseBasedonBlock")
 												.val();
@@ -84,7 +80,7 @@ $(document)
 												.ajax({
 													type : "POST",
 													contentType : "application/json",
-													url : "/PAYGTL_LORA_BLE/userconsumptionreports",
+													url : "./userconsumptionreports",
 													data : JSON
 															.stringify(data1),
 													dataType : "JSON",

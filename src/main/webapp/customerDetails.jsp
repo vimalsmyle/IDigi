@@ -270,7 +270,7 @@
 		src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/5.4.0/bootbox.min.js"></script>
 		
 		<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-		
+		<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 	<script>
 		$(document).ready(function() {
 			$('#customerTable').DataTable();
