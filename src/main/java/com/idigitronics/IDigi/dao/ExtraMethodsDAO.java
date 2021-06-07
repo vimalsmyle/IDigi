@@ -214,7 +214,7 @@ public class ExtraMethodsDAO {
 }
 	
 	
-	@Scheduled(cron="30 0 2 * * *") // scheduled for every month 2nd day at 00:30
+	@Scheduled(cron="30 6 2 * * *") // scheduled for every month 2nd day at 06:30
 	public void individualbillgeneration() throws SQLException {
 		
 		Connection con = null;
@@ -223,6 +223,7 @@ public class ExtraMethodsDAO {
 		PreparedStatement pstmt2 = null;
 		PreparedStatement pstmt3 = null;
 		ResultSet rs = null;
+		ResultSet check = null;
 		ResultSet rs1 = null;
 		ResultSet rs2 = null;
 		float consumption = 0;
@@ -231,7 +232,15 @@ public class ExtraMethodsDAO {
 		try {
 			
 			con = getConnection();
+			LocalDate currentdate = LocalDate.now();
 			
+			check = con.prepareStatement("SELECT * FROM billingdetails WHERE BillMonth = "+((currentdate.getMonthValue() - 1) == 0 ? 12 : (currentdate.getMonthValue() - 1)) +" AND BillYear = "+(currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear())).executeQuery();
+			
+			if(check.next()) {
+				logger.debug("Individual Bills already generated for current month" + LocalDateTime.now());
+				System.out.println("Individual Bills already generated for current month" + LocalDateTime.now());
+			} else {
+				
 			pstmt = con.prepareStatement("SELECT cd.CommunityID, cd.BlockID, cd.CustomerID, cd.CustomerUniqueID, cmd.CustomerMeterID, cmd.MIUID, cmd.MeterType, cmd.TariffID, t.Tariff FROM customerdetails AS cd LEFT JOIN customermeterdetails AS cmd ON cd.CustomerID = cmd.CustomerID LEFT JOIN tariff AS t ON t.TariffID = cmd.TariffID WHERE cmd.PayType = 'Postpaid'");
 			rs = pstmt.executeQuery();
 			while(rs.next()) {
@@ -248,8 +257,6 @@ public class ExtraMethodsDAO {
 					rs2 = pstmt2.executeQuery();
 					
 					if(rs2.next()) {
-						
-						LocalDate currentdate = LocalDate.now();
 						
 						consumption = rs1.getFloat("Reading") - rs2.getFloat("Reading");
 						billAmount = (consumption * rs.getFloat("Tariff"));
@@ -282,7 +289,6 @@ public class ExtraMethodsDAO {
 						rs2 = pstmt2.executeQuery();
 						
 						if(rs2.next()) {
-							LocalDate currentdate = LocalDate.now();
 							
 							consumption = rs1.getFloat("Reading") - rs2.getFloat("Reading");
 							billAmount = (consumption * rs.getFloat("Tariff"));
@@ -312,10 +318,10 @@ public class ExtraMethodsDAO {
 					}
 				}
 				
-			}
+				}
 			
-			billgeneration();
-			
+					billgeneration();
+			}	
 		} catch (Exception e) {
 			e.printStackTrace();
 			
@@ -336,6 +342,7 @@ public class ExtraMethodsDAO {
 		PreparedStatement pstmt2 = null;
 		ResultSet rs = null;
 		ResultSet rs1 = null;
+		ResultSet check = null;
 		SMSRequestVO smsRequestVO = null;
 		MailRequestVO mailRequestVO = null;
 		List<IndividualBillingResponseVO> individualBillsList = null;
@@ -345,10 +352,18 @@ public class ExtraMethodsDAO {
 			
 			con = getConnection();
 			LocalDate currentdate = LocalDate.now();
+			
+			check = con.prepareStatement("SELECT * FROM customerbillingdetails WHERE BillMonth = "+((currentdate.getMonthValue() - 1) == 0 ? 12 : (currentdate.getMonthValue() - 1)) +" AND BillYear = "+(currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear())).executeQuery();
+			
+			if(check.next()) {
+				logger.debug("Bills already generated for current month" + LocalDateTime.now());
+				System.out.println("Bills already generated for current month" + LocalDateTime.now());
+			} else {
+				
 			String billMonthYear = ((currentdate.getMonthValue() == 1) ? "December" : (currentdate.getMonthValue() == 2) ? "January" : (currentdate.getMonthValue() == 3) ? "February" : (currentdate.getMonthValue() == 4) ? "March" : (currentdate.getMonthValue() == 5) ? "April" : (currentdate.getMonthValue() == 6) ? "May" : (currentdate.getMonthValue() == 7) ? "June" : (currentdate.getMonthValue() == 8) ? "July" : (currentdate.getMonthValue() == 9) ? "August" : (currentdate.getMonthValue() == 10) ? "September" : (currentdate.getMonthValue() == 11) ? "October" : (currentdate.getMonthValue() == 12) ? "November" :"" ) + "-" + ((currentdate.getMonthValue() - 1 == 0) ? currentdate.getYear() - 1 : currentdate.getYear());
 			String drivename = "D:/Bills/" + (currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear()+"/"+(currentdate.getMonthValue() - 1));
 			individualBillsList = new LinkedList<IndividualBillingResponseVO>();
-			pstmt = con.prepareStatement("SELECT * FROM customerdetails JOIN alertsettings WHERE CustomerID IN (SELECT DISTINCT CustomerID FROM customermeterdetails WHERE PayType= 'Postpaid')");
+			pstmt = con.prepareStatement("SELECT cd.CommunityID, c.CommunityName, cd.BlockID, b.BlockName, cd.CustomerID, cd.CustomerUniqueID, cd.HouseNumber, cd.FirstName, cd.LastName, cd.Email, cd.MobileNumber, al.GST, al.LateFee, al.DueDayCount, al.VendorGSTNumber, al.CustomerGSTNumber FROM customerdetails AS cd LEFT JOIN community AS c ON c.CommunityID = cd.CommunityID LEFT JOIN block AS b ON cd.BlockID = b.BlockID JOIN alertsettings AS al WHERE cd.CustomerID IN (SELECT DISTINCT CustomerID FROM customermeterdetails WHERE PayType= 'Postpaid')");
 			rs = pstmt.executeQuery();
 			while(rs.next()) {
 				logger.debug("in billgeneration" + LocalDateTime.now());
@@ -356,6 +371,7 @@ public class ExtraMethodsDAO {
 				float totalamount = 0;
 				float totalConsumption = 0;
 				float previousDues = 0;
+				long invoiceNumber = 0;
 				smsRequestVO = new SMSRequestVO();
 				mailRequestVO = new MailRequestVO();
 				
@@ -402,7 +418,7 @@ public class ExtraMethodsDAO {
 				pstmt2.setInt(10, currentdate.getMonthValue() - 1);
 				pstmt2.setInt(11, currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear());
 				
-				if(pstmt2.executeUpdate() > 0) {
+//				if(pstmt2.executeUpdate() > 0) {
 					
 					File directory = new File(drivename);
 					if (!directory.exists()) {
@@ -449,29 +465,21 @@ public class ExtraMethodsDAO {
 
 					document.add(headTable);
 
-					float[] headerWidths = { 200F, 180F, 170F };
+					float[] headerWidths = { 180F, 200F, 210F };
 
 					Table table1 = new Table(headerWidths);
 
 					Cell table1cell1 = new Cell();
-					table1cell1.add("Customer Name: " +rs.getString("FirstName") + " " + rs.getString("LastName"));
+					table1cell1.add("Name: " +rs.getString("FirstName") + " " + rs.getString("LastName"));
 					table1cell1.setTextAlignment(TextAlignment.LEFT);
 
 					Cell table1cell2 = new Cell();
-					table1cell2.add("CAN Number: " + rs.getString("CustomerUniqueID"));
-					table1cell2.setTextAlignment(TextAlignment.CENTER);
-					
-					long invoiceNumber = 0;
-					PreparedStatement ps = con.prepareStatement("SELECT MAX(CustomerBillingID) AS InvoiceNumber FROM customerbillingdetails");
-					ResultSet rs2 = ps.executeQuery();
-					
-					if(rs2.next()) {
-						invoiceNumber = rs2.getInt("InvoiceNumber");
-					}
+					table1cell2.add("CAN: " + rs.getString("CustomerUniqueID"));
+					table1cell2.setTextAlignment(TextAlignment.LEFT);
 					
 					Cell table1cell3 = new Cell();
-					table1cell3.add("Invoice No. : " + invoiceNumber);
-					table1cell3.setTextAlignment(TextAlignment.RIGHT);
+					table1cell3.add("Address: " + rs.getString("HouseNumber")+", " + rs.getString("BlockName") + ", " + rs.getString("CommunityName"));
+					table1cell3.setTextAlignment(TextAlignment.LEFT);
 
 					table1.addCell(table1cell1.setBorder(Border.NO_BORDER));
 					table1.addCell(table1cell2.setBorder(Border.NO_BORDER));
@@ -484,15 +492,38 @@ public class ExtraMethodsDAO {
 					
 					Cell table1cell5 = new Cell();
 					table1cell5.add("Bill Month-Year: " + billMonthYear);
-					table1cell5.setTextAlignment(TextAlignment.CENTER);
+					table1cell5.setTextAlignment(TextAlignment.LEFT);
 					
 					Cell table1cell6 = new Cell();
 					table1cell6.add("Due Date: " + ExtraMethodsDAO.dateformatter(currentdate.plusDays(rs.getInt("DueDayCount")).toString()));
-					table1cell6.setTextAlignment(TextAlignment.RIGHT);
+					table1cell6.setTextAlignment(TextAlignment.LEFT);
 					
 					table1.addCell(table1cell4.setBorder(Border.NO_BORDER));
 					table1.addCell(table1cell5.setBorder(Border.NO_BORDER));
 					table1.addCell(table1cell6.setBorder(Border.NO_BORDER));
+					
+					PreparedStatement ps = con.prepareStatement("SELECT MAX(CustomerBillingID) AS InvoiceNumber FROM customerbillingdetails");
+					ResultSet rs2 = ps.executeQuery();
+					
+					if(rs2.next()) {
+						invoiceNumber = rs2.getLong("InvoiceNumber");
+					}
+					
+					Cell table1cell7 = new Cell();
+					table1cell7.add("Invoice No. : " + rs.getString("CommunityName")+"/"+invoiceNumber);
+					table1cell7.setTextAlignment(TextAlignment.LEFT);
+					
+					Cell table1cell8 = new Cell();
+					table1cell8.add("Vendor GSTN: " + rs.getString("VendorGSTNumber"));
+					table1cell8.setTextAlignment(TextAlignment.LEFT);
+					
+					Cell table1cell9 = new Cell();
+					table1cell9.add("Customer GSTN: " + rs.getString("CustomerGSTNumber"));
+					table1cell9.setTextAlignment(TextAlignment.LEFT);
+					
+					table1.addCell(table1cell7.setBorder(Border.NO_BORDER));
+					table1.addCell(table1cell8.setBorder(Border.NO_BORDER));
+					table1.addCell(table1cell9.setBorder(Border.NO_BORDER));
 
 					document.add(table1.setHorizontalAlignment(HorizontalAlignment.CENTER));
 					document.add(newLine);
@@ -590,7 +621,7 @@ public class ExtraMethodsDAO {
 					totalAmount.setTextAlignment(TextAlignment.CENTER);
 					
 					Cell CGSTCell = new Cell();
-					CGSTCell.add("CGST : ");
+					CGSTCell.add("CGST ("+rs.getFloat("GST")+ " %) : ");
 					CGSTCell.setTextAlignment(TextAlignment.RIGHT);
 
 					Cell CGSTAmount = new Cell();
@@ -598,7 +629,7 @@ public class ExtraMethodsDAO {
 					CGSTAmount.setTextAlignment(TextAlignment.CENTER);
 
 					Cell SGSTCell = new Cell();
-					SGSTCell.add("SGST : ");
+					SGSTCell.add("SGST ("+rs.getFloat("GST")+ " %) : ");
 					SGSTCell.setTextAlignment(TextAlignment.RIGHT);
 					
 					Cell SGSTAmount = new Cell();
@@ -671,9 +702,9 @@ public class ExtraMethodsDAO {
 					document.add(copyRight.setHorizontalAlignment(HorizontalAlignment.CENTER).setFont(font));
 					document.close();
 					
-				}
+//				}
 				
-				String message = "Dear "+ rs.getString("FirstName") + " " + rs.getString("LastName") + ", \n \n Your Bill of Amount" + (totalamount + tax + previousDues) + "/- for the consumption in the month of " + billMonthYear +" has been generated. Kindly pay the bill before " + currentdate.plusDays(rs.getInt("DueDayCount")).toString() + " to avoid late fee charges. Thank You";
+				String message = "Dear "+ rs.getString("FirstName") + " " + rs.getString("LastName") + ", \n \n Your Bill of Amount" + (totalamount + tax + previousDues) + "/- for the consumption of " + billMonthYear +" has been generated. Kindly pay the bill before " + currentdate.plusDays(rs.getInt("DueDayCount")).toString() + " to avoid late fee charges. Thank You";
 				smsRequestVO.setMessage(message);
 				smsRequestVO.setToMobileNumber(rs.getString("MobileNumber"));
 				
@@ -687,14 +718,14 @@ public class ExtraMethodsDAO {
 				sendmail(mailRequestVO);
 			}
 			
-			
+			}
 			
 		} catch (Exception e) {
 			e.printStackTrace();
 			
 		} finally {
-			pstmt.close();
-			rs.close();
+//			pstmt.close();
+			check.close();
 			con.close();
 		}
 		

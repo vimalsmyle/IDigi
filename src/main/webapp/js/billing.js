@@ -117,6 +117,19 @@ $(document)
 													"defaultContent" : ""
 												},
 												{
+													"mData" : "action",
+													"render" : function(data, type, row) {
+														
+														return "<a href=# id=CustomerMeters data-toggle=modal data-target=#myCustomerMeters onclick='getCustomerMeters(\""
+														+ row.customerBillingID
+														+ "\")'>"
+														+ "Multiple"
+														+ "</a>"
+														
+													}
+
+												},
+												{
 													"data" : "transactedBy",
 													"defaultContent" : ""
 												},
@@ -139,19 +152,6 @@ $(document)
 												{
 													"data" : "logDate",
 													"defaultContent" : ""
-												},
-												{
-													"mData" : "action",
-													"render" : function(data, type, row) {
-														
-														return "<a href=# id=CustomerMeters data-toggle=modal data-target=#myCustomerMeters onclick='getCustomerMeters(\""
-														+ row.customerBillingID
-														+ "\")'>"
-														+ "Multiple"
-														+ "</a>"
-														
-													}
-
 												},
 												{
 													"data" : "status",

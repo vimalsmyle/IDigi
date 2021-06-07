@@ -45,7 +45,7 @@
 				  <div class="row custom-scrollbar-css">
 						<div class="col-md-12">
             <div class="page-header">
-                <h3>Gas</h3>
+                <!-- <h3>Gas</h3> -->
             </div>
 			<div class="row">
 				<div class="col-xl-3 col-md-6 mb-4 d-flex">
@@ -55,7 +55,7 @@
 					<a href="userReport.jsp"><div class="card-body p-3 ">
 							<div class="row m-0">
 								<div class="text-xs font-weight-bold text-uppercase  justify-content-start col p-0">
-                                    User Management Report
+                                    User Consumption Report
 								</div>
 								<div class="justify-content-end f-30 d-flex"><i class="fa fa-dashboard"></i></div>
 							</div>
@@ -69,7 +69,7 @@
 						<a href="#"><div class="card-body p-3">
 						<div class="row m-0">
 								<div class="text-xs font-weight-bold text-uppercase  justify-content-start col p-0">
-                                   reChrage Summary
+                                   TopUp Summary
 								</div>
 								<div class="justify-content-end f-30 d-flex"><i class="fa fa-dashboard"></i></div>
 							</div>
@@ -82,7 +82,7 @@
 						<a href="#"><div class="card-body p-3">
 						<div class="row m-0">
 								<div class="text-xs font-weight-bold text-uppercase  justify-content-start col p-0">
-                                   reChrage Summary reChrage Summary
+                                   Bill Payment Summary
 								</div>
 								<div class="justify-content-end f-30 d-flex"><i class="fa fa-dashboard"></i></div>
 							</div>
@@ -95,7 +95,7 @@
 						<a href="#"><div class="card-body p-3">
 						<div class="row m-0">
 								<div class="text-xs font-weight-bold text-uppercase  justify-content-start col p-0">
-                                   reChrage Summary
+                                   Financial Reports
 								</div>
 								<div class="justify-content-end f-30 d-flex"><i class="fa fa-dashboard"></i></div>
 							</div>
@@ -103,7 +103,19 @@
 						</div></a>
 					</div>
 				</div>
-				
+				<div class="col-xl-3 col-md-6 mb-4 d-flex">
+					<div class="card border-left-warning shadow sidingBlock">
+						<a href="#"><div class="card-body p-3">
+						<div class="row m-0">
+								<div class="text-xs font-weight-bold text-uppercase  justify-content-start col p-0">
+                                   Alarm Reports
+								</div>
+								<div class="justify-content-end f-30 d-flex"><i class="fa fa-dashboard"></i></div>
+							</div>
+							
+						</div></a>
+					</div>
+				</div>
 			
 			</div>
 			</div>

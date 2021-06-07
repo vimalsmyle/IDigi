@@ -68,10 +68,10 @@ public class LoginDAO {
 
 						if (loginvo.getSource().equalsIgnoreCase("web")) {
 							
-							if(resultSet.getInt("RoleID") == 6) {
+							/*if(resultSet.getInt("RoleID") == 6) {
 								
 								throw new BusinessException("USER NOT AUTHORIZED TO LOGIN");
-							}
+							}*/
 
 							userDetails.setRoleID(resultSet.getInt("RoleID"));
 							userDetails.setBlockID(resultSet.getInt("BlockID"));
