@@ -27,10 +27,16 @@ $(document)
 
 										//alert($("#selectBlockBasedonCommunity").val());
 										
+										if($("#reportType").val() == "-1"){
+											bootbox
+											.alert("Please select type");
+											return false;
+										}
+										
 										if ($("#selectcommunityName").val() == "-1") {
 											
 											bootbox
-											.alert("Select Community Id");
+											.alert("Select community name");
 											return false;
 										}
 
@@ -69,28 +75,38 @@ $(document)
 										data1["CRNNumber"] = $(
 												"#selectHouseBasedonBlock")
 												.val();
-										data1["meterID"] = $("#AMR_topup")
-												.val();
-										data1["fromDate"] = $("#start_date")
-												.val();
-										data1["toDate"] = $("#end_date").val();
-
+										if($("#reportType").val()=="Graph"){
+											data1["fromMonth"] = $("#start_date")
+											.val();
+											data1["toMonth"] = $("#end_date").val();
+											data1["year"] = $("#end_date").val();
+										}else if($("#reportType").val()=="Tabular"){
+											data1["fromDate"] = $("#start_date")
+											.val()+" 00:00";
+											data1["toDate"] = $("#end_date").val()+" 23:59";
+										}
 										
 										$
 												.ajax({
 													type : "POST",
 													contentType : "application/json",
-													url : "./userconsumptionreports",
+													url : "./userconsumptionreports/"+$("#reportType").val(),
 													data : JSON
 															.stringify(data1),
 													dataType : "JSON",
 
 													success : function(d) {
+														if($.fn.DataTable.isDataTable("#userConsumptionsTable_wrapper")){
+															$('#userConsumptionsTable_wrapper').DataTable().clear();
+															$('#userConsumptionsTable').DataTable().destroy();
+														}
+														// $('#userConsumptionsTable').DataTable().clear();
+														// $('#userConsumptionsTable').DataTable().destroy();
 														
-														//if (data.result == "Success") {
-														
-														$("#form").hide();
-														$("#tablereport").show();
+														$('#userConsumptionsTable_wrapper thead').empty();
+														$('#userConsumptionsTable_wrapper tbody').remove();
+														$("#theadBody").append("<tr><th>customerUniqueID</th><th>miuID</th><th>reading</th><th>balance</th><th>battery</th><th>tariff</th>" +
+																"<th>alarmCredit</th><th>emergencyCredit</th><th>dateTime</th></tr>")
 
 														 table = $('#userConsumptionsTable').DataTable(
 																	{
@@ -109,9 +125,9 @@ $(document)
 																		"scrollX" : false,
 																		"data" : d.data,
 																		"columns" : [ {
-																			"data" : "CRNNumber"
+																			"data" : "customerUniqueID"
 																		}, {
-																			"data" : "meterID"
+																			"data" : "miuID"
 																		}, {
 																			"data" : "reading"
 																		}, {
@@ -168,11 +184,11 @@ $(document)
 													//	 if(){}
 														 
 														 $("div.totalCount").html('<b>MIU:</b> ' + d.data[0].meterID+ ' <b>CRN Number:</b> '+ d.data[0].CRNNumber);
-														 $("div.addevent").html('<button id="back" onClick="returnBack()"'
+														 /*$("div.addevent").html('<button id="back" onClick="returnBack()"'
 																 +'class="btn btn-raised btn-primary float-right"'
 																	+'>'
 																+'	<span>Back</span>'
-															+'</button>');
+															+'</button>');*/
 													//	}
 													}
 												});
@@ -191,3 +207,23 @@ $(document).ready(
 						
 					});
 		});
+
+
+function showReportType(id){
+	if(id=="Graph"){
+		$("#divEndDate").hide();
+		$("#divStartDate").hide();
+		$("#fromMonth").show();
+		$("#toYear_topup").show();
+		$("#toMonth_topup").show();
+		
+	}else if(id=="Tabular"){
+		$("#divEndDate").show();
+		$("#divStartDate").show();
+		$("#fromMonth").hide();
+		$("#toYear_topup").hide();
+		$("#toMonth_topup").hide();
+	}
+	
+	
+}

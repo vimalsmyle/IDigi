@@ -32,7 +32,7 @@
 				<span class="main-img-user" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 					<i class="fa fa-user-circle-o" aria-hidden="true"></i>
 				 </span>
-				  <div class="dropdown-menu main-profile-menu">
+				  <div class="dropdown-menu main-profile-menu  dropdown-menu-right">
 				    <div class="header-navheading"> 
 						<h6 class="main-notification-title" id="navbardrop"></h6> 
 						<p class="main-notification-text">idigitronics</p>

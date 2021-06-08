@@ -18,12 +18,6 @@ $(document).ready(function () {
 			
 		}
       });*/
-    	$('.arrowreport').click(function () {
-    		console.log("@@@");
-    	});
-    	
-      
-      
       var pageURL = $(location). attr("href");
 		//alert(pageURL.split('LORA_BLE/')[1]);
 		let  url = pageURL.split('IDigi/')[1].split("?")[0] =="LoginAction.jsp"?"home.jsp":pageURL.split('LORA_BLE/')[1];

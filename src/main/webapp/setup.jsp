@@ -45,7 +45,7 @@
 				  <div class="row custom-scrollbar-css">
 						<div class="col-md-12">
 			<div class="row">
-				<div class="col-xl-3 col-md-6 mb-4 d-flex">
+				<div class="col-xl-3 col-md-6 mb-4">
 				
 				
 					<div class="card border-left-warning shadow sidingBlock">
@@ -61,7 +61,7 @@
 					</div>
 					
 				</div>
-				<div class="col-xl-3 col-md-6 mb-4 d-flex">
+				<div class="col-xl-3 col-md-6 mb-4">
 					<div class="card border-left-warning shadow sidingBlock">
 						<a href="blockDetails.jsp"><div class="card-body p-3">
 						<div class="row m-0">
@@ -74,7 +74,7 @@
 						</div></a>
 					</div>
 				</div>
-				<div class="col-xl-3 col-md-6 mb-4 d-flex">
+				<div class="col-xl-3 col-md-6 mb-4">
 					<div class="card border-left-warning shadow sidingBlock">
 						<a href="customerDetails.jsp"><div class="card-body p-3">
 						<div class="row m-0">
@@ -87,7 +87,7 @@
 						</div></a>
 					</div>
 				</div>
-				<div class="col-xl-3 col-md-6 mb-4 d-flex">
+				<div class="col-xl-3 col-md-6 mb-4">
 					<div class="card border-left-warning shadow sidingBlock">
 						<a href="gateway.jsp"><div class="card-body p-3">
 						<div class="row m-0">
