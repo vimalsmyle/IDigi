@@ -47,7 +47,7 @@ public class DashboardDAO {
 		return connection;
 	}
 
-	public List<DashboardResponseVO> getDashboarddetails(int type, int communityID, int blockID, String customerUniqueID, int filter)
+	public List<DashboardResponseVO> getDashboarddetails(String type, String communityName, String blockName, String customerUniqueID, int filter)
 			throws SQLException {
 		Connection con = null;
 		PreparedStatement pstmt = null;
@@ -61,10 +61,9 @@ public class DashboardDAO {
 		int noAMRInterval = 0;
 		int lowBatteryVoltage = 0;
 		float perUnitValue = 0.0f;
+		int communityID = 0;
+		int blockID = 0;
 		
-		// write accordingly based on meter type and customer meter types
-		
-//		type path parameter: 1 = gas, 2= water, 3=energy 
 		try {
 			con = getConnection();
 			dashboard_list = new LinkedList<DashboardResponseVO>();
@@ -79,9 +78,17 @@ public class DashboardDAO {
 				perUnitValue = rs1.getFloat("PerUnitValue");
 			}
 			
+			String IDquery = "SELECT * FROM <tablename>";
+			PreparedStatement pstmt4 = con.prepareStatement(IDquery.replaceAll("<tablename>", (!blockName.equalsIgnoreCase("0") ? "block WHERE BlockName = '"+blockName+"' AND CommunityID = (SELECT CommunityID FROM community WHERE CommunityName = '"+communityName+"')" : "community WHERE CommunityName = '"+communityName+"'")));
+			ResultSet rs4 = pstmt4.executeQuery();
+			if(rs4.next()) {
+				blockID = (!blockName.equalsIgnoreCase("0") ? rs4.getInt("BlockID") : 0);
+				communityID = rs4.getInt("CommunityID");
+			}
+			
 			String mainquery = "SELECT c.CommunityName, b.BlockName, cd.HouseNumber, cd.FirstName, cd.LastName, cd.CustomerUniqueID, cd.CustomerID FROM customerdetails AS cd LEFT JOIN community AS c ON cd.CommunityID = c.CommunityID LEFT JOIN block AS b ON b.BlockID = cd.BlockID <main>";
 			
-			mainquery = mainquery.replaceAll("<main>", (blockID ==0 && customerUniqueID.equalsIgnoreCase("0")) ?"WHERE cd.CommunityID = "+communityID : (blockID !=0 && customerUniqueID.equalsIgnoreCase("0")) ? "WHERE cd.CommunityID = "+communityID +" AND cd.BlockID = "+blockID : (blockID !=0 && !customerUniqueID.equalsIgnoreCase("0")) ? "WHERE cd.CommunityID = "+communityID +" AND cd.BlockID = "+blockID + " AND cd.CustomerUniqueID = '" + customerUniqueID +"'" : "");
+			mainquery = mainquery.replaceAll("<main>", (blockID == 0 && customerUniqueID.equalsIgnoreCase("0")) ?"WHERE cd.CommunityID = "+communityID : (blockID !=0 && customerUniqueID.equalsIgnoreCase("0")) ? "WHERE cd.CommunityID = "+communityID +" AND cd.BlockID = "+blockID : (blockID !=0 && !customerUniqueID.equalsIgnoreCase("0")) ? "WHERE cd.CommunityID = "+communityID +" AND cd.BlockID = "+blockID + " AND cd.CustomerUniqueID = '" + customerUniqueID +"'" : "");
 			
 			pstmt = con.prepareStatement(mainquery);
 			rs = pstmt.executeQuery();
@@ -98,7 +105,7 @@ public class DashboardDAO {
 				dashboardvo.setCustomerUniqueID(rs.getString("CustomerUniqueID"));
 				
 				String query = "SELECT dbl.ReadingID, dbl.MainBalanceLogID, dbl.CustomerMeterID, dbl.MIUID, cmd.MeterSerialNumber, dbl.Tariff, dbl.Reading, dbl.Balance, dbl.EmergencyCredit, dbl.ValveStatus, dbl.BatteryVoltage, "
-						+ "dbl.LowBattery, dbl.DoorOpenTamper, dbl.MagneticTamper, dbl.RTCFault, dbl.Vacation, dbl.LowBalance, dbl.LogDate FROM displaybalancelog AS dbl LEFT JOIN customermeterdetails AS cmd ON cmd.CustomerMeterID = dbl.CustomerMeterID WHERE cmd.CustomerID = ? AND cmd.MeterType = " + (type == 1 ? "'Gas'" : type == 2 ? "'Water'" :"'Energy'");
+						+ "dbl.LowBattery, dbl.DoorOpenTamper, dbl.MagneticTamper, dbl.RTCFault, dbl.Vacation, dbl.LowBalance, dbl.LogDate FROM displaybalancelog AS dbl LEFT JOIN customermeterdetails AS cmd ON cmd.CustomerMeterID = dbl.CustomerMeterID WHERE cmd.CustomerID = ? AND cmd.MeterType = '" + type +"'";
 				
 				StringBuilder stringBuilder = new StringBuilder(query);
 				if(filter != 0) {
@@ -312,7 +319,7 @@ public class DashboardDAO {
 		return dashboard_list;
 	}
 	
-	public GraphResponseVO getGraphDashboardDetails(String type, int year, int month, int id) {
+	public GraphResponseVO getGraphDashboardDetails(String type, int year, int month, String communityName) {
 		// TODO Auto-generated method stub
 		
 		PreparedStatement pstmt = null;
@@ -322,11 +329,17 @@ public class DashboardDAO {
 		GraphResponseVO graphResponseVO = new GraphResponseVO();
 		List<String> xAxis;
 		List<Integer> yAxis;
+		int id = 0;
 		
 		try {
 			con = getConnection();
 			xAxis = new LinkedList<String>();
 			yAxis = new LinkedList<Integer>();
+			
+			if(!communityName.equalsIgnoreCase("0")) {
+				ResultSet rs1 = con.prepareStatement("SELECT * FROM block WHERE CommunityID = (SELECT CommunityID FROM community WHERE CommunityName = '"+communityName+"')").executeQuery();
+				if(rs1.next()) { id = rs1.getInt("BlockID"); }				
+				}
 			
 					if(year == 0 && month == 0) {
 						
