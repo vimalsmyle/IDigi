@@ -9,15 +9,15 @@ package com.idigitronics.IDigi.request.vo;
  */
 public class FeedbackRequestVO {
 
-	private String CRNNumber;
+	private String customerUniqueID;
 	private String feedback;
 	private String description;
 	
-	public String getCRNNumber() {
-		return CRNNumber;
+	public String getCustomerUniqueID() {
+		return customerUniqueID;
 	}
-	public void setCRNNumber(String cRNNumber) {
-		CRNNumber = cRNNumber;
+	public void setCustomerUniqueID(String customerUniqueID) {
+		this.customerUniqueID = customerUniqueID;
 	}
 	public String getFeedback() {
 		return feedback;

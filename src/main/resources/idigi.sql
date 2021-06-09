@@ -30,6 +30,8 @@ CREATE TABLE `alertsettings` (
   `LateFee` int(10) NOT NULL,
   `DueDayCount` int(10) NOT NULL,
   `GST` int(10) NOT NULL,
+  `VendorGSTNumber` varchar(100) DEFAULT NULL,
+  `CustomerGSTNumber` varchar(100) DEFAULT NULL,
   `RegisteredDate` datetime NOT NULL,
   `ModifiedDate` datetime NOT NULL,
   PRIMARY KEY (`AlertID`),
@@ -38,8 +40,8 @@ CREATE TABLE `alertsettings` (
 
 /*Data for the table `alertsettings` */
 
-insert  into `alertsettings`(`AlertID`,`NoAMRInterval`,`LowBatteryVoltage`,`TimeOut`,`PerUnitValue`,`ReconnectionCharges`,`LateFee`,`DueDayCount`,`GST`,`RegisteredDate`,`ModifiedDate`) values 
-(1,2880,3.00,330,2.4,50,50,10,9,'2021-05-18 18:52:34','2021-05-18 18:52:37');
+insert  into `alertsettings`(`AlertID`,`NoAMRInterval`,`LowBatteryVoltage`,`TimeOut`,`PerUnitValue`,`ReconnectionCharges`,`LateFee`,`DueDayCount`,`GST`,`VendorGSTNumber`,`CustomerGSTNumber`,`RegisteredDate`,`ModifiedDate`) values 
+(1,2880,3.00,330,2.4,50,50,10,9,'GST1234567890','GST0987654321','2021-05-18 18:52:34','2021-05-18 18:52:37');
 
 /*Table structure for table `balancelog` */
 
@@ -210,7 +212,7 @@ CREATE TABLE `block` (
 /*Data for the table `block` */
 
 insert  into `block`(`BlockID`,`BlockName`,`Location`,`MobileNumber`,`Email`,`CommunityID`,`CreatedByID`,`CreatedByRoleID`,`CreatedDate`,`ModifiedDate`) values 
-(1,'idigiblock','secunderabad','8498890001','vimal_smyle2006@yahoo.com',1,1,1,'2021-05-15 23:23:08','2021-05-15 23:24:59');
+(1,'idigiblock','secunderabad','8498890000','vimal_smyle2006@yahoo.com',1,1,1,'2021-05-15 23:23:08','2021-06-06 11:50:56');
 
 /*Table structure for table `command` */
 
@@ -378,7 +380,7 @@ CREATE TABLE `customerdetails` (
 insert  into `customerdetails`(`CustomerID`,`CommunityID`,`BlockID`,`HouseNumber`,`FirstName`,`LastName`,`Email`,`MobileNumber`,`ActiveStatus`,`CustomerUniqueID`,`CreatedByID`,`CreatedByRoleID`,`RegistrationDate`,`ModifiedDate`) values 
 (1,1,1,'101','Vimal','Kumar','kvk9889@gmail.com','8498890000',1,'IDIGI1',2,2,'2021-05-17 23:20:44','2021-05-18 14:26:45'),
 (2,1,1,'102','vml','kvk','vimal_smyle2006@yahoo.com','8498890000',1,'IDIGI2',1,1,'2021-05-23 16:30:27','2021-05-23 16:30:30'),
-(4,1,1,'1003','bharat','sriram','bhrtsriram@gmail.com','9000941911',1,'IDIGI3',1,1,'2021-05-26 15:49:40','2021-05-26 15:49:40');
+(4,1,1,'1003','bharat','sriram','bhrtsriram@gmail.com','9000941911',1,'IDIGI3',1,1,'2021-05-26 15:49:40','2021-06-06 08:12:54');
 
 /*Table structure for table `customermeterdetails` */
 
@@ -409,7 +411,7 @@ insert  into `customermeterdetails`(`CustomerMeterID`,`CustomerID`,`CustomerUniq
 (3,1,'IDIGI1','3344','33445566','Water',NULL,'Postpaid',3,1,'Bedroom','2021-05-17 23:25:15','2021-05-17 23:25:13'),
 (4,1,'IDIGI1','4455','44556677','Water',NULL,'Postpaid',2,1,'Washarea','2021-05-17 23:26:11','2021-05-17 23:26:10'),
 (5,2,'IDIGI2','5566','55667788','Gas',NULL,'Prepaid',1,1,'Kitchen','2021-05-23 16:31:15','2021-05-23 16:31:18'),
-(6,4,'IDIGI3','B6677','B66778899','Gas',1000,'Prepaid',1,1,'Kitchen','2021-05-26 15:50:17','2021-05-26 15:50:17');
+(6,4,'IDIGI3','B66777','B66778899','Gas',1000,'Prepaid',1,1,'Kitchen','2021-05-26 15:50:17','2021-06-06 08:12:54');
 
 /*Table structure for table `displaybalancelog` */
 
@@ -468,14 +470,16 @@ CREATE TABLE `feedback` (
   `BlockID` int(11) NOT NULL,
   `CustomerID` int(11) NOT NULL,
   `CustomerUniqueID` varchar(50) NOT NULL,
-  `MeterID` varchar(20) NOT NULL,
   `Remarks` varchar(2000) DEFAULT NULL,
   `RegisteredDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `ModifiedDate` datetime NOT NULL,
   PRIMARY KEY (`FeedbackID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 /*Data for the table `feedback` */
+
+insert  into `feedback`(`FeedbackID`,`Feedback`,`Description`,`Status`,`CommunityID`,`BlockID`,`CustomerID`,`CustomerUniqueID`,`Remarks`,`RegisteredDate`,`ModifiedDate`) values 
+(1,'test1','testing 1',1,1,1,1,'IDIGI1','solved','2021-06-09 19:15:10','2021-06-09 19:16:55');
 
 /*Table structure for table `gateway` */
 

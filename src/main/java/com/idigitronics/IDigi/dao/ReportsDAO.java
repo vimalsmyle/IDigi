@@ -275,7 +275,7 @@ public class ReportsDAO {
 			billsResponseList = new LinkedList<BillSummaryResponseVO>();
 			
 			String query = "SELECT bpd.TransactionID, cbd.CustomerBillingID, cbd.CommunityID, cd.FirstName, cd.LastName, cd.HouseNumber, cd.CustomerUniqueID, cbd.TotalAmount, cbd.TaxAmount, cbd.Status, bpd.ModeOfPayment,"
-					+ "bpd.PaymentStatus, bpd.RazorPayOrderID, bpd.RazorPayPaymentID, bpd.RazorPayRefundID, bpd.RazorPayRefundStatus, bpd.CreatedByID, cbd.LogDate, bpd.TransactionDate FROM customerbillingdetails as cbd LEFT JOIN billingpaymentdetails AS bpd ON cbd.CustomerBillingID = bpd.CustomerBillingID LEFT JOIN customerdetails as cd ON cd.CustomerID = cbd.CustomerID WHERE cbd.CommunityID = ? AND (MONTH(cbd.LogDate) BETWEEN ? AND ?) <change>";
+					+ "bpd.PaymentStatus, bpd.RazorPayOrderID, bpd.RazorPayPaymentID, bpd.RazorPayRefundID, bpd.RazorPayRefundStatus, bpd.CreatedByID, cbd.LogDate, bpd.TransactionDate FROM customerbillingdetails as cbd LEFT JOIN billingpaymentdetails AS bpd ON cbd.CustomerBillingID = bpd.CustomerBillingID LEFT JOIN customerdetails as cd ON cd.CustomerID = cbd.CustomerID WHERE bpd.PaymentStatus = 1 AND cbd.CommunityID = ? AND (MONTH(cbd.LogDate) BETWEEN ? AND ?) <change>";
 			
 			pstmt = con.prepareStatement(query.replaceAll("<change>", (billSummaryRequestVO.getBlockID() > 0 && !billSummaryRequestVO.getCustomerUniqueID().isEmpty()) ? " AND cbd.CustomerUniqueID = '"+billSummaryRequestVO.getCustomerUniqueID()+"'" : (billSummaryRequestVO.getCustomerUniqueID().isEmpty() && billSummaryRequestVO.getBlockID() > 0) ? " AND cbd.BlockID = "+billSummaryRequestVO.getBlockID() : ""));
 			

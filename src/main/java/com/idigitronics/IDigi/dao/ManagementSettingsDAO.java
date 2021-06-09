@@ -740,8 +740,8 @@ public class ManagementSettingsDAO {
 			con = getConnection();
 			feedbackList = new LinkedList<FeedbackResponseVO>();
 
-			pstmt = con.prepareStatement("SELECT f.FeedbackID, f.Feedback, f.Description, CONCAT(cmd.FirstName, ' ', cmd.LastName) AS CustomerName, cmd.HouseNumber, f.MeterID, f.CRNNumber, f.RegisteredDate \n" + 
-					"FROM feedback AS f LEFT JOIN customermeterdetails AS cmd ON cmd.CustomerID = f.CustomerID WHERE f.Status = 0 AND f.BlockID = "+blockid);
+			pstmt = con.prepareStatement("SELECT f.FeedbackID, f.Feedback, f.Description, CONCAT(cd.FirstName, ' ', cd.LastName) AS CustomerName, cd.HouseNumber, f.CustomerUniqueID, f.RegisteredDate \n" + 
+					"FROM feedback AS f LEFT JOIN customerdetails AS cd ON cd.CustomerID = f.CustomerID WHERE f.Status = 0 AND f.BlockID = "+blockid);
 			
 			rs = pstmt.executeQuery();
 
@@ -751,10 +751,9 @@ public class ManagementSettingsDAO {
 				feedbackResponseVO.setFeedbackID(rs.getInt("FeedbackID"));
 				feedbackResponseVO.setFeedback(rs.getString("Feedback"));
 				feedbackResponseVO.setDescription(rs.getString("Description"));
-				feedbackResponseVO.setCRNNumber(rs.getString("CRNNumber"));
+				feedbackResponseVO.setCustomerUniqueID(rs.getString("CustomerUniqueID"));
 				feedbackResponseVO.setName(rs.getString("CustomerName"));
 				feedbackResponseVO.setHouseNumber(rs.getString("HouseNumber"));
-				feedbackResponseVO.setMeterID(rs.getString("MeterID"));
 				feedbackResponseVO.setDate(ExtraMethodsDAO.datetimeformatter(rs.getString("RegisteredDate")));
 				
 				feedbackList.add(feedbackResponseVO);
@@ -782,19 +781,18 @@ public class ManagementSettingsDAO {
 		try {
 			con = getConnection();
 			
-			pstmt = con.prepareStatement("SELECT CommunityID, BlockID, CustomerID, MeterID from customermeterdetails WHERE CRNNumber = '"+feedbackRequestVO.getCRNNumber()+"'");
+			pstmt = con.prepareStatement("SELECT CommunityID, BlockID, CustomerID from customerdetails WHERE CustomerUniqueID = '"+feedbackRequestVO.getCustomerUniqueID()+"'");
 			rs = pstmt.executeQuery();
 			
 			if(rs.next()) {
 
-			ps = con.prepareStatement("INSERT INTO feedback (Feedback, Description, CommunityID, BlockID, CustomerID, CRNNumber, MeterID, ModifiedDate) VALUES (?, ?, ?, ?, ?, ?, ?, NOW())");
+			ps = con.prepareStatement("INSERT INTO feedback (Feedback, Description, CommunityID, BlockID, CustomerID, CustomerUniqueID, ModifiedDate) VALUES (?, ?, ?, ?, ?, ?, NOW())");
 			ps.setString(1, feedbackRequestVO.getFeedback());
 			ps.setString(2, feedbackRequestVO.getDescription());
 			ps.setInt(3, rs.getInt("CommunityID"));
 			ps.setInt(4, rs.getInt("BlockID"));
 			ps.setInt(5, rs.getInt("CustomerID"));
-			ps.setString(6, feedbackRequestVO.getCRNNumber());
-			ps.setString(7, rs.getString("MeterID"));
+			ps.setString(6, feedbackRequestVO.getCustomerUniqueID());
 
 			if (ps.executeUpdate() > 0) {
 				responsevo.setResult("Success");
