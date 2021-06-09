@@ -14,8 +14,7 @@ public class FeedbackResponseVO {
 	private int feedbackID;
 	private String feedback;
 	private String description;
-	private String CRNNumber;
-	private String meterID;
+	private String customerUniqueID;
 	private String houseNumber;
 	private String name;
 	private String date;
@@ -44,14 +43,6 @@ public class FeedbackResponseVO {
 
 	public void setDescription(String description) {
 		this.description = description;
-	}
-
-	public String getCRNNumber() {
-		return CRNNumber;
-	}
-
-	public void setCRNNumber(String cRNNumber) {
-		CRNNumber = cRNNumber;
 	}
 
 	public String getHouseNumber() {
@@ -86,12 +77,12 @@ public class FeedbackResponseVO {
 		this.data = data;
 	}
 
-	public String getMeterID() {
-		return meterID;
+	public String getCustomerUniqueID() {
+		return customerUniqueID;
 	}
 
-	public void setMeterID(String meterID) {
-		this.meterID = meterID;
+	public void setCustomerUniqueID(String customerUniqueID) {
+		this.customerUniqueID = customerUniqueID;
 	}
 
 }
