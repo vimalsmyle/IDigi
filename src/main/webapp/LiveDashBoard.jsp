@@ -71,7 +71,7 @@
 											<div class="row">
 												<div class="col-md-12">
 
-													<!-- <section class="logo-carousel slider" data-arrows="true">
+													<section class="logo-carousel slider" data-arrows="true">
 														<div class="slide sliding-block">
 
 															<div class="text-xs font-weight-bold text-uppercase">
@@ -149,7 +149,7 @@
 
 
 
-													</section> -->
+													</section>
 
 
 												</div>
@@ -189,7 +189,7 @@
 												<div class="row">
 													<div class="col-md-12">
 
-														<!-- <section class="logo-carousel slider" data-arrows="true">
+														<section class="logo-carousel slider" data-arrows="true">
 															<div class="slide sliding-block">
 
 																<div class="text-xs font-weight-bold text-uppercase">
@@ -254,7 +254,7 @@
 															</div>
 
 
-														</section> -->
+														</section>
 
 
 													</div>
@@ -320,29 +320,6 @@
 
 
 	<script language="JavaScript">
-		$(document).ready(function() {
-			Highcharts.chart('container12', {
-				chart : {
-					type : 'column'
-				},
-				title : {
-					text : ''
-				},
-				xAxis : {
-					categories : [ 'com1', 'com2', 'com3', 'com4' ]
-				},
-
-				plotOptions : {
-					series : {
-						pointWidth : 20
-					}
-				},
-
-				series : [ {
-					data : [ 29.9, 71.5, 106.4, 129.2 ]
-				} ]
-			});
-		});
 
 		$(document).ready(function() {
 			$('.logo-carousel').slick({

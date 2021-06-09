@@ -47,7 +47,7 @@
 						<div id="accordion">
 							<div class="card">
 								<div class="card-header">
-									<span class="mr-auto">Report 1</span> <a
+									<span class="mr-auto">User Consumption Report</span> <a
 										class="card-link float-right" data-toggle="collapse"
 										href="#collapseOne"> <i
 										class="fa fa-angle-down reportarrow" aria-hidden="true"></i>
@@ -105,7 +105,7 @@
 															</label> <select class="form-control"
 																id="selectHouseBasedonBlock"
 																name="selectHouseBasedonBlock"
-																onchange="showTopupDetails(this.value);">
+																>
 															</select>
 														</div>
 													</div>

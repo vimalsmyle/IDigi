@@ -63,6 +63,13 @@ $(document)
 											 */
 
 										}
+										
+										if ($("#paytype").val() == "null"
+											|| $("#paytype").val() == "-1") {
+
+										bootbox.alert("Select pay type");
+										return false;
+									}
 
 										if ($("#start_date").val() == "null"
 												|| $("#start_date").val() == "") {
@@ -104,12 +111,14 @@ $(document)
 										data1["year"] = $("#start_date").val();
 										data1["month"] = $("#end_date").val() == "" ? 0
 												: $("#end_date").val();
+										
+										data1["payType"] =  $("#paytype").val();
 
 										$
 												.ajax({
 													type : "POST",
 													contentType : "application/json",
-													url : "/PAYGTL_LORA_BLE/financialreports/"
+													url : "./financialreports/"
 															+ sessionStorage
 																	.getItem("roleID")
 															+ "/"
@@ -121,18 +130,18 @@ $(document)
 
 													success : function(d) {
 
-														// document.querySelector("#totalcount").innerText
-														// = ;
+														if($.fn.DataTable.isDataTable("#financialTable_wrapper")){
+															$('#financialTable_wrapper').DataTable().clear();
+															$('#financialTable').DataTable().destroy();
+														}
+														$('#financialTable_wrapper thead').empty();
+														$('#financialTable_wrapper tbody').remove();
+														
+														
+														$("#theadBody").append("<tr><th>Community Name</th><th>Block Name</th><th>House Number</th><th>Total Amount</th><th>Total Units</th></tr>")
 
-														$("#form").hide();
-														$("#tablereport")
-																.show();
 
-														// document.querySelector(".totalcount").innerHTML
-														// = "Total Amount:
-														// "+d.totalAmountForSelectedPeriod+
-														// " Total Units:
-														// "+d.totalUnitsForSelectedPeriod
+													
 
 														table = $(
 																'#financialTable')
@@ -172,9 +181,6 @@ $(document)
 																					},
 																					{
 																						"data" : "houseNumber"
-																					},
-																					{
-																						"data" : "meterID"
 																					},
 																					{
 																						"data" : "totalAmount"
@@ -230,7 +236,7 @@ $(document)
 																					        footer: 'true',
 																					      //  className: 'custom-btn fa fa-file-pdf-o',
 																					        exportOptions: {
-																					            columns: [0,1,2,3,4,5]
+																					            columns: [0,1,2,3,4]
 																					        },
 																					        //text: 'pdf',
 																					        orientation: 'landscape',

@@ -56,12 +56,19 @@ $(document)
 		        		    xAxis: {
 		        		        categories: d.xAxis
 		        		    },
-
 		        		    plotOptions: {
-		        		        series: {
-		        		            pointWidth: 20
-		        		        }
-		        		    },
+		        	            series: {
+		        	                cursor: 'pointer',
+		        	                pointWidth: 20,
+		        	                point: {
+		        	                    events: {
+		        	                        click: function () {
+		        	                            alert('Category: ' + this.category + ', value: ' + this.y);
+		        	                        }
+		        	                    }
+		        	                }
+		        	            }
+		        	        },
 
 		        		    series: [{
 		        		        data: d.yAxis

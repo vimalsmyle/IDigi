@@ -22,7 +22,7 @@
 	rel="stylesheet" type="text/css" />
 
 </head>
-<title>ReCharge Summary</title>
+<title>Bill Summary</title>
 <body>
 <body class="main-sidebar-show">
 	<%
@@ -48,7 +48,7 @@
 						<div id="accordion">
 							<div class="card">
 								<div class="card-header">
-									<span class="mr-auto">ReCharge Summary</span> <a
+									<span class="mr-auto">Bill Summary</span> <a
 										class="card-link float-right" data-toggle="collapse"
 										href="#collapseOne"> <i
 										class="fa fa-angle-down reportarrow" aria-hidden="true"></i>
@@ -58,7 +58,7 @@
 									data-parent="#accordion">
 									<div class="card-body">
 										<div class="card-body">
-											<form id="topupDetails">
+											<form id="billDetails">
 												<div class="row">
 													<%
 														if (user_id.equalsIgnoreCase("1") || user_id.equalsIgnoreCase("4")) {
@@ -129,29 +129,55 @@
 														}
 													%>
 													
-													<div class="col-md-4">
-														<div id="formcurrentBalance_topup"
-															class="group form-group">
-															<label class="bmd-label-floating">Start Date<sup
-																class="imp">*</sup></label>
-															<!--  <input type="text" class="form-control datepicker" id="start_date" name="start_date"> -->
-															<input type="text" id="start_date" name="start_date"
-																class="form-control">
+													<div class="col-md-4" id="fromMonth">
+														<div id="formfromMonth_topup" class="group form-group">
+															<label class="bmd-label-floating">From Month<sup
+																class="imp">*</sup></label> <select class="form-control"
+																id="fromMonth_topup" name="fromMonth_topup">
+																<option value='-1'>Select Month</option>
+																<option value='01'>January</option>
+																<option value='02'>February</option>
+																<option value='03'>March</option>
+																<option value='04'>April</option>
+																<option value='05'>May</option>
+																<option value='06'>June</option>
+																<option value='07'>July</option>
+																<option value='08'>August</option>
+																<option value='09'>September</option>
+																<option value='10'>October</option>
+																<option value='11'>November</option>
+																<option value='12'>December</option>
+															</select>
 														</div>
 													</div>
-													<div class="col-md-4">
-														<div id="formdateTime_topup"
-															class="group form-group">
-															<label class="bmd-label-floating">End Date<sup
-																class="imp">*</sup></label> <input type="text"
-																class="form-control" id="end_date" name="end_date">
+													
+													
+													<div class="col-md-4" id="toMonth">
+														<div id="formfromMonth_topup" class="group form-group">
+															<label class="bmd-label-floating">To Month<sup
+																class="imp">*</sup></label> <select class="form-control"
+																id="toMonth_topup" name="toMonth_topup">
+																<option value='-1'>Select Month</option>
+																<option value='01'>January</option>
+																<option value='02'>February</option>
+																<option value='03'>March</option>
+																<option value='04'>April</option>
+																<option value='05'>May</option>
+																<option value='06'>June</option>
+																<option value='07'>July</option>
+																<option value='08'>August</option>
+																<option value='09'>September</option>
+																<option value='10'>October</option>
+																<option value='11'>November</option>
+																<option value='12'>December</option>
+															</select>
 														</div>
 													</div>
 												</div>
-
+												
 												<div class="row">
 													<div class="col-md-11">
-														<button type="button" id="topupSummary"
+														<button type="button" id="billSummary"
 															class="btn btn-primary submit-button btn-raised float-right mr-4">
 															Submit
 															<div class="ripple-container"></div>
@@ -163,6 +189,7 @@
 															id="resetFilter">Reset</button>
 													</div>
 												</div>
+												
 											</form>
 										</div>
 									</div>
@@ -175,7 +202,7 @@
 
 						<div class="row mt-4">
 							<div class="col-md-12">
-								<table id=topupsummaryTable
+								<table id=billsummaryTable
 									class="table table-striped table-bordered dt-responsive nowrap dataTable no-footer dtr-inline collapsed"
 									style="width: 100%">
 									<thead id="theadBody">
@@ -204,7 +231,7 @@
 
 
 	<script src="js/dropdown.js"></script>
-	<script src="js/topupsummary.js"></script>
+	<script src="js/billsummary.js"></script>
 	<script src="js/common.js"></script>
 	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
 	<script
@@ -263,49 +290,6 @@
 	<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
-
-	<script type="text/javascript">
-		$(document).ready(
-				function() {
-					var date = new Date();
-					var currentMonth = date.getMonth();
-					var currentDate = date.getDate();
-					var currentYear = date.getFullYear();
-					/* $('#start_date').bootstrapMaterialDatePicker
-					({
-						time: true,
-						clearButton: true,
-						format: 'YYYY-MM-DD HH:mm',
-						 maxDate: new Date(currentYear, currentMonth, currentDate)
-					}); */
-
-					$('#start_date').datepicker({
-						todayHighlight : true,
-						autoclose : true,
-						format : "yyyy-mm-dd",
-						clearBtn : true,
-						todayBtn : "linked",
-						weekStart : 1
-					}).on('changeDate', function(e) {
-						var startDate = $('#start_date').datepicker('getDate');
-						$('#end_date').datepicker('setStartDate', startDate);
-					});
-					var lastDate = new Date(new Date().getFullYear(),
-							new Date().getMonth() + 1, 0);
-
-					$('#end_date').datepicker({
-						todayHighlight : true,
-						autoclose : true,
-						format : "yyyy-mm-dd",
-						clearBtn : true,
-						todayBtn : "linked",
-						weekStart : 1
-					}).on('changeDate', function(e) {
-						var endDate = $('#end_date').datepicker('getDate');
-						$('#start_date').datepicker('setEndDate', lastDate);
-					});
-				});
-	</script>
 
 </body>
 </html>

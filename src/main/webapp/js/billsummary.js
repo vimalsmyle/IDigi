@@ -19,7 +19,7 @@ $(document).ready(function() {
 $(document)
 		.ready(
 				function() {
-					$("#topupSummary")
+					$("#billSummary")
 							.click(
 									function() {
 
@@ -64,49 +64,49 @@ $(document)
 										}
 
 
-										if ($("#start_date").val() == "null" || $("#start_date").val() == "") {
+										if ($("#fromMonth_topup").val() == "null" || $("#fromMonth_topup").val() == "-1") {
 
 											bootbox
-											.alert("Select Start Date");
+											.alert("Select from month");
 											return false;
 										}
 										
-										if ($("#end_date").val() == "null" || $("#end_date").val() == "") {
+										if ($("#toMonth_topup").val() == "null" || $("#toMonth_topup").val() == "-1") {
 
 											bootbox
-											.alert("Select End Date");
+											.alert("Select to month");
 											return false;
 										}
 										
 										
-										data1["fromDate"] = $("#start_date")
+										data1["fromMonth"] = $("#fromMonth_topup")
 												.val();
-										data1["toDate"] = $("#end_date").val();
+										data1["toMonth"] = $("#toMonth_topup").val();
 
 										$
 												.ajax({
 													type : "POST",
 													contentType : "application/json",
-													url : "./topupsummary",
+													url : "./billpaymentsummary",
 													data : JSON
 															.stringify(data1),
 													dataType : "JSON",
 
 													success : function(d) {
-														if($.fn.DataTable.isDataTable("#topupsummaryTable_wrapper")){
-															$('#topupsummaryTable_wrapper').DataTable().clear();
-															$('#topupsummaryTable').DataTable().destroy();
+														if($.fn.DataTable.isDataTable("#billsummaryTable_wrapper")){
+															$('#billsummaryTable_wrapper').DataTable().clear();
+															$('#billsummaryTable').DataTable().destroy();
 														}
-														$('#topupsummaryTable_wrapper thead').empty();
-														$('#topupsummaryTable_wrapper tbody').remove();
+														$('#billsummaryTable_wrapper thead').empty();
+														$('#billsummaryTable_wrapper tbody').remove();
 														
 														
-														$("#theadBody").append("<tr><th>Customer Unique ID</th><th>MIU ID</th><th>First Name</th><th>Last Name</th><th>Recharge Amount</th><th>status</th>" +
-														"<th>Mode Of Payment</th><th>Razor Pay RefundID</th><th>Razor Pay Refund Status</th>" +
-														"<th>Payment Status</th><th>Transacted By UserName</th><th>Transacted By Role Description</th><th>Date Time</th><th>Action</th></tr>")
+														$("#theadBody").append("<tr><th>Customer Unique ID</th><th>First Name</th><th>Last Name</th><th>Bill Amount</th>" +
+														"<th>Mode Of Payment</th><th>Razorpay order ID</th><th>Razorpay payment ID</th><th>Razor Pay RefundID</th><th>Razor Pay Refund Status</th>" +
+														"<th>Payment Status</th><th>Transacted By UserName</th><th>Transacted By Role Description</th><th>Billing date</th><th>payment date</th></tr>")
 
 
-														 table = $('#topupsummaryTable').DataTable(
+														 table = $('#billsummaryTable').DataTable(
 																	{
 																		"dom": "<'row'<'col-sm-4 headname'><'col-sm-2'><'col-sm-1'><'col-sm-2'f>>" +"<'row'<'col-sm-4'B><'col-sm-2'l><'col-sm-2'><'col-sm-2'><'col-sm-1 addevent'>>" + "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-6 text-black'i><'col-sm-6 text-black'p>>",
 																		"responsive" : true,
@@ -127,24 +127,26 @@ $(document)
 																			"data" : "customerUniqueID",
 																			"defaultContent": ""
 																			},{
-																			"data" : "meterID",
-																			"defaultContent": ""
-																			},{
 																			"data" : "firstName",
 																			"defaultContent": ""
 																			},{
 																			"data" : "lastName",
 																			"defaultContent": ""
 																			},{
-																				"data" : "rechargeAmount",
+																				"data" : "billAmount",
 																				"defaultContent": ""
 																				},{
-																					"data" : "status",
-																					"defaultContent": ""
-																					},{
 																			"data" : "modeOfPayment",
 																			"defaultContent": ""
 																			},{
+																				"data" : "razorPayOrderID",
+																				"defaultContent": ""
+																				},{
+																					"data" : "razorPayPaymentID",
+																					"defaultContent": ""
+																					}
+																				
+																				,{
 																				"data" : "razorPayRefundID",
 																				"defaultContent": ""
 																				},{
@@ -164,30 +166,12 @@ $(document)
 																			"data" : "transactedByRoleDescription",
 																			"defaultContent": ""
 																			},{
-																				"data" : "dateTime",
+																				"data" : "billingDate",
 																				"defaultContent": ""
 																				},{
-																				"mData" : "action",
-																				"render" : function(data, type, row) {
-																					if(row.status == "Failed"){
-																						return "<a onclick='getDeleteTransactionID("
-																						+ row.transactionID
-																						+ ")'>"
-																						+ "<i class='material-icons' style='color:#17e9e9;cursor:pointer'>delete</i>"
-																						+ "</a>";
-																						
-																					}else if(row.status == "Passed" || row.status == "Pending"){
-																						return "<a onclick='getReceiptTransactionID("
-																						+ row.transactionID
-																						+ ")'>"
-																						+"<i class='material-icons' style='color:#17e9e9;cursor:pointer'>receipt</i>"
-																						+ "</a>"
-																					}else if( row.status == "Pending...waiting for acknowledge"){
-																						return "---"
-																					}
-																																		
-																				}
-																				}],
+																					"data" : "paymentDate",
+																					"defaultContent": ""
+																					}],
 																		"columnDefs" : [ {
 																		"className": "dt-center", "targets": "_all"
 																		}], "buttons": [
@@ -200,18 +184,18 @@ $(document)
 																				//className: 'custom-btn fa fa-file-excel-o',
 																		        footer: 'true',
 																		        //text: 'Excel',
-																		        title:'ReCharge Summary'  },
+																		        title:'Bill Summary'  },
 																		         
 																		        {
 																		        extend: 'pdf',
 																		        footer: 'true',
 																		        //className: 'custom-btn fa fa-file-pdf-o',
 																		        exportOptions: {
-																		            columns: [0,1,2,3,4,5,6,7,8,9,10,11,12]
+																		            columns: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14]
 																		        },
 																		        //text: 'pdf',
 																		        orientation: 'landscape',
-																		        title:'ReCharge Summary'  }
+																		        title:'Bill Summary'  }
 																		],
 																		 initComplete: function() {
 																			   $('.buttons-excel').html('<i class="fa fa-file-excel-o" />')
@@ -219,7 +203,7 @@ $(document)
 																			  }
 																	});
 
-														 $("div.headname").html('<h3>ReCharge Summary</h3>');
+														 $("div.headname").html('<h3>Bill Summary</h3>');
 															//table.ajax.reload()
 														 
 													}
@@ -227,42 +211,3 @@ $(document)
 										return false;
 									});
 				});
-
-function getReceiptTransactionID(transID){
-	bootbox
-	.confirm("ARE YOU SURE TO DOWNLOAD RECEIPT",
-		function(
-			result) {
-			//	alert(result);
-//				window.open("/PAYGTL_LORA_BLE/status/print/" + transID);
-				window.open("http://183.82.122.196:8080/PAYGTL_LORA_BLE/status/print/" + transID);
-				/*if(result == true){
-					$.ajax({
-						type : "GET",
-						contentType : "application/json",
-						url : "/PAYGTL_LORA_BLE/status/print/" + transID,
-						dataType : "JSON",
-						success : function(data) {
-							//alert("Success====" + data.result);
-							if (data.result == "Success") {
-								bootbox
-								.confirm(
-										data.Message,
-									function(
-										result) {
-										window.location = "topupStatus.jsp";
-									});
-
-							} else {
-								bootbox
-								.alert(data.Message);
-								return false;
-							}
-						}
-					});
-				}else if(result==false){
-					//alert("@"+false)
-					
-				}*/
-		});
-}

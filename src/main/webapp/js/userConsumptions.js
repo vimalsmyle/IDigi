@@ -54,25 +54,42 @@ $(document)
 											return false;
 										}
 										}
-
-										if ($("#start_date").val() == "null" || $("#start_date").val() == "") {
-
-											bootbox
-											.alert("Select Start Date");
-											return false;
-										}
 										
-										if ($("#end_date").val() == "null" || $("#end_date").val() == "") {
+										
+										if($("#reportType").val()=="Graph"){
+											if ($("#fromMonth_topup").val() == "null" || $("#fromMonth_topup").val() == "Select Month") {
+												bootbox
+												.alert("Select from month");
+												return false;
+											}
+											
+											if ($("#toMonth_topup").val() == "null" || $("#toMonth_topup").val() == "Select Month") {
+												bootbox
+												.alert("Select to month");
+												return false;
+											}
+										}else if($("#reportType").val()=="Tabular"){
+											if ($("#start_date").val() == "null" || $("#start_date").val() == "") {
 
-											bootbox
-											.alert("Select End Date");
-											return false;
+												bootbox
+												.alert("Select Start Date");
+												return false;
+											}
+											
+											if ($("#end_date").val() == "null" || $("#end_date").val() == "") {
+
+												bootbox
+												.alert("Select End Date");
+												return false;
+											}
 										}
+
+										
 										
 										
 										var data1 = {}
 										
-										data1["CRNNumber"] = $(
+										data1["customerUniqueID"] = $(
 												"#selectHouseBasedonBlock")
 												.val();
 										if($("#reportType").val()=="Graph"){
@@ -82,8 +99,8 @@ $(document)
 											data1["year"] = $("#end_date").val();
 										}else if($("#reportType").val()=="Tabular"){
 											data1["fromDate"] = $("#start_date")
-											.val()+" 00:00";
-											data1["toDate"] = $("#end_date").val()+" 23:59";
+											.val();
+											data1["toDate"] = $("#end_date").val();
 										}
 										
 										$
@@ -100,13 +117,10 @@ $(document)
 															$('#userConsumptionsTable_wrapper').DataTable().clear();
 															$('#userConsumptionsTable').DataTable().destroy();
 														}
-														// $('#userConsumptionsTable').DataTable().clear();
-														// $('#userConsumptionsTable').DataTable().destroy();
-														
 														$('#userConsumptionsTable_wrapper thead').empty();
 														$('#userConsumptionsTable_wrapper tbody').remove();
-														$("#theadBody").append("<tr><th>customerUniqueID</th><th>miuID</th><th>reading</th><th>balance</th><th>battery</th><th>tariff</th>" +
-																"<th>alarmCredit</th><th>emergencyCredit</th><th>dateTime</th></tr>")
+														$("#theadBody").append("<tr><th>Customer Unique ID</th><th>MIU ID</th><th>Reading</th><th>Balance</th><th>Battery</th><th>Tariff</th>" +
+																"<th>Alarm Credit</th><th>Emergency Credit</th><th>Date Time</th></tr>")
 
 														 table = $('#userConsumptionsTable').DataTable(
 																	{
@@ -121,7 +135,6 @@ $(document)
 																		"order" : [ 0, "desc" ],
 																		"lengthMenu" : [ 5, 10, 25, 30, 50, 75 ],
 																		"pageLength" : 5,
-																		"scrollY" : 324,
 																		"scrollX" : false,
 																		"data" : d.data,
 																		"columns" : [ {
@@ -183,7 +196,7 @@ $(document)
 															//table.ajax.reload()
 													//	 if(){}
 														 
-														 $("div.totalCount").html('<b>MIU:</b> ' + d.data[0].meterID+ ' <b>CRN Number:</b> '+ d.data[0].CRNNumber);
+														 $("div.totalCount").html(' <b>customerUniqueID:</b> '+ d.data[0].customerUniqueID);
 														 /*$("div.addevent").html('<button id="back" onClick="returnBack()"'
 																 +'class="btn btn-raised btn-primary float-right"'
 																	+'>'
@@ -214,15 +227,15 @@ function showReportType(id){
 		$("#divEndDate").hide();
 		$("#divStartDate").hide();
 		$("#fromMonth").show();
-		$("#toYear_topup").show();
-		$("#toMonth_topup").show();
+		$("#toMonth").show();
+		$("#year").show();
 		
 	}else if(id=="Tabular"){
 		$("#divEndDate").show();
 		$("#divStartDate").show();
 		$("#fromMonth").hide();
-		$("#toYear_topup").hide();
-		$("#toMonth_topup").hide();
+		$("#toMonth").hide();
+		$("#year").hide();
 	}
 	
 	
