@@ -15,6 +15,11 @@ body{
     justify-content: flex-start;
     position: relative;
 }
+
+body, .main-content {
+  overflow: hidden;
+}
+
 .login_form{
 	background-color: #d0d0ce;
      min-height: 100vh;
@@ -911,12 +916,12 @@ button:focus {
 }
 
 .slick-arrow.slick-next {
-  right: -20px;
+  right: -10px;
   transform: rotate(180deg);
 }
 
 .slick-arrow.slick-prev {
-  left: -20px;
+  left: -10px;
 }
 
 /* Media Queries */
@@ -985,3 +990,9 @@ button:focus {
 .imp{
 	color: red;
 }
+
+.box-footer .row{
+	overflow: hidden;
+}
+
+

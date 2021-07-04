@@ -252,7 +252,7 @@
 																												},
 																										    	"defaultContent": ""
 																												},{
-																											"data" : "meterID",
+																											"data" : "miuID",
 																									    	"defaultContent": ""
 																											},{
 																												"data" : "doorOpenTamper",

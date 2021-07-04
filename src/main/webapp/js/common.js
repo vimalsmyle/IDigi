@@ -20,7 +20,7 @@ $(document).ready(function () {
       });*/
       var pageURL = $(location). attr("href");
 		//alert(pageURL.split('LORA_BLE/')[1]);
-		let  url = pageURL.split('IDigi/')[1].split("?")[0] =="LoginAction.jsp"?"home.jsp":pageURL.split('LORA_BLE/')[1];
+		let  url = pageURL.split('IDigi/')[1].split("?")[0] =="LoginAction.jsp"?"home.jsp":pageURL.split('IDigi/')[1];
 	/*	document.querySelector("a[href='"+url+"']").className = "active";
 		*/
 		
@@ -35,13 +35,18 @@ $(document).ready(function () {
 
 				});	
 		
-		
     });
+
+
 
 $(window).on('load', function() { 
   $('#status').fadeOut(); 
   $('#preloader').delay(0).fadeOut('slow'); 
   $('body').delay(0).css({'overflow':'visible'});
+	$(".body_content").mCustomScrollbar({
+	    theme: "inset-dark",
+		 autoHideScrollbar:true
+	  });
 })
 
 function returnBack(){
@@ -64,10 +69,15 @@ $(document).on('click', '#mainSidebarToggle' ,function(event) {
 	event.preventDefault();
 	if (window.matchMedia('(min-width: 300px)').matches) {
 		$('body').toggleClass('main-sidebar-hide');
+		$('#communityTable').DataTable();
 	} else {
 		$('body').toggleClass('main-sidebar-show');
+		$('#communityTable').DataTable();
 	}
 });
+
+
+
 
 
 

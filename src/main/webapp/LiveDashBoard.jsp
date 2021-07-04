@@ -10,14 +10,14 @@
 	href="common/images/1-hanbit.png">
 <!-- Material Design for Bootstrap CSS -->
 <!-- <link rel="stylesheet" href="common/css/style.css"> -->
-<link rel="stylesheet"
+<!-- <link rel="stylesheet"
 	href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css">
-
+ -->
 <link rel="stylesheet" type="text/css"
 	href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
 
-<link rel="stylesheet"
-	href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.bootstrap4.min.css">
+<!-- <link rel="stylesheet"
+	href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.bootstrap4.min.css"> -->
 
 <link href="common/css/materialize.fontawsome.css" rel="stylesheet">
 
@@ -49,8 +49,8 @@
 	<div class="top-spacing"></div>
 	<div class="main-content side-content pt-0">
 		<div class="container-fluid">
-			<div class="inner-body" id="content-5">
-				<div class="row custom-scrollbar-css">
+			<div class="inner-body body_content" id="content-5">
+				<div class="row">
 					<div class="col-md-12">
 						<div class="page-header">
 							<h3>Gas</h3>
@@ -182,7 +182,6 @@
 											</div>
 										</div>
 									</div>
-									<div class="box-footer">
 										<div class="box-footer">
 
 											<div class="container">
@@ -261,7 +260,6 @@
 												</div>
 											</div>
 										</div>
-									</div>
 								</div>
 							</div>
 						</div>
@@ -289,7 +287,7 @@
 	<script src="js/common.js"></script>
 	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
 
-	<script
+	<!-- <script
 		src="https://cdn.datatables.net/1.10.12/js/dataTables.bootstrap.min.js"></script>
 
 
@@ -300,14 +298,14 @@
 	<script
 		src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
 
+ -->
 
 
 
-
-	<script
+	<!-- <script
 		src="https://cdn.datatables.net/responsive/2.2.3/js/responsive.bootstrap4.min.js"></script>
 
-
+ -->
 
 	<script
 		src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/5.4.0/bootbox.min.js"></script>
@@ -326,7 +324,7 @@
 				infinite : false,
 				slidesToShow : 6,
 				slidesToScroll : 1,
-				autoplay : false,
+				autoplay : true,
 				autoplaySpeed : 1000,
 				arrows : true,
 				dots : false,

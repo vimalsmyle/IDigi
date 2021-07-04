@@ -38,7 +38,7 @@ table = $('#communityTable')
 	"order" : [ 0, "desc" ],
 	"lengthMenu" : [ 5, 10, 25, 30, 50, 75 ],
 	"pageLength" : 5,
-	"scrollX" : true,
+	"scrollX" : false,
 "ajax" : {
 "url":"./community/"+sessionStorage.getItem("roleID")+"/"+sessionStorage.getItem("ID"),
 "type" : "GET",

@@ -7,7 +7,7 @@ $(document).ready(function() {
 table = $('#mgmtTable')
 .DataTable(
 {//'Pfrtip'
-	"dom": "<'row'<'col-sm-4 headname'><'col-sm-3 totalcount'><'col-sm-2'f>>" +"<'row'<'col-sm-4'B><'col-sm-2'l><'col-sm-2'><'col-sm-2'><'col-sm-1 addevent'>>" + "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-6 text-black'i><'col-sm-6 text-black'p>>",
+	"dom": "<'row'<'col-sm-6 headname'><'col-sm-6'f>>" +"<'row'<'col-sm-4'B><'col-sm-4'l><'col-sm-4 addevent'>>" + "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-6 text-black'i><'col-sm-6 text-black'p>>",
 	"responsive" : true,
 	/*"processing" : true,*/
 	"serverSide" : false,
@@ -19,10 +19,9 @@ table = $('#mgmtTable')
 	"order" : [ 0, "desc" ],
 	"lengthMenu" : [ 5, 10, 25, 30, 50, 75 ],
 	"pageLength" : 5,
-	"scrollY" : 324,
-	"scrollX" : true,
+	"scrollX" : false,
 "ajax" : {
-"url":"/PAYGTL_LORA_BLE/user/"+sessionStorage.getItem("roleID")+"/"+sessionStorage.getItem("ID"),
+"url":"./user/"+sessionStorage.getItem("roleID")+"/"+sessionStorage.getItem("ID"),
 "type" : "GET",
 "data" : function(search) {
 },
@@ -168,7 +167,7 @@ $(document)
 											'status.field.bv',
 											function(e, data) {
 												formIsValid = true;
-												$('.input-group.form-group', $(this))
+												$('.group.form-group', $(this))
 														.each(
 																function() {
 																//	alert(this+"@@=>"+formIsValid);
@@ -258,7 +257,7 @@ $(document)
 														.ajax({
 															type : "POST",
 															contentType : "application/json",
-															url : "/PAYGTL_LORA_BLE/user/add",
+															url : "./user/add",
 															data : JSON
 																	.stringify(data1),
 															dataType : "JSON",
