@@ -78,19 +78,19 @@ public class DropDownDAO {
 		return blocks;
 	}
 
-	public HashMap<String, String> getallhouses(int blockID, int roleid, String id) {
+	public HashMap<Long, String> getallcustomers(int blockID, int roleid, String id) {
 		// TODO Auto-generated method stub
-		HashMap<String, String> houses = new HashMap<String, String>();
+		HashMap<Long, String> houses = new HashMap<Long, String>();
 		
 		Connection con = null;
 		try {
 			con = getConnection();
-			String query = "SELECT CustomerUniqueID, HouseNumber from customerdetails WHERE BlockID = ? <change>";
+			String query = "SELECT CustomerUniqueID, CustomerID from customerdetails WHERE BlockID = ? <change>";
 			PreparedStatement pstmt = con.prepareStatement(query.replaceAll("<change>", (roleid == 1 || roleid == 2 || roleid == 4 || roleid == 5) ? "ORDER BY CustomerID ASC" : (roleid == 3) ? " AND CustomerUniqueID = '"+id+"'" :""));
 			pstmt.setInt(1, blockID);
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
-				houses.put(rs.getString("CustomerUniqueID"), rs.getString("HouseNumber"));
+				houses.put(rs.getLong("CustomerID"), rs.getString("CustomerUniqueID"));
 			}
 
 		} catch (Exception e) {
@@ -247,10 +247,10 @@ public class DropDownDAO {
 		return gateways;
 	}
 
-	public HashMap<Integer, String> getallcustomermeters(String customerUniqueID, String payType) throws SQLException {
+	public HashMap<Long, String> getallcustomermeters(String customerUniqueID, String payType) throws SQLException {
 		// TODO Auto-generated method stub
 		
-		HashMap<Integer, String> customermeters = new HashMap<Integer, String>();
+		HashMap<Long, String> customermeters = new HashMap<Long, String>();
 		
 		Connection con = null;
 		try {
@@ -259,7 +259,7 @@ public class DropDownDAO {
 			PreparedStatement pstmt = con.prepareStatement(query.replaceAll("<change>", payType.equalsIgnoreCase("Prepaid") ? "AND PayType = 'Prepaid' " : "AND PayType = 'Postpaid' "));
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
-				customermeters.put(rs.getInt("CustomerMeterID"), rs.getString("MIUID"));
+				customermeters.put(rs.getLong("CustomerMeterID"), rs.getString("MIUID"));
 			}
 
 		} catch (Exception e) {
