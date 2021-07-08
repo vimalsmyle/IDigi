@@ -54,11 +54,10 @@
                 <a href="alert.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-list"></i> <span class="textData">Alert Configuration</span></a>
                 
                 <%if(user_id.equalsIgnoreCase("1")){ %>
-                <!-- <a href="configuration.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-clock-o"></i> <span class="textData">Meter Commands</span></a>
-                 -->
-                 <a href="#" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-clock-o"></i> <span class="textData">Meter Commands</span></a>
+                 <a href="configuration.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-clock-o"></i> <span class="textData">Meter Commands</span></a>
+               <!--   <a href="#" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-clock-o"></i> <span class="textData">Meter Commands</span></a>
                 
-                 <%}%>
+ -->                 <%}%>
                 
                 <!-- <a href="configurationStatus.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-th"></i> <span class="textData">Meter Commands Status</span></a>
                  -->

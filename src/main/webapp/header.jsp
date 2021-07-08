@@ -38,7 +38,7 @@
 						<p class="main-notification-text">idigitronics</p>
 					</div>
 					<div class="dropdown-divider"></div>
-					<a class="dropdown-item" href="profile.html"> <i class="fa fa-user"></i> My Profile </a>
+					<a class="dropdown-item" href="myprofile.jsp"> <i class="fa fa-user"></i> My Profile </a>
 					<div class="dropdown-divider"></div>
 					<a class="dropdown-item" href="logout.jsp"> <i class="fa fa-sign-out"></i> Sign Out </a>
 					</div>

@@ -7,8 +7,6 @@
 	content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link rel="stylesheet" href="common/css/bootstrap.min.css">
 <link rel="icon" type="image/png" sizes="16x16" href="common/images/1-hanbit.png">
-<!-- Material Design for Bootstrap CSS -->
-<!-- <link rel="stylesheet" href="common/css/style.css"> -->
 <link rel="stylesheet"
 	href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css">
 		<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
@@ -18,7 +16,7 @@
 	<link href="common/css/materialize.fontawsome.css"
 	rel="stylesheet">
 	
-<title>Customer Management</title>
+<title>Block Management</title>
 </head>
 
 
