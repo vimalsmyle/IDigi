@@ -14,10 +14,10 @@ public class ResponseVO {
 	
 	private HashMap<Integer, String> dropDownCommunities;
 	private HashMap<Integer, String> dropDownBlocks;
-	private HashMap<String, String> dropDownHouses;
+	private HashMap<Long, String> dropDownCustomers;
 	private HashMap<Integer, String> dropDownTariffs;
 	private HashMap<Integer, String> dropDownGateways;
-	private HashMap<Integer, String> dropDownCustomerMeters;
+	private HashMap<Long, String> dropDownCustomerMeters;
 	private TopupDetailsResponseVO topupdetails;
 	private BillDetailsResponseVO billdetails;
 	private String result;
@@ -65,11 +65,11 @@ public class ResponseVO {
 	public void setDropDownBlocks(HashMap<Integer, String> dropDownBlocks) {
 		this.dropDownBlocks = dropDownBlocks;
 	}
-	public HashMap<String, String> getDropDownHouses() {
-		return dropDownHouses;
+	public HashMap<Long, String> getDropDownCustomers() {
+		return dropDownCustomers;
 	}
-	public void setDropDownHouses(HashMap<String, String> dropDownHouses) {
-		this.dropDownHouses = dropDownHouses;
+	public void setDropDownCustomers(HashMap<Long, String> dropDownCustomers) {
+		this.dropDownCustomers = dropDownCustomers;
 	}
 	public HashMap<Integer, String> getDropDownTariffs() {
 		return dropDownTariffs;
@@ -107,10 +107,10 @@ public class ResponseVO {
 	public void setDropDownGateways(HashMap<Integer, String> dropDownGateways) {
 		this.dropDownGateways = dropDownGateways;
 	}
-	public HashMap<Integer, String> getDropDownCustomerMeters() {
+	public HashMap<Long, String> getDropDownCustomerMeters() {
 		return dropDownCustomerMeters;
 	}
-	public void setDropDownCustomerMeters(HashMap<Integer, String> dropDownCustomerMeters) {
+	public void setDropDownCustomerMeters(HashMap<Long, String> dropDownCustomerMeters) {
 		this.dropDownCustomerMeters = dropDownCustomerMeters;
 	}
 	public BillDetailsResponseVO getBilldetails() {

@@ -138,7 +138,7 @@ public class ExtraMethodsDAO {
 	
 	public int postdata(RestCallVO restcallvo) throws IOException {
 		
-	URL url = new URL("http://" + restcallvo.getGatewayIP() + ":" + restcallvo.getGatewayPort() +"/"+ restcallvo.getMiuID()+"/"+restcallvo.getUrlExtension());
+	URL url = new URL("http://" + restcallvo.getGatewayIP() + ":" + restcallvo.getGatewayPort() +"/gateway/api/"+ restcallvo.getMiuID()+restcallvo.getUrlExtension());
     HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
     
     urlConnection.setRequestProperty("Content-Type", "application/json");

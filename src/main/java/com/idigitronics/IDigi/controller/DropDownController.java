@@ -50,7 +50,7 @@ public class DropDownController {
 	public @ResponseBody ResponseVO getallhouses(@PathVariable("roleID") int roleid, @PathVariable("id") String id, @PathVariable ("blockID") int blockID) {
 		
 		ResponseVO responsevo = new ResponseVO();
-		responsevo.setDropDownHouses(dropdowndao.getallhouses(blockID, roleid, id));
+		responsevo.setDropDownCustomers(dropdowndao.getallcustomers(blockID, roleid, id));
 		
 		return responsevo;
 	}
