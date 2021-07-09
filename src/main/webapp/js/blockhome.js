@@ -9,7 +9,7 @@ $(document)
 
   if(sessionStorage.getItem("roleID") != 3){
 	  
-	  $.getJSON("./homedashboard/Gas/" +sessionStorage.getItem("roleID")+"/"+sessionStorage.getItem("ID"), function(data) {
+	  $.getJSON("./homedashboard/Gas/" +sessionStorage.getItem("roleID")+"/"+sessionStorage.getItem("roleID")==1||sessionStorage.getItem("roleID")==4?$("#comName").val():sessionStorage.getItem("ID"), function(data) {
 			//var Options = "";
   	  document.querySelector("#gasActive").innerText = data.active;
   	  document.querySelector("#gasInactive").innerText = data.inActive;
@@ -24,7 +24,7 @@ $(document)
 	  
 	  
 	  
-	  $.getJSON("./homedashboard/water/" +sessionStorage.getItem("roleID")+"/"+sessionStorage.getItem("ID"), function(data) {
+	  $.getJSON("./homedashboard/water/" +sessionStorage.getItem("roleID")+"/"+sessionStorage.getItem("roleID")==1||sessionStorage.getItem("roleID")==4?$("#comName").val():sessionStorage.getItem("ID"), function(data) {
 			//var Options = "";
 		  document.querySelector("#waterActive").innerText = data.active;
 	  	  document.querySelector("#waterInactive").innerText = data.inActive;
@@ -40,7 +40,7 @@ $(document)
 		$.ajax({
 			type : "GET",
 			contentType : "application/json",
-			url : "./graph/Gas/0/0/"+ sessionStorage.getItem("ID"),
+			url : "./graph/Gas/0/0/"+ $("#comName").val(),
 			dataType : "JSON",
 
 			success : function(d) {
@@ -63,9 +63,7 @@ $(document)
 		        	                point: {
 		        	                    events: {
 		        	                        click: function () {
-		        	                         //   alert('Category: ' + this.category + ', value: ' + this.y);
-		        	                            window.location = "blockDashboard.jsp?com="+this.category;
-		        	                            
+		        	                            alert('Category: ' + this.category + ', value: ' + this.y);
 		        	                        }
 		        	                    }
 		        	                }
@@ -84,7 +82,7 @@ $(document)
 		$.ajax({
 			type : "GET",
 			contentType : "application/json",
-			url : "./graph/Water/0/0/"+ sessionStorage.getItem("ID"),
+			url : "./graph/Water/0/0/"+ $("#comName").val(),
 			dataType : "JSON",
 
 			success : function(d) {
