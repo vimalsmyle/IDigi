@@ -530,6 +530,7 @@ public class DashboardDAO {
 		int lowBattery = 0;
 		int amr = 0;
 		int consumption = 0;
+		int communityid = 0;
 		
 		try {
 			con = getConnection();
@@ -542,9 +543,17 @@ public class DashboardDAO {
 				noAMRInterval = rs1.getInt("NoAMRInterval");
 			}
 			
+			if(!id.equalsIgnoreCase("0")) {
+				PreparedStatement pstmt5 = con.prepareStatement("SELECT CommunityID FROM community WHERE CommunityName = '"+id+"'");
+				ResultSet rs5 = pstmt5.executeQuery();
+				if(rs5.next()) {
+					communityid = rs5.getInt("CommunityID");
+				}
+			}
+			
 			String query = "SELECT DISTINCT dbl.CustomerUniqueID, dbl.ReadingID, dbl.MainBalanceLogID, dbl.EmergencyCredit, dbl.CustomerMeterID, dbl.MIUID, dbl.PayType, dbl.MeterType, dbl.Reading, dbl.Balance, dbl.LowBattery, dbl.ValveStatus, dbl.ValveConfiguration, dbl.DoorOpenTamper, dbl.MagneticTamper, dbl.Vacation, dbl.RTCFault, dbl.LowBalance, dbl.Minutes, dbl.LogDate FROM displaybalancelog AS dbl WHERE dbl.MeterType = '"+type+"' <change>";
 
-			pstmt = con.prepareStatement(query.replaceAll("<change>", (roleid == 1 || roleid == 4) ? "ORDER BY dbl.LogDate DESC" : (roleid == 2 || roleid == 5) ? "AND dbl.BlockID = "+id+ " ORDER BY dbl.LogDate DESC" : (roleid == 3) ? "AND dbl.CustomerUniqueID = '"+id+"'":""));
+			pstmt = con.prepareStatement(query.replaceAll("<change>", ((roleid == 1 || roleid == 4) && !id.equalsIgnoreCase("0")) ? "AND dbl.CommunityID = "+communityid+" ORDER BY dbl.LogDate DESC" : ((roleid == 1 || roleid == 4) && id.equalsIgnoreCase("0")) ? "ORDER BY dbl.LogDate DESC" : (roleid == 2 || roleid == 5) ? "AND dbl.BlockID = "+id+ " ORDER BY dbl.LogDate DESC" : (roleid == 3) ? "AND dbl.CustomerUniqueID = '"+id+"'":""));
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
 				
