@@ -78,7 +78,7 @@
                           <div class="col-md-4">
                             <div class="group form-group">
                               <label class="bmd-label-floating select-label">Select CRN<sup class="imp">*</sup></label>
-                              <select class="form-control form-control-sm" id="selectHouseBasedonBlock" name="selectHouseBasedonBlock" onchange="showMetersDetails(this.value);">
+                              <select class="form-control form-control-sm select2" id="selectHouseBasedonBlock" name="selectHouseBasedonBlock" onchange="showMetersDetails(this.value);">
                               </select>
                             </div>
                           </div>
@@ -120,7 +120,7 @@
                           <div class="col-md-4">
                             <div class="group form-group">
                               <label class="bmd-label-floating select-label">Select Meters<sup class="imp">*</sup></label>
-                              <select class="form-control form-control-sm" id="selectMeters" name="selectMeters" onchange="showTopupDetails(this.value);">
+                              <select class="form-control form-control-sm select2" id="selectMeters" name="selectMeters" onchange="showTopupDetails(this.value);">
                               </select>
                             </div>
                           </div>

@@ -12,7 +12,7 @@ $(function() {
 		$.getJSON("./customers/" + sessionStorage.getItem("roleID") + "/"
 				+ sessionStorage.getItem("ID")+ "/" + sessionStorage.getItem("ID"), function(data) {
 			var Options = "";
-			$.each(data.dropDownHouses, function(key, value) {
+			$.each(data.dropDownCustomers, function(key, value) {
 				Options = Options + "<option value='" + key + "'>" + key
 						+ "</option>";
 			});
@@ -91,7 +91,7 @@ function showCustomerbyBlock(blockId){
 	$.getJSON("./customers/" + sessionStorage.getItem("roleID") + "/"
 			+ sessionStorage.getItem("ID")+ "/" + blockId, function(data) {
 		var Options = "";
-		$.each(data.dropDownHouses, function(key, value) {
+		$.each(data.dropDownCustomers, function(key, value) {
 			Options = Options + "<option value='" + key + "'>" + key
 					+ "</option>";
 		});

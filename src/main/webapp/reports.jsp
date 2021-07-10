@@ -10,11 +10,6 @@
 	href="common/images/1-hanbit.png">
 <!-- Material Design for Bootstrap CSS -->
 <!-- <link rel="stylesheet" href="common/css/style.css"> -->
-<link rel="stylesheet"
-	href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css">
-<link rel="stylesheet"
-	href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.bootstrap4.min.css">
-
 <link href="common/css/materialize.fontawsome.css" rel="stylesheet">
 
 <title>Community Management</title>
@@ -46,165 +41,102 @@
 						<div class="page-header">
 							<!-- <h3>Gas</h3> -->
 						</div>
-						<!-- <div class="row">
-							<div class="col-xl-3 col-md-6 mb-4">
-
-
-								<div class="card border-left-warning shadow sidingBlock">
-									<a href="userReport.jsp"><div class="card-body p-3 ">
-											<div class="row m-0">
-												<div
-													class="text-xs font-weight-bold text-uppercase  justify-content-start col p-0">
-													User Consumption Report</div>
-												<div class="justify-content-end f-30 d-flex">
-													<i class="fa fa-dashboard"></i>
-												</div>
-											</div>
-
-										</div></a>
-								</div>
-
-							</div>
-							<div class="col-xl-3 col-md-6 mb-4">
-								<div class="card border-left-warning shadow sidingBlock">
-									<a href="topupSummary.jsp"><div class="card-body p-3">
-											<div class="row m-0">
-												<div
-													class="text-xs font-weight-bold text-uppercase  justify-content-start col p-0">
-													TopUp Summary</div>
-												<div class="justify-content-end f-30 d-flex">
-													<i class="fa fa-dashboard"></i>
-												</div>
-											</div>
-
-										</div></a>
-								</div>
-							</div>
-							<div class="col-xl-3 col-md-6 mb-4">
-								<div class="card border-left-warning shadow sidingBlock">
-									<a href="billSummary.jsp"><div class="card-body p-3">
-											<div class="row m-0">
-												<div
-													class="text-xs font-weight-bold text-uppercase  justify-content-start col p-0">
-													Bill Payment Summary</div>
-												<div class="justify-content-end f-30 d-flex">
-													<i class="fa fa-dashboard"></i>
-												</div>
-											</div>
-
-										</div></a>
-								</div>
-							</div>
-							<div class="col-xl-3 col-md-6 mb-4">
-								<div class="card border-left-warning shadow sidingBlock">
-									<a href="financialreports.jsp"><div class="card-body p-3">
-											<div class="row m-0">
-												<div
-													class="text-xs font-weight-bold text-uppercase  justify-content-start col p-0">
-													Financial Reports</div>
-												<div class="justify-content-end f-30 d-flex">
-													<i class="fa fa-dashboard"></i>
-												</div>
-											</div>
-
-										</div></a>
-								</div>
-							</div>
-							<div class="col-xl-3 col-md-6 mb-4">
-								<div class="card border-left-warning shadow sidingBlock">
-									<a href="alarmReport.jsp"><div class="card-body p-3">
-											<div class="row m-0">
-												<div
-													class="text-xs font-weight-bold text-uppercase  justify-content-start col p-0">
-													Alarm Reports</div>
-												<div class="justify-content-end f-30 d-flex">
-													<i class="fa fa-dashboard"></i>
-												</div>
-											</div>
-
-										</div></a>
-								</div>
-							</div>
-
-						</div> -->
-						
 						<div class="row">
 
-    <div class="col-md-4  mb-4">
-      <div class="card h-100 shadow sidingBlock">
-          <div class="card-body">
-           <a href="userReport.jsp"><div class="card-body p-3 ">
-											<div class="row m-0">
-												<div
-													class="text-xs font-weight-bold text-uppercase  justify-content-start col p-0">
-													User Consumption Report</div>
-												<div class="justify-content-end f-30 d-flex">
-													<i class="fa fa-dashboard"></i>
+							<div class="col-md-4  mb-4">
+								<div class="card h-100 shadow sidingBlock">
+									<div class="card-body">
+										<a href="userReport.jsp"><div class="card-body p-3 ">
+												<div class="row m-0">
+													<div
+														class="text-xs font-weight-bold text-uppercase  justify-content-start col p-0">
+														User Consumption Report</div>
+													<div class="justify-content-end f-30 d-flex">
+														<i class="fa fa-dashboard"></i>
+													</div>
 												</div>
-											</div>
 
-										</div></a>
-        </div>
-      </div>
-    </div>
-    
-    
-     <div class="col-md-4  mb-4">
-      <div class="card h-100 shadow sidingBlock">
-          <div class="card-body">
-           <a href="userReport.jsp"><div class="card-body p-3 ">
-											<div class="row m-0">
-												<div
-													class="text-xs font-weight-bold text-uppercase  justify-content-start col p-0">
-													User Consumption Report</div>
-												<div class="justify-content-end f-30 d-flex">
-													<i class="fa fa-dashboard"></i>
+											</div></a>
+									</div>
+								</div>
+							</div>
+
+
+							<div class="col-md-4  mb-4">
+								<div class="card h-100 shadow sidingBlock">
+									<div class="card-body">
+										<a href="topupSummary.jsp"><div class="card-body p-3 ">
+												<div class="row m-0">
+													<div
+														class="text-xs font-weight-bold text-uppercase  justify-content-start col p-0">
+														Topup Summary Report</div>
+													<div class="justify-content-end f-30 d-flex">
+														<i class="fa fa-dashboard"></i>
+													</div>
 												</div>
-											</div>
 
-										</div></a>
-        </div>
-      </div>
-    </div>
-    
-     <div class="col-md-4  mb-4">
-      <div class="card h-100 shadow sidingBlock">
-          <div class="card-body">
-           <a href="userReport.jsp"><div class="card-body p-3 ">
-											<div class="row m-0">
-												<div
-													class="text-xs font-weight-bold text-uppercase  justify-content-start col p-0">
-													User Consumption Report</div>
-												<div class="justify-content-end f-30 d-flex">
-													<i class="fa fa-dashboard"></i>
+											</div></a>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-md-4  mb-4">
+								<div class="card h-100 shadow sidingBlock">
+									<div class="card-body">
+										<a href="billSummary.jsp"><div class="card-body p-3 ">
+												<div class="row m-0">
+													<div
+														class="text-xs font-weight-bold text-uppercase  justify-content-start col p-0">
+														Bill Summary Report</div>
+													<div class="justify-content-end f-30 d-flex">
+														<i class="fa fa-dashboard"></i>
+													</div>
 												</div>
-											</div>
 
-										</div></a>
-        </div>
-      </div>
-    </div>
-    
-    
-    <div class="col-md-4  mb-4">
-      <div class="card h-100 shadow sidingBlock">
-          <div class="card-body">
-           <a href="userReport.jsp"><div class="card-body p-3 ">
-											<div class="row m-0">
-												<div
-													class="text-xs font-weight-bold text-uppercase  justify-content-start col p-0">
-													User Consumption Report</div>
-												<div class="justify-content-end f-30 d-flex">
-													<i class="fa fa-dashboard"></i>
+											</div></a>
+									</div>
+								</div>
+							</div>
+
+
+							<div class="col-md-4  mb-4">
+								<div class="card h-100 shadow sidingBlock">
+									<div class="card-body">
+										<a href="financialreports.jsp"><div class="card-body p-3 ">
+												<div class="row m-0">
+													<div
+														class="text-xs font-weight-bold text-uppercase  justify-content-start col p-0">
+														Financial Report</div>
+													<div class="justify-content-end f-30 d-flex">
+														<i class="fa fa-dashboard"></i>
+													</div>
 												</div>
-											</div>
 
-										</div></a>
-        </div>
-      </div>
-    </div>
+											</div></a>
+									</div>
+								</div>
+							</div>
+
+
+							<div class="col-md-4  mb-4">
+								<div class="card h-100 shadow sidingBlock">
+									<div class="card-body">
+										<a href="alarmReport.jsp"><div class="card-body p-3 ">
+												<div class="row m-0">
+													<div
+														class="text-xs font-weight-bold text-uppercase  justify-content-start col p-0">
+														Alarm Report</div>
+													<div class="justify-content-end f-30 d-flex">
+														<i class="fa fa-dashboard"></i>
+													</div>
+												</div>
+
+											</div></a>
+									</div>
+								</div>
+							</div>
 						</div>
-						
+
 					</div>
 				</div>
 			</div>
@@ -220,67 +152,8 @@
 		}
 	%>
 
-	<script type="text/javascript"
-		src="//cdn.jsdelivr.net/jquery.bootstrapvalidator/0.5.0/js/bootstrapValidator.min.js"></script>
-
-
 	<script src="js/common.js"></script>
 	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
-	<script
-		src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
-
-	<script
-		src="https://cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js"></script>
-
-	<script
-		src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.colVis.min.js"></script>
-
-	<script
-		src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
-
-
-	<script
-		src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
-
-	<script
-		src="https://cdn.datatables.net/1.10.12/js/dataTables.bootstrap.min.js"></script>
-
-
-	<script
-		src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.bootstrap.min.js"></script>
-
-
-	<script
-		src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
-
-	<script
-		src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js"></script>
-
-	<script
-		src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
-
-
-
-	<script
-		src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
-
-	<script
-		src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
-
-
-
-	<script
-		src="https://cdn.datatables.net/responsive/2.2.3/js/responsive.bootstrap4.min.js"></script>
-
-
-
-	<script
-		src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/5.4.0/bootbox.min.js"></script>
-
-	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-
-
-
 </body>
 
 </html>

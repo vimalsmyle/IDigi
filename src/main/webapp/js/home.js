@@ -102,10 +102,20 @@ $(document)
 		        		    },
 
 		        		    plotOptions: {
-		        		        series: {
-		        		            pointWidth: 20
-		        		        }
-		        		    },
+		        	            series: {
+		        	                cursor: 'pointer',
+		        	                pointWidth: 20,
+		        	                point: {
+		        	                    events: {
+		        	                        click: function () {
+		        	                         //   alert('Category: ' + this.category + ', value: ' + this.y);
+		        	                            window.location = "blockDashboard.jsp?com="+this.category;
+		        	                            
+		        	                        }
+		        	                    }
+		        	                }
+		        	            }
+		        	        },
 
 		        		    series: [{
 		        		        data: d.yAxis

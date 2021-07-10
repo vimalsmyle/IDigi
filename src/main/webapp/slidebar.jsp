@@ -71,8 +71,8 @@
                 <a href="billingDetails.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-calendar"></i> <span class="textData">Billing Status</span></a>
                 
                 
-                <a href="#" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-envelope"></i> <span class="textData">Vacation</span></a>
-                <a href="reports.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-bar-chart-o"></i> <span class="textData">Reports</span></a>
+                <!-- <a href="#" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-envelope"></i> <span class="textData">Vacation</span></a>
+                --> <a href="reports.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-bar-chart-o"></i> <span class="textData">Reports</span></a>
                 
                 	<%if(user_id.equalsIgnoreCase("1")){ %>
                 <!-- <a href="Mgmt.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-star"></i> <span class="textData">User Management</span></a> -->
@@ -98,8 +98,8 @@
                 <%}%>
                 
                  <a href="topupStatus.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-calendar"></i> <span class="textData">ReCharge Status</span></a>
-                <a href="#" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-envelope"></i> <span class="textData">Vacation</span></a>
-                <a href="#" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-bar-chart-o"></i> <span class="textData">Reports</span></a>
+                <!-- <a href="#" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-envelope"></i> <span class="textData">Vacation</span></a>
+                 --><a href="#" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-bar-chart-o"></i> <span class="textData">Reports</span></a>
                 
                 		<%if(user_id.equalsIgnoreCase("2")){ %>
                  <a href="feedbackStatus.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-envelope"></i> <span class="textData">Feedback Status</span></a>

@@ -62,7 +62,7 @@
 						<table id="tariffTable"
 							class="table table-striped table-bordered dt-responsive nowrap dataTable no-footer dtr-inline collapsed"
 							style="width: 100%">
-							<thead>
+							<thead class="bg-primary text-white">
 								<tr>
 									<th><b>Name</b></th>
 									<th>Rate</th>
