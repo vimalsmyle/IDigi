@@ -21,6 +21,8 @@
 	href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.bootstrap4.min.css">
 
 <link href="common/css/materialize.fontawsome.css" rel="stylesheet">
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css" />
 <title>Configuration</title>
 </head>
 
@@ -45,8 +47,8 @@
 					<div class="col-md-12">
 						<div class="row">
 							<div class="col-md-12">
-								<a class="text-dark" href="home.jsp">Home</a> <span>/</span>
-								<span class="activeurl">Configuration</span>
+								<a class="text-dark" href="home.jsp">Home</a> <span>/</span> <span
+									class="activeurl">Configuration</span>
 							</div>
 						</div>
 
@@ -101,8 +103,7 @@
 														%>
 
 														<div class="col-md-4">
-															<div id="formcommunityNameAdd"
-																class="group form-group">
+															<div id="formcommunityNameAdd" class="group form-group">
 																<label class="bmd-label-floating">Community Name</label>
 																<input type="text" class="form-control"
 																	name="communityNameAdd" id="communityNameAdd" disabled>
@@ -142,6 +143,38 @@
 														<div class="col-md-4">
 															<div
 																class="group form-group has-feedback has-success bmd-form-group is-filled">
+																<label class="bmd-label-floating select-label">Select
+																	Type<sup class="imp">*</sup>
+																</label> <select class="form-control" id="selectType"
+																	name="selectType"
+																	onchange="showFieldsBasedONType(this.value);">
+																	<option style="color: Red" value="-1" selected>Select
+																		Type</option>
+																	<option value="group">Group</option>
+																	<option value="individual">Individual</option>
+																</select>
+															</div>
+														</div>
+
+														<div class="col-md-4" id="groupCommandId" style="display:none">
+															<div id="divGroup"
+																class="group form-group has-feedback has-success bmd-form-group is-filled">
+																<label class="bmd-label-floating select-label">Group Command
+																	Type<sup class="imp">*</sup>
+																</label> <select id="framework" name="framework[]" multiple
+																	class="form-control" onchange="groupCommand(this.value);">
+																	<option value="8" class="myCheck">Sync Interval</option>
+																	<option value="9" class="myCheck">Meter Reading</option>
+																	<option value="10" class="myCheck">PrePaid/PostPaid Mode</option>
+																	<option value="11" class="myCheck">Meter Resource Type</option>
+																	<option value="12" class="myCheck">Clear Tamper</option>
+																	<option value="13" class="myCheck">Sync Time</option>
+																</select>
+															</div>
+														</div>
+														<div class="col-md-4" id="individualCommandId" style="display:none">
+															<div
+																class="group form-group has-feedback has-success bmd-form-group is-filled">
 																<label class="bmd-label-floating select-label">Command
 																	Type<sup class="imp">*</sup>
 																</label> <select class="form-control" id="selectcommandType"
@@ -149,16 +182,16 @@
 																	onchange="showFieldsBasedONCommand(this.value);">
 																	<option style="color: Red" value="-1" selected>Select
 																		Command Type</option>
-																	<option value="5">Set RTC</option>
-																	<option value="3">Clear Meter</option>
+																	<option value="1">Meter Reset </option>
+																	<option value="3">Tariff</option>
 																	<!-- <option value="7">Active Mode</option> -->
 																	<!-- <option value="10">Set Weekend</option> -->
-																	<option value="1">Clear Tamper</option>
-																	<option value="40">Valve Open</option>
-																	<option value="0">Valve Close</option>
+																	<option value="4">Emergency Credit</option>
+																	<option value="5">Valve</option>
+																	<option value="6">RTC</option>
 																	<!--  <option value="8">Shutdown Mode</option> -->
-																	<option value="6">Set Meter Index</option>
-																	<option value="10">Set Tariff</option>
+																	<option value="7">Schedule Disconnect</option>
+																	<option value="14">Cancel trancation</option>
 																	<!-- <option value="9">Maintenance Mode</option> -->
 																</select>
 															</div>
@@ -177,8 +210,7 @@
 
 														<div class="col-md-4" id="confdefaultReading"
 															style="display: none">
-															<div id="formdefaultReading"
-																class="group form-group">
+															<div id="formdefaultReading" class="group form-group">
 																<label class="bmd-label-floating">Default
 																	Reading<sup class="imp">*</sup>
 																</label> <input type="text" class="form-control"
@@ -231,60 +263,64 @@
 	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
 	<script
 		src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
-		
+
 	<script
 		src="https://cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js"></script>
-		
-		<script
+
+	<script
 		src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.colVis.min.js"></script>
-		
-		<script
+
+	<script
 		src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
-		
-		
-		<script
+
+
+	<script
 		src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
-		
-		<script
+
+	<script
 		src="https://cdn.datatables.net/1.10.12/js/dataTables.bootstrap.min.js"></script>
-		
-		
-		<script
-		src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.bootstrap.min.js"></script>	
-		
-		
-		<script
+
+
+	<script
+		src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.bootstrap.min.js"></script>
+
+
+	<script
 		src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
-		
-		<script
-		src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js"></script>	
-		
-		<script
+
+	<script
+		src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js"></script>
+
+	<script
 		src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
-		
-		
-		
+
+
+
 	<script
 		src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
-		
-		
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
-		
+
+
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+
 	<script
 		src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
-		
-		
+
+
 
 	<script
 		src="https://cdn.datatables.net/responsive/2.2.3/js/responsive.bootstrap4.min.js"></script>
-		
-		
-		
-		<script
+
+
+
+	<script
 		src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/5.4.0/bootbox.min.js"></script>
-		
-		<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-		<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+	<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.js"></script>
 
 	<script>
 		$(document).ready(function() {

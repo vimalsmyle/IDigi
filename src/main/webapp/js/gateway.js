@@ -158,7 +158,7 @@ $(document)
 																message : 'IP is required and cannot be empty'
 															},
 															regexp : {
-																regexp : /^[0-9]{10}$/,
+																regexp : /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/,
 																message : 'IP can only consist of number'
 															}
 														}

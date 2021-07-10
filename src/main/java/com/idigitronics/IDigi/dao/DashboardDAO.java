@@ -174,6 +174,8 @@ public class DashboardDAO {
 				dashboardvo.setNonCommunicating(nonCommunicating);
 				dashboardvo.setDasboarddata(individualDashboardList);
 				dashboard_list.add(dashboardvo);
+				
+				dashboard_list.removeIf(e -> e.getDasboarddata().size()==0);
 			}
 		}
 

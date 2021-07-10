@@ -5,7 +5,12 @@
 $(document)
 		.ready(
 				function() {
-					
+					 $('#framework').multiselect({
+						  nonSelectedText: 'Select Group Value',
+						  enableFiltering: true,
+						  enableCaseInsensitiveFiltering: true,
+						  buttonWidth:'400px'
+						 });
 					if(sessionStorage.getItem("roleID") == 2){
 						$("#communityNameAdd").val(sessionStorage.getItem("communityName"));
 						$("#formcommunityNameAdd").addClass("input-group form-group has-feedback has-success bmd-form-group is-filled")

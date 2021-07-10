@@ -12,7 +12,7 @@ $(function() {
 		$.getJSON("./customers/" + sessionStorage.getItem("roleID") + "/"
 				+ sessionStorage.getItem("ID")+ "/" + sessionStorage.getItem("ID"), function(data) {
 			var Options = "";
-			$.each(data.dropDownHouses, function(key, value) {
+			$.each(data.dropDownCustomers, function(key, value) {
 				Options = Options + "<option value='" + key + "'>" + key
 						+ "</option>";
 			});
@@ -91,7 +91,7 @@ function showCustomerbyBlock(blockId){
 	$.getJSON("./customers/" + sessionStorage.getItem("roleID") + "/"
 			+ sessionStorage.getItem("ID")+ "/" + blockId, function(data) {
 		var Options = "";
-		$.each(data.dropDownHouses, function(key, value) {
+		$.each(data.dropDownCustomers, function(key, value) {
 			Options = Options + "<option value='" + key + "'>" + key
 					+ "</option>";
 		});
@@ -192,4 +192,51 @@ function showFieldsBasedONCommand(id){
 			$("#formdefaultReading").addClass("group form-group has-feedback has-success bmd-form-group is-filled");
 		}
 		
+}
+
+function showFieldsBasedONType(data){
+	if(data == "group"){
+		$("#groupCommandId").show();
+		
+		$(".myCheck").prop("checked", false);
+		
+	/*	var tem = `<div id="divGroup"
+																class="group form-group has-feedback has-success bmd-form-group is-filled">
+																<label class="bmd-label-floating select-label">Group Command
+																	Type<sup class="imp">*</sup>
+																</label> <select id="framework" name="framework[]" multiple
+																	class="form-control" onchange="groupCommand(this.value);">
+																	<option value="8" >Sync Interval</option>
+																	<option value="9">Meter Reading</option>
+																	<option value="10">PrePaid/PostPaid Mode</option>
+																	<option value="11">Meter Resource Type</option>
+																	<option value="12">Clear Tamper</option>
+																	<option value="13">Sync Time</option>
+																</select>
+															</div>`;
+		
+		$("#groupCommandId").append(tem);*/
+		
+		$("#individualCommandId").hide();
+	}else if(data=="individual"){
+		$("#groupCommandId").hide();
+		//$("#divGroup").remove();
+		$("#individualCommandId").show();
+		$(".myCheck").prop("checked", false);
+	}else{
+		$("#groupCommandId").hide();
+		$("#individualCommandId").hide();
+		$(".myCheck").prop("checked", false);
+	}
+}
+
+function show(value){
+	console.log(value);
+	
+	var optionsselected = $(".active input[type='checkbox']").val();
+	
+	  $.each(optionsselected,function(i,x) {
+	   // $('.divContainer').append('<div>'+x+'</div>')
+		  console.log(x);
+	  });
 }

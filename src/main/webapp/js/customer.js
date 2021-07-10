@@ -1382,15 +1382,7 @@ function getCustomerMeters(CRNNumber){
 									
 									
 									],
-										"columnDefs" : [/* {
-											orderable : false,
-											//targets: 5, visible: !(sessionStorage.getItem("roleID") == 4)
-											"className": "dt-center", "targets": "_all"
-										},
-										{
-											targets: 4, 
-											visible: !(sessionStorage.getItem("roleID") == 5)
-										}*/],
+										"columnDefs" : [],
 
 							"buttons" : [
 									]
