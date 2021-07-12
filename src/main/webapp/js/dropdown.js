@@ -92,7 +92,7 @@ function showCustomerbyBlock(blockId){
 			+ sessionStorage.getItem("ID")+ "/" + blockId, function(data) {
 		var Options = "";
 		$.each(data.dropDownCustomers, function(key, value) {
-			Options = Options + "<option value='" + key + "'>" + key
+			Options = Options + "<option value='" + key + "'>" + value
 					+ "</option>";
 		});
 		$('#selectHouseBasedonBlock').append(Options);
@@ -107,7 +107,7 @@ function showMetersDetails(customerId){
 	$.getJSON("./customermeters/Prepaid/" + customerId, function(data) {
 		var Options = "";
 		$.each(data.dropDownCustomerMeters, function(key, value) {
-			Options = Options + "<option value='" + key + "'>" + key
+			Options = Options + "<option value='" + key + "'>" + value
 					+ "</option>";
 		});
 		$('#selectMeters').append(Options);
