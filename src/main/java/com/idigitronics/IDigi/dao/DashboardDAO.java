@@ -104,7 +104,7 @@ public class DashboardDAO {
 				dashboardvo.setLastName(rs.getString("LastName"));
 				dashboardvo.setCustomerUniqueID(rs.getString("CustomerUniqueID"));
 				
-				String query = "SELECT dbl.ReadingID, dbl.MainBalanceLogID, dbl.CustomerMeterID, dbl.MIUID, cmd.MeterSerialNumber, dbl.Tariff, dbl.Reading, dbl.Balance, dbl.EmergencyCredit, dbl.ValveStatus, dbl.BatteryVoltage, "
+				String query = "SELECT dbl.ReadingID, dbl.MainBalanceLogID, dbl.CustomerMeterID, dbl.MIUID, cmd.MeterSerialNumber, cmd.PayType, cmd.MeterType, cmd.MeterSize, dbl.Tariff, dbl.Reading, dbl.Balance, dbl.EmergencyCredit, dbl.ValveStatus, dbl.BatteryVoltage, "
 						+ "dbl.LowBattery, dbl.DoorOpenTamper, dbl.MagneticTamper, dbl.RTCFault, dbl.Vacation, dbl.LowBalance, dbl.LogDate FROM displaybalancelog AS dbl LEFT JOIN customermeterdetails AS cmd ON cmd.CustomerMeterID = dbl.CustomerMeterID WHERE cmd.CustomerID = ? AND cmd.MeterType = '" + type +"'";
 				
 				StringBuilder stringBuilder = new StringBuilder(query);
@@ -125,6 +125,8 @@ public class DashboardDAO {
 					individualDashboardResponseVO = new IndividualDashboardResponseVO();
 					
 					individualDashboardResponseVO.setMeterSerialNumber(rs3.getString("MeterSerialNumber"));
+					individualDashboardResponseVO.setPayType(rs3.getString("PayType"));
+					individualDashboardResponseVO.setMeterType(rs3.getString("MeterType"));
 					individualDashboardResponseVO.setMiuID(rs3.getString("MIUID"));
 					individualDashboardResponseVO.setCustomerMeterID(rs3.getInt("CustomerMeterID"));
 					individualDashboardResponseVO.setTariff((rs3.getFloat("Tariff")));

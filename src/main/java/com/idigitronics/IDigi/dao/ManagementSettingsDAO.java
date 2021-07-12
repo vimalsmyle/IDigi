@@ -185,7 +185,7 @@ public class ManagementSettingsDAO {
 			con = getConnection();
 			AlertResponseVO alertvo = null;
 			alert_settings_list = new LinkedList<AlertResponseVO>();
-			pstmt = con.prepareStatement("SELECT AlertID, NoAMRInterval, TimeOut, PerUnitValue, ReconnectionCharges, LateFee, DueDayCount, GST, VendorGSTNumber, CustomerGSTNumber ModifiedDate FROM alertsettings");
+			pstmt = con.prepareStatement("SELECT AlertID, NoAMRInterval, TimeOut, PerUnitValue, ReconnectionCharges, LateFee, DueDayCount, GST, VendorGSTNumber, CustomerGSTNumber, ModifiedDate FROM alertsettings");
 			rs = pstmt.executeQuery();
 
 			while (rs.next()) {
