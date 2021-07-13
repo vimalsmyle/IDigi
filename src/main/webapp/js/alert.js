@@ -62,6 +62,8 @@ return json.data;
 },{
 "data" : "registeredDate"
 },{
+"data" : "registeredDate"
+},{
 	"mData" : "action",
 	"render" : function(data, type, row) {
 		

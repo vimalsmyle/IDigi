@@ -64,14 +64,14 @@
 							<thead>
 								<tr>
 									<th>MIU ID Interval (Min)</th>
-									<!-- <th>Battery (%)</th> -->
 									<th>Timeout</th>
 									<th>ReConnection Charge</th>
 									<th>Per Unit Value (KG)</th>
-									<th>Late Fee</th>
+									<th>Per Late Fee</th>
 									<th>GST</th>
 									<th>Due Date Count</th>
 									<th>Date</th>
+									<th>Billing Date</th>
 									<th>Edit</th>
 								</tr>
 							</thead>
@@ -142,7 +142,7 @@
 							
 							<div class="col-md-6">
 								<div class="group form-group">
-									<label class="bmd-label-floating">Late Fee</label> <input
+									<label class="bmd-label-floating">Per Late Fee</label> <input
 										type="text" class="form-control" name="lateFeeAdd"
 										id="lateFeeAdd">
 								</div>
@@ -268,7 +268,6 @@
 								</div>
 							</div>
 							
-								
 							</div> 
 						<div class="row">
 							<div class="col-md-12 text-right">

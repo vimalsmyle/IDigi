@@ -270,6 +270,9 @@ function getCustomerMeters(CRNNumber) {
 																				"data" : "emergencyCredit"
 																			},
 																			{
+																				"data" : "payType"
+																			},
+																			{
 																				"mData" : "action",
 																				"render" : function(
 																						data,

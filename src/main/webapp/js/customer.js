@@ -496,7 +496,7 @@ $("#addMeter")
 									+" id=locationAdd-"+rowCount+">"
 									+"<hr></div></div>   " +
 											" <div class='col-md-12 text-right'>" 
-									+" <button type=button class='btn btn-danger' id='removeMeter'>Remove</button></div></div>" +
+									+" <button type=button class='btn btn-danger' id='removeMeter'>Remove Meter</button></div></div>" +
 											"</div>");
 
 			
