@@ -917,10 +917,10 @@ public class DashboardDAO {
 							}
 							
 							if(size == 1) {
-								alertMessage = "The Battery in MIU: <MIU> with CRN/CAN/UAN: <CRN>, at H.No: <house>, Community Name: <community>, Block Name: <block> is low.";
+								alertMessage = "The Battery in MIU: <MIU> with CRN: <CRN>, at H.No: <house>, Community Name: <community>, Block Name: <block> is low.";
 								alertMessage = alertMessage.replaceAll("<MIU>", resultSet.getString("MIUID"));
 								sendalertmail("Low Battery Alert!!!", alertMessage, resultSet.getString("MIUID"));
-//								sendalertsms(0, alertMessage, resultSet.getString("MIUID"));
+								sendalertsms(0, alertMessage, resultSet.getString("MIUID"));
 							}
 						} 
 						
@@ -939,12 +939,12 @@ public class DashboardDAO {
 							}
 							
 							if(size == 1) {
-								alertMessage = "There is a <tamper> Tamper at <timestamp>, in MIU: <MIU> with CRN/CAN/UAN: <CRN>, at H.No: <house>, Community Name: <community>, Block Name: <block>.";
+								alertMessage = "There is a <tamper> Tamper at <timestamp>, in MIU: <MIU> with CRN: <CRN>, at H.No: <house>, Community Name: <community>, Block Name: <block>.";
 								alertMessage = alertMessage.replaceAll("<MIU>", resultSet.getString("MIUID"));
 								alertMessage = alertMessage.replaceAll("<tamper>", dataRequestVO.getStatus().getDoor_open() == 1 ? "Door Open Tamper" : dataRequestVO.getStatus().getMagnetic() == 1 ? "Magnetic Tamper" : "");
 								alertMessage = alertMessage.replaceAll("<timestamp>", resultSet.getString("LogDate"));
 								sendalertmail("Tamper Alert!!!", alertMessage, resultSet.getString("MIUID"));
-//								sendalertsms(0, alertMessage, resultSet.getString("MIUID"));
+								sendalertsms(0, alertMessage, resultSet.getString("MIUID"));
 							}
 						}
 
@@ -964,10 +964,10 @@ public class DashboardDAO {
 							}
 							
 							if(size == 1) {
-								alertMessage = "Balance in your MIU: <MIU> with CRN/CAN/UAN: <CRN> is low. Please Recharge.";
+								alertMessage = "Balance in your MIU: <MIU> with CRN: <CRN> is low. Please Recharge.";
 								alertMessage = alertMessage.replaceAll("<MIU>", resultSet.getString("MIUID"));
 								sendalertmail("Low Balance Alert!!!", alertMessage, resultSet.getString("MIUID"));
-//								sendalertsms(1, alertMessage, resultSet.getString("MIUID"));								
+								sendalertsms(1, alertMessage, resultSet.getString("MIUID"));								
 							}
 							
 						}
@@ -1009,7 +1009,7 @@ public class DashboardDAO {
 					message = message.replaceAll("<house>", rs.getString("HouseNumber"));	
 				}
 				
-				smsRequestVO.setMessage(message);
+				smsRequestVO.setMessage(i == 1 ? "Dear Customer, "+message : "Dear Admin, "+message);
 				
 				result = extraMethodsDao.sendsms(smsRequestVO).toString();				
 			}

@@ -585,11 +585,11 @@ public class CommunitySetUpDAO {
 //					extraMethodsDAO.sendsms(smsRequestVO);
 					
 					if(extraMethodsDAO.sendmail(mailrequestvo).equalsIgnoreCase("Success")) {
-//						extraMethodsDAO.sendsms(smsRequestVO);
+						extraMethodsDAO.sendsms(smsRequestVO);
 						responsevo.setResult("Success");
 						responsevo.setMessage("Block Added Successfully and Block Admin Credentials have been sent to registered mail");
 					}else {
-//						extraMethodsDAO.sendsms(smsRequestVO);
+						extraMethodsDAO.sendsms(smsRequestVO);
 						responsevo.setResult("Success");
 						responsevo.setMessage("Block Registered Successfully but due to internal server Error Credentials have not been sent to your registered Mail ID. Please Contact Administrator");
 					}
@@ -935,11 +935,11 @@ public class CommunitySetUpDAO {
 						String result = extraMethodsDAO.sendmail(mailrequestvo);
 						
 						if(result.equalsIgnoreCase("Success")) {
-//							extraMethodsDAO.sendsms(smsRequestVO);
+							extraMethodsDAO.sendsms(smsRequestVO);
 							responsevo.setResult("Success");
 							responsevo.setMessage("Customer Details Added Successfully");
 						}else {
-//							extraMethodsDAO.sendsms(smsRequestVO);
+							extraMethodsDAO.sendsms(smsRequestVO);
 							responsevo.setResult("Success");
 							responsevo.setMessage("Customer Registered Successfully but due to internal server Error Credentials have not been sent to your registered Mail ID. Please Contact Administrator");
 						}

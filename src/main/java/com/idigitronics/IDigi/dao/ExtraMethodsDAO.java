@@ -418,7 +418,7 @@ public class ExtraMethodsDAO {
 				pstmt2.setInt(10, currentdate.getMonthValue() - 1);
 				pstmt2.setInt(11, currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear());
 				
-//				if(pstmt2.executeUpdate() > 0) {
+				if(pstmt2.executeUpdate() > 0) {
 					
 					File directory = new File(drivename);
 					if (!directory.exists()) {
@@ -702,13 +702,13 @@ public class ExtraMethodsDAO {
 					document.add(copyRight.setHorizontalAlignment(HorizontalAlignment.CENTER).setFont(font));
 					document.close();
 					
-//				}
+				}
 				
 				String message = "Dear "+ rs.getString("FirstName") + " " + rs.getString("LastName") + ", \n \n Your Bill of Amount" + (totalamount + tax + previousDues) + "/- for the consumption of " + billMonthYear +" has been generated. Kindly pay the bill before " + currentdate.plusDays(rs.getInt("DueDayCount")).toString() + " to avoid late fee charges. Thank You";
 				smsRequestVO.setMessage(message);
 				smsRequestVO.setToMobileNumber(rs.getString("MobileNumber"));
 				
-//				sendsms(smsRequestVO);
+				sendsms(smsRequestVO);
 				
 				mailRequestVO.setSubject("Consumption Bill for " + billMonthYear);
 				mailRequestVO.setToEmail(rs.getString("Email"));
