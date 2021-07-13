@@ -12,6 +12,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.idigitronics.IDigi.request.vo.MeterRequestVO;
+import com.idigitronics.IDigi.request.vo.MeterSizeRequestVO;
 import com.idigitronics.IDigi.constants.DataBaseConstants;
 import com.idigitronics.IDigi.constants.ExtraConstants;
 import com.idigitronics.IDigi.request.vo.BlockRequestVO;
@@ -26,6 +27,7 @@ import com.idigitronics.IDigi.response.vo.BlockResponseVO;
 import com.idigitronics.IDigi.response.vo.CommunityResponseVO;
 import com.idigitronics.IDigi.response.vo.CustomerResponseVO;
 import com.idigitronics.IDigi.response.vo.GatewayResponseVO;
+import com.idigitronics.IDigi.response.vo.MeterSizeResponseVO;
 import com.idigitronics.IDigi.response.vo.ResponseVO;
 import com.idigitronics.IDigi.response.vo.TariffResponseVO;
 import com.idigitronics.IDigi.utils.Encryptor;
@@ -358,6 +360,102 @@ public class CommunitySetUpDAO {
 		}
 
 		return result;
+	}
+	
+/*Meter Size*/
+	
+	public List<MeterSizeResponseVO> getMeterSizedetails() throws SQLException {
+
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		List<MeterSizeResponseVO> meterSizeList = null;
+		MeterSizeResponseVO meterSizeResponseVO = null;
+
+		try {
+			con = getConnection();
+			meterSizeList = new LinkedList<MeterSizeResponseVO>();
+			pstmt = con.prepareStatement("SELECT MeterSizeID, MeterSize, MeterType, PerUnitValue, ModifiedDate FROM metersize ORDER BY MeterSizeID DESC");
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				meterSizeResponseVO = new MeterSizeResponseVO();
+				meterSizeResponseVO.setMeterSizeID(rs.getInt("MeterSizeID"));
+				meterSizeResponseVO.setMeterType(rs.getString("MeterType"));
+				meterSizeResponseVO.setMeterSize(rs.getInt("MeterSize"));
+				meterSizeResponseVO.setPerUnitValue(rs.getFloat("PerUnitValue"));
+				meterSizeResponseVO.setModifiedDate(ExtraMethodsDAO.datetimeformatter(rs.getString("ModifiedDate")));
+				meterSizeList.add(meterSizeResponseVO);
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			pstmt.close();
+			rs.close();
+			con.close();
+		}
+		return meterSizeList;
+	}
+
+	public ResponseVO addMeterSize(MeterSizeRequestVO meterSizeRequestVO) throws SQLException {
+		// TODO Auto-generated method stub
+
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResponseVO responsevo = new ResponseVO();
+		try {
+			con = getConnection();
+			pstmt = con.prepareStatement("INSERT INTO metersize (MeterType, MeterSize, PerUnitValue, CreatedDate) VALUES(?, ?, ?, NOW())");
+			pstmt.setString(1, meterSizeRequestVO.getMeterType());
+			pstmt.setInt(2, meterSizeRequestVO.getMeterSize());
+			pstmt.setFloat(3, meterSizeRequestVO.getPerUnitValue());
+			
+			if (pstmt.executeUpdate() > 0) {
+				responsevo.setResult("Success");
+				responsevo.setMessage("Meter Size Added Successfully");
+			} 
+			
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			responsevo.setMessage("INTERNAL SERVER ERROR");
+			responsevo.setResult("Failure");
+		} finally {
+			pstmt.close();
+			con.close();
+		}
+
+		return responsevo;
+	}
+
+	public ResponseVO editMeterSize(MeterSizeRequestVO meterSizeRequestVO) throws SQLException {
+		// TODO Auto-generated method stub
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResponseVO responsevo = new ResponseVO(); 
+
+		try {
+			con = getConnection();
+			pstmt = con.prepareStatement("UPDATE metersize SET MeterType = ?, MeterSize = ?, PerUnitValue = ?, ModifiedDate = NOW() WHERE MeterSizeID = ?");
+			pstmt.setString(1, meterSizeRequestVO.getMeterType());
+			pstmt.setInt(2, meterSizeRequestVO.getMeterSize());
+			pstmt.setFloat(3, meterSizeRequestVO.getPerUnitValue());
+			pstmt.setInt(4, meterSizeRequestVO.getMeterSizeID());
+
+			if (pstmt.executeUpdate() > 0) {
+				responsevo.setResult("Success");
+				responsevo.setMessage("Meter Size Updated Successfully");
+			} 
+			
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			responsevo.setMessage("INTERNAL SERVER ERROR");
+			responsevo.setResult("Failure");
+		} finally {
+			pstmt.close();
+			con.close();
+		}
+
+		return responsevo;
 	}
 
 	/* Block */
@@ -696,7 +794,7 @@ public class CommunitySetUpDAO {
 				customervo.setCustomerUniqueID(rs.getString("CustomerUniqueID"));
 				customervo.setCustomerID(rs.getLong("CustomerID"));
 				
-				PreparedStatement pstmt2 = con.prepareStatement("SELECT cmd.CustomerMeterID, cmd.MIUID, cmd.MeterSerialNumber, cmd.MeterType, cmd.PayType, cmd.Location, cmd.TariffID, cmd.GatewayID, g.GatewayName FROM customermeterdetails AS cmd LEFT JOIN gateway AS g ON g.GatewayID = cmd.GatewayID WHERE cmd.CustomerID = " + customervo.getCustomerID());
+				PreparedStatement pstmt2 = con.prepareStatement("SELECT cmd.CustomerMeterID, cmd.MIUID, cmd.MeterSerialNumber, cmd.MeterType, cmd.PayType, cmd.Location, cmd.TariffID, cmd.GatewayID, g.GatewayName, ms.MeterSize FROM customermeterdetails AS cmd LEFT JOIN gateway AS g ON g.GatewayID = cmd.GatewayID LEFT JOIN metersize AS ms ON ms.MeterSizeID = cmd.MeterSizeID WHERE cmd.CustomerID = " + customervo.getCustomerID());
 				
 				ResultSet rs2 = pstmt2.executeQuery();
 				
@@ -709,6 +807,7 @@ public class CommunitySetUpDAO {
 					metervo.setMeterSerialNumber(rs2.getString("MeterSerialNumber"));
 					metervo.setMeterType(rs2.getString("MeterType"));
 					metervo.setPayType(rs2.getString("PayType"));
+					metervo.setMeterSize(rs2.getFloat("MeterSize"));
 					metervo.setLocation(rs2.getString("Location"));
 					metervo.setTariffID(rs2.getInt("TariffID"));
 					metervo.setGatewayID(rs2.getInt("GatewayID"));
@@ -792,7 +891,7 @@ public class CommunitySetUpDAO {
 						pstmt4.setString(3, customervo.getMeters().get(i).getMiuID());
 						pstmt4.setString(4, customervo.getMeters().get(i).getMeterSerialNumber());
 						pstmt4.setString(5, customervo.getMeters().get(i).getMeterType());
-						pstmt4.setInt(6, customervo.getMeters().get(i).getMeterSize());
+						pstmt4.setInt(6, customervo.getMeters().get(i).getMeterSizeID());
 						pstmt4.setString(7, customervo.getMeters().get(i).getPayType());
 						pstmt4.setInt(8, customervo.getMeters().get(i).getTariffID());
 						pstmt4.setInt(9, customervo.getMeters().get(i).getGatewayID());
@@ -929,7 +1028,7 @@ public class CommunitySetUpDAO {
 	            if (pstmt.executeUpdate() > 0) {
 	            	
 	            	for(int i = 0; i < customervo.getMeters().size(); i++) {
-	            		con.prepareStatement("UPDATE customermeterdetails SET MIUID = '"+customervo.getMeters().get(i).getMiuID()+"', GatewayID = " +customervo.getMeters().get(i).getGatewayID()+ ",  ModifiedDate = NOW() WHERE CustomerMeterID = " + customervo.getMeters().get(i).getCustomerMeterID()).executeUpdate();
+	            		con.prepareStatement("UPDATE customermeterdetails SET MIUID = '"+customervo.getMeters().get(i).getMiuID()+"', GatewayID = " +customervo.getMeters().get(i).getGatewayID()+ ", ModifiedDate = NOW() WHERE CustomerMeterID = " + customervo.getMeters().get(i).getCustomerMeterID()).executeUpdate();
 	            	}
 	            	
 	            	PreparedStatement pstmt1 = con.prepareStatement("UPDATE USER SET UserName = CONCAT (?, (SELECT LastName FROM customerdetails WHERE CustomerUniqueID = ?)) WHERE CustomerUniqueID = ?");

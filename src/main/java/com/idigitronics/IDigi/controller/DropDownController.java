@@ -94,10 +94,19 @@ public class DropDownController {
 	}
 	
 	@RequestMapping(value = "/gateways",method = RequestMethod.GET, produces="application/json")
-	public @ResponseBody ResponseVO getallgatewayss() throws SQLException {
+	public @ResponseBody ResponseVO getallgateways() throws SQLException {
 		
 		ResponseVO responsevo = new ResponseVO();
 		responsevo.setDropDownGateways(dropdowndao.getallgateways());
+
+		return responsevo;
+	}
+	
+	@RequestMapping(value = "/metersizes/{type}",method = RequestMethod.GET, produces="application/json")
+	public @ResponseBody ResponseVO getallmetersizes(@PathVariable ("type") String type) throws SQLException {
+		
+		ResponseVO responsevo = new ResponseVO();
+		responsevo.setDropDownMeterSizes(dropdowndao.getallmetersizes(type));
 
 		return responsevo;
 	}

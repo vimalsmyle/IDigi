@@ -17,6 +17,7 @@ public class ResponseVO {
 	private HashMap<Long, String> dropDownCustomers;
 	private HashMap<Integer, String> dropDownTariffs;
 	private HashMap<Integer, String> dropDownGateways;
+	private HashMap<Integer, Integer> dropDownMeterSizes;
 	private HashMap<Long, String> dropDownCustomerMeters;
 	private TopupDetailsResponseVO topupdetails;
 	private BillDetailsResponseVO billdetails;
@@ -124,6 +125,12 @@ public class ResponseVO {
 	}
 	public void setPayType(String payType) {
 		this.payType = payType;
+	}
+	public HashMap<Integer, Integer> getDropDownMeterSizes() {
+		return dropDownMeterSizes;
+	}
+	public void setDropDownMeterSizes(HashMap<Integer, Integer> dropDownMeterSizes) {
+		this.dropDownMeterSizes = dropDownMeterSizes;
 	}
 	
 }

@@ -19,11 +19,13 @@ import com.idigitronics.IDigi.request.vo.BlockRequestVO;
 import com.idigitronics.IDigi.request.vo.CommunityRequestVO;
 import com.idigitronics.IDigi.request.vo.CustomerRequestVO;
 import com.idigitronics.IDigi.request.vo.GatewayRequestVO;
+import com.idigitronics.IDigi.request.vo.MeterSizeRequestVO;
 import com.idigitronics.IDigi.request.vo.TariffRequestVO;
 import com.idigitronics.IDigi.response.vo.BlockResponseVO;
 import com.idigitronics.IDigi.response.vo.CommunityResponseVO;
 import com.idigitronics.IDigi.response.vo.CustomerResponseVO;
 import com.idigitronics.IDigi.response.vo.GatewayResponseVO;
+import com.idigitronics.IDigi.response.vo.MeterSizeResponseVO;
 import com.idigitronics.IDigi.response.vo.ResponseVO;
 import com.idigitronics.IDigi.response.vo.TariffResponseVO;
 
@@ -138,6 +140,53 @@ public class CommunitySetUpController {
 		ResponseVO responsevo = new ResponseVO();
 		try {
 			 responsevo = communitysetupbo.deletegateway(gatewayID);
+			
+		} catch (BusinessException e) {
+			responsevo.setResult("Failure");
+			responsevo.setMessage(e.getMessage());
+		}
+
+		return responsevo;
+	}
+	
+	/* Meter Size */
+
+	@RequestMapping(value = "/metersize", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody
+	MeterSizeResponseVO meterSizeDetails() throws SQLException {
+
+		MeterSizeResponseVO meterSizeResponseVO = new MeterSizeResponseVO();
+
+		meterSizeResponseVO.setData(communitysetupdao.getMeterSizedetails());
+
+		return meterSizeResponseVO;
+	}
+
+	@RequestMapping(value = "/metersize/add", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	public @ResponseBody
+	ResponseVO addMeterSize(@RequestBody MeterSizeRequestVO meterSizeRequestVO) throws ClassNotFoundException,
+			SQLException, BusinessException {
+		ResponseVO responsevo = new ResponseVO();
+		try {
+			 responsevo = communitysetupbo.addMeterSize(meterSizeRequestVO);
+			
+		} catch (BusinessException e) {
+			responsevo.setResult("Failure");
+			responsevo.setMessage(e.getMessage());
+		}
+
+		return responsevo;
+	}
+	
+	@RequestMapping(value = "/metersize/edit/{metersizeID}", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	public @ResponseBody
+	ResponseVO editMeterSize(@RequestBody MeterSizeRequestVO meterSizeRequestVO, @PathVariable("metersizeID") int metersizeID) throws ClassNotFoundException,
+			SQLException, BusinessException {
+
+		meterSizeRequestVO.setMeterSizeID(metersizeID);
+		ResponseVO responsevo = new ResponseVO();
+		try {
+			 responsevo = communitysetupbo.editMeterSize(meterSizeRequestVO);
 			
 		} catch (BusinessException e) {
 			responsevo.setResult("Failure");

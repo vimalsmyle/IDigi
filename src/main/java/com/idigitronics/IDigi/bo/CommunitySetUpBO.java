@@ -13,6 +13,7 @@ import com.idigitronics.IDigi.request.vo.BlockRequestVO;
 import com.idigitronics.IDigi.request.vo.CommunityRequestVO;
 import com.idigitronics.IDigi.request.vo.CustomerRequestVO;
 import com.idigitronics.IDigi.request.vo.GatewayRequestVO;
+import com.idigitronics.IDigi.request.vo.MeterSizeRequestVO;
 import com.idigitronics.IDigi.request.vo.TariffRequestVO;
 import com.idigitronics.IDigi.response.vo.ResponseVO;
 
@@ -113,6 +114,28 @@ public class CommunitySetUpBO {
 		}
 
 		return communitysetupdao.deletegateway(gatewayID);
+	}
+	
+	/* Gateway */
+
+	public ResponseVO addMeterSize(MeterSizeRequestVO meterSizeRequestVO) throws SQLException, BusinessException {
+		// TODO Auto-generated method stub
+
+		if(meterSizeRequestVO.getMeterSize() <= 0 || meterSizeRequestVO.getMeterType().isEmpty() || meterSizeRequestVO.getPerUnitValue() <= 0){
+			throw new BusinessException("ALL FIELDS ARE MANDATORY");
+		}
+		
+		return communitysetupdao.addMeterSize(meterSizeRequestVO);
+	}
+	
+	public ResponseVO editMeterSize(MeterSizeRequestVO meterSizeRequestVO) throws SQLException, BusinessException {
+		// TODO Auto-generated method stub
+		
+		if(meterSizeRequestVO.getMeterSizeID() <= 0 || meterSizeRequestVO.getMeterSize() <= 0 || meterSizeRequestVO.getMeterType().isEmpty() || meterSizeRequestVO.getPerUnitValue() <= 0){
+			throw new BusinessException("ALL FIELDS ARE MANDATORY");
+		}
+		
+		return communitysetupdao.editMeterSize(meterSizeRequestVO);
 	}
 
 	/* Block */
