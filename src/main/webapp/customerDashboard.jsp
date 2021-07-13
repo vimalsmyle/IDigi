@@ -253,6 +253,7 @@
 								<th>Consumption</th>
 								<th>Balance</th>
 								<th>Emergency Credit</th>
+								<th>Pay Type</th>
 								<th>Battery</th>
 								<th>Valve Status</th>
 								<th>Tariff</th>
