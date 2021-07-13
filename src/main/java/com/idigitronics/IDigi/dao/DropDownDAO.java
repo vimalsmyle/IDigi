@@ -270,4 +270,26 @@ public class DropDownDAO {
 		return customermeters;
 	}
 
+	public HashMap<Integer, Integer> getallmetersizes(String type) throws SQLException {
+		// TODO Auto-generated method stub
+		HashMap<Integer, Integer> metersizes = new HashMap<Integer, Integer>();
+		
+		Connection con = null;
+		try {
+			con = getConnection();
+			PreparedStatement pstmt = con
+					.prepareStatement("SELECT MeterSizeID, MeterSize FROM metersize WHERE MeterType = '"+type+"'");
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				metersizes.put(rs.getInt("MeterSizeID"), rs.getInt("MeterSize"));
+			}
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			con.close();
+			
+		}
+		return metersizes;
+	}
+
 }

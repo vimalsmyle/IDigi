@@ -1704,5 +1704,33 @@ public class AccountDAO {
 
 		return result;
 	}
+	
+	public boolean validateBalance(TopUpRequestVO topupvo) throws SQLException {
+		// TODO Auto-generated method stub
+
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		Boolean result = false;
+
+		try {
+			con = getConnection();
+			pstmt = con.prepareStatement("SELECT Balance FROM displaybalancelog WHERE CustomerMeterID = "+topupvo.getCustomerMeterID());
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				if (topupvo.getAmount() + rs.getFloat("Balance") >= 2000)
+
+					result = true;
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			pstmt.close();
+			rs.close();
+			con.close();
+		}
+
+		return result;
+	}
 
 }

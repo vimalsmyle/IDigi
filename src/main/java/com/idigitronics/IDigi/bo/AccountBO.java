@@ -28,6 +28,10 @@ public class AccountBO {
 			throw new BusinessException("RECHARGE AMOUNT MUST BE GREATER THAN EMERGENCY CREDIT AND UNIT RATE");
 		}
 		
+		if(accountdao.validateBalance(topupvo)){
+			throw new BusinessException("SUM OF AVAILABLE BALANCE AND RECHARGE AMOUNT MUST BE LESS THAN Rs.2000/-");
+		}
+		
 		if(accountdao.checktopup(topupvo.getCustomerMeterID())) {
 			throw new BusinessException("PREVIOUS TOPUP REQUEST IS PENDING");
 		}
@@ -40,9 +44,9 @@ public class AccountBO {
 	public ResponseVO addconfiguration(ConfigurationRequestVO configurationvo) throws BusinessException, SQLException {
 		// TODO Auto-generated method stub
 		ResponseVO responsevo = new ResponseVO();
-			if (accountdao.checkconfigstatus(configurationvo.getMiuID())) {
+			/*if (accountdao.checkconfigstatus(configurationvo.getMiuID())) {
 				throw new BusinessException("PREVIOUS COMMAND REQUEST IS PENDING");
-			}
+			}*/
 			
 			responsevo = accountdao.addconfiguration(configurationvo);
 			

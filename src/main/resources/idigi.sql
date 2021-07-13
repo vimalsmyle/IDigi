@@ -400,7 +400,7 @@ CREATE TABLE `customermeterdetails` (
   `MIUID` varchar(100) NOT NULL,
   `MeterSerialNumber` varchar(100) NOT NULL,
   `MeterType` varchar(12) NOT NULL,
-  `MeterSize` int(11) DEFAULT NULL,
+  `MeterSizeID` int(100) DEFAULT NULL,
   `PayType` varchar(10) NOT NULL,
   `TariffID` int(255) NOT NULL,
   `GatewayID` int(255) NOT NULL,
@@ -412,7 +412,7 @@ CREATE TABLE `customermeterdetails` (
 
 /*Data for the table `customermeterdetails` */
 
-insert  into `customermeterdetails`(`CustomerMeterID`,`CustomerID`,`CustomerUniqueID`,`MIUID`,`MeterSerialNumber`,`MeterType`,`MeterSize`,`PayType`,`TariffID`,`GatewayID`,`Location`,`RegisteredDate`,`ModifiedDate`) values 
+insert  into `customermeterdetails`(`CustomerMeterID`,`CustomerID`,`CustomerUniqueID`,`MIUID`,`MeterSerialNumber`,`MeterType`,`MeterSizeID`,`PayType`,`TariffID`,`GatewayID`,`Location`,`RegisteredDate`,`ModifiedDate`) values 
 (1,1,'IDIGI1','1122','11223344','Gas',NULL,'Prepaid',1,1,'Kitchen','2021-05-17 23:22:24','2021-05-17 23:24:13'),
 (2,1,'IDIGI1','2233','22334455','Water',NULL,'Postpaid',2,1,'Bathroom','2021-05-17 23:24:09','2021-05-17 23:24:17'),
 (3,1,'IDIGI1','3344','33445566','Water',NULL,'Postpaid',3,1,'Bedroom','2021-05-17 23:25:15','2021-05-17 23:25:13'),
@@ -526,6 +526,25 @@ CREATE TABLE `mailsettings` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*Data for the table `mailsettings` */
+
+/*Table structure for table `metersize` */
+
+DROP TABLE IF EXISTS `metersize`;
+
+CREATE TABLE `metersize` (
+  `MeterSizeID` int(100) NOT NULL AUTO_INCREMENT,
+  `MeterType` varchar(100) NOT NULL,
+  `MeterSize` int(100) NOT NULL,
+  `PerUnitValue` decimal(10,2) NOT NULL,
+  `CreatedDate` datetime NOT NULL,
+  `ModifiedDate` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`MeterSizeID`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+
+/*Data for the table `metersize` */
+
+insert  into `metersize`(`MeterSizeID`,`MeterType`,`MeterSize`,`PerUnitValue`,`CreatedDate`,`ModifiedDate`) values 
+(1,'Gas',1,2.40,'2021-07-13 16:21:18','2021-07-13 16:22:12');
 
 /*Table structure for table `payment` */
 

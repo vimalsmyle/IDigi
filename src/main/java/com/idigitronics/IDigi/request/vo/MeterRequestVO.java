@@ -13,7 +13,8 @@ public class MeterRequestVO {
 	private String miuID;
 	private String meterSerialNumber;
 	private String meterType;
-	private int meterSize;
+	private float meterSize;
+	private int meterSizeID;
 	private String payType;
 	private int tariffID;
 	private int gatewayID;
@@ -58,10 +59,10 @@ public class MeterRequestVO {
 	public void setModifiedDate(String modifiedDate) {
 		this.modifiedDate = modifiedDate;
 	}
-	public int getMeterSize() {
+	public float getMeterSize() {
 		return meterSize;
 	}
-	public void setMeterSize(int meterSize) {
+	public void setMeterSize(float meterSize) {
 		this.meterSize = meterSize;
 	}
 	public int getTariffID() {
@@ -93,6 +94,12 @@ public class MeterRequestVO {
 	}
 	public void setGatewayName(String gatewayName) {
 		this.gatewayName = gatewayName;
+	}
+	public int getMeterSizeID() {
+		return meterSizeID;
+	}
+	public void setMeterSizeID(int meterSizeID) {
+		this.meterSizeID = meterSizeID;
 	}
 	
 }
