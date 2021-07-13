@@ -373,6 +373,7 @@ $(document)
 																	data2["razorpay_signature"] = response.razorpay_signature
 																	data2["transactionID"] = sessionStorage
 																			.getItem("transactionID");
+																	data2["payType"] = response.payType;
 
 																	$
 																			.ajax({
