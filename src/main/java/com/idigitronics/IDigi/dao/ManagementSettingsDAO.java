@@ -118,7 +118,7 @@ public class ManagementSettingsDAO {
 		try {
 			con = getConnection();
 
-				String query = " INSERT INTO user (UserID, UserName, UserPassword, RoleID, ActiveStatus, CommunityID, BlockID, CustomerID, CreatedByID, CreatedByRoleID, CustomerUniqueID, ModifiedDate) values(?, ?, ?, ?, 1, <change>, ?, ?, NOW()) ";
+				String query = " INSERT INTO user (UserID, UserName, UserPassword, RoleID, ActiveStatus, CommunityID, BlockID, CustomerID, CreatedByID, CreatedByRoleID, CustomerUniqueID, MobileNumber, EmailID, ModifiedDate) values(?, ?, ?, ?, 1, <change>, ?, ?, ?, ?, NOW()) ";
 			
 			    pstmt = con.prepareStatement(query.replaceAll("<change>", (usermanagementvo.getRoleID() == 4) ? "0, 0, 0, 0" : "?, ?, ?, ?"));
 			
@@ -142,6 +142,8 @@ public class ManagementSettingsDAO {
 						pstmt.setInt(8, rs.getInt("ID"));
 						pstmt.setInt(9, usermanagementvo.getLoggedInRoleID());
 						pstmt.setString(10, usermanagementvo.getCustomerUniqueID());
+						pstmt.setString(11, usermanagementvo.getMobileNumber());
+						pstmt.setString(12, usermanagementvo.getEmailID());
 						
 					}else {
 						pstmt.setInt(5, usermanagementvo.getCommunityID());
@@ -150,11 +152,15 @@ public class ManagementSettingsDAO {
 						pstmt.setInt(8, rs.getInt("ID"));
 						pstmt.setInt(9, usermanagementvo.getLoggedInRoleID());
 						pstmt.setString(10, usermanagementvo.getCustomerUniqueID());
+						pstmt.setString(11, usermanagementvo.getMobileNumber());
+						pstmt.setString(12, usermanagementvo.getEmailID());
 					}
 					
 				} else {
 					pstmt.setInt(5, rs.getInt("ID"));	
 					pstmt.setInt(6, usermanagementvo.getLoggedInRoleID());
+					pstmt.setString(7, usermanagementvo.getMobileNumber());
+					pstmt.setString(8, usermanagementvo.getEmailID());
 				}
 			}	
 				if (pstmt.executeUpdate() > 0) {

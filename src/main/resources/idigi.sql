@@ -668,6 +668,8 @@ CREATE TABLE `user` (
   `BlockID` bigint(20) DEFAULT NULL,
   `CustomerID` bigint(20) DEFAULT NULL,
   `CustomerUniqueID` varchar(100) DEFAULT NULL,
+  `MobileNumber` varchar(100) DEFAULT NULL,
+  `EmailID` varchar(1000) DEFAULT NULL,
   `CreatedByID` bigint(20) NOT NULL,
   `CreatedByRoleID` tinyint(4) NOT NULL,
   `RegisteredDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -678,16 +680,16 @@ CREATE TABLE `user` (
 
 /*Data for the table `user` */
 
-insert  into `user`(`ID`,`UserID`,`UserName`,`UserPassword`,`RoleID`,`ActiveStatus`,`CommunityID`,`BlockID`,`CustomerID`,`CustomerUniqueID`,`CreatedByID`,`CreatedByRoleID`,`RegisteredDate`,`ModifiedDate`) values 
-(1,'Superadmin','Idigitronics','cvp/LzpadrQT+2k0WDjyOQ==',1,1,0,0,0,NULL,0,0,'2021-05-01 17:19:40','2021-05-01 17:19:37'),
-(2,'kvkadmin','Kvk','cvp/LzpadrQT+2k0WDjyOQ==',2,1,1,1,0,NULL,1,1,'2021-05-01 17:24:22','2021-05-01 17:24:12'),
-(3,'IDIGI1','Vimal Kumar','cvp/LzpadrQT+2k0WDjyOQ==',3,1,1,1,1,'IDIGI1',2,2,'2021-05-01 17:25:54','2021-05-01 17:25:56'),
-(4,'Superadminsupervisor','Idigisuperadminsupervisor','cvp/LzpadrQT+2k0WDjyOQ==',4,1,0,0,0,NULL,1,1,'2021-05-01 17:26:45','2021-05-01 17:26:48'),
-(5,'Adminsupervisor','Kvkadminsupervisor','cvp/LzpadrQT+2k0WDjyOQ==',5,1,1,1,0,NULL,1,1,'2021-05-01 17:28:26','2021-05-01 17:28:29'),
-(6,'idigiblock','idigiblock','yotlEHVjsFQOtJ1njm6kXQ==',2,1,1,1,0,'NULL',1,1,'2021-05-15 23:23:08','2021-05-15 23:23:08'),
-(7,'IDIGI2','vml kvk','cvp/LzpadrQT+2k0WDjyOQ==',3,1,1,1,2,'IDIGI2',1,1,'2021-05-23 16:46:19','2021-05-23 16:46:22'),
-(8,'IDIGI3','bharat sriram','Ysgo3gABsnRMLWt4mO5WNg==',3,1,1,1,4,'IDIGI3',1,1,'2021-05-26 15:51:17','2021-05-26 15:51:17'),
-(9,'IDG10010','Sri Babu Kasamsetti','GqSSx8TwJNeL9/TNfEokMw==',3,1,1,1,5,'IDG10010',1,1,'2021-07-04 16:39:36','2021-07-04 16:39:36');
+insert  into `user`(`ID`,`UserID`,`UserName`,`UserPassword`,`RoleID`,`ActiveStatus`,`CommunityID`,`BlockID`,`CustomerID`,`CustomerUniqueID`,`MobileNumber`,`EmailID`,`CreatedByID`,`CreatedByRoleID`,`RegisteredDate`,`ModifiedDate`) values 
+(1,'Superadmin','Idigitronics','cvp/LzpadrQT+2k0WDjyOQ==',1,1,0,0,0,NULL,NULL,NULL,0,0,'2021-05-01 17:19:40','2021-05-01 17:19:37'),
+(2,'kvkadmin','Kvk','cvp/LzpadrQT+2k0WDjyOQ==',2,1,1,1,0,NULL,NULL,NULL,1,1,'2021-05-01 17:24:22','2021-05-01 17:24:12'),
+(3,'IDIGI1','Vimal Kumar','cvp/LzpadrQT+2k0WDjyOQ==',3,1,1,1,1,'IDIGI1',NULL,NULL,2,2,'2021-05-01 17:25:54','2021-05-01 17:25:56'),
+(4,'Superadminsupervisor','Idigisuperadminsupervisor','cvp/LzpadrQT+2k0WDjyOQ==',4,1,0,0,0,NULL,NULL,NULL,1,1,'2021-05-01 17:26:45','2021-05-01 17:26:48'),
+(5,'Adminsupervisor','Kvkadminsupervisor','cvp/LzpadrQT+2k0WDjyOQ==',5,1,1,1,0,NULL,NULL,NULL,1,1,'2021-05-01 17:28:26','2021-05-01 17:28:29'),
+(6,'idigiblock','idigiblock','yotlEHVjsFQOtJ1njm6kXQ==',2,1,1,1,0,'NULL',NULL,NULL,1,1,'2021-05-15 23:23:08','2021-05-15 23:23:08'),
+(7,'IDIGI2','vml kvk','cvp/LzpadrQT+2k0WDjyOQ==',3,1,1,1,2,'IDIGI2',NULL,NULL,1,1,'2021-05-23 16:46:19','2021-05-23 16:46:22'),
+(8,'IDIGI3','bharat sriram','Ysgo3gABsnRMLWt4mO5WNg==',3,1,1,1,4,'IDIGI3',NULL,NULL,1,1,'2021-05-26 15:51:17','2021-05-26 15:51:17'),
+(9,'IDG10010','Sri Babu Kasamsetti','GqSSx8TwJNeL9/TNfEokMw==',3,1,1,1,5,'IDG10010',NULL,NULL,1,1,'2021-07-04 16:39:36','2021-07-04 16:39:36');
 
 /*Table structure for table `userrole` */
 

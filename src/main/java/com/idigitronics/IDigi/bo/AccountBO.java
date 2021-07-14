@@ -30,6 +30,8 @@ public class AccountBO {
 		
 		if(accountdao.validateBalance(topupvo)){
 			throw new BusinessException("SUM OF AVAILABLE BALANCE AND RECHARGE AMOUNT MUST BE LESS THAN Rs.2000/-");
+		} else if(topupvo.getAmount() > 2000) {
+			throw new BusinessException("RECHARGE AMOUNT MUST BE LESS THAN Rs.2000/-");
 		}
 		
 		if(accountdao.checktopup(topupvo.getCustomerMeterID())) {

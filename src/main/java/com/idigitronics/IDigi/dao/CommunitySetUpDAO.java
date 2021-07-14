@@ -563,6 +563,8 @@ public class CommunitySetUpDAO {
 				usermanagementvo.setLoggedInRoleID(1);
 				usermanagementvo.setLoggedInUserID(blockvo.getLoggedInUserID());
 				usermanagementvo.setCustomerUniqueID("NULL");
+				usermanagementvo.setMobileNumber(blockvo.getMobileNumber());
+				usermanagementvo.setEmailID(blockvo.getEmail());
 				}
 				
 				if(managementsettingsdao.adduser(usermanagementvo).getResult().equalsIgnoreCase("Success")){
@@ -914,6 +916,8 @@ public class CommunitySetUpDAO {
 					usermanagementvo.setCustomerUniqueID(customervo.getCustomerUniqueID());
 					usermanagementvo.setLoggedInRoleID(customervo.getLoggedInRoleID());
 					usermanagementvo.setLoggedInUserID(customervo.getLoggedInUserID());
+					usermanagementvo.setMobileNumber(customervo.getMobileNumber());
+					usermanagementvo.setEmailID(customervo.getEmail());
 					
 					if(managementsettingsdao.adduser(usermanagementvo).getResult().equalsIgnoreCase("Success")){
 						

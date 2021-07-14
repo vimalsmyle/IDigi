@@ -22,6 +22,8 @@ public class UserManagementRequestVO {
 	private String oldPassword;
 	private String newPassword;
 	private String CustomerUniqueID;
+	private String mobileNumber;
+	private String emailID;
 	
 	public int getCommunityID() {
 		return communityID;
@@ -101,6 +103,18 @@ public class UserManagementRequestVO {
 	}
 	public void setCustomerUniqueID(String customerUniqueID) {
 		CustomerUniqueID = customerUniqueID;
+	}
+	public String getMobileNumber() {
+		return mobileNumber;
+	}
+	public void setMobileNumber(String mobileNumber) {
+		this.mobileNumber = mobileNumber;
+	}
+	public String getEmailID() {
+		return emailID;
+	}
+	public void setEmailID(String emailID) {
+		this.emailID = emailID;
 	}
 	
 }
