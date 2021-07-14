@@ -63,7 +63,7 @@ public class ManagementSettingsDAO {
 			con = getConnection();
 			user_list = new LinkedList<UserManagementResponseVO>();
 			
-			String query = "SELECT user.ID, user.UserID, user.UserName, userrole.RoleDescription, community.CommunityID, community.CommunityName, block.BlockID, block.BlockName, user.CreatedByID, user.ModifiedDate \r\n" + 
+			String query = "SELECT user.ID, user.UserID, user.UserName, user.MobileNumber, user.EmailID, userrole.RoleDescription, community.CommunityID, community.CommunityName, block.BlockID, block.BlockName, user.CreatedByID, user.ModifiedDate \r\n" + 
 					"	FROM USER LEFT JOIN community ON community.CommunityID = user.CommunityID LEFT JOIN block ON block.BlockID = user.BlockID\r\n" + 
 					"	LEFT JOIN userrole ON userrole.RoleID = user.RoleID <change> ";
 			
@@ -78,6 +78,8 @@ public class ManagementSettingsDAO {
 				usermanagementvo.setID(rs.getInt("ID"));
 				usermanagementvo.setCommunityName((rs.getInt("CommunityID") != 0) ? rs.getString("CommunityName") : "NA");
 				usermanagementvo.setBlockName((rs.getInt("BlockID") != 0) ? rs.getString("BlockName") : "NA");
+				usermanagementvo.setMobileNumber(rs.getString("MobileNumber"));
+				usermanagementvo.setEmailID(rs.getString("EmailID"));
 
 				if(rs.getInt("CreatedByID")>0) {
 					pstmt1 = con.prepareStatement("SELECT user.ID, user.UserName, userrole.RoleDescription FROM USER LEFT JOIN userrole ON user.RoleID = userrole.RoleID WHERE user.ID = "+rs.getInt("CreatedByID"));

@@ -632,6 +632,7 @@ public class CommunitySetUpDAO {
 
 		Connection con = null;
 		PreparedStatement pstmt = null;
+		PreparedStatement pstmt1 = null;
 		ResponseVO responsevo = new ResponseVO();
 
 		try {
@@ -644,8 +645,16 @@ public class CommunitySetUpDAO {
 			pstmt.setInt(5, blockvo.getBlockID());
 
 			if (pstmt.executeUpdate() > 0) {
-				responsevo.setResult("Success");
-				responsevo.setMessage("Block Details Updated Successfully");
+				
+				pstmt1 = con.prepareStatement("UPDATE user SET MobileNumber = ?, Email = ?, ModifiedDate = NOW() WHERE RoleID = 2 AND BlockID = ?");
+				pstmt1.setString(1, blockvo.getMobileNumber());
+				pstmt1.setString(2, blockvo.getEmail());
+				pstmt1.setInt(3, blockvo.getBlockID());
+				
+				if(pstmt1.executeUpdate() > 0) {
+					responsevo.setResult("Success");
+					responsevo.setMessage("Block Details Updated Successfully");					
+				}
 			}
 
 		} catch (Exception ex) {
@@ -1035,10 +1044,12 @@ public class CommunitySetUpDAO {
 	            		con.prepareStatement("UPDATE customermeterdetails SET MIUID = '"+customervo.getMeters().get(i).getMiuID()+"', GatewayID = " +customervo.getMeters().get(i).getGatewayID()+ ", ModifiedDate = NOW() WHERE CustomerMeterID = " + customervo.getMeters().get(i).getCustomerMeterID()).executeUpdate();
 	            	}
 	            	
-	            	PreparedStatement pstmt1 = con.prepareStatement("UPDATE USER SET UserName = CONCAT (?, (SELECT LastName FROM customerdetails WHERE CustomerUniqueID = ?)) WHERE CustomerUniqueID = ?");
+	            	PreparedStatement pstmt1 = con.prepareStatement("UPDATE USER SET UserName = CONCAT (?, (SELECT LastName FROM customerdetails WHERE CustomerUniqueID = ?)), MobileNumber = ?, EmailID = ? WHERE CustomerUniqueID = ?");
 	            	pstmt1.setString(1, customervo.getFirstName() + " ");
 	            	pstmt1.setString(2, customervo.getCustomerUniqueID());
-	            	pstmt1.setString(3, customervo.getCustomerUniqueID());
+	            	pstmt1.setString(3, customervo.getMobileNumber());
+	            	pstmt1.setString(4, customervo.getEmail());
+	            	pstmt1.setString(5, customervo.getCustomerUniqueID());
 	            	if(pstmt1.executeUpdate() > 0) {
 	            		responsevo.setResult("Success");
 	            		responsevo.setMessage("Customer Details Updated Successfully");
@@ -1212,10 +1223,12 @@ public class CommunitySetUpDAO {
 	            	ResultSet rs = pstmt2.executeQuery();
 	            	if(rs.next()) {
 	            		
-	            		PreparedStatement pstmt3 = con.prepareStatement("UPDATE USER SET UserName = CONCAT (?, (SELECT LastName FROM customerdetails WHERE CustomerUniqueID = ?)) WHERE CustomerUniqueID = ?");
+	            		PreparedStatement pstmt3 = con.prepareStatement("UPDATE USER SET UserName = CONCAT (?, (SELECT LastName FROM customerdetails WHERE CustomerUniqueID = ?)), MobileNumber = ?, EmailID = ? WHERE CustomerUniqueID = ?");
 		            	pstmt3.setString(1, rs.getString("FirstName")+ " ");
 		            	pstmt3.setString(2, rs.getString("CustomerUniqueID"));
-		            	pstmt3.setString(3, rs.getString("CustomerUniqueID"));
+		            	pstmt3.setString(3, rs.getString("MobileNumber"));
+		            	pstmt3.setString(4, rs.getString("EmailID"));
+		            	pstmt3.setString(5, rs.getString("CustomerUniqueID"));
 		            	if(pstmt3.executeUpdate() > 0) {
 		            		PreparedStatement pstmt1 = con.prepareStatement("DELETE FROM updaterequestcustomermeterdetails WHERE RequestID = ?");
 			            	pstmt1.setInt(1, requestid);

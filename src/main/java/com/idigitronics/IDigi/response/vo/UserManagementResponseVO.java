@@ -19,6 +19,8 @@ public class UserManagementResponseVO {
 	private String createdByRoleDescription;
 	private String communityName;
 	private String blockName;
+	private String mobileNumber;
+	private String emailID;
 	private List<UserManagementResponseVO> data;
 	
 	public long getID() {
@@ -74,6 +76,18 @@ public class UserManagementResponseVO {
 	}
 	public void setBlockName(String blockName) {
 		this.blockName = blockName;
+	}
+	public String getMobileNumber() {
+		return mobileNumber;
+	}
+	public void setMobileNumber(String mobileNumber) {
+		this.mobileNumber = mobileNumber;
+	}
+	public String getEmailID() {
+		return emailID;
+	}
+	public void setEmailID(String emailID) {
+		this.emailID = emailID;
 	}
 	
 }
