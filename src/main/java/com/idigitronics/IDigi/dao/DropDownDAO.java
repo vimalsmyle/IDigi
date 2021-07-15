@@ -247,7 +247,7 @@ public class DropDownDAO {
 		return gateways;
 	}
 
-	public HashMap<Long, String> getallcustomermeters(String customerUniqueID, String payType) throws SQLException {
+	public HashMap<Long, String> getcustomermeters(String customerUniqueID, String payType) throws SQLException {
 		// TODO Auto-generated method stub
 		
 		HashMap<Long, String> customermeters = new HashMap<Long, String>();
@@ -270,6 +270,28 @@ public class DropDownDAO {
 		return customermeters;
 	}
 
+	public HashMap<Long, String> getallcustomermeters(String customerUniqueID) throws SQLException {
+		// TODO Auto-generated method stub
+		
+		HashMap<Long, String> customermeters = new HashMap<Long, String>();
+		
+		Connection con = null;
+		try {
+			con = getConnection();
+			PreparedStatement pstmt = con.prepareStatement("SELECT CustomerMeterID, MIUID FROM customermeterdetails WHERE CustomerUniqueID = '"+ customerUniqueID.trim() + "'");
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				customermeters.put(rs.getLong("CustomerMeterID"), rs.getString("MIUID"));
+			}
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			con.close();
+			
+		}
+		return customermeters;
+	}
+	
 	public HashMap<Integer, Integer> getallmetersizes(String type) throws SQLException {
 		// TODO Auto-generated method stub
 		HashMap<Integer, Integer> metersizes = new HashMap<Integer, Integer>();
