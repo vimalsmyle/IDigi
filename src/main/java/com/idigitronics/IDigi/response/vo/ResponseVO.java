@@ -19,6 +19,7 @@ public class ResponseVO {
 	private HashMap<Integer, String> dropDownGateways;
 	private HashMap<Integer, Integer> dropDownMeterSizes;
 	private HashMap<Long, String> dropDownCustomerMeters;
+	private HashMap<Long, String> dropDownAllCustomerMeters;
 	private TopupDetailsResponseVO topupdetails;
 	private BillDetailsResponseVO billdetails;
 	private String result;
@@ -131,6 +132,12 @@ public class ResponseVO {
 	}
 	public void setDropDownMeterSizes(HashMap<Integer, Integer> dropDownMeterSizes) {
 		this.dropDownMeterSizes = dropDownMeterSizes;
+	}
+	public HashMap<Long, String> getDropDownAllCustomerMeters() {
+		return dropDownAllCustomerMeters;
+	}
+	public void setDropDownAllCustomerMeters(HashMap<Long, String> dropDownAllCustomerMeters) {
+		this.dropDownAllCustomerMeters = dropDownAllCustomerMeters;
 	}
 	
 }
