@@ -65,7 +65,7 @@
 													<div class="col-md-4">
 														<div class="group form-group">
 															<label class="bmd-label-floating select-label">Community<sup
-																class="imp">*</sup></label> <select class="form-control"
+																class="imp">*</sup></label> <select class="form-control select2"
 																id="selectcommunityName" name="selectcommunityName"
 																onchange="showBlockbyCommunity(this.value);">
 															</select>

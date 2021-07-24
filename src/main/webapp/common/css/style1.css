@@ -995,4 +995,9 @@ button:focus {
 	overflow: hidden;
 }
 
+label,.select2-container{
+	    width: 100% !important;
+}
+
+
 

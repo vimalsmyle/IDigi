@@ -5,12 +5,7 @@
 $(document)
 		.ready(
 				function() {
-					 $('#framework').multiselect({
-						  nonSelectedText: 'Select Group Value',
-						  enableFiltering: true,
-						  enableCaseInsensitiveFiltering: true,
-						  buttonWidth:'400px'
-						 });
+					
 					if(sessionStorage.getItem("roleID") == 2){
 						$("#communityNameAdd").val(sessionStorage.getItem("communityName"));
 						$("#formcommunityNameAdd").addClass("input-group form-group has-feedback has-success bmd-form-group is-filled")
@@ -40,6 +35,13 @@ $(document)
 											.alert("Select CRN Number");
 											return false;
 										}
+										
+										if ($("#selectMeters").val() == "null" || $("#selectMeters").val() == "Select Meters") {
+
+											bootbox
+											.alert("Select meters");
+											return false;
+										}
 
 
 										if ($("#selectcommandType").val() == "null" || $("#selectcommandType").val() == -1 || $("#selectcommandType").val() == "Select Command Type") {
@@ -49,42 +51,96 @@ $(document)
 											return false;
 										}
 										
-										if($("#selectcommandType").val() == "6"){
-											var reg =/[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$/;
-											if($("#defaultReading").val() == ""){
-											
+										var array=[];
+										
+										if($("#selectcommandType").val()=="3"){
+											if($("#valueText").val() == "Select Tariff" || $("#valueText").val() == -1){
+												
 												bootbox
-												.alert("Enter Default Reading");
+												.alert("Select Tariff");
 												return false;
 											}	
-											
-												else if(!reg.test($("#defaultReading").val())){
-													bootbox
-													.alert("The Default Reading can only consist of number");
-													return false;
-												}	
-											data1["defaultReading"] = $("#defaultReading").val();
-											} else if($("#selectcommandType").val() == "10"){
-												if($("#selectTariffName").val() == "Select Tariff" || $("#selectTariffName").val() == -1){
-												
-													bootbox
-													.alert("Select Tariff");
-													return false;
-												}	
-												data1["tariffID"] = $("#selectTariffName").val();
+											var json={};
+											json["value"] = $("#valueText").val();
+											json["parameter_id"] = $("#selectcommandType").val();
 											}
-										 
+										
+										if($("#selectcommandType").val()=="5"){
+											var json={};
+											json["value"] = $("#valueText").val();
+											json["parameter_id"] = $("#selectcommandType").val();
+											}
+										
+										else if($("#selectcommandType").val()=="6"){
+											if($("#valueText").val() == "Select Tariff" || $("#valueText").val() == ""){
+												
+												bootbox
+												.alert("Select Start Date");
+												return false;
+											}	
+											var json={};
+											json["value"] = $("#valueText").val();
+											json["parameter_id"] = $("#selectcommandType").val();
+											
+											}else if($("#selectcommandType").val()=="7"){
+												
+												
+												}else if($("#selectcommandType").val()=="8"){
+													if($("#valueText").val() <= "2" && $("#valueText").val() >= "1440"){
+														
+														bootbox
+														.alert("Please enter between 2 and 1440");
+														return false;
+													}	
+													var json={};
+													json["value"] = $("#valueText").val();
+													json["parameter_id"] = $("#selectcommandType").val();
+													
+													}else if($("#selectcommandType").val()=="9"){
+														var reg =/[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$/;
+														if($("#valueText").val() == ""){
+														
+															bootbox
+															.alert("Enter Default Reading");
+															return false;
+														}	
+														
+															else if(!reg.test($("#valueText").val())){
+																bootbox
+																.alert("The Default Reading can only consist of number");
+																return false;
+															}	
+														
+														var json={};
+														json["value"] = $("#valueText").val();
+														json["parameter_id"] = $("#selectcommandType").val();
+														
+														}else if(id=="13"){
+															$("#confValue").remove();
+															$("#row").append(`<div class="col-md-4" id="confValue" class="valueText"
+																												>
+																												<div id="formtariff" class="group form-group">
+																													<label class="bmd-label-floating select-label">Sync Time<sup
+																														class="imp">*</sup></label> 
+																														
+																									<input type="text" id="reading" name="reading" class="form-control">
+																														
+																												</div>
+																											</div>`);
+															}
+
 										data1["commandType"] = $("#selectcommandType").val();
-										data1["CRNNumber"] = $("#selectHouseBasedonBlock").val();
+										data1["customerUniqueID"] = $("#selectHouseBasedonBlock").val();
 										data1["meterID"] = $("#AMR_topup").val();
-										data1["source"] = "web";
+										data1["commands"] = array.push(json);
+										
 
 										
 										$
 												.ajax({
 													type : "POST",
 													contentType : "application/json",
-													url : "/PAYGTL_LORA_BLE/configuration/add",
+													url : "./configuration/add",
 													data : JSON
 															.stringify(data1),
 													dataType : "JSON",
@@ -93,10 +149,7 @@ $(document)
 														
 														if (data.result == "Success") {
 
-															/*
-															 * alert( "data" +
-															 * data.result);
-															 */
+														
 
 															bootbox
 																	.alert(
@@ -128,7 +181,7 @@ $(document)
 									});
 				});
 
-$(document)
+/*$(document)
 		.ready(
 				function() {
 					table = $('#configurationstatusTable1').hide();
@@ -137,7 +190,7 @@ $(document)
 									{
 										"dom" : "<'row'<'col-sm-4 headname'><'col-sm-2'><'col-sm-1'><'col-sm-2'f>>" +"<'row'<'col-sm-4'B><'col-sm-2'l><'col-sm-2'><'col-sm-2'><'col-sm-1'>>" + "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-6 text-black'i><'col-sm-6 text-black'p>>",
 												"responsive" : true,
-												/*"processing" : true,*/
+												"processing" : true,
 												"serverSide" : false,
 												"bDestroy" : true,
 												"bPaginate": true,
@@ -416,7 +469,7 @@ $(document)
 								 $("input:text").val("");
 							});	
 					
-				});
+				});*/
 
 
 
@@ -436,7 +489,7 @@ function getDeleteTransactionID(transID){
 				$.ajax({
 					type : "POST",
 					contentType : "application/json",
-					url : "/PAYGTL_LORA_BLE/configuration/delete/" + transID,
+					url : "./configuration/delete/" + transID,
 					dataType : "JSON",
 					success : function(data) {
 						//alert("Success====" + data.result);

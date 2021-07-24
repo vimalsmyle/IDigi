@@ -101,7 +101,20 @@
 					</div>
 				</div>
 				
-			
+			<div class="col-xl-3 col-md-6 mb-4">
+					<div class="card border-left-warning shadow sidingBlock">
+						<a href="MeterSize.jsp"><div class="card-body p-3">
+						<div class="row m-0">
+								<div class="text-xs font-weight-bold text-uppercase  justify-content-start col p-0">
+                                   Meter size
+								</div>
+								<div class="justify-content-end f-30 d-flex"><i class="fa fa-dashboard"></i></div>
+							</div>
+							
+						</div></a>
+					</div>
+				</div>
+				
 			</div>
 			</div>
 			</div>

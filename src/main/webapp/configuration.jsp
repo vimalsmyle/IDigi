@@ -12,17 +12,12 @@
 <link rel="stylesheet" href="common/css/bootstrap.min.css">
 <link rel="icon" type="image/png" sizes="16x16"
 	href="common/images/1-hanbit.png">
-<link rel="stylesheet"
-	href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css">
+
 <link
 	href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css"
 	rel="stylesheet" />
-<link rel="stylesheet"
-	href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.bootstrap4.min.css">
 
-<link href="common/css/materialize.fontawsome.css" rel="stylesheet">
-<link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/css/tempusdominus-bootstrap-4.min.css">
 <title>Configuration</title>
 </head>
 
@@ -61,7 +56,7 @@
 											<div class="card-header bg-primary cardHeading">Configuration</div>
 											<div class="card-body scroll right-block">
 												<form id="configurationDetails1">
-													<div class="row">
+													<div class="row" id="row">
 														<%
 															if (user_id.equalsIgnoreCase("1")) {
 														%>
@@ -82,22 +77,25 @@
 																</label> <select class="form-control"
 																	id="selectBlockBasedonCommunity"
 																	name="selectBlockBasedonCommunity"
-																	onchange="showCustomerbyBlock(this.value);">
+																	onchange="showCustomerbyBlockForConfig(this.value);">
 
 																</select>
 															</div>
 														</div>
+
+
 														<div class="col-md-4">
 															<div class="group form-group">
 																<label class="bmd-label-floating select-label">Select
 																	CRN<sup class="imp">*</sup>
-																</label> <select class="form-control"
+																</label> <select class="form-control form-control-sm"
 																	id="selectHouseBasedonBlock"
 																	name="selectHouseBasedonBlock"
-																	onchange="showTopupDetails(this.value);">
+																	onchange="showAllMetersDetails(this);">
 																</select>
 															</div>
 														</div>
+
 														<%
 															} else if (user_id.equalsIgnoreCase("2")) {
 														%>
@@ -121,10 +119,10 @@
 															<div class="group form-group">
 																<label class="bmd-label-floating select-label">Select
 																	CRN<sup class="imp">*</sup>
-																</label> <select class="form-control"
+																</label> <select class="form-control form-control-sm"
 																	id="selectHouseBasedonBlock"
 																	name="selectHouseBasedonBlock"
-																	onchange="showTopupDetails(this.value);">
+																	onchange="showMetersDetails(this.value);">
 																</select>
 															</div>
 														</div>
@@ -133,46 +131,17 @@
 															}
 														%>
 														<div class="col-md-4">
-															<div id="formAMR_topup" class="group form-group">
-																<label class="bmd-label-floating">MIU ID</label> <input
-																	type="text" class="form-control" id="AMR_topup"
-																	name="AMR_topup" disabled>
-															</div>
-														</div>
-
-														<div class="col-md-4">
-															<div
-																class="group form-group has-feedback has-success bmd-form-group is-filled">
+															<div class="group form-group">
 																<label class="bmd-label-floating select-label">Select
-																	Type<sup class="imp">*</sup>
-																</label> <select class="form-control" id="selectType"
-																	name="selectType"
-																	onchange="showFieldsBasedONType(this.value);">
-																	<option style="color: Red" value="-1" selected>Select
-																		Type</option>
-																	<option value="group">Group</option>
-																	<option value="individual">Individual</option>
+																	Meters<sup class="imp">*</sup>
+																</label> <select class="form-control form-control-sm select2"
+																	id="selectMeters" name="selectMeters"
+																	>
 																</select>
 															</div>
 														</div>
 
-														<div class="col-md-4" id="groupCommandId" style="display:none">
-															<div id="divGroup"
-																class="group form-group has-feedback has-success bmd-form-group is-filled">
-																<label class="bmd-label-floating select-label">Group Command
-																	Type<sup class="imp">*</sup>
-																</label> <select id="framework" name="framework[]" multiple
-																	class="form-control" onchange="groupCommand(this.value);">
-																	<option value="8" class="myCheck">Sync Interval</option>
-																	<option value="9" class="myCheck">Meter Reading</option>
-																	<option value="10" class="myCheck">PrePaid/PostPaid Mode</option>
-																	<option value="11" class="myCheck">Meter Resource Type</option>
-																	<option value="12" class="myCheck">Clear Tamper</option>
-																	<option value="13" class="myCheck">Sync Time</option>
-																</select>
-															</div>
-														</div>
-														<div class="col-md-4" id="individualCommandId" style="display:none">
+														<div class="col-md-4" id="individualCommandId">
 															<div
 																class="group form-group has-feedback has-success bmd-form-group is-filled">
 																<label class="bmd-label-floating select-label">Command
@@ -182,39 +151,18 @@
 																	onchange="showFieldsBasedONCommand(this.value);">
 																	<option style="color: Red" value="-1" selected>Select
 																		Command Type</option>
-																	<option value="1">Meter Reset </option>
+																	<option value="1">Meter Reset</option>
 																	<option value="3">Tariff</option>
-																	<!-- <option value="7">Active Mode</option> -->
-																	<!-- <option value="10">Set Weekend</option> -->
 																	<option value="4">Emergency Credit</option>
 																	<option value="5">Valve</option>
 																	<option value="6">RTC</option>
-																	<!--  <option value="8">Shutdown Mode</option> -->
 																	<option value="7">Schedule Disconnect</option>
-																	<option value="14">Cancel trancation</option>
-																	<!-- <option value="9">Maintenance Mode</option> -->
+																	<option value="8">Sync Interval</option>
+																	<option value="9">Reading</option>
+																	<option value="12">Clear Tamper</option>
+																	<option value="13">Sync Time</option>
+
 																</select>
-															</div>
-														</div>
-
-
-														<div class="col-md-4" id="conftariff"
-															style="display: none">
-															<div id="formtariff" class="group form-group">
-																<label class="bmd-label-floating select-label">Tariff<sup
-																	class="imp">*</sup></label> <select class="form-control"
-																	id="selectTariffName" name="selectTariffName">
-																</select>
-															</div>
-														</div>
-
-														<div class="col-md-4" id="confdefaultReading"
-															style="display: none">
-															<div id="formdefaultReading" class="group form-group">
-																<label class="bmd-label-floating">Default
-																	Reading<sup class="imp">*</sup>
-																</label> <input type="text" class="form-control"
-																	id="defaultReading" name="defaultReading">
 															</div>
 														</div>
 													</div>
@@ -252,7 +200,8 @@
 	<%
 		}
 	%>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/js/tempusdominus-bootstrap-4.min.js"></script>
 	<script type="text/javascript"
 		src="//cdn.jsdelivr.net/jquery.bootstrapvalidator/0.5.0/js/bootstrapValidator.min.js"></script>
 
@@ -261,55 +210,17 @@
 	<script src="js/configuration.js"></script>
 	<script src="js/common.js"></script>
 	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
-	<script
-		src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
-
-	<script
-		src="https://cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js"></script>
-
-	<script
-		src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.colVis.min.js"></script>
-
-	<script
-		src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
-
-
-	<script
-		src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
-
-	<script
-		src="https://cdn.datatables.net/1.10.12/js/dataTables.bootstrap.min.js"></script>
-
-
-	<script
-		src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.bootstrap.min.js"></script>
-
-
-	<script
-		src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
-
-	<script
-		src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js"></script>
-
-	<script
-		src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
-
-
-
-	<script
-		src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
-
 
 	<script
 		src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
 
-	<script
-		src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
-
-
+	
 
 	<script
-		src="https://cdn.datatables.net/responsive/2.2.3/js/responsive.bootstrap4.min.js"></script>
+		src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/locale/nl.js"></script>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/js/bootstrap-datetimepicker.min.js"></script>
 
 
 
@@ -319,21 +230,13 @@
 	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 	<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-	<script
-		src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.js"></script>
 
 	<script>
 		$(document).ready(function() {
-			$('.button-left').click(function() {
-				$('.left ').toggleClass('fliph');
+			 $('#datetimepicker1').datetimepicker({
+				    format: 'DD/MM/YYYY HH:mm'
+				  });
 
-			});
-
-		});
-	</script>
-	<script>
-		$(document).ready(function() {
-			$('#communityTable').DataTable();
 		});
 	</script>
 

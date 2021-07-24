@@ -43,10 +43,10 @@ $(window).on('load', function() {
   $('#status').fadeOut(); 
   $('#preloader').delay(0).fadeOut('slow'); 
   $('body').delay(0).css({'overflow':'visible'});
-	$(".body_content").mCustomScrollbar({
+	/*$(".body_content").mCustomScrollbar({
 	    theme: "inset-dark",
 		 autoHideScrollbar:true
-	  });
+	  });*/
 })
 
 function returnBack(){
