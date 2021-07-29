@@ -15,6 +15,7 @@ public class IndividualDashboardResponseVO {
 	private long customerMeterID;
 	private String meterSerialNumber;
 	private String meterType;
+	private float meterSize;
 	private String payType;
 	private float reading;
 	private int consumption;
@@ -253,6 +254,14 @@ public class IndividualDashboardResponseVO {
 
 	public void setLastTopupAmount(int lastTopupAmount) {
 		this.lastTopupAmount = lastTopupAmount;
+	}
+
+	public float getMeterSize() {
+		return meterSize;
+	}
+
+	public void setMeterSize(float meterSize) {
+		this.meterSize = meterSize;
 	}
 
 }

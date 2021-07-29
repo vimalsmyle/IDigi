@@ -413,13 +413,13 @@ CREATE TABLE `customermeterdetails` (
 /*Data for the table `customermeterdetails` */
 
 insert  into `customermeterdetails`(`CustomerMeterID`,`CustomerID`,`CustomerUniqueID`,`MIUID`,`MeterSerialNumber`,`MeterType`,`MeterSizeID`,`PayType`,`TariffID`,`GatewayID`,`Location`,`RegisteredDate`,`ModifiedDate`) values 
-(1,1,'IDIGI1','1122','11223344','Gas',NULL,'Prepaid',1,1,'Kitchen','2021-05-17 23:22:24','2021-05-17 23:24:13'),
-(2,1,'IDIGI1','2233','22334455','Water',NULL,'Postpaid',2,1,'Bathroom','2021-05-17 23:24:09','2021-05-17 23:24:17'),
-(3,1,'IDIGI1','3344','33445566','Water',NULL,'Postpaid',3,1,'Bedroom','2021-05-17 23:25:15','2021-05-17 23:25:13'),
-(4,1,'IDIGI1','4455','44556677','Water',NULL,'Postpaid',2,1,'Washarea','2021-05-17 23:26:11','2021-05-17 23:26:10'),
-(5,2,'IDIGI2','5566','55667788','Gas',NULL,'Prepaid',1,1,'Kitchen','2021-05-23 16:31:15','2021-05-23 16:31:18'),
-(6,4,'IDIGI3','B66777','B66778899','Gas',1000,'Prepaid',1,1,'Kitchen','2021-05-26 15:50:17','2021-06-06 08:12:54'),
-(7,5,'IDG10010','E099','I970366858','Water',0,'Postpaid',1,1,'Hall','2021-07-04 16:39:36','2021-07-04 16:39:36');
+(1,1,'IDIGI1','1122','11223344','Gas',1,'Prepaid',1,1,'Kitchen','2021-05-17 23:22:24','2021-05-17 23:24:13'),
+(2,1,'IDIGI1','2233','22334455','Water',1,'Postpaid',2,1,'Bathroom','2021-05-17 23:24:09','2021-05-17 23:24:17'),
+(3,1,'IDIGI1','3344','33445566','Water',1,'Postpaid',3,1,'Bedroom','2021-05-17 23:25:15','2021-05-17 23:25:13'),
+(4,1,'IDIGI1','4455','44556677','Water',1,'Postpaid',2,1,'Washarea','2021-05-17 23:26:11','2021-05-17 23:26:10'),
+(5,2,'IDIGI2','5566','55667788','Gas',1,'Prepaid',1,1,'Kitchen','2021-05-23 16:31:15','2021-05-23 16:31:18'),
+(6,4,'IDIGI3','B66777','B66778899','Gas',1,'Prepaid',1,1,'Kitchen','2021-05-26 15:50:17','2021-06-06 08:12:54'),
+(7,5,'IDG10010','E099','I970366858','Water',1,'Postpaid',1,1,'Hall','2021-07-04 16:39:36','2021-07-04 16:39:36');
 
 /*Table structure for table `displaybalancelog` */
 
