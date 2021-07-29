@@ -17,38 +17,57 @@ $(document)
 										var data1 = {}										
 										if ($("#selectcommunityName").val() == "-1") {
 											
-											bootbox
-											.alert("Select Community Id");
+											swal.fire({
+												  title: "error",
+												  text: "Select Community Id",
+												  icon: "error"
+												})
 											return false;
 										}
 
 										if ($("#selectBlockBasedonCommunity").val() == "null" || $("#selectBlockBasedonCommunity").val() == "Select Block") {
 
-											bootbox
-											.alert("Select Block Name");
+											swal.fire({
+												  title: "error",
+												  text: "Select Block Name",
+												  icon: "error"
+												})
 											return false;
+											
 										}
 										
 										if ($("#selectHouseBasedonBlock").val() == "null" || $("#selectHouseBasedonBlock").val() == "Select CRN") {
 
-											bootbox
-											.alert("Select CRN Number");
+											swal.fire({
+												  title: "error",
+												  text: "Select CRN Number",
+												  icon: "error"
+												})
 											return false;
+											
 										}
 										
 										if ($("#selectMeters").val() == "null" || $("#selectMeters").val() == "Select Meters") {
 
-											bootbox
-											.alert("Select meters");
+											swal.fire({
+												  title: "error",
+												  text: "Select meters",
+												  icon: "error"
+												})
 											return false;
+											
 										}
 
 
 										if ($("#selectcommandType").val() == "null" || $("#selectcommandType").val() == -1 || $("#selectcommandType").val() == "Select Command Type") {
 
-											bootbox
-											.alert("Select Command Type");
+											swal.fire({
+												  title: "error",
+												  text: "Select Command Type",
+												  icon: "error"
+												})
 											return false;
+											
 										}
 										
 										var array=[];
@@ -56,9 +75,13 @@ $(document)
 										if($("#selectcommandType").val()=="3"){
 											if($("#valueText").val() == "Select Tariff" || $("#valueText").val() == -1){
 												
-												bootbox
-												.alert("Select Tariff");
+												swal.fire({
+													  title: "error",
+													  text: "Select Tariff",
+													  icon: "error"
+													})
 												return false;
+												
 											}	
 											var json={};
 											json["value"] = $("#valueText").val();
@@ -74,9 +97,13 @@ $(document)
 										else if($("#selectcommandType").val()=="6"){
 											if($("#valueText").val() == "Select Tariff" || $("#valueText").val() == ""){
 												
-												bootbox
-												.alert("Select Start Date");
+												swal.fire({
+													  title: "error",
+													  text: "Select Start Date",
+													  icon: "error"
+													})
 												return false;
+												
 											}	
 											var json={};
 											json["value"] = $("#valueText").val();
@@ -88,9 +115,13 @@ $(document)
 												}else if($("#selectcommandType").val()=="8"){
 													if($("#valueText").val() <= "2" && $("#valueText").val() >= "1440"){
 														
-														bootbox
-														.alert("Please enter between 2 and 1440");
+														swal.fire({
+															  title: "error",
+															  text: "Please enter between 2 and 1440",
+															  icon: "error"
+															})
 														return false;
+														
 													}	
 													var json={};
 													json["value"] = $("#valueText").val();
@@ -100,22 +131,31 @@ $(document)
 														var reg =/[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$/;
 														if($("#valueText").val() == ""){
 														
-															bootbox
-															.alert("Enter Default Reading");
+															swal.fire({
+																  title: "error",
+																  text: "Enter Default Reading",
+																  icon: "error"
+																})
 															return false;
+															
 														}	
 														
 															else if(!reg.test($("#valueText").val())){
-																bootbox
-																.alert("The Default Reading can only consist of number");
+																
+																swal.fire({
+																	  title: "error",
+																	  text: "The Default Reading can only consist of number",
+																	  icon: "error"
+																	})
 																return false;
+																
 															}	
 														
 														var json={};
 														json["value"] = $("#valueText").val();
 														json["parameter_id"] = $("#selectcommandType").val();
 														
-														}else if(id=="13"){
+														}else if($("#selectcommandType").val()=="13"){
 															$("#confValue").remove();
 															$("#row").append(`<div class="col-md-4" id="confValue" class="valueText"
 																												>
@@ -128,13 +168,20 @@ $(document)
 																												</div>
 																											</div>`);
 															}
-
-										data1["commandType"] = $("#selectcommandType").val();
-										data1["customerUniqueID"] = $("#selectHouseBasedonBlock").val();
-										data1["meterID"] = $("#AMR_topup").val();
-										data1["commands"] = array.push(json);
-										
-
+										array.push(json);
+										data1["communityID"]=$("#selectcommunityName").val();
+										data1["blockID"]=$("#selectBlockBasedonCommunity").val();
+										data1["customerID"] = $("#selectHouseBasedonBlock").val();
+										var e = document.getElementById("selectHouseBasedonBlock");
+										var value=e.options[e.selectedIndex].value;// get selected option value
+										var text=e.options[e.selectedIndex].text;
+										data1["customerUniqueID"] = text;
+										data1["miuID"] = $("#selectMeters").val();
+										var e = document.getElementById("selectMeters");
+										var value=e.options[e.selectedIndex].value;// get selected option value
+										var text=e.options[e.selectedIndex].text;
+										data1["customerMeterID"] = text;
+										data1["commands"] = array;
 										
 										$
 												.ajax({
@@ -149,31 +196,30 @@ $(document)
 														
 														if (data.result == "Success") {
 
-														
+															swal.fire({
+																  title: "Saved",
+																  text: data.Message,
+																  icon: "success"
+																}).then(function() {
+																    window.location = "configurationStatus.jsp";
+																    
+																});
+															return false;
 
-															bootbox
-																	.alert(
-																			data.Message,
-																			function(
-																					result) {
-
-																				// alert();
-																				window.location = "configurationStatus.jsp";
-																				return false
-																			});
+															
 
 														} else if (data.result == "Failure") {
 
-															bootbox
-																	.alert(
-																			data.Message,
-																			function(
-																					result) {
-
-																				// alert();
-																				window.location = "configuration.jsp";
-																				return false
-																			});
+															
+															swal.fire({
+																  title: "Error",
+																  text: data.Message,
+																  icon: "success"
+																}).then(function() {
+																    window.location = "configurationStatus.jsp";
+																    
+																});
+															return false;
 														}
 													}
 												});
@@ -181,338 +227,5 @@ $(document)
 									});
 				});
 
-/*$(document)
-		.ready(
-				function() {
-					table = $('#configurationstatusTable1').hide();
-					table = $('#configurationstatusTable')
-							.DataTable(
-									{
-										"dom" : "<'row'<'col-sm-4 headname'><'col-sm-2'><'col-sm-1'><'col-sm-2'f>>" +"<'row'<'col-sm-4'B><'col-sm-2'l><'col-sm-2'><'col-sm-2'><'col-sm-1'>>" + "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-6 text-black'i><'col-sm-6 text-black'p>>",
-												"responsive" : true,
-												"processing" : true,
-												"serverSide" : false,
-												"bDestroy" : true,
-												"bPaginate": true,
-												"pagging" : true,
-												"bProcessing" : true,
-												"ordering" : true,
-												"order" : [ 0, "desc" ],
-												"lengthMenu" : [ 5, 10, 25, 30, 50, 75 ],
-												"pageLength" : 5,
-												"scrollY" : 324,
-												"scrollX" : true,
-												"ajax" : {
-											"url" : "/PAYGTL_LORA_BLE/configuration/"+ sessionStorage.getItem("roleID")+ "/"+ sessionStorage.getItem("ID")+"/-1",
-											"type" : "GET",
-											"data" : function(search) {
-											},
-											"complete" : function(json) {
-												return json.data;
-											},
-										},
-										"columns" : [
-												{
-													"data" : "meterID",
-													"defaultContent": ""
-												},
-												{
-													"data" : "commandType",
-													"defaultContent": ""
-												},{
-													"data" : "value",
-													"defaultContent": ""
-												},
-												{
-													"data" : "modifiedDate",
-													"defaultContent": ""
-												},
-												{
-													"data" : "status",
-													"defaultContent": ""
-												},
-												{
-													"mData" : "action",
-													"render" : function(data,
-															type, row) {
 
-														if(row.status == "Passed"){
-														
-															return "---";
-															
-														}else if(row.status == "Pending" || row.status == "Pending...waiting for acknowledge"){
-															
-															return "---";
-															
-														}
-														
-														else if(row.status == "Failed"){
-															return "<a onclick='getDeleteTransactionID("
-															+ row.transactionID
-															+ ")'>"
-															+ "<i class='material-icons' style='color:#17e9e9; cursor:pointer;'>delete</i>"
-															+ "</a>"
-															
-														}
-														
-														
-													}
-												} ],
-										"columnDefs" : [ {
-										//	orderable : false,
-											targets :5, visible:  (((sessionStorage.getItem("roleID") == 1) || (sessionStorage.getItem("roleID") == 2) || (sessionStorage.getItem("roleID") == 3)) && (!(sessionStorage.getItem("roleID") == 5) || !(sessionStorage.getItem("roleID") == 4)))
-										},
-										{
-											"className": "dt-center", "targets": "_all"
-										}],
-										"buttons" : [
-										{
-											extend : 'excel',
-											footer : 'true',
-											//text : 'Excel',
-											exportOptions : {
-												columns : [ 0, 1, 2, 3, 4 ]
-											},
-											//className: 'custom-btn fa fa-file-excel-o',
-											title : 'Configuration Status'
-										},
-
-										{
-											extend : 'pdf',
-											//className: 'custom-btn fa fa-file-pdf-o',
-											footer : 'true',
-											exportOptions : {
-												columns : [ 0, 1, 2, 3,4 ]
-											},
-											//text : 'pdf',
-											orientation : 'landscape',
-											title : 'Configuration Status'
-										},
-									       {
-									    	   
-									           className: 'customButton',
-									           text : "Filter",
-									            action: function ( e, dt, button, config ) {
-									            	$('.customButton').attr(
-									                    {
-									                        "data-toggle": "modal",
-									                        "data-target": "#filter"
-									                    }
-									                );
-									            }
-									        } ],
-											 initComplete: function() {
-												   $('.buttons-excel').html('<i class="fa fa-file-excel-o" />')
-												   $('.buttons-pdf').html('<i class="fa fa-file-pdf-o" />')
-												  }
-
-									});
-					if(sessionStorage.getItem("roleID") == 3 || sessionStorage.getItem("roleID") == 2 || sessionStorage.getItem("roleID") == 5){
-						table.buttons( $('a.customButton') ).remove();	
-					}
-					
-					$("div.headname").html('<h3>Configuration Status</h3>');
-					
-					
-					
-
-					$("#customerFilter")
-					.click(
-							function() {
-
-								var url = $("#filterselectcommunityName").val() == "-1" ? sessionStorage.getItem("roleID")+"/0/-1" : $("#filterselectBlockBasedonCommunity").val() == "Select Block" ? 
-										$("#filterselectcommunityName").val() == "-1" ? 
-										sessionStorage.getItem("roleID")+"/0/-1":sessionStorage.getItem("roleID")+"/0/"+$("#filterselectcommunityName").val():
-									"2/"+$("#filterselectBlockBasedonCommunity").val()+"/-1"
-										
-								$
-										.ajax({
-											type : "GET",
-											contentType : "application/json",
-											url : "/PAYGTL_LORA_BLE/configuration/"+url,
-											dataType : "JSON",
-
-											success : function(d) {
-												
-													$('#configurationstatusTable').dataTable()._fnAjaxUpdate();
-													$("#configurationstatusTable_wrapper").hide();
-													$("#filter").modal("hide");
-													$("#configurationstatusTable1").show();
-													
-													var hCols = [ 3, 4 ];
-													table = $('#configurationstatusTable1')
-													.DataTable(
-															{
-																
-																	"dom": "<'row'<'col-sm-4 headname'><'col-sm-2'><'col-sm-1'><'col-sm-2'f>>" +"<'row'<'col-sm-4'B><'col-sm-2'l><'col-sm-2'><'col-sm-2'><'col-sm-1'>>" + "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-6 text-black'i><'col-sm-6 text-black'p>>",
-																   "responsive" : true,
-																	"serverSide" : false,
-																	"bDestroy" : true,
-																	"bPaginate": true,
-																	"pagging" : true,
-																	"bProcessing" : true,
-																	"ordering" : true,
-																	"order" : [ 0, "desc" ],
-																	"lengthMenu" : [ 5, 10, 25, 30, 50, 75 ],
-																	"pageLength" : 5,
-																	"scrollY" : 324,
-																	"scrollX" : false,
-																	"data" : d.data,
-																	"columns" : [
-																		{
-																			"data" : "meterID",
-																			"defaultContent": ""
-																		},
-																		{
-																			"data" : "commandType",
-																			"defaultContent": ""
-																		},{
-																			"data" : "value",
-																			"defaultContent": ""
-																		},
-																		{
-																			"data" : "modifiedDate",
-																			"defaultContent": ""
-																		},
-																		{
-																			"data" : "status",
-																			"defaultContent": ""
-																		},
-																		{
-																			"mData" : "action",
-																			"render" : function(data,
-																					type, row) {
-
-																				if(row.status == "Passed"){
-																				
-																					return "---";
-																					
-																				}else if(row.status == "Pending" || row.Status == "Pending...waiting for acknowledge"){
-																				
-																					return "---";
-																					
-																				}
-																				
-																				else if(row.status == "Failed"){
-																					return "<a onclick='getDeleteTransactionID("
-																					+ row.transactionID
-																					+ ")'>"
-																					+ "<i class='material-icons' style='color:#17e9e9; cursor:pointer;'>delete</i>"
-																					+ "</a>"
-																					
-																				}
-																				
-																				
-																			}
-																		} ],
-																"columnDefs" : [ {
-																//	orderable : false,
-																	targets : 5, visible:  (((sessionStorage.getItem("roleID") == 1) || (sessionStorage.getItem("roleID") == 2) || (sessionStorage.getItem("roleID") == 3)) && (!(sessionStorage.getItem("roleID") == 5) || !(sessionStorage.getItem("roleID") == 4)))
-																},
-																{
-																	"className": "dt-center", "targets": "_all"
-																}],
-																"buttons" : [
-																{
-																	extend : 'excel',
-																	footer : 'true',
-																	//text : 'Excel',
-																	exportOptions : {
-																		columns : [ 0, 1, 2, 3,4 ]
-																	},
-																	//className: 'custom-btn fa fa-file-excel-o',
-																	title : 'Configuration Status'
-																},
-
-																{
-																	extend : 'pdf',
-																	footer : 'true',
-																	exportOptions : {
-																		columns : [ 0, 1, 2, 3,4 ]
-																	},
-																	//className: 'custom-btn fa fa-file-pdf-o',
-																	//text : 'pdf',
-																	orientation : 'landscape',
-																	title : 'Configuration Status'
-																},
-																{
-													                text: 'Reset',
-													                action: function ( e, dt, node, config ) {
-													                    alert( 'Button activated' );
-													                },
-													                className: 'customButton',
-													               
-													                action: function ( e, dt, button, config ) {
-													                   
-													                	window.location = "configurationStatus.jsp"
-													                }
-													            } ],
-																 initComplete: function() {
-																	   $('.buttons-excel').html('<i class="fa fa-file-excel-o" />')
-																	   $('.buttons-pdf').html('<i class="fa fa-file-pdf-o" />')
-																	  }
-
-															});
-													if(sessionStorage.getItem("roleID") == 3 || sessionStorage.getItem("roleID") == 2 || sessionStorage.getItem("roleID") == 5){
-														table.buttons( $('a.customButton') ).remove();	
-													}
-											
-											$("div.headname").html('<h3>Configuration</h3>');
-											}
-										});
-								return false;
-							});
-					
-					$("#resetFilter")
-					.on(
-							function() {
-								 $("input:text").val("");
-							});	
-					
-				});*/
-
-
-
-
-
-function getDeleteTransactionID(transID){
-	
-	//alert(transID);
-	
-	bootbox
-	.confirm(
-			"ARE YOU SURE TO DELETE RECORD",
-		function(
-			result) {
-			//	alert(result);
-			if(result == true){
-				$.ajax({
-					type : "POST",
-					contentType : "application/json",
-					url : "./configuration/delete/" + transID,
-					dataType : "JSON",
-					success : function(data) {
-						//alert("Success====" + data.result);
-						if (data.result == "Success") {
-							bootbox
-							.confirm(
-									data.Message,
-								function(
-									result) {
-									window.location = "configurationStatus.jsp";
-								});
-
-						} else {
-							bootbox
-							.alert(data.Message);
-							return false;
-						}
-					}
-				});
-			}else if(result==false){
-				//alert("@"+false)
-				
-			}
-		});
-}
 

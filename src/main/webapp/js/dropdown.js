@@ -207,6 +207,7 @@ function showCommunitybyTypeuser(id){
 
 function showFieldsBasedONCommand(id){
 	$("#confValue").remove();
+	$("#confValue").remove();
 	
 	
 	if(id=="3"){
@@ -271,15 +272,13 @@ function showFieldsBasedONCommand(id){
 															</div>
 														</div>`);
 		
-		$('#start_date').datetimepicker({
-			//todayHighlight : true,
-			//format : "yyyy-mm-dd LT"
-		});
+		$('#start_date').bootstrapMaterialDatePicker({
+            format: 'YYYY-MM-DD HH:mm'
+        });
 		
 		}else if(id=="7"){
 			$("#confValue").remove();
-			$("#row").append(`<div id="confValue"><div class="col-md-4"><div class="col-md-4" class="valueText"
-																>
+			$("#row").append(`<div class="col-md-4 valueText" id="confValue">
 																<div id="formtariff" class="group form-group">
 																	<label class="bmd-label-floating select-label">Start Date<sup
 																		class="imp">*</sup></label> 
@@ -287,7 +286,7 @@ function showFieldsBasedONCommand(id){
 													<input type="text" id="start_date" name="start_date" class="form-control" >
 																		
 																</div>
-															</div><div class="col-md-4" id="confValue" class="valueText"
+															</div><div class="col-md-4 valueText" id="confValue" 
 																>
 																<div id="formtariff" class="group form-group">
 																	<label class="bmd-label-floating select-label">End Date<sup
@@ -296,7 +295,7 @@ function showFieldsBasedONCommand(id){
 													<input type="text" id="end_date" name="end_date" class="form-control" >
 																		
 																</div>
-															</div></div></div>`);
+															</div>`);
 			
 			$('#start_date').datetimepicker({
 				todayHighlight : true,

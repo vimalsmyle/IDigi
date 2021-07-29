@@ -5,19 +5,18 @@
 <meta charset="utf-8">
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link rel="stylesheet" href="common/css/bootstrap.min.css">
+	<link rel="stylesheet" href="common/css/bootstrap.min.css">
 <link rel="icon" type="image/png" sizes="16x16"
 	href="common/images/1-hanbit.png">
 <!-- Material Design for Bootstrap CSS -->
-<link rel="stylesheet" href="common/css/bootstrap.min.css">
-<link rel="icon" type="image/png" sizes="16x16"
-	href="common/images/1-hanbit.png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-datetimepicker/2.7.1/css/bootstrap-material-datetimepicker.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
 
 <link
 	href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css"
 	rel="stylesheet" />
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/css/tempusdominus-bootstrap-4.min.css">
 <title>Configuration</title>
 </head>
 
@@ -88,7 +87,7 @@
 															<div class="group form-group">
 																<label class="bmd-label-floating select-label">Select
 																	CRN<sup class="imp">*</sup>
-																</label> <select class="form-control form-control-sm"
+																</label> <select class="form-control select2"
 																	id="selectHouseBasedonBlock"
 																	name="selectHouseBasedonBlock"
 																	onchange="showAllMetersDetails(this);">
@@ -119,7 +118,7 @@
 															<div class="group form-group">
 																<label class="bmd-label-floating select-label">Select
 																	CRN<sup class="imp">*</sup>
-																</label> <select class="form-control form-control-sm"
+																</label> <select class="form-control select2"
 																	id="selectHouseBasedonBlock"
 																	name="selectHouseBasedonBlock"
 																	onchange="showMetersDetails(this.value);">
@@ -134,7 +133,7 @@
 															<div class="group form-group">
 																<label class="bmd-label-floating select-label">Select
 																	Meters<sup class="imp">*</sup>
-																</label> <select class="form-control form-control-sm select2"
+																</label> <select class="form-control select2"
 																	id="selectMeters" name="selectMeters"
 																	>
 																</select>
@@ -166,7 +165,6 @@
 															</div>
 														</div>
 													</div>
-
 													<div class="row">
 														<div class="col-md-11">
 															<button type="button" id="configuration"
@@ -200,29 +198,63 @@
 	<%
 		}
 	%>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/js/tempusdominus-bootstrap-4.min.js"></script>
-	<script type="text/javascript"
-		src="//cdn.jsdelivr.net/jquery.bootstrapvalidator/0.5.0/js/bootstrapValidator.min.js"></script>
-
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-datetimepicker/2.7.1/js/bootstrap-material-datetimepicker.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/locale/ja.js"></script>
 
 	<script src="js/dropdown.js"></script>
 	<script src="js/configuration.js"></script>
 	<script src="js/common.js"></script>
 	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script
+		src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
 
 	<script
-		src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
-
-	
+		src="https://cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js"></script>
 
 	<script
-		src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/locale/nl.js"></script>
+		src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.colVis.min.js"></script>
+
+	<script
+		src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/js/bootstrap-datetimepicker.min.js"></script>
+	<script
+		src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
+
+	<script
+		src="https://cdn.datatables.net/1.10.12/js/dataTables.bootstrap.min.js"></script>
 
 
+	<script
+		src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.bootstrap.min.js"></script>
+
+
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
+
+	<script
+		src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js"></script>
+
+	<script
+		src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
+
+
+
+	<script
+		src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+
+	<script
+		src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+
+
+
+	<script
+		src="https://cdn.datatables.net/responsive/2.2.3/js/responsive.bootstrap4.min.js"></script>
+
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.js"></script>
 
 	<script
 		src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/5.4.0/bootbox.min.js"></script>
@@ -232,13 +264,12 @@
 
 
 	<script>
-		$(document).ready(function() {
-			 $('#datetimepicker1').datetimepicker({
-				    format: 'DD/MM/YYYY HH:mm'
-				  });
-
-		});
-	</script>
+    $(function () {
+        $('#start_date').bootstrapMaterialDatePicker({
+            format: 'YYYY-MM-DD HH:mm'
+        });
+    });
+</script>
 
 </body>
 

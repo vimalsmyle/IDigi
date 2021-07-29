@@ -54,7 +54,7 @@
 								<div class="text-xs font-weight-bold text-uppercase  justify-content-start col p-0">
                                     Community Details
 								</div>
-								<div class="justify-content-end f-30 d-flex"><i class="fa fa-dashboard"></i></div>
+								<div class="justify-content-end f-30 d-flex"><i class="fa fa-building"></i></div>
 							</div>
 							
 						</div></a>
@@ -68,7 +68,7 @@
 								<div class="text-xs font-weight-bold text-uppercase  justify-content-start col p-0">
                                    Block Details
 								</div>
-								<div class="justify-content-end f-30 d-flex"><i class="fa fa-dashboard"></i></div>
+								<div class="justify-content-end f-30 d-flex"><i class="fa fa-building"></i></div>
 							</div>
 							
 						</div></a>
@@ -81,7 +81,7 @@
 								<div class="text-xs font-weight-bold text-uppercase  justify-content-start col p-0">
                                    Customer Details
 								</div>
-								<div class="justify-content-end f-30 d-flex"><i class="fa fa-dashboard"></i></div>
+								<div class="justify-content-end f-30 d-flex"><i class="fa fa-users"></i></div>
 							</div>
 							
 						</div></a>
@@ -94,7 +94,7 @@
 								<div class="text-xs font-weight-bold text-uppercase  justify-content-start col p-0">
                                    Gateway Details
 								</div>
-								<div class="justify-content-end f-30 d-flex"><i class="fa fa-dashboard"></i></div>
+								<div class="justify-content-end f-30 d-flex"><i class="fa fa-key"></i></div>
 							</div>
 							
 						</div></a>

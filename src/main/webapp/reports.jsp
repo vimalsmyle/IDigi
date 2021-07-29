@@ -12,7 +12,7 @@
 <!-- <link rel="stylesheet" href="common/css/style.css"> -->
 <link href="common/css/materialize.fontawsome.css" rel="stylesheet">
 
-<title>Community Management</title>
+<title>Report</title>
 </head>
 
 
@@ -52,7 +52,7 @@
 														class="text-xs font-weight-bold text-uppercase  justify-content-start col p-0">
 														User Consumption Report</div>
 													<div class="justify-content-end f-30 d-flex">
-														<i class="fa fa-dashboard"></i>
+														<i class="fa fa-bar-chart"></i>
 													</div>
 												</div>
 
@@ -71,7 +71,7 @@
 														class="text-xs font-weight-bold text-uppercase  justify-content-start col p-0">
 														Topup Summary Report</div>
 													<div class="justify-content-end f-30 d-flex">
-														<i class="fa fa-dashboard"></i>
+														<i class="fa fa-arrow-up"></i>
 													</div>
 												</div>
 
@@ -89,7 +89,7 @@
 														class="text-xs font-weight-bold text-uppercase  justify-content-start col p-0">
 														Bill Summary Report</div>
 													<div class="justify-content-end f-30 d-flex">
-														<i class="fa fa-dashboard"></i>
+														<i class="fa fa-files-o"></i>
 													</div>
 												</div>
 
@@ -108,7 +108,7 @@
 														class="text-xs font-weight-bold text-uppercase  justify-content-start col p-0">
 														Financial Report</div>
 													<div class="justify-content-end f-30 d-flex">
-														<i class="fa fa-dashboard"></i>
+														<i class="fa fa-money"></i>
 													</div>
 												</div>
 
@@ -127,7 +127,7 @@
 														class="text-xs font-weight-bold text-uppercase  justify-content-start col p-0">
 														Alarm Report</div>
 													<div class="justify-content-end f-30 d-flex">
-														<i class="fa fa-dashboard"></i>
+														<i class="fa fa-bell"></i>
 													</div>
 												</div>
 
