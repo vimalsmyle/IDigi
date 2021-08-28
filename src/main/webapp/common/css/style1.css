@@ -1177,6 +1177,7 @@ button:focus {
 
 .description-text {
 	font-size: 12px;
+	cursor: pointer;
 }
 
 .d-flex {
@@ -1240,4 +1241,8 @@ label, .select2-container {
 	top: 0%;
 	background-repeat: no-repeat;
 	background-position: center;
+}
+
+.modal-xl{
+	max-width: 1140px;
 }

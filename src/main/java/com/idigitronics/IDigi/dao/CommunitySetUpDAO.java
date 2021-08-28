@@ -896,8 +896,9 @@ public class CommunitySetUpDAO {
 					
 					for(int i = 0; i < customervo.getMeters().size(); i++) {
 						
-						PreparedStatement pstmt4 = con.prepareStatement("INSERT INTO customermeterdetails (CustomerID, CustomerUniqueID, MIUID, MeterSerialNumber, MeterType, MeterSize, PayType, TariffID, GatewayID, Location, ModifiedDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
+						PreparedStatement pstmt4 = con.prepareStatement("INSERT INTO customermeterdetails (CustomerID, CustomerUniqueID, MIUID, MeterSerialNumber, MeterType, MeterSizeID, PayType, TariffID, GatewayID, Location, ModifiedDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
 						pstmt4.setInt(1, rs.getInt("CustomerID"));
+						System.out.println("Inside the Insert Statement->");
 						pstmt4.setString(2, customervo.getCustomerUniqueID());
 						pstmt4.setString(3, customervo.getMeters().get(i).getMiuID());
 						pstmt4.setString(4, customervo.getMeters().get(i).getMeterSerialNumber());
@@ -1102,7 +1103,7 @@ public class CommunitySetUpDAO {
 				while (rs.next()) {
 
 					pstmt6 = con.prepareStatement(
-							"INSERT INTO customerdeletemeter (CustomerMeterID, CustomerID, CustomerUniqueID, MIUID, MeterSerialNumber, MeterType, MeterSize, PayType, Location, ModifiedDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
+							"INSERT INTO customerdeletemeter (CustomerMeterID, CustomerID, CustomerUniqueID, MIUID, MeterSerialNumber, MeterType, MeterSizeID, PayType, Location, ModifiedDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
 
 					pstmt6.setInt(1, rs.getInt("CustomerMeterID"));
 					pstmt6.setInt(2, rs.getInt("CustomerID"));
@@ -1110,7 +1111,7 @@ public class CommunitySetUpDAO {
 					pstmt6.setString(4, rs.getString("MIUID"));
 					pstmt6.setString(5, rs.getString("MeterSerialNumber"));
 					pstmt6.setString(6, rs.getString("MeterType"));
-					pstmt6.setInt(7, rs.getInt("MeterSize"));
+					pstmt6.setInt(7, rs.getInt("MeterSizeID"));
 					pstmt6.setString(8, rs.getString("PayType"));
 					pstmt6.setString(9, rs.getString("Location"));
 

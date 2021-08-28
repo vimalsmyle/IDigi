@@ -182,7 +182,7 @@
 
 	<div class="modal fade bd-example-modal-xl" id="myCustomerMeters"
 		role="dialog">
-		<div class="modal-dialog modal-lg
+		<div class="modal-dialog modal-xl
 		">
 
 			<!-- Modal content-->

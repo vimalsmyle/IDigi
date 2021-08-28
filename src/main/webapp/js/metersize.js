@@ -131,7 +131,7 @@ $(document)
 																message : 'Per unit value is required and cannot be empty'
 															},
 															stringLength : {
-																min : 2,
+																min : 1,
 																max : 10,
 																message : 'Per unit value must be more than 2 and less than 10 characters long'
 															},
@@ -163,7 +163,7 @@ $(document)
 														message : 'Meter size is required and cannot be empty'
 													},
 													stringLength : {
-														min : 3,
+														min :1,
 														max : 10,
 														message : 'Meter size must be more than 6 and less than 30 characters long'
 													},
@@ -180,7 +180,7 @@ $(document)
 														message : 'Per Unit Value is required and cannot be empty'
 													},
 													stringLength : {
-														min : 2,
+														min : 1,
 														max : 10,
 														message : 'Per Unit Value must be more than 2 and less than 10 characters long'
 													},
@@ -216,11 +216,11 @@ $(document)
 																});
 
 												if (formIsValid) {
-													$('.submit-button', $(this))
+													$('#metersizeAdd', $(this))
 															.attr('disabled',
 																	false);
 												} else {
-													$('.submit-button', $(this))
+													$('#metersizeAdd', $(this))
 															.attr('disabled',
 																	true);
 												}
@@ -287,7 +287,7 @@ $(document)
 
 																	/*alert( "data"
 																			+ data.result);*/
-																	swal({
+																	swal.fire({
 																		  title: "Saved",
 																		  text: data.Message,
 																		  icon: "success"
@@ -299,7 +299,7 @@ $(document)
 
 																} else if(data.result == "Failure"){
 																	
-																	swal({
+																	swal.fire({
 																		  title: "error",
 																		  text: data.Message,
 																		  icon: "error"
@@ -343,7 +343,7 @@ $(document)
 															/*alert( "data"
 																	+ data.result);*/
 															
-															swal({
+															swal.fire({
 																  title: "Saved",
 																  text: data.Message,
 																  icon: "success"
@@ -355,7 +355,7 @@ $(document)
 
 														} else if(data.result == "Failure"){
 															
-															swal({
+															swal.fire({
 																  title: "error",
 																  text: data.Message,
 																  icon: "error"

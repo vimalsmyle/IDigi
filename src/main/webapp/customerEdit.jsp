@@ -131,10 +131,11 @@
 							<div class="group form-group has-feedback has-success bmd-form-group is-filled">
 							<label class="bmd-label-floating"></label> 
 							<br/>
-							<button class="btn btn-primary"
+							<!-- <button class="btn btn-primary"
 									 value="Add!" id="addMeter"
-									type="button">Add</button>
+									type="button">Add</button> -->
 									<input type="hidden" id="rowCount" name="rowCount">
+									<input type="hidden" id="rowCountArray" name="rowCountArray">
 									</div>
 							</div>
 							

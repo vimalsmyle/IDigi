@@ -540,3 +540,41 @@ function getBlockFormDelete(blockId){
 
 	
 }
+
+function getGatewayFormDelete(val){
+	bootbox
+	.confirm(
+			"ARE YOU SURE TO DELETE Gateway",
+		function(
+			result) {
+			//	alert(result);
+			if(result == true){
+				$.ajax({
+					type : "POST",
+					contentType : "application/json",
+					url : "./gateway/delete/" + val,
+					dataType : "JSON",
+					success : function(data) {
+						//alert("Success====" + data.result);
+						if (data.result == "Success") {
+							bootbox
+							.confirm(
+									data.Message,
+								function(
+									result) {
+									window.location = "gateway.jsp";
+								});
+
+						} else {
+							bootbox
+							.alert(data.Message);
+							return false;
+						}
+					}
+				});
+			}else if(result==false){
+				//alert("@"+false)
+				
+			}
+		});
+}

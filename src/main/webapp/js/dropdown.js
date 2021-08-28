@@ -13,12 +13,13 @@ $(function() {
 				+ sessionStorage.getItem("ID")+ "/" + sessionStorage.getItem("ID"), function(data) {
 			var Options = "";
 			$.each(data.dropDownCustomers, function(key, value) {
-				Options = Options + "<option value='" + key + "'>" + key
+				Options = Options + "<option value='" + key + "'>" + value
 						+ "</option>";
 			});
 			$('#selectHouseBasedonBlock').append(Options);
 			// $("#selectBlockBasedonCommunity").material_select();
 		});
+		
 	}
 	
 	
@@ -230,7 +231,6 @@ function showFieldsBasedONCommand(id){
 						+ "</option>";
 			});
 			$('#valueText').append(Options);
-			$('#valueText').append(Options);
 			// $("#selectcommunityName").material_select();
 		});
 		
@@ -400,4 +400,16 @@ function show(value){
 	   // $('.divContainer').append('<div>'+x+'</div>')
 		  console.log(x);
 	  });
+}
+
+function onChangeMeterSize(rowCount){
+	 $.getJSON("./metersizes/"+$("#selectMeterType-"+rowCount).val(), function(data) {
+			var Options = '<option value=-1>Select  Meter Size</option>';
+			$.each(data.dropDownMeterSizes, function(key, value) {
+				Options = Options + '<option value=' + key + '>' + value
+						+ '</option>';
+			});
+			$('#selectMeterSize-'+rowCount).append(Options);
+		});
+	
 }

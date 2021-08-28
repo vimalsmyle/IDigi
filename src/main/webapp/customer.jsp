@@ -152,6 +152,7 @@
 							<button class="btn btn-primary"
 									 value="Add!" id="addMeter"
 									type="button">Add Meter</button>
+									<input type="hidden" id="rowCountArray" name="rowCountArray">
 									<input type="hidden" id="rowCount" name="rowCount">
 									</div>
 							</div>

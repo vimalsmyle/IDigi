@@ -10,6 +10,7 @@ $(document).ready(function() {
 	$.each(data.data, function(i, item) {
 		if ($("#custUniqueId").val() == item.CustomerUniqueID) {
 			var rowCount = 0;
+			var rowCountArray=[];
 			$('#communityNameEdit').val(item.communityName).trigger("change");
 			$("#formcommunityNameEdit").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
 			
@@ -61,17 +62,17 @@ $(document).ready(function() {
 				
 				$("#template").append("<div class=row> " +
 						"<div class=col-md-4>" +
-						"<div id='formmiuIDEdit' class='group form-group has-feedback has-success bmd-form-group is-filled'>"
+						"<div id='formmiuIDAdd' class='group form-group has-feedback has-success bmd-form-group is-filled'>"
 										+"<label class=bmd-label-floating>MIU ID</label> <input "
-										+"type=text class='form-control form-control-sm' name=miuIDEdit["+rowCount+"]"
-										+" id=miuIDEdit-"+rowCount+">"
+										+"type=text class='form-control form-control-sm' name=miuIDAdd["+rowCount+"]"
+										+" id=miuIDAdd-"+rowCount+">"
 										+"</div></div>"+
 							"<div class=col-md-4>" +
-							"<div id='formmeterSerialNumberEdit' class='group form-group has-feedback has-success bmd-form-group is-filled'>"
+							"<div id='formmeterSerialNumberAdd' class='group form-group has-feedback has-success bmd-form-group is-filled'>"
 							+"<label class=bmd-label-floating>Meter Serial Number</label> <input "
-							+"type=text class='form-control form-control-sm' name=meterSerialNumberEdit["+rowCount+"]"
-							+" disabled id=meterSerialNumberEdit-"+rowCount+">"
-							+"<input type='hidden' id=customerMeterIDEdit-"+rowCount+"></div></div>"+
+							+"type=text class='form-control form-control-sm' name=meterSerialNumberAdd["+rowCount+"]"
+							+" disabled id=meterSerialNumberAdd-"+rowCount+">"
+							+"<input type='hidden' id=customerMeterIDAdd-"+rowCount+"></div></div>"+
 						"<div class=col-md-4>" +
 						"<div class='group form-group has-feedback has-success bmd-form-group is-filled'>"
 						+"<label class=bmd-label-floating>Meter Type</label> " +
@@ -85,13 +86,13 @@ $(document).ready(function() {
 						"<div class=col-md-4>" +
 						"<div id='formmeterSizeEdit' class='group form-group has-feedback has-success bmd-form-group is-filled'>"
 						+"<label class=bmd-label-floating>Meter Size</label> <input "
-						+"type=text class='form-control form-control-sm' disabled name=meterSizeEdit["+rowCount+"]"
-						+" id=meterSizeEdit-"+rowCount+">"
+						+"type=text class='form-control form-control-sm' name=meterSizeAdd["+rowCount+"]"
+						+" disabled id=meterSizeAdd-"+rowCount+">"
 						+"</div></div>"+
 						"<div class=col-md-4>" +
 						"<div class='group form-group has-feedback has-success bmd-form-group is-filled'>"
 						+"<label class=bmd-label-floating>Pay Type</label>" +
-						"<select class='form-control form-control-sm select2' disabled id=payTypeEdit-"+rowCount+" name=payTypeEdit["+rowCount+"]>"+
+						"<select class='form-control form-control-sm select2' disabled id=payTypeAdd-"+rowCount+" name=payTypeAdd["+rowCount+"]>"+
 						"<option value='-1'>Select Pay Type</option>"+
 						"<option value='Prepaid'>Prepaid</option>"+
 						"<option value='Postpaid'>Postpaid</option>"+
@@ -100,22 +101,22 @@ $(document).ready(function() {
 						"<div class=col-md-4>" +
 						"<div id=formtariffNameEdit class='group form-group has-feedback has-success bmd-form-group is-filled'>"
 						+"<label class=bmd-label-floating>Tariff Name</label> <input "
-						+"type=text class='form-control form-control-sm' name=tariffNameEdit["+rowCount+"]"
-						+" disabled id=tariffNameEdit-"+rowCount+">"
+						+"type=text class='form-control form-control-sm' name=tariffNameAdd["+rowCount+"]"
+						+" disabled id=tariffNameAdd-"+rowCount+">"
 						+"</div></div>"+
 						"<div class=col-md-4>" +
 						"<div class='group form-group has-feedback has-success bmd-form-group is-filled'>"
 						+"<label class=bmd-label-floating>Gateway ID</label> " +
 						"<select "+
-						"class='form-control form-control-sm gatewayIDEdit' id=gatewayIDEdit-"+rowCount+" name=gatewayIDEdit["+rowCount+"]>"+
+						"class='form-control form-control-sm gatewayIDAdd' id=gatewayIDAdd-"+rowCount+" name=gatewayIDAdd["+rowCount+"]>"+
 						 
 						"</select>"
 						+"</div></div>"+
 						"<div class=col-md-4>" +
 						"<div id='formlocationEdit' class='group form-group has-feedback has-success bmd-form-group is-filled'>"
 						+"<label class=bmd-label-floating>Location</label> <input "
-						+"type=text class='form-control form-control-sm' disabled name=locationEdit["+rowCount+"]"
-						+" id=locationEdit-"+rowCount+">"
+						+"type=text class='form-control form-control-sm' disabled name=locationAdd["+rowCount+"]"
+						+" id=locationAdd-"+rowCount+">"
 						+"<hr></div></div>   " +
 								"</div>" +
 								"</div>");
@@ -124,24 +125,33 @@ $(document).ready(function() {
 			
 				
 				
-				$("#miuIDEdit-"+rowCount).val(meter.miuID);
-				$("#customerMeterIDEdit-"+rowCount).val(meter.customerMeterID);
-				$("#formmiuIDEdit").removeClass().addClass("group form-group has-feedback has-success bmd-form-group is-filled");
-				$("#meterSerialNumberEdit-"+rowCount).val(meter.meterSerialNumber);
-				$("#formmeterSerialNumberEdit").addClass("group form-group has-feedback has-success bmd-form-group is-filled");
+				$("#miuIDAdd-"+rowCount).val(meter.miuID);
+				$("#customerMeterIDAdd-"+rowCount).val(meter.customerMeterID);
+				$("#formmiuIDAdd").removeClass().addClass("group form-group has-feedback has-success bmd-form-group is-filled");
+				$("#meterSerialNumberAdd-"+rowCount).val(meter.meterSerialNumber);
+				$("#formmeterSerialNumberAdd").addClass("group form-group has-feedback has-success bmd-form-group is-filled");
 				$("#selectMeterType-"+rowCount).val(meter.meterType);
-				$("#meterSizeEdit-"+rowCount).val(meter.meterSize);
-				$("#formmeterSizeEdit").addClass("group form-group has-feedback has-success bmd-form-group is-filled");
-				$("#payTypeEdit-"+rowCount).val(meter.payType);
+				$("#meterSizeAdd-"+rowCount).val(meter.meterSize);
+				$("#formmeterSizeAdd").addClass("group form-group has-feedback has-success bmd-form-group is-filled");
+				$("#payTypeAdd-"+rowCount).val(meter.payType);
 				$("#selectTariffName-"+rowCount).val(meter.tariffID);
-				$("#gatewayIDEdit-"+rowCount).val(meter.gatewayID);
-				$("#tariffNameEdit-"+rowCount).val(meter.tariffName);
-				$("#gatewayIDEdit-"+rowCount).val(meter.gatewayID);
-				$("#locationEdit-"+rowCount).val(meter.location);
-				$("#formlocationEdit").addClass("group form-group has-feedback has-success bmd-form-group is-filled");
+				$("#gatewayIDAdd-"+rowCount).val(meter.gatewayID);
+				$("#tariffNameAdd-"+rowCount).val(meter.tariffName);
+				$("#gatewayIDAdd-"+rowCount).val(meter.gatewayID);
+				$("#locationAdd-"+rowCount).val(meter.location);
+				$("#formlocationAdd").addClass("group form-group has-feedback has-success bmd-form-group is-filled");
 				
+				
+				$.getJSON("./gateways", function(data) {
+					var OptionsGateway = "<option value='-1'>Select  Gateway</option>";
+					$.each(data.dropDownGateways, function(key, value) {
+						OptionsGateway = OptionsGateway + "<option value='" + key + "'>" + value
+								+ "</option>";
+					});
+					$("#gatewayIDAdd-"+rowCount).append(OptionsGateway);
+			 });
 
-				$('#customerEdit').bootstrapValidator('addField' ,
+				$('#customerAdd').bootstrapValidator('addField' ,
 			        'miuIDEdit['+rowCount+']', {
 			        	message : 'MUI ID is not valid',
 						validators : {
@@ -149,17 +159,17 @@ $(document).ready(function() {
 								message : 'MUI ID is required and cannot be empty'
 							},
 							stringLength : {
-								min : 4,
+								min : 2,
 								max : 30,
-								message : 'MUI ID must be more than 4 and less than 30 characters long'
+								message : 'MUI ID must be more than 2 and less than 30 characters long'
 							},
 							regexp : {
-								regexp : /^[a-zA-Z][a-zA-Z0-9.,$; ]+$/,
+								regexp : /^[a-zA-Z0-9.,$; ]+$/,
 								message : 'MUI ID can only consist of Alphanumaric'
 							}
 						}
 			        });
-				 $('#customerEdit').bootstrapValidator('addField',
+				 $('#customerAdd').bootstrapValidator('addField',
 			        'meterSerialNumberEdit['+rowCount+']', {
 			        	message : 'Meter Serial Number is not valid',
 						validators : {
@@ -167,17 +177,17 @@ $(document).ready(function() {
 								message : 'Meter Serial Number is required and cannot be empty'
 							},
 							stringLength : {
-								min : 4,
+								min : 2,
 								max : 30,
-								message : 'Meter Serial Number must be more than 4 and less than 30 characters long'
+								message : 'Meter Serial Number must be more than 2 and less than 30 characters long'
 							},
 							regexp : {
-								regexp : /^[a-zA-Z][a-zA-Z0-9.,$; ]+$/,
+								regexp : /^[a-zA-Z0-9.,$; ]+$/,
 								message : 'Meter Serial Number can only consist of Alphanumaric'
 							}
 						}
 			        });
-				 $('#customerEdit').bootstrapValidator('addField',
+				 $('#customerAdd').bootstrapValidator('addField',
 			        'meterSizeEdit['+rowCount+']', {
 			        	message : 'Meter Size is not valid',
 						validators : {
@@ -187,7 +197,7 @@ $(document).ready(function() {
 							stringLength : {
 								min : 1,
 								max : 30,
-								message : 'Meter Size must be more than 4 and less than 30 characters long'
+								message : 'Meter Size must be more than 1 and less than 30 characters long'
 							},
 							regexp : {
 								regexp : /^[0-9]+$/,
@@ -195,7 +205,7 @@ $(document).ready(function() {
 							}
 						}
 			        });
-				 $('#customerEdit').bootstrapValidator('addField',
+				 $('#customerAdd').bootstrapValidator('addField',
 			        'tariffNameEdit['+rowCount+']', {
 			        	message : 'Tariff Name is not valid',
 						validators : {
@@ -214,7 +224,7 @@ $(document).ready(function() {
 						}
 			        });
 				
-				 $('#customerEdit').bootstrapValidator('addField','locationEdit['+rowCount+']', {
+				 $('#customerAdd').bootstrapValidator('addField','locationEdit['+rowCount+']', {
 			        	message : 'Location is not valid',
 						validators : {
 							notEmpty : {
@@ -232,19 +242,20 @@ $(document).ready(function() {
 						}
 			        }
 				 );
-				 rowCount++;
-				 
+				// rowCount++;
+				 rowCountArray.push(rowCount)
+				 $("#rowCountArray").val(rowCountArray);				 
 				 $("#rowCount").val(rowCount);
 				 
-				 	$("#formmiuIDEdit").removeClass().addClass("group form-group has-feedback has-success bmd-form-group is-filled");
-					$("#formmeterSerialNumberEdit").addClass("group form-group has-feedback has-success bmd-form-group is-filled");
-					$("#formmeterSizeEdit").addClass("group form-group has-feedback has-success bmd-form-group is-filled");
-					$("#formlocationEdit").addClass("group form-group has-feedback has-success bmd-form-group is-filled");
-					$("#formtariffNameEdit").addClass("group form-group has-feedback has-success bmd-form-group is-filled");
+				 	$("#formmiuIDAdd").removeClass().addClass("group form-group has-feedback has-success bmd-form-group is-filled");
+					$("#formmeterSerialNumberAdd").addClass("group form-group has-feedback has-success bmd-form-group is-filled");
+					$("#formmeterSizeAdd").addClass("group form-group has-feedback has-success bmd-form-group is-filled");
+					$("#formlocationAdd").addClass("group form-group has-feedback has-success bmd-form-group is-filled");
+					$("#formtariffNameAdd").addClass("group form-group has-feedback has-success bmd-form-group is-filled");
 				 
 			});
 			
-			if(rowCount>2){
+			if(rowCount>13){
 				$("#addMeter").hide();
 			}else{
 				$("#addMeter").show();
@@ -263,14 +274,7 @@ $(document).ready(function() {
 	});
  
  
- $.getJSON("./gateways", function(data) {
-		var OptionsGateway = "<option value='-1'>Select  Gateway</option>";
-		$.each(data.dropDownGateways, function(key, value) {
-			OptionsGateway = OptionsGateway + "<option value='" + key + "'>" + value
-					+ "</option>";
-		});
-		$('.gatewayIDEdit').append(OptionsGateway);
- });
+ 
  
 });
 	
@@ -280,7 +284,7 @@ $(document).ready(function() {
 
 
 $(document).ready(function() {
-	
+	var rowCountArray=[];
 	if(sessionStorage.getItem("roleID") == 1 || sessionStorage.getItem("roleID") == 2){
 		if(sessionStorage.getItem("roleID") == 2){
 			$("#communityNameAdd").val(sessionStorage.getItem("communityName"));
@@ -299,6 +303,7 @@ table = $('#customerTable')
 {
 	"dom": dom1,
 	"responsive" : true,
+	/*"processing" : true,*/
 	"serverSide" : false,
 	"bDestroy" : true,
 	"bPaginate": true,
@@ -308,8 +313,7 @@ table = $('#customerTable')
 	"order" : [ 0, "desc" ],
 	"lengthMenu" : [ 5, 10, 25, 30, 50, 75 ],
 	"pageLength" : 5,
-	
-	"scrollX" : true,
+	"scrollX" : false,
 "ajax" : {
 "url":"./customer/"+sessionStorage.getItem("roleID")+"/"+sessionStorage.getItem("ID")+"/-1",
 "type" : "GET",
@@ -370,7 +374,11 @@ return json.data;
 																	+ "\")'>"
 																	+ "<i class='material-icons' style='color:#17e9e9;cursor:pointer;'>delete</i>"
 																	+ "</a>"
-																	
+																	+"<a onclick='getCustomerFormDelete(\""
+																	+ row.CustomerUniqueID
+																	+ "\")'>"
+																	+ "<i class='material-icons' style='color:#17e9e9;cursor:pointer;'>delete</i>"
+																	+ "</a>"
 																	
 	}
 	},{
@@ -379,6 +387,11 @@ return json.data;
 			
 			return "<a href='customerEdit.jsp?cust="+row.CustomerUniqueID+"'>"
 																		+ "<i class='material-icons' style='color:#17e9e9'>edit</i>"
+																		+ "</a>"
+																		+"<a onclick='getCustomerFormDelete(\""
+																		+ row.CustomerUniqueID
+																		+ "\")'>"
+																		+ "<i class='material-icons' style='color:#17e9e9;cursor:pointer;'>delete</i>"
 																		+ "</a>"
 		}
 		}
@@ -422,13 +435,14 @@ $("div.addevent").html('<button type="button" id="customerAddd"'
 		+'<i class="fa fa-user-plus"></i>'
 		+'</button>');
 
-var rowCount = 0;
+var rowCount = $("#rowCount").val()==""?0:$("#rowCount").val();
 $("#addMeter")
 .click(
 		function() {
+			var rowCount = $("#rowCount").val()==""?0:$("#rowCount").val();
 			rowCount++;
 			
-			if(rowCount>2){
+			if(rowCount>13){
 				$("#addMeter").hide();
 			}else{
 				$("#addMeter").show();
@@ -451,7 +465,7 @@ $("#addMeter")
 									"<div class=col-md-4>" +
 									"<div class='group form-group has-feedback has-success bmd-form-group is-filled'>"
 									+"<label class=bmd-label-floating>Meter Type</label> " +
-									"<select class='form-control form-control-sm select2'  id=selectMeterType-"+rowCount+" name=selectMeterType["+rowCount+"]>"+
+									"<select class='form-control form-control-sm select2'  id=selectMeterType-"+rowCount+" onchange='onChangeMeterSize("+rowCount+")' name=selectMeterType["+rowCount+"]>"+
 										"<option value='-1'>Select Meter Type</option>"+
 										"<option value='Gas'>Gas</option>"+
 										"<option value='Water'>Water</option>"+
@@ -459,10 +473,11 @@ $("#addMeter")
 									"</select>"
 									+"</div></div>"+
 									"<div class=col-md-4>" +
-									"<div class='group form-group'>"
-									+"<label class=bmd-label-floating>Meter Size</label> <input "
-									+"type=text class='form-control form-control-sm' name=meterSizeAdd["+rowCount+"]"
-									+" id=meterSizeAdd-"+rowCount+">"
+									"<div class='group form-group has-feedback has-success bmd-form-group is-filled'>"
+									+"<label class=bmd-label-floating>Meter Size</label> <select "+
+									"class='form-control form-control-sm' " +
+									"id=selectMeterSize-"+rowCount+" name=selectMeterSize["+rowCount+"]>"+
+									"</select>"
 									+"</div></div>"+
 									"<div class=col-md-4>" +
 									"<div class='group form-group has-feedback has-success bmd-form-group is-filled'>"
@@ -496,7 +511,7 @@ $("#addMeter")
 									+" id=locationAdd-"+rowCount+">"
 									+"<hr></div></div>   " +
 											" <div class='col-md-12 text-right'>" 
-									+" <button type=button class='btn btn-danger' id='removeMeter'>Remove Meter</button></div></div>" +
+									+" <input type=button class='btn btn-danger' id='removeMeter' onclick='removeMeter("+rowCount+")' value='Remove Meter'></div></div>" +
 											"</div>");
 
 			
@@ -509,12 +524,12 @@ $("#addMeter")
 							message : 'MUI ID is required and cannot be empty'
 						},
 						stringLength : {
-							min : 4,
+							min : 2,
 							max : 30,
-							message : 'MUI ID must be more than 4 and less than 30 characters long'
+							message : 'MUI ID must be more than 2 and less than 30 characters long'
 						},
 						regexp : {
-							regexp : /^[a-zA-Z][a-zA-Z0-9.,$; ]+$/,
+							regexp : /^[a-zA-Z0-9.,$; ]+$/,
 							message : 'MUI ID can only consist of Alphanumaric'
 						}
 					}
@@ -527,12 +542,12 @@ $("#addMeter")
 							message : 'Meter Serial Number is required and cannot be empty'
 						},
 						stringLength : {
-							min : 4,
+							min : 2,
 							max : 30,
-							message : 'Meter Serial Number must be more than 4 and less than 30 characters long'
+							message : 'Meter Serial Number must be more than 2 and less than 30 characters long'
 						},
 						regexp : {
-							regexp : /^[a-zA-Z][a-zA-Z0-9.,$; ]+$/,
+							regexp : /^[a-zA-Z0-9.,$; ]+$/,
 							message : 'Meter Serial Number can only consist of Alphanumaric'
 						}
 					}
@@ -547,7 +562,7 @@ $("#addMeter")
 						stringLength : {
 							min : 1,
 							max : 30,
-							message : 'Meter Size must be more than 4 and less than 30 characters long'
+							message : 'Meter Size must be more than 1 and less than 30 characters long'
 						},
 						regexp : {
 							regexp : /^[0-9]+$/,
@@ -581,9 +596,9 @@ $("#addMeter")
 							message : 'Location is required and cannot be empty'
 						},
 						stringLength : {
-							min : 4,
+							min : 2,
 							max : 30,
-							message : 'Location must be more than 4 and less than 30 characters long'
+							message : 'Location must be more than 2 and less than 30 characters long'
 						},
 						regexp : {
 							regexp : /^[a-zA-Z][a-zA-Z0-9.,$; ]+$/,
@@ -592,8 +607,8 @@ $("#addMeter")
 					}
 		        }
 			 );
-		     
-			 
+			 rowCountArray.push(rowCount)
+			 $("#rowCountArray").val(rowCountArray);		
 			 $("#rowCount").val(rowCount);
 			 
 			 $.getJSON("./tariffs", function(data) {
@@ -604,6 +619,7 @@ $("#addMeter")
 					});
 					$('#selectTariffName-'+rowCount).append(Options);
 				});
+			
 			 
 			 
 			 $.getJSON("./gateways", function(data) {
@@ -618,18 +634,9 @@ $("#addMeter")
 
 		});
 
-$("body").on("click", "#removeMeter", function(e) {
-	rowCount--;
-	if(rowCount>2){
-		$("#addMeter").hide();
-	}else{
-		$("#addMeter").show();
-	}
-	$(this).parent().parent().remove();
-	
-	$("#rowCount").val(rowCount);
-	
-  });
+//$("body").on("click", "#removeMeter", function(e) {
+
+  //});
 
 
 
@@ -1095,7 +1102,7 @@ $(document)
 													array["miuID"] = $("#miuIDAdd-"+i).val();
 													array["meterSerialNumber"] = $("#meterSerialNumberAdd-"+i).val();
 													array["meterType"] = $("#selectMeterType-"+i).val();
-													array["meterSize"] = $("#meterSizeAdd-"+i).val();
+													array["meterSizeID"] = $("#meterSizeAdd-"+i).val();
 													array["payType"] = $("#payTypeAdd-"+i).val();
 													array["tariffID"] = $("#selectTariffName-"+i).val();
 													array["gatewayID"] = $("#gatewayIDAdd-"+i).val();
@@ -1186,17 +1193,17 @@ $(document)
 											
 											
 											var meterDetails = [];
-											for(var i=1;parseInt($("#rowCount").val())>i;i++){
+											for(var i=1;parseInt($("#rowCount").val())>=i;i++){
 												var array ={};
 												
-												array["miuID"] = $("#miuIDEdit-"+i).val();
-												array["meterSerialNumber"] = $("#meterSerialNumberEdit-"+i).val();
+												array["miuID"] = $("#miuIDAdd-"+i).val();
+												array["meterSerialNumber"] = $("#meterSerialNumberAdd-"+i).val();
 												array["meterType"] = $("#selectMeterType-"+i).val();
-												array["meterSize"] = $("#meterSizeEdit-"+i).val();
-												array["payType"] = $("#payTypeEdit-"+i).val();
-												array["gatewayID"] = $("#gatewayIDEdit-"+i).val();
-												array["customerMeterID"] = $("#customerMeterIDEdit-"+i).val();
-												array["location"] = $("#locationEdit-"+i).val();
+												array["meterSizeID"] = $("#meterSizeAdd-"+i).val();
+												array["payType"] = $("#payTypeAdd-"+i).val();
+												array["gatewayID"] = $("#gatewayIDAdd-"+i).val();
+												array["customerMeterID"] = $("#customerMeterIDAdd-"+i).val();
+												array["location"] = $("#locationAdd-"+i).val();
 												meterDetails.push(array);
 											}
 											
@@ -1397,6 +1404,25 @@ function getCustomerMeters(CRNNumber){
 	});
 	
 	
+}
+
+window.onload = function () {
+	function removeMeter(removeValue){
+		alert("!@");
+		var rowCount = $("#rowCount").val()==""?0:$("#rowCount").val();
+		rowCount--;
+		if(rowCount>2){
+			$("#addMeter").hide();
+		}else{
+			$("#addMeter").show();
+		}
+		$(this).parent().parent().remove();
+		const index = $("#rowCountArray").indexOf(removeValue);
+		if (index > -1) {
+			$("#rowCountArray").splice(index, 1);
+		}
+		$("#rowCount").val(rowCount);
+	}
 }
 
 

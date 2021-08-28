@@ -121,7 +121,7 @@
 																</label> <select class="form-control select2"
 																	id="selectHouseBasedonBlock"
 																	name="selectHouseBasedonBlock"
-																	onchange="showMetersDetails(this.value);">
+																	onchange="showAllMetersDetails(this.value);">
 																</select>
 															</div>
 														</div>

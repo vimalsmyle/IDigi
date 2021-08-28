@@ -81,7 +81,9 @@
             <% } else if (user_id.equalsIgnoreCase("2") || user_id.equalsIgnoreCase("5")) {
                 %>
              <a href="approval.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-calendar"></i> <span class="textData">Approval</span></a>
-              <a href="customerDetails.jsp" class="list-group-item" data-parent="#menu3">Customer Details</a>   
+		 <a href="setup.jsp" class="list-group-item" data-parent="#menu3">
+             	 <i class="fa fa-cogs"></i>
+             	 <span class="textData">Customer Setup </span></a>
                  <a href="tariff.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-heart"></i> <span class="textData">Tariff </span></a>
                 <a href="alert.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-list"></i> <span class="textData">Alert Configuration</span></a>
                 

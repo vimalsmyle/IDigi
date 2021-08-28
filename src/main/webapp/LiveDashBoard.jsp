@@ -76,7 +76,9 @@
 
 															<div class="text-xs font-weight-bold text-uppercase">
 																<h5 class="description-header" id="gasActive"></h5>
-																<span class="description-text">Active</span>
+																<span class="description-text" onClick="redirection(1)">Active
+																<i class="fa fa-chevron-right view_details" aria-hidden="true"></i>
+																</span>
 															</div>
 
 														</div>

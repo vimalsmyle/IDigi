@@ -37,23 +37,19 @@ $(document)
 												      "emptyTable": "No data available in table"
 												    },
 												 
-												    processing: true,
-												    serverSide: false,
-												    fixedColumns    : true
-												    ,autoWidth  : true
-												    ,responsive : true
-												    ,deferRender    : true
-												    ,processing : true
-												    ,paging     : true
-												    ,pageLength : 5
-												    ,searching  : true
-												    ,info       : true,
-												    "ordering" : true,
+												    "dom": dom1,
+													"responsive" : true,
+													/*"processing" : true,*/
+													"serverSide" : false,
+													"bDestroy" : true,
+													"bPaginate": true,
+													"pagging" : true,
+													"bProcessing" : true,
+													"ordering" : true,
 													"order" : [ 0, "desc" ],
-													"lengthMenu" : [ 5, 10, 25, 30, 50, 75 ]
-												    ,bPaginate  : false,
-												    "scrollY" : 300,
-													"scrollX" : true,
+													"lengthMenu" : [ 5, 10, 25, 30, 50, 75 ],
+													"pageLength" : 5,
+													"scrollX" : false,
 										"ajax" : {
 											"url" : "./dashboard/"
 													+ sessionStorage

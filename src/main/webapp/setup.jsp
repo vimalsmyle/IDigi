@@ -45,6 +45,9 @@
 				  <div class="row custom-scrollbar-css">
 						<div class="col-md-12">
 			<div class="row">
+			
+			<%if(user_id.equals("1") || user_id.equals("4")){ %>
+			
 				<div class="col-xl-3 col-md-6 mb-4">
 				
 				
@@ -74,6 +77,9 @@
 						</div></a>
 					</div>
 				</div>
+				
+				<%} %>
+				
 				<div class="col-xl-3 col-md-6 mb-4">
 					<div class="card border-left-warning shadow sidingBlock">
 						<a href="customerDetails.jsp"><div class="card-body p-3">
@@ -87,6 +93,8 @@
 						</div></a>
 					</div>
 				</div>
+				
+				<%if(!user_id.equals("3")){ %>
 				<div class="col-xl-3 col-md-6 mb-4">
 					<div class="card border-left-warning shadow sidingBlock">
 						<a href="gateway.jsp"><div class="card-body p-3">
@@ -114,6 +122,8 @@
 						</div></a>
 					</div>
 				</div>
+				
+				<%} %>
 				
 			</div>
 			</div>

@@ -28,7 +28,7 @@ $(document)
 													"scrollX" : true,
 												
 										"ajax" : {
-											"url" : "/PAYGTL_LORA_BLE/customerupdatesrequest/"
+											"url" : "./customerupdatesrequest/"
 													+ sessionStorage
 															.getItem("ID"),
 											"type" : "GET",
@@ -95,7 +95,7 @@ function getApprovalORRejected (requestId,Id){
 	$.ajax({
 		type : "POST",
 		contentType : "application/json",
-		url : "/PAYGTL_LORA_BLE/approverequest/" + requestId +"/"+Id,
+		url : "./approverequest/" + requestId +"/"+Id,
 		dataType : "JSON",
 		success : function(data) {
 			if (data.result == "Success") {

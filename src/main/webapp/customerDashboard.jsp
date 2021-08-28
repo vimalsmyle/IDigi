@@ -257,7 +257,7 @@
 								<th>Battery</th>
 								<th>Valve Status</th>
 								<th>Tariff</th>
-								<th>Door OpenTamper</th>
+								<th>Box AMR Tamper</th>
 								<th>Magnetic Tamper</th>
 								<th>TimeStamp</th>
 								<th>Communication Status</th>
