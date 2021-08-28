@@ -6,7 +6,6 @@ package com.idigitronics.IDigi.controller;
 import java.sql.SQLException;
 
 import org.apache.log4j.Logger;
-import org.springframework.http.HttpEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,9 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.google.gson.Gson;
 import com.idigitronics.IDigi.dao.DashboardDAO;
-import com.idigitronics.IDigi.request.vo.DashboardRequestVO;
 import com.idigitronics.IDigi.request.vo.DataRequestVO;
 import com.idigitronics.IDigi.request.vo.FilterVO;
 import com.idigitronics.IDigi.response.vo.DashboardResponseVO;
@@ -89,17 +86,10 @@ public class DashboardController {
 	}
 	
 	@RequestMapping(value = "/server/api/{device_eui}/status", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
-//	public @ResponseBody ResponseVO postDashboardDetails(HttpEntity<String> httpEntity, @PathVariable("device_eui") String miuID) {
 	public @ResponseBody ResponseVO postDashboardDetails(@RequestBody DataRequestVO dataRequestVO, @PathVariable("device_eui") String miuID) {
 
 		DashboardDAO dashboarddao = new DashboardDAO();
 		ResponseVO responsevo = new ResponseVO();
-		
-//		Gson gson = new Gson();
-		
-//		String json = httpEntity.getBody();
-		
-//		DataRequestVO dataRequestVO = gson.fromJson(json, DataRequestVO.class);
 		
 		try {
 			responsevo = dashboarddao.postDashboarddetails(dataRequestVO, miuID);
