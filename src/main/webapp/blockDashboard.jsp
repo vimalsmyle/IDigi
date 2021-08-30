@@ -77,7 +77,10 @@
 
 															<div class="text-xs font-weight-bold text-uppercase">
 																<h5 class="description-header" id="gasActive"></h5>
-																<span class="description-text">Active</span>
+																<span class="description-text" onClick="redirection(1,'Gas')">Active
+																<i class="fa fa-chevron-right view_details"
+																	aria-hidden="true"></i>
+																	</span>
 															</div>
 
 														</div>
@@ -86,7 +89,10 @@
 
 															<div class="text-xs font-weight-bold text-uppercase">
 																<h5 class="description-header" id="gasInactive"></h5>
-																<span class="description-text">In-Active</span>
+																<span class="description-text" onClick="redirection(2,'Gas')">In-Active
+																<i class="fa fa-chevron-right view_details"
+																	aria-hidden="true"></i>
+																</span>
 															</div>
 
 														</div>
@@ -94,7 +100,10 @@
 
 															<div class="text-xs font-weight-bold text-uppercase">
 																<h5 class="description-header" id="gasLive"></h5>
-																<span class="description-text">Live</span>
+																<span class="description-text" onClick="redirection(3,'Gas')">Live
+																<i class="fa fa-chevron-right view_details"
+																	aria-hidden="true"></i>
+																</span>
 															</div>
 
 														</div>
@@ -103,7 +112,10 @@
 
 															<div class="text-xs font-weight-bold text-uppercase">
 																<h5 class="description-header" id="gasnonLive"></h5>
-																<span class="description-text">Non-Live</span>
+																<span class="description-text" onClick="redirection(4,'Gas')">Non-Live
+																<i class="fa fa-chevron-right view_details"
+																	aria-hidden="true"></i>
+																</span>
 															</div>
 
 														</div>
@@ -112,7 +124,10 @@
 
 															<div class="text-xs font-weight-bold text-uppercase">
 																<h5 class="description-header" id="gasemergency"></h5>
-																<span class="description-text">Emergency</span>
+																<span class="description-text"  onClick="redirection(6,'Gas')">Emergency
+																<i class="fa fa-chevron-right view_details"
+																	aria-hidden="true"></i>
+																</span>
 															</div>
 
 														</div>
@@ -121,7 +136,10 @@
 
 															<div class="text-xs font-weight-bold text-uppercase">
 																<h5 class="description-header" id="gasLowbattery"></h5>
-																<span class="description-text">Low Battery</span>
+																<span class="description-text" onClick="redirection(5,'Gas')">Low Battery
+																<i class="fa fa-chevron-right view_details"
+																	aria-hidden="true"></i>
+																</span>
 															</div>
 
 														</div>
@@ -194,7 +212,10 @@
 
 																<div class="text-xs font-weight-bold text-uppercase">
 																	<h5 class="description-header" id="waterActive"></h5>
-																	<span class="description-text">Active</span>
+																	<span class="description-text" onClick="redirection(1,'Water')">Active
+																	<i class="fa fa-chevron-right view_details"
+																	aria-hidden="true"></i>
+																	</span>
 																</div>
 
 															</div>
@@ -203,7 +224,10 @@
 
 																<div class="text-xs font-weight-bold text-uppercase">
 																	<h5 class="description-header" id="waterInactive"></h5>
-																	<span class="description-text">In-Active</span>
+																	<span class="description-text" onClick="redirection(2,'Water')">In-Active
+																	<i class="fa fa-chevron-right view_details"
+																	aria-hidden="true"></i>
+																	</span>
 																</div>
 
 															</div>
@@ -211,7 +235,10 @@
 
 																<div class="text-xs font-weight-bold text-uppercase">
 																	<h5 class="description-header" id="waterLive"></h5>
-																	<span class="description-text">Live</span>
+																	<span class="description-text" onClick="redirection(3,'Water')">Live
+																	<i class="fa fa-chevron-right view_details"
+																	aria-hidden="true"></i>
+																	</span>
 																</div>
 
 															</div>
@@ -220,7 +247,10 @@
 
 																<div class="text-xs font-weight-bold text-uppercase">
 																	<h5 class="description-header" id="waternonLive"></h5>
-																	<span class="description-text">Non-Live</span>
+																	<span class="description-text" onClick="redirection(4,'Water')">Non-Live
+																	<i class="fa fa-chevron-right view_details"
+																	aria-hidden="true"></i>
+																	</span>
 																</div>
 
 															</div>
@@ -229,7 +259,10 @@
 
 																<div class="text-xs font-weight-bold text-uppercase">
 																	<h5 class="description-header" id="wateremergency"></h5>
-																	<span class="description-text">Emergency</span>
+																	<span class="description-text" onClick="redirection(6,'Water')">Emergency
+																	<i class="fa fa-chevron-right view_details"
+																	aria-hidden="true"></i>
+																	</span>
 																</div>
 
 															</div>
@@ -238,7 +271,10 @@
 
 																<div class="text-xs font-weight-bold text-uppercase">
 																	<h5 class="description-header" id="waterLowbattery"></h5>
-																	<span class="description-text">Low Battery</span>
+																	<span class="description-text" onClick="redirection(5,'Water')">Low Battery
+																	<i class="fa fa-chevron-right view_details"
+																	aria-hidden="true"></i>
+																	</span>
 																</div>
 
 															</div>

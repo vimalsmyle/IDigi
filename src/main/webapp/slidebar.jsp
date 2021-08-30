@@ -93,7 +93,7 @@
                 <%}%>
                 
                  <a href="configurationStatus.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-th"></i> <span class="textData">Meter Commands Status</span></a>
-                 <a href="dashboard.jsp" class="list-group-item d-inline-block collapsed"><i class="fa fa-film"></i> <span class="textData">DashBoard</span></a>
+                 <a href="LiveDashBoard.jsp" class="list-group-item d-inline-block collapsed"><i class="fa fa-film"></i> <span class="textData">DashBoard</span></a>
                 
                 <%if(user_id.equalsIgnoreCase("2")){ %>
                 <a href="topup.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-gear"></i> <span class="textData">ReCharge</span></a>

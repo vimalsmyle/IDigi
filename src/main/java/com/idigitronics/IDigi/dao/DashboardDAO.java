@@ -576,6 +576,7 @@ public class DashboardDAO {
 			}
 			
 			homeResponseVO.setLive(live);
+			logger.info(amr+live);
 			homeResponseVO.setLivePercentage((live*100/amr));
 			homeResponseVO.setNonLive(nonLive);
 			homeResponseVO.setNonLivePercentage((nonLive*100/amr));

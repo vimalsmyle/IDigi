@@ -74,9 +74,41 @@ $(document).on('click', '#mainSidebarToggle' ,function(event) {
 		$('body').toggleClass('main-sidebar-show');
 		$('#communityTable').DataTable();
 	}
+	
+
+	
+
 });
 
+function returnBack(){
+	window.location.reload();
+}
 
+function redirection(obj,type){
+	
+	if(obj == "day"){
+		sessionStorage.setItem("day",obj);
+		window.location = "topupStatus.jsp";
+	}
+	else{
+		sessionStorage.setItem("filterId",obj);
+		
+		if (sessionStorage
+				.getItem(
+				"roleID") == 2) {
+			var comm = sessionStorage
+			.getItem(
+					"communityName");
+		}else{
+			var comm=$("#comName").val()
+		}
+		
+		var block = $("#blockName").val()==undefined?"0":$("#blockName").val();
+		
+		window.location = "customerDashboard.jsp?com="+comm+"&block="+block+"&type="+type;
+	}
+	
+}
 
 
 
