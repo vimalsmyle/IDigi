@@ -8,7 +8,6 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
@@ -59,7 +58,6 @@ public class DashboardDAO {
 		IndividualDashboardResponseVO individualDashboardResponseVO = null;
 		DashboardResponseVO dashboardvo = null;
 		int noAMRInterval = 0;
-		int lowBatteryVoltage = 0;
 		float perUnitValue = 0.0f;
 		int communityID = 0;
 		int blockID = 0;
@@ -69,12 +67,11 @@ public class DashboardDAO {
 			dashboard_list = new LinkedList<DashboardResponseVO>();
 			int nonCommunicating = 0;
 			
-			PreparedStatement pstmt1 = con.prepareStatement("SELECT NoAMRInterval, LowBatteryVoltage, TimeOut, PerUnitValue FROM alertsettings");
+			PreparedStatement pstmt1 = con.prepareStatement("SELECT NoAMRInterval, TimeOut, PerUnitValue FROM alertsettings");
 			ResultSet rs1 = pstmt1.executeQuery();
 			if(rs1.next()) {
 				
 				noAMRInterval = rs1.getInt("NoAMRInterval");
-				lowBatteryVoltage = rs1.getInt("LowBatteryVoltage");
 				perUnitValue = rs1.getFloat("PerUnitValue");
 			}
 			
@@ -112,7 +109,7 @@ public class DashboardDAO {
 					
 //					1 = valve open(active), 2 = valve close(inactive) 3 = communicating(live), 4 = non-communicating(non-live) 5 = low battery 6 = emergency credit
 					
-					stringBuilder.append((filter == 1 || filter == 2) ? " AND dbl.ValveStatus = "+ (filter == 1 ? 0 : 1) : (filter == 3 || filter == 4) ? (filter == 3 ? " AND dbl.LogDate >= (NOW() - INTERVAL (SELECT NoAMRInterval/(24*60) FROM alertsettings) DAY) " : " AND dbl.LogDate <= (NOW() - INTERVAL (SELECT NoAMRInterval/(24*60) FROM alertsettings) DAY) " ) :  (filter == 5) ? " AND dbl.BatteryVoltage < "+ lowBatteryVoltage : (filter == 6) ? " AND dbl.Balance <= 0" : "");
+					stringBuilder.append((filter == 1 || filter == 2) ? " AND dbl.ValveStatus = "+ (filter == 1 ? 1 : 0) : (filter == 3 || filter == 4) ? (filter == 3 ? " AND dbl.LogDate >= (NOW() - INTERVAL (SELECT NoAMRInterval/(24*60) FROM alertsettings) DAY) " : " AND dbl.LogDate <= (NOW() - INTERVAL (SELECT NoAMRInterval/(24*60) FROM alertsettings) DAY) " ) :  (filter == 5) ? " AND dbl.LowBattery = "+ 1: (filter == 6) ? " AND dbl.Balance <= 0" : "");
 					
 				}
 				stringBuilder.append(" ORDER BY dbl.LogDate DESC");
@@ -135,8 +132,8 @@ public class DashboardDAO {
 					individualDashboardResponseVO.setConsumption((int) (individualDashboardResponseVO.getReading() * perUnitValue));
 					individualDashboardResponseVO.setBalance(rs3.getFloat("Balance"));
 					individualDashboardResponseVO.setEmergencyCredit(rs3.getFloat("EmergencyCredit"));
-					individualDashboardResponseVO.setValveStatus((rs3.getInt("ValveStatus") == 0) ? "OPEN" : (rs3.getInt("ValveStatus") == 1) ? "CLOSED" : "");
-					individualDashboardResponseVO.setValveStatusColor((rs3.getInt("ValveStatus") == 0) ? "GREEN" : (rs3.getInt("ValveStatus") == 1) ? "RED" : "");
+					individualDashboardResponseVO.setValveStatus((rs3.getInt("ValveStatus") == 1) ? "OPEN" : (rs3.getInt("ValveStatus") == 0) ? "CLOSED" : "");
+					individualDashboardResponseVO.setValveStatusColor((rs3.getInt("ValveStatus") == 1) ? "GREEN" : (rs3.getInt("ValveStatus") == 0) ? "RED" : "");
 					individualDashboardResponseVO.setBattery(rs3.getInt("BatteryVoltage"));
 					individualDashboardResponseVO.setBatteryColor((rs3.getInt("LowBattery") == 1 ) ? "RED" : "GREEN");
 					individualDashboardResponseVO.setDoorOpenTamper((rs3.getInt("DoorOpenTamper") == 0) ? "NO" : (rs3.getInt("DoorOpenTamper") == 1) ? "YES" : "NO");
@@ -238,10 +235,10 @@ public class DashboardDAO {
 				String query = "SELECT dbl.ReadingID, dbl.MainBalanceLogID, dbl.CustomerMeterID, dbl.MIUID, cmd.MeterSerialNumber, dbl.Tariff, dbl.Reading, dbl.Balance, dbl.EmergencyCredit, dbl.ValveStatus, dbl.BatteryVoltage, "
 						+ "dbl.LowBattery, dbl.DoorOpenTamper, dbl.MagneticTamper, dbl.RTCFault, dbl.Vacation, dbl.LowBalance, dbl.LogDate FROM displaybalancelog AS dbl LEFT JOIN customermeterdetails AS cmd ON cmd.CustomerMeterID = dbl.CustomerMeterID WHERE cmd.CustomerID = ? AND cmd.MeterType = " + (type == 1 ? "'Gas'" : type == 2 ? "'Water'" :"'Energy'");
 				
-				String oldquery = "SELECT DISTINCT c.CommunityName, b.BlockName, cd.FirstName,cd.CustomerUniqueID, cd.LastName, cd.HouseNumber, cmd.MeterSerialNumber, dbl.ReadingID, dbl.MainBalanceLogID, dbl.EmergencyCredit, \r\n" + 
+				/*String oldquery = "SELECT DISTINCT c.CommunityName, b.BlockName, cd.FirstName,cd.CustomerUniqueID, cd.LastName, cd.HouseNumber, cmd.MeterSerialNumber, dbl.ReadingID, dbl.MainBalanceLogID, dbl.EmergencyCredit, \r\n" + 
 						"dbl.MIUID, dbl.Reading, dbl.Balance, dbl.BatteryVoltage, dbl.LowBattery, dbl.Tariff, dbl.ValveStatus, dbl.DoorOpenTamper, dbl.MagneticTamper, dbl.RTCFault, dbl.Vacation, dbl.LowBalance, dbl.LogDate\r\n" + 
 						"FROM displaybalancelog AS dbl LEFT JOIN community AS c ON c.communityID = dbl.CommunityID LEFT JOIN block AS b ON b.BlockID = dbl.BlockID\r\n" + 
-						"LEFT JOIN customerdetails AS cd ON cd.CustomerID = dbl.CustomerID LEFT JOIN customermeterdetails AS cmd ON cmd.CustomerMeterID = dbl.CustomerMeterID WHERE 1=1 <change>";
+						"LEFT JOIN customerdetails AS cd ON cd.CustomerID = dbl.CustomerID LEFT JOIN customermeterdetails AS cmd ON cmd.CustomerMeterID = dbl.CustomerMeterID WHERE 1=1 <change>";*/
 				
 						StringBuilder stringBuilder = new StringBuilder(query);
 					
@@ -277,7 +274,7 @@ public class DashboardDAO {
 							individualDashboardResponseVO.setBalance(rs2.getFloat("Balance"));
 							individualDashboardResponseVO.setEmergencyCredit(rs2.getFloat("EmergencyCredit"));
 							individualDashboardResponseVO.setValveStatus((rs2.getInt("ValveStatus") == 1) ? "OPEN" : (rs2.getInt("ValveStatus") == 0) ? "CLOSED" : "");	
-							individualDashboardResponseVO.setValveStatusColor((rs2.getInt("ValveStatus") == 0) ? "GREEN" : (rs2.getInt("ValveStatus") == 1) ? "RED" : "");
+							individualDashboardResponseVO.setValveStatusColor((rs2.getInt("ValveStatus") == 1) ? "GREEN" : (rs2.getInt("ValveStatus") == 0) ? "RED" : "");
 							individualDashboardResponseVO.setBattery(rs2.getInt("BatteryVoltage"));
 							individualDashboardResponseVO.setBatteryColor((rs2.getInt("LowBattery") == 1 ) ? "RED" : "GREEN");
 							individualDashboardResponseVO.setDoorOpenTamper((rs2.getInt("DoorOpenTamper") == 0) ? "NO" : (rs2.getInt("DoorOpenTamper") == 1) ? "YES" : "NO");
