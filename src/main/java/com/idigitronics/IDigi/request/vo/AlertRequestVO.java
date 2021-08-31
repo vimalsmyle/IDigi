@@ -11,12 +11,8 @@ public class AlertRequestVO {
 	
 	private int alertID;
 	private int noAMRInterval;
-	private float lowBatteryVoltage;
 	private int timeOut;
 	private String registeredDate;
-	private float perUnitGasValue;
-	private float perUnitWaterValue;
-	private float perUnitEnergyValue;
 	private int reconnectionCharges;
 	private int reconnectionChargeDays;
 	private String billGenerationDate;
@@ -37,12 +33,6 @@ public class AlertRequestVO {
 	}
 	public void setNoAMRInterval(int noAMRInterval) {
 		this.noAMRInterval = noAMRInterval;
-	}
-	public float getLowBatteryVoltage() {
-		return lowBatteryVoltage;
-	}
-	public void setLowBatteryVoltage(float lowBatteryVoltage) {
-		this.lowBatteryVoltage = lowBatteryVoltage;
 	}
 	public int getTimeOut() {
 		return timeOut;
@@ -91,24 +81,6 @@ public class AlertRequestVO {
 	}
 	public void setCustomerGSTNumber(String customerGSTNumber) {
 		this.customerGSTNumber = customerGSTNumber;
-	}
-	public float getPerUnitGasValue() {
-		return perUnitGasValue;
-	}
-	public void setPerUnitGasValue(float perUnitGasValue) {
-		this.perUnitGasValue = perUnitGasValue;
-	}
-	public float getPerUnitWaterValue() {
-		return perUnitWaterValue;
-	}
-	public void setPerUnitWaterValue(float perUnitWaterValue) {
-		this.perUnitWaterValue = perUnitWaterValue;
-	}
-	public float getPerUnitEnergyValue() {
-		return perUnitEnergyValue;
-	}
-	public void setPerUnitEnergyValue(float perUnitEnergyValue) {
-		this.perUnitEnergyValue = perUnitEnergyValue;
 	}
 	public int getReconnectionChargeDays() {
 		return reconnectionChargeDays;

@@ -21,7 +21,7 @@ public class DataRequestVO {
 	private float credit;
 	private float tariff;
 	private float emergency_credit;
-	private int min_elapsed_after_valve_trip;
+	private int days_elapsed_after_valve_trip;
 	private float reading;
 	private Status status;
 	private int transaction_id;
@@ -101,11 +101,11 @@ public class DataRequestVO {
 	public void setEmergency_credit(float emergency_credit) {
 		this.emergency_credit = emergency_credit;
 	}
-	public int getMin_elapsed_after_valve_trip() {
-		return min_elapsed_after_valve_trip;
+	public int getDays_elapsed_after_valve_trip() {
+		return days_elapsed_after_valve_trip;
 	}
-	public void setMin_elapsed_after_valve_trip(int min_elapsed_after_valve_trip) {
-		this.min_elapsed_after_valve_trip = min_elapsed_after_valve_trip;
+	public void setDays_elapsed_after_valve_trip(int days_elapsed_after_valve_trip) {
+		this.days_elapsed_after_valve_trip = days_elapsed_after_valve_trip;
 	}
 	public float getReading() {
 		return reading;

@@ -14,6 +14,7 @@ public class UserConsumptionReportsResponseVO {
 	private String customerUniqueID;
 	private String miuID;
 	private float reading;
+	private int consumption;
 	private float balance;
 	private float battery;
 	private float tariff;
@@ -83,4 +84,11 @@ public class UserConsumptionReportsResponseVO {
 	public void setData(List<UserConsumptionReportsResponseVO> data) {
 		this.data = data;
 	}
+	public int getConsumption() {
+		return consumption;
+	}
+	public void setConsumption(int consumption) {
+		this.consumption = consumption;
+	}
+	
 }

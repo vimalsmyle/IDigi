@@ -24,9 +24,6 @@ CREATE TABLE `alertsettings` (
   `AlertID` int(11) NOT NULL AUTO_INCREMENT,
   `NoAMRInterval` bigint(255) NOT NULL,
   `TimeOut` int(11) NOT NULL,
-  `PerUnitGasValue` float NOT NULL,
-  `PerUnitWaterValue` float NOT NULL,
-  `PerUnitEnergyValue` float DEFAULT NULL,
   `ReconnectionCharges` int(11) NOT NULL,
   `LateFee` int(10) NOT NULL,
   `ReconnectionChargeDays` int(10) NOT NULL,
@@ -43,8 +40,8 @@ CREATE TABLE `alertsettings` (
 
 /*Data for the table `alertsettings` */
 
-insert  into `alertsettings`(`AlertID`,`NoAMRInterval`,`TimeOut`,`PerUnitGasValue`,`PerUnitWaterValue`,`PerUnitEnergyValue`,`ReconnectionCharges`,`LateFee`,`ReconnectionChargeDays`,`DueDayCount`,`BillGenerationDate`,`GST`,`VendorGSTNumber`,`CustomerGSTNumber`,`RegisteredDate`,`ModifiedDate`) values 
-(1,2880,330,2.4,1,1,50,50,10,10,'2nd of everymonth',9,'GST1234567890','GST0987654321','2021-05-18 18:52:34','2021-05-18 18:52:37');
+insert  into `alertsettings`(`AlertID`,`NoAMRInterval`,`TimeOut`,`ReconnectionCharges`,`LateFee`,`ReconnectionChargeDays`,`DueDayCount`,`BillGenerationDate`,`GST`,`VendorGSTNumber`,`CustomerGSTNumber`,`RegisteredDate`,`ModifiedDate`) values 
+(1,2880,330,50,50,2,10,'2nd of everymonth',9,'GST1234567890','GST0987654321','2021-05-18 18:52:34','2021-05-18 18:52:37');
 
 /*Table structure for table `balancelog` */
 
@@ -416,13 +413,13 @@ CREATE TABLE `customermeterdetails` (
 /*Data for the table `customermeterdetails` */
 
 insert  into `customermeterdetails`(`CustomerMeterID`,`CustomerID`,`CustomerUniqueID`,`MIUID`,`MeterSerialNumber`,`MeterType`,`MeterSizeID`,`PayType`,`TariffID`,`GatewayID`,`Location`,`RegisteredDate`,`ModifiedDate`) values 
-(1,1,'IDIGI1','1122','11223344','Gas',NULL,'Prepaid',1,1,'Kitchen','2021-05-17 23:22:24','2021-05-17 23:24:13'),
-(2,1,'IDIGI1','2233','22334455','Water',NULL,'Postpaid',2,1,'Bathroom','2021-05-17 23:24:09','2021-05-17 23:24:17'),
-(3,1,'IDIGI1','3344','33445566','Water',NULL,'Postpaid',3,1,'Bedroom','2021-05-17 23:25:15','2021-05-17 23:25:13'),
-(4,1,'IDIGI1','4455','44556677','Water',NULL,'Postpaid',2,1,'Washarea','2021-05-17 23:26:11','2021-05-17 23:26:10'),
-(5,2,'IDIGI2','5566','55667788','Gas',NULL,'Prepaid',1,1,'Kitchen','2021-05-23 16:31:15','2021-05-23 16:31:18'),
-(6,4,'IDIGI3','B66777','B66778899','Gas',1000,'Prepaid',1,1,'Kitchen','2021-05-26 15:50:17','2021-06-06 08:12:54'),
-(7,5,'IDG10010','E099','I970366858','Water',0,'Postpaid',1,1,'Hall','2021-07-04 16:39:36','2021-07-04 16:39:36');
+(1,1,'IDIGI1','1122','11223344','Gas',1,'Prepaid',1,1,'Kitchen','2021-05-17 23:22:24','2021-05-17 23:24:13'),
+(2,1,'IDIGI1','2233','22334455','Water',2,'Postpaid',2,1,'Bathroom','2021-05-17 23:24:09','2021-05-17 23:24:17'),
+(3,1,'IDIGI1','3344','33445566','Water',2,'Postpaid',3,1,'Bedroom','2021-05-17 23:25:15','2021-05-17 23:25:13'),
+(4,1,'IDIGI1','4455','44556677','Water',2,'Postpaid',2,1,'Washarea','2021-05-17 23:26:11','2021-05-17 23:26:10'),
+(5,2,'IDIGI2','5566','55667788','Gas',1,'Prepaid',1,1,'Kitchen','2021-05-23 16:31:15','2021-05-23 16:31:18'),
+(6,4,'IDIGI3','B66777','B66778899','Gas',1,'Prepaid',1,1,'Kitchen','2021-05-26 15:50:17','2021-06-06 08:12:54'),
+(7,5,'IDG10010','E099','I970366858','Water',2,'Postpaid',1,1,'Hall','2021-07-04 16:39:36','2021-07-04 16:39:36');
 
 /*Table structure for table `displaybalancelog` */
 
@@ -542,12 +539,13 @@ CREATE TABLE `metersize` (
   `CreatedDate` datetime NOT NULL,
   `ModifiedDate` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`MeterSizeID`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
 /*Data for the table `metersize` */
 
 insert  into `metersize`(`MeterSizeID`,`MeterType`,`MeterSize`,`PerUnitValue`,`CreatedDate`,`ModifiedDate`) values 
-(1,'Gas',1,2.40,'2021-07-13 16:21:18','2021-07-13 16:22:12');
+(1,'Gas',1,2.40,'2021-07-13 16:21:18','2021-07-13 16:22:12'),
+(2,'Water',10,5.20,'2021-08-31 21:05:10','2021-08-31 21:05:06');
 
 /*Table structure for table `payment` */
 
