@@ -13,7 +13,7 @@ $(function() {
 				+ sessionStorage.getItem("ID")+ "/" + sessionStorage.getItem("ID"), function(data) {
 			var Options = "";
 			$.each(data.dropDownCustomers, function(key, value) {
-				Options = Options + "<option value='" + key + "'>" + value
+				Options = Options + "<option value='" + value + "'>" + value
 						+ "</option>";
 			});
 			$('#selectHouseBasedonBlock').append(Options);

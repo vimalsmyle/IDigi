@@ -92,22 +92,17 @@ $(document)
 										data1["customerUniqueID"] = $(
 												"#selectHouseBasedonBlock")
 												.val();
-										if($("#reportType").val()=="Graph"){
-											data1["fromMonth"] = $("#start_date")
-											.val();
-											data1["toMonth"] = $("#end_date").val();
-											data1["year"] = $("#end_date").val();
-										}else if($("#reportType").val()=="Tabular"){
+										
 											data1["fromDate"] = $("#start_date")
 											.val();
 											data1["toDate"] = $("#end_date").val();
-										}
+										
 										
 										$
 												.ajax({
 													type : "POST",
 													contentType : "application/json",
-													url : "./userconsumptionreports/"+$("#reportType").val(),
+													url : "./userconsumptionreports/Tabular",
 													data : JSON
 															.stringify(data1),
 													dataType : "JSON",
@@ -196,7 +191,7 @@ $(document)
 															//table.ajax.reload()
 													//	 if(){}
 														 
-														 $("div.totalCount").html(' <b>customerUniqueID:</b> '+ d.data[0].customerUniqueID);
+														 $("div.totalCount").html(' <b>customerUniqueID:</b> '+ d.data.length==0?"":d.data[0].customerUniqueID);
 														 /*$("div.addevent").html('<button id="back" onClick="returnBack()"'
 																 +'class="btn btn-raised btn-primary float-right"'
 																	+'>'

@@ -32,30 +32,32 @@
 		} else {
 	%>
 	<div id="preloader">
-		<div id="status"><div class="spinner-grow text-primary" role="status">
-  <span class="sr-only">Loading...</span>
-</div>
-<div class="spinner-grow text-secondary" role="status">
-  <span class="sr-only">Loading...</span>
-</div>
-<div class="spinner-grow text-success" role="status">
-  <span class="sr-only">Loading...</span>
-</div>
-<div class="spinner-grow text-danger" role="status">
-  <span class="sr-only">Loading...</span>
-</div>
-<div class="spinner-grow text-warning" role="status">
-  <span class="sr-only">Loading...</span>
-</div>
-<div class="spinner-grow text-info" role="status">
-  <span class="sr-only">Loading...</span>
-</div>
-<div class="spinner-grow text-light" role="status">
-  <span class="sr-only">Loading...</span>
-</div>
-<div class="spinner-grow text-dark" role="status">
-  <span class="sr-only">Loading...</span>
-</div></div>
+		<div id="status">
+			<div class="spinner-grow text-primary" role="status">
+				<span class="sr-only">Loading...</span>
+			</div>
+			<div class="spinner-grow text-secondary" role="status">
+				<span class="sr-only">Loading...</span>
+			</div>
+			<div class="spinner-grow text-success" role="status">
+				<span class="sr-only">Loading...</span>
+			</div>
+			<div class="spinner-grow text-danger" role="status">
+				<span class="sr-only">Loading...</span>
+			</div>
+			<div class="spinner-grow text-warning" role="status">
+				<span class="sr-only">Loading...</span>
+			</div>
+			<div class="spinner-grow text-info" role="status">
+				<span class="sr-only">Loading...</span>
+			</div>
+			<div class="spinner-grow text-light" role="status">
+				<span class="sr-only">Loading...</span>
+			</div>
+			<div class="spinner-grow text-dark" role="status">
+				<span class="sr-only">Loading...</span>
+			</div>
+		</div>
 	</div>
 	<jsp:include page="header.jsp" />
 	<jsp:include page="slidebar.jsp" />
@@ -93,7 +95,6 @@
 																id="reportType" name="reportType"
 																onchange="showReportType(this.value);">
 																<option value='-1'>Select Type</option>
-																<option value='Graph'>Graph</option>
 																<option value='Tabular'>Tabular</option>
 															</select>
 														</div>
@@ -127,8 +128,7 @@
 																CRN<sup class="imp">*</sup>
 															</label> <select class="form-control"
 																id="selectHouseBasedonBlock"
-																name="selectHouseBasedonBlock"
-																>
+																name="selectHouseBasedonBlock">
 															</select>
 														</div>
 													</div>
@@ -196,76 +196,6 @@
 																class="form-control" id="end_date" name="end_date">
 														</div>
 													</div>
-
-
-													<div class="col-md-4" id="fromMonth">
-														<div id="formfromMonth_topup" class="group form-group">
-															<label class="bmd-label-floating">From Month<sup
-																class="imp">*</sup></label> <select class="form-control"
-																id="fromMonth_topup" name="fromMonth_topup">
-																<option value='-1'>Select Month</option>
-																<option value='01'>January</option>
-																<option value='02'>February</option>
-																<option value='03'>March</option>
-																<option value='04'>April</option>
-																<option value='05'>May</option>
-																<option value='06'>June</option>
-																<option value='07'>July</option>
-																<option value='08'>August</option>
-																<option value='09'>September</option>
-																<option value='10'>October</option>
-																<option value='11'>November</option>
-																<option value='12'>December</option>
-															</select>
-														</div>
-													</div>
-													
-													
-													<div class="col-md-4" id="toMonth">
-														<div id="formfromMonth_topup" class="group form-group">
-															<label class="bmd-label-floating">To Month<sup
-																class="imp">*</sup></label> <select class="form-control"
-																id="toMonth_topup" name="toMonth_topup">
-																<option value='-1'>Select Month</option>
-																<option value='01'>January</option>
-																<option value='02'>February</option>
-																<option value='03'>March</option>
-																<option value='04'>April</option>
-																<option value='05'>May</option>
-																<option value='06'>June</option>
-																<option value='07'>July</option>
-																<option value='08'>August</option>
-																<option value='09'>September</option>
-																<option value='10'>October</option>
-																<option value='11'>November</option>
-																<option value='12'>December</option>
-															</select>
-														</div>
-													</div>
-
-
-													<div class="col-md-4" id="year">
-														<div id="formtoYear_topup" class="group form-group">
-															<label class="bmd-label-floating">To Year<sup
-																class="imp">*</sup></label> <select class="form-control"
-																id="toYear_topup" name="toYear_topup">
-																<option value='-1'>Select Year</option>
-																<option value='2019'>2019</option>
-																<option value='2020'>2020</option>
-																<option value='2021'>2021</option>
-																<option value='2022'>2022</option>
-																<option value='2023'>2023</option>
-																<option value='2024'>2024</option>
-																<option value='2025'>2025</option>
-																<option value='2026'>2026</option>
-																<option value='2027'>2027</option>
-																<option value='2028'>2028</option>
-																<option value='2029'>2029</option>
-																<option value='2030'>2030</option>
-															</select>
-														</div>
-													</div>
-
 												</div>
 
 												<div class="row">
@@ -297,13 +227,13 @@
 						<div class="row mt-4">
 							<div class="col-md-12">
 								<table id=userConsumptionsTable
-							class="table table-striped table-bordered dt-responsive nowrap dataTable no-footer dtr-inline collapsed"
-							style="width: 100%">
-							<thead id="theadBody">
-							</thead>
-							<tbody>
-							</tbody>
-						</table>
+									class="table table-striped table-bordered dt-responsive nowrap dataTable no-footer dtr-inline collapsed"
+									style="width: 100%">
+									<thead id="theadBody">
+									</thead>
+									<tbody>
+									</tbody>
+								</table>
 							</div>
 						</div>
 
