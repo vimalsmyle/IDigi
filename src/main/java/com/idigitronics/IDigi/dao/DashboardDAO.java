@@ -58,7 +58,9 @@ public class DashboardDAO {
 		IndividualDashboardResponseVO individualDashboardResponseVO = null;
 		DashboardResponseVO dashboardvo = null;
 		int noAMRInterval = 0;
-		float perUnitValue = 0.0f;
+		float perUnitGasValue = 0.0f;
+		float perUnitWaterValue = 0.0f;
+		float perUnitEnergyValue = 0.0f;
 		int communityID = 0;
 		int blockID = 0;
 		
@@ -67,12 +69,14 @@ public class DashboardDAO {
 			dashboard_list = new LinkedList<DashboardResponseVO>();
 			int nonCommunicating = 0;
 			
-			PreparedStatement pstmt1 = con.prepareStatement("SELECT NoAMRInterval, TimeOut, PerUnitValue FROM alertsettings");
+			PreparedStatement pstmt1 = con.prepareStatement("SELECT * FROM alertsettings");
 			ResultSet rs1 = pstmt1.executeQuery();
 			if(rs1.next()) {
 				
 				noAMRInterval = rs1.getInt("NoAMRInterval");
-				perUnitValue = rs1.getFloat("PerUnitValue");
+				perUnitGasValue = rs1.getFloat("PerUnitGasValue");
+				perUnitWaterValue = rs1.getFloat("PerUnitWaterValue");
+				perUnitEnergyValue = rs1.getFloat("PerUnitEnergyValue");
 			}
 			
 			String IDquery = "SELECT * FROM <tablename>";
@@ -129,7 +133,7 @@ public class DashboardDAO {
 //					individualDashboardResponseVO.setMeterSize(rs3.getFloat("MeterSize"));
 					individualDashboardResponseVO.setTariff((rs3.getFloat("Tariff")));
 					individualDashboardResponseVO.setReading(rs3.getFloat("Reading"));
-					individualDashboardResponseVO.setConsumption((int) (individualDashboardResponseVO.getReading() * perUnitValue));
+					individualDashboardResponseVO.setConsumption((int) (individualDashboardResponseVO.getReading() * (rs3.getString("MeterType").equalsIgnoreCase("Gas") ? perUnitGasValue : rs3.getString("MeterType").equalsIgnoreCase("Water") ? perUnitWaterValue : perUnitEnergyValue)));
 					individualDashboardResponseVO.setBalance(rs3.getFloat("Balance"));
 					individualDashboardResponseVO.setEmergencyCredit(rs3.getFloat("EmergencyCredit"));
 					individualDashboardResponseVO.setValveStatus((rs3.getInt("ValveStatus") == 1) ? "OPEN" : (rs3.getInt("ValveStatus") == 0) ? "CLOSED" : "");
@@ -198,7 +202,10 @@ public class DashboardDAO {
 		List<DashboardResponseVO> dashboard_list = null;
 		DashboardResponseVO dashboardvo = null;
 		int noAMRInterval = 0;
-		float perUnitValue = 0.0f;
+		float perUnitGasValue = 0.0f;
+		float perUnitWaterValue = 0.0f;
+		float perUnitEnergyValue = 0.0f;
+
 		List<IndividualDashboardResponseVO> individualDashboardList = null;
 		IndividualDashboardResponseVO individualDashboardResponseVO = null;
 		
@@ -206,12 +213,14 @@ public class DashboardDAO {
 			con = getConnection();
 			dashboard_list = new LinkedList<DashboardResponseVO>();
 			
-			PreparedStatement pstmt1 = con.prepareStatement("SELECT NoAMRInterval, TimeOut, PerUnitValue FROM alertsettings");
+			PreparedStatement pstmt1 = con.prepareStatement("SELECT * FROM alertsettings");
 			ResultSet rs1 = pstmt1.executeQuery();
 			if(rs1.next()) {
 				
 				noAMRInterval = rs1.getInt("NoAMRInterval");
-				perUnitValue = rs1.getFloat("PerUnitValue");
+				perUnitGasValue = rs1.getFloat("PerUnitGasValue");
+				perUnitWaterValue = rs1.getFloat("PerUnitWaterValue");
+				perUnitEnergyValue = rs1.getFloat("PerUnitEnergyValue");
 			}
 			
 			String mainquery = "SELECT c.CommunityName, b.BlockName, cd.HouseNumber, cd.FirstName, cd.LastName, cd.CustomerUniqueID, cd.CustomerID FROM customerdetails AS cd LEFT JOIN community AS c ON cd.CommunityID = c.CommunityID LEFT JOIN block AS b ON b.BlockID = cd.BlockID <main>";
@@ -270,7 +279,7 @@ public class DashboardDAO {
 							individualDashboardResponseVO.setMiuID(rs2.getString("MIUID"));
 							individualDashboardResponseVO.setTariff((rs2.getFloat("Tariff")));
 							individualDashboardResponseVO.setReading(rs2.getFloat("Reading"));
-							individualDashboardResponseVO.setConsumption((int) (individualDashboardResponseVO.getReading() * perUnitValue));
+							individualDashboardResponseVO.setConsumption((int) (individualDashboardResponseVO.getReading() * (rs2.getString("MeterType").equalsIgnoreCase("Gas") ? perUnitGasValue : rs2.getString("MeterType").equalsIgnoreCase("Water") ? perUnitWaterValue : perUnitEnergyValue)));
 							individualDashboardResponseVO.setBalance(rs2.getFloat("Balance"));
 							individualDashboardResponseVO.setEmergencyCredit(rs2.getFloat("EmergencyCredit"));
 							individualDashboardResponseVO.setValveStatus((rs2.getInt("ValveStatus") == 1) ? "OPEN" : (rs2.getInt("ValveStatus") == 0) ? "CLOSED" : "");	
@@ -573,7 +582,6 @@ public class DashboardDAO {
 			}
 			
 			homeResponseVO.setLive(live);
-			logger.info(amr+live);
 			homeResponseVO.setLivePercentage((live*100/amr));
 			homeResponseVO.setNonLive(nonLive);
 			homeResponseVO.setNonLivePercentage((nonLive*100/amr));
