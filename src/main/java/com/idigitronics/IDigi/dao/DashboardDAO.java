@@ -63,6 +63,7 @@ public class DashboardDAO {
 		float perUnitEnergyValue = 0.0f;
 		int communityID = 0;
 		int blockID = 0;
+		String mainquery = null;
 		
 		try {
 			con = getConnection();
@@ -79,17 +80,25 @@ public class DashboardDAO {
 				perUnitEnergyValue = rs1.getFloat("PerUnitEnergyValue");
 			}
 			
-			String IDquery = "SELECT * FROM <tablename>";
-			PreparedStatement pstmt4 = con.prepareStatement(IDquery.replaceAll("<tablename>", (!blockName.equalsIgnoreCase("0") ? "block WHERE BlockName = '"+blockName+"' AND CommunityID = (SELECT CommunityID FROM community WHERE CommunityName = '"+communityName+"')" : "community WHERE CommunityName = '"+communityName+"'")));
-			ResultSet rs4 = pstmt4.executeQuery();
-			if(rs4.next()) {
-				blockID = (!blockName.equalsIgnoreCase("0") ? rs4.getInt("BlockID") : 0);
-				communityID = rs4.getInt("CommunityID");
+			if(communityName.equalsIgnoreCase("0")) {
+				
+				mainquery = "SELECT c.CommunityName, b.BlockName, cd.HouseNumber, cd.FirstName, cd.LastName, cd.CustomerUniqueID, cd.CustomerID FROM customerdetails AS cd LEFT JOIN community AS c ON cd.CommunityID = c.CommunityID LEFT JOIN block AS b ON b.BlockID = cd.BlockID";
+				
+			} else {
+				
+				String IDquery = "SELECT * FROM <tablename>";
+				PreparedStatement pstmt4 = con.prepareStatement(IDquery.replaceAll("<tablename>", (!blockName.equalsIgnoreCase("0") ? "block WHERE BlockName = '"+blockName+"' AND CommunityID = (SELECT CommunityID FROM community WHERE CommunityName = '"+communityName+"')" : "community WHERE CommunityName = '"+communityName+"'")));
+				ResultSet rs4 = pstmt4.executeQuery();
+				if(rs4.next()) {
+					blockID = (!blockName.equalsIgnoreCase("0") ? rs4.getInt("BlockID") : 0);
+					communityID = rs4.getInt("CommunityID");
+				}
+				
+				mainquery = "SELECT c.CommunityName, b.BlockName, cd.HouseNumber, cd.FirstName, cd.LastName, cd.CustomerUniqueID, cd.CustomerID FROM customerdetails AS cd LEFT JOIN community AS c ON cd.CommunityID = c.CommunityID LEFT JOIN block AS b ON b.BlockID = cd.BlockID <main>";
+				
+				mainquery = mainquery.replaceAll("<main>", (blockID == 0 && customerUniqueID.equalsIgnoreCase("0")) ?"WHERE cd.CommunityID = "+communityID : (blockID !=0 && customerUniqueID.equalsIgnoreCase("0")) ? "WHERE cd.CommunityID = "+communityID +" AND cd.BlockID = "+blockID : (blockID !=0 && !customerUniqueID.equalsIgnoreCase("0")) ? "WHERE cd.CommunityID = "+communityID +" AND cd.BlockID = "+blockID + " AND cd.CustomerUniqueID = '" + customerUniqueID +"'" : "");
+				
 			}
-			
-			String mainquery = "SELECT c.CommunityName, b.BlockName, cd.HouseNumber, cd.FirstName, cd.LastName, cd.CustomerUniqueID, cd.CustomerID FROM customerdetails AS cd LEFT JOIN community AS c ON cd.CommunityID = c.CommunityID LEFT JOIN block AS b ON b.BlockID = cd.BlockID <main>";
-			
-			mainquery = mainquery.replaceAll("<main>", (blockID == 0 && customerUniqueID.equalsIgnoreCase("0")) ?"WHERE cd.CommunityID = "+communityID : (blockID !=0 && customerUniqueID.equalsIgnoreCase("0")) ? "WHERE cd.CommunityID = "+communityID +" AND cd.BlockID = "+blockID : (blockID !=0 && !customerUniqueID.equalsIgnoreCase("0")) ? "WHERE cd.CommunityID = "+communityID +" AND cd.BlockID = "+blockID + " AND cd.CustomerUniqueID = '" + customerUniqueID +"'" : "");
 			
 			pstmt = con.prepareStatement(mainquery);
 			rs = pstmt.executeQuery();
@@ -547,7 +556,7 @@ public class DashboardDAO {
 			con = getConnection();
 			homeResponseVO = new HomeResponseVO();
 			
-			PreparedStatement pstmt1 = con.prepareStatement("SELECT NoAMRInterval FROM alertsettings");
+			PreparedStatement pstmt1 = con.prepareStatement("SELECT * FROM alertsettings");
 			ResultSet rs1 = pstmt1.executeQuery();
 			if(rs1.next()) {
 				
