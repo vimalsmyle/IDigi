@@ -193,16 +193,13 @@ public class ManagementSettingsDAO {
 			con = getConnection();
 			AlertResponseVO alertvo = null;
 			alert_settings_list = new LinkedList<AlertResponseVO>();
-			pstmt = con.prepareStatement("SELECT AlertID, NoAMRInterval, TimeOut, PerUnitGasValue, PerUnitWaterValue, PerUnitEnergyValue, ReconnectionCharges, LateFee, ReconnectionChargeDays, DueDayCount, BillGenerationDate, GST, VendorGSTNumber, CustomerGSTNumber, ModifiedDate FROM alertsettings");
+			pstmt = con.prepareStatement("SELECT AlertID, NoAMRInterval, TimeOut, ReconnectionCharges, LateFee, ReconnectionChargeDays, DueDayCount, BillGenerationDate, GST, VendorGSTNumber, CustomerGSTNumber, ModifiedDate FROM alertsettings");
 			rs = pstmt.executeQuery();
 
 			while (rs.next()) {
 				alertvo = new AlertResponseVO();
 				alertvo.setNoAMRInterval((rs.getString("NoAMRInterval")));
 				alertvo.setTimeOut(rs.getString("TimeOut"));
-				alertvo.setPerUnitGasValue(rs.getFloat("PerUnitGasValue"));
-				alertvo.setPerUnitWaterValue(rs.getFloat("PerUnitWaterValue"));
-				alertvo.setPerUnitEnergyValue(rs.getFloat("PerUnitEnergyValue"));
 				alertvo.setReconnectionCharges(rs.getInt("ReconnectionCharges"));
 				alertvo.setReconnectionChargeDays(rs.getInt("ReconnectionChargeDays"));
 				alertvo.setLateFee(rs.getInt("LateFee"));
@@ -237,20 +234,17 @@ public class ManagementSettingsDAO {
 		try {
 			con = getConnection();
 
-			ps = con.prepareStatement("INSERT INTO alertsettings (NoAMRInterval, TimeOut, PerUnitGasValue, PerUnitWaterValue, PerUnitEnergyValue, ReconnectionCharges, LateFee, ReconnectionChargeDays, DueDayCount, BillGenerationDate, GST, VendorGSTNumber, CustomerGSTNumber, RegisteredDate, ModifiedDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())");
+			ps = con.prepareStatement("INSERT INTO alertsettings (NoAMRInterval, TimeOut, ReconnectionCharges, LateFee, ReconnectionChargeDays, DueDayCount, BillGenerationDate, GST, VendorGSTNumber, CustomerGSTNumber, RegisteredDate, ModifiedDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())");
 			ps.setInt(1, alertvo.getNoAMRInterval());
 			ps.setInt(2, alertvo.getTimeOut());
-			ps.setFloat(3, alertvo.getPerUnitGasValue());
-			ps.setFloat(4, alertvo.getPerUnitWaterValue());
-			ps.setFloat(5, alertvo.getPerUnitEnergyValue());
-			ps.setInt(6, alertvo.getReconnectionCharges());
-			ps.setInt(7, alertvo.getLateFee());
-			ps.setInt(8, alertvo.getReconnectionChargeDays());
-			ps.setInt(9, alertvo.getDueDayCount());
-			ps.setString(10, alertvo.getBillGenerationDate());
-			ps.setInt(11, alertvo.getGST());
-			ps.setString(12, alertvo.getVendorGSTNumber());
-			ps.setString(13, alertvo.getCustomerGSTNumber());
+			ps.setInt(3, alertvo.getReconnectionCharges());
+			ps.setInt(4, alertvo.getLateFee());
+			ps.setInt(5, alertvo.getReconnectionChargeDays());
+			ps.setInt(6, alertvo.getDueDayCount());
+			ps.setString(7, alertvo.getBillGenerationDate());
+			ps.setInt(8, alertvo.getGST());
+			ps.setString(9, alertvo.getVendorGSTNumber());
+			ps.setString(10, alertvo.getCustomerGSTNumber());
 
 			if (ps.executeUpdate() > 0) {
 				responsevo.setResult("Success");
@@ -279,20 +273,17 @@ public class ManagementSettingsDAO {
 		try {
 			con = getConnection();
 
-			ps = con.prepareStatement("UPDATE alertsettings SET NoAMRInterval = ?, TimeOut = ?, PerUnitGasValue = ?, PerUnitWaterValue = ?, PerUnitEnergyValue = ?, ReconnectionCharges = ?, ReconnectionChargeDays = ?, LateFee = ?, DueDayCount = ?, GST = ?, VendorGSTNumber = ?, CustomerGSTNumber = ?, ModifiedDate = NOW() WHERE AlertID = ?");
+			ps = con.prepareStatement("UPDATE alertsettings SET NoAMRInterval = ?, TimeOut = ?, ReconnectionCharges = ?, ReconnectionChargeDays = ?, LateFee = ?, DueDayCount = ?, GST = ?, VendorGSTNumber = ?, CustomerGSTNumber = ?, ModifiedDate = NOW() WHERE AlertID = ?");
 			ps.setInt(1, alertvo.getNoAMRInterval());
 			ps.setInt(2, alertvo.getTimeOut());
-			ps.setFloat(3, alertvo.getPerUnitGasValue());
-			ps.setFloat(4, alertvo.getPerUnitWaterValue());
-			ps.setFloat(5, alertvo.getPerUnitEnergyValue());
-			ps.setInt(6, alertvo.getReconnectionCharges());
-			ps.setInt(7, alertvo.getReconnectionChargeDays());
-			ps.setInt(8, alertvo.getLateFee());
-			ps.setInt(9, alertvo.getDueDayCount());
-			ps.setInt(10, alertvo.getGST());
-			ps.setString(11, alertvo.getVendorGSTNumber());
-			ps.setString(12, alertvo.getCustomerGSTNumber());
-			ps.setInt(13, alertvo.getAlertID());
+			ps.setInt(3, alertvo.getReconnectionCharges());
+			ps.setInt(4, alertvo.getReconnectionChargeDays());
+			ps.setInt(5, alertvo.getLateFee());
+			ps.setInt(6, alertvo.getDueDayCount());
+			ps.setInt(7, alertvo.getGST());
+			ps.setString(8, alertvo.getVendorGSTNumber());
+			ps.setString(9, alertvo.getCustomerGSTNumber());
+			ps.setInt(10, alertvo.getAlertID());
 
 			if (ps.executeUpdate() > 0) {
 				responsevo.setResult("Success");

@@ -58,9 +58,6 @@ public class DashboardDAO {
 		IndividualDashboardResponseVO individualDashboardResponseVO = null;
 		DashboardResponseVO dashboardvo = null;
 		int noAMRInterval = 0;
-		float perUnitGasValue = 0.0f;
-		float perUnitWaterValue = 0.0f;
-		float perUnitEnergyValue = 0.0f;
 		int communityID = 0;
 		int blockID = 0;
 		String mainquery = "";
@@ -75,9 +72,6 @@ public class DashboardDAO {
 			if(rs1.next()) {
 				
 				noAMRInterval = rs1.getInt("NoAMRInterval");
-				perUnitGasValue = rs1.getFloat("PerUnitGasValue");
-				perUnitWaterValue = rs1.getFloat("PerUnitWaterValue");
-				perUnitEnergyValue = rs1.getFloat("PerUnitEnergyValue");
 			}
 			
 			if(communityName.equalsIgnoreCase("0")) {
@@ -114,7 +108,7 @@ public class DashboardDAO {
 				dashboardvo.setLastName(rs.getString("LastName"));
 				dashboardvo.setCustomerUniqueID(rs.getString("CustomerUniqueID"));
 				
-				String query = "SELECT dbl.ReadingID, dbl.MainBalanceLogID, dbl.CustomerMeterID, dbl.MIUID, cmd.MeterSerialNumber, cmd.PayType, cmd.MeterType, ms.MeterSize, dbl.Tariff, dbl.Reading, dbl.Balance, dbl.EmergencyCredit, dbl.ValveStatus, dbl.BatteryVoltage, "
+				String query = "SELECT dbl.ReadingID, dbl.MainBalanceLogID, dbl.CustomerMeterID, dbl.MIUID, cmd.MeterSerialNumber, cmd.PayType, cmd.MeterType, ms.MeterSize, ms.PerUnitValue, dbl.Tariff, dbl.Reading, dbl.Balance, dbl.EmergencyCredit, dbl.ValveStatus, dbl.BatteryVoltage, "
 						+ "dbl.LowBattery, dbl.DoorOpenTamper, dbl.MagneticTamper, dbl.RTCFault, dbl.Vacation, dbl.LowBalance, dbl.LogDate FROM displaybalancelog AS dbl LEFT JOIN customermeterdetails AS cmd ON cmd.CustomerMeterID = dbl.CustomerMeterID LEFT JOIN metersize AS ms ON ms.MeterSizeID = cmd.MeterSizeID WHERE cmd.CustomerID = ? AND cmd.MeterType = '" + type +"'";
 				
 				StringBuilder stringBuilder = new StringBuilder(query);
@@ -139,10 +133,10 @@ public class DashboardDAO {
 					individualDashboardResponseVO.setMeterType(rs3.getString("MeterType"));
 					individualDashboardResponseVO.setMiuID(rs3.getString("MIUID"));
 					individualDashboardResponseVO.setCustomerMeterID(rs3.getInt("CustomerMeterID"));
-//					individualDashboardResponseVO.setMeterSize(rs3.getFloat("MeterSize"));
+					individualDashboardResponseVO.setMeterSize(rs3.getFloat("MeterSize"));
 					individualDashboardResponseVO.setTariff((rs3.getFloat("Tariff")));
 					individualDashboardResponseVO.setReading(rs3.getFloat("Reading"));
-					individualDashboardResponseVO.setConsumption((int) (individualDashboardResponseVO.getReading() * (rs3.getString("MeterType").equalsIgnoreCase("Gas") ? perUnitGasValue : rs3.getString("MeterType").equalsIgnoreCase("Water") ? perUnitWaterValue : perUnitEnergyValue)));
+					individualDashboardResponseVO.setConsumption((int) (individualDashboardResponseVO.getReading() * rs3.getFloat("PerUnitValue")));
 					individualDashboardResponseVO.setBalance(rs3.getFloat("Balance"));
 					individualDashboardResponseVO.setEmergencyCredit(rs3.getFloat("EmergencyCredit"));
 					individualDashboardResponseVO.setValveStatus((rs3.getInt("ValveStatus") == 1) ? "OPEN" : (rs3.getInt("ValveStatus") == 0) ? "CLOSED" : "");
@@ -211,9 +205,6 @@ public class DashboardDAO {
 		List<DashboardResponseVO> dashboard_list = null;
 		DashboardResponseVO dashboardvo = null;
 		int noAMRInterval = 0;
-		float perUnitGasValue = 0.0f;
-		float perUnitWaterValue = 0.0f;
-		float perUnitEnergyValue = 0.0f;
 
 		List<IndividualDashboardResponseVO> individualDashboardList = null;
 		IndividualDashboardResponseVO individualDashboardResponseVO = null;
@@ -227,9 +218,6 @@ public class DashboardDAO {
 			if(rs1.next()) {
 				
 				noAMRInterval = rs1.getInt("NoAMRInterval");
-				perUnitGasValue = rs1.getFloat("PerUnitGasValue");
-				perUnitWaterValue = rs1.getFloat("PerUnitWaterValue");
-				perUnitEnergyValue = rs1.getFloat("PerUnitEnergyValue");
 			}
 			
 			String mainquery = "SELECT c.CommunityName, b.BlockName, cd.HouseNumber, cd.FirstName, cd.LastName, cd.CustomerUniqueID, cd.CustomerID FROM customerdetails AS cd LEFT JOIN community AS c ON cd.CommunityID = c.CommunityID LEFT JOIN block AS b ON b.BlockID = cd.BlockID <main>";
@@ -251,7 +239,7 @@ public class DashboardDAO {
 				dashboardvo.setCustomerUniqueID(rs.getString("CustomerUniqueID"));
 				
 				String query = "SELECT dbl.ReadingID, dbl.MainBalanceLogID, dbl.CustomerMeterID, dbl.MIUID, cmd.MeterSerialNumber, dbl.Tariff, dbl.Reading, dbl.Balance, dbl.EmergencyCredit, dbl.ValveStatus, dbl.BatteryVoltage, "
-						+ "dbl.LowBattery, dbl.DoorOpenTamper, dbl.MagneticTamper, dbl.RTCFault, dbl.Vacation, dbl.LowBalance, dbl.LogDate FROM displaybalancelog AS dbl LEFT JOIN customermeterdetails AS cmd ON cmd.CustomerMeterID = dbl.CustomerMeterID WHERE cmd.CustomerID = ? AND cmd.MeterType = " + (type == 1 ? "'Gas'" : type == 2 ? "'Water'" :"'Energy'");
+						+ "dbl.LowBattery, dbl.DoorOpenTamper, dbl.MagneticTamper, dbl.RTCFault, dbl.Vacation, dbl.LowBalance, dbl.LogDate, ms.MeterSize, ms.PerUnitValue FROM displaybalancelog AS dbl LEFT JOIN customermeterdetails AS cmd ON cmd.CustomerMeterID = dbl.CustomerMeterID LEFT JOIN metersize AS ms ON ms.MeterSizeID = cmd.MeterSizeID WHERE cmd.CustomerID = ? AND cmd.MeterType = " + (type == 1 ? "'Gas'" : type == 2 ? "'Water'" :"'Energy'");
 				
 				/*String oldquery = "SELECT DISTINCT c.CommunityName, b.BlockName, cd.FirstName,cd.CustomerUniqueID, cd.LastName, cd.HouseNumber, cmd.MeterSerialNumber, dbl.ReadingID, dbl.MainBalanceLogID, dbl.EmergencyCredit, \r\n" + 
 						"dbl.MIUID, dbl.Reading, dbl.Balance, dbl.BatteryVoltage, dbl.LowBattery, dbl.Tariff, dbl.ValveStatus, dbl.DoorOpenTamper, dbl.MagneticTamper, dbl.RTCFault, dbl.Vacation, dbl.LowBalance, dbl.LogDate\r\n" + 
@@ -288,7 +276,7 @@ public class DashboardDAO {
 							individualDashboardResponseVO.setMiuID(rs2.getString("MIUID"));
 							individualDashboardResponseVO.setTariff((rs2.getFloat("Tariff")));
 							individualDashboardResponseVO.setReading(rs2.getFloat("Reading"));
-							individualDashboardResponseVO.setConsumption((int) (individualDashboardResponseVO.getReading() * (rs2.getString("MeterType").equalsIgnoreCase("Gas") ? perUnitGasValue : rs2.getString("MeterType").equalsIgnoreCase("Water") ? perUnitWaterValue : perUnitEnergyValue)));
+							individualDashboardResponseVO.setConsumption((int) (individualDashboardResponseVO.getReading() * rs2.getFloat("PerUnitValue")));
 							individualDashboardResponseVO.setBalance(rs2.getFloat("Balance"));
 							individualDashboardResponseVO.setEmergencyCredit(rs2.getFloat("EmergencyCredit"));
 							individualDashboardResponseVO.setValveStatus((rs2.getInt("ValveStatus") == 1) ? "OPEN" : (rs2.getInt("ValveStatus") == 0) ? "CLOSED" : "");	
@@ -585,7 +573,7 @@ public class DashboardDAO {
 				
 				if(minutes > noAMRInterval) { nonLive++; } else { live++; }
 				if(rs.getInt("ValveStatus") == 1) { active++; } else { inActive++; }
-				if(rs.getInt("Balance") <= 0 && rs.getString("MeterType").equalsIgnoreCase("Prepaid")) { emergency++; }
+				if(rs.getInt("Balance") <= 0 && rs.getString("PayType").equalsIgnoreCase("Prepaid")) { emergency++; }
 				if(rs.getInt("LowBattery") == 1) { lowBattery++; }
 				
 			}
@@ -825,7 +813,7 @@ public class DashboardDAO {
 					pstmt.setInt(16, dataRequestVO.getValve_live_status());
 					pstmt.setFloat(17, dataRequestVO.getCredit());
 					pstmt.setFloat(18, dataRequestVO.getEmergency_credit());
-					pstmt.setInt(19, dataRequestVO.getMin_elapsed_after_valve_trip());
+					pstmt.setInt(19, dataRequestVO.getDays_elapsed_after_valve_trip());
 					pstmt.setFloat(20, dataRequestVO.getReading());
 					pstmt.setInt(21, dataRequestVO.getStatus().getDoor_open());
 					pstmt.setInt(22, dataRequestVO.getStatus().getMagnetic());
@@ -867,7 +855,7 @@ public class DashboardDAO {
 								pstmt1.setInt(17, dataRequestVO.getValve_live_status());
 								pstmt1.setFloat(18, dataRequestVO.getCredit());
 								pstmt1.setFloat(19, dataRequestVO.getEmergency_credit());
-								pstmt1.setInt(20, dataRequestVO.getMin_elapsed_after_valve_trip());
+								pstmt1.setInt(20, dataRequestVO.getDays_elapsed_after_valve_trip());
 								pstmt1.setFloat(21, dataRequestVO.getReading());
 								pstmt1.setInt(22, dataRequestVO.getStatus().getDoor_open());
 								pstmt1.setInt(23, dataRequestVO.getStatus().getMagnetic());
@@ -899,7 +887,7 @@ public class DashboardDAO {
 									pstmt1.setInt(17, dataRequestVO.getValve_live_status());
 									pstmt1.setFloat(18, dataRequestVO.getCredit());
 									pstmt1.setFloat(19, dataRequestVO.getEmergency_credit());
-									pstmt1.setInt(20, dataRequestVO.getMin_elapsed_after_valve_trip());
+									pstmt1.setInt(20, dataRequestVO.getDays_elapsed_after_valve_trip());
 									pstmt1.setFloat(21, dataRequestVO.getReading());
 									pstmt1.setInt(22, dataRequestVO.getStatus().getDoor_open());
 									pstmt1.setInt(23, dataRequestVO.getStatus().getMagnetic());

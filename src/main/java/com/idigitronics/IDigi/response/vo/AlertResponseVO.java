@@ -16,9 +16,6 @@ public class AlertResponseVO {
 	private String lowBatteryVoltage;
 	private String timeOut;
 	private String registeredDate;
-	private float perUnitGasValue;
-	private float perUnitWaterValue;
-	private float perUnitEnergyValue;
 	private int reconnectionCharges;
 	private int reconnectionChargeDays;
 	private String billGenerationDate;
@@ -124,30 +121,6 @@ public class AlertResponseVO {
 
 	public void setCustomerGSTNumber(String customerGSTNumber) {
 		this.customerGSTNumber = customerGSTNumber;
-	}
-
-	public float getPerUnitGasValue() {
-		return perUnitGasValue;
-	}
-
-	public void setPerUnitGasValue(float perUnitGasValue) {
-		this.perUnitGasValue = perUnitGasValue;
-	}
-
-	public float getPerUnitWaterValue() {
-		return perUnitWaterValue;
-	}
-
-	public void setPerUnitWaterValue(float perUnitWaterValue) {
-		this.perUnitWaterValue = perUnitWaterValue;
-	}
-
-	public float getPerUnitEnergyValue() {
-		return perUnitEnergyValue;
-	}
-
-	public void setPerUnitEnergyValue(float perUnitEnergyValue) {
-		this.perUnitEnergyValue = perUnitEnergyValue;
 	}
 
 	public int getReconnectionChargeDays() {

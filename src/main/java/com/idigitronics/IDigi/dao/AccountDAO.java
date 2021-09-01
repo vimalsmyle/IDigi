@@ -119,12 +119,12 @@ public class AccountDAO {
 							topUpRequestVO.setFixedCharges(rs1.getInt("FixedCharges"));
 						}
 
-						PreparedStatement pstmt2 = con.prepareStatement("SELECT al.ReconnectionCharges, dbl.Minutes FROM displaybalancelog AS dbl JOIN alertsettings AS al WHERE dbl.CustomerUniqueID = '"
+						PreparedStatement pstmt2 = con.prepareStatement("SELECT al.ReconnectionCharges, al.ReconnectionChargeDays, dbl.Minutes FROM displaybalancelog AS dbl JOIN alertsettings AS al WHERE dbl.CustomerUniqueID = '"
 										+ topUpRequestVO.getCustomerUniqueID() + "' AND dbl.CustomerMeterID = " + topUpRequestVO.getCustomerMeterID());
 						ResultSet rs2 = pstmt2.executeQuery();
 
 						if (rs2.next()) {
-							if (rs2.getInt("Minutes") != 0) {
+							if (rs2.getInt("Minutes") > rs2.getInt("ReconnectionChargeDays")) {
 								topUpRequestVO.setReconnectionCharges(rs2.getInt("ReconnectionCharges"));
 							}
 						}
