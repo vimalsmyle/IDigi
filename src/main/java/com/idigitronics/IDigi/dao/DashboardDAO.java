@@ -63,7 +63,7 @@ public class DashboardDAO {
 		float perUnitEnergyValue = 0.0f;
 		int communityID = 0;
 		int blockID = 0;
-		String mainquery = null;
+		String mainquery = "";
 		
 		try {
 			con = getConnection();

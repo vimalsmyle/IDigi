@@ -100,7 +100,7 @@ function redirection(obj,type){
 			.getItem(
 					"communityName");
 		}else{
-			var comm=$("#comName").val()
+			var comm=$("#comName").val()==undefined?"0":$("#comName").val()
 		}
 		
 		var block = $("#blockName").val()==undefined?"0":$("#blockName").val();
