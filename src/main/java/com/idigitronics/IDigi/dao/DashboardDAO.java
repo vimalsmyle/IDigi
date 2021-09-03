@@ -134,21 +134,36 @@ public class DashboardDAO {
 					individualDashboardResponseVO.setMiuID(rs3.getString("MIUID"));
 					individualDashboardResponseVO.setCustomerMeterID(rs3.getInt("CustomerMeterID"));
 					individualDashboardResponseVO.setMeterSize(rs3.getFloat("MeterSize"));
-					individualDashboardResponseVO.setTariff((rs3.getFloat("Tariff")));
 					individualDashboardResponseVO.setReading(rs3.getFloat("Reading"));
 					individualDashboardResponseVO.setConsumption((int) (individualDashboardResponseVO.getReading() * rs3.getFloat("PerUnitValue")));
-					individualDashboardResponseVO.setBalance(rs3.getFloat("Balance"));
-					individualDashboardResponseVO.setEmergencyCredit(rs3.getFloat("EmergencyCredit"));
-					individualDashboardResponseVO.setValveStatus((rs3.getInt("ValveStatus") == 1) ? "OPEN" : (rs3.getInt("ValveStatus") == 0) ? "CLOSED" : "");
-					individualDashboardResponseVO.setValveStatusColor((rs3.getInt("ValveStatus") == 1) ? "GREEN" : (rs3.getInt("ValveStatus") == 0) ? "RED" : "");
 					individualDashboardResponseVO.setBattery(rs3.getInt("BatteryVoltage"));
 					individualDashboardResponseVO.setBatteryColor((rs3.getInt("LowBattery") == 1 ) ? "RED" : "GREEN");
 					individualDashboardResponseVO.setDoorOpenTamper((rs3.getInt("DoorOpenTamper") == 0) ? "NO" : (rs3.getInt("DoorOpenTamper") == 1) ? "YES" : "NO");
 					individualDashboardResponseVO.setDooropentamperColor((rs3.getInt("DoorOpenTamper") == 0) ? "GREEN" : "RED");
 					individualDashboardResponseVO.setMagneticTamper((rs3.getInt("MagneticTamper") == 0) ? "NO" : (rs3.getInt("MagneticTamper") == 1) ? "YES" : "NO");
 					individualDashboardResponseVO.setMagnetictamperColor((rs3.getInt("MagneticTamper") == 0) ? "GREEN" : "RED");
-					individualDashboardResponseVO.setVacationStatus(rs3.getInt("Vacation") == 1 ? "YES" : "NO");
-					individualDashboardResponseVO.setVacationColor(rs3.getInt("Vacation") == 1 ? "ORANGE" : "BLACK");
+					
+					if(rs3.getString("PayType").equalsIgnoreCase("Prepaid")) {
+						
+						individualDashboardResponseVO.setBalance(rs3.getString("Balance"));
+						individualDashboardResponseVO.setEmergencyCredit(rs3.getString("EmergencyCredit"));
+						individualDashboardResponseVO.setTariff((rs3.getString("Tariff")));
+						individualDashboardResponseVO.setValveStatus((rs3.getInt("ValveStatus") == 1) ? "OPEN" : (rs3.getInt("ValveStatus") == 0) ? "CLOSED" : "");
+						individualDashboardResponseVO.setValveStatusColor((rs3.getInt("ValveStatus") == 1) ? "GREEN" : (rs3.getInt("ValveStatus") == 0) ? "RED" : "");
+						individualDashboardResponseVO.setVacationStatus(rs3.getInt("Vacation") == 1 ? "YES" : "NO");
+						individualDashboardResponseVO.setVacationColor(rs3.getInt("Vacation") == 1 ? "ORANGE" : "BLACK");
+					} else {
+						individualDashboardResponseVO.setBalance("---");
+						individualDashboardResponseVO.setEmergencyCredit("---");
+						individualDashboardResponseVO.setTariff("---");
+						individualDashboardResponseVO.setValveStatus("---");
+						individualDashboardResponseVO.setValveStatusColor("---");
+						individualDashboardResponseVO.setVacationStatus("---");
+						individualDashboardResponseVO.setVacationColor("---");
+						individualDashboardResponseVO.setLastTopupAmount("---");
+						individualDashboardResponseVO.setLastRechargeDate("---");
+					}
+					
 					individualDashboardResponseVO.setTimeStamp(ExtraMethodsDAO.datetimeformatter(rs3.getString("LogDate")));
 					
 					Date currentDateTime = new Date();
@@ -171,7 +186,7 @@ public class DashboardDAO {
 						PreparedStatement pstmt2 = con.prepareStatement("SELECT Amount, TransactionDate FROM topup WHERE CustomerMeterID = "+rs3.getInt("CustomerMeterID")+" AND STATUS = 0 ORDER BY TransactionID DESC LIMIT 0,1") ;
 						ResultSet rs2 = pstmt2.executeQuery();
 						if(rs2.next()) {
-							individualDashboardResponseVO.setLastTopupAmount(rs2.getInt("Amount"));
+							individualDashboardResponseVO.setLastTopupAmount(rs2.getString("Amount"));
 							individualDashboardResponseVO.setLastRechargeDate(ExtraMethodsDAO.datetimeformatter(rs2.getString("TransactionDate")));
 						}
 					}
@@ -274,24 +289,34 @@ public class DashboardDAO {
 							
 							individualDashboardResponseVO.setMeterSerialNumber(rs2.getString("MeterSerialNumber"));
 							individualDashboardResponseVO.setMiuID(rs2.getString("MIUID"));
-							individualDashboardResponseVO.setTariff((rs2.getFloat("Tariff")));
 							individualDashboardResponseVO.setReading(rs2.getFloat("Reading"));
 							individualDashboardResponseVO.setConsumption((int) (individualDashboardResponseVO.getReading() * rs2.getFloat("PerUnitValue")));
-							individualDashboardResponseVO.setBalance(rs2.getFloat("Balance"));
-							individualDashboardResponseVO.setEmergencyCredit(rs2.getFloat("EmergencyCredit"));
-							individualDashboardResponseVO.setValveStatus((rs2.getInt("ValveStatus") == 1) ? "OPEN" : (rs2.getInt("ValveStatus") == 0) ? "CLOSED" : "");	
-							individualDashboardResponseVO.setValveStatusColor((rs2.getInt("ValveStatus") == 1) ? "GREEN" : (rs2.getInt("ValveStatus") == 0) ? "RED" : "");
 							individualDashboardResponseVO.setBattery(rs2.getInt("BatteryVoltage"));
 							individualDashboardResponseVO.setBatteryColor((rs2.getInt("LowBattery") == 1 ) ? "RED" : "GREEN");
 							individualDashboardResponseVO.setDoorOpenTamper((rs2.getInt("DoorOpenTamper") == 0) ? "NO" : (rs2.getInt("DoorOpenTamper") == 1) ? "YES" : "NO");
 							individualDashboardResponseVO.setDooropentamperColor((rs2.getInt("DoorOpenTamper") == 0) ? "GREEN" : "RED");
 							individualDashboardResponseVO.setMagneticTamper((rs2.getInt("MagneticTamper") == 0) ? "NO" : (rs2.getInt("MagneticTamper") == 1) ? "YES" : "NO");
 							individualDashboardResponseVO.setMagnetictamperColor((rs2.getInt("MagneticTamper") == 0) ? "GREEN" : "RED");
-							individualDashboardResponseVO.setVacationStatus(rs2.getInt("Vacation") == 1 ? "YES" : "NO");
-							individualDashboardResponseVO.setVacationColor(rs2.getInt("Vacation") == 1 ? "ORANGE" : "BLACK");
-							individualDashboardResponseVO.setTimeStamp(ExtraMethodsDAO.datetimeformatter(rs2.getString("LogDate")));
-							individualDashboardResponseVO.setVacationStatus(rs2.getInt("Vacation") == 1 ? "YES" : "NO");
-							individualDashboardResponseVO.setVacationColor(rs2.getInt("Vacation") == 1 ? "ORANGE" : "BLACK");
+							
+							if(rs2.getString("PayType").equalsIgnoreCase("Prepaid")) {
+								
+								individualDashboardResponseVO.setBalance(rs2.getString("Balance"));
+								individualDashboardResponseVO.setEmergencyCredit(rs2.getString("EmergencyCredit"));
+								individualDashboardResponseVO.setTariff((rs2.getString("Tariff")));
+								individualDashboardResponseVO.setValveStatus((rs2.getInt("ValveStatus") == 1) ? "OPEN" : (rs2.getInt("ValveStatus") == 0) ? "CLOSED" : "");
+								individualDashboardResponseVO.setValveStatusColor((rs2.getInt("ValveStatus") == 1) ? "GREEN" : (rs2.getInt("ValveStatus") == 0) ? "RED" : "");
+								individualDashboardResponseVO.setVacationStatus(rs2.getInt("Vacation") == 1 ? "YES" : "NO");
+								individualDashboardResponseVO.setVacationColor(rs2.getInt("Vacation") == 1 ? "ORANGE" : "BLACK");
+							} else {
+								individualDashboardResponseVO.setBalance("---");
+								individualDashboardResponseVO.setEmergencyCredit("---");
+								individualDashboardResponseVO.setTariff("---");
+								individualDashboardResponseVO.setValveStatus("---");
+								individualDashboardResponseVO.setValveStatusColor("---");
+								individualDashboardResponseVO.setVacationStatus("---");
+								individualDashboardResponseVO.setVacationColor("---");
+							}
+							
 							individualDashboardResponseVO.setTimeStamp(ExtraMethodsDAO.datetimeformatter(rs2.getString("LogDate")));
 							
 							Date currentDateTime = new Date();
@@ -789,38 +814,39 @@ public class DashboardDAO {
 		try {
 			con = getConnection();
 			
-				PreparedStatement pstmt2 = con.prepareStatement("SELECT cd.CommunityID, cd.BlockID, cd.CustomerID, cmd.CustomerMeterID, cmd.TariffID, t.Tariff, cmd.MeterSerialNumber, cd.CustomerUniqueID from customerdetails as cd LEFT JOIN customermeterdetails as cmd ON cd.CustomerID = cmd.CustomerID LEFT JOIN tariff as t on t.TariffID = cmd.TariffID WHERE cmd.MIUID = ?");
+				PreparedStatement pstmt2 = con.prepareStatement("SELECT cd.CommunityID, cd.BlockID, cd.CustomerID, cmd.CustomerMeterID, cmd.TariffID, t.Tariff, cmd.MeterSerialNumber, cd.CustomerUniqueID, cmd.MeterSizeID from customerdetails as cd LEFT JOIN customermeterdetails as cmd ON cd.CustomerID = cmd.CustomerID LEFT JOIN tariff as t on t.TariffID = cmd.TariffID WHERE cmd.MIUID = ?");
 				pstmt2.setString(1, miuID);
 				ResultSet rs = pstmt2.executeQuery();
 				if(rs.next()) {
 					
-					pstmt = con.prepareStatement("INSERT INTO balancelog (MIUID, CommunityID, BlockID, CustomerID, CustomerMeterID, MeterSerialNumber, CustomerUniqueID, MeterType, SyncTime, SyncInterval, PayType, BatteryVoltage, TariffID, Tariff, ValveConfiguration, ValveStatus, Balance, EmergencyCredit, Minutes, Reading, DoorOpenTamper, MagneticTamper, Vacation, RTCFault, LowBattery, LowBalance, LogDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
+					pstmt = con.prepareStatement("INSERT INTO balancelog (MIUID, CommunityID, BlockID, CustomerID, CustomerMeterID, MeterSizeID, MeterSerialNumber, CustomerUniqueID, MeterType, SyncTime, SyncInterval, PayType, BatteryVoltage, TariffID, Tariff, ValveConfiguration, ValveStatus, Balance, EmergencyCredit, Minutes, Reading, DoorOpenTamper, MagneticTamper, Vacation, RTCFault, LowBattery, LowBalance, LogDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
 					pstmt.setString(1, miuID);
 					pstmt.setInt(2, rs.getInt("CommunityID"));
 					pstmt.setInt(3, rs.getInt("BlockID"));
 					pstmt.setInt(4, rs.getInt("CustomerID"));
 					pstmt.setInt(5, rs.getInt("CustomerMeterID"));
-					pstmt.setString(6, rs.getString("MeterSerialNumber"));
-					pstmt.setString(7, rs.getString("CustomerUniqueID"));
-					pstmt.setString(8, dataRequestVO.getType() == 1 ? "Water" : dataRequestVO.getType() == 2 ? "Gas" : dataRequestVO.getType() == 3 ? "Energy" : "");
-					pstmt.setString(9, dataRequestVO.getSync_time());
-					pstmt.setInt(10, dataRequestVO.getSync_interval());
-					pstmt.setString(11, dataRequestVO.getPre_post_paid() == 0 ? "Prepaid" : "Postpaid");
-					pstmt.setFloat(12, dataRequestVO.getBat_volt());
-					pstmt.setInt(13, rs.getInt("TariffID"));
-					pstmt.setFloat(14, dataRequestVO.getTariff());
-					pstmt.setInt(15, dataRequestVO.getValve_configuration());
-					pstmt.setInt(16, dataRequestVO.getValve_live_status());
-					pstmt.setFloat(17, dataRequestVO.getCredit());
-					pstmt.setFloat(18, dataRequestVO.getEmergency_credit());
-					pstmt.setInt(19, dataRequestVO.getDays_elapsed_after_valve_trip());
-					pstmt.setFloat(20, dataRequestVO.getReading());
-					pstmt.setInt(21, dataRequestVO.getStatus().getDoor_open());
-					pstmt.setInt(22, dataRequestVO.getStatus().getMagnetic());
-					pstmt.setInt(23, dataRequestVO.getStatus().getSchedule_disconnect());
-					pstmt.setInt(24, dataRequestVO.getStatus().getRtc_fault());
-					pstmt.setInt(25, dataRequestVO.getStatus().getLow_bat());
-					pstmt.setInt(26, dataRequestVO.getStatus().getLow_bal());
+					pstmt.setInt(6, rs.getInt("MeterSizeID"));
+					pstmt.setString(7, rs.getString("MeterSerialNumber"));
+					pstmt.setString(8, rs.getString("CustomerUniqueID"));
+					pstmt.setString(9, dataRequestVO.getType() == 1 ? "Water" : dataRequestVO.getType() == 2 ? "Gas" : dataRequestVO.getType() == 3 ? "Energy" : "");
+					pstmt.setString(10, dataRequestVO.getSync_time());
+					pstmt.setInt(11, dataRequestVO.getSync_interval());
+					pstmt.setString(12, dataRequestVO.getPre_post_paid() == 0 ? "Prepaid" : "Postpaid");
+					pstmt.setFloat(13, dataRequestVO.getBat_volt());
+					pstmt.setInt(14, rs.getInt("TariffID"));
+					pstmt.setFloat(15, dataRequestVO.getTariff());
+					pstmt.setInt(16, dataRequestVO.getValve_configuration());
+					pstmt.setInt(17, dataRequestVO.getValve_live_status());
+					pstmt.setFloat(18, dataRequestVO.getCredit());
+					pstmt.setFloat(19, dataRequestVO.getEmergency_credit());
+					pstmt.setInt(20, dataRequestVO.getDays_elapsed_after_valve_trip());
+					pstmt.setFloat(21, dataRequestVO.getReading());
+					pstmt.setInt(22, dataRequestVO.getStatus().getDoor_open());
+					pstmt.setInt(23, dataRequestVO.getStatus().getMagnetic());
+					pstmt.setInt(24, dataRequestVO.getStatus().getSchedule_disconnect());
+					pstmt.setInt(25, dataRequestVO.getStatus().getRtc_fault());
+					pstmt.setInt(26, dataRequestVO.getStatus().getLow_bat());
+					pstmt.setInt(27, dataRequestVO.getStatus().getLow_bal());
 					
 					if (pstmt.executeUpdate() > 0) {
 						
@@ -835,66 +861,68 @@ public class DashboardDAO {
 							ResultSet rs1 = pstmt3.executeQuery();
 							
 							if(rs1.next()) {
-								pstmt1 = con.prepareStatement("UPDATE displaybalancelog SET MainBalanceLogID = ?, MIUID = ?, CommunityID = ?, BlockID = ?, CustomerID = ?, CustomerMeterID = ?, MeterSerialNumber = ?, CustomerUniqueID = ?, MeterType = ?, SyncTime = ?, SyncInterval = ?, PayType = ?, BatteryVoltage = ?, TariffID = ?, Tariff = ?, ValveConfiguration = ?,  ValveStatus = ?, Balance = ?, EmergencyCredit = ?, Minutes = ?, Reading = ?, DoorOpenTamper = ?, MagneticTamper = ?, Vacation = ?, RTCFault = ?, LowBattery = ?, LowBalance = ?, LogDate = NOW() WHERE CustomerMeterID = ? ");
+								pstmt1 = con.prepareStatement("UPDATE displaybalancelog SET MainBalanceLogID = ?, MIUID = ?, CommunityID = ?, BlockID = ?, CustomerID = ?, CustomerMeterID = ?, MeterSizeID =?, MeterSerialNumber = ?, CustomerUniqueID = ?, MeterType = ?, SyncTime = ?, SyncInterval = ?, PayType = ?, BatteryVoltage = ?, TariffID = ?, Tariff = ?, ValveConfiguration = ?,  ValveStatus = ?, Balance = ?, EmergencyCredit = ?, Minutes = ?, Reading = ?, DoorOpenTamper = ?, MagneticTamper = ?, Vacation = ?, RTCFault = ?, LowBattery = ?, LowBalance = ?, LogDate = NOW() WHERE CustomerMeterID = ? ");
 								pstmt1.setInt(1, rs2.getInt("ReadingID"));
 								pstmt1.setString(2, miuID);
 								pstmt1.setInt(3, rs.getInt("CommunityID"));
 								pstmt1.setInt(4, rs.getInt("BlockID"));
 								pstmt1.setInt(5, rs.getInt("CustomerID"));
 								pstmt1.setInt(6, rs.getInt("CustomerMeterID"));
-								pstmt1.setString(7, rs.getString("MeterSerialNumber"));
-								pstmt1.setString(8, rs.getString("CustomerUniqueID"));
-								pstmt1.setString(9, dataRequestVO.getType() == 1 ? "Water" : dataRequestVO.getType() == 2 ? "Gas" : dataRequestVO.getType() == 3 ? "Energy" : "");
-								pstmt1.setString(10, dataRequestVO.getSync_time());
-								pstmt1.setInt(11, dataRequestVO.getSync_interval());
-								pstmt1.setString(12, dataRequestVO.getPre_post_paid() == 0 ? "Prepaid" : "Postpaid");
-								pstmt1.setFloat(13, dataRequestVO.getBat_volt());
-								pstmt1.setInt(14, rs.getInt("TariffID"));
-								pstmt1.setFloat(15, dataRequestVO.getTariff());
-								pstmt1.setInt(16, dataRequestVO.getValve_configuration());
-								pstmt1.setInt(17, dataRequestVO.getValve_live_status());
-								pstmt1.setFloat(18, dataRequestVO.getCredit());
-								pstmt1.setFloat(19, dataRequestVO.getEmergency_credit());
-								pstmt1.setInt(20, dataRequestVO.getDays_elapsed_after_valve_trip());
-								pstmt1.setFloat(21, dataRequestVO.getReading());
-								pstmt1.setInt(22, dataRequestVO.getStatus().getDoor_open());
-								pstmt1.setInt(23, dataRequestVO.getStatus().getMagnetic());
-								pstmt1.setInt(24, dataRequestVO.getStatus().getSchedule_disconnect());
-								pstmt1.setInt(25, dataRequestVO.getStatus().getRtc_fault());
-								pstmt1.setInt(26, dataRequestVO.getStatus().getLow_bat());
-								pstmt1.setInt(27, dataRequestVO.getStatus().getLow_bal());
-								pstmt1.setInt(28, rs.getInt("CustomerMeterID"));
+								pstmt1.setInt(7, rs.getInt("MeterSizeID"));
+								pstmt1.setString(8, rs.getString("MeterSerialNumber"));
+								pstmt1.setString(9, rs.getString("CustomerUniqueID"));
+								pstmt1.setString(10, dataRequestVO.getType() == 1 ? "Water" : dataRequestVO.getType() == 2 ? "Gas" : dataRequestVO.getType() == 3 ? "Energy" : "");
+								pstmt1.setString(11, dataRequestVO.getSync_time());
+								pstmt1.setInt(12, dataRequestVO.getSync_interval());
+								pstmt1.setString(13, dataRequestVO.getPre_post_paid() == 0 ? "Prepaid" : "Postpaid");
+								pstmt1.setFloat(14, dataRequestVO.getBat_volt());
+								pstmt1.setInt(15, rs.getInt("TariffID"));
+								pstmt1.setFloat(16, dataRequestVO.getTariff());
+								pstmt1.setInt(17, dataRequestVO.getValve_configuration());
+								pstmt1.setInt(18, dataRequestVO.getValve_live_status());
+								pstmt1.setFloat(19, dataRequestVO.getCredit());
+								pstmt1.setFloat(20, dataRequestVO.getEmergency_credit());
+								pstmt1.setInt(21, dataRequestVO.getDays_elapsed_after_valve_trip());
+								pstmt1.setFloat(22, dataRequestVO.getReading());
+								pstmt1.setInt(23, dataRequestVO.getStatus().getDoor_open());
+								pstmt1.setInt(24, dataRequestVO.getStatus().getMagnetic());
+								pstmt1.setInt(25, dataRequestVO.getStatus().getSchedule_disconnect());
+								pstmt1.setInt(26, dataRequestVO.getStatus().getRtc_fault());
+								pstmt1.setInt(27, dataRequestVO.getStatus().getLow_bat());
+								pstmt1.setInt(28, dataRequestVO.getStatus().getLow_bal());
+								pstmt1.setInt(29, rs.getInt("CustomerMeterID"));
 								
 							} else {
 								
-									pstmt1 = con.prepareStatement("INSERT INTO displaybalancelog (MainBalanceLogID, MIUID, CommunityID, BlockID, CustomerID, CustomerMeterID, MeterSerialNumber, CustomerUniqueID, MeterType, SyncTime, SyncInterval, PayType, BatteryVoltage, TariffID, Tariff, ValveConfiguration, ValveStatus, Balance, EmergencyCredit, Minutes, Reading, DoorOpenTamper, MagneticTamper, Vacation, RTCFault, LowBattery, LowBalance, LogDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
+									pstmt1 = con.prepareStatement("INSERT INTO displaybalancelog (MainBalanceLogID, MIUID, CommunityID, BlockID, CustomerID, CustomerMeterID, MeterSizeID, MeterSerialNumber, CustomerUniqueID, MeterType, SyncTime, SyncInterval, PayType, BatteryVoltage, TariffID, Tariff, ValveConfiguration, ValveStatus, Balance, EmergencyCredit, Minutes, Reading, DoorOpenTamper, MagneticTamper, Vacation, RTCFault, LowBattery, LowBalance, LogDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
 									pstmt1.setInt(1, rs2.getInt("ReadingID"));
 									pstmt1.setString(2, miuID);
 									pstmt1.setInt(3, rs.getInt("CommunityID"));
 									pstmt1.setInt(4, rs.getInt("BlockID"));
 									pstmt1.setInt(5, rs.getInt("CustomerID"));
 									pstmt1.setInt(6, rs.getInt("CustomerMeterID"));
-									pstmt1.setString(7, rs.getString("MeterSerialNumber"));
-									pstmt1.setString(8, rs.getString("CustomerUniqueID"));
-									pstmt1.setString(9, dataRequestVO.getType() == 1 ? "Water" : dataRequestVO.getType() == 2 ? "Gas" : dataRequestVO.getType() == 3 ? "Energy" : "");
-									pstmt1.setString(10, dataRequestVO.getSync_time());
-									pstmt1.setInt(11, dataRequestVO.getSync_interval());
-									pstmt1.setString(12, dataRequestVO.getPre_post_paid() == 0 ? "Prepaid" : "Postpaid");
-									pstmt1.setFloat(13, dataRequestVO.getBat_volt());
-									pstmt1.setInt(14, rs.getInt("TariffID"));
-									pstmt1.setFloat(15, dataRequestVO.getTariff());
-									pstmt1.setInt(16, dataRequestVO.getValve_configuration());
-									pstmt1.setInt(17, dataRequestVO.getValve_live_status());
-									pstmt1.setFloat(18, dataRequestVO.getCredit());
-									pstmt1.setFloat(19, dataRequestVO.getEmergency_credit());
-									pstmt1.setInt(20, dataRequestVO.getDays_elapsed_after_valve_trip());
-									pstmt1.setFloat(21, dataRequestVO.getReading());
-									pstmt1.setInt(22, dataRequestVO.getStatus().getDoor_open());
-									pstmt1.setInt(23, dataRequestVO.getStatus().getMagnetic());
-									pstmt1.setInt(24, dataRequestVO.getStatus().getSchedule_disconnect());
-									pstmt1.setInt(25, dataRequestVO.getStatus().getRtc_fault());
-									pstmt1.setInt(26, dataRequestVO.getStatus().getLow_bat());
-									pstmt1.setInt(27, dataRequestVO.getStatus().getLow_bal());
+									pstmt1.setInt(7, rs.getInt("MeterSizeID"));
+									pstmt1.setString(8, rs.getString("MeterSerialNumber"));
+									pstmt1.setString(9, rs.getString("CustomerUniqueID"));
+									pstmt1.setString(10, dataRequestVO.getType() == 1 ? "Water" : dataRequestVO.getType() == 2 ? "Gas" : dataRequestVO.getType() == 3 ? "Energy" : "");
+									pstmt1.setString(11, dataRequestVO.getSync_time());
+									pstmt1.setInt(12, dataRequestVO.getSync_interval());
+									pstmt1.setString(13, dataRequestVO.getPre_post_paid() == 0 ? "Prepaid" : "Postpaid");
+									pstmt1.setFloat(14, dataRequestVO.getBat_volt());
+									pstmt1.setInt(15, rs.getInt("TariffID"));
+									pstmt1.setFloat(16, dataRequestVO.getTariff());
+									pstmt1.setInt(17, dataRequestVO.getValve_configuration());
+									pstmt1.setInt(18, dataRequestVO.getValve_live_status());
+									pstmt1.setFloat(19, dataRequestVO.getCredit());
+									pstmt1.setFloat(20, dataRequestVO.getEmergency_credit());
+									pstmt1.setInt(21, dataRequestVO.getDays_elapsed_after_valve_trip());
+									pstmt1.setFloat(22, dataRequestVO.getReading());
+									pstmt1.setInt(23, dataRequestVO.getStatus().getDoor_open());
+									pstmt1.setInt(24, dataRequestVO.getStatus().getMagnetic());
+									pstmt1.setInt(25, dataRequestVO.getStatus().getSchedule_disconnect());
+									pstmt1.setInt(26, dataRequestVO.getStatus().getRtc_fault());
+									pstmt1.setInt(27, dataRequestVO.getStatus().getLow_bat());
+									pstmt1.setInt(28, dataRequestVO.getStatus().getLow_bal());
 							}
 							
 						}
