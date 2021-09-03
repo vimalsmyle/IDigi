@@ -60,7 +60,7 @@ public class DashboardDAO {
 		int noAMRInterval = 0;
 		int communityID = 0;
 		int blockID = 0;
-		String mainquery = null;
+		String mainquery = "";
 		
 		try {
 			con = getConnection();

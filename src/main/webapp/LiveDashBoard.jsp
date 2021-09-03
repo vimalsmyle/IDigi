@@ -59,12 +59,14 @@
 							<div class="col-md-12">
 								<div class="box">
 									<div class="box-body">
+									<%if(!user_id.equalsIgnoreCase("2")){%>
 										<div class="row">
 											<div class="col-md-12">
 												<div id="container"
 													style="width: 100%; height: 400px; margin: 0 auto"></div>
 											</div>
 										</div>
+										<%} %>
 									</div>
 									<div class="box-footer">
 										<div class="container">
@@ -193,6 +195,7 @@
 									<!-- <div class="box-header with-border">
               <h3 class="box-title">Monthly Recap Report</h3>
 			</div> -->
+				<%if(!user_id.equalsIgnoreCase("2")){%>
 									<div class="box-body">
 										<div class="row">
 											<div class="col-md-12">
@@ -201,6 +204,7 @@
 											</div>
 										</div>
 									</div>
+									<%} %>
 									<div class="box-footer">
 
 										<div class="container">

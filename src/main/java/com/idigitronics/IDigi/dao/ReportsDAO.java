@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.idigitronics.IDigi.dao;
 
 import java.sql.Connection;
