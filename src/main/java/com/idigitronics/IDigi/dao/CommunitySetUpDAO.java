@@ -3,6 +3,10 @@
  */
 package com.idigitronics.IDigi.dao;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -10,6 +14,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
+
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.idigitronics.IDigi.request.vo.MeterRequestVO;
 import com.idigitronics.IDigi.request.vo.MeterSizeRequestVO;
@@ -1455,6 +1464,102 @@ public class CommunitySetUpDAO {
 		}
 		
 		return result;
+	}
+	
+	public ResponseVO customerDetailsfile(CustomerResponseVO customerResponseVO) {
+		// TODO Auto-generated method stub
+		
+		ResponseVO responsevo = new ResponseVO();
+		String drivename = "D:/CustomerList/";
+		
+		File directory = new File(drivename);
+		if (!directory.exists()) {
+			directory.mkdir();
+		}
+		
+		try {
+		
+		XSSFWorkbook workbook = new XSSFWorkbook();
+		
+		XSSFSheet spreadsheet = workbook.createSheet("Customers List");
+		
+		XSSFRow header = spreadsheet.createRow(0);
+		
+		int columnCount = 0;
+        
+        Cell headercell1 = header.createCell(columnCount);
+        headercell1.setCellValue("Community Name");
+        
+        Cell headercell2 = header.createCell(++columnCount);
+        headercell2.setCellValue("Block Name");
+        
+        Cell headercell3 = header.createCell(++columnCount);
+        headercell3.setCellValue("CRN/CAN");
+        
+        Cell headercell4 = header.createCell(++columnCount);
+        headercell4.setCellValue("Name");
+        
+        Cell headercell5 = header.createCell(++columnCount);
+        headercell5.setCellValue("House Number");
+        
+        Cell headercell6 = header.createCell(++columnCount);
+        headercell6.setCellValue("MIU ID");
+        
+        Cell headercell7 = header.createCell(++columnCount);
+        headercell7.setCellValue("Meter Serial Number");
+        
+        Cell headercell8 = header.createCell(++columnCount);
+        headercell8.setCellValue("Meter Type");
+        
+        Cell headercell9 = header.createCell(++columnCount);
+        headercell9.setCellValue("Meter Size");
+        
+        Cell headercell10 = header.createCell(++columnCount);
+        headercell10.setCellValue("Pay Type");
+        
+        Cell headercell11 = header.createCell(++columnCount);
+        headercell11.setCellValue("Tariff Name");
+        
+        Cell headercell12 = header.createCell(++columnCount);
+        headercell12.setCellValue("Gateway Name");
+        
+        Cell headercell13 = header.createCell(++columnCount);
+        headercell13.setCellValue("Location");
+        
+        Cell headercell14 = header.createCell(++columnCount);
+        headercell14.setCellValue("Mobile Number");
+        
+        Cell headercell15 = header.createCell(++columnCount);
+        headercell15.setCellValue("Email");
+                
+        Cell headercell16 = header.createCell(++columnCount);
+        headercell16.setCellValue("Created By UserName");
+        
+        Cell headercell17 = header.createCell(++columnCount);
+        headercell17.setCellValue("Created By Role Description");
+        
+        Cell headercell18 = header.createCell(++columnCount);
+        headercell18.setCellValue("Date");
+        
+		FileOutputStream outputStream = new FileOutputStream("D:\\CustomerList\\Customers.xlsx");
+		workbook.write(outputStream);
+		workbook.close();
+		outputStream.close();
+		
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        
+        responsevo.setResult("Success");
+		responsevo.setLocation(drivename);
+		
+		responsevo.setFileName("Customers.xlsx");
+        
+		return responsevo;
 	}
 	
 /*Tariff*/

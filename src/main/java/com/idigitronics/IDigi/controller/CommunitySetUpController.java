@@ -3,8 +3,14 @@
  */
 package com.idigitronics.IDigi.controller;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.sql.SQLException;
 
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -272,6 +278,21 @@ public class CommunitySetUpController {
 		customerresponsevo.setData(communitysetupdao.getCustomerdetails(roleid, id, filterCid));
 
 		return customerresponsevo;
+	}
+	
+	@RequestMapping(value = "/customer/excel", method = RequestMethod.POST, produces = "application/xlsx", consumes = "application/json")
+	public ResponseEntity<InputStreamResource> customerDetailsfile(@RequestBody CustomerResponseVO customerResponseVO) throws SQLException, FileNotFoundException {
+
+		ResponseVO responsevo = new ResponseVO();
+
+		responsevo = communitysetupdao.customerDetailsfile(customerResponseVO);
+		
+		File file = new File(responsevo.getLocation() + responsevo.getFileName());
+	    InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
+		
+		ResponseEntity<InputStreamResource> response = new ResponseEntity<InputStreamResource>(resource, HttpStatus.OK);
+		
+		return response;
 	}
 
 	@RequestMapping(value = "/customer/add", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")

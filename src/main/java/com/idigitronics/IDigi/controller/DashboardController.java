@@ -3,9 +3,15 @@
  */
 package com.idigitronics.IDigi.controller;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.sql.SQLException;
 
 import org.apache.log4j.Logger;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -47,8 +53,24 @@ public class DashboardController {
 		return dasboardresponsevo;
 	}
 	
+	@RequestMapping(value = "/dashboard/excel", method = RequestMethod.POST, produces = "application/excel", consumes = "application/json")
+	public ResponseEntity<InputStreamResource> dashboardFile(@RequestBody DashboardResponseVO dashboardResponseVO) throws SQLException, FileNotFoundException {
+
+		ResponseVO responsevo = new ResponseVO();
+		DashboardDAO dashboarddao = new DashboardDAO();
+
+		responsevo = dashboarddao.dashboardFile(dashboardResponseVO);
+		
+		File file = new File(responsevo.getLocation() + responsevo.getFileName());
+	    InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
+		
+		ResponseEntity<InputStreamResource> response = new ResponseEntity<InputStreamResource>(resource, HttpStatus.OK);
+		
+		return response;
+	}
+	
 	@RequestMapping(value = "/filterdashboard/{type}/{communityName}/{blockName}", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
-	public @ResponseBody DashboardResponseVO filterdashboarddetails(@PathVariable("type") int type, @PathVariable("communityName") String communityName, @PathVariable("blockName") String blockName, @RequestBody FilterVO filtervo) throws SQLException {
+	public @ResponseBody DashboardResponseVO filterdashboarddetails(@PathVariable("type") String type, @PathVariable("communityName") String communityName, @PathVariable("blockName") String blockName, @RequestBody FilterVO filtervo) throws SQLException {
 
 		DashboardDAO dashboarddao = new DashboardDAO();
 		DashboardResponseVO dasboardresponsevo = new DashboardResponseVO();
@@ -59,6 +81,22 @@ public class DashboardController {
 //		dasboardresponsevo.setCommunicating(dasboardresponsevo.getData().size()-dasboardresponsevo.getNonCommunicating());
 		
 		return dasboardresponsevo;
+	}
+	
+	@RequestMapping(value = "/filterdashboard/excel", method = RequestMethod.POST, produces = "application/xlsx", consumes = "application/json")
+	public ResponseEntity<InputStreamResource> filterDashboardFile(@RequestBody DashboardResponseVO dashboardResponseVO) throws SQLException, FileNotFoundException {
+
+		ResponseVO responsevo = new ResponseVO();
+		DashboardDAO dashboarddao = new DashboardDAO();
+
+		responsevo = dashboarddao.filterDashboardFile(dashboardResponseVO);
+		
+		File file = new File(responsevo.getLocation() + responsevo.getFileName());
+	    InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
+		
+		ResponseEntity<InputStreamResource> response = new ResponseEntity<InputStreamResource>(resource, HttpStatus.OK);
+		
+		return response;
 	}
 	
 	@RequestMapping(value = "/homedashboard/{type}/{roleid}/{id}", method = RequestMethod.GET, produces = "application/json")
