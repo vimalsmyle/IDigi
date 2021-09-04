@@ -42,7 +42,13 @@
 			<div class="inner-body custom-scrollbar-js" id="content-5">
 				<div class="row custom-scrollbar-css">
 					<div class="col-md-12">
-
+						<div class="row">
+							<div class="col-md-12">
+								<a class="text-dark" href="home.jsp">Home</a> <span>/</span> <a
+									class="text-dark" href="reports.jsp">Reports</a> <span>/</span>
+								<span class="activeurl">Alarm Report</span>
+							</div>
+						</div>
 
 						<div id="accordion">
 							<div class="card">
@@ -75,7 +81,7 @@
 														<div class="group form-group">
 															<label class="bmd-label-floating select-label">Select
 																Block<sup class="imp">*</sup>
-															</label> <select class="form-control"
+															</label> <select class="form-control select2"
 																id="selectBlockBasedonCommunity"
 																name="selectBlockBasedonCommunity"
 																onchange="showCustomerbyBlock(this.value);">
@@ -87,7 +93,7 @@
 														<div class="group form-group">
 															<label class="bmd-label-floating select-label">Select
 																CRN<sup class="imp">*</sup>
-															</label> <select class="form-control"
+															</label> <select class="form-control select2"
 																id="selectHouseBasedonBlock"
 																name="selectHouseBasedonBlock"
 																onchange="showTopupDetails(this.value);">
@@ -98,8 +104,7 @@
 														} else if (user_id.equalsIgnoreCase("2") || user_id.equalsIgnoreCase("5")) {
 													%>
 													<div class="col-md-4">
-														<div id="formcommunityNameAdd"
-															class="group form-group">
+														<div id="formcommunityNameAdd" class="group form-group">
 															<label class="bmd-label-floating">Community Name</label>
 															<input type="text" class="form-control"
 																name="communityNameAdd" id="communityNameAdd" disabled>
@@ -117,10 +122,9 @@
 														<div class="group form-group">
 															<label class="bmd-label-floating select-label">Select
 																CRN<sup class="imp">*</sup>
-															</label> <select class="form-control"
+															</label> <select class="form-control select2"
 																id="selectHouseBasedonBlock"
-																name="selectHouseBasedonBlock"
-																>
+																name="selectHouseBasedonBlock">
 															</select>
 														</div>
 													</div>
@@ -128,7 +132,7 @@
 													<%
 														}
 													%>
-													
+
 													<div class="col-md-4">
 														<div id="formcurrentBalance_topup"
 															class="group form-group">
@@ -140,8 +144,7 @@
 														</div>
 													</div>
 													<div class="col-md-4">
-														<div id="formdateTime_topup"
-															class="group form-group">
+														<div id="formdateTime_topup" class="group form-group">
 															<label class="bmd-label-floating">End Date Time<sup
 																class="imp">*</sup></label> <input type="text"
 																class="form-control" id="end_date" name="end_date">

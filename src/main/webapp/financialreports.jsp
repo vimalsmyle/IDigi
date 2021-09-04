@@ -43,7 +43,13 @@
 			<div class="inner-body custom-scrollbar-js" id="content-5">
 				<div class="row custom-scrollbar-css">
 					<div class="col-md-12">
-
+						<div class="row">
+							<div class="col-md-12">
+								<a class="text-dark" href="home.jsp">Home</a> <span>/</span> <a
+									class="text-dark" href="reports.jsp">Reports</a> <span>/</span>
+								<span class="activeurl">Financial Report</span>
+							</div>
+						</div>
 
 						<div id="accordion">
 							<div class="card">
@@ -66,7 +72,7 @@
 													<div class="col-md-4">
 														<div class="group form-group">
 															<label class="bmd-label-floating select-label">Community<sup
-																class="imp">*</sup></label> <select class="form-control"
+																class="imp">*</sup></label> <select class="form-control select2"
 																id="selectcommunityName" name="selectcommunityName"
 																onchange="showBlockbyCommunity(this.value);">
 															</select>
@@ -76,7 +82,7 @@
 														<div class="group form-group">
 															<label class="bmd-label-floating select-label">Select
 																Block<sup class="imp">*</sup>
-															</label> <select class="form-control"
+															</label> <select class="form-control select2"
 																id="selectBlockBasedonCommunity"
 																name="selectBlockBasedonCommunity"
 																onchange="showCustomerbyBlock(this.value);">
@@ -88,8 +94,7 @@
 														} else if (user_id.equalsIgnoreCase("2") || user_id.equalsIgnoreCase("5")) {
 													%>
 													<div class="col-md-4">
-														<div id="formcommunityNameAdd"
-															class="group form-group">
+														<div id="formcommunityNameAdd" class="group form-group">
 															<label class="bmd-label-floating">Community Name</label>
 															<input type="text" class="form-control"
 																name="communityNameAdd" id="communityNameAdd" disabled>
@@ -106,21 +111,20 @@
 													<%
 														}
 													%>
-													
-													
+
+
 													<div class="col-md-4">
-														<div id="formdateTime_topup"
-															class="group form-group">
-															<label class="bmd-label-floating select-label">Pay Type</label>
-															<select class="form-control paytype" id="paytype">
+														<div id="formdateTime_topup" class="group form-group">
+															<label class="bmd-label-floating select-label">Pay
+																Type</label> <select class="form-control paytype select2" id="paytype">
 																<option value="">Select paytype</option>
 																<option value="Prepaid">Prepaid</option>
 																<option value="Postpaid">Postpaid</option>
 															</select>
 														</div>
 													</div>
-													
-													
+
+
 													<div class="col-md-4">
 														<div id="formcurrentBalance_topup"
 															class="group form-group">
@@ -133,10 +137,9 @@
 														</div>
 													</div>
 													<div class="col-md-4">
-														<div id="formdateTime_topup"
-															class="group form-group">
+														<div id="formdateTime_topup" class="group form-group">
 															<label class="bmd-label-floating select-label">Month</label>
-															<select class="form-control end_date" id="end_date">
+															<select class="form-control end_date select2" id="end_date">
 																<option value="">Select Month</option>
 																<option value="01">January</option>
 																<option value="02">February</option>
@@ -252,6 +255,11 @@
 	<script
 		src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
 
+
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+
+
 	<script
 		src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
 
@@ -268,16 +276,21 @@
 
 	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 	<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-	
-	<script src="common/js/year-select.js"></script>
-        <script type="text/javascript">
-            $(document).ready(function(e) {
-                $('.yearselect').yearselect();
 
-                $('.yrselectdesc').yearselect({step: 1, order: 'desc'});
-                $('.yrselectasc').yearselect({order: 'asc'});
-            });
-        </script>
+	<script src="common/js/year-select.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function(e) {
+			$('.yearselect').yearselect();
+
+			$('.yrselectdesc').yearselect({
+				step : 1,
+				order : 'desc'
+			});
+			$('.yrselectasc').yearselect({
+				order : 'asc'
+			});
+		});
+	</script>
 
 </body>
 </html>

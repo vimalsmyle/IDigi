@@ -63,7 +63,7 @@
 														<div class="col-md-4">
 															<div class="group form-group">
 																<label class="bmd-label-floating select-label">Community<sup
-																	class="imp">*</sup></label> <select class="form-control"
+																	class="imp">*</sup></label> <select class="form-control select2"
 																	id="selectcommunityName" name="selectcommunityName"
 																	onchange="showBlockbyCommunity(this.value);">
 																</select>
@@ -73,7 +73,7 @@
 															<div class="group form-group">
 																<label class="bmd-label-floating select-label">Select
 																	Block<sup class="imp">*</sup>
-																</label> <select class="form-control"
+																</label> <select class="form-control select2"
 																	id="selectBlockBasedonCommunity"
 																	name="selectBlockBasedonCommunity"
 																	onchange="showCustomerbyBlockForConfig(this.value);">
@@ -252,6 +252,9 @@
 
 	<script
 		src="https://cdn.datatables.net/responsive/2.2.3/js/responsive.bootstrap4.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+		
 
 	<script
 		src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.js"></script>

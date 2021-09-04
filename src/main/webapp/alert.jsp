@@ -66,12 +66,12 @@
 									<th>MIU ID Interval (Min)</th>
 									<th>Timeout</th>
 									<th>ReConnection Charge</th>
-									<th>Per Unit Value (KG)</th>
-									<th>Per Late Fee</th>
+									<th>ReConnection Days</th>
+									<th>Bill Generation Date</th>
+									<th>Late Fee</th>
 									<th>GST</th>
 									<th>Due Date Count</th>
 									<th>Date</th>
-									<th>Billing Date</th>
 									<th>Edit</th>
 								</tr>
 							</thead>
@@ -131,18 +131,26 @@
 								</div>
 								<input type = "hidden" id="alertIdhidden">
 							</div>
+							
+							<div class="col-md-6">
+								<div class="group form-group">
+									<label class="bmd-label-floating">ReConnection Charge Days</label> <input
+										type="text" class="form-control" name="reconnectionDaysAdd"
+										id="reconnectionDaysAdd">
+								</div>
+							</div>
 
 								<div class="col-md-6">
 								<div class="group form-group">
-									<label class="bmd-label-floating">Per Unit Charge</label> <input
-										type="text" class="form-control" name="perUnitAdd"
-										id="perUnitAdd">
+									<label class="bmd-label-floating">Bill Generation Date</label> <input
+										type="text" class="form-control" name="billGenerationAdd"
+										id="billGenerationAdd">
 								</div>
 							</div>
 							
 							<div class="col-md-6">
 								<div class="group form-group">
-									<label class="bmd-label-floating">Per Late Fee</label> <input
+									<label class="bmd-label-floating">Late Fee</label> <input
 										type="text" class="form-control" name="lateFeeAdd"
 										id="lateFeeAdd">
 								</div>
@@ -236,10 +244,19 @@
 							</div>
 							
 							<div class="col-md-6">
-								<div id="formperUnitEdit" class="group form-group">
-									<label class="bmd-label-floating">Per Unit Charge</label> <input
-										type="text" class="form-control" name="perUnitEdit1"
-										id="perUnitEdit1">
+								<div id="formreconnectionDaysEdit" class="group form-group">
+									<label class="bmd-label-floating">ReConnection Charge Days</label> <input
+										type="text" class="form-control" name="connectionDaysEdit1"
+										id="connectionDaysEdit1">
+								</div>
+							</div>
+							
+							
+							<div class="col-md-6">
+								<div id="formbillgenerationEdit" class="group form-group has-feedback has-success bmd-form-group is-filled">
+									<label class="bmd-label-floating">Bill Generation</label> <input
+										type="text" class="form-control" name="billGenerationEdit1" readonly
+										id="billGenerationEdit1">
 								</div>
 							</div>
 							
