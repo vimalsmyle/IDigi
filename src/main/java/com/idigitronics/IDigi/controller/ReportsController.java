@@ -1,7 +1,13 @@
 package com.idigitronics.IDigi.controller;
 
 import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
+import org.eclipse.collections.impl.map.mutable.ConcurrentHashMap;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -58,9 +64,23 @@ public class ReportsController {
 		
 		userConsumptionReportsResponseVO.setData(reportsdao.getuserconsumptionreportsdetails(userConsumptionRequestVO, type));
 		
+		List<String> miuIdList = userConsumptionReportsResponseVO.getData().stream() 
+				  .filter(distinctByKey(p -> p.getMiuID())).map(e->e.getMiuID())
+				  .collect(Collectors.toList());
+		
+		userConsumptionReportsResponseVO.setSizeMeter(String.valueOf(miuIdList.size()));
+	
+		
 		return userConsumptionReportsResponseVO;
 	}
 	
+	public static <T> Predicate<T> distinctByKey(
+		    Function<? super T, ?> keyExtractor) {
+		  
+		    Map<Object, Boolean> seen = new ConcurrentHashMap<>(); 
+		    return t -> seen.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null; 
+		}
+
 	/* TopUp Summary */
 	
 	@RequestMapping(value = "/topupsummary", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")

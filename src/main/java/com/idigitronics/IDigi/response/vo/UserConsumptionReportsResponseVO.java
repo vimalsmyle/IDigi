@@ -21,6 +21,7 @@ public class UserConsumptionReportsResponseVO {
 	private float alarmCredit;
 	private float emergencyCredit;
 	private String dateTime;
+	private String sizeMeter;
 	
 	private List<UserConsumptionReportsResponseVO> data;
 	
@@ -90,5 +91,13 @@ public class UserConsumptionReportsResponseVO {
 	public void setConsumption(int consumption) {
 		this.consumption = consumption;
 	}
+	public String getSizeMeter() {
+		return sizeMeter;
+	}
+	public void setSizeMeter(String sizeMeter) {
+		this.sizeMeter = sizeMeter;
+	}
+	
+	
 	
 }

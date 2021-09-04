@@ -114,12 +114,12 @@ $(document)
 														}
 														$('#userConsumptionsTable_wrapper thead').empty();
 														$('#userConsumptionsTable_wrapper tbody').remove();
-														$("#theadBody").append("<tr><th>Customer Unique ID</th><th>MIU ID</th><th>Reading</th><th>Balance</th><th>Battery</th><th>Tariff</th>" +
+														$("#theadBody").append("<tr><th>Customer Unique ID</th><th>MIU ID</th><th>Reading</th><th>Balance</th><th>Consumption</th><th>Battery</th><th>Tariff</th>" +
 																"<th>Alarm Credit</th><th>Emergency Credit</th><th>Date Time</th></tr>")
 
 														 table = $('#userConsumptionsTable').DataTable(
 																	{
-																		"dom": "<'row'<'col-sm-4 headname'><'col-sm-2'><'col-sm-1'><'col-sm-2'f>>" +"<'row'<'col-sm-4'B><'col-sm-2'l><'col-sm-5 totalCount'><'col-sm-1 addevent'>>" + "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-6 text-black'i><'col-sm-6 text-black'p>>",
+																		"dom": "<'row'<'col-sm-4 headname'><'col-sm-2'><'col-sm-1'><'col-sm-2'f>>" +"<'row'<'col-sm-4'B><'col-sm-2'l><'col-sm-6 totalCount'>>" + "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-6 text-black'i><'col-sm-6 text-black'p>>",
 																		"responsive" : true,
 																		"serverSide" : false,
 																		"bDestroy" : true,
@@ -141,6 +141,8 @@ $(document)
 																		}, {
 																			"data" : "balance"
 																		}, {
+																			"data" : "consumption"
+																		}, {
 																			"data" : "battery"
 																		}, {
 																			"data" : "tariff"
@@ -153,7 +155,7 @@ $(document)
 																		}],
 																		"columnDefs" : [  {
 																			//orderable : false,
-																			targets : [0,1], visible: false
+																			targets : [0], visible: false
 																			
 																		},
 																		{
@@ -190,13 +192,15 @@ $(document)
 														 $("div.headname").html('<h3>User Consumptions</h3>');
 															//table.ajax.reload()
 													//	 if(){}
-														 
-														 $("div.totalCount").html(' <b>customerUniqueID:</b> '+ d.data.length==0?"":d.data[0].customerUniqueID);
-														 /*$("div.addevent").html('<button id="back" onClick="returnBack()"'
-																 +'class="btn btn-raised btn-primary float-right"'
-																	+'>'
-																+'	<span>Back</span>'
-															+'</button>');*/
+														 var template = `<div>CAN:</div><div>`+d.data.length==0?"":d.data[0].customerUniqueID+`</div>`;
+														 alert("template->"+template);
+														 $("div.totalcount")
+															.html(
+																	'<b>CAN: </b>'
+																			+ d.data[0].customerUniqueID
+																			+ '  <b>&nbsp&nbspMeter Size: </b> '
+																			+ d.sizeMeter);
+														
 													//	}
 													}
 												});
