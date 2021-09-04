@@ -211,7 +211,7 @@ public class DashboardDAO {
 		return dashboard_list;
 	}
 	
-	public List<DashboardResponseVO> getFilterDashboarddetails(int communityID, int blockID, FilterVO filtervo, int type) throws SQLException {
+	public List<DashboardResponseVO> getFilterDashboarddetails(String communityName, String blockName, FilterVO filtervo, int type) throws SQLException {
 		// TODO Auto-generated method stub
 
 		Connection con = null;
@@ -220,7 +220,9 @@ public class DashboardDAO {
 		List<DashboardResponseVO> dashboard_list = null;
 		DashboardResponseVO dashboardvo = null;
 		int noAMRInterval = 0;
-
+		int communityID = 0;
+		int blockID = 0;
+		
 		List<IndividualDashboardResponseVO> individualDashboardList = null;
 		IndividualDashboardResponseVO individualDashboardResponseVO = null;
 		
@@ -234,12 +236,22 @@ public class DashboardDAO {
 				
 				noAMRInterval = rs1.getInt("NoAMRInterval");
 			}
+
+			PreparedStatement pstmt4 = con.prepareStatement("SELECT c.CommunityID, b.BlockID FROM block AS b Where b.BlockName = '" + blockName.trim() +"' AND b.CommunityID = (SELECT CommunityID FROM community WHERE CommunityName = '"+communityName+"')");
+			ResultSet rs4 = pstmt4.executeQuery();
+				
+				if(rs4.next()) {
+					blockID = rs4.getInt("BlockID");
+					communityID = rs4.getInt("CommunityID");
+				}
+				
+//				mainquery = mainquery.replaceAll("<main>", (blockID == 0) ? "WHERE cd.CommunityID = "+communityID : (blockID !=0) ? "WHERE cd.CommunityID = "+communityID +" AND cd.BlockID = "+blockID : (blockID !=0) ? "WHERE cd.CommunityID = "+communityID +" AND cd.BlockID = "+blockID + " AND cd.CustomerUniqueID = '" + customerUniqueID +"'" : "");
+				
+//			String mainquery = "SELECT c.CommunityName, b.BlockName, cd.HouseNumber, cd.FirstName, cd.LastName, cd.CustomerUniqueID, cd.CustomerID FROM customerdetails AS cd LEFT JOIN community AS c ON cd.CommunityID = c.CommunityID LEFT JOIN block AS b ON b.BlockID = cd.BlockID <main>";
 			
-			String mainquery = "SELECT c.CommunityName, b.BlockName, cd.HouseNumber, cd.FirstName, cd.LastName, cd.CustomerUniqueID, cd.CustomerID FROM customerdetails AS cd LEFT JOIN community AS c ON cd.CommunityID = c.CommunityID LEFT JOIN block AS b ON b.BlockID = cd.BlockID <main>";
+//			mainquery = mainquery.replaceAll("<main>", blockID ==0 ?"WHERE cd.CommunityID = "+communityID : blockID !=0 ? "WHERE cd.CommunityID = "+communityID +" AND cd.BlockID = "+blockID : "");
 			
-			mainquery = mainquery.replaceAll("<main>", blockID ==0 ?"WHERE cd.CommunityID = "+communityID : blockID !=0 ? "WHERE cd.CommunityID = "+communityID +" AND cd.BlockID = "+blockID : "");
-			
-			pstmt = con.prepareStatement(mainquery);
+			pstmt = con.prepareStatement("SELECT c.CommunityName, b.BlockName, cd.HouseNumber, cd.FirstName, cd.LastName, cd.CustomerUniqueID, cd.CustomerID FROM customerdetails AS cd LEFT JOIN community AS c ON cd.CommunityID = c.CommunityID LEFT JOIN block AS b ON b.BlockID = cd.BlockID WHERE cd.BlockID = "+ blockID+" AND cd.CommunityID = " +communityID);
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
 				
