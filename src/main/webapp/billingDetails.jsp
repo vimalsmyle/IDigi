@@ -47,7 +47,7 @@
 	<div class="col-md-12">
 		<div class="row">
 				<div class="col-md-12">
-					<a class="text-dark" href="#">Home</a>
+					<a class="text-dark" href="home.jsp">Home</a>
 					<span>/</span>
 					<span class="activeurl">Billing Status</span>
 				</div>

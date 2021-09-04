@@ -250,7 +250,7 @@ public class CommunitySetUpBO {
 		}
 		
 		if(communitysetupdao.checkcustomerName(customervo)) {
-			throw new BusinessException("CUSTOMER NAME ALREADY EXISTS");
+			throw new BusinessException(customervo.getLastName().trim() + " "+ customervo.getFirstName().trim() +" - CUSTOMER NAME ALREADY EXISTS");
 		}
 		
 		if(communitysetupdao.checkHouseNumber(customervo)) {
@@ -258,7 +258,14 @@ public class CommunitySetUpBO {
 		}
 		
 		if(communitysetupdao.checkCustomerUniqueID(customervo.getCustomerUniqueID())) {
-			throw new BusinessException("CUSTOMERUNIQUEID IS ALREADY REGISTERED");
+			throw new BusinessException(customervo.getCustomerUniqueID() + " - CUSTOMERUNIQUEID IS ALREADY REGISTERED");
+		}
+		
+		for(int i = 0; i < customervo.getMeters().size(); i++) {
+			
+			if(communitysetupdao.checkMIUID(customervo.getMeters().get(i).getMiuID())) {
+				throw new BusinessException(customervo.getMeters().get(i).getMiuID() +" - MIUID IS ALREADY REGISTERED");
+			}
 		}
 		
 		return communitysetupdao.addcustomer(customervo);
