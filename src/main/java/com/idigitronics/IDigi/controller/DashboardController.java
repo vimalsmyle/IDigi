@@ -47,13 +47,13 @@ public class DashboardController {
 		return dasboardresponsevo;
 	}
 	
-	@RequestMapping(value = "/filterdashboard/{type}/{communityID}/{blockID}", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
-	public @ResponseBody DashboardResponseVO filterdashboarddetails(@PathVariable("type") int type, @PathVariable("communityID") int communityID, @PathVariable("blockID") int blockID, @RequestBody FilterVO filtervo) throws SQLException {
+	@RequestMapping(value = "/filterdashboard/{type}/{communityName}/{blockName}", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	public @ResponseBody DashboardResponseVO filterdashboarddetails(@PathVariable("type") int type, @PathVariable("communityName") String communityName, @PathVariable("blockName") String blockName, @RequestBody FilterVO filtervo) throws SQLException {
 
 		DashboardDAO dashboarddao = new DashboardDAO();
 		DashboardResponseVO dasboardresponsevo = new DashboardResponseVO();
 
-		dasboardresponsevo.setData(dashboarddao.getFilterDashboarddetails(communityID, blockID, filtervo, type));
+		dasboardresponsevo.setData(dashboarddao.getFilterDashboarddetails(communityName, blockName, filtervo, type));
 		dasboardresponsevo.setTotal(dasboardresponsevo.getData().size());
 //		dasboardresponsevo.setNonCommunicating(dasboardresponsevo.getData().size() == 0 ? 0 : dasboardresponsevo.getData().get(dasboardresponsevo.getData().size()-1).getNonCommunicating());
 //		dasboardresponsevo.setCommunicating(dasboardresponsevo.getData().size()-dasboardresponsevo.getNonCommunicating());
