@@ -127,7 +127,7 @@ $(document)
 																			"data" : "customerUniqueID",
 																			"defaultContent": ""
 																			},{
-																			"data" : "meterID",
+																			"data" : "miuID",
 																			"defaultContent": ""
 																			},{
 																			"data" : "firstName",

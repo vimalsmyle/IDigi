@@ -187,11 +187,11 @@ function showTopupDetails(meterId){
 
 function showCommunitybyTypeuser(id){
 	
-	if(id=="Super"){
+	if(id=="4"){
 		$("#usercommunityId,#userblockId").hide();
 	$("#formcomunityName").addClass("group form-group has-feedback has-success bmd-form-group is-filled");
 	$("#formblockName").addClass("group form-group has-feedback has-success bmd-form-group is-filled");
-	}else if(id =="Admin")
+	}else if(id =="5")
 		{
 		$("#formcomunityName").addClass("group form-group has-feedback has-success bmd-form-group is-filled");
 		$("#formblockName").addClass("group form-group has-feedback has-success bmd-form-group is-filled");

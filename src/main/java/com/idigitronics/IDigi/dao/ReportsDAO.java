@@ -8,6 +8,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+
+import org.eclipse.collections.impl.map.mutable.ConcurrentHashMap;
 
 import com.idigitronics.IDigi.constants.DataBaseConstants;
 import com.idigitronics.IDigi.request.vo.AlarmRequestVO;
@@ -179,10 +185,11 @@ public class ReportsDAO {
 			 rs.close();
 			con.close();
 		}
-
+		
 		return userconsumptionreportsresponselist;
 	}
-
+	
+	
 	/* TopUp Summary */
 
 	public List<TopUpSummaryResponseVO> gettopupsummarydetails(TopUpSummaryRequestVO topupsummaryrequestvo) throws SQLException {
