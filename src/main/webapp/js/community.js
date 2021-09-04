@@ -37,7 +37,7 @@ table = $('#communityTable')
 	"ordering" : true,
 	"order" : [ 0, "desc" ],
 	"lengthMenu" : [ 5, 10, 25, 30, 50, 75 ],
-	"pageLength" : 5,
+	"pageLength" : 25,
 	"scrollX" : false,
 "ajax" : {
 "url":"./community/"+sessionStorage.getItem("roleID")+"/"+sessionStorage.getItem("ID"),
@@ -95,7 +95,7 @@ $("div.headname").html('<h3>Community Management</h3>');
 $("div.addevent").html('<button type="button" id="communitypopup"' 
 		+'class="btn btn-raised btn-primary float-right"'
 		+'	data-toggle="modal" data-target="#exampleModal">'
-		+'<i class="fa fa-user-plus"></i>'
+		+'<i class="fa fa-plus">Add</i>'
 		+'</button>');
 
 
@@ -124,12 +124,12 @@ $(document)
 																message : 'Name is required and cannot be empty'
 															},
 															stringLength : {
-																min : 6,
-																max : 30,
-																message : 'Name must be more than 6 and less than 30 characters long'
+																min : 5,
+																max : 35,
+																message : 'Name must be more than 5 and less than 35 characters long'
 															},
 															regexp : {
-																regexp : /^[a-zA-Z ]*$/,
+																regexp : /^[a-zA-Z\s]*$/,
 																message : 'Name can only consist of alphabet'
 															}
 														}
@@ -141,9 +141,9 @@ $(document)
 																message : 'Community Address is required and cannot be empty'
 															},
 															stringLength : {
-																min : 2,
-																max : 30,
-																message : 'Address must be more than 6 and less than 30 characters long'
+																min : 4,
+																max : 60,
+																message : 'Address must be more than 4 and less than 60 characters long'
 															}
 														}
 													},
@@ -193,12 +193,12 @@ $(document)
 														message : 'Name is required and cannot be empty'
 													},
 													stringLength : {
-														min : 6,
-														max : 30,
-														message : 'Name must be more than 6 and less than 30 characters long'
+														min : 5,
+														max : 35,
+														message : 'Name must be more than 5 and less than 35 characters long'
 													},
 													regexp : {
-														regexp : /^[a-zA-Z ]*$/,
+														regexp : /^[a-zA-Z\s]*$/,
 														message : 'Name can only consist of alphabet'
 													}
 												}
@@ -210,9 +210,9 @@ $(document)
 														message : 'Address is required and cannot be empty'
 													},
 													stringLength : {
-														min : 2,
-														max : 30,
-														message : 'Address must be more than 6 and less than 30 characters long'
+														min : 5,
+														max : 60,
+														message : 'Address must be more than 5 and less than 60 characters long'
 													}
 												}
 											},

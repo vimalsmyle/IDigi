@@ -14,6 +14,8 @@
 <link rel="stylesheet"
 	href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.bootstrap4.min.css">
 	
+	
+	
 	<link href="common/css/materialize.fontawsome.css"
 	rel="stylesheet">
 
@@ -109,7 +111,7 @@
 						<div class="row">
 							<div class="col-md-6">
 								 <div class="group form-group">
-									<label for="text">Name:</label>
+									<label for="text">Name:<span class="impp"><sup>*</sup></span></label>
 									<input type="text" class="form-control form-control-sm"  name="communityNameAdd"
 										id="communityNameAdd" placeholder = "Community Name">
 								  </div>
@@ -118,7 +120,7 @@
 							
 							<div class="col-md-6">
 								 <div class="group form-group">
-									<label for="text">Address:</label>
+									<label for="text">Address:<span class="impp"><sup>*</sup></span></label>
 									<input type="text" class="form-control form-control-sm" name="communityAddressAdd"
 										id="communityAddressAdd" placeholder = "Community Address">
 								  </div>
@@ -126,7 +128,7 @@
 							
 							<div class="col-md-6">
 								<div class="group form-group">
-									<label for="text">Mobile:</label>
+									<label for="text">Mobile:<span class="impp"><sup>*</sup></span></label>
 									<input type="text" class="form-control form-control-sm" name="communityMobileAdd"
 										id="communityMobileAdd" placeholder = "Community Mobile">
 								  </div>
@@ -135,7 +137,7 @@
 							
 							<div class="col-md-6">
 								<div class="group form-group">
-									<label for="text">Email:</label>
+									<label for="text">Email:<span class="impp"><sup>*</sup></span></label>
 									<input type="text" class="form-control form-control-sm"  name="communityEmailAdd"
 										id="communityEmailAdd" placeholder = "Community Email">
 								  </div>
@@ -188,14 +190,14 @@
 						<div class="row">
 							<div class="col-md-6">
 								<div id="formcomunityName" class="group form-group">
-									<label for="text">Name:</label>
+									<label for="text">Name:<span class="impp"><sup>*</sup></span></label>
 									<input type="text" class="form-control form-control-sm"  name="communityNameEdit"
 										id="communityNameEdit" placeholder = "Community Name">
 								  </div>
 							</div>
 							<div class="col-md-6">
 								<div id="formcomunityAddress" class="group form-group">
-									<label for="text">Address:</label>
+									<label for="text">Address:<span class="impp"><sup>*</sup></span></label>
 									<input type="text" class="form-control form-control-sm"  name="communityAddressEdit"
 										id="communityAddressEdit" placeholder = "Community Address">
 								  </div>
@@ -204,7 +206,7 @@
 							<div class="col-md-6">
 								
 								<div id="formcomunityMobile" class="group form-group">
-									<label for="text">Mobile:</label>
+									<label for="text">Mobile:<span class="impp"><sup>*</sup></span></label>
 									<input type="text" class="form-control form-control-sm"  name="communityMobileEdit"
 										id="communityMobileEdit" placeholder = "Community Mobile">
 								  </div>
@@ -212,7 +214,7 @@
 							<div class="col-md-6">
 								
 								<div id="formcomunityEmail" class="group form-group">
-									<label for="text">Email:</label>
+									<label for="text">Email:<span class="impp"><sup>*</sup></span></label>
 									<input type="text" class="form-control form-control-sm"  name="communityEmailEdit"
 										id="communityEmailEdit" placeholder = "Community Email">
 								  </div>

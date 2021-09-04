@@ -25,7 +25,7 @@ table = $('#gatewayTable')
 "ordering" : true,
 "order" : [ 0, "desc" ],
 "lengthMenu" : [ 5, 10, 25, 30, 50, 75 ],
-"pageLength" : 5,
+"pageLength" : 25,
 "scrollY" : 324,
 "scrollX" : true,
 "ajax" : {
@@ -94,7 +94,7 @@ $("div.headname").html('<h3>Gateway Management</h3>');
 $("div.addevent").html('<button type="button" id="gatewayAddButton"'
 		+'class="btn btn-raised btn-primary float-right"'
 			+'data-toggle="modal" data-target="#exampleModal">'
-			+'<i class="fa fa-user-plus"></i>'
+			+'<i class="fa fa-plus">Add</i>'
 			+'</button>');
 
 });
@@ -121,16 +121,16 @@ $(document)
 														message : 'Gateway Name is not valid',
 														validators : {
 															notEmpty : {
-																message : 'Gateway Name is required and cannot be empty'
+																message : 'Gateway name is required and cannot be empty'
 															},
 															stringLength : {
 																min : 4,
 																max : 30,
-																message : 'Gateway Name must be more than 4 and less than 30 characters long'
+																message : 'Gateway name must be more than 4 and less than 30 characters long'
 															},
 															regexp : {
 																regexp : /^[a-zA-Z][a-zA-Z0-9.,$; ]+$/,
-																message : 'Gateway Name can only consist of Alphanumaric'
+																message : 'Gateway name can only consist of Alphanumaric'
 															}
 														}
 													},
@@ -146,8 +146,8 @@ $(document)
 																message : 'Serial Number must be more than 4 and less than 30 characters long'
 															},
 															regexp : {
-																regexp : /^[0-9]+$/,
-																message : 'Serial Number can only consist of alphabetical'
+																regexp : /^[a-zA-Z0-9]+$/,
+																message : 'Serial Number can only consist of alphanumaric'
 															}
 														}
 													},
@@ -159,7 +159,7 @@ $(document)
 															},
 															regexp : {
 																regexp : /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/,
-																message : 'IP can only consist of number'
+																message : 'IP can only consist of numbers with point'
 															}
 														}
 													},
@@ -168,6 +168,15 @@ $(document)
 														validators : {
 															notEmpty : {
 																message : 'Port is required and cannot be empty'
+															},
+															stringLength : {
+																min : 4,
+																max : 4,
+																message : 'Port number must be 4'
+															},
+															regexp : {
+																regexp : /^[0-9]+$/,
+																message : 'Port number can only consist of number'
 															}
 														}
 													}
@@ -210,13 +219,13 @@ $(document)
 														message : 'Serial Number is required and cannot be empty'
 													},
 													stringLength : {
-														min : 6,
+														min : 4,
 														max : 30,
-														message : 'Serial Number must be more than 6 and less than 30 characters long'
+														message : 'Serial Number must be more than 4 and less than 30 characters long'
 													},
 													regexp : {
-														regexp : /^[0-9]+$/,
-														message : 'Serial Number can only consist of Numaric'
+														regexp : /^[a-zA-Z0-9]+$/,
+														message : 'Serial Number can only consist of alphanumaric'
 													}
 												}
 											},
@@ -227,8 +236,8 @@ $(document)
 														message : 'IP is required and cannot be empty'
 													},
 													regexp : {
-														regexp : /^\d{10}$/,
-														message : 'IP can only consist of number'
+														regexp : /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/,
+														message : 'IP can only consist of numbers with point'
 													}
 												}
 											},
@@ -237,6 +246,15 @@ $(document)
 												validators : {
 													notEmpty : {
 														message : 'Port is required and cannot be empty'
+													},
+													stringLength : {
+														min : 4,
+														max : 4,
+														message : 'Port Number must be 4'
+													},
+													regexp : {
+														regexp : /^[0-9]+$/,
+														message : 'Port Number can only consist of number'
 													}
 												}
 											}

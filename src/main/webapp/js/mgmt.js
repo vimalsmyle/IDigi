@@ -18,7 +18,7 @@ table = $('#mgmtTable')
 	"ordering" : true,
 	"order" : [ 0, "desc" ],
 	"lengthMenu" : [ 5, 10, 25, 30, 50, 75 ],
-	"pageLength" : 5,
+	"pageLength" : 25,
 	"scrollX" : false,
 "ajax" : {
 "url":"./user/"+sessionStorage.getItem("roleID")+"/"+sessionStorage.getItem("ID"),
@@ -73,7 +73,7 @@ return json.data;
 });
 
 $("div.headname").html('<h3>User Management</h3>');
-$("div.addevent").html('<button type="button" class="btn btn-raised btn-primary float-right" data-toggle="modal" data-target="#exampleModal">	<i class="fa fa-user-plus"></i>	</button>');
+$("div.addevent").html('<button type="button" class="btn btn-raised btn-primary float-right" data-toggle="modal" data-target="#exampleModal">	<i class="fa fa-plus">Add</i>	</button>');
 
 
 });

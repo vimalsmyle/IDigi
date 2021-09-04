@@ -168,7 +168,7 @@ $(document)
 																					30,
 																					50,
 																					75 ],
-																			"pageLength" : 5,
+																			"pageLength" : 25,
 																			"scrollY" : 324,
 																			"scrollX" : true,
 																			"data" : d.data,

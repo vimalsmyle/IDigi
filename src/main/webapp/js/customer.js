@@ -63,19 +63,19 @@ $(document).ready(function() {
 				$("#template").append("<div class=row> " +
 						"<div class=col-md-4>" +
 						"<div id='formmiuIDAdd' class='group form-group has-feedback has-success bmd-form-group is-filled'>"
-										+"<label class=bmd-label-floating>MIU ID</label> <input "
+										+"<label class=bmd-label-floating>MIU ID<span class=impp><sup>*</sup></span></label> <input "
 										+"type=text class='form-control form-control-sm' name=miuIDAdd["+rowCount+"]"
 										+" id=miuIDAdd-"+rowCount+">"
 										+"</div></div>"+
 							"<div class=col-md-4>" +
 							"<div id='formmeterSerialNumberAdd' class='group form-group has-feedback has-success bmd-form-group is-filled'>"
-							+"<label class=bmd-label-floating>Meter Serial Number</label> <input "
+							+"<label class=bmd-label-floating>Meter Serial Number<span class=impp><sup>*</sup></span></label> <input "
 							+"type=text class='form-control form-control-sm' name=meterSerialNumberAdd["+rowCount+"]"
 							+" disabled id=meterSerialNumberAdd-"+rowCount+">"
 							+"<input type='hidden' id=customerMeterIDAdd-"+rowCount+"></div></div>"+
 						"<div class=col-md-4>" +
 						"<div class='group form-group has-feedback has-success bmd-form-group is-filled'>"
-						+"<label class=bmd-label-floating>Meter Type</label> " +
+						+"<label class=bmd-label-floating>Meter Type<span class=impp><sup>*</sup></span></label> " +
 						"<select class='form-control form-control-sm select2'  disabled id=selectMeterType-"+rowCount+" name=selectMeterType["+rowCount+"]>"+
 							"<option value='-1'>Select Meter Type</option>"+
 							"<option value='Gas'>Gas</option>"+
@@ -85,13 +85,13 @@ $(document).ready(function() {
 						+"</div></div>"+
 						"<div class=col-md-4>" +
 						"<div id='formmeterSizeEdit' class='group form-group has-feedback has-success bmd-form-group is-filled'>"
-						+"<label class=bmd-label-floating>Meter Size</label> <input "
+						+"<label class=bmd-label-floating>Meter Size<span class=impp><sup>*</sup></span></label> <input "
 						+"type=text class='form-control form-control-sm' name=meterSizeAdd["+rowCount+"]"
 						+" disabled id=meterSizeAdd-"+rowCount+">"
 						+"</div></div>"+
 						"<div class=col-md-4>" +
 						"<div class='group form-group has-feedback has-success bmd-form-group is-filled'>"
-						+"<label class=bmd-label-floating>Pay Type</label>" +
+						+"<label class=bmd-label-floating>Pay Type<span class=impp><sup>*</sup></span></label>" +
 						"<select class='form-control form-control-sm select2' disabled id=payTypeAdd-"+rowCount+" name=payTypeAdd["+rowCount+"]>"+
 						"<option value='-1'>Select Pay Type</option>"+
 						"<option value='Prepaid'>Prepaid</option>"+
@@ -100,13 +100,13 @@ $(document).ready(function() {
 						+"</div></div>"+
 						"<div class=col-md-4>" +
 						"<div id=formtariffNameEdit class='group form-group has-feedback has-success bmd-form-group is-filled'>"
-						+"<label class=bmd-label-floating>Tariff Name</label> <input "
+						+"<label class=bmd-label-floating>Tariff Name<span class=impp><sup>*</sup></span></label> <input "
 						+"type=text class='form-control form-control-sm' name=tariffNameAdd["+rowCount+"]"
 						+" disabled id=tariffNameAdd-"+rowCount+">"
 						+"</div></div>"+
 						"<div class=col-md-4>" +
 						"<div class='group form-group has-feedback has-success bmd-form-group is-filled'>"
-						+"<label class=bmd-label-floating>Gateway ID</label> " +
+						+"<label class=bmd-label-floating>Gateway ID<span class=impp><sup>*</sup></span></label> " +
 						"<select "+
 						"class='form-control form-control-sm gatewayIDAdd' id=gatewayIDAdd-"+rowCount+" name=gatewayIDAdd["+rowCount+"]>"+
 						 
@@ -114,7 +114,7 @@ $(document).ready(function() {
 						+"</div></div>"+
 						"<div class=col-md-4>" +
 						"<div id='formlocationEdit' class='group form-group has-feedback has-success bmd-form-group is-filled'>"
-						+"<label class=bmd-label-floating>Location</label> <input "
+						+"<label class=bmd-label-floating>Location<span class=impp><sup>*</sup></span></label> <input "
 						+"type=text class='form-control form-control-sm' disabled name=locationAdd["+rowCount+"]"
 						+" id=locationAdd-"+rowCount+">"
 						+"<hr></div></div>   " +
@@ -135,9 +135,8 @@ $(document).ready(function() {
 				$("#formmeterSizeAdd").addClass("group form-group has-feedback has-success bmd-form-group is-filled");
 				$("#payTypeAdd-"+rowCount).val(meter.payType);
 				$("#selectTariffName-"+rowCount).val(meter.tariffID);
-				$("#gatewayIDAdd-"+rowCount).val(meter.gatewayID);
 				$("#tariffNameAdd-"+rowCount).val(meter.tariffName);
-				$("#gatewayIDAdd-"+rowCount).val(meter.gatewayID);
+				//$("#gatewayIDAdd-"+rowCount).val(meter.gatewayID);
 				$("#locationAdd-"+rowCount).val(meter.location);
 				$("#formlocationAdd").addClass("group form-group has-feedback has-success bmd-form-group is-filled");
 				
@@ -150,6 +149,8 @@ $(document).ready(function() {
 					});
 					$("#gatewayIDAdd-"+rowCount).append(OptionsGateway);
 			 });
+				
+				$("#gatewayIDAdd-"+rowCount).val(meter.gatewayID);
 
 				$('#customerAdd').bootstrapValidator('addField' ,
 			        'miuIDEdit['+rowCount+']', {
@@ -312,7 +313,7 @@ table = $('#customerTable')
 	"ordering" : true,
 	"order" : [ 0, "desc" ],
 	"lengthMenu" : [ 5, 10, 25, 30, 50, 75 ],
-	"pageLength" : 5,
+	"pageLength" : 25,
 	"scrollX" : false,
 "ajax" : {
 "url":"./customer/"+sessionStorage.getItem("roleID")+"/"+sessionStorage.getItem("ID")+"/-1",
@@ -432,7 +433,7 @@ if(sessionStorage.getItem("roleID") == 3 || sessionStorage.getItem("roleID") == 
 $("div.addevent").html('<button type="button" id="customerAddd"'
 		+'class="btn btn-raised btn-primary float-right"'
 			+'data-toggle="modal" data-target="#exampleModal">'
-		+'<i class="fa fa-user-plus"></i>'
+			+'<i class="fa fa-plus">Add</i>'
 		+'</button>');
 
 var rowCount = $("#rowCount").val()==""?0:$("#rowCount").val();
@@ -452,19 +453,19 @@ $("#addMeter")
 			$("#template").append("<div class=row> " +
 									"<div class=col-md-4>" +
 									"<div class='group form-group'>"
-													+"<label class=bmd-label-floating>MIU ID</label> <input "
+													+"<label class=bmd-label-floating>MIU ID<span class=impp><sup>*</sup></span></label> <input "
 													+"type=text class='form-control form-control-sm' name=miuIDAdd["+rowCount+"]"
 													+" id=miuIDAdd-"+rowCount+">"
 													+"</div></div>"+
 										"<div class=col-md-4>" +
 										"<div class='group form-group'>"
-										+"<label class=bmd-label-floating>Meter Serial Number</label> <input "
+										+"<label class=bmd-label-floating>Meter Serial Number<span class=impp><sup>*</sup></span></label> <input "
 										+"type=text class='form-control form-control-sm' name=meterSerialNumberAdd["+rowCount+"]"
 										+" id=meterSerialNumberAdd-"+rowCount+">"
 										+"</div></div>"+
 									"<div class=col-md-4>" +
 									"<div class='group form-group has-feedback has-success bmd-form-group is-filled'>"
-									+"<label class=bmd-label-floating>Meter Type</label> " +
+									+"<label class=bmd-label-floating>Meter Type<span class=impp><sup>*</sup></span></label> " +
 									"<select class='form-control form-control-sm select2'  id=selectMeterType-"+rowCount+" onchange='onChangeMeterSize("+rowCount+")' name=selectMeterType["+rowCount+"]>"+
 										"<option value='-1'>Select Meter Type</option>"+
 										"<option value='Gas'>Gas</option>"+
@@ -474,14 +475,14 @@ $("#addMeter")
 									+"</div></div>"+
 									"<div class=col-md-4>" +
 									"<div class='group form-group has-feedback has-success bmd-form-group is-filled'>"
-									+"<label class=bmd-label-floating>Meter Size</label> <select "+
+									+"<label class=bmd-label-floating>Meter Size<span class=impp><sup>*</sup></span></label> <select "+
 									"class='form-control form-control-sm' " +
 									"id=selectMeterSize-"+rowCount+" name=selectMeterSize["+rowCount+"]>"+
 									"</select>"
 									+"</div></div>"+
 									"<div class=col-md-4>" +
 									"<div class='group form-group has-feedback has-success bmd-form-group is-filled'>"
-									+"<label class=bmd-label-floating>Pay Type</label>" +
+									+"<label class=bmd-label-floating>Pay Type<span class=impp><sup>*</sup></span></label>" +
 									"<select class='form-control form-control-sm select2' id=payTypeAdd-"+rowCount+" name=payTypeAdd["+rowCount+"]>"+
 									"<option value='-1'>Select Pay Type</option>"+
 									"<option value='Prepaid'>Prepaid</option>"+
@@ -490,7 +491,7 @@ $("#addMeter")
 									+"</div></div>"+
 									"<div class=col-md-4>" +
 									"<div class='group form-group has-feedback has-success bmd-form-group is-filled'>"
-									+"<label class=bmd-label-floating>Tariff Name</label> " +
+									+"<label class=bmd-label-floating>Tariff Name<span class=impp><sup>*</sup></span></label> " +
 									"<select "+
 									"class='form-control form-control-sm' id=selectTariffName-"+rowCount+" name=selectTariffName["+rowCount+"]>"+
 									 
@@ -498,7 +499,7 @@ $("#addMeter")
 									+"</div></div>"+
 									"<div class=col-md-4>" +
 									"<div class='group form-group has-feedback has-success bmd-form-group is-filled'>"
-									+"<label class=bmd-label-floating>Gateway ID</label> " +
+									+"<label class=bmd-label-floating>Gateway ID<span class=impp><sup>*</sup></span></label> " +
 									"<select "+
 									"class='form-control form-control-sm' id=gatewayIDAdd-"+rowCount+" name=gatewayIDAdd["+rowCount+"]>"+
 									 
@@ -506,7 +507,7 @@ $("#addMeter")
 									+"</div></div>"+
 									"<div class=col-md-4>" +
 									"<div class='group form-group'>"
-									+"<label class=bmd-label-floating>Location</label> <input "
+									+"<label class=bmd-label-floating>Location<span class=impp><sup>*</sup></span></label> <input "
 									+"type=text class='form-control form-control-sm' name=locationAdd["+rowCount+"]"
 									+" id=locationAdd-"+rowCount+">"
 									+"<hr></div></div>   " +
@@ -902,7 +903,7 @@ $(document)
 																			"ordering" : true,
 																			"order" : [ 0, "desc" ],
 																			"lengthMenu" : [ 5, 10, 25, 30, 50, 75 ],
-																			"pageLength" : 5,
+																			"pageLength" : 25,
 																			"scrollX" : false,
 																			"data" : d.data,
 																			"columns" : [
@@ -1353,7 +1354,7 @@ function getCustomerMeters(CRNNumber){
 										"ordering" : true,
 										"order" : [ 0, "desc" ],
 										"lengthMenu" : [ 5, 10, 25, 30, 50, 75 ],
-										"pageLength" : 5,
+										"pageLength" : 25,
 										
 										"scrollX" : true,
 										"data":item.meters,

@@ -102,7 +102,7 @@
 						<div class="row">
 							<div class="col-md-6">
 								 <div class="group form-group">
-									<label for="text">Name:</label>
+									<label for="text">Name:<span class="impp"><sup>*</sup></span></label>
 									<input
 										class="form-control" id="gatewayNameAdd" name="gatewayNameAdd">
 									
@@ -113,7 +113,7 @@
 								
 							<div class="col-md-6">
 								<div class="group form-group">
-									<label for="text">Serial Number:</label>
+									<label for="text">Serial Number:<span class="impp"><sup>*</sup></span></label>
 									<input
 										type="text" class="form-control" name="serialNumberAdd"
 										id="serialNumberAdd">
@@ -122,14 +122,14 @@
 
 							<div class="col-md-6">
 								<div class="group form-group">
-									<label class="bmd-label-floating">IP</label> <input
+									<label class="bmd-label-floating">IP<span class="impp"><sup>*</sup></span></label> <input
 										type="text" class="form-control" name="ipAdd"
 										id="ipAdd">
 								</div>
 							</div>
 							<div class="col-md-6">
 								<div class="group form-group">
-									<label class="bmd-label-floating">Port</label> <input
+									<label class="bmd-label-floating">Port<span class="impp"><sup>*</sup></span></label> <input
 										type="text" class="form-control" name="portAdd"
 										id="portAdd">
 								</div>
@@ -184,14 +184,14 @@
 						<div class="row">
 							<div class="col-md-6">
 								<div id="formGatewayName1" class="group form-group has-feedback has-success bmd-form-group is-filled">
-									<label class="bmd-label-floating">Name</label> <input
+									<label class="bmd-label-floating">Name<span class="impp"><sup>*</sup></span></label> <input
 										type="text" class="form-control" name="gatewayNameEdit"
 										id="gatewayNameEdit">
 								</div>
 							</div>
 							<div class="col-md-6">
 								<div id="formserialNumber" class="group form-group">
-									<label class="bmd-label-floating">Block Name</label> <input
+									<label class="bmd-label-floating">Block Name<span class="impp"><sup>*</sup></span></label> <input
 										type="text" class="form-control" name="serialNumberEdit"
 										id="serialNumberEdit">
 								</div>
@@ -199,14 +199,14 @@
 
 							<div class="col-md-6">
 								<div id="formip" class="group form-group">
-									<label class="bmd-label-floating">IP</label> <input
+									<label class="bmd-label-floating">IP<span class="impp"><sup>*</sup></span></label> <input
 										type="text" class="form-control" name="ipEdit"
 										id="ipEdit">
 								</div>
 							</div>
 							<div class="col-md-6">
 								<div id="formport" class="group form-group">
-									<label class="bmd-label-floating">Port</label> <input
+									<label class="bmd-label-floating">Port<span class="impp"><sup>*</sup></span></label> <input
 										type="text" class="form-control" name="portEdit"
 										id="portEdit">
 								</div>

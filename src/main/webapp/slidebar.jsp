@@ -38,8 +38,8 @@
 			if (user_id.equalsIgnoreCase("1") || user_id.equalsIgnoreCase("4")) {
 				%>	
             
-                <a href="LiveDashBoard.jsp" class="list-group-item d-inline-block collapsed"><i class="fa fa-tachometer"></i> 
- <span class="textData">DashBoard</span></a>
+                <!-- <a href="LiveDashBoard.jsp" class="list-group-item d-inline-block collapsed"><i class="fa fa-tachometer"></i> 
+ <span class="textData">DashBoard</span></a> -->
              	 <a href="setup.jsp" class="list-group-item" data-parent="#menu3">
              	 <i class="fa fa-cogs"></i>
              	 <span class="textData">Customer Setup </span></a>

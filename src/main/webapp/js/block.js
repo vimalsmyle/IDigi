@@ -25,7 +25,7 @@ table = $('#blockTable')
 "ordering" : true,
 "order" : [ 0, "desc" ],
 "lengthMenu" : [ 5, 10, 25, 30, 50, 75 ],
-"pageLength" : 5,
+"pageLength" : 25,
 "scrollX" : true,
 "ajax" : {
 "url":"./block/"+sessionStorage.getItem("roleID")+"/"+sessionStorage.getItem("ID"),
@@ -93,7 +93,7 @@ $("div.headname").html('<h3>Block Management</h3>');
 $("div.addevent").html('<button type="button" id="blockAddButton"'
 		+'class="btn btn-raised btn-primary float-right"'
 			+'data-toggle="modal" data-target="#exampleModal">'
-			+'<i class="fa fa-user-plus"></i>'
+			+'<i class="fa fa-plus">Add</i>'
 			+'</button>');
 
 });

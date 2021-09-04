@@ -65,7 +65,7 @@
 						<button type="button"
 							class="btn btn-raised btn-primary float-right"
 							data-toggle="modal" data-target="#exampleModal">
-							<i class="fa fa-user-plus"></i>
+							<i class="fa fa-plus">Add</i></i>
 						</button>
 					</div> -->
 								</div>

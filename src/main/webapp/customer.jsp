@@ -61,7 +61,7 @@
 						<%if(!user_id.equalsIgnoreCase("2")) {%>
 							<div class="col-md-4">
 								<div class="form-group has-feedback has-success bmd-form-group is-filled">
-									<label class="bmd-label-floating select-label">Community Name</label> 
+									<label class="bmd-label-floating select-label">Community Name<span class="impp"><sup>*</sup></span></label> 
 									<select
 										class="form-control select3 form-control-sm select2" id="selectcommunityName" name="selectcommunityName" onchange="showBlockbyCommunity(this.value);">
 									</select>
@@ -69,7 +69,7 @@
 							</div>
 							<div class="col-md-4">
 								<div class="form-group has-feedback has-success bmd-form-group is-filled">
-									<label class="bmd-label-floating select-label">Select Block</label> <select
+									<label class="bmd-label-floating select-label">Select Block<span class="impp"><sup>*</sup></span></label> <select
 										class="form-control form-control-sm select2" id="selectBlockBasedonCommunity" name="selectBlockBasedonCommunity">
 									</select>
 								</div>
@@ -78,14 +78,14 @@
 
 							<div class="col-md-4">
 								<div id = "formcommunityNameAdd" class="form-group">
-									<label class="bmd-label-floating">Community Name</label> <input
+									<label class="bmd-label-floating">Community Name<span class="impp"><sup>*</sup></span></label> <input
 										type="text" class="form-control form-control-sm" name="communityNameAdd"
 										id="communityNameAdd" disabled>
 								</div>
 							</div>
 							<div class="col-md-4">
 								<div id = "formblockNameAdd" class="form-group">
-									<label class="bmd-label-floating">Block Name</label> <input
+									<label class="bmd-label-floating">Block Name<span class="impp"><sup>*</sup></span></label> <input
 										type="text" class="form-control form-control-sm" name="blockNameAdd"
 										id="blockNameAdd"  disabled>
 								</div>
@@ -94,14 +94,14 @@
 <%} %>
 							<div class="col-md-4">
 								<div class="group form-group">
-									<label class="bmd-label-floating">First Name</label> <input
+									<label class="bmd-label-floating">First Name<span class="impp"><sup>*</sup></span></label> <input
 										type="text" class="form-control form-control-sm" name="firstNameAdd"
 										id="firstNameAdd">
 								</div>
 							</div>
 							<div class="col-md-4">
 								<div class="group form-group">
-									<label class="bmd-label-floating">Last Name</label> <input
+									<label class="bmd-label-floating">Last Name<span class="impp"><sup>*</sup></span></label> <input
 										type="text" class="form-control form-control-sm" name="lastNameAdd"
 										id="lastNameAdd">
 								</div>
@@ -111,14 +111,14 @@
 							
 							<div class="col-md-4">
 								<div class="group form-group">
-									<label class="bmd-label-floating">House No.</label> <input
+									<label class="bmd-label-floating">House No.<span class="impp"><sup>*</sup></span></label> <input
 										type="text" class="form-control form-control-sm" name="houseNoAdd"
 										id="houseNoAdd">
 								</div>
 							</div>
 							<div class="col-md-4">
 								<div class="group form-group">
-									<label class="bmd-label-floating">Mobile No</label> <input
+									<label class="bmd-label-floating">Mobile No<span class="impp"><sup>*</sup></span></label> <input
 										type="text" class="form-control form-control-sm" name="mobileNoAdd"
 										id="mobileNoAdd">
 								</div>
@@ -129,14 +129,14 @@
 							
 							<div class="col-md-4">
 								<div class="group form-group">
-									<label class="bmd-label-floating">Email</label> <input
+									<label class="bmd-label-floating">Email<span class="impp"><sup>*</sup></span></label> <input
 										type="email" class="form-control form-control-sm" name="emailAdd"
 										id="emailAdd">
 								</div>
 							</div>
 							<div class="col-md-4">
 								<div class="group form-group">
-									<label class="bmd-label-floating">CRN/CAN</label> <input
+									<label class="bmd-label-floating">CRN/CAN<span class="impp"><sup>*</sup></span></label> <input
 										type="text" class="form-control form-control-sm" name="CRNAdd"
 										id="CRNAdd">
 								</div>

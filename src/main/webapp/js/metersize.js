@@ -26,7 +26,7 @@ table = $('#metersizeTable')
 	"ordering" : true,
 	"order" : [ 0, "desc" ],
 	"lengthMenu" : [ 5, 10, 25, 30, 50, 75 ],
-	"pageLength" : 5,
+	"pageLength" : 25,
 	"scrollX" : false,
 "ajax" : {
 "url":"./metersize",
@@ -84,7 +84,7 @@ $("div.headname").html('<h3>Meter Size</h3>');
 $("div.addevent").html('<button type="button" id="metersizepopup"' 
 		+'class="btn btn-raised btn-primary float-right"'
 		+'	data-toggle="modal" data-target="#exampleModal">'
-		+'<i class="fa fa-user-plus"></i>'
+		+'<i class="fa fa-plus">Add</i>'
 		+'</button>');
 
 
@@ -114,13 +114,13 @@ $(document)
 																message : 'Meter Size is required and cannot be empty'
 															},
 															stringLength : {
-																min : 2,
-																max : 10,
-																message : 'Name must be more than 2 and less than 10 characters long'
+																min : 1,
+																max : 4,
+																message : 'Meter Size must be more than 1 and less than 4 characters long'
 															},
 															regexp : {
-																regexp : /^[0-9 ]*$/,
-																message : 'Name can only consist of number'
+																regexp : /^[0-9]*$/,
+																message : 'Meter size can only consist of number'
 															}
 														}
 													},
@@ -132,11 +132,11 @@ $(document)
 															},
 															stringLength : {
 																min : 1,
-																max : 10,
-																message : 'Per unit value must be more than 2 and less than 10 characters long'
+																max : 4,
+																message : 'Per unit value must be more than 1 and less than 4 characters long'
 															},
 															regexp : {
-																regexp : /^[0-9]*$/,
+																regexp : /^(0|[1-9]\d*)(\.\d+)?$/,
 																message : 'Per Unit Value can only consist of number'
 															}
 														}
@@ -164,8 +164,8 @@ $(document)
 													},
 													stringLength : {
 														min :1,
-														max : 10,
-														message : 'Meter size must be more than 6 and less than 30 characters long'
+														max : 4,
+														message : 'Meter size must be more than 1 and less than 4 characters long'
 													},
 													regexp : {
 														regexp : /^[0-9]*$/,
@@ -181,11 +181,11 @@ $(document)
 													},
 													stringLength : {
 														min : 1,
-														max : 10,
-														message : 'Per Unit Value must be more than 2 and less than 10 characters long'
+														max : 4,
+														message : 'Per Unit Value must be more than 1 and less than 4 characters long'
 													},
 													regexp : {
-														regexp : /^[0-9]*$/,
+														regexp : /^(0|[1-9]\d*)(\.\d+)?$/,
 														message : 'Per Unit Value can only consist of number'
 													}
 												}

@@ -48,7 +48,7 @@ $(document)
 													"ordering" : true,
 													"order" : [ 0, "desc" ],
 													"lengthMenu" : [ 5, 10, 25, 30, 50, 75 ],
-													"pageLength" : 5,
+													"pageLength" : 25,
 													"scrollX" : false,
 										"ajax" : {
 											"url" : "./dashboard/"
@@ -374,7 +374,7 @@ $(document)
 																			"ordering" : true,
 																			"order" : [ 0, "desc" ],
 																			"lengthMenu" : [ 5, 10, 25, 30, 50, 75 ],
-																			"pageLength" : 5,
+																			"pageLength" : 25,
 																			"scrollY" : 324,
 																			"scrollX" : false,
 																			"data" : d.data,

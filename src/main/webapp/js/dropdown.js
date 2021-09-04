@@ -297,23 +297,19 @@ function showFieldsBasedONCommand(id){
 																</div>
 															</div>`);
 			
-			$('#start_date').datetimepicker({
-				todayHighlight : true,
-				autoclose : true,
-				format : "yyyy-mm-dd",
+			$('#start_date').bootstrapMaterialDatePicker({
+				 format: 'YYYY-MM-DD HH:mm',
 				clearBtn : true,
 				todayBtn : "linked",
 				weekStart : 1
 			}).on('changeDate', function(e) {
 				var startDate = $('#start_date').datepicker('getDate');
 			});
-			$('#end_date').datetimepicker({
-				todayHighlight : true,
-				autoclose : true,
-				format : "yyyy-mm-dd",
-				clearBtn : true,
-				todayBtn : "linked",
-				weekStart : 1
+			$('#end_date').bootstrapMaterialDatePicker({
+				 format: 'YYYY-MM-DD HH:mm',
+					clearBtn : true,
+					todayBtn : "linked",
+					weekStart : 1
 			}).on('changeDate', function(e) {
 				var endDate = $('#end_date').datepicker('getDate');
 			});
@@ -350,10 +346,15 @@ function showFieldsBasedONCommand(id){
 																				<label class="bmd-label-floating select-label">Sync Time<sup
 																					class="imp">*</sup></label> 
 																					
-																<input type="text" id="reading" name="reading" class="form-control">
+																<input type="text" id="syncTime" name="syncTime" class="form-control">
 																					
 																			</div>
 																		</div>`);
+						
+						$('#syncTime').bootstrapMaterialDatePicker({
+				            format: 'HH:mm'
+				        });
+						
 						}
 		
 }
