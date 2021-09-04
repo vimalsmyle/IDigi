@@ -451,8 +451,8 @@ public class DashboardDAO {
 				dashboardvo.setLastName(rs.getString("LastName"));
 				dashboardvo.setCustomerUniqueID(rs.getString("CustomerUniqueID"));
 				
-				String query = "SELECT dbl.ReadingID, dbl.MainBalanceLogID, dbl.CustomerMeterID, dbl.MIUID, cmd.MeterSerialNumber, dbl.Tariff, dbl.Reading, dbl.Balance, dbl.EmergencyCredit, dbl.ValveStatus, dbl.BatteryVoltage, "
-						+ "dbl.LowBattery, dbl.DoorOpenTamper, dbl.MagneticTamper, dbl.RTCFault, dbl.Vacation, dbl.LowBalance, dbl.LogDate, ms.MeterSize, ms.PerUnitValue FROM displaybalancelog AS dbl LEFT JOIN customermeterdetails AS cmd ON cmd.CustomerMeterID = dbl.CustomerMeterID LEFT JOIN metersize AS ms ON ms.MeterSizeID = cmd.MeterSizeID WHERE cmd.CustomerID = ? AND cmd.MeterType = " + type;
+				String query = "SELECT dbl.ReadingID, dbl.MainBalanceLogID, dbl.CustomerMeterID, dbl.MIUID, cmd.MeterSerialNumber, cmd.PayType, dbl.Tariff, dbl.Reading, dbl.Balance, dbl.EmergencyCredit, dbl.ValveStatus, dbl.BatteryVoltage, "
+						+ "dbl.LowBattery, dbl.DoorOpenTamper, dbl.MagneticTamper, dbl.RTCFault, dbl.Vacation, dbl.LowBalance, dbl.LogDate, ms.MeterSize, ms.PerUnitValue FROM displaybalancelog AS dbl LEFT JOIN customermeterdetails AS cmd ON cmd.CustomerMeterID = dbl.CustomerMeterID LEFT JOIN metersize AS ms ON ms.MeterSizeID = cmd.MeterSizeID WHERE cmd.CustomerID = ? AND cmd.MeterType = '" + type+"'";
 				
 				/*String oldquery = "SELECT DISTINCT c.CommunityName, b.BlockName, cd.FirstName,cd.CustomerUniqueID, cd.LastName, cd.HouseNumber, cmd.MeterSerialNumber, dbl.ReadingID, dbl.MainBalanceLogID, dbl.EmergencyCredit, \r\n" + 
 						"dbl.MIUID, dbl.Reading, dbl.Balance, dbl.BatteryVoltage, dbl.LowBattery, dbl.Tariff, dbl.ValveStatus, dbl.DoorOpenTamper, dbl.MagneticTamper, dbl.RTCFault, dbl.Vacation, dbl.LowBalance, dbl.LogDate\r\n" + 
@@ -534,9 +534,9 @@ public class DashboardDAO {
 							individualDashboardList.add(individualDashboardResponseVO);
 				
 			}
-			
 					dashboardvo.setDasboarddata(individualDashboardList);
 					dashboard_list.add(dashboardvo);
+					dashboard_list.removeIf(e -> e.getDasboarddata().size()==0);
 			}
 		}
 
@@ -552,7 +552,178 @@ public class DashboardDAO {
 	
 	public ResponseVO filterDashboardFile(DashboardResponseVO dashboardResponseVO) {
 		// TODO Auto-generated method stub
-		return null;
+		ResponseVO responsevo = new ResponseVO();
+		String drivename = "D:/Dashboard/";
+		
+		File directory = new File(drivename);
+		if (!directory.exists()) {
+			directory.mkdir();
+		}
+		
+		try {
+		
+		XSSFWorkbook workbook = new XSSFWorkbook();
+		
+		XSSFSheet spreadsheet = workbook.createSheet("Dashboard List");
+		
+		XSSFRow header = spreadsheet.createRow(0);
+		
+		int columnCount = 0;
+        
+        Cell headercell1 = header.createCell(columnCount);
+        headercell1.setCellValue("Community");
+        
+        Cell headercell2 = header.createCell(++columnCount);
+        headercell2.setCellValue("Block");
+        
+        Cell headercell3 = header.createCell(++columnCount);
+        headercell3.setCellValue("CRN/CAN");
+        
+        Cell headercell4 = header.createCell(++columnCount);
+        headercell4.setCellValue("Name");
+        
+        Cell headercell5 = header.createCell(++columnCount);
+        headercell5.setCellValue("House Number");
+        
+        Cell headercell6 = header.createCell(++columnCount);
+        headercell6.setCellValue("MIU ID");
+        
+        Cell headercell7 = header.createCell(++columnCount);
+        headercell7.setCellValue("Meter Serial Number");
+        
+        Cell headercell8 = header.createCell(++columnCount);
+        headercell8.setCellValue("Reading");
+        
+        Cell headercell9 = header.createCell(++columnCount);
+        headercell9.setCellValue("Consumption");
+        
+        Cell headercell10 = header.createCell(++columnCount);
+        headercell10.setCellValue("Balance");
+        
+        Cell headercell11 = header.createCell(++columnCount);
+        headercell11.setCellValue("Emergency Credit");
+        
+        Cell headercell12 = header.createCell(++columnCount);
+        headercell12.setCellValue("Pay Type");
+        
+        Cell headercell13 = header.createCell(++columnCount);
+        headercell13.setCellValue("Battery");
+        
+        Cell headercell14 = header.createCell(++columnCount);
+        headercell14.setCellValue("Valve Status");
+        
+        Cell headercell15 = header.createCell(++columnCount);
+        headercell15.setCellValue("Tariff");
+                
+        Cell headercell16 = header.createCell(++columnCount);
+        headercell16.setCellValue("Box AMR Tamper");
+        
+        Cell headercell17 = header.createCell(++columnCount);
+        headercell17.setCellValue("Magnetic Tamper");
+        
+        Cell headercell18 = header.createCell(++columnCount);
+        headercell18.setCellValue("Time Stamp");
+        
+        Cell headercell19 = header.createCell(++columnCount);
+        headercell19.setCellValue("Vacation Status");
+        
+        Cell headercell20 = header.createCell(++columnCount);
+        headercell20.setCellValue("Last Topup Amount");
+        
+        for(int i = 0; i< dashboardResponseVO.getData().size(); i++) {
+        	
+        	int dataColumnCount = 0;
+        	XSSFRow data = spreadsheet.createRow(spreadsheet.getLastRowNum()+1);
+        	
+        	Cell cell1 = data.createCell(dataColumnCount);
+            cell1.setCellValue(dashboardResponseVO.getData().get(i).getCommunityName());
+            
+            Cell cell2 = data.createCell(++dataColumnCount);
+            cell2.setCellValue(dashboardResponseVO.getData().get(i).getBlockName());
+            
+            Cell cell3 = data.createCell(++dataColumnCount);
+            cell3.setCellValue(dashboardResponseVO.getData().get(i).getCustomerUniqueID());
+            
+            Cell cell4 = data.createCell(++dataColumnCount);
+            cell4.setCellValue(dashboardResponseVO.getData().get(i).getFirstName()+" "+dashboardResponseVO.getData().get(i).getLastName());
+            
+            Cell cell5 = data.createCell(++dataColumnCount);
+            cell5.setCellValue(dashboardResponseVO.getData().get(i).getHouseNumber());
+            
+            for(int j = 0; j < dashboardResponseVO.getData().get(i).getDasboarddata().size(); j++) {
+            	
+            	XSSFRow dashboardData = spreadsheet.createRow(spreadsheet.getLastRowNum()+1);
+            	
+            	int dashboarDataColumnCount = 5;
+            	
+            	Cell cell6 = dashboardData.createCell(dashboarDataColumnCount);
+            	cell6.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getMiuID());
+            	
+            	Cell cell7 = dashboardData.createCell(++dashboarDataColumnCount);
+            	cell7.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getMeterSerialNumber());
+            	
+            	Cell cell8 = dashboardData.createCell(++dashboarDataColumnCount);
+            	cell8.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getReading());
+            	
+            	Cell cell9 = dashboardData.createCell(++dashboarDataColumnCount);
+            	cell9.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getConsumption());
+            	
+            	Cell cell10 = dashboardData.createCell(++dashboarDataColumnCount);
+            	cell10.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getBalance());
+            	
+            	Cell cell11 = dashboardData.createCell(++dashboarDataColumnCount);
+            	cell11.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getEmergencyCredit());
+            	
+            	Cell cell12 = dashboardData.createCell(++dashboarDataColumnCount);
+            	cell12.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getPayType());
+            	
+            	Cell cell13 = dashboardData.createCell(++dashboarDataColumnCount);
+            	cell13.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getBattery());
+            	
+            	Cell cell14 = dashboardData.createCell(++dashboarDataColumnCount);
+            	cell14.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getValveStatus());
+            	
+            	Cell cell15 = dashboardData.createCell(++dashboarDataColumnCount);
+            	cell15.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getTariff());
+            	
+            	Cell cell16 = dashboardData.createCell(++dashboarDataColumnCount);
+            	cell16.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getDoorOpenTamper());
+            	
+            	Cell cell17 = dashboardData.createCell(++dashboarDataColumnCount);
+            	cell17.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getMagneticTamper());
+            	
+            	Cell cell18 = dashboardData.createCell(++dashboarDataColumnCount);
+            	cell18.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getTimeStamp());
+            	
+            	Cell cell19 = dashboardData.createCell(++dashboarDataColumnCount);
+            	cell19.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getVacationStatus());
+            	
+            	Cell cell20 = dashboardData.createCell(++dashboarDataColumnCount);
+            	cell20.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getLastTopupAmount());
+            	
+            }
+        	
+        }
+        
+		FileOutputStream outputStream = new FileOutputStream("D:\\Dashboard\\FilterDashboard.xlsx");
+		workbook.write(outputStream);
+		workbook.close();
+		outputStream.close();
+		
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        
+        responsevo.setResult("Success");
+		responsevo.setLocation(drivename);
+		
+		responsevo.setFileName("FilterDashboard.xlsx");
+        
+		return responsevo;
 	}
 	
 	public GraphResponseVO getGraphDashboardDetails(String type, int year, int month, String communityName) {
