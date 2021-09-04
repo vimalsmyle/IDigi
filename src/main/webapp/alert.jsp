@@ -45,7 +45,7 @@
 	<div class="col-md-12">
 		<div class="row">
 				<div class="col-md-12">
-					<a class="text-dark" href="#">Home</a>
+					<a class="text-dark" href="home.jsp">Home</a>
 					<span>/</span>
 					<span class="activeurl">Alert Settings</span>
 				</div>
@@ -109,7 +109,7 @@
 						<div class="row">
 							<div class="col-md-6">
 								<div class="group form-group">
-									<label class="bmd-label-floating">No MIU ID Interval</label> <input
+									<label class="bmd-label-floating">No MIU ID Interval<span class=impp><sup>*</sup></span></label> <input
 										type="text" class="form-control" name="noamrintervalAdd"
 										id="noamrintervalAdd">
 								</div>
@@ -118,14 +118,14 @@
 
 							<div class="col-md-6">
 								<div class="group form-group">
-									<label class="bmd-label-floating">ReCharge Time Out</label> <input
+									<label class="bmd-label-floating">ReCharge Time Out<span class=impp><sup>*</sup></span></label> <input
 										type="text" class="form-control" name="rechargetimeoutAdd"
 										id="rechargetimeoutAdd">
 								</div>
 							</div>
 							<div class="col-md-6">
 								<div class="group form-group">
-									<label class="bmd-label-floating">ReConnection Charge</label> <input
+									<label class="bmd-label-floating">ReConnection Charge<span class=impp><sup>*</sup></span></label> <input
 										type="text" class="form-control" name="reconnectionAdd"
 										id="reconnectionAdd">
 								</div>
@@ -134,7 +134,7 @@
 							
 							<div class="col-md-6">
 								<div class="group form-group">
-									<label class="bmd-label-floating">ReConnection Charge Days</label> <input
+									<label class="bmd-label-floating">ReConnection Charge Days<span class=impp><sup>*</sup></span></label> <input
 										type="text" class="form-control" name="reconnectionDaysAdd"
 										id="reconnectionDaysAdd">
 								</div>
@@ -142,7 +142,7 @@
 
 								<div class="col-md-6">
 								<div class="group form-group">
-									<label class="bmd-label-floating">Bill Generation Date</label> <input
+									<label class="bmd-label-floating">Bill Generation Date<span class=impp><sup>*</sup></span></label> <input
 										type="text" class="form-control" name="billGenerationAdd"
 										id="billGenerationAdd">
 								</div>
@@ -150,7 +150,7 @@
 							
 							<div class="col-md-6">
 								<div class="group form-group">
-									<label class="bmd-label-floating">Late Fee</label> <input
+									<label class="bmd-label-floating">Late Fee<span class=impp><sup>*</sup></span></label> <input
 										type="text" class="form-control" name="lateFeeAdd"
 										id="lateFeeAdd">
 								</div>
@@ -158,7 +158,7 @@
 							
 							<div class="col-md-6">
 								<div class="group form-group">
-									<label class="bmd-label-floating">GST</label> <input
+									<label class="bmd-label-floating">GST<span class=impp><sup>*</sup></span></label> <input
 										type="text" class="form-control" name="gstAdd"
 										id="gstAdd">
 								</div>
@@ -166,7 +166,7 @@
 							
 							<div class="col-md-6">
 								<div class="group form-group">
-									<label class="bmd-label-floating">Due Date Count</label> <input
+									<label class="bmd-label-floating">Due Date Count<span class=impp><sup>*</sup></span></label> <input
 										type="text" class="form-control" name="duedatecountAdd"
 										id="duedatecountAdd">
 								</div>
@@ -220,7 +220,7 @@
 						<div class="row">
 							<div class="col-md-6">
 								<div id="formnoamrintervalEdit" class="group form-group">
-									<label class="bmd-label-floating">No MIU ID Interval</label> <input
+									<label class="bmd-label-floating">No MIU ID Interval<span class=impp><sup>*</sup></span></label> <input
 										type="text" class="form-control" name="noamrintervalEdit"
 										id="noamrintervalEdit">
 								</div>
@@ -229,7 +229,7 @@
 
 							<div class="col-md-6">
 								<div id="formrechargetimeoutEdit" class="group form-group">
-									<label class="bmd-label-floating">ReCharge Time Out</label> <input
+									<label class="bmd-label-floating">ReCharge Time Out<span class=impp><sup>*</sup></span></label> <input
 										type="text" class="form-control" name="rechargetimeoutEdit1"
 										id="rechargetimeoutEdit1">
 								</div>
@@ -237,7 +237,7 @@
 							
 							<div class="col-md-6">
 								<div id="formreconnectionEdit" class="group form-group">
-									<label class="bmd-label-floating">ReConnection Charge</label> <input
+									<label class="bmd-label-floating">ReConnection Charge<span class=impp><sup>*</sup></span></label> <input
 										type="text" class="form-control" name="connectionEdit1"
 										id="connectionEdit1">
 								</div>
@@ -245,7 +245,7 @@
 							
 							<div class="col-md-6">
 								<div id="formreconnectionDaysEdit" class="group form-group">
-									<label class="bmd-label-floating">ReConnection Charge Days</label> <input
+									<label class="bmd-label-floating">ReConnection Charge Days<span class=impp><sup>*</sup></span></label> <input
 										type="text" class="form-control" name="connectionDaysEdit1"
 										id="connectionDaysEdit1">
 								</div>
@@ -254,7 +254,7 @@
 							
 							<div class="col-md-6">
 								<div id="formbillgenerationEdit" class="group form-group has-feedback has-success bmd-form-group is-filled">
-									<label class="bmd-label-floating">Bill Generation</label> <input
+									<label class="bmd-label-floating">Bill Generation<span class=impp><sup>*</sup></span></label> <input
 										type="text" class="form-control" name="billGenerationEdit1" readonly
 										id="billGenerationEdit1">
 								</div>
@@ -263,7 +263,7 @@
 							
 							<div class="col-md-6">
 								<div id="formlateFeeEdit" class="group form-group">
-									<label class="bmd-label-floating">Late Fee</label> <input
+									<label class="bmd-label-floating">Late Fee<span class=impp><sup>*</sup></span></label> <input
 										type="text" class="form-control" name="lateFeeEdit1"
 										id="lateFeeEdit1">
 								</div>
@@ -271,7 +271,7 @@
 							
 							<div class="col-md-6">
 								<div id="formgstEdit" class="group form-group">
-									<label class="bmd-label-floating">GST</label> <input
+									<label class="bmd-label-floating">GST<span class=impp><sup>*</sup></span></label> <input
 										type="text" class="form-control" name="gstEdit1"
 										id="gstEdit1">
 								</div>
@@ -279,7 +279,7 @@
 							
 							<div class="col-md-6">
 								<div id="formduedatecountEdit" class="group form-group">
-									<label class="bmd-label-floating">Due Date Count</label> <input
+									<label class="bmd-label-floating">Due Date Count<span class=impp><sup>*</sup></span></label> <input
 										type="text" class="form-control" name="duedatecountEdit1"
 										id="duedatecountEdit1">
 								</div>

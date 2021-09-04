@@ -28,7 +28,7 @@ table = $('#tariffTable')
 	"ordering" : true,
 	"order" : [ 0, "desc" ],
 	"lengthMenu" : [ 5, 10, 25, 30, 50, 75 ],
-	"pageLength" : 5,
+	"pageLength" : 25,
 	"scrollX" : true,
 "ajax" : {
 "url":"./tariff",
@@ -84,7 +84,7 @@ return json.data;
 
 $("div.headname").html('<h3>Tariff Details</h3>');
 
-$("div.addevent").html('<button type="button" id="tariffAddd" class="btn btn-raised btn-primary" data-toggle="modal" data-target="#exampleModal"> <i class="fa fa-user-plus"></i></button>');
+$("div.addevent").html('<button type="button" id="tariffAddd" class="btn btn-raised btn-primary" data-toggle="modal" data-target="#exampleModal"> <i class="fa fa-plus">Add</i></i></button>');
 
 });
 
@@ -113,12 +113,12 @@ $(document)
 															},
 															stringLength : {
 																min : 4,
-																max : 30,
-																message : 'Name must be more than 4 and less than 30 characters long'
+																max : 25,
+																message : 'Name must be more than 4 and less than 25 characters long'
 															},
 															regexp : {
-																regexp : /^[a-zA-Z ]*$/,
-																message : 'Name can only consist of alphabet'
+																regexp : /^[a-zA-Z0-9\s]*$/,
+																message : 'Name can only consist of alphanumaric with max 25'
 															}
 														}
 													},
@@ -129,13 +129,13 @@ $(document)
 																message : 'Rate is required and cannot be empty'
 															},
 															stringLength : {
-																min : 2,
-																max : 30,
-																message : 'Rate must be more than 2 and less than 30 characters long'
+																min : 1,
+																max : 4,
+																message : 'Rate must be more than 1 and less than 4 characters long'
 															},
 															regexp : {
-																regexp : /[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$/,
-																message : 'Rate can only consist of alphabetical and number'
+																regexp : /^(0|[1-9]\d*)(\.\d+)?$/,
+																message : 'Rate can only consist of number'
 															}
 														}
 													},
@@ -145,12 +145,12 @@ $(document)
 															notEmpty : {
 																message : 'Emergency Credit is required and cannot be empty'
 															},stringLength : {
-																min : 2,
-																max : 30,
-																message : 'Emergency Credit must be more than 2 and less than 30 characters long'
+																min : 1,
+																max : 4,
+																message : 'Emergency Credit must be more than 1 and less than 4 characters long'
 															},
 															regexp : {
-																regexp : /[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$/,
+																regexp : /^(0|[1-9]\d*)(\.\d+)?$/,
 																message : 'Emergency Credit can only consist of number'
 															}
 														}
@@ -161,12 +161,12 @@ $(document)
 															notEmpty : {
 																message : 'Alaram Credit is required and cannot be empty'
 															},stringLength : {
-																min : 2,
-																max : 30,
-																message : 'Alaram Credit must be more than 2 and less than 30 characters long'
+																min : 1,
+																max : 4,
+																message : 'Alaram Credit must be more than 1 and less than 4 characters long'
 															},
 															regexp : {
-																regexp : /[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$/,
+																regexp : /^(0|[1-9]\d*)(\.\d+)?$/,
 																message : 'Alarm Credit can only consist of number'
 															}
 														}
@@ -177,12 +177,12 @@ $(document)
 															notEmpty : {
 																message : 'Fixed Charge is required and cannot be empty'
 															},stringLength : {
-																min : 2,
-																max : 30,
-																message : 'Fixed Charge must be more than 2 and less than 30 characters long'
+																min : 1,
+																max : 4,
+																message : 'Fixed Charge must be more than 2 and less than 4 characters long'
 															},
 															regexp : {
-																regexp : /[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$/,
+																regexp : /^(0|[1-9]\d*)(\.\d+)?$/,
 																message : 'Fixed Charge can only consist of number'
 															}
 														}
@@ -210,11 +210,11 @@ $(document)
 													},
 													stringLength : {
 														min : 4,
-														max : 30,
-														message : 'Name must be more than 4 and less than 30 characters long'
+														max : 25,
+														message : 'Name must be more than 4 and less than 25 characters long'
 													},
 													regexp : {
-														regexp : /^[a-zA-Z ]*$/,
+														regexp : /^[a-zA-Z0-9\s]*$/,
 														message : 'Name can only consist of alphabet'
 													}
 												}
@@ -226,13 +226,13 @@ $(document)
 														message : 'Rate is required and cannot be empty'
 													},
 													stringLength : {
-														min : 2,
-														max : 30,
-														message : 'Rate must be more than 2 and less than 30 characters long'
+														min : 1,
+														max : 4,
+														message : 'Rate must be more than 1 and less than 4 characters long'
 													},
 													regexp : {
-														regexp : /[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$/,
-														message : 'Rate can only consist of alphabetical and number'
+														regexp : /^(0|[1-9]\d*)(\.\d+)?$/,
+														message : 'Rate can only consist number'
 													}
 												}
 											},
@@ -242,12 +242,12 @@ $(document)
 													notEmpty : {
 														message : 'Emergency Credit is required and cannot be empty'
 													},stringLength : {
-														min : 2,
-														max : 30,
-														message : 'Emergency Credit must be more than 2 and less than 30 characters long'
+														min : 1,
+														max : 4,
+														message : 'Emergency Credit must be more than 1 and less than 4 characters long'
 													},
 													regexp : {
-														regexp : /[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$/,
+														regexp : /^(0|[1-9]\d*)(\.\d+)?$/,
 														message : 'Emergency Credit can only consist of number'
 													}
 												}
@@ -258,12 +258,12 @@ $(document)
 													notEmpty : {
 														message : 'Alaram Credit is required and cannot be empty'
 													},stringLength : {
-														min : 2,
-														max : 30,
-														message : 'Alaram Credit must be more than 2 and less than 30 characters long'
+														min : 1,
+														max : 4,
+														message : 'Alaram Credit must be more than 1 and less than 4 characters long'
 													},
 													regexp : {
-														regexp : /[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$/,
+														regexp : /^(0|[1-9]\d*)(\.\d+)?$/,
 														message : 'Alarm Credit can only consist of number'
 													}
 												}
@@ -274,12 +274,12 @@ $(document)
 													notEmpty : {
 														message : 'Fixed Charge is required and cannot be empty'
 													},stringLength : {
-														min : 2,
-														max : 30,
-														message : 'Fixed Charge must be more than 2 and less than 30 characters long'
+														min : 1,
+														max : 4,
+														message : 'Fixed Charge must be more than 1 and less than 4 characters long'
 													},
 													regexp : {
-														regexp : /[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$/,
+														regexp : /^(0|[1-9]\d*)(\.\d+)?$/,
 														message : 'Fixed Charge can only consist of number'
 													}
 												}

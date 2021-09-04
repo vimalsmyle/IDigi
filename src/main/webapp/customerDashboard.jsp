@@ -187,9 +187,7 @@
 													<th>Name</th>
 													<th>Customer Unique ID</th>
 													<th>Meters</th>
-													<th>Communicating</th>
-													<th>non-Communicating</th>
-													<th>Total</th>
+													
 												</tr>
 											</thead>
 											<tbody>
@@ -197,10 +195,10 @@
 										</table>
 
 
-										<!-- <table id="liveTable1"
+										<table id="liveTable1"
 											class="table table-striped table-bordered dt-responsive nowrap dataTable no-footer dtr-inline collapsed"
 											style="width: 100%">
-											<thead>
+											<thead id="theadBody" class="bg-primary text-white">
 												<tr>
 													<th>Com</th>
 													<th>Block</th>
@@ -208,15 +206,11 @@
 													<th>Name</th>
 													<th>Customer Unique ID</th>
 													<th>Meters</th>
-													<th>Communicating</th>
-													<th>Tariff</th>
-													<th>non-Communicating</th>
-													<th>Total</th>
 												</tr>
 											</thead>
 											<tbody>
 											</tbody>
-										</table> -->
+										</table>
 									</div>
 								</div>
 

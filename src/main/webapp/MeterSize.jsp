@@ -107,7 +107,7 @@
 							<div class="col-md-6">
 								<div class="group form-group has-feedback has-success">
 									<label>Select
-										Meter Type<sup class="imp">*</sup>
+										Meter Type<span class="impp"><sup>*</sup></span>
 									</label>
 									<select class='form-control select2'
 										id=meterTypeAdd name=meterTypeAdd>
@@ -122,7 +122,7 @@
 
 							<div class="col-md-6">
 								<div class="group form-group">
-									<label for="text">Size:</label> <input type="text"
+									<label for="text">Size:<span class="impp"><sup>*</sup></span></label> <input type="text"
 										class="form-control form-control-sm" name="meterSizeAdd"
 										id="meterSizeAdd" placeholder="Meter Size">
 								</div>
@@ -130,7 +130,7 @@
 
 							<div class="col-md-6">
 								<div class="group form-group">
-									<label for="text">Per Unit Value:</label> <input type="text"
+									<label for="text">Per Unit Value:<span class="impp"><sup>*</sup></span></label> <input type="text"
 										class="form-control form-control-sm" name="perUnitValueAdd"
 										id="perUnitValueAdd" placeholder="Per Unit Value">
 								</div>
@@ -173,7 +173,7 @@
 						<div class="row">
 							<div class="col-md-6">
 								<div id="formmeterType" class="group form-group">
-									<label for="text">Meter Type:</label> <select
+									<label for="text">Meter Type:<span class="impp"><sup>*</sup></span></label> <select
 										class='form-control form-control-sm select2' id=meterTypeEdit
 										name=meterTypeEdit>
 										<option value='Gas'>Gas</option>
@@ -185,7 +185,7 @@
 
 							<div class="col-md-6">
 								<div id="formmeterSize" class="group form-group">
-									<label for="text">Size:</label> <input type="text"
+									<label for="text">Size:<span class="impp"><sup>*</sup></span></label> <input type="text"
 										class="form-control form-control-sm" name="meterSizeEdit"
 										id="meterSizeeEdit" placeholder="Meter Size">
 								</div>
@@ -194,7 +194,7 @@
 							<div class="col-md-6">
 
 								<div id="formperUnitValue" class="group form-group">
-									<label for="text">Per Unit Value:</label> <input type="text"
+									<label for="text">Per Unit Value:<span class="impp"><sup>*</sup></span></label> <input type="text"
 										class="form-control form-control-sm" name="perUnitValueEdit"
 										id="perUnitValueEdit" placeholder="">
 								</div>

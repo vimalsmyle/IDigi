@@ -106,14 +106,14 @@
 						<div class="row">
 							<div class="col-md-6">
 								<div class="group form-group">
-									<label class="bmd-label-floating">Name</label> <input
+									<label class="bmd-label-floating">Name<span class=impp><sup>*</sup></span></label> <input
 										type="text" class="form-control form-control-sm" name="tariffNameAdd"
 										id="tariffNameAdd">
 								</div>
 							</div>
 							<div class="col-md-6">
 								<div class="group form-group">
-									<label class="bmd-label-floating">Rate</label> <input
+									<label class="bmd-label-floating">Rate<span class=impp><sup>*</sup></span></label> <input
 										type="text" class="form-control form-control-sm" name="tariffRateAdd"
 										id="tariffRateAdd">
 								</div>
@@ -121,14 +121,14 @@
 
 							<div class="col-md-6">
 								<div class="group form-group">
-									<label class="bmd-label-floating">Emergency Credit</label> <input
+									<label class="bmd-label-floating">Emergency Credit<span class=impp><sup>*</sup></span></label> <input
 										type="text" class="form-control form-control-sm" name="emergencyCreditAdd"
 										id="emergencyCreditAdd">
 								</div>
 							</div>
 							<div class="col-md-6">
 								<div class="group form-group">
-									<label class="bmd-label-floating">Alarm Credit</label> <input
+									<label class="bmd-label-floating">Alarm Credit<span class=impp><sup>*</sup></span></label> <input
 										type="text" class="form-control form-control-sm" name="alarmCreditAdd"
 										id="alarmCreditAdd">
 								</div>
@@ -136,7 +136,7 @@
 
 							<div class="col-md-6">
 								<div class="group form-group">
-									<label class="bmd-label-floating">Fixed Charge</label> <input
+									<label class="bmd-label-floating">Fixed Charge<span class=impp><sup>*</sup></span></label> <input
 										type="text" class="form-control form-control-sm" name="fixedChargeAdd"
 										id="fixedChargeAdd">
 								</div>
@@ -180,14 +180,14 @@
 						<div class="row">
 							<div class="col-md-6">
 								<div id="formtariffName" class="group form-group">
-									<label class="bmd-label-floating">Name</label> <input
+									<label class="bmd-label-floating">Name<span class=impp><sup>*</sup></span></label> <input
 										type="text" class="form-control form-control-sm" name="tariffNameEdit"
 										id="tariffNameEdit">
 								</div>
 							</div>
 							<div class="col-md-6">
 								<div id="formtariffRate" class="group form-group">
-									<label class="bmd-label-floating">Rate</label> <input
+									<label class="bmd-label-floating">Rate<span class=impp><sup>*</sup></span></label> <input
 										type="text" class="form-control form-control-sm" name="tariffRateEdit"
 										id="tariffRateEdit">
 								</div>
@@ -195,14 +195,14 @@
 
 							<div class="col-md-6">
 								<div id="formemergencyCredit" class="group form-group">
-									<label class="bmd-label-floating">Emergency Credit</label> <input
+									<label class="bmd-label-floating">Emergency Credit<span class=impp><sup>*</sup></span></label> <input
 										type="text" class="form-control form-control-sm" name="emergencyCreditEdit"
 										id="emergencyCreditEdit">
 								</div>
 							</div>
 							<div class="col-md-6">
 								<div id="formalarmCredit" class="group form-group">
-									<label class="bmd-label-floating">Alarm Credit</label> <input
+									<label class="bmd-label-floating">Alarm Credit<span class=impp><sup>*</sup></span></label> <input
 										type="text" class="form-control form-control-sm" name="alarmCreditEdit"
 										id="alarmCreditEdit"> <input type="hidden"
 										id="tariffIdhidden">
@@ -212,7 +212,7 @@
 
 							<div class="col-md-6">
 								<div id="formfixedCharge" class="group form-group">
-									<label class="bmd-label-floating">Fixed Charge</label> <input
+									<label class="bmd-label-floating">Fixed Charge<span class=impp><sup>*</sup></span></label> <input
 										type="text" class="form-control form-control-sm" name="fixedChargeEdit"
 										id="fixedChargeEdit">
 								</div>

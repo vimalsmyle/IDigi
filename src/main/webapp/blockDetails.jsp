@@ -101,7 +101,7 @@
 						<div class="row">
 							<div class="col-md-6">
 								 <div class="form-group">
-									<label for="text">Community:</label>
+									<label for="text">Community:<span class="impp"><sup>*</sup></span></label>
 									<select
 										class="form-control  form-control-sm select2" id="selectcommunityName" name="selectcommunityName">
 									</select>
@@ -112,7 +112,7 @@
 								
 							<div class="col-md-6">
 								<div class="group form-group">
-									<label for="text">Block Name:</label>
+									<label for="text">Block Name:<span class="impp"><sup>*</sup></span></label>
 									<input
 										type="text" class="form-control  form-control-sm" name="blockNameAdd"
 										id="blockNameAdd">
@@ -121,14 +121,14 @@
 
 							<div class="col-md-6">
 								<div class="group form-group">
-									<label class="bmd-label-floating">Location</label> <input
+									<label class="bmd-label-floating">Location:<span class="impp"><sup>*</sup></span></label> <input
 										type="text" class="form-control  form-control-sm  form-control  form-control-sm-sm" name="blockLocationAdd"
 										id="blockLocationAdd">
 								</div>
 							</div>
 							<div class="col-md-6">
 								<div class="group form-group">
-									<label class="bmd-label-floating">Mobile Number</label> <input
+									<label class="bmd-label-floating">Mobile Number<span class="impp"><sup>*</sup></span></label> <input
 										type="text" class="form-control  form-control-sm" name="blockMobileAdd"
 										id="blockMobileAdd">
 								</div>
@@ -136,7 +136,7 @@
 
 							<div class="col-md-6">
 								<div class="group form-group">
-									<label class="bmd-label-floating">Email</label> <input
+									<label class="bmd-label-floating">Email<span class="impp"><sup>*</sup></span></label> <input
 										type="email" class="form-control  form-control-sm" name="blockEmailAdd"
 										id="blockEmailAdd">
 								</div>
@@ -193,14 +193,14 @@
 						<div class="row">
 							<div class="col-md-6">
 								<div id="formcomunityName" class="group form-group">
-									<label class="bmd-label-floating">Community</label> <input
+									<label class="bmd-label-floating">Community<span class="impp"><sup>*</sup></span></label> <input
 										type="text" class="form-control  form-control-sm select2" name="communityNameEdit"
 										id="communityNameEdit" disabled>
 								</div>
 							</div>
 							<div class="col-md-6">
 								<div id="formblockName" class="group form-group">
-									<label class="bmd-label-floating">Block Name</label> <input
+									<label class="bmd-label-floating">Block Name<span class="impp"><sup>*</sup></span></label> <input
 										type="text" class="form-control  form-control-sm" name="blockNameEdit"
 										id="blockNameEdit">
 								</div>
@@ -208,14 +208,14 @@
 
 							<div class="col-md-6">
 								<div id="formblocklocation" class="group form-group">
-									<label class="bmd-label-floating">Location</label> <input
+									<label class="bmd-label-floating">Location<span class="impp"><sup>*</sup></span></label> <input
 										type="text" class="form-control  form-control-sm" name="blockLocationEdit"
 										id="blockLocationEdit">
 								</div>
 							</div>
 							<div class="col-md-6">
 								<div id="formblockMobile" class="group form-group">
-									<label class="bmd-label-floating">Mobile Number</label> <input
+									<label class="bmd-label-floating">Mobile Number<span class="impp"><sup>*</sup></span></label> <input
 										type="text" class="form-control  form-control-sm" name="blockMobileEdit"
 										id="blockMobileEdit">
 								</div>
@@ -223,7 +223,7 @@
 
 							<div class="col-md-6">
 								<div id="formblockEmail" class="group form-group">
-									<label class="bmd-label-floating">Email</label> <input
+									<label class="bmd-label-floating">Email<span class="impp"><sup>*</sup></span></label> <input
 										type="email" class="form-control  form-control-sm" name="blockEmailEdit"
 										id="blockEmailEdit">
 										

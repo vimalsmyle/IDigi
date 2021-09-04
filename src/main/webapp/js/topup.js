@@ -502,7 +502,7 @@ $(document)
 										"ordering" : true,
 										"order" : [ 0, "desc" ],
 										"lengthMenu" : [ 5, 10, 25, 30, 50, 75 ],
-										"pageLength" : 5,
+										"pageLength" : 25,
 										"scrollX" : true,
 										"ajax" : {
 											"url" : "./status/"
@@ -784,101 +784,99 @@ $(document)
 																					30,
 																					50,
 																					75 ],
-																			"pageLength" : 5,
+																			"pageLength" : 25,
 																			"scrollY" : 324,
 																			"scrollX" : false,
 																			"data" : d.data,
 																			"columns" : [
-																					{
-																						"data" : "communityName",
-																						"defaultContent" : ""
-																					},
-																					{
-																						"data" : "blockName",
-																						"defaultContent" : ""
-																					},
-																					{
-																						"data" : "houseNumber",
-																						"defaultContent" : ""
-																					},
-																					{
-																						"data" : "meterID",
-																						"defaultContent" : ""
-																					},
-																					{
-																						"data" : "amount",
-																						"defaultContent" : ""
-																					},
-																					{
-																						"data" : "emergencyCredit",
-																						"defaultContent" : ""
-																					},
-																					{
-																						"data" : "alarmCredit",
-																						"defaultContent" : ""
-																					},
-																					{
-																						"data" : "modeOfPayment",
-																						"defaultContent" : ""
-																					},
-																					{
-																						"data" : "razorPayOrderID",
-																						"defaultContent" : ""
-																					},
-																					{
-																						"data" : "razorPayPaymentID",
-																						"defaultContent" : ""
-																					},
-																					{
-																						"data" : "razorPayRefundID",
-																						"defaultContent" : ""
-																					},
-																					{
-																						"data" : "RazorPayRefundStatus",
-																						"defaultContent" : ""
-																					},
-																					{
-																						"data" : "transactionDate",
-																						"defaultContent" : ""
-																					},
-																					{
-																						"data" : "transactedByUserName",
-																						"defaultContent" : ""
-																					},
-																					{
-																						"data" : "transactedByRoleDescription",
-																						"defaultContent" : ""
-																					},
-																					{
-																						"data" : "RazorPayPaymentStatus",
-																						"defaultContent" : ""
-																					},
-																					{
-																						"mData" : "action",
-																						"render" : function(
-																								data,
-																								type,
-																								row) {
-																							if (row.Status == "Failed") {
-																								return "<a onclick='getDeleteTransactionID("
-																										+ row.transactionID
-																										+ ")'>"
-																										+ "<i class='material-icons' style='color:#17e9e9;cursor:pointer'>delete</i>"
-																										+ "</a>";
+																				{
+																					"data" : "communityName",
+																					"defaultContent" : ""
+																				},
+																				{
+																					"data" : "blockName",
+																					"defaultContent" : ""
+																				},
+																				{
+																					"data" : "houseNumber",
+																					"defaultContent" : ""
+																				},
+																				{
+																					"data" : "meterID",
+																					"defaultContent" : ""
+																				},
+																				{
+																					"data" : "amount",
+																					"defaultContent" : ""
+																				},
+																				{
+																					"data" : "emergencyCredit",
+																					"defaultContent" : ""
+																				},
+																				{
+																					"data" : "alarmCredit",
+																					"defaultContent" : ""
+																				},
+																				{
+																					"data" : "modeOfPayment",
+																					"defaultContent" : ""
+																				},
+																				{
+																					"data" : "razorPayOrderID",
+																					"defaultContent" : ""
+																				},
+																				{
+																					"data" : "razorPayPaymentID",
+																					"defaultContent" : ""
+																				},
+																				{
+																					"data" : "razorPayRefundID",
+																					"defaultContent" : ""
+																				},
+																				{
+																					"data" : "RazorPayRefundStatus",
+																					"defaultContent" : ""
+																				},
+																				{
+																					"data" : "transactionDate",
+																					"defaultContent" : ""
+																				},
+																				{
+																					"data" : "transactedByUserName",
+																					"defaultContent" : ""
+																				},
+																				{
+																					"data" : "transactedByRoleDescription",
+																					"defaultContent" : ""
+																				},
+																				{
+																					"data" : "Status",
+																					"defaultContent" : ""
+																				},
+																				{
+																					"mData" : "action",
+																					"render" : function(data,
+																							type, row) {
+																						if (row.Status == "Failed") {
+																							return "<a onclick='getDeleteTransactionID("
+																									+ row.transactionID
+																									+ ")'>"
+																									+ "<i class='material-icons' style='color:#17e9e9;cursor:pointer'>delete</i>"
+																									+ "</a>";
 
-																							} else if (row.Status == "Passed"
-																									|| row.Status == "Pending") {
-																								return "<a onclick='getReceiptTransactionID("
-																										+ row.transactionID
-																										+ ")'>"
-																										+ "<i class='material-icons' style='color:#17e9e9;cursor:pointer'>receipt</i>"
-																										+ "</a>"
-																							} else if (row.Status == "Pending...waiting for acknowledge") {
-																								return "---"
-																							}
-
+																						} else if (row.Status == "Passed"
+																								|| row.Status == "Pending") {
+																							return "<a onclick='getReceiptTransactionID("
+																									+ row.transactionID
+																									+ ")'>"
+																									+ "<i class='material-icons' style='color:#17e9e9;cursor:pointer'>receipt</i>"
+																									+ "</a>"
+																						} else if (row.Status == "Pending...waiting for acknowledge") {
+																							return "---"
 																						}
-																					} ],
+
+																					}
+																				} ],
 																			"columnDefs" : [
 																					{
 																						// orderable

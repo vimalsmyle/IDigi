@@ -95,7 +95,7 @@ $(document)
 											}
 										
 										else if($("#selectcommandType").val()=="6"){
-											if($("#valueText").val() == "Select Tariff" || $("#valueText").val() == ""){
+											if($("#start_date").val() == "" || $("#start_date").val() == ""){
 												
 												swal.fire({
 													  title: "error",
@@ -106,11 +106,38 @@ $(document)
 												
 											}	
 											var json={};
-											json["value"] = $("#valueText").val();
+											json["value"] = $("#start_date").val();
 											json["parameter_id"] = $("#selectcommandType").val();
 											
 											}else if($("#selectcommandType").val()=="7"){
 												
+												if($("#start_date").val() == "" || $("#start_date").val() == ""){
+													
+													swal.fire({
+														  title: "error",
+														  text: "Select Start Date",
+														  icon: "error"
+														})
+													return false;
+													
+												}	
+												var json={};
+												json["value"] = $("#start_date").val();
+												json["parameter_id"] = $("#selectcommandType").val();
+												
+												if($("#end_date").val() == "" || $("#end_date").val() == ""){
+													
+													swal.fire({
+														  title: "error",
+														  text: "Select End Date",
+														  icon: "error"
+														})
+													return false;
+													
+												}	
+												var json={};
+												json["value"] = $("#end_date").val();
+												json["parameter_id"] = $("#selectcommandType").val();
 												
 												}else if($("#selectcommandType").val()=="8"){
 													if($("#valueText").val() <= "2" && $("#valueText").val() >= "1440"){
@@ -128,7 +155,7 @@ $(document)
 													json["parameter_id"] = $("#selectcommandType").val();
 													
 													}else if($("#selectcommandType").val()=="9"){
-														var reg =/[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$/;
+														var reg =/[0-9]{1,10}$/;
 														if($("#valueText").val() == ""){
 														
 															swal.fire({
@@ -156,17 +183,19 @@ $(document)
 														json["parameter_id"] = $("#selectcommandType").val();
 														
 														}else if($("#selectcommandType").val()=="13"){
-															$("#confValue").remove();
-															$("#row").append(`<div class="col-md-4" id="confValue" class="valueText"
-																												>
-																												<div id="formtariff" class="group form-group">
-																													<label class="bmd-label-floating select-label">Sync Time<sup
-																														class="imp">*</sup></label> 
-																														
-																									<input type="text" id="reading" name="reading" class="form-control">
-																														
-																												</div>
-																											</div>`);
+															if($("#sync_interval").val() == ""){
+																
+																swal.fire({
+																	  title: "error",
+																	  text: "Select Sync Time",
+																	  icon: "error"
+																	})
+																return false;
+																
+															}	
+															var json={};
+															json["value"] = $("#sync_interval").val();
+															json["parameter_id"] = $("#selectcommandType").val();
 															}
 										array.push(json);
 										data1["communityID"]=$("#selectcommunityName").val();

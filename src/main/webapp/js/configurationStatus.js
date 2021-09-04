@@ -32,7 +32,7 @@ $(document)
 												"ordering" : true,
 												"order" : [ 0, "desc" ],
 												"lengthMenu" : [ 5, 10, 25, 30, 50, 75 ],
-												"pageLength" : 5,
+												"pageLength" : 25,
 												"scrollY" : 324,
 												"scrollX" : true,
 												"ajax" : {
@@ -141,6 +141,7 @@ $(document)
 													$('#configurationstatusTable').dataTable()._fnAjaxUpdate();
 													$("#configurationstatusTable_wrapper").hide();
 													$("#filter").modal("hide");
+													
 													$("#configurationstatusTable1").show();
 													
 													var hCols = [ 3, 4 ];
@@ -158,12 +159,28 @@ $(document)
 																	"ordering" : true,
 																	"order" : [ 0, "desc" ],
 																	"lengthMenu" : [ 5, 10, 25, 30, 50, 75 ],
-																	"pageLength" : 5,
+																	"pageLength" : 25,
 																	"scrollY" : 324,
 																	"scrollX" : false,
 																	"data" : d.data,
 																	"columns" : [
-																		 ],
+																		{
+																			"data" : "miuID",
+																			"defaultContent": ""
+																		},
+																		{
+																			"mData" : "action",
+																			"render" : function(data, type, row) {
+																				
+																				return "<a href=# id=CustomerMeters data-toggle=modal data-target=#myCustomerMeters onclick='getCustomerMeters(\""
+																				+ row.miuID
+																				+ "\")'>"
+																				+ "Multiple"
+																				+ "</a>"
+																				
+																			}
+
+																		} ],
 																"columnDefs" : [ {
 																//	orderable : false,
 																//	targets : 5, visible:  (((sessionStorage.getItem("roleID") == 1) || (sessionStorage.getItem("roleID") == 2) || (sessionStorage.getItem("roleID") == 3)) && (!(sessionStorage.getItem("roleID") == 5) || !(sessionStorage.getItem("roleID") == 4)))
@@ -299,7 +316,7 @@ function getCustomerMeters(muid){
 										"ordering" : true,
 										"order" : [ 0, "desc" ],
 										"lengthMenu" : [ 5, 10, 25, 30, 50, 75 ],
-										"pageLength" : 5,
+										"pageLength" : 25,
 										"scrollX" : true,
 										"data":item.commands,
 						
