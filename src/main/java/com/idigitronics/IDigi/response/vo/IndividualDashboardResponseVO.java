@@ -3,8 +3,6 @@
  */
 package com.idigitronics.IDigi.response.vo;
 
-import java.util.List;
-
 /**
  * @author VmL
  *
@@ -19,12 +17,12 @@ public class IndividualDashboardResponseVO {
 	private String payType;
 	private float reading;
 	private int consumption;
-	private float balance;
-	private float emergencyCredit;
+	private String balance;
+	private String emergencyCredit;
 	private int battery;
 	private String valveStatus;
 	private String valveStatusColor;
-	private float tariff;
+	private String tariff;
 	private String tariffName;
 	private String doorOpenTamper;
 	private String magneticTamper;
@@ -38,7 +36,7 @@ public class IndividualDashboardResponseVO {
 	private String vacationStatus;
 	private String vacationColor;
 	private String lastRechargeDate;
-	private int lastTopupAmount;
+	private String lastTopupAmount;
 	
 	public String getMiuID() {
 		return miuID;
@@ -96,19 +94,19 @@ public class IndividualDashboardResponseVO {
 		this.consumption = consumption;
 	}
 
-	public float getBalance() {
+	public String getBalance() {
 		return balance;
 	}
 
-	public void setBalance(float balance) {
+	public void setBalance(String balance) {
 		this.balance = balance;
 	}
 
-	public float getEmergencyCredit() {
+	public String getEmergencyCredit() {
 		return emergencyCredit;
 	}
 
-	public void setEmergencyCredit(float emergencyCredit) {
+	public void setEmergencyCredit(String emergencyCredit) {
 		this.emergencyCredit = emergencyCredit;
 	}
 
@@ -136,11 +134,11 @@ public class IndividualDashboardResponseVO {
 		this.valveStatusColor = valveStatusColor;
 	}
 
-	public float getTariff() {
+	public String getTariff() {
 		return tariff;
 	}
 
-	public void setTariff(float tariff) {
+	public void setTariff(String tariff) {
 		this.tariff = tariff;
 	}
 
@@ -248,11 +246,11 @@ public class IndividualDashboardResponseVO {
 		this.lastRechargeDate = lastRechargeDate;
 	}
 
-	public int getLastTopupAmount() {
+	public String getLastTopupAmount() {
 		return lastTopupAmount;
 	}
 
-	public void setLastTopupAmount(int lastTopupAmount) {
+	public void setLastTopupAmount(String lastTopupAmount) {
 		this.lastTopupAmount = lastTopupAmount;
 	}
 
