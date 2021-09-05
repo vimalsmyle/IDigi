@@ -452,7 +452,7 @@ public class DashboardDAO {
 				dashboardvo.setCustomerUniqueID(rs.getString("CustomerUniqueID"));
 				
 				String query = "SELECT dbl.ReadingID, dbl.MainBalanceLogID, dbl.CustomerMeterID, dbl.MIUID, cmd.MeterSerialNumber, dbl.Tariff, dbl.Reading, dbl.Balance, dbl.EmergencyCredit, dbl.ValveStatus, dbl.BatteryVoltage, "
-						+ "dbl.LowBattery, dbl.DoorOpenTamper, dbl.MagneticTamper, dbl.RTCFault, dbl.Vacation, dbl.LowBalance, dbl.LogDate, ms.MeterSize, ms.PerUnitValue FROM displaybalancelog AS dbl LEFT JOIN customermeterdetails AS cmd ON cmd.CustomerMeterID = dbl.CustomerMeterID LEFT JOIN metersize AS ms ON ms.MeterSizeID = cmd.MeterSizeID WHERE cmd.CustomerID = ? AND cmd.MeterType = " + type;
+						+ "dbl.LowBattery, dbl.DoorOpenTamper, dbl.MagneticTamper, dbl.RTCFault, dbl.Vacation, dbl.LowBalance, dbl.LogDate, ms.MeterSize, ms.PerUnitValue FROM displaybalancelog AS dbl LEFT JOIN customermeterdetails AS cmd ON cmd.CustomerMeterID = dbl.CustomerMeterID LEFT JOIN metersize AS ms ON ms.MeterSizeID = cmd.MeterSizeID WHERE cmd.CustomerID = ? AND cmd.MeterType = '" + type+"'";
 				
 				/*String oldquery = "SELECT DISTINCT c.CommunityName, b.BlockName, cd.FirstName,cd.CustomerUniqueID, cd.LastName, cd.HouseNumber, cmd.MeterSerialNumber, dbl.ReadingID, dbl.MainBalanceLogID, dbl.EmergencyCredit, \r\n" + 
 						"dbl.MIUID, dbl.Reading, dbl.Balance, dbl.BatteryVoltage, dbl.LowBattery, dbl.Tariff, dbl.ValveStatus, dbl.DoorOpenTamper, dbl.MagneticTamper, dbl.RTCFault, dbl.Vacation, dbl.LowBalance, dbl.LogDate\r\n" + 

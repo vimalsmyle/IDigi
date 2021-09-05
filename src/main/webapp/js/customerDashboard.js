@@ -23,6 +23,7 @@ $(document)
 							+ $("#comName").val() + "/"
 							+ $("#blockName").val()
 							+ "/0/"+filterId);
+					var responseD;
 					
 					$('#liveTable')
 							.DataTable(
@@ -95,7 +96,8 @@ $(document)
 											"data" : function(search) {
 											},
 											"complete" : function(json) {
-												console.log(json.data);
+												console.log(json.responseJSON);
+												responseD = json.responseJSON;
 												return json.data;
 											},
 										},
@@ -168,7 +170,12 @@ $(document)
 													title : 'Dashboard',
 												// className: 'custom-btn fa
 												// fa-file-excel-o'
-												},
+													
+													action:function(e,dt,node,config){
+														executeDownloadDashboard(responseD);
+													}
+													
+												}/*,
 
 												{
 													extend : 'pdf',
@@ -181,8 +188,11 @@ $(document)
 													title : 'Dashboard',
 													// className: 'custom-btn fa
 													// fa-file-pdf-o',
-													pageSize : 'LEGAL'
-												} ],
+													pageSize : 'LEGAL',
+													action:function(e,dt,node,config){
+														executeDownloadDashboard(responseD);
+													}
+												}*/ ],
 										initComplete : function() {
 											$('.buttons-excel')
 													.html(
@@ -196,6 +206,39 @@ $(document)
 
 				
 				});
+
+
+function executeDownloadDashboard(data){
+	console.log(data);
+	
+	bootbox.confirm("ARE YOU SURE TO DOWNLOAD EXCEL", function(result) {
+		// alert(result);
+		if (result == true) {
+			$.ajax({
+				type : "POST",
+				contentType : "application/json",
+				url : "./dashboard/excel",
+				data : JSON
+				.stringify(data),
+				dataType : "JSON",
+				success : function(data) {
+					// alert("Success====" + data.result);
+					if (data.result == "Success") {
+						location.reload();
+
+					} else {
+						bootbox.alert(data.Message);
+						return false;
+					}
+				}
+			});
+		} else if (result == false) {
+			// alert("@"+false)
+
+		}
+	});
+	
+}
 
 function getCustomerMeters(CRNNumber) {
 	$
@@ -566,7 +609,7 @@ $("#dashboardFilter")
 													//	className: 'custom-btn fa fa-file-pdf-o'
 												},
 												
-												{
+											/*	{
 										               className: 'customButton',
 										               text : "Adv Serach",
 										              // extend : 'ADv',
@@ -578,7 +621,7 @@ $("#dashboardFilter")
 										                        }
 										                    );
 										                }
-										            },
+										            },*/
 													{
 										                text: 'Reset',
 										                action: function ( e, dt, node, config ) {
@@ -588,7 +631,7 @@ $("#dashboardFilter")
 										               
 										                action: function ( e, dt, button, config ) {
 										                   
-										                	window.location = "LiveDashBoard.jsp"
+										                	location.reload();
 										                }
 										            }
 													],
