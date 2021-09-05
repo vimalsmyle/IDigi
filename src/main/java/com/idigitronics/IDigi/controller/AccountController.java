@@ -154,7 +154,7 @@ public class AccountController {
 		return billingresponsevo;
 	}
 	
-	@RequestMapping(value = "/billing/excel", method = RequestMethod.POST, produces = "application/excel", consumes = "application/json")
+	@RequestMapping(value = "/billing/excel", method = RequestMethod.POST, produces = "application/vnd.ms-excel", consumes = "application/json")
 	public ResponseEntity<InputStreamResource> dashboardFile(@RequestBody BillingResponseVO billingResponseVO) throws SQLException, FileNotFoundException {
 
 		ResponseVO responsevo = new ResponseVO();

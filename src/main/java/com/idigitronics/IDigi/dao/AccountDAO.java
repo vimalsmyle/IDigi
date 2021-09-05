@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -972,6 +973,8 @@ public class AccountDAO {
 				billingresponsevo.setIndividualbills(individualbills);
 				billlist.add(billingresponsevo);
 				
+				billlist.removeIf(e -> e.getIndividualbills().size()==0);
+				
 			}
 
 		} catch (Exception ex) {
@@ -1080,31 +1083,29 @@ public class AccountDAO {
             org.apache.poi.ss.usermodel.Cell cell5 = data.createCell(++billingColumnCount);
             cell5.setCellValue(billingResponseVO.getData().get(i).getTotalAmount());
             
-            int k = spreadsheet.getLastRowNum();
-            
             for(int j = 0; j < billingResponseVO.getData().get(i).getIndividualbills().size(); j++) {
-            	
-            	XSSFRow billingData = spreadsheet.createRow(k++);
             	
             	individualBillingColumnCount = 5;
             	
-            	org.apache.poi.ss.usermodel.Cell cell6 = billingData.createCell(individualBillingColumnCount);
+            	org.apache.poi.ss.usermodel.Cell cell6 = data.createCell(individualBillingColumnCount);
             	cell6.setCellValue(billingResponseVO.getData().get(i).getIndividualbills().get(j).getMiuID());
             	
-            	org.apache.poi.ss.usermodel.Cell cell7 = billingData.createCell(++individualBillingColumnCount);
+            	org.apache.poi.ss.usermodel.Cell cell7 = data.createCell(++individualBillingColumnCount);
             	cell7.setCellValue(billingResponseVO.getData().get(i).getIndividualbills().get(j).getMeterType());
             	
-            	org.apache.poi.ss.usermodel.Cell cell8 = billingData.createCell(++individualBillingColumnCount);
+            	org.apache.poi.ss.usermodel.Cell cell8 = data.createCell(++individualBillingColumnCount);
             	cell8.setCellValue(billingResponseVO.getData().get(i).getIndividualbills().get(j).getPreviousReading());
             	
-            	org.apache.poi.ss.usermodel.Cell cell9 = billingData.createCell(++individualBillingColumnCount);
+            	org.apache.poi.ss.usermodel.Cell cell9 = data.createCell(++individualBillingColumnCount);
             	cell9.setCellValue(billingResponseVO.getData().get(i).getIndividualbills().get(j).getPresentReading());
             	
-            	org.apache.poi.ss.usermodel.Cell cell10 = billingData.createCell(++individualBillingColumnCount);
+            	org.apache.poi.ss.usermodel.Cell cell10 = data.createCell(++individualBillingColumnCount);
             	cell10.setCellValue(billingResponseVO.getData().get(i).getIndividualbills().get(j).getConsumption());
             	
-            	org.apache.poi.ss.usermodel.Cell cell11 = billingData.createCell(++individualBillingColumnCount);
+            	org.apache.poi.ss.usermodel.Cell cell11 = data.createCell(++individualBillingColumnCount);
             	cell11.setCellValue(billingResponseVO.getData().get(i).getIndividualbills().get(j).getTariff());
+            	
+            	if(j < billingResponseVO.getData().get(i).getIndividualbills().size() - 1) { data = spreadsheet.createRow(spreadsheet.getLastRowNum()+1); }
             	
             }
             
@@ -1148,7 +1149,7 @@ public class AccountDAO {
         responsevo.setResult("Success");
 		responsevo.setLocation(drivename);
 		
-		responsevo.setFileName("FilterDashboard.xlsx");
+		responsevo.setFileName("Billing.xlsx");
         
 		return responsevo;
 		

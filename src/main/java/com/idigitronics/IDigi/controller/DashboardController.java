@@ -10,7 +10,10 @@ import java.sql.SQLException;
 
 import org.apache.log4j.Logger;
 import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -53,8 +56,8 @@ public class DashboardController {
 		return dasboardresponsevo;
 	}
 	
-	@RequestMapping(value = "/dashboard/excel", method = RequestMethod.POST, produces = "application/excel", consumes = "application/json")
-	public ResponseEntity<InputStreamResource> dashboardFile(@RequestBody DashboardResponseVO dashboardResponseVO) throws SQLException, FileNotFoundException {
+	@RequestMapping(value = "/dashboard/excel", method = RequestMethod.POST, produces = "application/vnd.ms-excel", consumes = "application/json")
+	public ResponseEntity<File> dashboardFile(@RequestBody DashboardResponseVO dashboardResponseVO) throws SQLException, FileNotFoundException {
 
 		ResponseVO responsevo = new ResponseVO();
 		DashboardDAO dashboarddao = new DashboardDAO();
@@ -62,11 +65,17 @@ public class DashboardController {
 		responsevo = dashboarddao.dashboardFile(dashboardResponseVO);
 		
 		File file = new File(responsevo.getLocation() + responsevo.getFileName());
+		
 	    InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
 		
 		ResponseEntity<InputStreamResource> response = new ResponseEntity<InputStreamResource>(resource, HttpStatus.OK);
 		
-		return response;
+		return ResponseEntity.ok()
+		        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + responsevo.getFileName())
+		        .contentType(MediaType.parseMediaType("application/vnd.ms-excel"))
+		        .body(file);
+		
+//		return response;
 	}
 	
 	@RequestMapping(value = "/filterdashboard/{type}/{communityName}/{blockName}", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
@@ -96,6 +105,10 @@ public class DashboardController {
 		
 		ResponseEntity<InputStreamResource> response = new ResponseEntity<InputStreamResource>(resource, HttpStatus.OK);
 		
+//		return ResponseEntity.ok()
+//		        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + responsevo.getFileName())
+//		        .contentType(MediaType.parseMediaType("application/vnd.ms-excel"))
+//		        .body(file);
 		return response;
 	}
 	

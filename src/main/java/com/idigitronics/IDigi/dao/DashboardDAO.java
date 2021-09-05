@@ -320,58 +320,56 @@ public class DashboardDAO {
             Cell cell5 = data.createCell(++dataColumnCount);
             cell5.setCellValue(dashboardResponseVO.getData().get(i).getHouseNumber());
             
-            int k = spreadsheet.getLastRowNum();
-            
             for(int j = 0; j < dashboardResponseVO.getData().get(i).getDasboarddata().size(); j++) {
-            	
-            	XSSFRow dashboardData = spreadsheet.createRow(k++);
             	
             	int dashboarDataColumnCount = 5;
             	
-            	Cell cell6 = dashboardData.createCell(dashboarDataColumnCount);
+            	Cell cell6 = data.createCell(dashboarDataColumnCount);
             	cell6.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getMiuID());
             	
-            	Cell cell7 = dashboardData.createCell(++dashboarDataColumnCount);
+            	Cell cell7 = data.createCell(++dashboarDataColumnCount);
             	cell7.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getMeterSerialNumber());
             	
-            	Cell cell8 = dashboardData.createCell(++dashboarDataColumnCount);
+            	Cell cell8 = data.createCell(++dashboarDataColumnCount);
             	cell8.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getReading());
             	
-            	Cell cell9 = dashboardData.createCell(++dashboarDataColumnCount);
+            	Cell cell9 = data.createCell(++dashboarDataColumnCount);
             	cell9.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getConsumption());
             	
-            	Cell cell10 = dashboardData.createCell(++dashboarDataColumnCount);
+            	Cell cell10 = data.createCell(++dashboarDataColumnCount);
             	cell10.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getBalance());
             	
-            	Cell cell11 = dashboardData.createCell(++dashboarDataColumnCount);
+            	Cell cell11 = data.createCell(++dashboarDataColumnCount);
             	cell11.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getEmergencyCredit());
             	
-            	Cell cell12 = dashboardData.createCell(++dashboarDataColumnCount);
+            	Cell cell12 = data.createCell(++dashboarDataColumnCount);
             	cell12.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getPayType());
             	
-            	Cell cell13 = dashboardData.createCell(++dashboarDataColumnCount);
+            	Cell cell13 = data.createCell(++dashboarDataColumnCount);
             	cell13.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getBattery());
             	
-            	Cell cell14 = dashboardData.createCell(++dashboarDataColumnCount);
+            	Cell cell14 = data.createCell(++dashboarDataColumnCount);
             	cell14.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getValveStatus());
             	
-            	Cell cell15 = dashboardData.createCell(++dashboarDataColumnCount);
+            	Cell cell15 = data.createCell(++dashboarDataColumnCount);
             	cell15.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getTariff());
             	
-            	Cell cell16 = dashboardData.createCell(++dashboarDataColumnCount);
+            	Cell cell16 = data.createCell(++dashboarDataColumnCount);
             	cell16.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getDoorOpenTamper());
             	
-            	Cell cell17 = dashboardData.createCell(++dashboarDataColumnCount);
+            	Cell cell17 = data.createCell(++dashboarDataColumnCount);
             	cell17.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getMagneticTamper());
             	
-            	Cell cell18 = dashboardData.createCell(++dashboarDataColumnCount);
+            	Cell cell18 = data.createCell(++dashboarDataColumnCount);
             	cell18.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getTimeStamp());
             	
-            	Cell cell19 = dashboardData.createCell(++dashboarDataColumnCount);
+            	Cell cell19 = data.createCell(++dashboarDataColumnCount);
             	cell19.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getVacationStatus());
             	
-            	Cell cell20 = dashboardData.createCell(++dashboarDataColumnCount);
+            	Cell cell20 = data.createCell(++dashboarDataColumnCount);
             	cell20.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getLastTopupAmount());
+            	
+            	if(j < dashboardResponseVO.getData().get(i).getDasboarddata().size() - 1) { data = spreadsheet.createRow(spreadsheet.getLastRowNum()+1); }
             	
             }
         	
@@ -654,54 +652,54 @@ public class DashboardDAO {
             
             for(int j = 0; j < dashboardResponseVO.getData().get(i).getDasboarddata().size(); j++) {
             	
-            	XSSFRow dashboardData = spreadsheet.createRow(spreadsheet.getLastRowNum()+1);
-            	
             	int dashboarDataColumnCount = 5;
             	
-            	Cell cell6 = dashboardData.createCell(dashboarDataColumnCount);
+            	Cell cell6 = data.createCell(dashboarDataColumnCount);
             	cell6.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getMiuID());
             	
-            	Cell cell7 = dashboardData.createCell(++dashboarDataColumnCount);
+            	Cell cell7 = data.createCell(++dashboarDataColumnCount);
             	cell7.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getMeterSerialNumber());
             	
-            	Cell cell8 = dashboardData.createCell(++dashboarDataColumnCount);
+            	Cell cell8 = data.createCell(++dashboarDataColumnCount);
             	cell8.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getReading());
             	
-            	Cell cell9 = dashboardData.createCell(++dashboarDataColumnCount);
+            	Cell cell9 = data.createCell(++dashboarDataColumnCount);
             	cell9.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getConsumption());
             	
-            	Cell cell10 = dashboardData.createCell(++dashboarDataColumnCount);
+            	Cell cell10 = data.createCell(++dashboarDataColumnCount);
             	cell10.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getBalance());
             	
-            	Cell cell11 = dashboardData.createCell(++dashboarDataColumnCount);
+            	Cell cell11 = data.createCell(++dashboarDataColumnCount);
             	cell11.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getEmergencyCredit());
             	
-            	Cell cell12 = dashboardData.createCell(++dashboarDataColumnCount);
+            	Cell cell12 = data.createCell(++dashboarDataColumnCount);
             	cell12.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getPayType());
             	
-            	Cell cell13 = dashboardData.createCell(++dashboarDataColumnCount);
+            	Cell cell13 = data.createCell(++dashboarDataColumnCount);
             	cell13.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getBattery());
             	
-            	Cell cell14 = dashboardData.createCell(++dashboarDataColumnCount);
+            	Cell cell14 = data.createCell(++dashboarDataColumnCount);
             	cell14.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getValveStatus());
             	
-            	Cell cell15 = dashboardData.createCell(++dashboarDataColumnCount);
+            	Cell cell15 = data.createCell(++dashboarDataColumnCount);
             	cell15.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getTariff());
             	
-            	Cell cell16 = dashboardData.createCell(++dashboarDataColumnCount);
+            	Cell cell16 = data.createCell(++dashboarDataColumnCount);
             	cell16.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getDoorOpenTamper());
             	
-            	Cell cell17 = dashboardData.createCell(++dashboarDataColumnCount);
+            	Cell cell17 = data.createCell(++dashboarDataColumnCount);
             	cell17.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getMagneticTamper());
             	
-            	Cell cell18 = dashboardData.createCell(++dashboarDataColumnCount);
+            	Cell cell18 = data.createCell(++dashboarDataColumnCount);
             	cell18.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getTimeStamp());
             	
-            	Cell cell19 = dashboardData.createCell(++dashboarDataColumnCount);
+            	Cell cell19 = data.createCell(++dashboarDataColumnCount);
             	cell19.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getVacationStatus());
             	
-            	Cell cell20 = dashboardData.createCell(++dashboarDataColumnCount);
+            	Cell cell20 = data.createCell(++dashboarDataColumnCount);
             	cell20.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getLastTopupAmount());
+            	
+            	if(j < dashboardResponseVO.getData().get(i).getDasboarddata().size() - 1) { data = spreadsheet.createRow(spreadsheet.getLastRowNum()+1); }
             	
             }
         	
