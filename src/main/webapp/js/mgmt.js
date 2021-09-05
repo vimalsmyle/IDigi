@@ -36,6 +36,10 @@ return json.data;
  },*/{
 "data" : "userID"
 },{
+"data" : "emailID"
+},{
+"data" : "mobileNumber"
+},{
 "data" : "userName"
 },{
 "data" : "role"
@@ -116,6 +120,30 @@ $(document)
 										                            message: 'Please select Block.'
 										                        }
 										                    }
+													},
+													userIDAdd : {
+														message : 'Email is not valid',
+														validators : {
+															notEmpty : {
+																message : 'Email is required and cannot be empty'
+															}/*,
+															regexp : {
+																regexp : /^[a-zA-Z0-9]+$/,
+																message : 'The Community Address can only consist of alphabetical and number'
+															}*/
+														}
+													},
+													userIDAdd : {
+														message : 'Mobile is not valid',
+														validators : {
+															notEmpty : {
+																message : 'Mobile is required and cannot be empty'
+															},
+															regexp : {
+																regexp : /^[0-9]{10}$/,
+																message : 'Mobile can only consist of number'
+															}
+														}
 													},
 													userIDAdd : {
 														message : 'User ID is not valid',

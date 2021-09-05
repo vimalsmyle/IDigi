@@ -77,6 +77,8 @@
 											<thead class="bg-primary text-white">
 												<tr>
 													<th>User ID</th>
+													<th>Email</th>
+													<th>Mobile</th>
 													<th>User Name</th>
 													<th>Role</th>
 													<th>Community Name</th>
@@ -161,6 +163,24 @@
 										id="userIDAdd">
 								</div>
 							</div>
+							
+							
+							<div class="col-md-6">
+								<div class="group form-group">
+									<label class="bmd-label-floating">Email</label> <input
+										type="email" class="form-control" name="emailAdd"
+										id="emailAdd">
+								</div>
+							</div>
+							
+							<div class="col-md-6">
+								<div class="group form-group">
+									<label class="bmd-label-floating">Mobile no.</label> <input
+										type="text" class="form-control" name="mobileAdd"
+										id="mobileAdd">
+								</div>
+							</div>
+							
 							<div class="col-md-6">
 								<div class="group form-group">
 									<label class="bmd-label-floating">User Name</label> <input
