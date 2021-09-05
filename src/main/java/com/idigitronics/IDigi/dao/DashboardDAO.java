@@ -320,9 +320,11 @@ public class DashboardDAO {
             Cell cell5 = data.createCell(++dataColumnCount);
             cell5.setCellValue(dashboardResponseVO.getData().get(i).getHouseNumber());
             
+            int k = spreadsheet.getLastRowNum();
+            
             for(int j = 0; j < dashboardResponseVO.getData().get(i).getDasboarddata().size(); j++) {
             	
-            	XSSFRow dashboardData = spreadsheet.createRow(spreadsheet.getLastRowNum()+1);
+            	XSSFRow dashboardData = spreadsheet.createRow(k++);
             	
             	int dashboarDataColumnCount = 5;
             	
