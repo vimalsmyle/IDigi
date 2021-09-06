@@ -5,6 +5,7 @@ package com.idigitronics.IDigi.controller;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.google.gson.Gson;
 import com.idigitronics.IDigi.bo.AccountBO;
 import com.idigitronics.IDigi.dao.AccountDAO;
+import com.idigitronics.IDigi.dao.DashboardDAO;
 import com.idigitronics.IDigi.dao.ExtraMethodsDAO;
 import com.idigitronics.IDigi.exceptions.BusinessException;
 import com.idigitronics.IDigi.request.vo.CheckOutRequestVO;
@@ -33,6 +35,7 @@ import com.idigitronics.IDigi.request.vo.TopUpRequestVO;
 import com.idigitronics.IDigi.response.vo.BillingResponseVO;
 import com.idigitronics.IDigi.response.vo.ConfigurationResponseVO;
 import com.idigitronics.IDigi.response.vo.ConfigurationStatusResponseVO;
+import com.idigitronics.IDigi.response.vo.DashboardResponseVO;
 import com.idigitronics.IDigi.response.vo.ResponseVO;
 import com.idigitronics.IDigi.response.vo.StatusResponseVO;
 
@@ -149,6 +152,21 @@ public class AccountController {
 		billingresponsevo.setData(accountdao.getbillingdetails(roleid, id, filterCid));
 
 		return billingresponsevo;
+	}
+	
+	@RequestMapping(value = "/billing/excel", method = RequestMethod.POST, produces = "application/vnd.ms-excel", consumes = "application/json")
+	public ResponseEntity<InputStreamResource> dashboardFile(@RequestBody BillingResponseVO billingResponseVO) throws SQLException, FileNotFoundException {
+
+		ResponseVO responsevo = new ResponseVO();
+
+		responsevo = accountdao.billingFile(billingResponseVO);
+		
+		File file = new File(responsevo.getLocation() + responsevo.getFileName());
+	    InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
+		
+		ResponseEntity<InputStreamResource> response = new ResponseEntity<InputStreamResource>(resource, HttpStatus.OK);
+		
+		return response;
 	}
 	
 	@RequestMapping(value = "/paybill", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
