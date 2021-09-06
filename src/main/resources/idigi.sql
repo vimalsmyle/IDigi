@@ -78,7 +78,7 @@ CREATE TABLE `balancelog` (
   `LowBalance` tinyint(2) DEFAULT NULL,
   `LogDate` datetime NOT NULL,
   PRIMARY KEY (`ReadingID`)
-) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=70 DEFAULT CHARSET=latin1;
 
 /*Data for the table `balancelog` */
 
@@ -124,7 +124,34 @@ insert  into `balancelog`(`ReadingID`,`MIUID`,`CommunityID`,`BlockID`,`CustomerI
 (39,'3344',1,1,1,3,2,'33445566','IDIGI1','Water','00:00:05',1440,'Postpaid',90.00,1,1,0.00,3,20.00,40.00,10,57.00,0,0,0,0,0,0,'2021-08-27 19:57:54'),
 (40,'3344',1,1,1,3,2,'33445566','IDIGI1','Water','00:00:05',1440,'Postpaid',90.00,1,1,0.00,3,20.00,40.00,10,58.00,0,0,0,0,0,0,'2021-08-27 20:57:58'),
 (41,'3344',1,1,1,3,2,'33445566','IDIGI1','Water','00:00:05',1440,'Postpaid',90.00,1,1,0.00,3,20.00,40.00,10,59.00,0,0,0,0,0,0,'2021-08-29 20:58:02'),
-(42,'3344',1,1,1,3,2,'33445566','IDIGI1','Water','00:00:05',1440,'Postpaid',90.00,1,1,0.00,3,20.00,40.00,10,62.00,0,0,0,0,0,0,'2021-09-01 20:58:06');
+(42,'3344',1,1,1,3,2,'33445566','IDIGI1','Water','00:00:05',1440,'Postpaid',90.00,1,1,0.00,3,20.00,40.00,10,62.00,0,0,0,0,0,0,'2021-08-31 20:58:06'),
+(43,'9889',2,2,6,8,1,'98899889','KVK0001','Gas','00:00:05',1440,'Prepaid',95.00,1,1,21.00,1,10.00,20.00,0,1.00,0,0,0,0,0,0,'2021-08-31 13:33:27'),
+(44,'9889',2,2,6,8,1,'98899889','KVK0001','Gas','00:00:05',1440,'Prepaid',95.00,1,1,100.00,1,10.00,20.00,0,5.00,0,0,0,0,0,0,'2021-09-01 13:33:59'),
+(45,'9889',2,2,6,8,1,'98899889','KVK0001','Gas','00:00:05',1440,'Prepaid',95.00,1,1,100.00,1,10.00,20.00,0,10.00,0,0,0,0,0,0,'2021-09-01 13:34:09'),
+(46,'9889',2,2,6,8,1,'98899889','KVK0001','Gas','00:00:05',1440,'Prepaid',95.00,1,1,100.00,1,10.00,20.00,0,15.00,0,0,0,0,0,0,'2021-09-02 13:34:15'),
+(47,'9889',2,2,6,8,1,'98899889','KVK0001','Gas','00:00:05',1440,'Prepaid',95.00,1,1,100.00,1,10.00,20.00,0,20.00,0,0,0,0,0,0,'2021-09-02 13:34:21'),
+(48,'9889',2,2,6,8,1,'98899889','KVK0001','Gas','00:00:05',1440,'Prepaid',95.00,1,1,100.00,1,10.00,20.00,0,25.00,0,0,0,0,0,0,'2021-09-03 13:34:25'),
+(49,'9889',2,2,6,8,1,'98899889','KVK0001','Gas','00:00:05',1440,'Prepaid',95.00,1,1,100.00,1,10.00,20.00,0,30.00,0,0,0,0,0,0,'2021-09-04 13:34:30'),
+(50,'9889',2,2,6,8,1,'98899889','KVK0001','Gas','00:00:05',1440,'Prepaid',95.00,1,1,100.00,1,10.00,20.00,0,35.00,0,0,0,0,0,0,'2021-09-04 13:34:35'),
+(51,'9889',2,2,6,8,1,'98899889','KVK0001','Gas','00:00:05',1440,'Prepaid',95.00,1,1,100.00,1,10.00,20.00,0,40.00,0,0,0,0,0,0,'2021-09-05 13:34:39'),
+(52,'9889',2,2,6,8,1,'98899889','KVK0001','Gas','00:00:05',1440,'Prepaid',95.00,1,1,100.00,1,10.00,20.00,0,45.00,0,0,0,0,0,0,'2021-09-05 13:34:43'),
+(53,'9889',2,2,6,8,1,'98899889','KVK0001','Gas','00:00:05',1440,'Prepaid',95.00,1,1,100.00,1,10.00,20.00,0,50.00,0,0,0,0,0,0,'2021-09-06 13:34:48'),
+(54,'9889',2,2,6,8,1,'98899889','KVK0001','Gas','00:00:05',1440,'Prepaid',95.00,1,1,100.00,1,10.00,20.00,0,60.00,0,0,0,0,0,0,'2021-09-06 13:34:53'),
+(55,'9888',2,2,6,9,2,'98899888','KVK0001','Water','00:00:05',1440,'Postpaid',93.00,1,1,0.00,2,20.00,0.00,0,1.00,0,0,0,0,0,0,'2021-08-31 15:07:38'),
+(56,'9888',2,2,6,9,2,'98899888','KVK0001','Water','00:00:05',1440,'Postpaid',93.00,1,1,0.00,2,20.00,0.00,0,3.00,0,0,0,0,0,0,'2021-08-31 15:07:48'),
+(57,'9888',2,2,6,9,2,'98899888','KVK0001','Water','00:00:05',1440,'Postpaid',93.00,1,1,0.00,2,20.00,0.00,0,5.00,0,0,0,0,0,0,'2021-09-01 15:07:52'),
+(58,'9888',2,2,6,9,2,'98899888','KVK0001','Water','00:00:05',1440,'Postpaid',93.00,1,1,0.00,2,20.00,0.00,0,8.00,0,0,0,0,0,0,'2021-09-01 15:07:56'),
+(59,'9888',2,2,6,9,2,'98899888','KVK0001','Water','00:00:05',1440,'Postpaid',93.00,1,1,0.00,2,20.00,0.00,0,11.00,0,0,0,0,0,0,'2021-09-02 15:08:02'),
+(60,'9888',2,2,6,9,2,'98899888','KVK0001','Water','00:00:05',1440,'Postpaid',93.00,1,1,0.00,2,20.00,0.00,0,17.00,0,0,0,0,0,0,'2021-09-02 15:08:06'),
+(61,'9888',2,2,6,9,2,'98899888','KVK0001','Water','00:00:05',1440,'Postpaid',93.00,1,1,0.00,2,20.00,0.00,0,21.00,0,0,0,0,0,0,'2021-09-03 15:08:13'),
+(62,'9888',2,2,6,9,2,'98899888','KVK0001','Water','00:00:05',1440,'Postpaid',93.00,1,1,0.00,2,20.00,0.00,0,25.00,0,0,0,0,0,0,'2021-09-03 15:08:17'),
+(63,'9888',2,2,6,9,2,'98899888','KVK0001','Water','00:00:05',1440,'Postpaid',93.00,1,1,0.00,2,20.00,0.00,0,30.00,0,0,0,0,0,0,'2021-09-04 15:08:21'),
+(64,'9888',2,2,6,9,2,'98899888','KVK0001','Water','00:00:05',1440,'Postpaid',93.00,1,1,0.00,2,20.00,0.00,0,38.00,0,0,0,0,0,0,'2021-09-04 15:08:25'),
+(65,'9888',2,2,6,9,2,'98899888','KVK0001','Water','00:00:05',1440,'Postpaid',93.00,1,1,0.00,2,20.00,0.00,0,47.00,0,0,0,0,0,0,'2021-09-05 15:08:32'),
+(66,'9888',2,2,6,9,2,'98899888','KVK0001','Water','00:00:05',1440,'Postpaid',93.00,1,1,0.00,2,20.00,0.00,0,53.00,0,0,0,0,0,0,'2021-09-05 15:08:38'),
+(67,'9888',2,2,6,9,2,'98899888','KVK0001','Water','00:00:05',1440,'Postpaid',93.00,1,1,0.00,2,20.00,0.00,0,62.00,0,0,0,0,0,0,'2021-09-06 15:08:44'),
+(68,'9888',2,2,6,9,2,'98899888','KVK0001','Water','00:00:05',1440,'Postpaid',93.00,1,1,0.00,2,20.00,0.00,0,65.00,0,0,0,0,0,0,'2021-09-06 15:08:44'),
+(69,'9888',2,2,6,9,2,'98899888','KVK0001','Water','00:00:05',1440,'Postpaid',93.00,1,1,0.00,2,20.00,0.00,0,68.00,0,0,0,0,0,0,'2021-09-06 15:28:57');
 
 /*Table structure for table `billingdetails` */
 
@@ -209,12 +236,13 @@ CREATE TABLE `block` (
   `CreatedDate` datetime NOT NULL,
   `ModifiedDate` datetime NOT NULL,
   PRIMARY KEY (`BlockID`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
 /*Data for the table `block` */
 
 insert  into `block`(`BlockID`,`BlockName`,`Location`,`MobileNumber`,`Email`,`CommunityID`,`CreatedByID`,`CreatedByRoleID`,`CreatedDate`,`ModifiedDate`) values 
-(1,'idigiblock','secunderabad','8498890000','vimal_smyle2006@yahoo.com',1,1,1,'2021-05-15 23:23:08','2021-06-06 11:50:56');
+(1,'idigiblock','secunderabad','8498890000','vimal_smyle2006@yahoo.com',1,1,1,'2021-05-15 23:23:08','2021-06-06 11:50:56'),
+(2,'vml123','hyderabad','9398348954','vimalsmyle2006yahoo.com@gmail.com',2,1,1,'2021-09-06 13:23:18','2021-09-06 13:23:18');
 
 /*Table structure for table `command` */
 
@@ -276,12 +304,13 @@ CREATE TABLE `community` (
   `CreatedDate` datetime NOT NULL,
   `ModifiedDate` datetime DEFAULT NULL,
   PRIMARY KEY (`CommunityID`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
 /*Data for the table `community` */
 
 insert  into `community`(`CommunityID`,`CommunityName`,`Email`,`MobileNumber`,`Address`,`CreatedDate`,`ModifiedDate`) values 
-(1,'Idigi','vimal_smyle2006@yahoo.com','8498890000','hyderabad','2021-05-15 23:21:57',NULL);
+(1,'Idigi','vimal_smyle2006@yahoo.com','8498890000','hyderabad','2021-05-15 23:21:57',NULL),
+(2,'Vimal','vimalsmyle2006yahoo.com@gmail.com','9398348954','secunderabad','2021-09-06 13:22:48',NULL);
 
 /*Table structure for table `customerbillingdetails` */
 
@@ -383,7 +412,7 @@ CREATE TABLE `customerdetails` (
   `ModifiedDate` datetime DEFAULT NULL,
   PRIMARY KEY (`CustomerID`,`CustomerUniqueID`),
   UNIQUE KEY `CRNNumber` (`CustomerUniqueID`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 
 /*Data for the table `customerdetails` */
 
@@ -391,7 +420,8 @@ insert  into `customerdetails`(`CustomerID`,`CommunityID`,`BlockID`,`HouseNumber
 (1,1,1,'101','Vimal','Kumar','kvk9889@gmail.com','8498890000',1,'IDIGI1',2,2,'2021-05-17 23:20:44','2021-05-18 14:26:45'),
 (2,1,1,'102','vml','kvk','vimal_smyle2006@yahoo.com','8498890000',1,'IDIGI2',1,1,'2021-05-23 16:30:27','2021-05-23 16:30:30'),
 (4,1,1,'1003','bharat','sriram','bhrtsriram@gmail.com','9000941911',1,'IDIGI3',1,1,'2021-05-26 15:49:40','2021-06-06 08:12:54'),
-(5,1,1,'486/81','Sri Babu','Kasamsetti','kasamsettysri@gmail.com','9703668598',1,'IDG10010',1,1,'2021-07-04 16:39:36','2021-07-04 16:39:36');
+(5,1,1,'486/81','Sri Babu','Kasamsetti','kasamsettysri@gmail.com','9703668598',1,'IDG10010',1,1,'2021-07-04 16:39:36','2021-07-04 16:39:36'),
+(6,2,2,'49/38','kvimal','kumar','kvk9889@gmail.com','8498890000',1,'KVK0001',1,1,'2021-09-06 13:25:22','2021-09-06 13:25:22');
 
 /*Table structure for table `customermeterdetails` */
 
@@ -412,7 +442,7 @@ CREATE TABLE `customermeterdetails` (
   `RegisteredDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `ModifiedDate` datetime NOT NULL,
   PRIMARY KEY (`CustomerMeterID`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
 
 /*Data for the table `customermeterdetails` */
 
@@ -423,7 +453,10 @@ insert  into `customermeterdetails`(`CustomerMeterID`,`CustomerID`,`CustomerUniq
 (4,1,'IDIGI1','4455','44556677','Water',2,'Postpaid',2,1,'Washarea','2021-05-17 23:26:11','2021-05-17 23:26:10'),
 (5,2,'IDIGI2','5566','55667788','Gas',1,'Prepaid',1,1,'Kitchen','2021-05-23 16:31:15','2021-05-23 16:31:18'),
 (6,4,'IDIGI3','B66777','B66778899','Gas',1,'Prepaid',1,1,'Kitchen','2021-05-26 15:50:17','2021-06-06 08:12:54'),
-(7,5,'IDG10010','E099','I970366858','Water',2,'Postpaid',1,1,'Hall','2021-07-04 16:39:36','2021-07-04 16:39:36');
+(7,5,'IDG10010','E099','I970366858','Water',2,'Postpaid',1,1,'Hall','2021-07-04 16:39:36','2021-07-04 16:39:36'),
+(8,6,'KVK0001','9889','98899889','Gas',1,'Prepaid',1,1,'kitchen','2021-09-06 13:25:22','2021-09-06 13:25:22'),
+(9,6,'KVK0001','9888','98899888','Water',2,'Postpaid',2,1,'bathroom','2021-09-06 13:25:22','2021-09-06 13:25:22'),
+(10,6,'KVK0001','9887','98899887','Water',2,'Postpaid',2,1,'bedroom','2021-09-06 13:25:22','2021-09-06 13:25:22');
 
 /*Table structure for table `displaybalancelog` */
 
@@ -461,14 +494,16 @@ CREATE TABLE `displaybalancelog` (
   `LowBalance` tinyint(2) DEFAULT NULL,
   `LogDate` datetime NOT NULL,
   PRIMARY KEY (`ReadingID`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 
 /*Data for the table `displaybalancelog` */
 
 insert  into `displaybalancelog`(`ReadingID`,`MainBalanceLogID`,`MIUID`,`CommunityID`,`BlockID`,`CustomerID`,`CustomerMeterID`,`MeterSizeID`,`MeterSerialNumber`,`CustomerUniqueID`,`MeterType`,`SyncTime`,`SyncInterval`,`PayType`,`BatteryVoltage`,`ValveConfiguration`,`ValveStatus`,`Balance`,`TariffID`,`Tariff`,`EmergencyCredit`,`Minutes`,`Reading`,`DoorOpenTamper`,`MagneticTamper`,`Vacation`,`RTCFault`,`LowBattery`,`LowBalance`,`LogDate`) values 
 (1,22,'2233',1,1,1,2,2,'22334455','IDIGI1','Water','00:00:05',1440,'Postpaid',90.00,1,1,0.00,2,20.00,40.00,10,45.00,0,0,0,0,0,0,'2021-05-27 22:39:14'),
 (2,19,'1122',1,1,1,1,1,'11223344','IDIGI1','Gas','00:00:05',1440,'Prepaid',90.00,1,1,50.00,1,10.00,20.00,12,55.00,0,0,0,0,0,0,'2021-09-03 19:40:22'),
-(3,42,'3344',1,1,1,3,2,'33445566','IDIGI1','Water','00:00:05',1440,'Postpaid',90.00,1,1,0.00,3,20.00,40.00,10,62.00,0,0,0,0,0,0,'2021-09-01 20:58:06');
+(3,42,'3344',1,1,1,3,2,'33445566','IDIGI1','Water','00:00:05',1440,'Postpaid',90.00,1,1,0.00,3,20.00,40.00,10,62.00,0,0,0,0,0,0,'2021-09-01 20:58:06'),
+(4,54,'9889',2,2,6,8,0,'98899889','KVK0001','Gas','00:00:05',1440,'Prepaid',95.00,1,1,100.00,1,10.00,20.00,0,60.00,0,0,0,0,0,0,'2021-09-06 13:34:53'),
+(5,69,'9888',2,2,6,9,2,'98899888','KVK0001','Water','00:00:05',1440,'Postpaid',93.00,1,1,0.00,2,20.00,0.00,0,68.00,0,0,0,0,0,0,'2021-09-06 15:28:57');
 
 /*Table structure for table `feedback` */
 
@@ -682,7 +717,7 @@ CREATE TABLE `user` (
   `ModifiedDate` datetime DEFAULT NULL,
   PRIMARY KEY (`ID`),
   KEY `CommunityID` (`CommunityID`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
 
 /*Data for the table `user` */
 
@@ -695,7 +730,9 @@ insert  into `user`(`ID`,`UserID`,`UserName`,`UserPassword`,`RoleID`,`ActiveStat
 (6,'idigiblock','idigiblock','yotlEHVjsFQOtJ1njm6kXQ==',2,1,1,1,0,'NULL',NULL,NULL,1,1,'2021-05-15 23:23:08','2021-05-15 23:23:08'),
 (7,'IDIGI2','vml kvk','cvp/LzpadrQT+2k0WDjyOQ==',3,1,1,1,2,'IDIGI2',NULL,NULL,1,1,'2021-05-23 16:46:19','2021-05-23 16:46:22'),
 (8,'IDIGI3','bharat sriram','Ysgo3gABsnRMLWt4mO5WNg==',3,1,1,1,4,'IDIGI3',NULL,NULL,1,1,'2021-05-26 15:51:17','2021-05-26 15:51:17'),
-(9,'IDG10010','Sri Babu Kasamsetti','GqSSx8TwJNeL9/TNfEokMw==',3,1,1,1,5,'IDG10010',NULL,NULL,1,1,'2021-07-04 16:39:36','2021-07-04 16:39:36');
+(9,'IDG10010','Sri Babu Kasamsetti','GqSSx8TwJNeL9/TNfEokMw==',3,1,1,1,5,'IDG10010',NULL,NULL,1,1,'2021-07-04 16:39:36','2021-07-04 16:39:36'),
+(10,'vml123','vml123','EXNtSiJkb/KAa4AfbAfufg==',2,1,2,2,0,'NULL','9398348954','vimalsmyle2006yahoo.com@gmail.com',1,1,'2021-09-06 13:23:18','2021-09-06 13:23:18'),
+(11,'KVK0001','kvimal kumar','qQMo+J4ZJo1nRgCX1BHATA==',3,1,2,2,6,'KVK0001','8498890000','kvk9889@gmail.com',1,1,'2021-09-06 13:25:22','2021-09-06 13:25:22');
 
 /*Table structure for table `userrole` */
 
