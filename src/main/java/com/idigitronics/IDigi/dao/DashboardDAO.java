@@ -750,13 +750,15 @@ public class DashboardDAO {
 			
 					if(year == 0 && month == 0) {
 						
-						int totalConsumptionPerDayMonthYear = 0;
+						
 						
 						String start = "SELECT * FROM <tablename> ";
 						PreparedStatement pstmt3 = con.prepareStatement(start.replaceAll("<tablename>", id != 0 ? "block" : "community"));
 						ResultSet rs3 = pstmt3.executeQuery();
 						
 						while(rs3.next()) {
+							
+							int totalConsumptionPerDayMonthYear = 0;
 						
 						// last 30 days	
 						
@@ -803,13 +805,13 @@ public class DashboardDAO {
 					} 
 					else if (year != 0 &&  month == 0) {
 						
-						int totalConsumptionPerDayMonthYear = 0;
-
 						String start = "SELECT * FROM <tablename> ";
 						PreparedStatement pstmt3 = con.prepareStatement(start.replaceAll("<tablename>", id != 0 ? "block" : "community"));
 						ResultSet rs3 = pstmt3.executeQuery();
 						
 						while(rs3.next()) {
+							
+							int totalConsumptionPerDayMonthYear = 0;
 						
 						for(int i = 1; i<=12; i++) {
 							
@@ -853,7 +855,6 @@ public class DashboardDAO {
 						}
 					} else if(year != 0 && month != 0) {
 						
-						int totalConsumptionPerDayMonthYear = 0;
 						int j = (month == 2 ? 28 : (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12) ? 31 : 30);
 						
 						String start = "SELECT * FROM <tablename> ";
@@ -861,6 +862,8 @@ public class DashboardDAO {
 						ResultSet rs3 = pstmt3.executeQuery();
 						
 						while(rs3.next()) {
+							
+							int totalConsumptionPerDayMonthYear = 0;
 						
 						for(int i = 1; i <= j ; i++) {
 							
@@ -1193,7 +1196,7 @@ public class DashboardDAO {
 				ResultSet rs = pstmt2.executeQuery();
 				if(rs.next()) {
 					
-					pstmt = con.prepareStatement("INSERT INTO balancelog (MIUID, CommunityID, BlockID, CustomerID, CustomerMeterID, MeterSizeID, MeterSerialNumber, CustomerUniqueID, MeterType, SyncTime, SyncInterval, PayType, BatteryVoltage, TariffID, Tariff, ValveConfiguration, ValveStatus, Balance, EmergencyCredit, Minutes, Reading, DoorOpenTamper, MagneticTamper, Vacation, RTCFault, LowBattery, LowBalance, LogDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
+					pstmt = con.prepareStatement("INSERT INTO balancelog (MIUID, CommunityID, BlockID, CustomerID, CustomerMeterID, MeterSizeID, MeterSerialNumber, CustomerUniqueID, MeterType, SyncTime, SyncInterval, PayType, BatteryVoltage, TariffID, Tariff, ValveConfiguration, ValveStatus, Balance, EmergencyCredit, Minutes, Reading, DoorOpenTamper, MagneticTamper, Vacation, RTCFault, LowBattery, LowBalance, LogDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
 					pstmt.setString(1, miuID);
 					pstmt.setInt(2, rs.getInt("CommunityID"));
 					pstmt.setInt(3, rs.getInt("BlockID"));
@@ -1268,7 +1271,7 @@ public class DashboardDAO {
 								
 							} else {
 								
-									pstmt1 = con.prepareStatement("INSERT INTO displaybalancelog (MainBalanceLogID, MIUID, CommunityID, BlockID, CustomerID, CustomerMeterID, MeterSizeID, MeterSerialNumber, CustomerUniqueID, MeterType, SyncTime, SyncInterval, PayType, BatteryVoltage, TariffID, Tariff, ValveConfiguration, ValveStatus, Balance, EmergencyCredit, Minutes, Reading, DoorOpenTamper, MagneticTamper, Vacation, RTCFault, LowBattery, LowBalance, LogDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
+									pstmt1 = con.prepareStatement("INSERT INTO displaybalancelog (MainBalanceLogID, MIUID, CommunityID, BlockID, CustomerID, CustomerMeterID, MeterSizeID, MeterSerialNumber, CustomerUniqueID, MeterType, SyncTime, SyncInterval, PayType, BatteryVoltage, TariffID, Tariff, ValveConfiguration, ValveStatus, Balance, EmergencyCredit, Minutes, Reading, DoorOpenTamper, MagneticTamper, Vacation, RTCFault, LowBattery, LowBalance, LogDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
 									pstmt1.setInt(1, rs2.getInt("ReadingID"));
 									pstmt1.setString(2, miuID);
 									pstmt1.setInt(3, rs.getInt("CommunityID"));
