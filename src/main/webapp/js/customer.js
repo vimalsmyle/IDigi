@@ -57,6 +57,14 @@ $(document).ready(function() {
 						true);
 				
 			}
+			
+			$.getJSON("./gateways", function(data) {
+				var OptionsGatewayEdit = "<option value='-1'>Select  Gateway</option>";
+				$.each(data.dropDownGateways, function(key, value) {
+					OptionsGatewayEdit = OptionsGatewayEdit + "<option value='" + key + "'>" + value
+							+ "</option>";
+				});
+			
 			$.each(item.meters, function(i, meter) {
 				rowCount++;
 				
@@ -141,17 +149,7 @@ $(document).ready(function() {
 				$("#formlocationAdd").addClass("group form-group has-feedback has-success bmd-form-group is-filled");
 				
 				
-				$.getJSON("./gateways", function(data) {
-					var OptionsGateway = "<option value='-1'>Select  Gateway</option>";
-					$.each(data.dropDownGateways, function(key, value) {
-						OptionsGateway = OptionsGateway + "<option value='" + key + "'>" + value
-								+ "</option>";
-					});
-					$("#gatewayIDAdd-"+rowCount).append(OptionsGateway);
-			 });
 				
-				$("#gatewayIDAdd-"+rowCount).val(meter.gatewayID);
-
 				$('#customerAdd').bootstrapValidator('addField' ,
 			        'miuIDEdit['+rowCount+']', {
 			        	message : 'MUI ID is not valid',
@@ -254,13 +252,25 @@ $(document).ready(function() {
 					$("#formlocationAdd").addClass("group form-group has-feedback has-success bmd-form-group is-filled");
 					$("#formtariffNameAdd").addClass("group form-group has-feedback has-success bmd-form-group is-filled");
 				 
+					
+					
+					$("#gatewayIDAdd-"+rowCount).append(OptionsGatewayEdit);
+					
+					$("#gatewayIDAdd-"+rowCount).val(meter.gatewayID);
+					
+					
 			});
-			
+			 });
 			if(rowCount>13){
 				$("#addMeter").hide();
 			}else{
 				$("#addMeter").show();
 			}
+			
+			
+			
+
+			
 			
 		} 
 	});
@@ -477,7 +487,7 @@ $("#addMeter")
 									"<div class='group form-group has-feedback has-success bmd-form-group is-filled'>"
 									+"<label class=bmd-label-floating>Meter Size<span class=impp><sup>*</sup></span></label> <select "+
 									"class='form-control form-control-sm' " +
-									"id=selectMeterSize-"+rowCount+" name=selectMeterSize["+rowCount+"]>"+
+									"id=meterSizeAdd-"+rowCount+" name=meterSizeAdd["+rowCount+"]>"+
 									"</select>"
 									+"</div></div>"+
 									"<div class=col-md-4>" +
@@ -1407,9 +1417,8 @@ function getCustomerMeters(CRNNumber){
 	
 }
 
-window.onload = function () {
+
 	function removeMeter(removeValue){
-		alert("!@");
 		var rowCount = $("#rowCount").val()==""?0:$("#rowCount").val();
 		rowCount--;
 		if(rowCount>2){
@@ -1424,6 +1433,6 @@ window.onload = function () {
 		}
 		$("#rowCount").val(rowCount);
 	}
-}
+
 
 
