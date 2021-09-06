@@ -201,6 +201,22 @@ public class CommunitySetUpController {
 
 		return responsevo;
 	}
+	
+	@RequestMapping(value = "/metersize/delete/{metersizeID}", method = RequestMethod.POST, produces = "application/json")
+	public @ResponseBody
+	ResponseVO deleteMeterSize(@PathVariable("metersizeID") int metersizeID) throws ClassNotFoundException,
+			SQLException, BusinessException {
+		ResponseVO responsevo = new ResponseVO();
+		try {
+			 responsevo = communitysetupbo.deleteMeterSize(metersizeID);
+			
+		} catch (BusinessException e) {
+			responsevo.setResult("Failure");
+			responsevo.setMessage(e.getMessage());
+		}
+
+		return responsevo;
+	}
 
 	/* Block */
 

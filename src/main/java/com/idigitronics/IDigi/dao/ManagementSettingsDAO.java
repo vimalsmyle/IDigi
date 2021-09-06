@@ -76,10 +76,10 @@ public class ManagementSettingsDAO {
 				usermanagementvo.setUserName(rs.getString("UserName"));
 				usermanagementvo.setRole(rs.getString("RoleDescription"));
 				usermanagementvo.setID(rs.getInt("ID"));
-				usermanagementvo.setCommunityName((rs.getInt("CommunityID") != 0) ? rs.getString("CommunityName") : "NA");
-				usermanagementvo.setBlockName((rs.getInt("BlockID") != 0) ? rs.getString("BlockName") : "NA");
-				usermanagementvo.setMobileNumber(rs.getString("MobileNumber"));
-				usermanagementvo.setEmailID(rs.getString("EmailID"));
+				usermanagementvo.setCommunityName((rs.getInt("CommunityID") != 0) ? rs.getString("CommunityName") : "---");
+				usermanagementvo.setBlockName((rs.getInt("BlockID") != 0) ? rs.getString("BlockName") : "---");
+				usermanagementvo.setMobileNumber(rs.getString("MobileNumber") == null ? "NA" : rs.getString("MobileNumber"));
+				usermanagementvo.setEmailID(rs.getString("EmailID") == null ? "---" : rs.getString("EmailID"));
 
 				if(rs.getInt("CreatedByID")>0) {
 					pstmt1 = con.prepareStatement("SELECT user.ID, user.UserName, userrole.RoleDescription FROM USER LEFT JOIN userrole ON user.RoleID = userrole.RoleID WHERE user.ID = "+rs.getInt("CreatedByID"));
@@ -89,8 +89,8 @@ public class ManagementSettingsDAO {
 					usermanagementvo.setCreatedByRoleDescription(rs1.getString("RoleDescription"));
 					} 
 				}else {
-					usermanagementvo.setCreatedByUserName("NA");
-					usermanagementvo.setCreatedByRoleDescription("NA");
+					usermanagementvo.setCreatedByUserName("---");
+					usermanagementvo.setCreatedByRoleDescription("---");
 				}
 				
 				user_list.add(usermanagementvo);

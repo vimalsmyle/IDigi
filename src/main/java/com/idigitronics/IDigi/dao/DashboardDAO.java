@@ -745,15 +745,13 @@ public class DashboardDAO {
 			
 			if(!communityName.equalsIgnoreCase("0")) {
 				ResultSet rs1 = con.prepareStatement("SELECT * FROM block WHERE CommunityID = (SELECT CommunityID FROM community WHERE CommunityName = '"+communityName+"')").executeQuery();
-				if(rs1.next()) { id = rs1.getInt("BlockID"); }				
+				if(rs1.next()) { id = rs1.getInt("CommunityID"); }				
 				}
 			
 					if(year == 0 && month == 0) {
 						
-						
-						
 						String start = "SELECT * FROM <tablename> ";
-						PreparedStatement pstmt3 = con.prepareStatement(start.replaceAll("<tablename>", id != 0 ? "block" : "community"));
+						PreparedStatement pstmt3 = con.prepareStatement(start.replaceAll("<tablename>", id != 0 ? "block WHERE CommunityID = "+id : "community"));
 						ResultSet rs3 = pstmt3.executeQuery();
 						
 						while(rs3.next()) {
@@ -943,6 +941,9 @@ public class DashboardDAO {
 		int communityid = 0;
 		
 		try {
+			
+//			1 = valve open(active), 2 = valve close(inactive) 3 = communicating(live), 4 = non-communicating(non-live) 5 = low battery 6 = emergency credit
+			
 			con = getConnection();
 			homeResponseVO = new HomeResponseVO();
 			

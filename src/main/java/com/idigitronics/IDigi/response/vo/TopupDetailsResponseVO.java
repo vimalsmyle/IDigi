@@ -10,6 +10,7 @@ package com.idigitronics.IDigi.response.vo;
 public class TopupDetailsResponseVO {
 	
 	private String miuID;
+	private String meterSerialNumber;
 	private float currentBalance;
 	private String tariffName;
 	private float emergencyCredit;
@@ -94,4 +95,11 @@ public class TopupDetailsResponseVO {
 	public void setCustomerMeterID(long customerMeterID) {
 		this.customerMeterID = customerMeterID;
 	}
+	public String getMeterSerialNumber() {
+		return meterSerialNumber;
+	}
+	public void setMeterSerialNumber(String meterSerialNumber) {
+		this.meterSerialNumber = meterSerialNumber;
+	}
+	
 }

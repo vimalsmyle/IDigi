@@ -466,6 +466,88 @@ public class CommunitySetUpDAO {
 
 		return responsevo;
 	}
+	
+	public ResponseVO deleteMeterSize(int metersizeID) throws SQLException {
+		// TODO Auto-generated method stub
+
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResponseVO responsevo = new ResponseVO(); 
+
+		try {
+			con = getConnection();
+			pstmt = con.prepareStatement("DELETE FROM metersize WHERE MeterSizeID ="+metersizeID);
+
+			if (pstmt.executeUpdate() > 0) {
+				responsevo.setResult("Success");
+				responsevo.setMessage("Metersize Deleted Successfully");
+			} 
+			
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			responsevo.setMessage("INTERNAL SERVER ERROR");
+			responsevo.setResult("Failure");
+		} finally {
+			pstmt.close();
+			con.close();
+		}
+
+		return responsevo;
+		
+	}
+	
+	public boolean checkMeterSize(int meterSize) throws SQLException {
+		// TODO Auto-generated method stub
+
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		Boolean result = false;
+
+		try {
+			con = getConnection();
+			pstmt = con.prepareStatement("SELECT * FROM metersize WHERE MeterSize = " + meterSize);
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				result = true;
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			pstmt.close();
+			rs.close();
+			con.close();
+		}
+
+		return result;
+	}
+
+	public boolean checkMeterSizeIsSetToMeters(int metersizeID) throws SQLException {
+		// TODO Auto-generated method stub
+		
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		boolean result = false;
+
+		try {
+			con = getConnection();
+			pstmt = con.prepareStatement("SELECT * FROM customermeterdetails WHERE MeterSizeID = "+metersizeID);
+			ResultSet rs = pstmt.executeQuery();
+			if (rs.next()) {
+
+				result = true;
+
+			} 
+			
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			pstmt.close();
+			con.close();
+		}
+
+		return result;
+	}
 
 	/* Block */
 

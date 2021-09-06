@@ -125,6 +125,10 @@ public class CommunitySetUpBO {
 			throw new BusinessException("ALL FIELDS ARE MANDATORY");
 		}
 		
+		if(communitysetupdao.checkMeterSize(meterSizeRequestVO.getMeterSize())) {
+			throw new BusinessException("METERSIZE ALREADY EXISTS");
+		}
+		
 		return communitysetupdao.addMeterSize(meterSizeRequestVO);
 	}
 	
@@ -136,6 +140,16 @@ public class CommunitySetUpBO {
 		}
 		
 		return communitysetupdao.editMeterSize(meterSizeRequestVO);
+	}
+	
+	public ResponseVO deleteMeterSize(int metersizeID) throws BusinessException, SQLException {
+		// TODO Auto-generated method stub
+		
+		if(communitysetupdao.checkMeterSizeIsSetToMeters(metersizeID)) {
+			throw new BusinessException("METERSIZE CANNOT BE DELETED AS IT IS ASSIGNED TO METERS");
+		}
+
+		return communitysetupdao.deleteMeterSize(metersizeID);
 	}
 
 	/* Block */

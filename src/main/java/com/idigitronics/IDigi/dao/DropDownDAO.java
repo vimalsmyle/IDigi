@@ -115,11 +115,12 @@ public class DropDownDAO {
 			topupdetailsresponsevo.setReconnectionCharges(0);
 			LocalDateTime dateTime = LocalDateTime.now();
 
-					ps = con.prepareStatement("SELECT cmd.MIUID, cmd.CustomerMeterID, t.TariffID, t.TariffName, t.Tariff, t.EmergencyCredit, t.AlarmCredit, t.FixedCharges FROM customermeterdetails AS cmd LEFT JOIN tariff AS t ON t.TariffID = cmd.TariffID WHERE cmd.CustomerMeterID = ?");
+					ps = con.prepareStatement("SELECT cmd.MIUID, cmd.MeterSerialNumber, cmd.CustomerMeterID, t.TariffID, t.TariffName, t.Tariff, t.EmergencyCredit, t.AlarmCredit, t.FixedCharges FROM customermeterdetails AS cmd LEFT JOIN tariff AS t ON t.TariffID = cmd.TariffID WHERE cmd.CustomerMeterID = ?");
 			        ps.setInt(1, customerMeterID);
 			        rs = ps.executeQuery();
 			        if (rs.next()) {
 			        	topupdetailsresponsevo.setMiuID(rs.getString("MIUID"));
+			        	topupdetailsresponsevo.setMeterSerialNumber(rs.getString("MeterSerialNumber"));
 			        	topupdetailsresponsevo.setAlarmCredit(rs.getFloat("AlarmCredit"));
 			        	topupdetailsresponsevo.setEmergencyCredit(rs.getFloat("EmergencyCredit"));
 			        	topupdetailsresponsevo.setTariffName(rs.getString("TariffName"));
