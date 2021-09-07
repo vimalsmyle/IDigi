@@ -319,7 +319,7 @@ public class CommunitySetUpDAO {
 		return responsevo;
 	}
 	
-	public boolean checkgateway(String gatewaySerialNumber) throws SQLException {
+	public boolean checkgateway(GatewayRequestVO gatewayvo, String mode) throws SQLException {
 		// TODO Auto-generated method stub
 
 		Connection con = null;
@@ -329,7 +329,9 @@ public class CommunitySetUpDAO {
 
 		try {
 			con = getConnection();
-			pstmt = con.prepareStatement("SELECT * FROM gateway WHERE GatewaySerialNumber = '" + gatewaySerialNumber.trim() + "'");
+			
+			String query = "SELECT * FROM gateway WHERE <change> GatewaySerialNumber = '" + gatewayvo.getGatewaySerialNumber().trim() + "'";
+			pstmt = con.prepareStatement(query.replaceAll("<change>", (mode.equalsIgnoreCase("add")) ? "" : "GatewayID != "+gatewayvo.getGatewayID() + " AND "));
 			rs = pstmt.executeQuery();
 			if (rs.next()) {
 				result = true;
@@ -496,7 +498,7 @@ public class CommunitySetUpDAO {
 		
 	}
 	
-	public boolean checkMeterSize(int meterSize) throws SQLException {
+	public boolean checkMeterSize(MeterSizeRequestVO meterSizeRequestVO, String mode) throws SQLException {
 		// TODO Auto-generated method stub
 
 		Connection con = null;
@@ -506,7 +508,10 @@ public class CommunitySetUpDAO {
 
 		try {
 			con = getConnection();
-			pstmt = con.prepareStatement("SELECT * FROM metersize WHERE MeterSize = " + meterSize);
+			
+			String query = "SELECT * FROM metersize WHERE <change> MeterSize = " + meterSizeRequestVO.getMeterSize();
+			pstmt = con.prepareStatement(query.replaceAll("<change>", (mode.equalsIgnoreCase("add")) ? "" : "MeterSizeID != "+meterSizeRequestVO.getMeterSizeID() + " AND "));
+			
 			rs = pstmt.executeQuery();
 			if (rs.next()) {
 				result = true;
@@ -1773,7 +1778,7 @@ public class CommunitySetUpDAO {
 		return responsevo;
 	}
 	
-	public boolean checktariffamount(float tariff) throws SQLException {
+	public boolean checktariffamount(TariffRequestVO tariffvo, String mode) throws SQLException {
 		// TODO Auto-generated method stub
 
 		Connection con = null;
@@ -1783,8 +1788,10 @@ public class CommunitySetUpDAO {
 
 		try {
 			con = getConnection();
-			pstmt = con.prepareStatement("SELECT * FROM tariff WHERE Tariff = ?");
-			pstmt.setFloat(1, tariff);
+			
+			String query = "SELECT * FROM tariff WHERE <change> Tariff = " + tariffvo.getTariff();
+			pstmt = con.prepareStatement(query.replaceAll("<change>", (mode.equalsIgnoreCase("add")) ? "" : "TariffID != "+tariffvo.getTariffID() + " AND "));
+			
 			rs = pstmt.executeQuery();
 			if (rs.next()) {
 				result = true;
