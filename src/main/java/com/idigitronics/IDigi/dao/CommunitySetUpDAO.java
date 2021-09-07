@@ -509,7 +509,7 @@ public class CommunitySetUpDAO {
 		try {
 			con = getConnection();
 			
-			String query = "SELECT * FROM metersize WHERE <change> MeterSize = " + meterSizeRequestVO.getMeterSize();
+			String query = "SELECT * FROM metersize WHERE <change> MeterType = '"+ meterSizeRequestVO.getMeterType()+"' AND MeterSize = " + meterSizeRequestVO.getMeterSize();
 			pstmt = con.prepareStatement(query.replaceAll("<change>", (mode.equalsIgnoreCase("add")) ? "" : "MeterSizeID != "+meterSizeRequestVO.getMeterSizeID() + " AND "));
 			
 			rs = pstmt.executeQuery();
