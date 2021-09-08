@@ -190,12 +190,16 @@ public class DashboardDAO {
 						individualDashboardResponseVO.setCommunicationStatus("YES");
 					}
 					
-					if(!customerUniqueID.isEmpty()) {
+					if(!customerUniqueID.isEmpty() && rs3.getString("PayType").equalsIgnoreCase("Prepaid")) {
 						PreparedStatement pstmt2 = con.prepareStatement("SELECT Amount, TransactionDate FROM topup WHERE CustomerMeterID = "+rs3.getInt("CustomerMeterID")+" AND STATUS = 0 ORDER BY TransactionID DESC LIMIT 0,1") ;
 						ResultSet rs2 = pstmt2.executeQuery();
 						if(rs2.next()) {
 							individualDashboardResponseVO.setLastTopupAmount(rs2.getString("Amount"));
 							individualDashboardResponseVO.setLastRechargeDate(ExtraMethodsDAO.datetimeformatter(rs2.getString("TransactionDate")));
+						} else {
+						
+						individualDashboardResponseVO.setLastTopupAmount("---");
+						individualDashboardResponseVO.setLastRechargeDate("---");
 						}
 					}
 					
