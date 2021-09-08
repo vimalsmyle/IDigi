@@ -404,13 +404,15 @@ function show(value){
 }
 
 function onChangeMeterSize(rowCount){
-	 $.getJSON("./metersizes/"+$("#selectMeterType-"+rowCount).val(), function(data) {
+	$('#meterSizeAdd-'+rowCount).find('option').remove();
+
+	$.getJSON("./metersizes/"+$("#selectMeterType-"+rowCount).val(), function(data) {
 			var Options = '<option value=-1>Select  Meter Size</option>';
 			$.each(data.dropDownMeterSizes, function(key, value) {
 				Options = Options + '<option value=' + key + '>' + value
 						+ '</option>';
 			});
-			$('#selectMeterSize-'+rowCount).append(Options);
+			$('#meterSizeAdd-'+rowCount).append(Options);
 		});
 	
 }

@@ -137,9 +137,9 @@ $(document)
 																message : 'Block Name is required and cannot be empty'
 															},
 															stringLength : {
-																min : 4,
-																max : 30,
-																message : 'Block Name must be more than 4 and less than 30 characters long'
+																min : 2,
+																max : 35,
+																message : 'Block Name must be more than 2 and less than 35 characters long'
 															},
 															regexp : {
 																regexp : /^[a-zA-Z][a-zA-Z0-9.,$; ]+$/,
@@ -154,9 +154,9 @@ $(document)
 																message : 'Location is required and cannot be empty'
 															},
 															stringLength : {
-																min : 4,
-																max : 30,
-																message : 'Locaton must be more than 4 and less than 30 characters long'
+																min : 2,
+																max : 35,
+																message : 'Locaton must be more than 2 and less than 35 characters long'
 															},
 															regexp : {
 																regexp : /^[a-zA-Z ]+$/,
@@ -210,9 +210,9 @@ $(document)
 														message : 'Block Name is required and cannot be empty'
 													},
 													stringLength : {
-														min : 4,
-														max : 30,
-														message : 'Block Name must be more than 4 and less than 30 characters long'
+														min : 2,
+														max : 35,
+														message : 'Block Name must be more than 2 and less than 35 characters long'
 													},
 													regexp : {
 														regexp : /^[a-zA-Z][a-zA-Z0-9.,$; ]+$/,
@@ -227,9 +227,9 @@ $(document)
 														message : 'Location is required and cannot be empty'
 													},
 													stringLength : {
-														min : 6,
-														max : 30,
-														message : 'Location must be more than 6 and less than 30 characters long'
+														min : 2,
+														max : 35,
+														message : 'Location must be more than 2 and less than 35 characters long'
 													},
 													regexp : {
 														regexp : /^[a-zA-Z ]+$/,

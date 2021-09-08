@@ -1413,8 +1413,6 @@ function getCustomerMeters(CRNNumber){
 		});
 		$('#myCustomerMeters').modal('show');
 	});
-	
-	
 }
 
 

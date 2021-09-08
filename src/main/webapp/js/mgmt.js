@@ -162,6 +162,30 @@ $(document)
 															}
 														}
 													},
+													mobileAdd : {
+														message : 'Mobile is not valid',
+														validators : {
+															notEmpty : {
+																message : 'Mobile is required and cannot be empty'
+															},
+															regexp : {
+																regexp : /^[0-9]{10}$/,
+																message : 'Mobile can only consist of number'
+															}
+														}
+													},
+													emailAdd : {
+														message : 'Email is not valid',
+														validators : {
+															notEmpty : {
+																message : 'Email is required and cannot be empty'
+															}/*,
+															regexp : {
+																regexp : /^[a-zA-Z0-9]+$/,
+																message : 'The Community Address can only consist of alphabetical and number'
+															}*/
+														}
+													},
 													userNameAdd : {
 														message : 'User Name is not valid',
 														validators : {
@@ -274,6 +298,10 @@ $(document)
 												
 												data1["userID"] = $("#userIDAdd").val();
 												data1["userName"] = $("#userNameAdd").val();
+												
+												data1["emailID"] = $("#emailAdd").val();
+												data1["mobileNumber"] = $("#mobileAdd").val();
+												
 												data1["userPassword"] = $("#userPasswordAdd").val();
 												data1["confirmPassword"] = $("#confirmPasswordAdd").val();
 												data1["roleID"] = $("#selecttypeofuser").val();

@@ -82,14 +82,7 @@
 										</div></a>
 								</div>
 							</div>
-
-							<%
-								}
-							%>
-
-							<%
-								if (!user_id.equals("3")) {
-							%>
+							
 							<div class="col-xl-3 col-md-6 mb-4">
 								<div class="card border-left-warning shadow sidingBlock">
 									<a href="gateway.jsp"><div class="card-body p-3">
@@ -105,7 +98,8 @@
 										</div></a>
 								</div>
 							</div>
-
+							
+							
 							<div class="col-xl-3 col-md-6 mb-4">
 								<div class="card border-left-warning shadow sidingBlock">
 									<a href="MeterSize.jsp"><div class="card-body p-3">
@@ -121,6 +115,17 @@
 										</div></a>
 								</div>
 							</div>
+
+							<%
+								}
+							%>
+
+							<%
+								if (!user_id.equals("3")) {
+							%>
+							
+
+							
 
 							<%
 								}

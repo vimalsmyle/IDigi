@@ -84,8 +84,8 @@
 		 <a href="setup.jsp" class="list-group-item" data-parent="#menu3">
              	 <i class="fa fa-cogs"></i>
              	 <span class="textData">Customer Setup </span></a>
-                 <a href="tariff.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-heart"></i> <span class="textData">Tariff </span></a>
-                <a href="alert.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-list"></i> <span class="textData">Alert Configuration</span></a>
+                <!--  <a href="tariff.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-heart"></i> <span class="textData">Tariff </span></a>
+                --> <a href="alert.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-list"></i> <span class="textData">Alert Configuration</span></a>
                 
                 
                    <%if(user_id.equalsIgnoreCase("2")){ %>
@@ -93,7 +93,6 @@
                 <%}%>
                 
                  <a href="configurationStatus.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-th"></i> <span class="textData">Meter Commands Status</span></a>
-                 <a href="LiveDashBoard.jsp" class="list-group-item d-inline-block collapsed"><i class="fa fa-film"></i> <span class="textData">DashBoard</span></a>
                 
                 <%if(user_id.equalsIgnoreCase("2")){ %>
                 <a href="topup.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-gear"></i> <span class="textData">ReCharge</span></a>
