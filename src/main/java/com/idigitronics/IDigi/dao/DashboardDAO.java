@@ -190,12 +190,16 @@ public class DashboardDAO {
 						individualDashboardResponseVO.setCommunicationStatus("YES");
 					}
 					
-					if(!customerUniqueID.isEmpty()) {
+					if(!customerUniqueID.isEmpty() && rs3.getString("PayType").equalsIgnoreCase("Prepaid")) {
 						PreparedStatement pstmt2 = con.prepareStatement("SELECT Amount, TransactionDate FROM topup WHERE CustomerMeterID = "+rs3.getInt("CustomerMeterID")+" AND STATUS = 0 ORDER BY TransactionID DESC LIMIT 0,1") ;
 						ResultSet rs2 = pstmt2.executeQuery();
 						if(rs2.next()) {
 							individualDashboardResponseVO.setLastTopupAmount(rs2.getString("Amount"));
 							individualDashboardResponseVO.setLastRechargeDate(ExtraMethodsDAO.datetimeformatter(rs2.getString("TransactionDate")));
+						} else {
+						
+						individualDashboardResponseVO.setLastTopupAmount("---");
+						individualDashboardResponseVO.setLastRechargeDate("---");
 						}
 					}
 					
@@ -745,15 +749,13 @@ public class DashboardDAO {
 			
 			if(!communityName.equalsIgnoreCase("0")) {
 				ResultSet rs1 = con.prepareStatement("SELECT * FROM block WHERE CommunityID = (SELECT CommunityID FROM community WHERE CommunityName = '"+communityName+"')").executeQuery();
-				if(rs1.next()) { id = rs1.getInt("BlockID"); }				
+				if(rs1.next()) { id = rs1.getInt("CommunityID"); }				
 				}
 			
 					if(year == 0 && month == 0) {
 						
-						
-						
 						String start = "SELECT * FROM <tablename> ";
-						PreparedStatement pstmt3 = con.prepareStatement(start.replaceAll("<tablename>", id != 0 ? "block" : "community"));
+						PreparedStatement pstmt3 = con.prepareStatement(start.replaceAll("<tablename>", id != 0 ? "block WHERE CommunityID = "+id : "community"));
 						ResultSet rs3 = pstmt3.executeQuery();
 						
 						while(rs3.next()) {
@@ -943,6 +945,9 @@ public class DashboardDAO {
 		int communityid = 0;
 		
 		try {
+			
+//			1 = valve open(active), 2 = valve close(inactive) 3 = communicating(live), 4 = non-communicating(non-live) 5 = low battery 6 = emergency credit
+			
 			con = getConnection();
 			homeResponseVO = new HomeResponseVO();
 			

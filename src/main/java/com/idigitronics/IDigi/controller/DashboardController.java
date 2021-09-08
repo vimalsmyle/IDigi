@@ -51,7 +51,7 @@ public class DashboardController {
 		dasboardresponsevo.setData(dashboarddao.getDashboarddetails(type, communityName, blockName, customerUniqueID, filter));
 		dasboardresponsevo.setTotal(dasboardresponsevo.getData().size());
 		dasboardresponsevo.setNonCommunicating(dasboardresponsevo.getData().size() == 0 ? 0 : dasboardresponsevo.getData().get(dasboardresponsevo.getData().size()-1).getNonCommunicating());
-		dasboardresponsevo.setCommunicating(dasboardresponsevo.getData().size()-dasboardresponsevo.getNonCommunicating());
+		dasboardresponsevo.setCommunicating(dasboardresponsevo.getData().size() == 0 ? 0 : dasboardresponsevo.getData().size()-dasboardresponsevo.getNonCommunicating());
 		
 		return dasboardresponsevo;
 	}
@@ -86,8 +86,8 @@ public class DashboardController {
 
 		dasboardresponsevo.setData(dashboarddao.getFilterDashboarddetails(communityName, blockName, filtervo, type));
 		dasboardresponsevo.setTotal(dasboardresponsevo.getData().size());
-//		dasboardresponsevo.setNonCommunicating(dasboardresponsevo.getData().size() == 0 ? 0 : dasboardresponsevo.getData().get(dasboardresponsevo.getData().size()-1).getNonCommunicating());
-//		dasboardresponsevo.setCommunicating(dasboardresponsevo.getData().size()-dasboardresponsevo.getNonCommunicating());
+		dasboardresponsevo.setNonCommunicating(dasboardresponsevo.getData().size() == 0 ? 0 : dasboardresponsevo.getData().get(dasboardresponsevo.getData().size()-1).getNonCommunicating());
+		dasboardresponsevo.setCommunicating(dasboardresponsevo.getData().size() == 0 ? 0 : dasboardresponsevo.getData().size()-dasboardresponsevo.getNonCommunicating());
 		
 		return dasboardresponsevo;
 	}

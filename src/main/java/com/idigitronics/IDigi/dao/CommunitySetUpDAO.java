@@ -319,7 +319,7 @@ public class CommunitySetUpDAO {
 		return responsevo;
 	}
 	
-	public boolean checkgateway(String gatewaySerialNumber) throws SQLException {
+	public boolean checkgateway(GatewayRequestVO gatewayvo, String mode) throws SQLException {
 		// TODO Auto-generated method stub
 
 		Connection con = null;
@@ -329,7 +329,9 @@ public class CommunitySetUpDAO {
 
 		try {
 			con = getConnection();
-			pstmt = con.prepareStatement("SELECT * FROM gateway WHERE GatewaySerialNumber = '" + gatewaySerialNumber.trim() + "'");
+			
+			String query = "SELECT * FROM gateway WHERE <change> GatewaySerialNumber = '" + gatewayvo.getGatewaySerialNumber().trim() + "'";
+			pstmt = con.prepareStatement(query.replaceAll("<change>", (mode.equalsIgnoreCase("add")) ? "" : "GatewayID != "+gatewayvo.getGatewayID() + " AND "));
 			rs = pstmt.executeQuery();
 			if (rs.next()) {
 				result = true;
@@ -465,6 +467,91 @@ public class CommunitySetUpDAO {
 		}
 
 		return responsevo;
+	}
+	
+	public ResponseVO deleteMeterSize(int metersizeID) throws SQLException {
+		// TODO Auto-generated method stub
+
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResponseVO responsevo = new ResponseVO(); 
+
+		try {
+			con = getConnection();
+			pstmt = con.prepareStatement("DELETE FROM metersize WHERE MeterSizeID ="+metersizeID);
+
+			if (pstmt.executeUpdate() > 0) {
+				responsevo.setResult("Success");
+				responsevo.setMessage("Metersize Deleted Successfully");
+			} 
+			
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			responsevo.setMessage("INTERNAL SERVER ERROR");
+			responsevo.setResult("Failure");
+		} finally {
+			pstmt.close();
+			con.close();
+		}
+
+		return responsevo;
+		
+	}
+	
+	public boolean checkMeterSize(MeterSizeRequestVO meterSizeRequestVO, String mode) throws SQLException {
+		// TODO Auto-generated method stub
+
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		Boolean result = false;
+
+		try {
+			con = getConnection();
+			
+			String query = "SELECT * FROM metersize WHERE <change> MeterType = '"+ meterSizeRequestVO.getMeterType()+"' AND MeterSize = " + meterSizeRequestVO.getMeterSize();
+			pstmt = con.prepareStatement(query.replaceAll("<change>", (mode.equalsIgnoreCase("add")) ? "" : "MeterSizeID != "+meterSizeRequestVO.getMeterSizeID() + " AND "));
+			
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				result = true;
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			pstmt.close();
+			rs.close();
+			con.close();
+		}
+
+		return result;
+	}
+
+	public boolean checkMeterSizeIsSetToMeters(int metersizeID) throws SQLException {
+		// TODO Auto-generated method stub
+		
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		boolean result = false;
+
+		try {
+			con = getConnection();
+			pstmt = con.prepareStatement("SELECT * FROM customermeterdetails WHERE MeterSizeID = "+metersizeID);
+			ResultSet rs = pstmt.executeQuery();
+			if (rs.next()) {
+
+				result = true;
+
+			} 
+			
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			pstmt.close();
+			con.close();
+		}
+
+		return result;
 	}
 
 	/* Block */
@@ -1691,7 +1778,7 @@ public class CommunitySetUpDAO {
 		return responsevo;
 	}
 	
-	public boolean checktariffamount(float tariff) throws SQLException {
+	public boolean checktariffamount(TariffRequestVO tariffvo, String mode) throws SQLException {
 		// TODO Auto-generated method stub
 
 		Connection con = null;
@@ -1701,8 +1788,10 @@ public class CommunitySetUpDAO {
 
 		try {
 			con = getConnection();
-			pstmt = con.prepareStatement("SELECT * FROM tariff WHERE Tariff = ?");
-			pstmt.setFloat(1, tariff);
+			
+			String query = "SELECT * FROM tariff WHERE <change> Tariff = " + tariffvo.getTariff();
+			pstmt = con.prepareStatement(query.replaceAll("<change>", (mode.equalsIgnoreCase("add")) ? "" : "TariffID != "+tariffvo.getTariffID() + " AND "));
+			
 			rs = pstmt.executeQuery();
 			if (rs.next()) {
 				result = true;

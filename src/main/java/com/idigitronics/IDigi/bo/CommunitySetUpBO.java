@@ -89,7 +89,7 @@ public class CommunitySetUpBO {
 			throw new BusinessException("ALL FIELDS ARE MANDATORY");
 		}
 		
-		if(communitysetupdao.checkgateway(gatewayvo.getGatewaySerialNumber())) {
+		if(communitysetupdao.checkgateway(gatewayvo, "add")) {
 			throw new BusinessException("GATEWAY ALREADY EXISTS");
 		}
 
@@ -101,6 +101,10 @@ public class CommunitySetUpBO {
 		
 		if(gatewayvo.getGatewayName().isEmpty() || gatewayvo.getGatewayIP().isEmpty() || gatewayvo.getGatewayPort().isEmpty() || gatewayvo.getGatewaySerialNumber().isEmpty()){
 			throw new BusinessException("ALL FIELDS ARE MANDATORY");
+		}
+		
+		if(communitysetupdao.checkgateway(gatewayvo, "edit")) {
+			throw new BusinessException("GATEWAY SERIAL NUMBER ALREADY EXISTS");
 		}
 		
 		return communitysetupdao.editgateway(gatewayvo);
@@ -125,6 +129,10 @@ public class CommunitySetUpBO {
 			throw new BusinessException("ALL FIELDS ARE MANDATORY");
 		}
 		
+		if(communitysetupdao.checkMeterSize(meterSizeRequestVO, "add")) {
+			throw new BusinessException("METERSIZE ALREADY EXISTS");
+		}
+		
 		return communitysetupdao.addMeterSize(meterSizeRequestVO);
 	}
 	
@@ -135,7 +143,21 @@ public class CommunitySetUpBO {
 			throw new BusinessException("ALL FIELDS ARE MANDATORY");
 		}
 		
+		if(communitysetupdao.checkMeterSize(meterSizeRequestVO, "edit")) {
+			throw new BusinessException("METERSIZE ALREADY EXISTS");
+		}
+		
 		return communitysetupdao.editMeterSize(meterSizeRequestVO);
+	}
+	
+	public ResponseVO deleteMeterSize(int metersizeID) throws BusinessException, SQLException {
+		// TODO Auto-generated method stub
+		
+		if(communitysetupdao.checkMeterSizeIsSetToMeters(metersizeID)) {
+			throw new BusinessException("METERSIZE CANNOT BE DELETED AS IT IS ASSIGNED TO METERS");
+		}
+
+		return communitysetupdao.deleteMeterSize(metersizeID);
 	}
 
 	/* Block */
@@ -333,7 +355,7 @@ public class CommunitySetUpBO {
 			throw new BusinessException("EMERGENCY CREDIT MUST BE GREATER THAN TARIFF AMOUNT");
 		}
 		
-		if(communitysetupdao.checktariffamount(tariffvo.getTariff())) {
+		if(communitysetupdao.checktariffamount(tariffvo, "add")) {
 			throw new BusinessException("TARIFF AMOUNT ALREADY EXISTS");
 		}
 
@@ -349,6 +371,10 @@ public class CommunitySetUpBO {
 		
 		if(tariffvo.getEmergencyCredit() < tariffvo.getTariff()) {
 			throw new BusinessException("EMERGENCY CREDIT MUST BE GREATER THAN TARIFF AMOUNT");
+		}
+		
+		if(communitysetupdao.checktariffamount(tariffvo, "edit")) {
+			throw new BusinessException("TARIFF AMOUNT ALREADY EXISTS");
 		}
 		
 		return communitysetupdao.edittariff(tariffvo);

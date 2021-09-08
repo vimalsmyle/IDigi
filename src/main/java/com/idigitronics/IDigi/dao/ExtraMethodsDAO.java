@@ -773,7 +773,7 @@ public class ExtraMethodsDAO {
 	}*/
 	
 //	@Scheduled(cron="0 0 7 ? * *")
-//	@Scheduled(cron="0 0 7 ? * TUE,FRI") //every tuesday and friday at 7:00
+	@Scheduled(cron="0 0 7 ? * TUE,FRI") //every tuesday and friday at 7:00
 	public void communicationfailurealert() throws SQLException {
 		
 		Connection con = null;
@@ -808,7 +808,7 @@ public class ExtraMethodsDAO {
 						smsRequestVO.setToMobileNumber(rs.getString("MobileNumber"));
 						
 						sendmail(mailRequestVO);
-//						sendsms(smsRequestVO);
+						sendsms(smsRequestVO);
 						
 					}
 				}
@@ -826,7 +826,7 @@ public class ExtraMethodsDAO {
 	
 	public static String datetimeformatter(String dateTime) throws ParseException {
 		
-		SimpleDateFormat IdigiFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+		SimpleDateFormat IdigiFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		SimpleDateFormat clientFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 		return clientFormat.format(IdigiFormat.parse(dateTime));
 	}
