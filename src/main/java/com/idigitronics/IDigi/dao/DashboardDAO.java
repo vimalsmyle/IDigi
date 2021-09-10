@@ -5,9 +5,7 @@ package com.idigitronics.IDigi.dao;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -229,13 +227,7 @@ public class DashboardDAO {
 		// TODO Auto-generated method stub
 		
 		ResponseVO responsevo = new ResponseVO();
-		String drivename = "D:/Dashboard/";
 		ByteArrayInputStream in = null;
-		
-		File directory = new File(drivename);
-		if (!directory.exists()) {
-			directory.mkdir();
-		}
 		
 		try {
 		
@@ -256,7 +248,7 @@ public class DashboardDAO {
         headercell2.setCellValue("Block");
         
         Cell headercell3 = header.createCell(++columnCount);
-        headercell3.setCellValue("CRN/CAN");
+        headercell3.setCellValue("CRN/CAN/CUI");
         
         Cell headercell4 = header.createCell(++columnCount);
         headercell4.setCellValue("Name");
@@ -265,43 +257,43 @@ public class DashboardDAO {
         headercell5.setCellValue("House Number");
         
         Cell headercell6 = header.createCell(++columnCount);
-        headercell6.setCellValue("MIU ID");
+        headercell6.setCellValue("Time Stamp");
         
         Cell headercell7 = header.createCell(++columnCount);
         headercell7.setCellValue("Meter Serial Number");
         
         Cell headercell8 = header.createCell(++columnCount);
-        headercell8.setCellValue("Reading");
+        headercell8.setCellValue("MIU ID");
         
         Cell headercell9 = header.createCell(++columnCount);
-        headercell9.setCellValue("Consumption");
+        headercell9.setCellValue("Reading");
         
         Cell headercell10 = header.createCell(++columnCount);
-        headercell10.setCellValue("Balance");
+        headercell10.setCellValue("Consumption");
         
         Cell headercell11 = header.createCell(++columnCount);
-        headercell11.setCellValue("Emergency Credit");
+        headercell11.setCellValue("Battery");
         
         Cell headercell12 = header.createCell(++columnCount);
-        headercell12.setCellValue("Pay Type");
+        headercell12.setCellValue("Box Tamper");
         
         Cell headercell13 = header.createCell(++columnCount);
-        headercell13.setCellValue("Battery");
+        headercell13.setCellValue("Magnetic Tamper");
         
         Cell headercell14 = header.createCell(++columnCount);
-        headercell14.setCellValue("Valve Status");
+        headercell14.setCellValue("Balance");
         
         Cell headercell15 = header.createCell(++columnCount);
-        headercell15.setCellValue("Tariff");
+        headercell15.setCellValue("Emergency Credit");
                 
         Cell headercell16 = header.createCell(++columnCount);
-        headercell16.setCellValue("Box AMR Tamper");
+        headercell16.setCellValue("Pay Type");
         
         Cell headercell17 = header.createCell(++columnCount);
-        headercell17.setCellValue("Magnetic Tamper");
+        headercell17.setCellValue("Tariff");
         
         Cell headercell18 = header.createCell(++columnCount);
-        headercell18.setCellValue("Time Stamp");
+        headercell18.setCellValue("Valve Status");
         
         Cell headercell19 = header.createCell(++columnCount);
         headercell19.setCellValue("Vacation Status");
@@ -334,43 +326,43 @@ public class DashboardDAO {
             	int dashboarDataColumnCount = 5;
             	
             	Cell cell6 = data.createCell(dashboarDataColumnCount);
-            	cell6.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getMiuID());
+            	cell6.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getTimeStamp());
             	
             	Cell cell7 = data.createCell(++dashboarDataColumnCount);
             	cell7.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getMeterSerialNumber());
             	
             	Cell cell8 = data.createCell(++dashboarDataColumnCount);
-            	cell8.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getReading());
+            	cell8.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getMiuID());
             	
             	Cell cell9 = data.createCell(++dashboarDataColumnCount);
-            	cell9.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getConsumption());
+            	cell9.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getReading());
             	
             	Cell cell10 = data.createCell(++dashboarDataColumnCount);
-            	cell10.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getBalance());
+            	cell10.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getConsumption());
             	
             	Cell cell11 = data.createCell(++dashboarDataColumnCount);
-            	cell11.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getEmergencyCredit());
+            	cell11.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getBattery());
             	
             	Cell cell12 = data.createCell(++dashboarDataColumnCount);
-            	cell12.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getPayType());
+            	cell12.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getDoorOpenTamper());
             	
             	Cell cell13 = data.createCell(++dashboarDataColumnCount);
-            	cell13.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getBattery());
+            	cell13.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getMagneticTamper());
             	
             	Cell cell14 = data.createCell(++dashboarDataColumnCount);
-            	cell14.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getValveStatus());
+            	cell14.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getBalance());
             	
             	Cell cell15 = data.createCell(++dashboarDataColumnCount);
-            	cell15.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getTariff());
+            	cell15.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getEmergencyCredit());
             	
             	Cell cell16 = data.createCell(++dashboarDataColumnCount);
-            	cell16.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getDoorOpenTamper());
+            	cell16.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getPayType());
             	
             	Cell cell17 = data.createCell(++dashboarDataColumnCount);
-            	cell17.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getMagneticTamper());
+            	cell17.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getTariff());
             	
             	Cell cell18 = data.createCell(++dashboarDataColumnCount);
-            	cell18.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getTimeStamp());
+            	cell18.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getValveStatus());
             	
             	Cell cell19 = data.createCell(++dashboarDataColumnCount);
             	cell19.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getVacationStatus());
@@ -384,11 +376,9 @@ public class DashboardDAO {
         	
         }
         
-//		FileOutputStream outputStream = new FileOutputStream("D:\\Dashboard\\Dashboard.xlsx");
 		workbook.write(outByteStream);
 		in = new ByteArrayInputStream(outByteStream.toByteArray());
 		workbook.close();
-//		outputStream.close();
 		
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -399,8 +389,6 @@ public class DashboardDAO {
 		}
         
         responsevo.setResult("Success");
-		responsevo.setLocation(drivename);
-		
 		responsevo.setFileName("Dashboard.xlsx");
 		responsevo.setByteArrayInputStream(in);
         
@@ -564,18 +552,16 @@ public class DashboardDAO {
 	public ResponseVO filterDashboardFile(DashboardResponseVO dashboardResponseVO) {
 		// TODO Auto-generated method stub
 		ResponseVO responsevo = new ResponseVO();
-		String drivename = "D:/Dashboard/";
-		
-		File directory = new File(drivename);
-		if (!directory.exists()) {
-			directory.mkdir();
-		}
+
+		ByteArrayInputStream in = null;
 		
 		try {
 		
 		XSSFWorkbook workbook = new XSSFWorkbook();
 		
-		XSSFSheet spreadsheet = workbook.createSheet("Dashboard List");
+		XSSFSheet spreadsheet = workbook.createSheet("Filter Dashboard List");
+		
+		ByteArrayOutputStream outByteStream = new ByteArrayOutputStream();
 		
 		XSSFRow header = spreadsheet.createRow(0);
 		
@@ -597,43 +583,43 @@ public class DashboardDAO {
         headercell5.setCellValue("House Number");
         
         Cell headercell6 = header.createCell(++columnCount);
-        headercell6.setCellValue("MIU ID");
+        headercell6.setCellValue("Time Stamp");
         
         Cell headercell7 = header.createCell(++columnCount);
         headercell7.setCellValue("Meter Serial Number");
         
         Cell headercell8 = header.createCell(++columnCount);
-        headercell8.setCellValue("Reading");
+        headercell8.setCellValue("MIU ID");
         
         Cell headercell9 = header.createCell(++columnCount);
-        headercell9.setCellValue("Consumption");
+        headercell9.setCellValue("Reading");
         
         Cell headercell10 = header.createCell(++columnCount);
-        headercell10.setCellValue("Balance");
+        headercell10.setCellValue("Consumption");
         
         Cell headercell11 = header.createCell(++columnCount);
-        headercell11.setCellValue("Emergency Credit");
+        headercell11.setCellValue("Battery");
         
         Cell headercell12 = header.createCell(++columnCount);
-        headercell12.setCellValue("Pay Type");
+        headercell12.setCellValue("Bax Tamper");
         
         Cell headercell13 = header.createCell(++columnCount);
-        headercell13.setCellValue("Battery");
+        headercell13.setCellValue("Magnetic Tamper");
         
         Cell headercell14 = header.createCell(++columnCount);
-        headercell14.setCellValue("Valve Status");
+        headercell14.setCellValue("Balance");
         
         Cell headercell15 = header.createCell(++columnCount);
-        headercell15.setCellValue("Tariff");
+        headercell15.setCellValue("Emergency Credit");
                 
         Cell headercell16 = header.createCell(++columnCount);
-        headercell16.setCellValue("Box AMR Tamper");
+        headercell16.setCellValue("Pay Type");
         
         Cell headercell17 = header.createCell(++columnCount);
-        headercell17.setCellValue("Magnetic Tamper");
+        headercell17.setCellValue("Tariff");
         
         Cell headercell18 = header.createCell(++columnCount);
-        headercell18.setCellValue("Time Stamp");
+        headercell18.setCellValue("Valve Status");
         
         Cell headercell19 = header.createCell(++columnCount);
         headercell19.setCellValue("Vacation Status");
@@ -666,43 +652,43 @@ public class DashboardDAO {
             	int dashboarDataColumnCount = 5;
             	
             	Cell cell6 = data.createCell(dashboarDataColumnCount);
-            	cell6.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getMiuID());
+            	cell6.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getTimeStamp());
             	
             	Cell cell7 = data.createCell(++dashboarDataColumnCount);
             	cell7.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getMeterSerialNumber());
             	
             	Cell cell8 = data.createCell(++dashboarDataColumnCount);
-            	cell8.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getReading());
+            	cell8.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getMiuID());
             	
             	Cell cell9 = data.createCell(++dashboarDataColumnCount);
-            	cell9.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getConsumption());
+            	cell9.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getReading());
             	
             	Cell cell10 = data.createCell(++dashboarDataColumnCount);
-            	cell10.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getBalance());
+            	cell10.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getConsumption());
             	
             	Cell cell11 = data.createCell(++dashboarDataColumnCount);
-            	cell11.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getEmergencyCredit());
+            	cell11.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getBattery());
             	
             	Cell cell12 = data.createCell(++dashboarDataColumnCount);
-            	cell12.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getPayType());
+            	cell12.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getDoorOpenTamper());
             	
             	Cell cell13 = data.createCell(++dashboarDataColumnCount);
-            	cell13.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getBattery());
+            	cell13.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getMagneticTamper());
             	
             	Cell cell14 = data.createCell(++dashboarDataColumnCount);
-            	cell14.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getValveStatus());
+            	cell14.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getBalance());
             	
             	Cell cell15 = data.createCell(++dashboarDataColumnCount);
-            	cell15.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getTariff());
+            	cell15.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getEmergencyCredit());
             	
             	Cell cell16 = data.createCell(++dashboarDataColumnCount);
-            	cell16.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getDoorOpenTamper());
+            	cell16.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getPayType());
             	
             	Cell cell17 = data.createCell(++dashboarDataColumnCount);
-            	cell17.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getMagneticTamper());
+            	cell17.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getTariff());
             	
             	Cell cell18 = data.createCell(++dashboarDataColumnCount);
-            	cell18.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getTimeStamp());
+            	cell18.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getValveStatus());
             	
             	Cell cell19 = data.createCell(++dashboarDataColumnCount);
             	cell19.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getVacationStatus());
@@ -716,10 +702,9 @@ public class DashboardDAO {
         	
         }
         
-		FileOutputStream outputStream = new FileOutputStream("D:\\Dashboard\\FilterDashboard.xlsx");
-		workbook.write(outputStream);
+        workbook.write(outByteStream);
+		in = new ByteArrayInputStream(outByteStream.toByteArray());
 		workbook.close();
-		outputStream.close();
 		
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -730,8 +715,7 @@ public class DashboardDAO {
 		}
         
         responsevo.setResult("Success");
-		responsevo.setLocation(drivename);
-		
+		responsevo.setByteArrayInputStream(in);
 		responsevo.setFileName("FilterDashboard.xlsx");
         
 		return responsevo;

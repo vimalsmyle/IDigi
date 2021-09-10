@@ -3,22 +3,14 @@
  */
 package com.idigitronics.IDigi.controller;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.sql.SQLException;
 
-import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
-import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.InputStreamResource;
-import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -91,7 +83,7 @@ public class DashboardController {
 		return dasboardresponsevo;
 	}
 	
-	@RequestMapping(value = "/filterdashboard/excel", method = RequestMethod.POST, produces = "application/vnd.ms-excel", consumes = "application/json")
+	@RequestMapping(value = "/filterdashboard/excel", method = RequestMethod.POST)
 	public ResponseEntity<InputStreamResource> filterDashboardFile(@RequestBody DashboardResponseVO dashboardResponseVO) throws SQLException, FileNotFoundException {
 
 		ResponseVO responsevo = new ResponseVO();
@@ -99,16 +91,10 @@ public class DashboardController {
 
 		responsevo = dashboarddao.filterDashboardFile(dashboardResponseVO);
 		
-		File file = new File(responsevo.getLocation() + responsevo.getFileName());
-	    InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
-		
-		ResponseEntity<InputStreamResource> response = new ResponseEntity<InputStreamResource>(resource, HttpStatus.OK);
-		
-//		return ResponseEntity.ok()
-//		        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + responsevo.getFileName())
-//		        .contentType(MediaType.parseMediaType("application/vnd.ms-excel"))
-//		        .body(file);
-		return response;
+		return ResponseEntity.ok()
+		        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + responsevo.getFileName())
+		        .contentType(MediaType.parseMediaType("application/octet-stream"))
+		        .body(new InputStreamResource(responsevo.getByteArrayInputStream()));
 	}
 	
 	@RequestMapping(value = "/homedashboard/{type}/{roleid}/{id}", method = RequestMethod.GET, produces = "application/json")
