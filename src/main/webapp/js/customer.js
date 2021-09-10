@@ -332,6 +332,7 @@ table = $('#customerTable')
 },
 "complete" : function(json) {
 	console.log(json);
+	$("#action").val(json.responseJSON.data[0].action);
 return json.data;
 },
 },
@@ -385,11 +386,7 @@ return json.data;
 																	+ "\")'>"
 																	+ "<i class='material-icons' style='color:#17e9e9;cursor:pointer;'>delete</i>"
 																	+ "</a>"
-																	+"<a onclick='getCustomerFormDelete(\""
-																	+ row.CustomerUniqueID
-																	+ "\")'>"
-																	+ "<i class='material-icons' style='color:#17e9e9;cursor:pointer;'>delete</i>"
-																	+ "</a>"
+																	
 																	
 	}
 	},{
@@ -411,9 +408,9 @@ return json.data;
 
 ],
 "columnDefs" : [ {
-	targets : 11, visible:  (((sessionStorage.getItem("roleID") == 1) || (sessionStorage.getItem("roleID") == 2)) && (!(sessionStorage.getItem("roleID") == 5) || !(sessionStorage.getItem("roleID") == 3) || !(sessionStorage.getItem("roleID") == 4))),
+	targets : 12, visible:  (((sessionStorage.getItem("roleID") == 1) || (sessionStorage.getItem("roleID") == 2)) && (!(sessionStorage.getItem("roleID") == 5) || !(sessionStorage.getItem("roleID") == 3) || !(sessionStorage.getItem("roleID") == 4))),
 },{
-	targets : 12, visible: (sessionStorage.getItem("roleID") == 3)
+	targets : 13, visible: (sessionStorage.getItem("roleID") == 3)
 //(!(sessionStorage.getItem("roleID") == 1) && (((sessionStorage.getItem("roleID") == 1) || (sessionStorage.getItem("roleID") == 2) || (sessionStorage.getItem("roleID") == 3)) && (!(sessionStorage.getItem("roleID") == 5) || !(sessionStorage.getItem("roleID") == 4))))
 },
 {
@@ -522,7 +519,9 @@ $("#addMeter")
 									+" id=locationAdd-"+rowCount+">"
 									+"<hr></div></div>   " +
 											" <div class='col-md-12 text-right'>" 
-									+" <input type=button class='btn btn-danger' id='removeMeter' onclick='removeMeter("+rowCount+")' value='Remove Meter'></div></div>" +
+									+" 	<button class='btn btn-danger' value='Remove Meter!' onclick='$(this).removeMeter("+rowCount+")' id='removeMeter' " +
+											"type='button'>Remove Meter</button>" +
+											"</div></div>" +
 											"</div>");
 
 			
@@ -977,13 +976,10 @@ $(document)
 
 																	],
 																	"columnDefs" : [ {
-																		//orderable : false,
-																		targets : 11, visible:  (((sessionStorage.getItem("roleID") == 1) || (sessionStorage.getItem("roleID") == 2)) && (!(sessionStorage.getItem("roleID") == 5) || !(sessionStorage.getItem("roleID") == 3) || !(sessionStorage.getItem("roleID") == 4))),
-																		//targets : 14, visible:  (((sessionStorage.getItem("roleID") == 1) || (sessionStorage.getItem("roleID") == 2) || (sessionStorage.getItem("roleID") == 3)) && (!(sessionStorage.getItem("roleID") == 5) || !(sessionStorage.getItem("roleID") == 4))),
+																		targets : 12, visible:  (((sessionStorage.getItem("roleID") == 1) || (sessionStorage.getItem("roleID") == 2)) && (!(sessionStorage.getItem("roleID") == 5) || !(sessionStorage.getItem("roleID") == 3) || !(sessionStorage.getItem("roleID") == 4))),
 																	},{
-																		//orderable : false,
-																		//targets : 13, visible:  (((sessionStorage.getItem("roleID") == 1) || (sessionStorage.getItem("roleID") == 2)) && (!(sessionStorage.getItem("roleID") == 5) || !(sessionStorage.getItem("roleID") == 3) || !(sessionStorage.getItem("roleID") == 4))),
-																		targets : 12, visible: ( !(sessionStorage.getItem("roleID") == 1) && (((sessionStorage.getItem("roleID") == 1) || (sessionStorage.getItem("roleID") == 2) || (sessionStorage.getItem("roleID") == 3)) && (!(sessionStorage.getItem("roleID") == 5) || !(sessionStorage.getItem("roleID") == 4))))
+																		targets : 13, visible: (sessionStorage.getItem("roleID") == 3)
+																	//(!(sessionStorage.getItem("roleID") == 1) && (((sessionStorage.getItem("roleID") == 1) || (sessionStorage.getItem("roleID") == 2) || (sessionStorage.getItem("roleID") == 3)) && (!(sessionStorage.getItem("roleID") == 5) || !(sessionStorage.getItem("roleID") == 4))))
 																	},
 																	{
 																		"className": "dt-center", "targets": "_all"
@@ -1415,22 +1411,23 @@ function getCustomerMeters(CRNNumber){
 	});
 }
 
-
-	function removeMeter(removeValue){
-		var rowCount = $("#rowCount").val()==""?0:$("#rowCount").val();
-		rowCount--;
-		if(rowCount>2){
-			$("#addMeter").hide();
-		}else{
-			$("#addMeter").show();
-		}
-		$(this).parent().parent().remove();
-		const index = $("#rowCountArray").indexOf(removeValue);
-		if (index > -1) {
-			$("#rowCountArray").splice(index, 1);
-		}
-		$("#rowCount").val(rowCount);
+// define the function within the global scope
+$.fn.removeMeter = function(removeValue) {
+	var rowCount = $("#rowCount").val()==""?0:$("#rowCount").val();
+	rowCount--;
+	if(rowCount>13){
+		$("#addMeter").hide();
+	}else{
+		$("#addMeter").show();
 	}
+	$(this).parent().parent().remove();
+	const index = $("#rowCountArray").indexOf(parseInt(removeValue));
+	if (index > -1) {
+		$("#rowCountArray").splice(index, 1);
+	}
+	$("#rowCount").val(rowCount);
+};
 
+	
 
 

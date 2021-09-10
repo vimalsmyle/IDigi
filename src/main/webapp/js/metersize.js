@@ -55,7 +55,12 @@ return json.data;
 		return "<div id=tdfiled><a href=# id=metersizeEdit data-toggle=modal data-target=#mymetersizeEdit onclick='getMeterSizeFormEdit("
 																	+ row.meterSizeID
 																	+ ")'>"
-																	+ "<i class='fa fa-edit'></i>"
+																	+ "<i class='material-icons' style='color:#17e9e9'>edit</i>"
+																	+ "</a>" +
+																	"<a onclick='getMeterFormDelete(\""
+																	+ row.meterSizeID
+																	+ "\")'>"
+																	+ "<i class='material-icons' style='color:#17e9e9;cursor:pointer;'>delete</i>"
 																	+ "</a></div>"
 	}
 	}
@@ -401,4 +406,46 @@ function getMeterSizeFormEdit(id) {
 		});
 		$('#mymetersizeEdit').modal('show');
 	});
+}
+
+
+
+function getMeterFormDelete(meterSizeId){
+	
+	bootbox
+	.confirm(
+			"ARE YOU SURE TO DELETE Meter Size",
+		function(
+			result) {
+			//	alert(result);
+			if(result == true){
+				$.ajax({
+					type : "POST",
+					contentType : "application/json",
+					url : "./metersize/delete/" + meterSizeId,
+					dataType : "JSON",
+					success : function(data) {
+						//alert("Success====" + data.result);
+						if (data.result == "Success") {
+							bootbox
+							.confirm(
+									data.Message,
+								function(
+									result) {
+									window.location = "MeterSize.jsp";
+								});
+
+						} else {
+							bootbox
+							.alert(data.Message);
+							return false;
+						}
+					}
+				});
+			}else if(result==false){
+				//alert("@"+false)
+				
+			}
+		});
+	
 }

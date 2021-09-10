@@ -53,7 +53,7 @@
 							</div>
 						</div>
 
-
+					<input type="hidden" id="action" />
 						<div class="row mr-0 ml-0">
 
 							<div class="right_data col-md-12 mt-4 mb-4">
@@ -67,7 +67,7 @@
 												<tr>
 													<th>Community</th>
 													<th>Block</th>
-													<th>CRN/CAN</th>
+													<th>CRN/CAN/CUI</th>
 													<th>First Name</th>
 													<th>Last Name</th>
 													<th>House No</th>
@@ -77,8 +77,8 @@
 													<th>Created By UserName</th>
 													<th>Created By Role</th>
 													<th>Registration Date</th>
-													<th>Action</th>
-													<th>Action</th>
+													<th>Action1</th>
+													<th>Action2</th>
 												</tr>
 											</thead>
 											<tbody>
@@ -94,7 +94,7 @@
 												<tr>
 													<th>Community</th>
 													<th>Block</th>
-													<th>CRN/CAN</th>
+													<th>CRN/CAN/CUI</th>
 													<th>First Name</th>
 													<th>Last Name</th>
 													<th>House No</th>
@@ -180,9 +180,9 @@
 		</div>
 	</div>
 
-	<div class="modal fade bd-example-modal-xl" id="myCustomerMeters"
+	<div class="modal fade bd-example-modal-lg" id="myCustomerMeters"
 		role="dialog">
-		<div class="modal-dialog modal-xl
+		<div class="modal-dialog modal-lg
 		">
 
 			<!-- Modal content-->

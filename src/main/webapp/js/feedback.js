@@ -8,7 +8,7 @@ $(document)
 				function() {
 					$(
 					"#CRNNumber")
-					.val(sessionStorage.getItem("ID"))
+					.val(sessionStorage.getItem("userID"))
 					
 					$("#feedbackapproval")
 					.click(
@@ -27,7 +27,7 @@ $(document)
 										.ajax({
 											type : "POST",
 											contentType : "application/json",
-											url : "/PAYGTL_LORA_BLE/feedback/"+$("#feedbackId").val()+"/"+$("#action").val()+"/"+$("#description").val(),
+											url : "./feedback/"+$("#feedbackId").val()+"/"+$("#action").val()+"/"+$("#description").val(),
 											dataType : "JSON",
 
 											success : function(
@@ -92,7 +92,7 @@ $(document)
 											"scrollX" : true,
 										
 								"ajax" : {
-									"url" : "/PAYGTL_LORA_BLE/feedback/"
+									"url" : "./feedback/"
 											+ sessionStorage
 													.getItem("ID"),
 									"type" : "GET",
@@ -166,7 +166,7 @@ $(document)
 										}
 
 										var data1 = {}
-										data1["CRNNumber"] = $(
+										data1["customerUniqueID"] = $(
 										"#CRNNumber")
 										.val();
 										data1["feedback"] = $(
@@ -182,7 +182,7 @@ $(document)
 												.ajax({
 													type : "POST",
 													contentType : "application/json",
-													url : "/PAYGTL_LORA_BLE/feedback/add",
+													url : "./feedback/add",
 													data : JSON
 															.stringify(data1),
 													dataType : "JSON",

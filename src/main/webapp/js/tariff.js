@@ -123,19 +123,19 @@ $(document)
 														}
 													},
 													tariffRateAdd : {
-														message : 'Rate is not valid',
+														message : 'Per Unit is not valid',
 														validators : {
 															notEmpty : {
-																message : 'Rate is required and cannot be empty'
+																message : 'Per Unit is required and cannot be empty'
 															},
 															stringLength : {
 																min : 1,
 																max : 4,
-																message : 'Rate must be more than 1 and less than 4 characters long'
+																message : 'Per Unit must be more than 1 and less than 4 characters long'
 															},
 															regexp : {
 																regexp : /^(0|[1-9]\d*)(\.\d+)?$/,
-																message : 'Rate can only consist of number'
+																message : 'Per Unit can only consist of number'
 															}
 														}
 													},
@@ -179,7 +179,7 @@ $(document)
 															},stringLength : {
 																min : 1,
 																max : 4,
-																message : 'Fixed Charge must be more than 2 and less than 4 characters long'
+																message : 'Fixed Charge must be more than 1 and less than 4 characters long'
 															},
 															regexp : {
 																regexp : /^(0|[1-9]\d*)(\.\d+)?$/,
@@ -220,15 +220,15 @@ $(document)
 												}
 											},
 											tariffRateEdit : {
-												message : 'Rate is not valid',
+												message : 'Per Unit is not valid',
 												validators : {
 													notEmpty : {
-														message : 'Rate is required and cannot be empty'
+														message : 'Per Unit is required and cannot be empty'
 													},
 													stringLength : {
 														min : 1,
 														max : 4,
-														message : 'Rate must be more than 1 and less than 4 characters long'
+														message : 'Per Unit must be more than 1 and less than 4 characters long'
 													},
 													regexp : {
 														regexp : /^(0|[1-9]\d*)(\.\d+)?$/,

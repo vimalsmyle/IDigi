@@ -65,7 +65,7 @@
 							<thead class="bg-primary text-white">
 								<tr>
 									<th><b>Name</b></th>
-									<th>Rate</th>
+									<th>Per Unit</th>
 									<th>Emergency Credit</th>
 									<th>Alarm Credit</th>
 									<th>Fixed Charge</th>
@@ -113,7 +113,7 @@
 							</div>
 							<div class="col-md-6">
 								<div class="group form-group">
-									<label class="bmd-label-floating">Rate<span class=impp><sup>*</sup></span></label> <input
+									<label class="bmd-label-floating">Per Unit<span class=impp><sup>*</sup></span></label> <input
 										type="text" class="form-control form-control-sm" name="tariffRateAdd"
 										id="tariffRateAdd">
 								</div>
@@ -187,7 +187,7 @@
 							</div>
 							<div class="col-md-6">
 								<div id="formtariffRate" class="group form-group">
-									<label class="bmd-label-floating">Rate<span class=impp><sup>*</sup></span></label> <input
+									<label class="bmd-label-floating">Per Unit<span class=impp><sup>*</sup></span></label> <input
 										type="text" class="form-control form-control-sm" name="tariffRateEdit"
 										id="tariffRateEdit">
 								</div>

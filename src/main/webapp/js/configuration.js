@@ -155,7 +155,7 @@ $(document)
 													json["parameter_id"] = $("#selectcommandType").val();
 													
 													}else if($("#selectcommandType").val()=="9"){
-														var reg =/[0-9]{1,10}$/;
+														var reg =/^(0|[1-9]\d*)(\.\d+)?$/;
 														if($("#valueText").val() == ""){
 														
 															swal.fire({
@@ -171,7 +171,7 @@ $(document)
 																
 																swal.fire({
 																	  title: "error",
-																	  text: "The Default Reading can only consist of number",
+																	  text: "The Default Reading can only consist of number with max 10 digit",
 																	  icon: "error"
 																	})
 																return false;
