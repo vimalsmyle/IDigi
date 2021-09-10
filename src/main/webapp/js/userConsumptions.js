@@ -12,8 +12,11 @@ $(document)
 						$("#blockNameAdd").val(sessionStorage.getItem("blockName"));
 						$("#formblockNameAdd").addClass("input-group form-group has-feedback has-success bmd-form-group is-filled")
 					}
+					if(sessionStorage.getItem("roleID") == 3){
+						$("#selectHouseBasedonBlock").val(sessionStorage.getItem("userID"));
+					}
 					
-					$("#selectHouseBasedonBlock").val(sessionStorage.getItem("ID"));
+				//	$("#selectHouseBasedonBlock").val(sessionStorage.getItem("ID"));
 					$("#userconsumption")
 							.click(
 									function() {

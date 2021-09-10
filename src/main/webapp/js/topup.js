@@ -256,7 +256,7 @@ $(document)
 											return false;
 										}
 										
-										if ($("#selectMeters").val() == "-1") {
+										if ($("#selectMeters").val() == "-1" || $("#selectMeters").val() == "Select Meters") {
 											swal.fire({
 												  title: "error",
 												  text: "Please Select Meters",
@@ -310,7 +310,7 @@ $(document)
 											.val();
 										}
 
-										data1["miuID"] = $("#AMR_topup")
+										data1["miuID"] = $("#selectMeters")
 												.val();
 										data1["customerMeterID"] = $("#selectMeters").val();
 										data1["currentBalance"] = $(
@@ -445,12 +445,12 @@ $(document)
 								sessionStorage.getItem("communityName"));
 						$("#formcommunityNameAdd")
 								.addClass(
-										"input-group form-group has-feedback has-success bmd-form-group is-filled")
+										"group form-group has-feedback has-success bmd-form-group is-filled")
 						$("#blockNameAdd").val(
 								sessionStorage.getItem("blockName"));
 						$("#formblockNameAdd")
 								.addClass(
-										"input-group form-group has-feedback has-success bmd-form-group is-filled")
+										"group form-group has-feedback has-success bmd-form-group is-filled")
 					}
 
 					if (sessionStorage.getItem("roleID") == 1
@@ -465,6 +465,28 @@ $(document)
 								+ "<'row'<'col-sm-4'B><'col-sm-2'l><'col-sm-5 total'>>"
 								+ "<'row'<'col-sm-12'tr>>"
 								+ "<'row'<'col-sm-6 text-black'i><'col-sm-6 text-black'p>>";
+						
+						$("#selectHouseBasedonBlock").val(
+								sessionStorage.getItem("userID"));
+						$("#formCRNNumber")
+								.addClass(
+										"group form-group has-feedback has-success bmd-form-group is-filled");
+						
+						$("#formSelectmeters")
+						.addClass(
+								"group form-group has-feedback has-success bmd-form-group is-filled");
+						
+						$("#selectMeters").find('option').remove();
+						$("#selectMeters").append("<option>" + "Select Meters" + "</option>");
+						$.getJSON("./customermeters/" + sessionStorage.getItem("userID"), function(data) {
+							var Options = "";
+							$.each(data.dropDownAllCustomerMeters, function(key, value) {
+								Options = Options + "<option value='" + key + "'>" + value
+										+ "</option>";
+							});
+							$('#selectMeters').append(Options);
+						});
+						
 					} else {
 						$("#customerAddd").remove();
 						var dom1 = "<'row'<'col-sm-4 headname'><'col-sm-2'><'col-sm-1'><'col-sm-2'f>>"

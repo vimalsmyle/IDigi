@@ -118,7 +118,7 @@
 							
 							<div class="col-md-4">
 								<div id="formCRNEdit" class="group">
-									<label class="bmd-label-floating">CRN Number</label> <input
+									<label class="bmd-label-floating">CRN/CAN/CUI</label> <input
 										type="text" class="form-control form-control-sm" name="CRNEdit"
 										id="CRNEdit" disabled>
 								</div>

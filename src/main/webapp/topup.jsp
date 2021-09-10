@@ -136,10 +136,11 @@
 															} else if (user_id.equalsIgnoreCase("3")) {
 														%>
 														<div class="col-md-4">
-															<div id="formCRNNumber" class="group form-group">
+															<div id="formCRNNumber" class="group form-group has-feedback has-success bmd-form-group is-filled">
 																<label class="bmd-label-floating">CRN Number</label> <input
 																	type="text" class="form-control form-control-sm"
-																	id="CustomerCRNNumber" name="CustomerCRNNumber"
+																	id="selectHouseBasedonBlock"
+																	name="selectHouseBasedonBlock"
 																	disabled>
 															</div>
 														</div>
@@ -149,7 +150,7 @@
 														%>
 
 														<div class="col-md-4">
-															<div class="group form-group">
+															<div id="formSelectmeters" class="group form-group">
 																<label class="bmd-label-floating select-label">Select
 																	Meters<sup class="imp">*</sup>
 																</label> <select class="form-control form-control-sm select2"
@@ -159,13 +160,13 @@
 															</div>
 														</div>
 
-														<div class="col-md-4">
+														<!-- <div class="col-md-4">
 															<div id="formAMR_topup" class="group form-group">
 																<label class="bmd-label-floating">MIU ID</label> <input
 																	type="text" class="form-control form-control-sm"
 																	id="AMR_topup" name="AMR_topup" disabled>
 															</div>
-														</div>
+														</div> -->
 														<div class="col-md-4">
 															<div id="formcurrentBalance_topup"
 																class="group form-group">
@@ -265,7 +266,7 @@
 															<!--     <button type="button" id="topup" class="btn btn-primary submit-button btn-raised float-right mr-4" disabled>Submit<div class="ripple-container"></div></button> -->
 															<button id="topup"
 																class="btn btn-secondary submit-button btn-raised"
-																disabled>
+																>
 																Submit
 																<div class="ripple-container"></div>
 															</button>

@@ -67,7 +67,7 @@
 												<tr>
 													<th>Community</th>
 													<th>Block</th>
-													<th>CRN/CAN</th>
+													<th>CRN/CAN/CUI</th>
 													<th>First Name</th>
 													<th>Last Name</th>
 													<th>House No</th>
@@ -94,7 +94,7 @@
 												<tr>
 													<th>Community</th>
 													<th>Block</th>
-													<th>CRN/CAN</th>
+													<th>CRN/CAN/CUI</th>
 													<th>First Name</th>
 													<th>Last Name</th>
 													<th>House No</th>
@@ -180,9 +180,9 @@
 		</div>
 	</div>
 
-	<div class="modal fade bd-example-modal-xl" id="myCustomerMeters"
+	<div class="modal fade bd-example-modal-lg" id="myCustomerMeters"
 		role="dialog">
-		<div class="modal-dialog modal-xl
+		<div class="modal-dialog modal-lg
 		">
 
 			<!-- Modal content-->

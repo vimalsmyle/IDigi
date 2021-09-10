@@ -89,17 +89,6 @@ table = $('#alertTable')
 													"render" : function(data,
 															type, row) {
 
-														/*
-														 * return "<a href=#
-														 * id=alertEdit
-														 * data-toggle=modal
-														 * data-target=#myAlertEdit
-														 * onclick='getAlertFormEdit(" +
-														 * row.alertID + ")'>" + "<i
-														 * class='material-icons'
-														 * style='color:#17e9e9'>edit</i>" + "</a>"
-														 */
-
 														return "<a href=# id=alertEdit data-toggle=modal data-target=#myAlertEdit onclick='getAlertFormEdit("
 																+ row.alertID
 																+ ")'>"
@@ -112,14 +101,18 @@ table = $('#alertTable')
 										"columnDefs" : [
 												{
 													// orderable : false,
-													targets : 5,
-													visible : (((sessionStorage
-															.getItem("roleID") == 1)
-															|| (sessionStorage
-																	.getItem("roleID") == 2) || (sessionStorage
-															.getItem("roleID") == 3)) && (!(sessionStorage
-															.getItem("roleID") == 5) || !(sessionStorage
-															.getItem("roleID") == 4)))
+													targets : 9,
+													visible : (sessionStorage
+													.getItem("roleID") == 1) 
+														
+														
+														/*(((sessionStorage
+																.getItem("roleID") == 1)
+																|| (sessionStorage
+																		.getItem("roleID") == 2) || (sessionStorage
+																.getItem("roleID") == 3)) && (!(sessionStorage
+																.getItem("roleID") == 5) || !(sessionStorage
+																.getItem("roleID") == 4)))*/
 												}, {
 													"className" : "dt-center",
 													"targets" : "_all"

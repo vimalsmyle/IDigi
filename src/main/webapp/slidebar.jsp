@@ -109,10 +109,8 @@
                 
                 <a href="topup.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-gear"></i> <span class="textData">ReCharge</span></a>
                  <a href="topupStatus.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-calendar"></i> <span class="textData">ReCharge Status</span></a>
-                <a href="#" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-envelope"></i> <span class="textData">Vacation</span></a>
-                 <a href="userConsumptions.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-envelope"></i> <span class="textData">User Consumptions</span></a>
-                
-                <a href="#" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-bar-chart-o"></i> <span class="textData">Feedback/Compliant</span></a>
+                 <a href="userReport.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-envelope"></i> <span class="textData">User Consumptions</span></a>
+                <a href="feedback.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-bar-chart-o"></i> <span class="textData">Feedback/Compliant</span></a>
               <% } %>
             </div>
         </div>

@@ -17,8 +17,8 @@ $(document)
   	  document.querySelector("#gasnonLive").innerText = data.live;
   	  document.querySelector("#gasemergency").innerText = data.emergency;
   	  document.querySelector("#gasLowbattery").innerText = data.lowBattery;
-  	  document.querySelector("#gasActivePercentage").innerText = data.activePercentage;
-  	  document.querySelector("#gasinactivePercentage").innerText = data.inActivePercentage;
+  	// document.querySelector("#gasActivePercentage").innerText = data.activePercentage;
+  	//  document.querySelector("#gasinactivePercentage").innerText = data.inActivePercentage;
 			
 		});
 	  
@@ -32,8 +32,8 @@ $(document)
 	  	  document.querySelector("#waternonLive").innerText = data.live;
 	  	  document.querySelector("#wateremergency").innerText = data.emergency;
 	  	  document.querySelector("#waterLowbattery").innerText = data.lowBattery;
-	  	  document.querySelector("#waterActivePercentage").innerText = data.activePercentage;
-	  	  document.querySelector("#waterinactivePercentage").innerText = data.inActivePercentage;
+	  	//  document.querySelector("#waterActivePercentage").innerText = data.activePercentage;
+	  	//  document.querySelector("#waterinactivePercentage").innerText = data.inActivePercentage;
 			
 		});
 		
@@ -73,7 +73,9 @@ $(document)
 		        	        },
 
 		        		    series: [{
-		        		        data: d.yAxis
+		        		        data: d.yAxis,
+		        		        name: 'Consumption'
+		        		        
 		        		    }]
 
 						});
@@ -100,7 +102,7 @@ $(document)
 		        		    xAxis: {
 		        		        categories: d.xAxis
 		        		    },
-
+		        		    
 		        		    plotOptions: {
 		        	            series: {
 		        	                cursor: 'pointer',
@@ -118,7 +120,8 @@ $(document)
 		        	        },
 
 		        		    series: [{
-		        		        data: d.yAxis
+		        		        data: d.yAxis,
+		        		        name: 'Consumption'
 		        		    }]
 
 						});

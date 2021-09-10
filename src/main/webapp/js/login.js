@@ -308,6 +308,17 @@ $(document)
 																		"userName",
 																		data.userDetails.userName);
 																
+																sessionStorage
+																.setItem(
+																		"communityName",
+																		data.userDetails.communityName);
+																
+																
+																sessionStorage
+																.setItem(
+																		"blockName",
+																		data.userDetails.blockName);
+																
 																var Role = data.userDetails.roleID;
 																		window.location = "LoginAction.jsp?RoleID="
 																				+ Role;

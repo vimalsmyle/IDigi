@@ -110,6 +110,26 @@ function redirection(obj,type){
 	
 }
 
+function dashboardAll(type){
+	if (sessionStorage
+			.getItem(
+			"roleID") == 2) {
+		var comm = sessionStorage
+		.getItem(
+				"communityName");
+		
+		var block = sessionStorage
+		.getItem(
+		"blockName");
+	}else{
+		var comm=$("#comName").val()==undefined?"0":$("#comName").val()
+				var block = $("#blockName").val()==undefined?"0":$("#blockName").val();
+	}
+	
+	
+	window.location = "customerDashboard.jsp?com="+comm+"&block="+block+"&type="+type;
+}
+
 
 
 

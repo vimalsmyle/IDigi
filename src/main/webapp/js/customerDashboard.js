@@ -69,23 +69,18 @@ $(document)
 											"emptyTable" : "No data available in table"
 										},
 
-										processing : true,
-										serverSide : false,
-										fixedColumns : true,
-										autoWidth : true,
-										responsive : true,
-										deferRender : true,
-										processing : true,
-										paging : true,
-										pageLength : 5,
-										searching : true,
-										info : true,
+										"responsive" : true,
+										/*"processing" : true,*/
+										"serverSide" : false,
+										"bDestroy" : true,
+										"bPaginate": true,
+										"pagging" : true,
+										"bProcessing" : true,
 										"ordering" : true,
 										"order" : [ 0, "desc" ],
 										"lengthMenu" : [ 5, 10, 25, 30, 50, 75 ],
-										bPaginate : false,
-										"scrollY" : 300,
-										"scrollX" : true,
+										"pageLength" : 25,
+										"scrollX" : false,
 										"ajax" : {
 											"url" : "./dashboard/"
 													+ $("#type").val() + "/"
@@ -268,32 +263,37 @@ function getCustomerMeters(CRNNumber) {
 																	"responsive" : true,
 																	"serverSide" : false,
 																	"bDestroy" : true,
-																	"bPaginate" : true,
+																	"bPaginate": true,
 																	"pagging" : true,
 																	"bProcessing" : true,
 																	"ordering" : true,
-																	"order" : [
-																			0,
-																			"desc" ],
-																	"lengthMenu" : [
-																			5,
-																			10,
-																			25,
-																			30,
-																			50,
-																			75 ],
+																	"order" : [ 0, "desc" ],
+																	"lengthMenu" : [ 5, 10, 25, 30, 50, 75 ],
 																	"pageLength" : 25,
-
 																	"scrollX" : true,
 																	"data" : item.dasboarddata,
 
 																	"columns" : [
+																		{
+																		"mData" : "action",
+																		"render" : function(
+																				data,
+																				type,
+																				row) {
+																			return "<span id=color style = color:"
+																					+ row.dateColor
+																					+ ">"
+																					+ row.timeStamp
+																					+ "</span>"
+																		},
+																		"defaultContent" : ""
+																	},
+																	{
+																		"data" : "meterSerialNumber"
+																	},
 																			{
 																				"data" : "miuID"
 
-																			},
-																			{
-																				"data" : "meterSerialNumber"
 																			},
 																			{
 																				"data" : "reading"
@@ -301,15 +301,6 @@ function getCustomerMeters(CRNNumber) {
 																			{
 																				"data" : "consumption"
 
-																			},
-																			{
-																				"data" : "balance"
-																			},
-																			{
-																				"data" : "emergencyCredit"
-																			},
-																			{
-																				"data" : "payType"
 																			},
 																			{
 																				"mData" : "action",
@@ -324,23 +315,6 @@ function getCustomerMeters(CRNNumber) {
 																							+ "</span>"
 																				},
 																				"defaultContent" : ""
-																			},
-																			{
-																				"mData" : "action",
-																				"render" : function(
-																						data,
-																						type,
-																						row) {
-																					return "<span id=color style = color:"
-																							+ row.valveStatusColor
-																							+ ">"
-																							+ row.valveStatus
-																							+ "</span>"
-																				},
-																				"defaultContent" : ""
-																			},
-																			{
-																				"data" : "tariff"
 																			},
 																			{
 																				"mData" : "action",
@@ -371,18 +345,30 @@ function getCustomerMeters(CRNNumber) {
 																				"defaultContent" : ""
 																			},
 																			{
+																				"data" : "balance"
+																			},
+																			{
+																				"data" : "emergencyCredit"
+																			},
+																			{
+																				"data" : "payType"
+																			},
+																			{
 																				"mData" : "action",
 																				"render" : function(
 																						data,
 																						type,
 																						row) {
 																					return "<span id=color style = color:"
-																							+ row.dateColor
+																							+ row.valveStatusColor
 																							+ ">"
-																							+ row.timeStamp
+																							+ row.valveStatus
 																							+ "</span>"
 																				},
 																				"defaultContent" : ""
+																			},
+																			{
+																				"data" : "tariff"
 																			},
 																			{
 																				"data" : "communicationStatus"
