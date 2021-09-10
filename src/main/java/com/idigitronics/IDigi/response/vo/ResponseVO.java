@@ -3,6 +3,8 @@
  */
 package com.idigitronics.IDigi.response.vo;
 
+import java.io.ByteArrayInputStream;
+import java.io.FileOutputStream;
 import java.util.HashMap;
 
 /**
@@ -30,6 +32,7 @@ public class ResponseVO {
 	private CheckoutDetails checkoutDetails;
 	private String paymentMode;
 	private String payType;
+	private ByteArrayInputStream byteArrayInputStream;
 	
 	public UserDetails getUserDetails() {
 		return userDetails;
@@ -138,6 +141,12 @@ public class ResponseVO {
 	}
 	public void setDropDownAllCustomerMeters(HashMap<Long, String> dropDownAllCustomerMeters) {
 		this.dropDownAllCustomerMeters = dropDownAllCustomerMeters;
+	}
+	public ByteArrayInputStream getByteArrayInputStream() {
+		return byteArrayInputStream;
+	}
+	public void setByteArrayInputStream(ByteArrayInputStream byteArrayInputStream) {
+		this.byteArrayInputStream = byteArrayInputStream;
 	}
 	
 }

@@ -27,6 +27,8 @@ public class CustomerResponseVO {
 	private String createdByRoleDescription;
 	private String userID;
 	private int requestID;
+	private boolean action;
+	
 	
 	private List<MeterRequestVO> meters;
 	private List<CustomerResponseVO> data;
@@ -126,6 +128,12 @@ public class CustomerResponseVO {
 	}
 	public void setMeters(List<MeterRequestVO> meters) {
 		this.meters = meters;
+	}
+	public boolean isAction() {
+		return action;
+	}
+	public void setAction(boolean action) {
+		this.action = action;
 	}
 	
 }

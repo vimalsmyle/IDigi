@@ -1,4 +1,3 @@
-
 $(document)
 		.ready(
 				function() {
@@ -213,22 +212,30 @@ function executeDownloadDashboard(data){
 				type : "POST",
 				contentType : "application/json",
 				url : "./dashboard/excel",
+				xhrFields:{
+					responseType:'blob'
+				},
+				headers:{
+					'Accept':'application/json',
+					'contentType' : 'application/json'
+						},
 				data : JSON
 				.stringify(data),
-				dataType : "JSON",
 				success : function(data) {
-					// alert("Success====" + data.result);
-					if (data.result == "Success") {
-						location.reload();
-
-					} else {
-						bootbox.alert(data.Message);
-						return false;
-					}
+					
+					var blob =  data;
+					var downloadUrl = URL.createObjectURL(blob);
+					var a= document.createElement("a");
+					a.href = downloadUrl;
+					a.download = "Dashboard.xlsx";
+					document.body.appendChild(a);
+					a.click();
+					
+					
 				}
 			});
 		} else if (result == false) {
-			// alert("@"+false)
+			 alert("@"+false)
 
 		}
 	});
@@ -631,3 +638,4 @@ $("#dashboardFilter")
 					});
 			return false;
 		});
+

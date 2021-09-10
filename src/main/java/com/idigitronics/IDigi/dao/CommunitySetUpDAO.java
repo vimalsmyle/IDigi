@@ -900,6 +900,7 @@ public class CommunitySetUpDAO {
 				customervo.setHouseNumber(rs.getString("HouseNumber"));
 				customervo.setCustomerUniqueID(rs.getString("CustomerUniqueID"));
 				customervo.setCustomerID(rs.getLong("CustomerID"));
+				customervo.setAction((roleid == 1 || roleid == 2 || roleid == 3 ? true : false));
 				
 				PreparedStatement pstmt2 = con.prepareStatement("SELECT cmd.CustomerMeterID, cmd.MIUID, cmd.MeterSerialNumber, cmd.MeterType, cmd.PayType, cmd.Location, cmd.TariffID, cmd.GatewayID, g.GatewayName, ms.MeterSize FROM customermeterdetails AS cmd LEFT JOIN gateway AS g ON g.GatewayID = cmd.GatewayID LEFT JOIN metersize AS ms ON ms.MeterSizeID = cmd.MeterSizeID WHERE cmd.CustomerID = " + customervo.getCustomerID());
 				
