@@ -3,6 +3,8 @@
  */
 package com.idigitronics.IDigi.dao;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -228,6 +230,7 @@ public class DashboardDAO {
 		
 		ResponseVO responsevo = new ResponseVO();
 		String drivename = "D:/Dashboard/";
+		ByteArrayInputStream in = null;
 		
 		File directory = new File(drivename);
 		if (!directory.exists()) {
@@ -239,6 +242,8 @@ public class DashboardDAO {
 		XSSFWorkbook workbook = new XSSFWorkbook();
 		
 		XSSFSheet spreadsheet = workbook.createSheet("Dashboard List");
+		
+		ByteArrayOutputStream outByteStream = new ByteArrayOutputStream();
 		
 		XSSFRow header = spreadsheet.createRow(0);
 		
@@ -379,10 +384,11 @@ public class DashboardDAO {
         	
         }
         
-		FileOutputStream outputStream = new FileOutputStream("D:\\Dashboard\\Dashboard.xlsx");
-		workbook.write(outputStream);
+//		FileOutputStream outputStream = new FileOutputStream("D:\\Dashboard\\Dashboard.xlsx");
+		workbook.write(outByteStream);
+		in = new ByteArrayInputStream(outByteStream.toByteArray());
 		workbook.close();
-		outputStream.close();
+//		outputStream.close();
 		
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -396,6 +402,7 @@ public class DashboardDAO {
 		responsevo.setLocation(drivename);
 		
 		responsevo.setFileName("Dashboard.xlsx");
+		responsevo.setByteArrayInputStream(in);
         
 		return responsevo;
 		
