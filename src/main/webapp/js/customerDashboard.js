@@ -469,7 +469,7 @@ $("#dashboardFilter")
 			data1["tamperType"] = $("#tamper").val();
 
 			//alert(JSON.stringify(data1));
-			
+			var responseD;
 			$
 					.ajax({
 						type : "POST",
@@ -480,7 +480,7 @@ $("#dashboardFilter")
 						dataType : "JSON",
 
 						success : function(d) {
-							
+							responseD = d.data;
 							//if (data.result == "Success") {
 							$('#liveTable').dataTable()._fnAjaxUpdate();
 							//$("#form").hide();
@@ -579,55 +579,37 @@ $("#dashboardFilter")
 											
 											  "columnDefs": [{ "visible": false }],
 											 
-											"buttons" : [
-												{
-													extend : 'excel',
-													footer : 'true',
-													//text : 'Excel',
-													title : 'Dashboard',
-												//	className: 'custom-btn fa fa-file-excel-o'
-														
-												},
-
-												{
-													extend : 'pdf',
-													footer : 'true',
-													exportOptions : {
-														columns : [ 0,1, 2, 3, 4,
-																5 ]
-													},
-													orientation : 'landscape',
-													title : 'Dashboard',
-													pageSize: 'LEGAL',
-													//	className: 'custom-btn fa fa-file-pdf-o'
-												},
-												
-											/*	{
-										               className: 'customButton',
-										               text : "Adv Serach",
-										              // extend : 'ADv',
-										                action: function ( e, dt, button, config ) {
-										                	$('.customButton').attr(
-										                        {
-										                            "data-toggle": "modal",
-										                            "data-target": "#exampleModal"
-										                        }
-										                    );
-										                }
-										            },*/
+												"buttons" : [
 													{
-										                text: 'Reset',
-										                action: function ( e, dt, node, config ) {
-										                    alert( 'Button activated' );
-										                },
-										                className: 'customButton',
-										               
-										                action: function ( e, dt, button, config ) {
-										                   
-										                	location.reload();
-										                }
-										            }
-													],
+														extend : 'excel',
+														footer : 'true',
+														// text : 'Excel',
+														title : 'Dashboard',
+													// className: 'custom-btn fa
+													// fa-file-excel-o'
+														
+														action:function(e,dt,node,config){
+															executeDownloadDashboard(responseD);
+														}
+														
+													}/*,
+
+													{
+														extend : 'pdf',
+														footer : 'true',
+														exportOptions : {
+															columns : [ 0, 1, 2, 3,
+																	4, 5]
+														},
+														orientation : 'landscape',
+														title : 'Dashboard',
+														// className: 'custom-btn fa
+														// fa-file-pdf-o',
+														pageSize : 'LEGAL',
+														action:function(e,dt,node,config){
+															executeDownloadDashboard(responseD);
+														}
+													}*/ ],
 													 initComplete: function() {
 														   $('.buttons-excel').html('<i class="fa fa-file-excel-o" />')
 														   $('.buttons-pdf').html('<i class="fa fa-file-pdf-o" />')

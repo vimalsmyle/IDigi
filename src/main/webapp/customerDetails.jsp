@@ -53,7 +53,7 @@
 							</div>
 						</div>
 
-
+					<input type="hidden" id="action" />
 						<div class="row mr-0 ml-0">
 
 							<div class="right_data col-md-12 mt-4 mb-4">
@@ -77,8 +77,8 @@
 													<th>Created By UserName</th>
 													<th>Created By Role</th>
 													<th>Registration Date</th>
-													<th>Action</th>
-													<th>Action</th>
+													<th>Action1</th>
+													<th>Action2</th>
 												</tr>
 											</thead>
 											<tbody>

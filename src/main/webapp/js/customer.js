@@ -332,6 +332,7 @@ table = $('#customerTable')
 },
 "complete" : function(json) {
 	console.log(json);
+	$("#action").val(json.responseJSON.data[0].action);
 return json.data;
 },
 },
@@ -385,11 +386,7 @@ return json.data;
 																	+ "\")'>"
 																	+ "<i class='material-icons' style='color:#17e9e9;cursor:pointer;'>delete</i>"
 																	+ "</a>"
-																	+"<a onclick='getCustomerFormDelete(\""
-																	+ row.CustomerUniqueID
-																	+ "\")'>"
-																	+ "<i class='material-icons' style='color:#17e9e9;cursor:pointer;'>delete</i>"
-																	+ "</a>"
+																	
 																	
 	}
 	},{
@@ -411,9 +408,9 @@ return json.data;
 
 ],
 "columnDefs" : [ {
-	targets : 11, visible:  (((sessionStorage.getItem("roleID") == 1) || (sessionStorage.getItem("roleID") == 2)) && (!(sessionStorage.getItem("roleID") == 5) || !(sessionStorage.getItem("roleID") == 3) || !(sessionStorage.getItem("roleID") == 4))),
+	targets : 12, visible:  (((sessionStorage.getItem("roleID") == 1) || (sessionStorage.getItem("roleID") == 2)) && (!(sessionStorage.getItem("roleID") == 5) || !(sessionStorage.getItem("roleID") == 3) || !(sessionStorage.getItem("roleID") == 4))),
 },{
-	targets : 12, visible: (sessionStorage.getItem("roleID") == 3)
+	targets : 13, visible: (sessionStorage.getItem("roleID") == 3)
 //(!(sessionStorage.getItem("roleID") == 1) && (((sessionStorage.getItem("roleID") == 1) || (sessionStorage.getItem("roleID") == 2) || (sessionStorage.getItem("roleID") == 3)) && (!(sessionStorage.getItem("roleID") == 5) || !(sessionStorage.getItem("roleID") == 4))))
 },
 {
@@ -979,13 +976,10 @@ $(document)
 
 																	],
 																	"columnDefs" : [ {
-																		//orderable : false,
-																		targets : 11, visible:  (((sessionStorage.getItem("roleID") == 1) || (sessionStorage.getItem("roleID") == 2)) && (!(sessionStorage.getItem("roleID") == 5) || !(sessionStorage.getItem("roleID") == 3) || !(sessionStorage.getItem("roleID") == 4))),
-																		//targets : 14, visible:  (((sessionStorage.getItem("roleID") == 1) || (sessionStorage.getItem("roleID") == 2) || (sessionStorage.getItem("roleID") == 3)) && (!(sessionStorage.getItem("roleID") == 5) || !(sessionStorage.getItem("roleID") == 4))),
+																		targets : 12, visible:  (((sessionStorage.getItem("roleID") == 1) || (sessionStorage.getItem("roleID") == 2)) && (!(sessionStorage.getItem("roleID") == 5) || !(sessionStorage.getItem("roleID") == 3) || !(sessionStorage.getItem("roleID") == 4))),
 																	},{
-																		//orderable : false,
-																		//targets : 13, visible:  (((sessionStorage.getItem("roleID") == 1) || (sessionStorage.getItem("roleID") == 2)) && (!(sessionStorage.getItem("roleID") == 5) || !(sessionStorage.getItem("roleID") == 3) || !(sessionStorage.getItem("roleID") == 4))),
-																		targets : 12, visible: ( !(sessionStorage.getItem("roleID") == 1) && (((sessionStorage.getItem("roleID") == 1) || (sessionStorage.getItem("roleID") == 2) || (sessionStorage.getItem("roleID") == 3)) && (!(sessionStorage.getItem("roleID") == 5) || !(sessionStorage.getItem("roleID") == 4))))
+																		targets : 13, visible: (sessionStorage.getItem("roleID") == 3)
+																	//(!(sessionStorage.getItem("roleID") == 1) && (((sessionStorage.getItem("roleID") == 1) || (sessionStorage.getItem("roleID") == 2) || (sessionStorage.getItem("roleID") == 3)) && (!(sessionStorage.getItem("roleID") == 5) || !(sessionStorage.getItem("roleID") == 4))))
 																	},
 																	{
 																		"className": "dt-center", "targets": "_all"
