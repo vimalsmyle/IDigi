@@ -3,9 +3,10 @@
  */
 package com.idigitronics.IDigi.dao;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
@@ -18,7 +19,6 @@ import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -991,18 +991,15 @@ public class AccountDAO {
 		// TODO Auto-generated method stub
 
 		ResponseVO responsevo = new ResponseVO();
-		String drivename = "D:/Billing/";
-		
-		File directory = new File(drivename);
-		if (!directory.exists()) {
-			directory.mkdir();
-		}
+		ByteArrayInputStream in = null;
 		
 		try {
 		
 		XSSFWorkbook workbook = new XSSFWorkbook();
 		
 		XSSFSheet spreadsheet = workbook.createSheet("Billing Status List");
+		
+		ByteArrayOutputStream outByteStream = new ByteArrayOutputStream();
 		
 		XSSFRow header = spreadsheet.createRow(0);
 		
@@ -1133,10 +1130,9 @@ public class AccountDAO {
         	
         }
         
-		FileOutputStream outputStream = new FileOutputStream("D:\\Billing\\Billing.xlsx");
-		workbook.write(outputStream);
+        workbook.write(outByteStream);
+		in = new ByteArrayInputStream(outByteStream.toByteArray());
 		workbook.close();
-		outputStream.close();
 		
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -1147,8 +1143,7 @@ public class AccountDAO {
 		}
         
         responsevo.setResult("Success");
-		responsevo.setLocation(drivename);
-		
+		responsevo.setByteArrayInputStream(in);
 		responsevo.setFileName("Billing.xlsx");
         
 		return responsevo;
