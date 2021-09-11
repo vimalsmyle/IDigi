@@ -139,7 +139,7 @@ function showAllMetersDetails(customerId){
 	var value=e.options[e.selectedIndex].value;// get selected option value
 	var text=e.options[e.selectedIndex].text;
 	$("#selectMeters").append("<option>" + "Select Meters" + "</option>");
-	$.getJSON("./customermeters/Prepaid/" + text, function(data) {
+	$.getJSON("./customermeters/" + text, function(data) {
 		var Options = "";
 		$.each(data.dropDownAllCustomerMeters, function(key, value) {
 			Options = Options + "<option value='" + key + "'>" + value

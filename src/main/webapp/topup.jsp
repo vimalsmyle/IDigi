@@ -97,7 +97,7 @@
 																</label> <select class="form-control form-control-sm select2"
 																	id="selectHouseBasedonBlock"
 																	name="selectHouseBasedonBlock"
-																	onchange="showAllMetersDetails(this.value);">
+																	onchange="showMetersDetails(this.value);">
 																</select>
 															</div>
 														</div>
@@ -127,7 +127,7 @@
 																</label> <select class="form-control form-control-sm"
 																	id="selectHouseBasedonBlock"
 																	name="selectHouseBasedonBlock"
-																	onchange="showAllMetersDetails(this.value);">
+																	onchange="showMetersDetails(this.value);">
 																</select>
 															</div>
 														</div>
