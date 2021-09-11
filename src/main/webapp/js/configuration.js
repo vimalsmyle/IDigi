@@ -156,7 +156,7 @@ $(document)
 													
 													}else if($("#selectcommandType").val()=="9"){
 														var reg =/^(0|[1-9]\d*)(\.\d+)?$/;
-														if($("#valueText").val() == ""){
+														if($("#reading").val() == ""){
 														
 															swal.fire({
 																  title: "error",
@@ -167,7 +167,7 @@ $(document)
 															
 														}	
 														
-															else if(!reg.test($("#valueText").val())){
+															else if(!reg.test($("#reading").val())){
 																
 																swal.fire({
 																	  title: "error",
@@ -179,7 +179,7 @@ $(document)
 															}	
 														
 														var json={};
-														json["value"] = $("#valueText").val();
+														json["value"] = $("#reading").val();
 														json["parameter_id"] = $("#selectcommandType").val();
 														
 														}else if($("#selectcommandType").val()=="13"){
@@ -205,11 +205,11 @@ $(document)
 										var value=e.options[e.selectedIndex].value;// get selected option value
 										var text=e.options[e.selectedIndex].text;
 										data1["customerUniqueID"] = text;
-										data1["miuID"] = $("#selectMeters").val();
+										data1["customerMeterID"] = $("#selectMeters").val();
 										var e = document.getElementById("selectMeters");
 										var value=e.options[e.selectedIndex].value;// get selected option value
 										var text=e.options[e.selectedIndex].text;
-										data1["customerMeterID"] = text;
+										data1["miuID"] = text;
 										data1["commands"] = array;
 										
 										$

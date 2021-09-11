@@ -69,7 +69,11 @@
 											<thead>
 												<tr>
 													<th>MIU ID</th>
-													<th>Meters</th>
+													<th>Command Type</th>
+													<th>Value</th>
+													<th>Status</th>
+													<th>Date</th>
+													<th>Action</th>
 												</tr>
 											</thead>
 											<tbody>
@@ -82,7 +86,11 @@
 											<thead>
 												<tr>
 													<th>MIU ID</th>
-													<th>Meters</th>
+													<th>Command Type</th>
+													<th>Value</th>
+													<th>Status</th>
+													<th>Date</th>
+													<th>Action</th>
 												</tr>
 											</thead>
 											<tbody>

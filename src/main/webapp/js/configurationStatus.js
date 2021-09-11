@@ -41,27 +41,85 @@ $(document)
 											"data" : function(search) {
 											},
 											"complete" : function(json) {
+												cosole.log(json.data);
 												return json.data;
 											},
 										},
 										"columns" : [
-												{
-													"data" : "miuID",
-													"defaultContent": ""
-												},
-												{
-													"mData" : "action",
-													"render" : function(data, type, row) {
+											{
+												"data" : "miuID",
+												"defaultContent": ""
+											},{
+												"mData" : "action",
+												"render" : function(data,
+														type, row) {
+													if(row.commands.length==0){
+														return "---";
+													}else{
+												return row.commands[0].commandType
+													}
+											}
+									},{
+												"mData" : "action",
+												"render" : function(data,
+														type, row) {
+												
+													if(row.commands.length==0){
+														return "---";
+													}else{
+														return row.commands[0].value
+													}
+											}
+											},{
+												"mData" : "action",
+												"render" : function(data,
+														type, row) {
+													if(row.commands.length==0){
+														return "---";
+													}else{
+														return row.commands[0].status
+														}
+											}
+											},{
+												"mData" : "action",
+												"render" : function(data,
+														type, row) {
+													if(row.commands.length==0){
+														return "---";
+													}else{
+														return row.commands[0].modifiedDate
+													}
+											}
+											},
+											{
+												"mData" : "action",
+												"render" : function(data,
+														type, row) {
+
+													if(row.commands.length==0){
+														return "---";
+													}else{if(row.commands[0].status == "Passed"){
+													
+														return "---";
 														
-														return "<a href=# id=CustomerMeters data-toggle=modal data-target=#myCustomerMeters onclick='getCustomerMeters(\""
-														+ row.miuID
-														+ "\")'>"
-														+ "Multiple"
+													}else if(row.commands[0].status == "Pending" || row.commands[0].status == "Pending...waiting for acknowledge"){
+														
+														return "---";
+														
+													}
+													
+													else if(row.commands[0].status == "Failed"){
+														return "<a onclick='getDeleteTransactionID("
+														+ row.transactionID
+														+ ")'>"
+														+ "<i class='material-icons' style='color:#17e9e9; cursor:pointer;'>delete</i>"
 														+ "</a>"
 														
 													}
-
-												} ],
+													}
+													
+												}
+											} ],
 										"columnDefs" : [ {
 										//	orderable : false,
 											//targets :5, visible:  (((sessionStorage.getItem("roleID") == 1) || (sessionStorage.getItem("roleID") == 2) || (sessionStorage.getItem("roleID") == 3)) && (!(sessionStorage.getItem("roleID") == 5) || !(sessionStorage.getItem("roleID") == 4)))
@@ -167,20 +225,76 @@ $(document)
 																		{
 																			"data" : "miuID",
 																			"defaultContent": ""
+																		},{
+																			"mData" : "action",
+																			"render" : function(data,
+																					type, row) {
+																				if(row.commands.length==0){
+																					return "---";
+																				}else{
+																					return row.commands[0].commandType
+																				}
+																		}
+																		},{
+																			"mData" : "action",
+																			"render" : function(data,
+																					type, row) {
+																				if(row.commands.length==0){
+																					return "---";
+																				}else{
+																					return row.commands[0].value
+																				}
+																		}
+																		},{
+																			"mData" : "action",
+																			"render" : function(data,
+																					type, row) {
+																				if(row.commands.length==0){
+																					return "---";
+																				}else{
+																					return row.commands[0].status
+																				}
+																		}
+																		},{
+																			"mData" : "action",
+																			"render" : function(data,
+																					type, row) {
+																				if(row.commands.length==0){
+																					return "---";
+																				}else{
+																					return row.commands[0].modifiedDate
+																				}
+																		}
 																		},
 																		{
 																			"mData" : "action",
-																			"render" : function(data, type, row) {
+																			"render" : function(data,
+																					type, row) {
+
+																				if(row.commands.length==0){
+																					return "---";
+																				}else{if(row.commands[0].status == "Passed"){
 																				
-																				return "<a href=# id=CustomerMeters data-toggle=modal data-target=#myCustomerMeters onclick='getCustomerMeters(\""
-																				+ row.miuID
-																				+ "\")'>"
-																				+ "Multiple"
-																				+ "</a>"
+																					return "---";
+																					
+																				}else if(row.commands[0].status == "Pending" || row.commands[0].status == "Pending...waiting for acknowledge"){
+																					
+																					return "---";
+																					
+																				}
+																				
+																				else if(row.commands[0].status == "Failed"){
+																					return "<a onclick='getDeleteTransactionID("
+																					+ row.transactionID
+																					+ ")'>"
+																					+ "<i class='material-icons' style='color:#17e9e9; cursor:pointer;'>delete</i>"
+																					+ "</a>"
+																					
+																				}
+																				}
 																				
 																			}
-
-																		} ],
+																		}  ],
 																"columnDefs" : [ {
 																//	orderable : false,
 																//	targets : 5, visible:  (((sessionStorage.getItem("roleID") == 1) || (sessionStorage.getItem("roleID") == 2) || (sessionStorage.getItem("roleID") == 3)) && (!(sessionStorage.getItem("roleID") == 5) || !(sessionStorage.getItem("roleID") == 4)))
@@ -294,10 +408,11 @@ function getDeleteTransactionID(transID){
 
 
 
-function getCustomerMeters(muid){
+function getCustomerMeters(transactionID){
 	$.getJSON("./configuration/"+sessionStorage.getItem("roleID")+"/"+sessionStorage.getItem("ID")+"/-1", function(data) {
 		$.each(data.data, function(i, item) {
-			if (muid == item.miuID) {
+			if (transactionID == item.transactionID) {
+				console.log(item);
 				$('#customerMeterTable')
 				.DataTable(
 						{
@@ -349,7 +464,7 @@ function getCustomerMeters(muid){
 											
 											else if(row.status == "Failed"){
 												return "<a onclick='getDeleteTransactionID("
-												+ row.status
+												+ row.transactionID
 												+ ")'>"
 												+ "<i class='material-icons' style='color:#17e9e9; cursor:pointer;'>delete</i>"
 												+ "</a>"
