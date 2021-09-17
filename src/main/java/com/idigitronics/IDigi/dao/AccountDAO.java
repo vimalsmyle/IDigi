@@ -914,13 +914,12 @@ public class AccountDAO {
 		
 		try {
 			con = getConnection();
-			String query = "SELECT c.CommunityName, b.BlockName, cd.FirstName, cd.LastName, cd.HouseNumber, cd.CustomerID, cbd.CustomerBillingID, cbd.TotalAmount, cbd.TaxAmount, cbd.TotalConsumption, cbd.PreviousDues, cbd.Status, cbd.BillMonth, cbd.BillYear, cbd.LogDate FROM customerdetails AS cd LEFT JOIN customerbillingdetails AS cbd ON cd.CustomerID = cbd.CustomerID LEFT JOIN community AS c ON c.CommunityID = cd.CommunityID LEFT JOIN block AS b ON b.BlockID = cd.BlockID WHERE cbd.BillMonth = "+ (currentdate.getMonthValue() - 1) +" AND cbd.BillYear = "+ (currentdate.getMonthValue() == 1 ? (currentdate.getYear() - 1) : currentdate.getYear()) +" <change>"; 
+			String query = "SELECT c.CommunityName, b.BlockName, cd.FirstName, cd.LastName, cd.HouseNumber, cd.CustomerUniqueID, cd.CustomerID, cbd.CustomerBillingID, cbd.TotalAmount, cbd.TaxAmount, cbd.TotalConsumption, cbd.PreviousDues, cbd.DueDate, cbd.Status, cbd.BillMonth, cbd.BillYear, cbd.LogDate FROM customerdetails AS cd LEFT JOIN customerbillingdetails AS cbd ON cd.CustomerID = cbd.CustomerID LEFT JOIN community AS c ON c.CommunityID = cd.CommunityID LEFT JOIN block AS b ON b.BlockID = cd.BlockID WHERE cbd.BillMonth = "+ (currentdate.getMonthValue() - 1) +" AND cbd.BillYear = "+ (currentdate.getMonthValue() == 1 ? (currentdate.getYear() - 1) : currentdate.getYear()) +" <change>"; 
 			pstmt = con.prepareStatement(query.replaceAll("<change>", ((roleid == 1 || roleid == 4) && (filterCid == -1)) ? "ORDER BY cd.CustomerID DESC" : ((roleid == 1 || roleid == 4) && (filterCid != -1)) ? " AND cd.CommunityID = "+filterCid+" ORDER BY cd.CustomerID DESC" : (roleid == 2 || roleid == 5) ? "AND cd.BlockID = "+id+ " ORDER BY cd.CustomerID DESC" : (roleid == 3) ? "AND cd.CustomerUniqueID = '"+id+"'":""));
 			rs = pstmt.executeQuery();
 			
 			billlist = new LinkedList<BillingResponseVO>();
 			while(rs.next()) {
-				
 				
 				billingresponsevo = new BillingResponseVO();
 				billingresponsevo.setCustomerBillingID(rs.getLong("CustomerBillingID"));
@@ -928,9 +927,14 @@ public class AccountDAO {
 				billingresponsevo.setBlockName(rs.getString("BlockName"));
 				billingresponsevo.setCustomerName(rs.getString("FirstName") + " "+ rs.getString("LastName"));
 				billingresponsevo.setHouseNumber(rs.getString("HouseNumber"));
+				billingresponsevo.setCustomerID(rs.getLong("CustomerID"));
+				billingresponsevo.setCustomerUniqueID(rs.getString("CustomerUniqueID"));
 				billingresponsevo.setTotalAmount(rs.getFloat("TotalAmount") + rs.getFloat("TaxAmount"));
+				billingresponsevo.setAmount(rs.getFloat("TotalAmount"));
+				billingresponsevo.setTax(rs.getFloat("TaxAmount"));
 				billingresponsevo.setTotalConsumption(rs.getFloat("TotalConsumption"));
 				billingresponsevo.setPreviousDues(rs.getFloat("PreviousDues"));
+				billingresponsevo.setDueDate(rs.getString("DueDate"));
 				
 				PreparedStatement ps = con.prepareStatement("SELECT bpd.PaymentStatus, bpd.ModeofPayment, bpd.TransactionDate, u.UserName FROM billingpaymentdetails AS bpd LEFT JOIN user AS u ON u.ID = bpd.CreatedByID WHERE bpd.CustomerBillingID = " + rs.getLong("CustomerBillingID"));
 				ResultSet rs2 = ps.executeQuery();
@@ -1166,7 +1170,7 @@ public class AccountDAO {
 		try {
 			con = getConnection();
 			
-			PreparedStatement pstmt1 = con.prepareStatement("SELECT CustomerUniqueID, FirstName, LastName, HouseNumber, MobileNumber, Email FROM customerdetails WHERE CustomerUniqueID = '" + paybillRequestVO.getCustomerUniqueID() +"' AND CustomerID = " + paybillRequestVO.getCustomerID());
+			PreparedStatement pstmt1 = con.prepareStatement("SELECT CustomerID, CustomerUniqueID, FirstName, LastName, HouseNumber, MobileNumber, Email FROM customerdetails WHERE CustomerUniqueID = '" + paybillRequestVO.getCustomerUniqueID() +"'");
 			ResultSet rs1 = pstmt1.executeQuery();
 			
 			if(rs1.next()) {
@@ -1203,7 +1207,7 @@ public class AccountDAO {
 							if (pstmt2.executeUpdate() > 0) {
 
 								checkoutDetails.setKey(ExtraConstants.RZPKeyID);
-								checkoutDetails.setAmount((paybillRequestVO.getTotalamount() + paybillRequestVO.getTaxAmount() + + paybillRequestVO.getLateFee()) * 100);
+								checkoutDetails.setAmount((paybillRequestVO.getTotalamount() + paybillRequestVO.getTaxAmount() + paybillRequestVO.getLateFee()) * 100);
 								checkoutDetails.setCurrency(ExtraConstants.PaymentCurrency);
 								checkoutDetails.setOrder_id(paybillRequestVO.getRazorPayOrderID());
 								checkoutDetails.setButtonText(ExtraConstants.PaymentButtonText);
@@ -1277,7 +1281,7 @@ public class AccountDAO {
 			pstmt.setLong(1, paybillRequestVO.getCustomerBillingID());
 			pstmt.setLong(2, paybillRequestVO.getCustomerID());
 			pstmt.setString(3, paybillRequestVO.getCustomerUniqueID());
-			pstmt.setFloat(4, paybillRequestVO.getTotalamount() + paybillRequestVO.getTaxAmount());
+			pstmt.setFloat(4, paybillRequestVO.getTotalamount() + paybillRequestVO.getTaxAmount() + paybillRequestVO.getPreviousDues()); // = bill amount + tax amount + late fee()
 			pstmt.setInt(5, paybillRequestVO.getLateFee());
 			pstmt.setString(5, paybillRequestVO.getSource());
 			pstmt.setString(6, paybillRequestVO.getModeOfPayment());
@@ -1894,6 +1898,32 @@ public class AccountDAO {
 			if (rs.next()) {
 				if (topupvo.getAmount() + rs.getFloat("Balance") >= 2000)
 
+					result = true;
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			pstmt.close();
+			rs.close();
+			con.close();
+		}
+
+		return result;
+	}
+
+	public boolean checkBillPaymentStatus(long customerBillingID) throws SQLException {
+		// TODO Auto-generated method stub
+		
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		Boolean result = false;
+
+		try {
+			con = getConnection();
+			pstmt = con.prepareStatement("SELECT * FROM billingpaymentdetails WHERE CustomerBillingID = "+customerBillingID +" AND PaymentStatus = 1");
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
 					result = true;
 			}
 		} catch (Exception ex) {

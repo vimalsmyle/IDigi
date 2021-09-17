@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import com.idigitronics.IDigi.dao.AccountDAO;
 import com.idigitronics.IDigi.exceptions.BusinessException;
 import com.idigitronics.IDigi.request.vo.ConfigurationRequestVO;
+import com.idigitronics.IDigi.request.vo.PayBillRequestVO;
 import com.idigitronics.IDigi.request.vo.TopUpRequestVO;
 import com.idigitronics.IDigi.response.vo.ResponseVO;
 
@@ -39,6 +40,16 @@ public class AccountBO {
 		}
 		
 		return accountdao.addtopup(topupvo);
+	}
+	
+	public ResponseVO payBill(PayBillRequestVO paybillRequestVO) throws SQLException, BusinessException {
+		// TODO Auto-generated method stub
+		
+		if(accountdao.checkBillPaymentStatus(paybillRequestVO.getCustomerBillingID())) {
+			throw new BusinessException("BILL IS ALREADY PAID");
+		}
+		
+		return accountdao.paybill(paybillRequestVO);
 	}
 	
 	/* Configuration */

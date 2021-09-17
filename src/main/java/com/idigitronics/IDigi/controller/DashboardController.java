@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.idigitronics.IDigi.dao.DashboardDAO;
 import com.idigitronics.IDigi.request.vo.DataRequestVO;
 import com.idigitronics.IDigi.request.vo.FilterVO;
+import com.idigitronics.IDigi.response.vo.AllGraphResponseVO;
 import com.idigitronics.IDigi.response.vo.DashboardResponseVO;
 import com.idigitronics.IDigi.response.vo.GraphResponseVO;
 import com.idigitronics.IDigi.response.vo.HomeResponseVO;
@@ -119,6 +120,14 @@ public class DashboardController {
 		DashboardDAO dashboarddao = new DashboardDAO();
 
 		return dashboarddao.getCustomerGraphDashboardDetails(type, year, month, customerUniqueID);
+	}
+	
+	@RequestMapping(value = "/customergraphall/{year}/{month}/{customerUniqueID}", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody AllGraphResponseVO customerallgraphdashboarddetails(@PathVariable("year") int year, @PathVariable("month") int month, @PathVariable("customerUniqueID") String customerUniqueID) throws SQLException {
+
+		DashboardDAO dashboarddao = new DashboardDAO();
+
+		return dashboarddao.getCustomerAllGraphDashboardDetails(year, month, customerUniqueID);
 	}
 	
 	@RequestMapping(value = "/server/api/{device_eui}/status", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
