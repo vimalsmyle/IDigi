@@ -169,14 +169,18 @@ $(document)
 																	+ "</a>";
 
 														} else if (row.status == "Passed"
-																|| row.status == "Pending") {
+																) {
 															return "<a onclick='getReceiptTransactionID("
 																	+ row.customerBillingID
 																	+ ")'>"
 																	+ "<i class='material-icons' style='color:#17e9e9;cursor:pointer'>receipt</i>"
 																	+ "</a>"
-														} else if (row.status == "Pending...waiting for acknowledge") {
-															return "---"
+														} else if (row.status == "Pending") {
+															return "<a onclick='getPayBillTransactionID("
+															+ row.customerBillingID
+															+ ")'>"
+															+ "<i class='material-icons' style='color:#17e9e9;cursor:pointer'>pay Bill</i>"
+															+ "</a>"
 														}
 
 													}

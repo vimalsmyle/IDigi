@@ -1225,15 +1225,16 @@ label, .select2-container {
 }
 
 #preloader {
-	position: fixed;
+		position: fixed;
 	top: 0;
 	left: 0;
 	right: 0;
 	bottom: 0;
+	background-image: url(../../common/images/icons/progress.gif);
 	background-size: 100%;
 	background-repeat: no-repeat;
 	height: 100%;
-	z-index: 999;
+	z-index: 9999;
 }
 
 #status {
@@ -1250,3 +1251,16 @@ label, .select2-container {
 .modal-xl{
 	max-width: 1140px;
 }
+
+.eyeToggle{
+	    position: absolute;
+    /* margin-left: -30px; */
+    top: 12px;
+    right: 12px;
+}
+.psd{
+	position: relative;
+}
+
+
+

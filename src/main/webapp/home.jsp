@@ -50,6 +50,12 @@
 	<div class="main-content side-content pt-0">
 		<div class="container-fluid">
 			<div class="inner-body body_content" id="content-5">
+
+				<%
+					if (user_id.equalsIgnoreCase("2") || user_id.equalsIgnoreCase("1") || user_id.equalsIgnoreCase("4")
+								|| user_id.equalsIgnoreCase("5")) {
+				%>
+
 				<div class="row">
 					<div class="col-md-12">
 						<div class="page-header">
@@ -60,7 +66,7 @@
 								<div class="box">
 									<div class="box-body">
 										<%
-											if (!user_id.equalsIgnoreCase("2")) {
+											if (!user_id.equalsIgnoreCase("2") || !user_id.equalsIgnoreCase("5")) {
 										%>
 										<div class="row">
 											<div class="col-md-12">
@@ -216,7 +222,7 @@
               <h3 class="box-title">Monthly Recap Report</h3>
 			</div> -->
 									<%
-										if (!user_id.equalsIgnoreCase("2")) {
+										if (!user_id.equalsIgnoreCase("2") || !user_id.equalsIgnoreCase("5")) {
 									%>
 									<div class="box-body">
 										<div class="row">
@@ -359,15 +365,112 @@
 
 					</div>
 				</div>
+				<%
+					} else if (user_id.equalsIgnoreCase("3")) {
+				%>
+
+				<div class="main-content side-content pt-0">
+					<div class="container-fluid">
+						<div class="inner-body body_content">
+							<!-- <div class="row">
+						<div class="col-md-12">
+						  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+							Open modal
+						  </button>
+				 </div>
+				 </div> -->
+							<div class="row bg-success bg-gradient mt-2 p-2 text-white">
+								<div class="col-md-6">
+									Last ReCharge Amount :<span id="lastBillAmount"> </span>
+								</div>
+								<div class="col-md-6 text-right">
+									Last ReCharge Date : <span id="lastBillDate"> </span>
+								</div>
+							</div>
+							<div class="row border-bottom bg-light bg-gradient p-2 pt-0">
+
+								<div class="col-md-4">
+									<div class="form-group">
+										<label for="text">Select Year:</label> <select
+											class="yrselectdesc form-control start_date select2" id="start_date">
+											<option value="">Select Year</option>
+										</select>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group">
+										<label for="text">Select Month:</label> <select class="form-control month select2" id="month">
+                             <option value="0">Select Month</option>
+                             <option value="1">January</option>
+                             <option value="2">February</option>
+                             <option value="3">March</option>
+                             <option value="4">April</option>
+                             <option value="5">May</option>
+                             <option value="6">June</option>
+                             <option value="7">July</option>
+                             <option value="8">August</option>
+                             <option value="9">September</option>
+                             <option value="10">October</option>
+                             <option value="11">November</option>
+                             <option value="12">December</option>
+                             </select>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group mt-4">
+										<label for="text">&nbsp; &nbsp;</label>
+										<button type="button" class="btn btn-primary"
+											data-toggle="modal" data-target=".bd-example-modal-lg">
+											Sumbit</button>
+									</div>
+
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-4 border-right">
+									<div class="row mt-2">
+										<div class="col-md-4">
+											<div class="text-center">
+												<i class="fa fa-user-circle-o" aria-hidden="true"></i>
+												<p>User</p>
+											</div>
+										</div>
+										<div class="col-md-4">
+											<div class="text-center">
+												<i class="fa fa-user-circle-o" aria-hidden="true"></i>
+												<p>User</p>
+											</div>
+										</div>
+										<div class="col-md-4">
+											<div class="text-center">
+												<i class="fa fa-user-circle-o" aria-hidden="true"></i>
+												<p>User</p>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-8">
+									<div id="container"
+										style="width: 100%; height: 400px; margin: 0 auto"></div>
+								</div>
+							</div>
+
+						</div>
+					</div>
+				</div>
+				<%
+					}
+				%>
+
 			</div>
 		</div>
 	</div>
-
-	<jsp:include page="footer.jsp" />
-
 	<%
 		}
 	%>
+	<jsp:include page="footer.jsp" />
+
+
 	<script type="text/javascript"
 		src="//cdn.jsdelivr.net/jquery.bootstrapvalidator/0.5.0/js/bootstrapValidator.min.js"></script>
 
@@ -430,7 +533,15 @@
 			});
 		});
 	</script>
-
+<script src="common/js/year-select.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function(e) {
+                $('.yearselect').yearselect();
+                
+                $('.yrselectdesc').yearselect({step: 1, order: 'desc'});
+                $('.yrselectasc').yearselect({order: 'asc'});
+            });
+        </script>
 
 
 
