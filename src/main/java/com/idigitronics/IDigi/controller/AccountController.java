@@ -172,7 +172,7 @@ public class AccountController {
 			BusinessException, SQLException {
 		ResponseVO responsevo = new ResponseVO();
 		try {
-			responsevo = accountdao.paybill(paybillRequestVO);
+			responsevo = accountbo.payBill(paybillRequestVO);
 		} catch (Exception e) {
 			responsevo.setResult("Failure");
 			responsevo.setMessage(e.getMessage());

@@ -30,11 +30,13 @@ import com.idigitronics.IDigi.request.vo.DataRequestVO;
 import com.idigitronics.IDigi.request.vo.FilterVO;
 import com.idigitronics.IDigi.request.vo.MailRequestVO;
 import com.idigitronics.IDigi.request.vo.SMSRequestVO;
+import com.idigitronics.IDigi.response.vo.AllGraphResponseVO;
 import com.idigitronics.IDigi.response.vo.DashboardResponseVO;
 import com.idigitronics.IDigi.response.vo.GraphResponseVO;
 import com.idigitronics.IDigi.response.vo.HomeResponseVO;
 import com.idigitronics.IDigi.response.vo.IndividualDashboardResponseVO;
 import com.idigitronics.IDigi.response.vo.ResponseVO;
+import com.idigitronics.IDigi.response.vo.Series;
 
 
 /**
@@ -1143,6 +1145,104 @@ public class DashboardDAO {
 		}
 		
 		return graphResponseVO;
+	}
+	
+	public AllGraphResponseVO getCustomerAllGraphDashboardDetails(int year, int month, String customerUniqueID) {
+		// TODO Auto-generated method stub
+		
+		PreparedStatement pstmt = null;
+		PreparedStatement pstmt1 = null;
+		ResultSet rs = null;
+		ResultSet rs1 = null;
+		Connection con = null;
+		
+		AllGraphResponseVO allGraphResponseVO = new AllGraphResponseVO();
+		Series series = null;
+		List<String> xAxis;
+		List<Series> seriesList;
+		List<Integer> gasData;
+		List<Integer> waterData;
+		
+		try {
+			con = getConnection();
+			xAxis = new LinkedList<String>();
+			seriesList = new LinkedList<Series>();
+			gasData = new LinkedList<Integer>();
+			waterData = new LinkedList<Integer>();
+			
+			if(year == 0 && month == 0) {
+				
+				for(int i = 30; i>0; i-- ) {
+					
+					int totalGasMetersConsumptionPerDay = 0;
+					
+					series = new Series();
+					series.setName("Gas");
+					
+					pstmt1 = con.prepareStatement("SELECT * FROM customermeterdetails WHERE CustomerUniqueID = '"+customerUniqueID+"' AND MeterType = 'Gas'");
+					rs1 = pstmt1.executeQuery();
+					while(rs1.next()) {
+						String query = "SELECT ((SELECT Reading FROM balancelog WHERE CustomerMeterID = ? AND LogDate BETWEEN CONCAT(CURDATE() - INTERVAL <day> DAY, ' 00:00:00') AND CONCAT(CURDATE() - INTERVAL <day> DAY, ' 23:59:59') ORDER BY ReadingID DESC LIMIT 0,1) \r\n" + 
+								 "- (SELECT Reading FROM balancelog WHERE CustomerMeterID = ? AND LogDate BETWEEN CONCAT(CURDATE() - INTERVAL <day> DAY, ' 00:00:00') AND CONCAT(CURDATE() - INTERVAL <day> DAY, ' 23:59:59') ORDER BY ReadingID ASC LIMIT 0,1)) AS Units, CURDATE() - INTERVAL <day> DAY AS consumptiondate";
+			
+						pstmt = con.prepareStatement(query.replaceAll("<day>", "" + i));
+						pstmt.setInt(1, rs1.getInt("CustomerMeterID"));
+						pstmt.setInt(2, rs1.getInt("CustomerMeterID"));
+						rs = pstmt.executeQuery();
+
+						if (rs.next()) {
+							
+							totalGasMetersConsumptionPerDay = totalGasMetersConsumptionPerDay + (rs.getString("Units") == null ? 0 : rs.getInt("Units"));
+						}
+					}
+					
+					xAxis.add(rs.getString("consumptiondate"));
+					gasData.add(totalGasMetersConsumptionPerDay);
+				}
+				
+				series.setData(gasData);
+				seriesList.add(series);
+				
+				for(int i = 30; i>0; i-- ) {
+					
+					int totalWaterMetersConsumptionPerDay = 0;
+					gasData = new LinkedList<Integer>();
+					series = new Series();
+					series.setName("Water");
+					
+					pstmt1 = con.prepareStatement("SELECT * FROM customermeterdetails WHERE CustomerUniqueID = '"+customerUniqueID+"' AND MeterType = 'Water'");
+					rs1 = pstmt1.executeQuery();
+					while(rs1.next()) {
+						String query = "SELECT ((SELECT Reading FROM balancelog WHERE CustomerMeterID = ? AND LogDate BETWEEN CONCAT(CURDATE() - INTERVAL <day> DAY, ' 00:00:00') AND CONCAT(CURDATE() - INTERVAL <day> DAY, ' 23:59:59') ORDER BY ReadingID DESC LIMIT 0,1) \r\n" + 
+								 "- (SELECT Reading FROM balancelog WHERE CustomerMeterID = ? AND LogDate BETWEEN CONCAT(CURDATE() - INTERVAL <day> DAY, ' 00:00:00') AND CONCAT(CURDATE() - INTERVAL <day> DAY, ' 23:59:59') ORDER BY ReadingID ASC LIMIT 0,1)) AS Units, CURDATE() - INTERVAL <day> DAY AS consumptiondate";
+			
+						pstmt = con.prepareStatement(query.replaceAll("<day>", "" + i));
+						pstmt.setInt(1, rs1.getInt("CustomerMeterID"));
+						pstmt.setInt(2, rs1.getInt("CustomerMeterID"));
+						rs = pstmt.executeQuery();
+
+						if (rs.next()) {
+							
+							totalWaterMetersConsumptionPerDay = totalWaterMetersConsumptionPerDay + (rs.getString("Units") == null ? 0 : rs.getInt("Units"));
+						}
+					}
+					
+					waterData.add(totalWaterMetersConsumptionPerDay);
+				}
+				
+				series.setData(waterData);
+				seriesList.add(series);
+
+			} 
+			
+			allGraphResponseVO.setxAxis(xAxis);
+			allGraphResponseVO.setSeries(seriesList);
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return allGraphResponseVO;
 	}
 	
 	

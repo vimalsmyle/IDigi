@@ -15,11 +15,16 @@ public class BillingResponseVO {
 	private String communityName;
 	private String blockName;
 	private String customerName;
+	private String customerUniqueID;
+	private long customerID;
 	private String houseNumber;
 	private float totalConsumption;
+	private float amount;
+	private float tax;
 	private float totalAmount;
 	private float previousDues;
 	private String status;
+	private String dueDate;
 	private String transactedBy;
 	private String paidDate;
 	private String modeOfPayment;
@@ -138,6 +143,36 @@ public class BillingResponseVO {
 	}
 	public void setPreviousDues(float previousDues) {
 		this.previousDues = previousDues;
+	}
+	public String getDueDate() {
+		return dueDate;
+	}
+	public void setDueDate(String dueDate) {
+		this.dueDate = dueDate;
+	}
+	public String getCustomerUniqueID() {
+		return customerUniqueID;
+	}
+	public void setCustomerUniqueID(String customerUniqueID) {
+		this.customerUniqueID = customerUniqueID;
+	}
+	public long getCustomerID() {
+		return customerID;
+	}
+	public void setCustomerID(long customerID) {
+		this.customerID = customerID;
+	}
+	public float getAmount() {
+		return amount;
+	}
+	public void setAmount(float amount) {
+		this.amount = amount;
+	}
+	public float getTax() {
+		return tax;
+	}
+	public void setTax(float tax) {
+		this.tax = tax;
 	}
 	
 }

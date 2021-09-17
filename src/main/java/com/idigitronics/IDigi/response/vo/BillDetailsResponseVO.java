@@ -12,6 +12,9 @@ public class BillDetailsResponseVO {
 	private long customerBillingID;
 	private float totalConsumption;
 	private float totalAmount;
+	private float billAmount;
+	private float taxAmount;
+	private float previousDues;
 	private int lateFee;
 	private String dueDate;
 	private String billingDate;
@@ -65,6 +68,24 @@ public class BillDetailsResponseVO {
 	}
 	public void setDueDate(String dueDate) {
 		this.dueDate = dueDate;
+	}
+	public float getBillAmount() {
+		return billAmount;
+	}
+	public void setBillAmount(float billAmount) {
+		this.billAmount = billAmount;
+	}
+	public float getTaxAmount() {
+		return taxAmount;
+	}
+	public void setTaxAmount(float taxAmount) {
+		this.taxAmount = taxAmount;
+	}
+	public float getPreviousDues() {
+		return previousDues;
+	}
+	public void setPreviousDues(float previousDues) {
+		this.previousDues = previousDues;
 	}
 	
 }

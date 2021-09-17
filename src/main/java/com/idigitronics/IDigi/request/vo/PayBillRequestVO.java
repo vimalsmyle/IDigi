@@ -10,11 +10,12 @@ package com.idigitronics.IDigi.request.vo;
 public class PayBillRequestVO {
 	
 	private long customerBillingID;
-	private long transactionID;
 	private long customerID;
 	private String customerUniqueID;
 	private float totalamount;
 	private float taxAmount;
+	private float billAmount;
+	private float previousDues;
 	private int lateFee;
 	private String source;
 	private String modeOfPayment;
@@ -25,6 +26,8 @@ public class PayBillRequestVO {
 	private String razorPaySignature;
 	private int transactedByID;
 	private int transactedByRoleID;
+	
+	private long transactionID;
 	
 	public long getCustomerBillingID() {
 		return customerBillingID;
@@ -121,6 +124,18 @@ public class PayBillRequestVO {
 	}
 	public void setLateFee(int lateFee) {
 		this.lateFee = lateFee;
+	}
+	public float getBillAmount() {
+		return billAmount;
+	}
+	public void setBillAmount(float billAmount) {
+		this.billAmount = billAmount;
+	}
+	public float getPreviousDues() {
+		return previousDues;
+	}
+	public void setPreviousDues(float previousDues) {
+		this.previousDues = previousDues;
 	}
 
 }
