@@ -133,6 +133,20 @@ function showMetersDetails(customerId){
 	});
 }
 
+function showMetersDetailsPostpaid(customerId){
+	$("#selectMeters").find('option').remove();
+
+	$("#selectMeters").append("<option>" + "Select Meters" + "</option>");
+	$.getJSON("./customermeters/Postpaid/" + customerId, function(data) {
+		var Options = "";
+		$.each(data.dropDownCustomerMeters, function(key, value) {
+			Options = Options + "<option value='" + key + "'>" + value
+					+ "</option>";
+		});
+		$('#selectMeters').append(Options);
+	});
+}
+
 function showAllMetersDetails(customerId){
 	$("#selectMeters").find('option').remove();
 	var e = document.getElementById("selectHouseBasedonBlock");
@@ -179,6 +193,36 @@ function showTopupDetails(meterId){
 		
 		$("#month_topup").val(data.topupdetails.noOfMonths).trigger("change");
 		$("#formmonth_topup").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
+		
+	});
+	
+}
+
+
+function showBillingDetails(meterId){
+	
+	$.getJSON("./billdetails/" + $("#selectHouseBasedonBlock").val(), function(data) {
+		// var Options = "";
+		$("#totalConsumption").val(data.billdetails.totalConsumption).trigger("change");
+		$("#formcurrentBalance_topup").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
+		
+		$("#totalAmount").val(data.billdetails.totalAmount).trigger("change");
+		$("#formdateTime_topup").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
+		
+		$("#lateFee").val(data.billdetails.lateFee).trigger("change");
+		$("#formunit_topup").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
+		
+		$("#dueDate").val(data.billdetails.dueDate).trigger("change");
+		$("#formemergency_topup").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
+		
+		$("#billingDate").val(data.billdetails.billingDate).trigger("change");
+		$("#formalarm_topup").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
+		
+		$("#billMonth").val(data.billdetails.billMonth).trigger("change");
+		$("#formreconnection_topup").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
+		
+		$("#billYear").val(data.billdetails.billYear).trigger("change");
+		$("#formfixed_topup").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
 		
 	});
 	

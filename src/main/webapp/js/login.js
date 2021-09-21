@@ -211,6 +211,17 @@ $(document)
 																
 																sessionStorage
 																.setItem(
+																		"communityName",
+																		data.userDetails.communityName);
+																
+																sessionStorage
+																.setItem(
+																		"blockName",
+																		data.userDetails.blockName);
+																
+																
+																sessionStorage
+																.setItem(
 																		"roleID",
 																		data.userDetails.roleID);
 																
@@ -238,6 +249,11 @@ $(document)
 																.setItem(
 																		"mobileNumber",
 																		data.userDetails.mobileNumber);
+																
+																sessionStorage
+																.setItem(
+																		"CustomerUniqueID",
+																		data.userDetails.CustomerUniqueID);
 																
 																sessionStorage
 																.setItem(
@@ -364,7 +380,7 @@ $(document)
 										$.ajax({
 											type : "POST",
 											contentType : "application/json",
-											url : "/PAYGTL_LORA_BLE/forgotpassword/" + $("#forgetusername")
+											url : "./forgotpassword/" + $("#forgetusername")
 											.val(),
 											dataType : "JSON",
 											success : function(data) {

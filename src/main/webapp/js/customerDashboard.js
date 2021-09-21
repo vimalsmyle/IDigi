@@ -243,6 +243,9 @@ function executeDownloadDashboard(data){
 }
 
 function getCustomerMeters(CRNNumber) {
+	$('#customerMeterTable')
+	.DataTable();
+	
 	$
 			.getJSON(
 					"./dashboard/" + $("#type").val() + "/"
@@ -277,24 +280,11 @@ function getCustomerMeters(CRNNumber) {
 																	"order" : [ 0, "desc" ],
 																	"lengthMenu" : [ 5, 10, 25, 30, 50, 75 ],
 																	"pageLength" : 25,
-																	"scrollX" : true,
+																	"fixedHeader": false,
 																	"data" : item.dasboarddata,
 
 																	"columns" : [
-																		{
-																		"mData" : "action",
-																		"render" : function(
-																				data,
-																				type,
-																				row) {
-																			return "<span id=color style = color:"
-																					+ row.dateColor
-																					+ ">"
-																					+ row.timeStamp
-																					+ "</span>"
-																		},
-																		"defaultContent" : ""
-																	},
+																		
 																	{
 																		"data" : "meterSerialNumber"
 																	},
@@ -396,6 +386,19 @@ function getCustomerMeters(CRNNumber) {
 																			},
 																			{
 																				"data" : "lastTopupAmount"
+																			},{
+																				"mData" : "action",
+																				"render" : function(
+																						data,
+																						type,
+																						row) {
+																					return "<span id=color style = color:"
+																							+ row.dateColor
+																							+ ">"
+																							+ row.timeStamp
+																							+ "</span>"
+																				},
+																				"defaultContent" : ""
 																			}
 
 																	],
@@ -403,11 +406,25 @@ function getCustomerMeters(CRNNumber) {
 
 																	"buttons" : []
 																})
-
+																$('#myCustomerMeters').modal('show');
 											} else {
 											}
 										});
-						$('#myCustomerMeters').modal('show');
+						
+						/*$('#customerMeterTable')
+						.DataTable({
+						"responsive" : true,
+						"serverSide" : false,
+						"bDestroy" : true,
+						"bPaginate": true,
+						"pagging" : true,
+						"bProcessing" : true,
+						"ordering" : true,
+						"order" : [ 0, "desc" ],
+						"lengthMenu" : [ 5, 10, 25, 30, 50, 75 ],
+						"pageLength" : 25,
+						"fixedHeader": false
+						});*/
 					});
 
 }

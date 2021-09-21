@@ -242,7 +242,7 @@
 						style="width: 100%">
 						<thead>
 							<tr>
-								<th>TimeStamp</th>
+								
 								<th>Meter Serial Number</th>
 								<th>MIU ID</th>
 								<th>Reading</th>
@@ -258,6 +258,7 @@
 								<th>Communication Status</th>
 								<th>Vacation Status</th>
 								<th>Last Topup Amount</th>
+								<th>TimeStamp</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -296,10 +297,6 @@
 
 	<script
 		src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
-
-	<script
-		src="https://cdn.datatables.net/1.10.12/js/dataTables.bootstrap.min.js"></script>
-
 
 	<script
 		src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.bootstrap.min.js"></script>

@@ -67,7 +67,9 @@
                 <a href="topup.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-credit-card"></i> <span class="textData">ReCharge</span></a>
                 <%}%>
                 <a href="topupStatus.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-list"></i> <span class="textData">ReCharge Status</span></a>
-                
+                <%if(user_id.equalsIgnoreCase("1")){ %>
+                <a href="bill.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-credit-card"></i> <span class="textData">Bill Payment</span></a>
+                <%}%>
                 <a href="billingDetails.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-credit-card"></i> <span class="textData">Billing Status</span></a>
                 
                 
