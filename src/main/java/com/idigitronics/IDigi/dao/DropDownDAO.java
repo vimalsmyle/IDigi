@@ -99,6 +99,26 @@ public class DropDownDAO {
 		return houses;
 	}
 	
+	public HashMap<Long, String> getallcustomersbasedontype(String type, int blockID, int roleid, String id) {
+		// TODO Auto-generated method stub
+		Connection con = null;
+		HashMap<Long, String> customers = new HashMap<Long, String>();
+		
+		try {
+			con = getConnection();
+			String query = "SELECT CustomerUniqueID, CustomerID from customerdetails WHERE BlockID = ? AND CustomerID IN (SELECT CustomerID FROM customermeterdetails WHERE PayType = '"+type+"')  <change>";
+			PreparedStatement pstmt = con.prepareStatement(query.replaceAll("<change>", (roleid == 1 || roleid == 2 || roleid == 4 || roleid == 5) ? "ORDER BY CustomerID ASC" : (roleid == 3) ? " AND CustomerUniqueID = '"+id+"'" :""));
+			pstmt.setInt(1, blockID);
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				customers.put(rs.getLong("CustomerID"), rs.getString("CustomerUniqueID"));
+			}
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+		}
+		return customers;
+	}
 	
 	
 	public TopupDetailsResponseVO gettopupdetails(String CustomerUniqueID, int customerMeterID) throws SQLException {

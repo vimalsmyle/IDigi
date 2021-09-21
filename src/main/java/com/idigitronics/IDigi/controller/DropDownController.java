@@ -47,10 +47,20 @@ public class DropDownController {
 	
 	@RequestMapping(value = "/customers/{roleID}/{id}/{blockID}",method = RequestMethod.GET, 
 			produces="application/json")
-	public @ResponseBody ResponseVO getallhouses(@PathVariable("roleID") int roleid, @PathVariable("id") String id, @PathVariable ("blockID") int blockID) {
+	public @ResponseBody ResponseVO getallcustomers(@PathVariable("roleID") int roleid, @PathVariable("id") String id, @PathVariable ("blockID") int blockID) {
 		
 		ResponseVO responsevo = new ResponseVO();
 		responsevo.setDropDownCustomers(dropdowndao.getallcustomers(blockID, roleid, id));
+		
+		return responsevo;
+	}
+	
+	@RequestMapping(value = "/customers/{type}/{roleID}/{id}/{blockID}",method = RequestMethod.GET, 
+			produces="application/json")
+	public @ResponseBody ResponseVO getallcustomersbasedontype(@PathVariable("type") String type, @PathVariable("roleID") int roleid, @PathVariable("id") String id, @PathVariable ("blockID") int blockID) {
+		
+		ResponseVO responsevo = new ResponseVO();
+		responsevo.setDropDownCustomers(dropdowndao.getallcustomersbasedontype(type, blockID, roleid, id));
 		
 		return responsevo;
 	}
