@@ -1174,24 +1174,26 @@ public class AccountDAO {
 			ResultSet rs1 = pstmt1.executeQuery();
 			
 			if(rs1.next()) {
-				if(paybillRequestVO.getModeOfPayment().equalsIgnoreCase("Online")) {
 					
 					PreparedStatement pstmt3 = con.prepareStatement("SELECT cbd.TotalAmount, cbd.TaxAmount, cbd.PreviousDues, al.LateFee, DATEDIFF(NOW(),cbd.DueDate) AS DueDays FROM customerbillingdetails AS cbd JOIN alertsettings AS al WHERE cbd.CustomerBillingID = "+paybillRequestVO.getCustomerBillingID());
 					ResultSet rs3 = pstmt3.executeQuery();
 					
 					if(rs3.next()) {
 						
-						paybillRequestVO.setTotalamount(rs3.getFloat("TotalAmount") + rs3.getFloat("PreviousDues"));
+						paybillRequestVO.setTotalamount(rs3.getFloat("TotalAmount"));
+						paybillRequestVO.setPreviousDues(rs3.getFloat("PreviousDues"));
 						paybillRequestVO.setTaxAmount(rs3.getFloat("TaxAmount"));
 						paybillRequestVO.setLateFee(rs3.getInt("DueDays") >= 1 ? (rs3.getInt("LateFee")*rs3.getInt("DueDays")) : 0);
 						
+						if(paybillRequestVO.getModeOfPayment().equalsIgnoreCase("Online")) {
+							
 						long transactionID = insertbillingpayment(paybillRequestVO);
 						
 						if (transactionID != 0) {
 
 							// creating order in razor pay
 							
-							razorPayOrderVO.setAmount((int) ((paybillRequestVO.getTotalamount() + paybillRequestVO.getTaxAmount() + + paybillRequestVO.getLateFee()) * 100));
+							razorPayOrderVO.setAmount((int) ((paybillRequestVO.getTotalamount() + paybillRequestVO.getTaxAmount()+ paybillRequestVO.getPreviousDues() + paybillRequestVO.getLateFee()) * 100));
 							razorPayOrderVO.setCurrency("INR");
 							razorPayOrderVO.setPayment_capture(1);
 
