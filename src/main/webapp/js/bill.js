@@ -225,7 +225,7 @@ $(document)
 																
 																sessionStorage
 																.setItem(
-																		"transactionID",
+																		"payType",
 																		data.payType);
 
 																data.checkoutDetails.handler = function processRazorpayResponse(
@@ -238,8 +238,7 @@ $(document)
 																	data2["transactionID"] = sessionStorage
 																			.getItem("transactionID");
 																	data2["payType"] = sessionStorage
-																	.getItem(
-																			data.payType);
+																	.getItem("payType");
 
 																	$
 																			.ajax({
