@@ -71,7 +71,7 @@ $(document)
 
 						$
 								.getJSON(
-										"./topupdetails/"
+										"./billdetails/"
 												+ sessionStorage.getItem("ID"),
 										function(data) {
 											// var Options = "";
@@ -79,81 +79,28 @@ $(document)
 													sessionStorage
 															.getItem("ID"))
 													.trigger("change");
-											$("#formCRNNumber")
-													.addClass(
-															"input-group form-group has-feedback has-success bmd-form-group is-filled")
-
-											$("#AMR_topup").val(
-													data.topupdetails.meterID)
-													.trigger("change");
-											$("#formAMR_topup")
-													.addClass(
-															"input-group form-group has-feedback has-success bmd-form-group is-filled")
-
-											$("#currentBalance_topup")
-													.val(
-															data.topupdetails.currentBalance)
-													.trigger("change");
-											$("#formcurrentBalance_topup")
-													.addClass(
-															"input-group form-group has-feedback has-success bmd-form-group is-filled")
-
-											$("#dateTime_topup")
-													.val(
-															data.topupdetails.IoTTimeStamp)
-													.trigger("change");
-											$("#formdateTime_topup")
-													.addClass(
-															"input-group form-group has-feedback has-success bmd-form-group is-filled")
-
-											$("#unit_topup").val(
-													data.topupdetails.tariff)
-													.trigger("change");
-											$("#formunit_topup")
-													.addClass(
-															"input-group form-group has-feedback has-success bmd-form-group is-filled")
-
-											$("#emergency_topup")
-													.val(
-															data.topupdetails.emergencyCredit)
-													.trigger("change");
-											$("#formemergency_topup")
-													.addClass(
-															"input-group form-group has-feedback has-success bmd-form-group is-filled")
-
-											$("#alarm_topup")
-													.val(
-															data.topupdetails.alarmCredit)
-													.trigger("change");
-											$("#formalarm_topup")
-													.addClass(
-															"input-group form-group has-feedback has-success bmd-form-group is-filled")
-
-											$("#reconnection_topup")
-													.val(
-															data.topupdetails.reconnectionCharges)
-													.trigger("change");
-											$("#formreconnection_topup")
-													.addClass(
-															"input-group form-group has-feedback has-success bmd-form-group is-filled")
-
-											$("#fixed_topup")
-													.val(
-															data.topupdetails.fixedCharges)
-													.trigger("change");
-											$("#formfixed_topup")
-													.addClass(
-															"input-group form-group has-feedback has-success bmd-form-group is-filled")
-
-											$("#month_topup")
-													.val(
-															data.topupdetails.noOfMonths)
-													.trigger("change");
-											$("#formmonth_topup")
-													.addClass(
-															"input-group form-group has-feedback has-success bmd-form-group is-filled")
-
-											$('#topup').attr('disabled', false);
+											$("#totalConsumption").val(data.billdetails.totalConsumption).trigger("change");
+											$("#formcurrentBalance_topup").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
+											
+											$("#totalAmount").val(data.billdetails.totalAmount).trigger("change");
+											$("#formdateTime_topup").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
+											
+											$("#lateFee").val(data.billdetails.lateFee).trigger("change");
+											$("#formunit_topup").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
+											
+											$("#dueDate").val(data.billdetails.dueDate).trigger("change");
+											$("#formemergency_topup").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
+											
+											$("#billingDate").val(data.billdetails.billingDate).trigger("change");
+											$("#formalarm_topup").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
+											
+											$("#billMonth").val(data.billdetails.billMonth).trigger("change");
+											$("#formreconnection_topup").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
+											
+											$("#billYear").val(data.billdetails.billYear).trigger("change");
+											$("#formfixed_topup").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
+											
+											$('#bill').attr('disabled', false);
 
 										});
 
@@ -186,7 +133,7 @@ $(document)
 					$(document)
 							.on(
 									'click',
-									'#topup',
+									'#bill',
 									function() {
 
 										var data1 = {}
@@ -202,15 +149,7 @@ $(document)
 											return false;
 										}
 										
-										if ($("#selectMeters").val() == "-1" || $("#selectMeters").val() == "Select Meters") {
-											swal.fire({
-												  title: "error",
-												  text: "Please Select Meters",
-												  icon: "error"
-												});
-											return false;
-										}
-
+										
 										if ($("#recharge_topup").val() == "") {
 											swal.fire({
 												  title: "error",
@@ -256,8 +195,7 @@ $(document)
 											.val();
 										}
 
-										data1["miuID"] = $("#selectMeters")
-												.val();
+										
 										data1["customerMeterID"] = $("#selectMeters").val();
 										data1["currentBalance"] = $(
 												"#currentBalance_topup").val();

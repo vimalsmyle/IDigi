@@ -199,9 +199,9 @@ function showTopupDetails(meterId){
 }
 
 
-function showBillingDetails(meterId){
+function showBillingDetails(customerId){
 	
-	$.getJSON("./billdetails/" + $("#selectHouseBasedonBlock").val(), function(data) {
+	$.getJSON("./billdetails/" + customerId, function(data) {
 		// var Options = "";
 		$("#totalConsumption").val(data.billdetails.totalConsumption).trigger("change");
 		$("#formcurrentBalance_topup").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
