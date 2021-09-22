@@ -951,7 +951,7 @@ public class DashboardDAO {
 				noAMRInterval = rs1.getInt("NoAMRInterval");
 			}
 			
-			if(!id.equalsIgnoreCase("0")) {
+			if(!id.equalsIgnoreCase("0") && (roleid == 1 || roleid == 4)) {
 				PreparedStatement pstmt5 = con.prepareStatement("SELECT CommunityID FROM community WHERE CommunityName = '"+id+"'");
 				ResultSet rs5 = pstmt5.executeQuery();
 				if(rs5.next()) {
@@ -979,19 +979,19 @@ public class DashboardDAO {
 			}
 			
 			homeResponseVO.setLive(live);
-			homeResponseVO.setLivePercentage((live*100/amr));
+			homeResponseVO.setLivePercentage(amr == 0 ? 0 : (live*100/amr));
 			homeResponseVO.setNonLive(nonLive);
-			homeResponseVO.setNonLivePercentage((nonLive*100/amr));
+			homeResponseVO.setNonLivePercentage(amr == 0 ? 0 : (nonLive*100/amr));
 			homeResponseVO.setActive(active);
-			homeResponseVO.setActivePercentage((active*100/amr));
+			homeResponseVO.setActivePercentage(amr == 0 ? 0 : (active*100/amr));
 			homeResponseVO.setInActive(inActive);
-			homeResponseVO.setInActivePercentage((inActive*100/amr));
+			homeResponseVO.setInActivePercentage(amr == 0 ? 0 : (inActive*100/amr));
 			homeResponseVO.setEmergency(emergency);
-			homeResponseVO.setEmergencyPercentage((emergency*100/amr));
+			homeResponseVO.setEmergencyPercentage(amr == 0 ? 0 : (emergency*100/amr));
 			homeResponseVO.setLowBattery(lowBattery);
-			homeResponseVO.setLowBatteryPercentage((lowBattery*100/amr));
+			homeResponseVO.setLowBatteryPercentage(amr == 0 ? 0 : (lowBattery*100/amr));
 			homeResponseVO.setAmr(amr);
-			homeResponseVO.setAmrPercentage(100);
+			homeResponseVO.setAmrPercentage(amr == 0 ? 0 : 100);
 			
 			String query1 = "SELECT SUM(Amount) AS topup FROM topup WHERE Status = 0 AND PaymentStatus = 1 AND TransactionDate BETWEEN CONCAT(CURDATE(), ' 00:00:00') AND CONCAT(CURDATE(), ' 23:59:59') <change>";
 			pstmt2 = con.prepareStatement(query1.replaceAll("<change>", (roleid == 2 || roleid == 5) ? "AND BlockID = "+id :""));

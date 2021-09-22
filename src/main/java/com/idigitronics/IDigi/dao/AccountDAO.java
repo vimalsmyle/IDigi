@@ -936,7 +936,7 @@ public class AccountDAO {
 				billingresponsevo.setPreviousDues(rs.getFloat("PreviousDues"));
 				billingresponsevo.setDueDate(rs.getString("DueDate"));
 				
-				PreparedStatement ps = con.prepareStatement("SELECT bpd.PaymentStatus, bpd.ModeofPayment, bpd.TransactionDate, u.UserName FROM billingpaymentdetails AS bpd LEFT JOIN user AS u ON u.ID = bpd.CreatedByID WHERE bpd.CustomerBillingID = " + rs.getLong("CustomerBillingID"));
+				PreparedStatement ps = con.prepareStatement("SELECT bpd.PaymentStatus, bpd.ModeofPayment, bpd.TransactionDate, u.UserName FROM billingpaymentdetails AS bpd LEFT JOIN user AS u ON u.ID = bpd.CreatedByID WHERE bpd.CustomerBillingID = " + rs.getLong("CustomerBillingID") +" ORDER BY bpd.TransactionID DESC LIMIT 1");
 				ResultSet rs2 = ps.executeQuery();
 				if(rs2.next()) {
 					billingresponsevo.setStatus((rs2.getInt("PaymentStatus") == 1) ? "Paid" : "Pending");
