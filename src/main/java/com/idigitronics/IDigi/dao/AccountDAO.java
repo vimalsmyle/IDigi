@@ -1240,21 +1240,21 @@ public class AccountDAO {
 							responsevo.setResult("Failure");
 							responsevo.setMessage("Order Creation Failed. Please Try After Sometime");
 						}
-					}
-					
-				} else {
-					paybillRequestVO.setPaymentStatus(1);
-					responsevo.setPaymentMode("Cash");
-
-					if(insertbillingpayment(paybillRequestVO) != 0) {
-						responsevo.setResult("Success");
-						responsevo.setMessage("Bill Paid Successfully");
 					} else {
-						responsevo.setResult("Failure");
-						responsevo.setMessage("Bill Payment Failed. Please Try After Sometime");
+						paybillRequestVO.setPaymentStatus(1);
+						responsevo.setPaymentMode("Cash");
+
+						if(insertbillingpayment(paybillRequestVO) != 0) {
+							responsevo.setResult("Success");
+							responsevo.setMessage("Bill Paid Successfully");
+						} else {
+							responsevo.setResult("Failure");
+							responsevo.setMessage("Bill Payment Failed. Please Try After Sometime");
+						}
+						
 					}
 					
-				}
+				} 
 			}
 			
 		} catch (Exception ex) {
@@ -1279,17 +1279,17 @@ public class AccountDAO {
 		try {
 			con = getConnection();
 			
-			PreparedStatement pstmt = con.prepareStatement("INSERT INTO billingpaymentdetails (CustomerBillingID, CustomerID, CustomerUniqueID, TotalAmount, LateFee, Source, ModeOfPayment, PaymentStatus, CreatedByID, CreatedByRoleID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+			PreparedStatement pstmt = con.prepareStatement("INSERT INTO billingpaymentdetails (CustomerBillingID, CustomerID, CustomerUniqueID, TotalAmount, LateFee, Source, ModeOfPayment, PaymentStatus, CreatedByID, CreatedByRoleID, AcknowledgeDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, Now())");
 			pstmt.setLong(1, paybillRequestVO.getCustomerBillingID());
 			pstmt.setLong(2, paybillRequestVO.getCustomerID());
 			pstmt.setString(3, paybillRequestVO.getCustomerUniqueID());
 			pstmt.setFloat(4, paybillRequestVO.getTotalamount() + paybillRequestVO.getTaxAmount() + paybillRequestVO.getPreviousDues()); // = bill amount + tax amount + late fee()
 			pstmt.setInt(5, paybillRequestVO.getLateFee());
-			pstmt.setString(5, paybillRequestVO.getSource());
-			pstmt.setString(6, paybillRequestVO.getModeOfPayment());
-			pstmt.setInt(7, paybillRequestVO.getPaymentStatus());
-			pstmt.setInt(8, paybillRequestVO.getTransactedByID());
-			pstmt.setInt(9, paybillRequestVO.getTransactedByRoleID());
+			pstmt.setString(6, paybillRequestVO.getSource());
+			pstmt.setString(7, paybillRequestVO.getModeOfPayment());
+			pstmt.setInt(8, paybillRequestVO.getPaymentStatus());
+			pstmt.setInt(9, paybillRequestVO.getTransactedByID());
+			pstmt.setInt(10, paybillRequestVO.getTransactedByRoleID());
 			
 			if (pstmt.executeUpdate() > 0) {
 				PreparedStatement pstmt1 = con.prepareStatement("SELECT MAX(TransactionID) as TransactionID from billingpaymentdetails");
