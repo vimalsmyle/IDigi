@@ -26,8 +26,6 @@ table = $('#gatewayTable')
 "order" : [ 0, "desc" ],
 "lengthMenu" : [ 5, 10, 25, 30, 50, 75 ],
 "pageLength" : 25,
-"scrollY" : 324,
-"scrollX" : true,
 "ajax" : {
 "url":"./gateway",
 "type" : "GET",

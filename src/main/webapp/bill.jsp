@@ -59,7 +59,7 @@
 								<div class="row mb-4">
 									<div class="col-md-10 m-auto">
 										<div class="card">
-											<div class="card-header bg-dark cardHeading text-white">Bill Payment</div>
+											<div class="card-header bg-primary cardHeading text-white">Bill Payment</div>
 											<div class="card-body scroll right-block">
 												<form id="topupDetails">
 													<div class="row">
@@ -85,7 +85,7 @@
 																</label> <select class="form-control form-control-sm select2"
 																	id="selectBlockBasedonCommunity"
 																	name="selectBlockBasedonCommunity"
-																	onchange="showCustomerbyBlock(this.value);">
+																	onchange="showCustomerbyBlockForBill(this.value);">
 
 																</select>
 															</div>
@@ -163,6 +163,10 @@
 																<label class="bmd-label-floating">Total Amount</label> <input
 																	type="text" class="form-control form-control-sm"
 																	id="totalAmount" name="totalAmount" disabled>
+																	
+																	<input
+																	type="hidden" class="form-control form-control-sm"
+																	id="customerBillingID" name="customerBillingID">
 															</div>
 														</div>
 														<div class="col-md-4">

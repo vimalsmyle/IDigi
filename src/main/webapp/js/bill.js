@@ -149,27 +149,6 @@ $(document)
 											return false;
 										}
 										
-										
-										if ($("#recharge_topup").val() == "") {
-											swal.fire({
-												  title: "error",
-												  text: "Please Enter Amount",
-												  icon: "error"
-												});
-											return false;
-										} else {
-											if (!regTopup.test($(
-													"#recharge_topup").val())) {
-												swal.fire({
-													  title: "error",
-													  text: "Enter Valid Amount",
-													  icon: "error"
-													});
-												return false;
-												
-											}
-										}
-
 										if ($("#paymentMode").val() == "Select Mode" || $("#paymentMode").val() == "-1") {
 											swal.fire({
 												  title: "error",
@@ -183,26 +162,22 @@ $(document)
 											data1["CustomerUniqueID"] = $(
 													"#selectHouseBasedonBlock")
 													.val();
+											
+											data1["customerID"] = $(
+											"#CustomerID")
+											.val();
 										} else {
-											data1["communityID"] = $(
-													"#selectcommunityName")
-													.val();
-											data1["blockID"] = $(
-													"#selectBlockBasedonCommunity")
-													.val();
-											data1["CustomerUniqueID"] = $(
+											data1["customerId"] = $(
 											"#selectHouseBasedonBlock")
 											.val();
+											var v = $("#selectHouseBasedonBlock").val();
+											data1["CustomerUniqueID"] = $("#selectHouseBasedonBlock option[value="+v+"]").text();
 										}
 
 										
-										data1["customerMeterID"] = $("#selectMeters").val();
-										data1["currentBalance"] = $(
-												"#currentBalance_topup").val();
-										data1["tariffID"] = $("#tariffID")
-												.val();
-										data1["amount"] = $("#recharge_topup")
-												.val();
+										data1["customerBillingID"] = $("#customerBillingID").val();
+										data1["totalAmount"] = $(
+												"#totalAmount").val();
 										if(sessionStorage.getItem("roleID") == 3){
 											data1["modeOfPayment"] = "Online";
 										}
@@ -220,7 +195,7 @@ $(document)
 												.ajax({
 													type : "POST",
 													contentType : "application/json",
-													url : "./topup",
+													url : "./paybill",
 													data : JSON
 															.stringify(data1),
 													dataType : "JSON",
@@ -236,7 +211,7 @@ $(document)
 																	  text: data.Message,
 																	  icon: "success"
 																	}).then(function() {
-																	    window.location = "topupStatus.jsp";
+																	    window.location = "billingDetails.jsp";
 																	    
 																	});
 																return false;
@@ -276,7 +251,7 @@ $(document)
 																							  text: data.Message,
 																							  icon: "success"
 																							}).then(function() {
-																							    window.location = "topupStatus.jsp";
+																							    window.location = "billingDetails.jsp";
 																							    
 																							});
 																						return false;
@@ -286,7 +261,7 @@ $(document)
 																							  text: data.Message,
 																							  icon: "error"
 																							}).then(function() {
-																							    window.location = "topupStatus.jsp";
+																							    window.location = "billingDetails.jsp";
 																							    
 																							});
 																						return false;
@@ -308,7 +283,7 @@ $(document)
 																  text: data.Message,
 																  icon: "error"
 																}).then(function() {
-																    window.location = "topupStatus.jsp";
+																    window.location = "billingDetails.jsp";
 																    
 																});
 															return false

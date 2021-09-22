@@ -1142,7 +1142,7 @@ public class CommunitySetUpDAO {
 	            		con.prepareStatement("UPDATE customermeterdetails SET MIUID = '"+customervo.getMeters().get(i).getMiuID()+"', GatewayID = " +customervo.getMeters().get(i).getGatewayID()+ ", ModifiedDate = NOW() WHERE CustomerMeterID = " + customervo.getMeters().get(i).getCustomerMeterID()).executeUpdate();
 	            	}
 	            	
-	            	PreparedStatement pstmt1 = con.prepareStatement("UPDATE USER SET UserName = CONCAT (?, (SELECT LastName FROM customerdetails WHERE CustomerUniqueID = ?)), MobileNumber = ?, EmailID = ? WHERE CustomerUniqueID = ?");
+	            	PreparedStatement pstmt1 = con.prepareStatement("UPDATE USER SET UserName = CONCAT (?, (SELECT LastName FROM customerdetails WHERE CustomerUniqueID = ?)), MobileNumber = ?, Email = ? WHERE CustomerUniqueID = ?");
 	            	pstmt1.setString(1, customervo.getFirstName() + " ");
 	            	pstmt1.setString(2, customervo.getCustomerUniqueID());
 	            	pstmt1.setString(3, customervo.getMobileNumber());

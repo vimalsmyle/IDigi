@@ -101,7 +101,7 @@
 								<div id="formmobileNoEdit" class="group">
 									<label class="bmd-label-floating">Mobile No</label> <input
 										type="text" class="form-control" name="mobileNoEdit"
-										id="mobileNoEdit">
+										id="mobileNoEdit" maxlength="10">
 								</div>
 							</div>
 							

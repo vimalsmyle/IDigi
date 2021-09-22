@@ -257,6 +257,11 @@ $(document)
 																
 																sessionStorage
 																.setItem(
+																		"CustomerID",
+																		data.userDetails.customerID);
+																
+																sessionStorage
+																.setItem(
 																		"email",
 																		data.userDetails.email);
 																

@@ -84,11 +84,8 @@ function showBlockbyCommunity(communityId){
 
 
 function showCustomerbyBlock(blockId){
-	// alert("@@-->"+communityId);
 	$("#selectHouseBasedonBlock").find('option').remove();
-
 	$("#selectHouseBasedonBlock").append("<option>" + "Select CRN" + "</option>");
-	
 	$.getJSON("./customers/" + sessionStorage.getItem("roleID") + "/"
 			+ sessionStorage.getItem("ID")+ "/" + blockId, function(data) {
 		var Options = "";
@@ -97,7 +94,20 @@ function showCustomerbyBlock(blockId){
 					+ "</option>";
 		});
 		$('#selectHouseBasedonBlock').append(Options);
-		// $("#selectBlockBasedonCommunity").material_select();
+	});
+}
+
+function showCustomerbyBlockForBill(blockId){
+	$("#selectHouseBasedonBlock").find('option').remove();
+	$("#selectHouseBasedonBlock").append("<option>" + "Select CRN" + "</option>");
+	$.getJSON("./customers/" + sessionStorage.getItem("roleID") + "/"
+			+ sessionStorage.getItem("ID")+ "/" + blockId, function(data) {
+		var Options = "";
+		$.each(data.dropDownCustomers, function(key, value) {
+			Options = Options + "<option value='" + key + "'>" + value
+					+ "</option>";
+		});
+		$('#selectHouseBasedonBlock').append(Options);
 	});
 }
 
@@ -166,7 +176,7 @@ function showAllMetersDetails(customerId){
 function showTopupDetails(meterId){
 	
 	$.getJSON("./topupdetails/" + $("#CustomerCRNNumber").val()+"/"+meterId, function(data) {
-		// var Options = "";
+		
 		$("#AMR_topup").val(data.topupdetails.miuID).trigger("change");
 		$("#formAMR_topup").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
 		
@@ -192,7 +202,7 @@ function showTopupDetails(meterId){
 		$("#formfixed_topup").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
 		
 		$("#month_topup").val(data.topupdetails.noOfMonths).trigger("change");
-		$("#formmonth_topup").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
+		$("#formmonth_topup").addClass("group form-group has-feedback has-success bmd-form-group is-filled");
 		
 	});
 	
@@ -213,6 +223,7 @@ function showBillingDetails(customerId){
 		$("#formunit_topup").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
 		
 		$("#dueDate").val(data.billdetails.dueDate).trigger("change");
+		$("#customerBillingID").val(data.billdetails.customerBillingID).trigger("change");
 		$("#formemergency_topup").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
 		
 		$("#billingDate").val(data.billdetails.billingDate).trigger("change");
@@ -378,7 +389,7 @@ function showFieldsBasedONCommand(id){
 																			<label class="bmd-label-floating select-label">Reading<sup
 																				class="imp">*</sup></label> 
 																				
-															<input type="text" id="reading" name="reading" class="form-control">
+															<input type="text" id="reading" name="reading" class="form-control" maxLength="10">
 																				
 																		</div>
 																	</div>`);

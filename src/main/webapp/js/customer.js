@@ -378,7 +378,7 @@ return json.data;
 	"mData" : "action",
 	"render" : function(data, type, row) {
 		
-		return "<a href='customerEdit.jsp?cust='"+row.CustomerUniqueID+"'>"
+		return "<a href='customerEdit.jsp?cust="+row.CustomerUniqueID+"'>"
 																	+ "<i class='material-icons' style='color:#17e9e9'>edit</i>"
 																	+ "</a>"
 																	+"<a onclick='getCustomerFormDelete(\""

@@ -120,7 +120,7 @@
 								<div class="group form-group">
 									<label class="bmd-label-floating">Mobile No<span class="impp"><sup>*</sup></span></label> <input
 										type="text" class="form-control form-control-sm" name="mobileNoAdd"
-										id="mobileNoAdd">
+										id="mobileNoAdd" maxlength="10">
 								</div>
 							</div>
 							
