@@ -159,7 +159,7 @@ $(document)
 										}
 
 										if (sessionStorage.getItem("roleID") == 3) {
-											data1["CustomerUniqueID"] = $(
+											data1["customerUniqueID"] = $(
 													"#selectHouseBasedonBlock")
 													.val();
 											
@@ -167,11 +167,11 @@ $(document)
 											"#CustomerID")
 											.val();
 										} else {
-											data1["customerId"] = $(
+											data1["customerID"] = $(
 											"#selectHouseBasedonBlock")
 											.val();
 											var v = $("#selectHouseBasedonBlock").val();
-											data1["CustomerUniqueID"] = $("#selectHouseBasedonBlock option[value="+v+"]").text();
+											data1["customerUniqueID"] = $("#selectHouseBasedonBlock option[value="+v+"]").text();
 										}
 
 										

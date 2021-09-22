@@ -161,14 +161,7 @@ $(document)
 													"mData" : "action",
 													"render" : function(data,
 															type, row) {
-														if (row.status == "Failed") {
-															return "<a onclick='getDeleteTransactionID("
-																	+ row.customerBillingID
-																	+ ")'>"
-																	+ "<i class='material-icons' style='color:#17e9e9;cursor:pointer'>delete</i>"
-																	+ "</a>";
-
-														} else if (row.status == "Passed"
+														 if (row.status == "Passed"
 																) {
 															return "<a onclick='getReceiptTransactionID("
 																	+ row.customerBillingID
@@ -176,10 +169,10 @@ $(document)
 																	+ "<i class='material-icons' style='color:#17e9e9;cursor:pointer'>receipt</i>"
 																	+ "</a>"
 														} else if (row.status == "Pending") {
-															return "<a onclick='getPayBillTransactionID("
-															+ row.customerBillingID
-															+ ")'>"
-															+ "<i class='material-icons' style='color:#17e9e9;cursor:pointer'>pay Bill</i>"
+															return "<a onclick='getPayBillTransactionID(\""
+															+ row.customerUniqueID
+															+ "\")'>"
+															+ "<i class='material-icons' style='color:#17e9e9;cursor:pointer'>receipt</i>"
 															+ "</a>"
 														}
 
@@ -424,22 +417,19 @@ $(document)
 																								data,
 																								type,
 																								row) {
-																							if (row.Status == "Failed") {
-																								return "<a onclick='getDeleteTransactionID("
-																										+ row.transactionID
-																										+ ")'>"
-																										+ "<i class='material-icons' style='color:#17e9e9;cursor:pointer'>delete</i>"
-																										+ "</a>";
-
-																							} else if (row.Status == "Passed"
-																									|| row.Status == "Pending") {
+																							 if (row.Status == "Passed"
+																									) {
 																								return "<a onclick='getReceiptTransactionID("
 																										+ row.transactionID
 																										+ ")'>"
 																										+ "<i class='material-icons' style='color:#17e9e9;cursor:pointer'>receipt</i>"
 																										+ "</a>"
-																							} else if (row.Status == "Pending...waiting for acknowledge") {
-																								return "---"
+																							} else if (row.status == "Pending") {
+																								return "<a onclick='getPayBillTransactionID(\""
+																		+ row.customerUniqueID
+																		+ "\")'>"
+																								+ "<i class='material-icons' style='color:#17e9e9;cursor:pointer'>receipt</i>"
+																								+ "</a>"
 																							}
 
 																						}
@@ -653,3 +643,88 @@ function getCustomerMeters(customerBillingID){
 	
 	
 }
+
+
+
+function getReceiptTransactionID(transId){
+	
+	bootbox
+	.confirm(
+			"ARE YOU SURE TO DOWNLOAD RECEIPT",
+		function(
+			result) {
+			//	alert(result);
+			if(result == true){
+				$.ajax({
+					type : "GET",
+					contentType : "application/json",
+					url : "./billing/printreceipt/" + transId,
+					dataType : "JSON",
+					success : function(data) {
+						//alert("Success====" + data.result);
+						if (data.result == "Success") {
+							bootbox
+							.confirm(
+									data.Message,
+								function(
+									result) {
+									window.location = "billingDetails.jsp";
+								});
+
+						} else {
+							bootbox
+							.alert(data.Message);
+							return false;
+						}
+					}
+				});
+			}else if(result==false){
+				//alert("@"+false)
+				
+			}
+		});
+	
+}
+
+
+function getPayBillTransactionID(customerUniqueID){
+	
+	bootbox
+	.confirm(
+			"ARE YOU SURE TO DOWNLOAD BILL",
+		function(
+			result) {
+			//	alert(result);
+			if(result == true){
+				$.ajax({
+					type : "GET",
+					contentType : "application/json",
+					url : "./billing/print/" + customerUniqueID,
+					dataType : "JSON",
+					success : function(data) {
+						//alert("Success====" + data.result);
+						if (data.result == "Success") {
+							bootbox
+							.confirm(
+									data.Message,
+								function(
+									result) {
+									window.location = "billingDetails.jsp";
+								});
+
+						} else {
+							bootbox
+							.alert(data.Message);
+							return false;
+						}
+					}
+				});
+			}else if(result==false){
+				//alert("@"+false)
+				
+			}
+		});
+	
+}
+
+

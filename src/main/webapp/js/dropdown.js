@@ -104,7 +104,7 @@ function showCustomerbyBlockForBill(blockId){
 			+ sessionStorage.getItem("ID")+ "/" + blockId, function(data) {
 		var Options = "";
 		$.each(data.dropDownCustomers, function(key, value) {
-			Options = Options + "<option value='" + value + "'>" + value
+			Options = Options + "<option value='" + key + "'>" + value
 					+ "</option>";
 		});
 		$('#selectHouseBasedonBlock').append(Options);
@@ -211,7 +211,7 @@ function showTopupDetails(meterId){
 
 function showBillingDetails(customerId){
 	
-	$.getJSON("./billdetails/" + customerId, function(data) {
+	$.getJSON("./billdetails/" + $("#selectHouseBasedonBlock option[value="+customerId+"]").text(), function(data) {
 		// var Options = "";
 		$("#totalConsumption").val(data.billdetails.totalConsumption).trigger("change");
 		$("#formcurrentBalance_topup").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
