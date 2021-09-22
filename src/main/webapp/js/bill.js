@@ -222,6 +222,11 @@ $(document)
 																		.setItem(
 																				"transactionID",
 																				data.checkoutDetails.transactionID);
+																
+																sessionStorage
+																.setItem(
+																		"payType",
+																		data.payType);
 
 																data.checkoutDetails.handler = function processRazorpayResponse(
 																		response) {
@@ -232,7 +237,8 @@ $(document)
 																	data2["razorpay_signature"] = response.razorpay_signature
 																	data2["transactionID"] = sessionStorage
 																			.getItem("transactionID");
-																	data2["payType"] = response.payType;
+																	data2["payType"] = sessionStorage
+																	.getItem("payType");
 
 																	$
 																			.ajax({

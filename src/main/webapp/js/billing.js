@@ -161,7 +161,7 @@ $(document)
 													"mData" : "action",
 													"render" : function(data,
 															type, row) {
-														 if (row.status == "Passed"
+														 if (row.status == "Paid"
 																) {
 															return "<a onclick='getReceiptTransactionID("
 																	+ row.customerBillingID
@@ -417,7 +417,7 @@ $(document)
 																								data,
 																								type,
 																								row) {
-																							 if (row.Status == "Passed"
+																							 if (row.Status == "Paid"
 																									) {
 																								return "<a onclick='getReceiptTransactionID("
 																										+ row.transactionID
