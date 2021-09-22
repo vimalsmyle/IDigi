@@ -104,7 +104,7 @@ function showCustomerbyBlockForBill(blockId){
 			+ sessionStorage.getItem("ID")+ "/" + blockId, function(data) {
 		var Options = "";
 		$.each(data.dropDownCustomers, function(key, value) {
-			Options = Options + "<option value='" + key + "'>" + value
+			Options = Options + "<option value='" + value + "'>" + value
 					+ "</option>";
 		});
 		$('#selectHouseBasedonBlock').append(Options);
