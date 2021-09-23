@@ -415,7 +415,7 @@ public class AccountDAO {
 			if(topUpRequestVO.getModeOfPayment().equalsIgnoreCase("Cash")) {
 				
 				restcallvo.setTransaction_id(inserttopup(topUpRequestVO));
-	//			restcallresponse = extramethodsdao.postdata(restcallvo);
+				restcallresponse = extramethodsdao.postdata(restcallvo);
 			} else {
 				restcallvo.setTransaction_id(topUpRequestVO.getTransactionID());
 				restcallresponse = extramethodsdao.postdata(restcallvo);
@@ -1682,7 +1682,8 @@ public class AccountDAO {
 					
 					if (ps2.executeUpdate() > 0) {
 						restcallvo.setParameter_id(configurationvo.getCommands().get(0).getParameter_id());
-						restcallvo.setValue(configurationvo.getCommands().get(0).getParameter_id() == 6 ? ExtraMethodsDAO.datetimeformatter(configurationvo.getCommands().get(0).getValue()) : configurationvo.getCommands().get(0).getValue());
+//						restcallvo.setValue(configurationvo.getCommands().get(0).getParameter_id() == 6 ? ExtraMethodsDAO.datetimeformatter(configurationvo.getCommands().get(0).getValue()) : configurationvo.getCommands().get(0).getValue());
+						restcallvo.setValue(configurationvo.getCommands().get(0).getParameter_id() == 6 ? configurationvo.getCommands().get(0).getValue()+":00" : configurationvo.getCommands().get(0).getValue());
 						restcallvo.setUrlExtension("/set");
 						
 						if (configurationvo.getCommands().get(0).getParameter_id() == 3) {
