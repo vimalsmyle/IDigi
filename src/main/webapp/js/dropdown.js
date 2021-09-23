@@ -17,8 +17,21 @@ $(function() {
 						+ "</option>";
 			});
 			$('#selectHouseBasedonBlock').append(Options);
-			// $("#selectBlockBasedonCommunity").material_select();
+			
 		});
+		$("#selectHouseBasedonBlockForBill").append("<option>" + "Select CRN" + "</option>");
+		
+		$.getJSON("./customers/" + sessionStorage.getItem("roleID") + "/"
+				+ sessionStorage.getItem("ID")+ "/" + sessionStorage.getItem("ID"), function(data) {
+			var Options = "";
+			$.each(data.dropDownCustomers, function(key, value) {
+				Options = Options + "<option value='" + key + "'>" + value
+						+ "</option>";
+			});
+			$('#selectHouseBasedonBlockForBill').append(Options);
+			
+		});
+		
 		
 	}
 	
@@ -98,8 +111,8 @@ function showCustomerbyBlock(blockId){
 }
 
 function showCustomerbyBlockForBill(blockId){
-	$("#selectHouseBasedonBlock").find('option').remove();
-	$("#selectHouseBasedonBlock").append("<option>" + "Select CRN" + "</option>");
+	$("#selectHouseBasedonBlockForBill").find('option').remove();
+	$("#selectHouseBasedonBlockForBill").append("<option>" + "Select CRN" + "</option>");
 	$.getJSON("./customers/" + sessionStorage.getItem("roleID") + "/"
 			+ sessionStorage.getItem("ID")+ "/" + blockId, function(data) {
 		var Options = "";
@@ -107,7 +120,7 @@ function showCustomerbyBlockForBill(blockId){
 			Options = Options + "<option value='" + key + "'>" + value
 					+ "</option>";
 		});
-		$('#selectHouseBasedonBlock').append(Options);
+		$('#selectHouseBasedonBlockForBill').append(Options);
 	});
 }
 
@@ -211,7 +224,7 @@ function showTopupDetails(meterId){
 
 function showBillingDetails(customerId){
 	
-	$.getJSON("./billdetails/" + $("#selectHouseBasedonBlock option[value="+customerId+"]").text(), function(data) {
+	$.getJSON("./billdetails/" + $("#selectHouseBasedonBlockForBill option[value="+customerId+"]").text(), function(data) {
 		// var Options = "";
 		$("#totalConsumption").val(data.billdetails.totalConsumption).trigger("change");
 		$("#formcurrentBalance_topup").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
@@ -272,7 +285,7 @@ function showFieldsBasedONCommand(id){
 		$("#row").append(`<div class="col-md-4" id="confValue" class="valueText"
 															>
 															<div id="formtariff" class="group form-group">
-																<label class="bmd-label-floating select-label">Valve<sup
+																<label class="bmd-label-floating select-label">Select Tariff<sup
 																	class="imp">*</sup></label> <select class="form-control"
 																	id="valueText" name="valueText">
 																</select>
@@ -302,9 +315,9 @@ function showFieldsBasedONCommand(id){
 																	class="imp">*</sup></label> <select class="form-control"
 																	id="valueText" name="valueText">
 																	
-																	<option value="0">Open</option>
-																	<option value="1">Close</option>
-																	<option value="2">Both</option>
+																	<option value="1">Open</option>
+																	<option value="0">Close</option>
+																	<option value="2">Automatic</option>
 																	
 																</select>
 															</div>
@@ -377,7 +390,7 @@ function showFieldsBasedONCommand(id){
 																		<label class="bmd-label-floating select-label">Sync Interval<sup
 																			class="imp">*</sup></label> 
 																			
-														<input type="number" id="sync_interval" name="sync_interval" class="form-control" min="2" max="1200">
+														<input type="number" id="sync_interval" name="sync_interval" class="form-control" min="2" max="1440">
 																			
 																	</div>
 																</div>`);

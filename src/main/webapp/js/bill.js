@@ -72,12 +72,12 @@ $(document)
 						$
 								.getJSON(
 										"./billdetails/"
-												+ sessionStorage.getItem("ID"),
+												+ sessionStorage.getItem("CustomerUniqueID"),
 										function(data) {
 											// var Options = "";
-											$("#CustomerCRNNumber").val(
+											$("#selectHouseBasedonBlockForBill").val(
 													sessionStorage
-															.getItem("ID"))
+															.getItem("CustomerUniqueID"))
 													.trigger("change");
 											$("#totalConsumption").val(data.billdetails.totalConsumption).trigger("change");
 											$("#formcurrentBalance_topup").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
@@ -89,6 +89,7 @@ $(document)
 											$("#formunit_topup").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
 											
 											$("#dueDate").val(data.billdetails.dueDate).trigger("change");
+											$("#customerBillingID").val(data.billdetails.customerBillingID).trigger("change");
 											$("#formemergency_topup").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
 											
 											$("#billingDate").val(data.billdetails.billingDate).trigger("change");
@@ -140,7 +141,7 @@ $(document)
 
 										var regTopup = /[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$/
 
-										if ($("#selectHouseBasedonBlock").val() == "Select CRN") {
+										if ($("#selectHouseBasedonBlockForBill").val() == "Select CRN") {
 											swal.fire({
 												  title: "error",
 												  text: "Please Select CRN Number",
@@ -160,7 +161,7 @@ $(document)
 
 										if (sessionStorage.getItem("roleID") == 3) {
 											data1["customerUniqueID"] = $(
-													"#selectHouseBasedonBlock")
+													"#selectHouseBasedonBlockForBill")
 													.val();
 											
 											data1["customerID"] = $(
@@ -168,10 +169,10 @@ $(document)
 											.val();
 										} else {
 											data1["customerID"] = $(
-											"#selectHouseBasedonBlock")
+											"#selectHouseBasedonBlockForBill")
 											.val();
-											var v = $("#selectHouseBasedonBlock").val();
-											data1["customerUniqueID"] = $("#selectHouseBasedonBlock option[value="+v+"]").text();
+											var v = $("#selectHouseBasedonBlockForBill").val();
+											data1["customerUniqueID"] = $("#selectHouseBasedonBlockForBill option[value="+v+"]").text();
 										}
 
 										

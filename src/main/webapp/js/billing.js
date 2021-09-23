@@ -50,6 +50,14 @@ $(document)
 					var filterId = sessionStorage.getItem("day") == "day" ? "1"
 							: "-1";
 					sessionStorage.removeItem("day")
+					if( sessionStorage
+							.getItem("roleID")){
+						var ID =  sessionStorage
+							.getItem("CustomerUniqueID");
+					}else{
+						var ID =  sessionStorage
+						.getItem("ID");
+					}
 					
 					$('#billingstatusTable1').hide();
 					table = $('#billingstatusTable')
@@ -73,8 +81,7 @@ $(document)
 													+ sessionStorage
 															.getItem("roleID")
 													+ "/"
-													+ sessionStorage
-															.getItem("ID")
+													+ ID
 													+ "/" + filterId,
 											"type" : "GET",
 											"data" : function(search) {
@@ -648,83 +655,16 @@ function getCustomerMeters(customerBillingID){
 
 function getReceiptTransactionID(transId){
 	
-	bootbox
-	.confirm(
-			"ARE YOU SURE TO DOWNLOAD RECEIPT",
-		function(
-			result) {
-			//	alert(result);
-			if(result == true){
-				$.ajax({
-					type : "GET",
-					contentType : "application/json",
-					url : "./billing/printreceipt/" + transId,
-					dataType : "JSON",
-					success : function(data) {
-						//alert("Success====" + data.result);
-						if (data.result == "Success") {
-							bootbox
-							.confirm(
-									data.Message,
-								function(
-									result) {
-									window.location = "billingDetails.jsp";
-								});
-
-						} else {
-							bootbox
-							.alert(data.Message);
-							return false;
-						}
-					}
-				});
-			}else if(result==false){
-				//alert("@"+false)
-				
-			}
-		});
-	
+	bootbox.confirm("ARE YOU SURE TO DOWNLOAD RECEIPT", function(result) {
+		window.open( "./billing/printreceipt/" + transId );
+	});
 }
 
 
 function getPayBillTransactionID(customerUniqueID){
-	
-	bootbox
-	.confirm(
-			"ARE YOU SURE TO DOWNLOAD BILL",
-		function(
-			result) {
-			//	alert(result);
-			if(result == true){
-				$.ajax({
-					type : "GET",
-					contentType : "application/json",
-					url : "./billing/print/" + customerUniqueID,
-					dataType : "JSON",
-					success : function(data) {
-						//alert("Success====" + data.result);
-						if (data.result == "Success") {
-							bootbox
-							.confirm(
-									data.Message,
-								function(
-									result) {
-									window.location = "billingDetails.jsp";
-								});
-
-						} else {
-							bootbox
-							.alert(data.Message);
-							return false;
-						}
-					}
-				});
-			}else if(result==false){
-				//alert("@"+false)
-				
-			}
-		});
-	
+	bootbox.confirm("ARE YOU SURE TO DOWNLOAD BILL", function(result) {
+		window.open(  "./billing/print/" + customerUniqueID );
+	});
 }
 
 

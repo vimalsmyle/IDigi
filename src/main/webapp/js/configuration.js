@@ -102,16 +102,13 @@ $(document)
 													icon : "error"
 												})
 												return false;
-
 											}
 											var json = {};
 											json["value"] = $("#valueText")
 													.val();
 											json["parameter_id"] = $(
 													"#selectcommandType").val();
-										}
-
-										if ($("#selectcommandType").val() == "5") {
+										}else if ($("#selectcommandType").val() == "5") {
 											var json = {};
 											json["value"] = $("#valueText")
 													.val();
@@ -168,16 +165,27 @@ $(document)
 												return false;
 
 											}
-											var json = {};
+											array.push(json);
 											json["value"] = $("#end_date")
 													.val();
 											json["parameter_id"] = $(
 													"#selectcommandType").val();
-
+											array.push(json);
 										} else if ($("#selectcommandType")
 												.val() == "8") {
-											if ($("#valueText").val() <= "2"
-													&& $("#valueText").val() >= "1440") {
+											
+											if($("#sync_interval").val()==''){
+												swal
+												.fire({
+													title : "error",
+													text : "Please enter number between 2 and 1440",
+													icon : "error"
+												})
+										return false;
+											}
+											
+											if ($("#sync_interval").val()!="" && $("#sync_interval").val() <= "2"
+													&& $("#sync_interval").val() <= "1440") {
 
 												swal
 														.fire({
@@ -189,7 +197,7 @@ $(document)
 
 											}
 											var json = {};
-											json["value"] = $("#valueText")
+											json["value"] = $("#sync_interval")
 													.val();
 											json["parameter_id"] = $(
 													"#selectcommandType").val();
@@ -229,7 +237,7 @@ $(document)
 
 										} else if ($("#selectcommandType")
 												.val() == "13") {
-											if ($("#sync_interval").val() == "") {
+											if ($("#syncTime").val() == "") {
 
 												swal.fire({
 													title : "error",
@@ -240,7 +248,7 @@ $(document)
 
 											}
 											var json = {};
-											json["value"] = $("#sync_interval")
+											json["value"] = $("#syncTime")
 													.val();
 											json["parameter_id"] = $(
 													"#selectcommandType").val();
@@ -250,7 +258,10 @@ $(document)
 											json["parameter_id"] = $(
 													"#selectcommandType").val();
 										}
+										if ($("#selectcommandType")
+												.val() != "7") {
 										array.push(json);
+										}
 										data1["communityID"] = $(
 												"#selectcommunityName").val();
 										data1["blockID"] = $(

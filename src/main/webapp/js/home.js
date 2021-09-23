@@ -22,9 +22,9 @@ $(document)
 													.querySelector("#gasActive").innerText = data.active;
 											document
 													.querySelector("#gasInactive").innerText = data.inActive;
-											document.querySelector("#gasLive").innerText = data.nonLive;
+											document.querySelector("#gasLive").innerText = data.live;
 											document
-													.querySelector("#gasnonLive").innerText = data.live;
+													.querySelector("#gasnonLive").innerText = data.nonLive;
 											document
 													.querySelector("#gasemergency").innerText = data.emergency;
 											document
@@ -50,9 +50,9 @@ $(document)
 											document
 													.querySelector("#waterInactive").innerText = data.inActive;
 											document
-													.querySelector("#waterLive").innerText = data.nonLive;
+													.querySelector("#waterLive").innerText = data.live;
 											document
-													.querySelector("#waternonLive").innerText = data.live;
+													.querySelector("#waternonLive").innerText = data.nonLive;
 											document
 													.querySelector("#wateremergency").innerText = data.emergency;
 											document

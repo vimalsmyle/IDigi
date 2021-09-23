@@ -95,8 +95,8 @@
 																<label class="bmd-label-floating select-label">Select
 																	CRN<sup class="imp">*</sup>
 																</label> <select class="form-control form-control-sm select2"
-																	id="selectHouseBasedonBlock"
-																	name="selectHouseBasedonBlock"
+																	id="selectHouseBasedonBlockForBill"
+																	name="selectHouseBasedonBlockForBill"
 																	onchange="showBillingDetails(this.value);">
 																</select>
 															</div>
@@ -125,8 +125,8 @@
 																<label class="bmd-label-floating select-label">Select
 																	CRN<sup class="imp">*</sup>
 																</label> <select class="form-control form-control-sm"
-																	id="selectHouseBasedonBlock"
-																	name="selectHouseBasedonBlock"
+																	id="selectHouseBasedonBlockForBill"
+																	name="selectHouseBasedonBlockForBill"
 																	onchange="showBillingDetails(this.value);">
 																</select>
 															</div>
@@ -139,8 +139,8 @@
 															<div id="formCRNNumber" class="group form-group has-feedback has-success bmd-form-group is-filled">
 																<label class="bmd-label-floating">CRN Number</label> <input
 																	type="text" class="form-control form-control-sm"
-																	id="selectHouseBasedonBlock"
-																	name="selectHouseBasedonBlock"
+																	id="selectHouseBasedonBlockForBill"
+																	name="selectHouseBasedonBlockForBill"
 																	disabled>
 															</div>
 														</div>

@@ -16,7 +16,6 @@ $(document)
 						$("#selectHouseBasedonBlock").val(sessionStorage.getItem("userID"));
 					}
 					
-				//	$("#selectHouseBasedonBlock").val(sessionStorage.getItem("ID"));
 					$("#userconsumption")
 							.click(
 									function() {
@@ -193,18 +192,10 @@ $(document)
 																			  }
 																	});
 														 $("div.headname").html('<h3>User Consumptions</h3>');
-															//table.ajax.reload()
-													//	 if(){}
-														 var template = `<div>CAN:</div><div>`+d.data.length==0?"":d.data[0].customerUniqueID+`</div>`;
-														 alert("template->"+template);
-														 $("div.totalcount")
-															.html(
-																	'<b>CAN: </b>'
-																			+ d.data[0].customerUniqueID
-																			+ '  <b>&nbsp&nbspMeter Size: </b> '
-																			+ d.sizeMeter);
+														 var template = `<b>CAN:</b><span>`+d.data[0].customerUniqueID+`</span><b>&nbsp&nbspMeter Size: </b>`+d.sizeMeter;
+														 $(".totalCount")
+															.html(template);
 														
-													//	}
 													}
 												});
 										return false;

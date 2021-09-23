@@ -152,7 +152,6 @@
 																		Command Type</option>
 																	<option value="1">Meter Reset</option>
 																	<option value="3">Tariff</option>
-																	<option value="4">Emergency Credit</option>
 																	<option value="5">Valve</option>
 																	<option value="6">RTC</option>
 																	<option value="7">Schedule Disconnect</option>
