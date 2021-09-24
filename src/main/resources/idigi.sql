@@ -78,7 +78,7 @@ CREATE TABLE `balancelog` (
   `LowBalance` tinyint(2) DEFAULT NULL,
   `LogDate` datetime NOT NULL,
   PRIMARY KEY (`ReadingID`)
-) ENGINE=InnoDB AUTO_INCREMENT=70 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=74 DEFAULT CHARSET=latin1;
 
 /*Data for the table `balancelog` */
 
@@ -151,7 +151,11 @@ insert  into `balancelog`(`ReadingID`,`MIUID`,`CommunityID`,`BlockID`,`CustomerI
 (66,'9888',2,2,6,9,2,'98899888','KVK0001','Water','00:00:05',1440,'Postpaid',93.00,1,1,0.00,2,20.00,0.00,0,53.00,0,0,0,0,0,0,'2021-09-05 15:08:38'),
 (67,'9888',2,2,6,9,2,'98899888','KVK0001','Water','00:00:05',1440,'Postpaid',93.00,1,1,0.00,2,20.00,0.00,0,62.00,0,0,0,0,0,0,'2021-09-06 15:08:44'),
 (68,'9888',2,2,6,9,2,'98899888','KVK0001','Water','00:00:05',1440,'Postpaid',93.00,1,1,0.00,2,20.00,0.00,0,65.00,0,0,0,0,0,0,'2021-09-06 15:08:44'),
-(69,'9888',2,2,6,9,2,'98899888','KVK0001','Water','00:00:05',1440,'Postpaid',93.00,1,1,0.00,2,20.00,0.00,0,68.00,0,0,0,0,0,0,'2021-09-06 15:28:57');
+(69,'9888',2,2,6,9,2,'98899888','KVK0001','Water','00:00:05',1440,'Postpaid',93.00,1,1,0.00,2,20.00,0.00,0,68.00,0,0,0,0,0,0,'2021-09-06 15:28:57'),
+(70,'9889',2,2,6,8,1,'98899889','KVK0001','Gas','00:00:05',1440,'Prepaid',95.00,1,1,100.00,1,10.00,20.00,0,67.00,0,0,0,0,0,0,'2021-09-08 12:05:02'),
+(71,'9888',2,2,6,9,2,'98899888','KVK0001','Water','00:00:05',1440,'Postpaid',93.00,1,1,0.00,2,20.00,0.00,0,74.00,0,0,0,0,0,0,'2021-09-08 12:10:59'),
+(72,'9888',2,2,6,9,2,'98899888','KVK0001','Water','00:00:05',1440,'Postpaid',93.00,1,1,0.00,2,20.00,0.00,0,77.00,0,0,0,0,0,0,'2021-09-08 13:07:13'),
+(73,'9889',2,2,6,8,1,'98899889','KVK0001','Gas','00:00:05',1440,'Prepaid',95.00,1,1,100.00,1,10.00,20.00,0,70.00,0,0,0,0,0,0,'2021-09-08 13:07:24');
 
 /*Table structure for table `billingdetails` */
 
@@ -256,7 +260,7 @@ CREATE TABLE `command` (
   `CustomerUniqueID` varchar(100) NOT NULL,
   `CreatedDate` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`TransactionID`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
 
 /*Data for the table `command` */
 
@@ -265,7 +269,8 @@ insert  into `command`(`TransactionID`,`CustomerID`,`CustomerMeterID`,`MIUID`,`C
 (3,1,1,'1122','IDIGI1','2021-05-23 15:20:58'),
 (4,5,7,'E099','IDG10010','2021-07-04 16:41:43'),
 (5,5,7,'E099','IDG10010','2021-07-04 16:43:51'),
-(6,5,7,'E099','IDG10010','2021-07-04 16:46:57');
+(6,5,7,'E099','IDG10010','2021-07-04 16:46:57'),
+(7,6,8,'BF3','KVK0001','2021-09-24 17:09:37');
 
 /*Table structure for table `commanddetails` */
 
@@ -280,7 +285,7 @@ CREATE TABLE `commanddetails` (
   `RegisteredDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `ModifiedDate` datetime DEFAULT NULL,
   PRIMARY KEY (`CommandDetailsID`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 
 /*Data for the table `commanddetails` */
 
@@ -289,7 +294,8 @@ insert  into `commanddetails`(`CommandDetailsID`,`TransactionID`,`CommandType`,`
 (2,3,3,'1',10,'2021-05-23 15:21:09','2021-05-23 15:21:09'),
 (3,4,5,'0',0,'2021-07-04 16:41:43','2021-07-04 16:41:43'),
 (4,5,5,'0',0,'2021-07-04 16:43:51','2021-07-04 16:43:51'),
-(5,6,5,'0',10,'2021-07-04 16:46:57','2021-07-04 16:46:57');
+(5,6,5,'0',10,'2021-07-04 16:46:57','2021-07-04 16:46:57'),
+(6,7,1,'0',10,'2021-09-24 17:09:58','2021-09-24 17:09:58');
 
 /*Table structure for table `community` */
 
@@ -381,7 +387,7 @@ CREATE TABLE `customerdeletemeter` (
   `MIUID` varchar(100) NOT NULL,
   `MeterSerialNumber` varchar(100) NOT NULL,
   `MeterType` varchar(12) NOT NULL,
-  `MeterSize` int(11) DEFAULT NULL,
+  `MeterSizeID` int(11) DEFAULT NULL,
   `PayType` varchar(10) NOT NULL,
   `Location` varchar(100) DEFAULT NULL,
   `RegisteredDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -412,7 +418,7 @@ CREATE TABLE `customerdetails` (
   `ModifiedDate` datetime DEFAULT NULL,
   PRIMARY KEY (`CustomerID`,`CustomerUniqueID`),
   UNIQUE KEY `CRNNumber` (`CustomerUniqueID`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
 
 /*Data for the table `customerdetails` */
 
@@ -421,7 +427,8 @@ insert  into `customerdetails`(`CustomerID`,`CommunityID`,`BlockID`,`HouseNumber
 (2,1,1,'102','vml','kvk','vimal_smyle2006@yahoo.com','8498890000',1,'IDIGI2',1,1,'2021-05-23 16:30:27','2021-05-23 16:30:30'),
 (4,1,1,'1003','bharat','sriram','bhrtsriram@gmail.com','9000941911',1,'IDIGI3',1,1,'2021-05-26 15:49:40','2021-06-06 08:12:54'),
 (5,1,1,'486/81','Sri Babu','Kasamsetti','kasamsettysri@gmail.com','9703668598',1,'IDG10010',1,1,'2021-07-04 16:39:36','2021-07-04 16:39:36'),
-(6,2,2,'49/38','kvimal','kumar','kvk9889@gmail.com','8498890000',1,'KVK0001',1,1,'2021-09-06 13:25:22','2021-09-06 13:25:22');
+(6,2,2,'49/38','kvimal','kumar','kvk9889@gmail.com','8498890000',1,'KVK0001',1,1,'2021-09-06 13:25:22','2021-09-06 13:25:22'),
+(7,2,2,'1111','bharats','sriramb','bhrt.sriram@gmail.com','9000094191',1,'kvk0002',1,1,'2021-09-24 17:16:39','2021-09-24 17:16:39');
 
 /*Table structure for table `customermeterdetails` */
 
@@ -442,7 +449,7 @@ CREATE TABLE `customermeterdetails` (
   `RegisteredDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `ModifiedDate` datetime NOT NULL,
   PRIMARY KEY (`CustomerMeterID`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
 
 /*Data for the table `customermeterdetails` */
 
@@ -454,9 +461,10 @@ insert  into `customermeterdetails`(`CustomerMeterID`,`CustomerID`,`CustomerUniq
 (5,2,'IDIGI2','5566','55667788','Gas',1,'Prepaid',1,1,'Kitchen','2021-05-23 16:31:15','2021-05-23 16:31:18'),
 (6,4,'IDIGI3','B66777','B66778899','Gas',1,'Prepaid',1,1,'Kitchen','2021-05-26 15:50:17','2021-06-06 08:12:54'),
 (7,5,'IDG10010','E099','I970366858','Water',2,'Postpaid',1,1,'Hall','2021-07-04 16:39:36','2021-07-04 16:39:36'),
-(8,6,'KVK0001','9889','98899889','Gas',1,'Prepaid',1,1,'kitchen','2021-09-06 13:25:22','2021-09-06 13:25:22'),
+(8,6,'KVK0001','BF3','98899889','Gas',1,'Prepaid',1,1,'kitchen','2021-09-06 13:25:22','2021-09-06 13:25:22'),
 (9,6,'KVK0001','9888','98899888','Water',2,'Postpaid',2,1,'bathroom','2021-09-06 13:25:22','2021-09-06 13:25:22'),
-(10,6,'KVK0001','9887','98899887','Water',2,'Postpaid',2,1,'bedroom','2021-09-06 13:25:22','2021-09-06 13:25:22');
+(10,6,'KVK0001','9887','98899887','Water',2,'Postpaid',2,1,'bedroom','2021-09-06 13:25:22','2021-09-06 13:25:22'),
+(11,7,'kvk0002','BF4','kvk0002BF4','Gas',1,'Prepaid',1,1,'bedroom','2021-09-24 17:20:20','2021-09-24 17:20:20');
 
 /*Table structure for table `displaybalancelog` */
 
@@ -502,8 +510,8 @@ insert  into `displaybalancelog`(`ReadingID`,`MainBalanceLogID`,`MIUID`,`Communi
 (1,22,'2233',1,1,1,2,2,'22334455','IDIGI1','Water','00:00:05',1440,'Postpaid',90.00,1,1,0.00,2,20.00,40.00,10,45.00,0,0,0,0,0,0,'2021-05-27 22:39:14'),
 (2,19,'1122',1,1,1,1,1,'11223344','IDIGI1','Gas','00:00:05',1440,'Prepaid',90.00,1,1,50.00,1,10.00,20.00,12,55.00,0,0,0,0,0,0,'2021-09-03 19:40:22'),
 (3,42,'3344',1,1,1,3,2,'33445566','IDIGI1','Water','00:00:05',1440,'Postpaid',90.00,1,1,0.00,3,20.00,40.00,10,62.00,0,0,0,0,0,0,'2021-09-01 20:58:06'),
-(4,54,'9889',2,2,6,8,0,'98899889','KVK0001','Gas','00:00:05',1440,'Prepaid',95.00,1,1,100.00,1,10.00,20.00,0,60.00,0,0,0,0,0,0,'2021-09-06 13:34:53'),
-(5,69,'9888',2,2,6,9,2,'98899888','KVK0001','Water','00:00:05',1440,'Postpaid',93.00,1,1,0.00,2,20.00,0.00,0,68.00,0,0,0,0,0,0,'2021-09-06 15:28:57');
+(4,73,'9889',2,2,6,8,1,'98899889','KVK0001','Gas','00:00:05',1440,'Prepaid',95.00,1,1,100.00,1,10.00,20.00,0,70.00,0,0,0,0,0,0,'2021-09-08 13:07:24'),
+(5,72,'9888',2,2,6,9,2,'98899888','KVK0001','Water','00:00:05',1440,'Postpaid',93.00,1,1,0.00,2,20.00,0.00,0,77.00,0,0,0,0,0,0,'2021-09-08 13:07:13');
 
 /*Table structure for table `feedback` */
 
@@ -710,18 +718,18 @@ CREATE TABLE `user` (
   `CustomerID` bigint(20) DEFAULT NULL,
   `CustomerUniqueID` varchar(100) DEFAULT NULL,
   `MobileNumber` varchar(100) DEFAULT NULL,
-  `EmailID` varchar(1000) DEFAULT NULL,
+  `Email` varchar(1000) DEFAULT NULL,
   `CreatedByID` bigint(20) NOT NULL,
   `CreatedByRoleID` tinyint(4) NOT NULL,
   `RegisteredDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `ModifiedDate` datetime DEFAULT NULL,
   PRIMARY KEY (`ID`),
   KEY `CommunityID` (`CommunityID`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
 
 /*Data for the table `user` */
 
-insert  into `user`(`ID`,`UserID`,`UserName`,`UserPassword`,`RoleID`,`ActiveStatus`,`CommunityID`,`BlockID`,`CustomerID`,`CustomerUniqueID`,`MobileNumber`,`EmailID`,`CreatedByID`,`CreatedByRoleID`,`RegisteredDate`,`ModifiedDate`) values 
+insert  into `user`(`ID`,`UserID`,`UserName`,`UserPassword`,`RoleID`,`ActiveStatus`,`CommunityID`,`BlockID`,`CustomerID`,`CustomerUniqueID`,`MobileNumber`,`Email`,`CreatedByID`,`CreatedByRoleID`,`RegisteredDate`,`ModifiedDate`) values 
 (1,'Superadmin','Idigitronics','cvp/LzpadrQT+2k0WDjyOQ==',1,1,0,0,0,NULL,NULL,NULL,0,0,'2021-05-01 17:19:40','2021-05-01 17:19:37'),
 (2,'kvkadmin','Kvk','cvp/LzpadrQT+2k0WDjyOQ==',2,1,1,1,0,NULL,NULL,NULL,1,1,'2021-05-01 17:24:22','2021-05-01 17:24:12'),
 (3,'IDIGI1','Vimal Kumar','cvp/LzpadrQT+2k0WDjyOQ==',3,1,1,1,1,'IDIGI1',NULL,NULL,2,2,'2021-05-01 17:25:54','2021-05-01 17:25:56'),
@@ -732,7 +740,8 @@ insert  into `user`(`ID`,`UserID`,`UserName`,`UserPassword`,`RoleID`,`ActiveStat
 (8,'IDIGI3','bharat sriram','Ysgo3gABsnRMLWt4mO5WNg==',3,1,1,1,4,'IDIGI3',NULL,NULL,1,1,'2021-05-26 15:51:17','2021-05-26 15:51:17'),
 (9,'IDG10010','Sri Babu Kasamsetti','GqSSx8TwJNeL9/TNfEokMw==',3,1,1,1,5,'IDG10010',NULL,NULL,1,1,'2021-07-04 16:39:36','2021-07-04 16:39:36'),
 (10,'vml123','vml123','EXNtSiJkb/KAa4AfbAfufg==',2,1,2,2,0,'NULL','9398348954','vimalsmyle2006yahoo.com@gmail.com',1,1,'2021-09-06 13:23:18','2021-09-06 13:23:18'),
-(11,'KVK0001','kvimal kumar','qQMo+J4ZJo1nRgCX1BHATA==',3,1,2,2,6,'KVK0001','8498890000','kvk9889@gmail.com',1,1,'2021-09-06 13:25:22','2021-09-06 13:25:22');
+(11,'KVK0001','kvimal kumar','qQMo+J4ZJo1nRgCX1BHATA==',3,1,2,2,6,'KVK0001','8498890000','kvk9889@gmail.com',1,1,'2021-09-06 13:25:22','2021-09-06 13:25:22'),
+(12,'kvk0002','bharats sriramb','ePR5GP9p8ILw7wTLGVZ1tQ==',3,1,2,2,7,'kvk0002','9000094191','bhrt.sriram@gmail.com',1,1,'2021-09-24 17:20:29','2021-09-24 17:20:29');
 
 /*Table structure for table `userrole` */
 
