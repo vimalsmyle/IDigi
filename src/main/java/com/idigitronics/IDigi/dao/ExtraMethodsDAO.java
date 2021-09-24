@@ -34,8 +34,6 @@ import javax.mail.internet.MimeMessage;
 
 import org.apache.log4j.Logger;
 import org.json.JSONObject;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -51,7 +49,6 @@ import com.idigitronics.IDigi.request.vo.RazorpayRequestVO;
 import com.idigitronics.IDigi.request.vo.RestCallVO;
 import com.idigitronics.IDigi.request.vo.SMSRequestVO;
 import com.idigitronics.IDigi.response.vo.IndividualBillingResponseVO;
-import com.idigitronics.IDigi.response.vo.RazorPayResponseVO;
 import com.itextpdf.io.font.FontConstants;
 import com.itextpdf.io.image.ImageDataFactory;
 import com.itextpdf.kernel.font.PdfFont;
@@ -802,9 +799,9 @@ public class ExtraMethodsDAO {
 						mailRequestVO.setFileLocation("NoAttachment");
 						mailRequestVO.setSubject("No Communication from MIU ID: "+rs.getString("MIUID"));
 						mailRequestVO.setToEmail(rs.getString("Email"));
-						mailRequestVO.setMessage("Dear Admin, \n \n CRN/CAN/UAN: "+rs.getString("CustomerUniqueID")+ " is not up to date for more than 3 days.");
+						mailRequestVO.setMessage("Dear Admin, \n \n CRN/CAN/UAN: "+rs.getString("CustomerUniqueID")+ "with MIUID: "+rs.getString("MIUID")+" is not up to date for more than 3 days.");
 						
-						smsRequestVO.setMessage("Dear Admin, \n \n CRN/CAN/UAN: "+rs.getString("CustomerUniqueID")+ " is not up to date for more than 3 days.");
+						smsRequestVO.setMessage("Dear Admin, \n \n CRN/CAN/UAN: "+rs.getString("CustomerUniqueID")+ "with MIUID: "+rs.getString("MIUID")+" is not up to date for more than 3 days.");
 						smsRequestVO.setToMobileNumber(rs.getString("MobileNumber"));
 						
 						sendmail(mailRequestVO);
