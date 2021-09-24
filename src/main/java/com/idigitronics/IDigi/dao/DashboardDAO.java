@@ -763,7 +763,7 @@ public class DashboardDAO {
 								
 								String mainquery = "SELECT * FROM customerdetails <main>";
 								
-								mainquery = mainquery.replaceAll("<main>", id != 0 ? "WHERE CommunityID = "+rs3.getInt("CommunityID")+" AND BlockID = "+ id+" ORDER BY CustomerID ASC" : "WHERE CommunityID = "+rs3.getInt("CommunityID"));
+								mainquery = mainquery.replaceAll("<main>", id != 0 ? "WHERE CommunityID = "+id+" AND BlockID = "+ rs3.getInt("BlockID")+" ORDER BY CustomerID ASC" : "WHERE CommunityID = "+rs3.getInt("CommunityID"));
 								
 								PreparedStatement pstmt2 = con.prepareStatement(mainquery);
 								ResultSet rs2 = pstmt2.executeQuery();
