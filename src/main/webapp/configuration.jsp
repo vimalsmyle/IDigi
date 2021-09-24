@@ -165,18 +165,17 @@
 														</div>
 													</div>
 													<div class="row">
-														<div class="col-md-11">
+														<div class="col-md-12 text-right">
 															<button type="button" id="configuration"
-																class="btn btn-primary submit-button btn-raised float-right mr-4">
+																class="btn btn-primary submit-button btn-raised">
 																Submit
 																<div class="ripple-container"></div>
 															</button>
-														</div>
-														<div class="col-md-1">
 															<button type="button"
-																class="btn btn-secondary btn-raised mr-3 resetFilter"
+																class="btn btn-secondary btn-raised resetFilter"
 																id="resetFilter">Reset</button>
 														</div>
+														
 													</div>
 												</form>
 											</div>

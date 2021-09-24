@@ -404,8 +404,6 @@ function getCustomerMeters(type){
 								.each(
 										data.data,
 										function(i, item) {
-											$('#myCustomerMeters').modal('show');
-											
 											if($.fn.DataTable.isDataTable("#customerMeterTable_wrapper")){
 												$('#customerMeterTable_wrapper').DataTable().clear();
 												$('#customerMeterTable').DataTable().destroy();
@@ -566,6 +564,11 @@ function getCustomerMeters(type){
 
 															"buttons" : []
 														});
+											$('#myCustomerMeters').on('shown.bs.modal', function(e){
+												   $($.fn.dataTable.tables(true)).DataTable()
+												      .columns.adjust()
+												      .responsive.recalc();
+										});
 											 $("div.headname").html('<h3>User Consumptions</h3>');
 										});
 						

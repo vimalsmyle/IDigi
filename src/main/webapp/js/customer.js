@@ -1338,6 +1338,13 @@ function getCustomerFormDelete(CRNNumber){
 }
 
 function getCustomerMeters(CRNNumber){
+	/*$('#myCustomerMeters_wrapper').DataTable().clear();
+	$('#myCustomerMetersTable').DataTable().destroy();
+	$('#myCustomerMetersTable_wrapper tbody').remove();
+	$('#myCustomerMeters').on('shown.bs.modal', function(e){
+		$('#myCustomerMeters_wrapper').DataTable().clear();
+		$('#myCustomerMetersTable').DataTable().destroy();
+		$('#myCustomerMetersTable_wrapper tbody').remove();*/
 	$.getJSON("./customer/"+sessionStorage.getItem("roleID")+"/"+sessionStorage.getItem("ID")+"/-1", function(data) {
 		$.each(data.data, function(i, item) {
 			if (CRNNumber == item.CustomerUniqueID) {
@@ -1361,7 +1368,6 @@ function getCustomerMeters(CRNNumber){
 										"order" : [ 0, "desc" ],
 										"lengthMenu" : [ 5, 10, 25, 30, 50, 75 ],
 										"pageLength" : 25,
-										
 										"scrollX" : true,
 										"data":item.meters,
 						
@@ -1402,12 +1408,14 @@ function getCustomerMeters(CRNNumber){
 									]
 						})  
 				
-				
+						$('#myCustomerMeters').on('shown.bs.modal', function(e){
+							   $($.fn.dataTable.tables(true)).DataTable()
+							      .columns.adjust()
+							      .responsive.recalc();
+					});
 			} 
-			else {
-			}
 		});
-		$('#myCustomerMeters').modal('show');
+		
 	});
 }
 

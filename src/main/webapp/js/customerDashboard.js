@@ -243,9 +243,8 @@ function executeDownloadDashboard(data){
 }
 
 function getCustomerMeters(CRNNumber) {
-	$('#customerMeterTable')
-	.DataTable();
 	
+		
 	$
 			.getJSON(
 					"./dashboard/" + $("#type").val() + "/"
@@ -257,7 +256,7 @@ function getCustomerMeters(CRNNumber) {
 										data.data,
 										function(i, item) {
 											if (CRNNumber == item.customerUniqueID) {
-
+												$('#myCustomerMeters').modal('show');
 												$('#customerMeterTable')
 														.DataTable(
 																{
@@ -280,7 +279,11 @@ function getCustomerMeters(CRNNumber) {
 																	"order" : [ 0, "desc" ],
 																	"lengthMenu" : [ 5, 10, 25, 30, 50, 75 ],
 																	"pageLength" : 25,
-																	"fixedHeader": false,
+																	"fixedHeader": {
+															            "header": true,
+															            "headerOffset": 45,
+															            },
+															        "scrollX": true,
 																	"data" : item.dasboarddata,
 
 																	"columns" : [
@@ -403,30 +406,16 @@ function getCustomerMeters(CRNNumber) {
 
 																	],
 																	"columnDefs" : [],
-
 																	"buttons" : []
 																})
-																$('#myCustomerMeters').modal('show');
-											} else {
-											}
+																$('#myCustomerMeters').on('shown.bs.modal', function(e){
+																	   $($.fn.dataTable.tables(true)).DataTable()
+																	      .columns.adjust()
+																	      .responsive.recalc();
+															});
+											} 
 										});
-						
-						/*$('#customerMeterTable')
-						.DataTable({
-						"responsive" : true,
-						"serverSide" : false,
-						"bDestroy" : true,
-						"bPaginate": true,
-						"pagging" : true,
-						"bProcessing" : true,
-						"ordering" : true,
-						"order" : [ 0, "desc" ],
-						"lengthMenu" : [ 5, 10, 25, 30, 50, 75 ],
-						"pageLength" : 25,
-						"fixedHeader": false
-						});*/
-					});
-
+	});	
 }
 
 

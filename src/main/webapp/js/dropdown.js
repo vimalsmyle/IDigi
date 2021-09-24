@@ -366,7 +366,7 @@ function showFieldsBasedONCommand(id){
 															</div>`);
 			
 			$('#start_date').bootstrapMaterialDatePicker({
-				 format: 'YYYY-MM-DD HH:mm',
+				 format: 'YYYY-MM-DD HH:mm:ss',
 				clearBtn : true,
 				todayBtn : "linked",
 				weekStart : 1
@@ -374,7 +374,7 @@ function showFieldsBasedONCommand(id){
 				var startDate = $('#start_date').datepicker('getDate');
 			});
 			$('#end_date').bootstrapMaterialDatePicker({
-				 format: 'YYYY-MM-DD HH:mm',
+				 format: 'YYYY-MM-DD HH:mm:ss',
 					clearBtn : true,
 					todayBtn : "linked",
 					weekStart : 1

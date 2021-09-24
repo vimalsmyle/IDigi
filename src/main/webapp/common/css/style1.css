@@ -158,6 +158,10 @@ body, .main-content {
 	white-space: nowrap;
 }
 
+#sidebar .list-group-item:hover,.sidingBlock:hover{
+	background: #F6F6F6;
+}
+
 #sidebar .list-group-item:not (.collapsed ) {
 	background-color: #fff;
 	color: #2f395f;
@@ -1261,6 +1265,22 @@ label, .select2-container {
 .psd{
 	position: relative;
 }
+.dtp>.dtp-content>.dtp-date-view>header.dtp-header, 
+.dtp div.dtp-date, .dtp div.dtp-time, .dtp table.dtp-picker-days tr>td>a.selected {
+    background: #005cbf !important;
+    
+    }
+    
+    .dtp .p10>a {
+    color: #fff !important;
+    }
+    
+    .dtp .dtp-buttons {
+    margin-top: -13px;
+    }
+    .dtp-buttons button{
+    	margin-right:10px;
+    }
 
 
 
