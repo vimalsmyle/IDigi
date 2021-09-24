@@ -37,16 +37,6 @@ $(document)
 								+ "<'row'<'col-sm-6 text-black'i><'col-sm-6 text-black'p>>";
 					}
 
-					// alert((sessionStorage.getItem("roleID") == 3) ?
-					// [0,1,2,11]:11);
-					// alert(((sessionStorage.getItem("roleID") == 3)) ?
-					// (sessionStorage.getItem("roleID") == 3)
-					// :(((sessionStorage.getItem("roleID") == 1) ||
-					// (sessionStorage.getItem("roleID") == 2) ||
-					// (sessionStorage.getItem("roleID") == 3)) &&
-					// (!(sessionStorage.getItem("roleID") == 5) ||
-					// !(sessionStorage.getItem("roleID") == 4))));
-
 					var filterId = sessionStorage.getItem("day") == "day" ? "1"
 							: "-1";
 					sessionStorage.removeItem("day")
@@ -88,17 +78,6 @@ $(document)
 											},
 											"complete" : function(json) {
 												console.log(json);
-
-												/*if (sessionStorage
-														.getItem("roleID") == 3) {
-													$("div.total")
-															.html(
-																	'<b>MIU ID:</b> '
-																			+ json.responseJSON.data[0].meterID
-																			+ ' <b>CRN Number:</b> '
-																			+ sessionStorage
-																					.getItem("ID"));
-												}*/
 												return json.data;
 											},
 										},
@@ -639,13 +618,15 @@ function getCustomerMeters(customerBillingID){
 							"buttons" : [
 									]
 						})  
-				
+
+						$('#myCustomerMeters').on('shown.bs.modal', function(e){
+							   $($.fn.dataTable.tables(true)).DataTable()
+							      .columns.adjust()
+							      .responsive.recalc();
+					});
 				
 			} 
-			else {
-			}
 		});
-		$('#myCustomerMeters').modal('show');
 	});
 	
 	
