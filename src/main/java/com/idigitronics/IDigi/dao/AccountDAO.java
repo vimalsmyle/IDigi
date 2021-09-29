@@ -204,7 +204,7 @@ public class AccountDAO {
 						} else {
 							topUpRequestVO.setPaymentStatus(1);
 							responsevo.setPaymentMode("Cash");
-							if(sendPayLoadToGateway(topUpRequestVO) != 0) {
+							if(sendPayLoadToGateway(topUpRequestVO) == 200) {
 								responsevo.setResult("Success");
 								responsevo.setMessage("Topup Request Submitted Successfully");	
 							} else {
@@ -330,7 +330,7 @@ public class AccountDAO {
 							responseVO.setResult("Success");
 							responseVO.setMessage("Payment Captured Successfully");
 						} else {
-							if (sendPayLoadToGateway(topUpRequestVO) != 0) {
+							if (sendPayLoadToGateway(topUpRequestVO) == 200) {
 								responseVO.setResult("Success");
 								responseVO.setMessage("Payment Captured & Topup Request Submitted Successfully");
 							} else {
