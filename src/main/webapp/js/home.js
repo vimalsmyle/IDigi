@@ -189,7 +189,7 @@ $(document)
 								Highcharts.chart('highchart_container1', {
 
 									title : {
-										text : 'CRN/CAN/CID: '
+										text : 'CRN/CAN/UAN: '
 												+ sessionStorage
 														.getItem("userID")
 									},

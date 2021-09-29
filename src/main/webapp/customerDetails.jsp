@@ -67,13 +67,13 @@
 												<tr>
 													<th>Community</th>
 													<th>Block</th>
-													<th>CRN/CAN/CUI</th>
+													<th>CRN/CAN/UAN</th>
 													<th>First Name</th>
 													<th>Last Name</th>
 													<th>House No</th>
-													<th>Meters</th>
-													<th>Mobile</th>
 													<th>Email</th>
+													<th>Mobile</th>
+													<th>Meters</th>
 													<th>Created By UserName</th>
 													<th>Created By Role</th>
 													<th>Registration Date</th>
@@ -94,13 +94,13 @@
 												<tr>
 													<th>Community</th>
 													<th>Block</th>
-													<th>CRN/CAN/CUI</th>
+													<th>CRN/CAN/UAN</th>
 													<th>First Name</th>
 													<th>Last Name</th>
 													<th>House No</th>
-													<th>Meters</th>
-													<th>Mobile</th>
 													<th>Email</th>
+													<th>Mobile</th>
+													<th>Meters</th>
 													<th>Created By UserName</th>
 													<th>Created By Role</th>
 													<th>Registration Date</th>
