@@ -287,7 +287,20 @@ function getCustomerMeters(CRNNumber) {
 																	"data" : item.dasboarddata,
 
 																	"columns" : [
-																		
+																		{
+																			"mData" : "action",
+																			"render" : function(
+																					data,
+																					type,
+																					row) {
+																				return "<span id=color style = color:"
+																						+ row.dateColor
+																						+ ">"
+																						+ row.timeStamp
+																						+ "</span>"
+																			},
+																			"defaultContent" : ""
+																		},	
 																	{
 																		"data" : "meterSerialNumber"
 																	},
@@ -389,19 +402,6 @@ function getCustomerMeters(CRNNumber) {
 																			},
 																			{
 																				"data" : "lastTopupAmount"
-																			},{
-																				"mData" : "action",
-																				"render" : function(
-																						data,
-																						type,
-																						row) {
-																					return "<span id=color style = color:"
-																							+ row.dateColor
-																							+ ">"
-																							+ row.timeStamp
-																							+ "</span>"
-																				},
-																				"defaultContent" : ""
 																			}
 
 																	],

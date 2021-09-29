@@ -351,6 +351,11 @@ return json.data;
 "data" : "houseNumber"
 },
 {
+"data" : "email"
+},
+{
+"data" : "mobileNumber"
+},{
 	"mData" : "action",
 	"render" : function(data, type, row) {
 		
@@ -362,12 +367,8 @@ return json.data;
 		
 	}
 
-},
-{
-"data" : "mobileNumber"
-},{
-"data" : "email"
-},{
+}
+,{
 "data" : "createdByUserName"
 },{
 "data" : "createdByRoleDescription"
@@ -928,6 +929,12 @@ $(document)
 																	"data" : "lastName"
 																	},{
 																	"data" : "houseNumber"
+																	},{
+																	"data" : "email"
+																	},
+																	
+																	{
+																	"data" : "mobileNumber"
 																	},
 																	{
 																		"mData" : "action",
@@ -941,13 +948,9 @@ $(document)
 																			
 																		}
 																	
-																	},
+																	}
 																	
-																	{
-																	"data" : "mobileNumber"
-																	},{
-																	"data" : "email"
-																	},{
+																	,{
 																	"data" : "createdByUserName"
 																	},{
 																	"data" : "createdByRoleDescription"
@@ -1168,26 +1171,30 @@ $(document)
 																	
 
 																} else if(data.result == "Failure"){
-																	
+																	if(data.Message.includes("MIUID IS ALREADY REGISTERED")){
+																		swal.fire({
+																			  title: "error",
+																			  text: data.Message,
+																			  icon: "error"
+																			})
+																			return false;
+																	}else{
 																	swal.fire({
 																		  title: "error",
 																		  text: data.Message,
 																		  icon: "error"
 																		}).then(function() {
 																		    window.location = "customerDetails.jsp";
-																		    
 																		});
-																	return false;
-																				//});
+																	}
+																				
 																}else {
-																	
 																	swal.fire({
 																		  title: "error",
 																		  text: data.Message,
 																		  icon: "error"
 																		}).then(function() {
 																		    window.location = "customerDetails.jsp";
-																		    
 																		});
 																}
 															}

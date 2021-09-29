@@ -571,7 +571,7 @@ $(document)
 													"defaultContent" : ""
 												},
 												{
-													"data" : "meterID",
+													"data" : "miuID",
 													"defaultContent" : ""
 												},
 												{
@@ -828,7 +828,7 @@ $(document)
 																					"defaultContent" : ""
 																				},
 																				{
-																					"data" : "meterID",
+																					"data" : "miuID",
 																					"defaultContent" : ""
 																				},
 																				{

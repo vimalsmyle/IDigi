@@ -185,7 +185,7 @@
 													<th>Block</th>
 													<th>House Number</th>
 													<th>Name</th>
-													<th>CRN/CAN/CUI</th>
+													<th>CRN/CAN/UAN</th>
 													<th>Meters</th>
 													
 												</tr>
@@ -204,7 +204,7 @@
 													<th>Block</th>
 													<th>House Number</th>
 													<th>Name</th>
-													<th>CRN/CAN/CUI</th>
+													<th>CRN/CAN/UAN</th>
 													<th>Meters</th>
 												</tr>
 											</thead>
@@ -242,7 +242,7 @@
 						style="width: 100%">
 						<thead>
 							<tr>
-								
+								<th>TimeStamp</th>
 								<th>Meter Serial Number</th>
 								<th>MIU ID</th>
 								<th>Reading</th>
@@ -258,7 +258,7 @@
 								<th>Communication Status</th>
 								<th>Vacation Status</th>
 								<th>Last Topup Amount</th>
-								<th>TimeStamp</th>
+								
 							</tr>
 						</thead>
 						<tbody>
