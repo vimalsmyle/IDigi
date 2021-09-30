@@ -24,6 +24,7 @@ import com.idigitronics.IDigi.request.vo.UserManagementRequestVO;
 import com.idigitronics.IDigi.response.vo.ResponseVO;
 import com.idigitronics.IDigi.response.vo.UserDetails;
 import com.idigitronics.IDigi.utils.Encryptor;
+import com.mysql.cj.protocol.Resultset;
 
 /**
  * @author K VimaL Kumar 
@@ -84,6 +85,13 @@ public class LoginDAO {
 							userDetails.setCommunityName(resultSet.getString("CommunityName"));
 							userDetails.setBlockName(resultSet.getString("BlockName"));
 							userDetails.setID(resultSet.getInt("ID"));
+							
+							PreparedStatement pstmt4 = con.prepareStatement("SELECT * FROM customermeterdetails WHERE <id> = ");
+							ResultSet rs4 = pstmt4.executeQuery();
+							
+							if(rs4.next()) {
+								
+							}
 
 							responsevo.setUserDetails(userDetails);
 							responsevo.setResult("Success");

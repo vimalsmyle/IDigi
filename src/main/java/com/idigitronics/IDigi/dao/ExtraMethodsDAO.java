@@ -701,7 +701,7 @@ public class ExtraMethodsDAO {
 					
 				}
 				
-				String message = "Dear "+ rs.getString("FirstName") + " " + rs.getString("LastName") + ", \n \n Your Bill of Amount" + (totalamount + tax + previousDues) + "/- for the consumption of " + billMonthYear +" has been generated. Kindly pay the bill before " + currentdate.plusDays(rs.getInt("DueDayCount")).toString() + " to avoid late fee charges. Thank You";
+				String message = "Dear "+ rs.getString("FirstName") + " " + rs.getString("LastName") + ", \n \n Your Bill of Amount " + (totalamount + tax + previousDues) + "/- for the consumption of " + billMonthYear +" has been generated. Kindly pay the bill before " + currentdate.plusDays(rs.getInt("DueDayCount")).toString() + " to avoid late fee charges. Thank You";
 				smsRequestVO.setMessage(message);
 				smsRequestVO.setToMobileNumber(rs.getString("MobileNumber"));
 				

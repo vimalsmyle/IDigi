@@ -29,6 +29,9 @@ public class UserDetails {
 	private long pendingTransactionID;
 	private String blockName;
 	private List<MeterRequestVO> meters;
+	private boolean gas;
+	private boolean water;
+	private boolean energy;
 	
 	public String getCommunityName() {
 		return communityName;
@@ -129,6 +132,24 @@ public class UserDetails {
 	}
 	public void setMeters(List<MeterRequestVO> meters) {
 		this.meters = meters;
+	}
+	public boolean isGas() {
+		return gas;
+	}
+	public void setGas(boolean gas) {
+		this.gas = gas;
+	}
+	public boolean isWater() {
+		return water;
+	}
+	public void setWater(boolean water) {
+		this.water = water;
+	}
+	public boolean isEnergy() {
+		return energy;
+	}
+	public void setEnergy(boolean energy) {
+		this.energy = energy;
 	}
 	
 }

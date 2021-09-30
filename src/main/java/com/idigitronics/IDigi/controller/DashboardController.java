@@ -137,6 +137,7 @@ public class DashboardController {
 		ResponseVO responsevo = new ResponseVO();
 		
 		try {
+			dataRequestVO.setTopupSMS(false);
 			responsevo = dashboarddao.postDashboarddetails(dataRequestVO, miuID);
 		} catch (Exception ex) {
 			logger.error("This is Error message", ex);
