@@ -67,7 +67,7 @@
 						
 						
 
-						<div id="accordion">
+						<div id="accordion" class="accordionFilter">
 							<div class="card">
 								<div class="card-header">
 									<span class="mr-auto">Advance Filter</span> <a
