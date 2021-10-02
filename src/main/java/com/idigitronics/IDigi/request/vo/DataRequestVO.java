@@ -28,6 +28,7 @@ public class DataRequestVO {
 	private int cmd_status;
 	
 	private String source;
+	private boolean topupSMS;
 	
 	public long getReadingID() {
 		return readingID;
@@ -136,6 +137,12 @@ public class DataRequestVO {
 	}
 	public void setCmd_status(int cmd_status) {
 		this.cmd_status = cmd_status;
+	}
+	public boolean isTopupSMS() {
+		return topupSMS;
+	}
+	public void setTopupSMS(boolean topupSMS) {
+		this.topupSMS = topupSMS;
 	}
 	
 }
