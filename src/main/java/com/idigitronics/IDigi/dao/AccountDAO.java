@@ -19,6 +19,7 @@ import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -75,6 +76,8 @@ import com.itextpdf.layout.property.VerticalAlignment;
 public class AccountDAO {
 
 	Gson gson = new Gson();
+	
+	private static final Logger logger = Logger.getLogger(AccountDAO.class);
 
 	public static Connection getConnection() throws ClassNotFoundException, SQLException {
 		Connection connection = null;
@@ -229,11 +232,11 @@ public class AccountDAO {
 		return responsevo;
 	}
 
-	public int inserttopuponline(TopUpRequestVO topUpRequestVO) {
+	public long inserttopuponline(TopUpRequestVO topUpRequestVO) {
 
 		Connection con = null;
 		PreparedStatement ps = null;
-		int transactionID = 0;
+		long transactionID = 0;
 
 		try {
 			con = getConnection();
@@ -333,6 +336,7 @@ public class AccountDAO {
 							responseVO.setMessage("Payment Captured Successfully");
 						} else {
 							if (sendPayLoadToGateway(topUpRequestVO) == 200) {
+								logger.debug("Payload sent to gateway at " + LocalDateTime.now());
 								responseVO.setResult("Success");
 								responseVO.setMessage("Payment Captured & Topup Request Submitted Successfully");
 								

@@ -288,16 +288,16 @@ public class AccountController {
 		return responsevo;
 	}
 	
-	@RequestMapping(value = "/test/{transactionID}", method = RequestMethod.GET, produces = "application/json")
+/*	@RequestMapping(value = "/test/{transactionID}", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody
 	ResponseVO testmethod(@PathVariable("transactionID") int transactionID)
 			throws ClassNotFoundException, SQLException {
 		ResponseVO responsevo = new ResponseVO();
-		/*MailRequestVO mailrequestvo = new MailRequestVO();
+		MailRequestVO mailrequestvo = new MailRequestVO();
 		mailrequestvo.setToEmail("kvk9889@gmail.com");
 		mailrequestvo.setSubject("testmail");
 		mailrequestvo.setMessage("hello test");
-		mailrequestvo.setFileLocation("NoAttachment");*/
+		mailrequestvo.setFileLocation("NoAttachment");
 		ExtraMethodsDAO extramethods = new ExtraMethodsDAO();
 //		responsevo = accountdao.printbillreceipt(transactionID);
 //		responsevo.setMessage(extramethods.sendmail(mailrequestvo));
@@ -305,6 +305,19 @@ public class AccountController {
 		
 		extramethods.billgeneration();
 
+		return responsevo;
+	}*/
+	
+	@RequestMapping(value = "/manualbillgeneration", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody ResponseVO manualBillGeneration() throws ClassNotFoundException, SQLException {
+
+		ResponseVO responsevo = new ResponseVO();
+		ExtraMethodsDAO extramethods = new ExtraMethodsDAO();
+		extramethods.individualbillgeneration();
+		
+		responsevo.setResult("Success");
+		responsevo.setMessage("Bills Will be Generated. Leave the Application for around 2 hours with Mail, SMS and other servers running.");
+		
 		return responsevo;
 	}
 

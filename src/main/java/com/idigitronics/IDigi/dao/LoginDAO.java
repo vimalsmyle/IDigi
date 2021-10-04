@@ -3,6 +3,7 @@
  */
 package com.idigitronics.IDigi.dao;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -56,6 +57,12 @@ public class LoginDAO {
 
 		try {
 			con = getConnection();
+			
+			File directory = new File("D:/Logs/IDigi.txt");
+			if (!directory.exists()) {
+				directory.mkdirs();
+			}
+			
 			pstmt = con.prepareStatement(
 					"SELECT u.ID, u.UserID, u.UserName, u.UserPassword, u.RoleID, u.CommunityID, c.CommunityName, u.BlockID, u.CustomerID, u.CustomerUniqueID, b.BlockName, b.Email AS bemail, b.MobileNumber AS bmobile, cd.MobileNumber AS cmobile, cd.Email AS cemail FROM USER AS u LEFT JOIN community AS c ON c.CommunityID = u.CommunityID LEFT JOIN block AS b ON b.BlockID = u.BlockID LEFT JOIN customerdetails AS cd ON cd.CustomerUniqueID = u.CustomerUniqueID WHERE u.UserID = ? AND u.UserPassword = ?");
 			pstmt.setString(1, loginvo.getUserID());
@@ -92,19 +99,38 @@ public class LoginDAO {
 							
 							if(rs4.next()) {
 								
-								if(rs4.getString("MeterType").equalsIgnoreCase("Gas") ) {
+								/*if(rs4.getString("MeterType").equalsIgnoreCase("Gas")) {
+										userDetails.setGas(true);
+										rs4.next();
+									} else if (rs4.getString("MeterType").equalsIgnoreCase("Water")) {
+										userDetails.setWater(true);
+										rs4.next();
+									} else if (rs4.getString("MeterType").equalsIgnoreCase("Energy")) {
+										userDetails.setEnergy(true);
+										rs4.next();
+									}
+								
+								if(rs4.getString("MeterType").equalsIgnoreCase("Water")) {
+									userDetails.setWater(true);
+									rs4.next();
+								} else if (rs4.getString("MeterType").equalsIgnoreCase("Gas")) {
 									userDetails.setGas(true);
 									rs4.next();
-								}
-								
-								if (rs4.getString("MeterType").equalsIgnoreCase("Water")) {
-								userDetails.setWater(true);
-								rs4.next();
-								}
-								if(rs4.getString("MeterType").equalsIgnoreCase("Energy")) {
+								} else if (rs4.getString("MeterType").equalsIgnoreCase("Energy")) {
 									userDetails.setEnergy(true);
 									rs4.next();
 								}
+								
+								if(rs4.getString("MeterType").equalsIgnoreCase("Energy")) {
+									userDetails.setEnergy(true);
+									rs4.next();
+								} else if (rs4.getString("MeterType").equalsIgnoreCase("Gas")) {
+									userDetails.setGas(true);
+									rs4.next();
+								} else if (rs4.getString("MeterType").equalsIgnoreCase("Water")) {
+									userDetails.setWater(true);
+									rs4.next();
+								}*/
 								
 							}
 
