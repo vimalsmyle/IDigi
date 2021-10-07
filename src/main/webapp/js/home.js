@@ -426,7 +426,7 @@ function getCustomerMeters(type){
 
 											 table = $('#customerMeterTable').DataTable(
 														{
-															"dom": "<'row'<'col-sm-4 headname'><'col-sm-2'><'col-sm-1'><'col-sm-2'f>>" +"<'row'<'col-sm-4'B><'col-sm-2'l><'col-sm-6 totalCount'>>" + "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-6 text-black'i><'col-sm-6 text-black'p>>",
+															"dom" : "<'row'<'col-sm-4 headname'><'col-sm-2'><'col-sm-1'><'col-sm-2'f>>" +"<'row'<'col-sm-4'B><'col-sm-2'l><'col-sm-2'><'col-sm-2'><'col-sm-1 addevent'>>" + "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-6 text-black'i><'col-sm-6 text-black'p>>",
 															"responsive" : true,
 															"serverSide" : false,
 															"bDestroy" : true,
@@ -569,7 +569,6 @@ function getCustomerMeters(type){
 												      .columns.adjust()
 												      .responsive.recalc();
 										});
-											 $("div.headname").html('<h3>User Consumptions</h3>');
 										});
 						
 					});

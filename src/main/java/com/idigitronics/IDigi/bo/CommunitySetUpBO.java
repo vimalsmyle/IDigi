@@ -288,6 +288,14 @@ public class CommunitySetUpBO {
 			if(communitysetupdao.checkMIUID(customervo.getMeters().get(i).getMiuID())) {
 				throw new BusinessException(customervo.getMeters().get(i).getMiuID() +" - MIUID IS ALREADY REGISTERED");
 			}
+			
+			if(customervo.getMeters().get(i).getTariffID()==-1) {
+				throw new BusinessException(customervo.getMeters().get(i).getMiuID() +" - TARIFF IS NOT SELECTED");
+			}
+			
+			if(customervo.getMeters().get(i).getGatewayID()==-1) {
+				throw new BusinessException(customervo.getMeters().get(i).getMiuID() +" - GATEWAY IS NOT SELECTED");
+			}
 		}
 		
 		return communitysetupdao.addcustomer(customervo);

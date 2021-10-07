@@ -86,7 +86,7 @@ public class LoginDAO {
 							userDetails.setBlockName(resultSet.getString("BlockName"));
 							userDetails.setID(resultSet.getInt("ID"));
 							
-							String viewQuery = "SELECT DISTINCT cmd.MeterType FROM customerdetails AS cd LEFT JOIN customermeterdetails AS cmd ON cd.CustomerID = cmd.CustomerID WHERE cmd.MeterType IN ('Gas', 'Water', 'Energy') <id>";
+							/*String viewQuery = "SELECT DISTINCT cmd.MeterType FROM customerdetails AS cd LEFT JOIN customermeterdetails AS cmd ON cd.CustomerID = cmd.CustomerID WHERE cmd.MeterType IN ('Gas', 'Water', 'Energy') <id>";
 							PreparedStatement pstmt4 = con.prepareStatement(viewQuery.replace("<id>", (userDetails.getRoleID() == 1 || userDetails.getRoleID() == 4) ? "" : (userDetails.getRoleID() == 2 || userDetails.getRoleID() == 5) ? "AND cd.BlockID = "+userDetails.getBlockID() : (userDetails.getRoleID() == 3) ? "AND cd.CustomerID = "+userDetails.getCustomerID() : ""));
 							ResultSet rs4 = pstmt4.executeQuery();
 							
@@ -106,7 +106,7 @@ public class LoginDAO {
 									rs4.next();
 								}
 								
-							}
+							}*/
 
 							responsevo.setUserDetails(userDetails);
 							responsevo.setResult("Success");

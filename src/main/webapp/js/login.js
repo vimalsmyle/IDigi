@@ -6,6 +6,9 @@
 $(document)
 				.ready(
 						function() {
+							$("#loginTestId").hide();
+							$("#userClass").hide();
+							
 							$('#test')
 									.bootstrapValidator(
 											{

@@ -1139,7 +1139,7 @@ $(document)
 												/*alert("===>"
 														+ JSON.stringify(data1));*/
 												
-												$('#customerAdd').prop('disabled', true).addClass('disabled').off( "click" );
+											//	$('#customerAdd').prop('disabled', true).addClass('disabled').off( "click" );
 												console.log(JSON
 														.stringify(data1));
 												$
@@ -1183,9 +1183,9 @@ $(document)
 																		  title: "error",
 																		  text: data.Message,
 																		  icon: "error"
-																		}).then(function() {
-																		    window.location = "customerDetails.jsp";
-																		});
+																		})
+																		return false;
+																		
 																	}
 																				
 																}else {

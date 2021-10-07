@@ -103,7 +103,10 @@ public class ExtraMethodsDAO {
 			message.setFrom(new InternetAddress(ExtraConstants.fromEmail));// change accordingly
 			message.addRecipient(Message.RecipientType.TO, new InternetAddress(mailrequestvo.getToEmail()));
 			message.setSubject(mailrequestvo.getSubject());
-			message.setText(mailrequestvo.getMessage());
+
+
+			
+			
 			
 			if(!mailrequestvo.getFileLocation().equalsIgnoreCase("NoAttachment")) { 
 			 DataSource source = new FileDataSource(mailrequestvo.getFileLocation());  

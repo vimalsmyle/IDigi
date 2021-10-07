@@ -142,31 +142,32 @@ $(document)
 
 												swal.fire({
 													title : "error",
-													text : "Select Start Date",
+													text : "Select start date",
 													icon : "error"
 												})
 												return false;
 
 											}
-											var json = {};
+											/*var json = {};
 											json["value"] = $("#start_date")
 													.val();
 											json["parameter_id"] = $(
-													"#selectcommandType").val();
+													"#selectcommandType").val();*/
 
 											if ($("#end_date").val() == ""
 													|| $("#end_date").val() == "") {
 
 												swal.fire({
 													title : "error",
-													text : "Select End Date",
+													text : "Select end date",
 													icon : "error"
 												})
 												return false;
 
 											}
-											array.push(json);
-											json["value"] = $("#end_date")
+											//array.push(json);
+											json["value"] = $("#start_date")
+											.val()+","+$("#end_date")
 													.val();
 											json["parameter_id"] = $(
 													"#selectcommandType").val();
