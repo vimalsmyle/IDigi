@@ -58,7 +58,7 @@ public class LoginDAO {
 		try {
 			con = getConnection();
 			
-			File directory = new File("D:/Logs/IDigi.txt");
+			File directory = new File("D:/Logs/IDigi");
 			if (!directory.exists()) {
 				directory.mkdirs();
 			}
@@ -275,12 +275,12 @@ public class LoginDAO {
 
 					if (rs.getInt("CustomerID") != 0) {
 
-						pstmt1 = con.prepareStatement("SELECT Email FROM customer WHERE CustomerID=?");
-						pstmt1.setString(1, rs.getString("CustomerID"));
+						pstmt1 = con.prepareStatement("SELECT Email FROM customerdetails WHERE CustomerID=?");
+						pstmt1.setLong(1, rs.getLong("CustomerID"));
 
 					} else {
 						pstmt1 = con.prepareStatement("SELECT Email FROM block WHERE BlockID=?");
-						pstmt1.setString(1, rs.getString("BlockID"));
+						pstmt1.setInt(1, rs.getInt("BlockID"));
 
 					}
 					rs1 = pstmt1.executeQuery();
