@@ -19,6 +19,7 @@ import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -32,10 +33,12 @@ import com.idigitronics.IDigi.request.vo.CheckOutRequestVO;
 import com.idigitronics.IDigi.request.vo.CommandGroupRequestVO;
 import com.idigitronics.IDigi.request.vo.ConfigurationRequestVO;
 import com.idigitronics.IDigi.request.vo.DataRequestVO;
+import com.idigitronics.IDigi.request.vo.MailRequestVO;
 import com.idigitronics.IDigi.request.vo.PayBillRequestVO;
 import com.idigitronics.IDigi.request.vo.RazorPayOrderVO;
 import com.idigitronics.IDigi.request.vo.RazorpayRequestVO;
 import com.idigitronics.IDigi.request.vo.RestCallVO;
+import com.idigitronics.IDigi.request.vo.SMSRequestVO;
 import com.idigitronics.IDigi.request.vo.TopUpRequestVO;
 import com.idigitronics.IDigi.response.vo.BillingResponseVO;
 import com.idigitronics.IDigi.response.vo.CheckoutDetails;
@@ -73,6 +76,8 @@ import com.itextpdf.layout.property.VerticalAlignment;
 public class AccountDAO {
 
 	Gson gson = new Gson();
+	
+	private static final Logger logger = Logger.getLogger(AccountDAO.class);
 
 	public static Connection getConnection() throws ClassNotFoundException, SQLException {
 		Connection connection = null;
@@ -227,11 +232,11 @@ public class AccountDAO {
 		return responsevo;
 	}
 
-	public int inserttopuponline(TopUpRequestVO topUpRequestVO) {
+	public long inserttopuponline(TopUpRequestVO topUpRequestVO) {
 
 		Connection con = null;
 		PreparedStatement ps = null;
-		int transactionID = 0;
+		long transactionID = 0;
 
 		try {
 			con = getConnection();
@@ -331,8 +336,10 @@ public class AccountDAO {
 							responseVO.setMessage("Payment Captured Successfully");
 						} else {
 							if (sendPayLoadToGateway(topUpRequestVO) == 200) {
+								logger.debug("Payload sent to gateway at " + LocalDateTime.now());
 								responseVO.setResult("Success");
 								responseVO.setMessage("Payment Captured & Topup Request Submitted Successfully");
+								
 							} else {
 								responseVO.setResult("Failure");
 								responseVO.setMessage("Payment Captured but Topup Request Submission Failed. Deducted Amount will be Refunded in 14 Days");
@@ -371,6 +378,7 @@ public class AccountDAO {
 				if (ps.executeUpdate() > 0) {
 					responseVO.setResult("Success");
 					responseVO.setMessage("Payment Captured Successfully");
+					
 				} else {
 					ps = con.prepareStatement("UPDATE billingpaymentdetails SET PaymentStatus = 2, RazorPayPaymentID = ?, ErrorResponse = ? WHERE RazorPayOrderID = ? AND TransactionID = ?");
 
@@ -497,6 +505,7 @@ public class AccountDAO {
 			
 			if(ps.executeUpdate() > 0) {
 				
+					dataRequestVO.setTopupSMS(dataRequestVO.getCmd_status() == 0 ? true : false);  
 					responsevo = dashboarddao.postDashboarddetails(dataRequestVO, miuID);
 				
 			}
@@ -1185,6 +1194,13 @@ public class AccountDAO {
 						paybillRequestVO.setTaxAmount(rs3.getFloat("TaxAmount"));
 						paybillRequestVO.setLateFee(rs3.getInt("DueDays") >= 1 ? (rs3.getInt("LateFee")*rs3.getInt("DueDays")) : 0);
 						
+						String message = "Hi, Payment of Rs. "+ (int) (paybillRequestVO.getTotalamount() + paybillRequestVO.getTaxAmount()+ paybillRequestVO.getPreviousDues() + paybillRequestVO.getLateFee()) +" is received for your Postpaid Bill. Thank You.";
+						
+						SMSRequestVO smsRequestVO = new SMSRequestVO();
+						
+						smsRequestVO.setMessage(message);
+						smsRequestVO.setToMobileNumber(rs1.getString("MobileNumber"));
+						
 						if(paybillRequestVO.getModeOfPayment().equalsIgnoreCase("Online")) {
 							
 						long transactionID = insertbillingpayment(paybillRequestVO);
@@ -1247,6 +1263,9 @@ public class AccountDAO {
 						if(insertbillingpayment(paybillRequestVO) != 0) {
 							responsevo.setResult("Success");
 							responsevo.setMessage("Bill Paid Successfully");
+							
+							extramethodsdao.sendsms(smsRequestVO);
+							
 						} else {
 							responsevo.setResult("Failure");
 							responsevo.setMessage("Bill Payment Failed. Please Try After Sometime");

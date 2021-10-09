@@ -16,6 +16,12 @@ $(document)
 					// sessionStorage.remove("filterId");
 					//var hCols = [ 3, 4 ];
 					// DataTable initialisation
+					if(filterId!=0){
+						$(".accordionFilter").hide();
+					}else{
+						$(".accordionFilter").show();
+					}
+					
 					
 					console.log("./dashboard/"
 							+ $("#type").val() + "/"
@@ -197,7 +203,7 @@ $(document)
 										}
 
 									})
-
+sessionStorage.removeItem("filterId");
 				
 				});
 

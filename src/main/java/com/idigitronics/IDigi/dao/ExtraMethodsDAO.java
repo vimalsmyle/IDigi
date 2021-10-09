@@ -103,7 +103,10 @@ public class ExtraMethodsDAO {
 			message.setFrom(new InternetAddress(ExtraConstants.fromEmail));// change accordingly
 			message.addRecipient(Message.RecipientType.TO, new InternetAddress(mailrequestvo.getToEmail()));
 			message.setSubject(mailrequestvo.getSubject());
-			message.setText(mailrequestvo.getMessage());
+
+
+			
+			
 			
 			if(!mailrequestvo.getFileLocation().equalsIgnoreCase("NoAttachment")) { 
 			 DataSource source = new FileDataSource(mailrequestvo.getFileLocation());  
@@ -701,7 +704,7 @@ public class ExtraMethodsDAO {
 					
 				}
 				
-				String message = "Dear "+ rs.getString("FirstName") + " " + rs.getString("LastName") + ", \n \n Your Bill of Amount" + (totalamount + tax + previousDues) + "/- for the consumption of " + billMonthYear +" has been generated. Kindly pay the bill before " + currentdate.plusDays(rs.getInt("DueDayCount")).toString() + " to avoid late fee charges. Thank You";
+				String message = "Dear "+ rs.getString("FirstName") + " " + rs.getString("LastName") + ", \n \n Your Bill of Amount " + (totalamount + tax + previousDues) + "/- for the consumption of " + billMonthYear +" has been generated. Kindly pay the bill before " + currentdate.plusDays(rs.getInt("DueDayCount")).toString() + " to avoid late fee charges. Thank You";
 				smsRequestVO.setMessage(message);
 				smsRequestVO.setToMobileNumber(rs.getString("MobileNumber"));
 				
