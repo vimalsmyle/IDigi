@@ -801,7 +801,7 @@ public class DashboardDAO {
 					else if (year != 0 &&  month == 0) {
 						
 						String start = "SELECT * FROM <tablename> ";
-						PreparedStatement pstmt3 = con.prepareStatement(start.replaceAll("<tablename>", id != 0 ? "block" : "community"));
+						PreparedStatement pstmt3 = con.prepareStatement(start.replaceAll("<tablename>", id != 0 ? "block  WHERE CommunityID = "+id : "community"));
 						ResultSet rs3 = pstmt3.executeQuery();
 						
 						while(rs3.next()) {
@@ -853,7 +853,7 @@ public class DashboardDAO {
 						int j = (month == 2 ? 28 : (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12) ? 31 : 30);
 						
 						String start = "SELECT * FROM <tablename> ";
-						PreparedStatement pstmt3 = con.prepareStatement(start.replaceAll("<tablename>", id != 0 ? "block" : "community"));
+						PreparedStatement pstmt3 = con.prepareStatement(start.replaceAll("<tablename>", id != 0 ? "block  WHERE CommunityID = "+id : "community"));
 						ResultSet rs3 = pstmt3.executeQuery();
 						
 						while(rs3.next()) {
