@@ -23,7 +23,7 @@
 <!--Header Start-->
  <!-- bg-info -->
 	 <div class="main-header">
-			<div class="container-fluid">
+			<div class="container-fluid headerColor">
 			  <div class="main-header-left"> 
 				<a class="main-header-menu-icon" href="#" id="mainSidebarToggle"><span></span></a> 
 			  </div>
@@ -39,6 +39,10 @@
 					</div>
 					<div class="dropdown-divider"></div>
 					<a class="dropdown-item" href="myprofile.jsp"> <i class="fa fa-user"></i> My Profile </a>
+					
+					<a class="dropdown-item" href="setting.jsp"> <i class="fa fa-user"></i> Setting</a>
+					
+					
 					<div class="dropdown-divider"></div>
 					<a class="dropdown-item" href="logout.jsp"> <i class="fa fa-sign-out"></i> Sign Out </a>
 					</div>
