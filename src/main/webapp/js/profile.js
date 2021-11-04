@@ -121,7 +121,7 @@ $(document)
 												.ajax({
 													type : "POST",
 													contentType : "application/json",
-													url : "/PAYGTL_LORA_BLE/changepassword/"+sessionStorage.getItem("userID"),
+													url : "./changepassword/"+sessionStorage.getItem("userID"),
 													data : JSON
 															.stringify(data1),
 													dataType : "JSON",

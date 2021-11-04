@@ -341,8 +341,15 @@ public class AccountDAO {
 								responseVO.setMessage("Payment Captured & Topup Request Submitted Successfully");
 								
 							} else {
-								responseVO.setResult("Failure");
-								responseVO.setMessage("Payment Captured but Topup Request Submission Failed. Deducted Amount will be Refunded in 14 Days");
+								ps = con.prepareStatement("UPDATE topup SET Status = 11 WHERE RazorPayOrderID = ? AND TransactionID = ?");
+
+								ps.setString(1, checkOutRequestVO.getRazorpay_order_id());
+								ps.setLong(2, checkOutRequestVO.getTransactionID());
+								
+								if(ps.executeUpdate() > 0) {
+									responseVO.setResult("Failure");
+									responseVO.setMessage("Payment Captured but Topup Request Submission Failed. Deducted Amount will be Refunded in 14 Days");
+								}
 							}
 						}
 
@@ -644,7 +651,7 @@ public class AccountDAO {
 		try {
 			con = getConnection();
 
-			String query = "SELECT t.TransactionID, c.CommunityName, b.BlockName, cd.FirstName, cd.HouseNumber, cd.CreatedByID, cd.LastName, cd.CustomerUniqueID, t.MIUID, t.CustomerMeterID, t.Amount, tr.AlarmCredit, tr.EmergencyCredit, t.Status, t.ModeOfPayment, t.PaymentStatus, t.RazorPayOrderID, t.RazorPayPaymentID, t.RazorPayRefundID, t.RazorPayRefundStatus, t.TransactionDate, t.AcknowledgeDate FROM topup AS t \r\n"
+			String query = "SELECT t.TransactionID, c.CommunityName, b.BlockName, cd.FirstName, cd.HouseNumber, cd.CreatedByID, cd.LastName, cd.CustomerUniqueID, t.MIUID, t.CustomerMeterID, t.Amount, tr.AlarmCredit, t.FixedCharges, tr.EmergencyCredit, t.Status, t.ModeOfPayment, t.PaymentStatus, t.RazorPayOrderID, t.RazorPayPaymentID, t.RazorPayRefundID, t.RazorPayRefundStatus, t.TransactionDate, t.AcknowledgeDate FROM topup AS t \r\n"
 					+ "LEFT JOIN community AS c ON t.CommunityID = c.CommunityID LEFT JOIN block AS b ON t.BlockID = b.BlockID LEFT JOIN tariff AS tr ON tr.TariffID = t.tariffID \r\n"
 					+ "LEFT JOIN customerdetails AS cd ON t.CustomerUniqueID = cd.CustomerUniqueID LEFT JOIN customermeterdetails as cmd ON cd.CustomerID = cmd.CustomerID WHERE t.TransactionID = "+ transactionID;
 
@@ -1606,7 +1613,7 @@ public class AccountDAO {
 				while (rs1.next()) {
 					commands = new CommandGroupResponseVO();
 
-					commands.setCommandType(rs1.getInt("CommandType") == 1 ? "Meter Reset" : rs1.getInt("CommandType") == 3 ? "Tariff" : rs1.getInt("CommandType") == 5 ? "Valve" : rs1.getInt("CommandType") == 6 ? "RTC" : rs1.getInt("CommandType") == 8 ? "Sync Interval" : rs1.getInt("CommandType") == 9 ? "Meter Reading" : rs1.getInt("CommandType") == 10 ? "PrePaidPostPaid Mode"	: rs1.getInt("CommandType") == 12 ? "Clear Tamper" : rs1.getInt("CommandType") == 13 ? "Sync Time" : "");
+					commands.setCommandType(rs1.getInt("CommandType") == 1 ? "Meter Reset" : rs1.getInt("CommandType") == 3 ? "Tariff" : rs1.getInt("CommandType") == 5 ? "Valve" : rs1.getInt("CommandType") == 6 ? "RTC" : rs1.getInt("CommandType") == 8 ? "Sync Interval" : rs1.getInt("CommandType") == 9 ? "Meter Reading" : rs1.getInt("CommandType") == 10 ? "PrePaidPostPaid Mode"	: rs1.getInt("CommandType") == 12 ? "Clear Tamper" : rs1.getInt("CommandType") == 13 ? "Sync Time" : rs1.getInt("CommandType") == 7 ? "Schedule Disconnect" : "");
 					commands.setStatus(rs1.getInt("Status") == 0 ? "Passed"	: rs1.getInt("Status") == 1 ? "Already Executed" : rs1.getInt("Status") == 2 ? "Invalid Syntax"	: rs1.getInt("Status") == 3 ? "Invalid Parameters" : rs1.getInt("Status") == 4 ? "Value Cannot be Applied" : rs1.getInt("Status") == 5 ? "Value Not in Range" : rs1.getInt("Status") == 6 ? "Command Not Found"	: rs1.getInt("Status") == 7	? "Device Not Found" : rs1.getInt("Status") == 8 ? "Transaction Discarded" : rs1.getInt("Status") == 9 ? "Transaction not Found" : rs1.getInt("Status") == 10 ? "Pending": "Unknown Failure");
 					commands.setValue(rs1.getString("Value"));
 					commands.setModifiedDate(rs1.getString("ModifiedDate"));

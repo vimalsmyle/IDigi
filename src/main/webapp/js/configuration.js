@@ -166,8 +166,8 @@ $(document)
 
 											}
 											//array.push(json);
-											json["value"] = $("#start_date")
-											.val()+","+$("#end_date")
+											var json = {};
+											json["value"] = $("#start_date").val()+","+$("#end_date")
 													.val();
 											json["parameter_id"] = $(
 													"#selectcommandType").val();

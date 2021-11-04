@@ -640,7 +640,7 @@ $(document)
 																	+ ")'>"
 																	+ "<i class='material-icons' style='color:#17e9e9;cursor:pointer'>receipt</i>"
 																	+ "</a>"
-														} else if (row.Status == "Pending...waiting for acknowledge") {
+														} else if (row.Status == "Unknown Failure" ||row.Status == "Pending...waiting for acknowledge") {
 															return "---"
 														}
 
