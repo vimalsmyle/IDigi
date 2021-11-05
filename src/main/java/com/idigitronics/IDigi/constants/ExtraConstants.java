@@ -18,8 +18,8 @@ public class ExtraConstants {
 	public static final String fromEmailPassword = "M1rage@24"; 
 	public static final String SenderID = "&senderid="+"SJSMTH&msg=";
 	public static final String SMSAPI = "http://sms.textmysms.com/app/smsapi/index.php?key=360EDC1AD67720&campaign=0&routeid=26&type=text&contacts=";
-	public static final String RZPKeyID = "rzp_test_ym55ShYP4avccH";
-	public static final String RZPKeySecret = "crzxYcMp8HzBwErUjhhHY1hc";
+	public static final String RZPKeyID = "rzp_live_bnuQgY7vzc3u3p"; // live = rzp_live_bnuQgY7vzc3u3p  test = rzp_test_ym55ShYP4avccH 
+	public static final String RZPKeySecret = "cjjpCQeDLlmkNCU3LZ3QuwVF";  // live = cjjpCQeDLlmkNCU3LZ3QuwVF   test = crzxYcMp8HzBwErUjhhHY1hc
 	public static final String RZPBasicUrl = "https://api.razorpay.com/v1/";
 	public static final String PaymentThemeColor = "#125e8c";
 	public static final String PaymentButtonText = "Proceed to Pay With Razorpay";
