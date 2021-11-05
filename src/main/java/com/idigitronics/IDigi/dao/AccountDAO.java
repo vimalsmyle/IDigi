@@ -651,7 +651,7 @@ public class AccountDAO {
 		try {
 			con = getConnection();
 
-			String query = "SELECT t.TransactionID, c.CommunityName, b.BlockName, cd.FirstName, cd.HouseNumber, cd.CreatedByID, cd.LastName, cd.CustomerUniqueID, t.MIUID, t.CustomerMeterID, t.Amount, tr.AlarmCredit, t.FixedCharges, tr.EmergencyCredit, t.Status, t.ModeOfPayment, t.PaymentStatus, t.RazorPayOrderID, t.RazorPayPaymentID, t.RazorPayRefundID, t.RazorPayRefundStatus, t.TransactionDate, t.AcknowledgeDate FROM topup AS t \r\n"
+			String query = "SELECT t.TransactionID, c.CommunityName, b.BlockName, cd.FirstName, cd.HouseNumber, cd.CreatedByID, cd.LastName, cd.CustomerUniqueID, t.MIUID, t.CustomerMeterID, t.Amount, tr.AlarmCredit, t.FixedCharges, t.ReconnectionCharges, tr.EmergencyCredit, t.Status, t.ModeOfPayment, t.PaymentStatus, t.RazorPayOrderID, t.RazorPayPaymentID, t.RazorPayRefundID, t.RazorPayRefundStatus, t.TransactionDate, t.AcknowledgeDate FROM topup AS t \r\n"
 					+ "LEFT JOIN community AS c ON t.CommunityID = c.CommunityID LEFT JOIN block AS b ON t.BlockID = b.BlockID LEFT JOIN tariff AS tr ON tr.TariffID = t.tariffID \r\n"
 					+ "LEFT JOIN customerdetails AS cd ON t.CustomerUniqueID = cd.CustomerUniqueID LEFT JOIN customermeterdetails as cmd ON cd.CustomerID = cmd.CustomerID WHERE t.TransactionID = "+ transactionID;
 
