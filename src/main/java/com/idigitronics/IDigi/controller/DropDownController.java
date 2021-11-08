@@ -102,6 +102,15 @@ public class DropDownController {
 		return responsevo;
 	}
 	
+	@RequestMapping(value = "/tariffsAmount",method = RequestMethod.GET, produces="application/json")
+	public @ResponseBody ResponseVO getalltariffsAmount() throws SQLException {
+		
+		ResponseVO responsevo = new ResponseVO();
+		responsevo.setDropDownTariffs(dropdowndao.getalltariffsAmount());
+
+		return responsevo;
+	}
+	
 	@RequestMapping(value = "/gateways",method = RequestMethod.GET, produces="application/json")
 	public @ResponseBody ResponseVO getallgateways() throws SQLException {
 		

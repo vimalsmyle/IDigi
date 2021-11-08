@@ -1,4 +1,4 @@
-<!doctype html>
+\<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -45,6 +45,7 @@
 								<input name="login" id="login"
 									class="btn btn-block login-btn mb-4" type="button"
 									value="Login">
+							<span class="errorMessage"></span>
 							</form>
 						</div>
 

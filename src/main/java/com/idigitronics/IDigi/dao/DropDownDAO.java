@@ -338,4 +338,25 @@ public class DropDownDAO {
 		return metersizes;
 	}
 
+	public HashMap<Integer, String> getalltariffsAmount() throws SQLException {
+		HashMap<Integer, String> tariffs = new HashMap<Integer, String>();
+		
+		Connection con = null;
+		try {
+			con = getConnection();
+			PreparedStatement pstmt = con
+					.prepareStatement("SELECT TariffID, TariffName FROM tariff");
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				tariffs.put(rs.getInt("Tariff"), rs.getString("TariffName"));
+			}
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			con.close();
+			
+		}
+		return tariffs;
+	}
+
 }

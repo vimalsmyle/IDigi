@@ -1088,8 +1088,12 @@ $(document)
 												} 
 												
 												if($("#selectBlockBasedonCommunity").val() == -1 || $("#selectBlockBasedonCommunity").val() == null || $("#selectBlockBasedonCommunity").val() == "Select Block"){
-													bootbox
-													.alert("Select Block Id");
+													
+													swal.fire({
+														  title: "error",
+														  text: "Select block id",
+														  icon: "error"
+														});
 													return false;
 												}
 												
