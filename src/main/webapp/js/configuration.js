@@ -147,14 +147,7 @@ $(document)
 												})
 												return false;
 
-											}
-											/*var json = {};
-											json["value"] = $("#start_date")
-													.val();
-											json["parameter_id"] = $(
-													"#selectcommandType").val();*/
-
-											if ($("#end_date").val() == ""
+											}else if ($("#end_date").val() == ""
 													|| $("#end_date").val() == "") {
 
 												swal.fire({
@@ -164,6 +157,13 @@ $(document)
 												})
 												return false;
 
+											}else if(new Date($("#start_date").val()).getTime()>=new Date($("#end_date").val()).getTime()){
+												swal.fire({
+													title : "error",
+													text : "Select end date less than start date",
+													icon : "error"
+												})
+												return false;
 											}
 											//array.push(json);
 											var json = {};

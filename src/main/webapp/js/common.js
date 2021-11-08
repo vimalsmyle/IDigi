@@ -128,5 +128,40 @@ function dashboardAll(type){
 }
 
 
+$(document)
+.ready(
+		function() {
+			$("#manualBilling")
+					.click(
+							function() {
+								
+								$("#loader").show();
+								
+								$
+										.ajax({
+											type : "GET",
+											contentType : "application/json",
+											url : "./manualbillgeneration",
+											dataType : "JSON",
+
+											success : function(data) {
+												$("#loader").hide();
+												if (data.result == "Success") {
+													swal.fire({
+														  title: "Saved",
+														  text: data.Message,
+														  icon: "success"
+														}).then(function() {
+														    window.location = "manualBilling.jsp";
+														    
+														});
+													return false;
+												}
+											}
+										});
+								return false;
+							});
+		});
+
 
 

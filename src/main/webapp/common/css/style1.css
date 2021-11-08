@@ -8,6 +8,11 @@
 	color:red;
 }
 
+.errorMessage h6{
+	float: right;
+	background-color: red;
+}
+
 body {
 	background-color: #fff;
 	/* //font-family: 'Jost',Roboto,sans-serif; */
@@ -1228,7 +1233,7 @@ label, .select2-container {
 	height: 38px !important;
 }
 
-#preloader {
+#preloader,#loader {
 	position: fixed;
 	top: 0;
 	left: 0;
@@ -1241,6 +1246,10 @@ label, .select2-container {
     background-position: center;
     background-color: rgba(0,0,0,0.5);
     z-index: 9999;
+}
+
+#loader{
+	background-image: url(../../common/images/loading2.gif);
 }
 
 #status {

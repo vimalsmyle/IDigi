@@ -58,6 +58,7 @@ $(function() {
 		});
 		$('#selectTariffName').append(Options);
 		$('#selectTariffNameEdit').append(Options);
+		$('#tariff').append(Options);
 		// $("#selectcommunityName").material_select();
 	});
 });
@@ -364,23 +365,30 @@ function showFieldsBasedONCommand(id){
 																		
 																</div>
 															</div>`);
-			
+			var lastDate = new Date(new Date().getFullYear(),
+					new Date().getMonth() + 1, 0);
 			$('#start_date').bootstrapMaterialDatePicker({
 				 format: 'YYYY-MM-DD HH:mm:ss',
 				clearBtn : true,
 				todayBtn : "linked",
-				weekStart : 1
-			}).on('changeDate', function(e) {
-				var startDate = $('#start_date').datepicker('getDate');
-			});
+				weekStart : 1,
+				 minDate:new Date()
+			}).on('changeDate', function (selected) {
+				alert("start_date"+selected);
+		        var minDate = new Date(selected.date.valueOf());
+		        $('#end_date').datepicker('setStartDate', minDate);
+		    });
 			$('#end_date').bootstrapMaterialDatePicker({
 				 format: 'YYYY-MM-DD HH:mm:ss',
 					clearBtn : true,
 					todayBtn : "linked",
-					weekStart : 1
-			}).on('changeDate', function(e) {
-				var endDate = $('#end_date').datepicker('getDate');
-			});
+					weekStart : 1,
+					minDate:new Date()
+			}).on('changeDate', function (selected) {
+				alert("end_date"+selected);
+	            var maxDate = new Date(selected.date.valueOf());
+	            $('#start_date').datepicker('setEndDate', maxDate);
+	        });
 			
 			}else if(id=="8"){
 				$("#confValue").remove();
@@ -484,3 +492,29 @@ function onChangeMeterSize(rowCount){
 		});
 	
 }
+
+
+var lastDate = new Date(new Date().getFullYear(),
+		new Date().getMonth() + 1, 0);
+$('#start_date').bootstrapMaterialDatePicker({
+	 format: 'YYYY-MM-DD HH:mm:ss',
+	clearBtn : true,
+	todayBtn : "linked",
+	weekStart : 1,
+	 minDate:new Date()
+}).on('changeDate', function (selected) {
+	alert("start_date"+selected);
+    var minDate = new Date(selected.date.valueOf());
+    $('#end_date').datepicker('setMinDate', minDate);
+});
+$('#end_date').bootstrapMaterialDatePicker({
+	 format: 'YYYY-MM-DD HH:mm:ss',
+		clearBtn : true,
+		todayBtn : "linked",
+		weekStart : 1,
+		minDate:new Date()
+}).on('changeDate', function (selected) {
+	alert("end_date"+selected);
+    var maxDate = new Date(selected.date.valueOf());
+    $('#start_date').datepicker('setMaxDate', maxDate);
+});

@@ -78,7 +78,12 @@
                 
                 	<%if(user_id.equalsIgnoreCase("1")){ %>
                 <!-- <a href="Mgmt.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-star"></i> <span class="textData">User Management</span></a> -->
-                <a href="Mgmt.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-star"></i> <span class="textData">User Management</span></a>
+                 <a href="Mgmt.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-star"></i> <span class="textData">User Management</span></a>
+                 
+                <!--  <a href="manualBilling.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-star"></i> <span class="textData">Manual Billing</span></a>
+                 
+                  <a href="manualdata.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-star"></i> <span class="textData">Manual Data</span></a>
+                  -->
             <%}%>
             <% } else if (user_id.equalsIgnoreCase("2") || user_id.equalsIgnoreCase("5")) {
                 %>
