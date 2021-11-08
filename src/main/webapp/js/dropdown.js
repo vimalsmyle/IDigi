@@ -61,6 +61,15 @@ $(function() {
 		$('#tariff').append(Options);
 		// $("#selectcommunityName").material_select();
 	});
+	
+	$.getJSON("./tariffsAmount", function(data) {
+		var Options = "<option value='-1'>Select  Tariff</option>";
+		$.each(data.dropDownTariffs, function(key, value) {
+			Options = Options + "<option value='" + key + "'>" + value
+					+ "</option>";
+		});
+		$('#tariff').append(Options);
+	});
 });
 
 

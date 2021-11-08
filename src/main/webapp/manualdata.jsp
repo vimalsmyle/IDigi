@@ -15,8 +15,10 @@
 <link
 	href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css"
 	rel="stylesheet" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-datetimepicker/2.7.1/css/bootstrap-material-datetimepicker.min.css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-datetimepicker/2.7.1/css/bootstrap-material-datetimepicker.min.css">
+<link rel="stylesheet"
+	href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
 
 <link href="common/css/materialize.fontawsome.css" rel="stylesheet">
@@ -56,23 +58,26 @@
 										<h5 class="modal-title" id="exampleModalLabel">Manual
 											Data Entry</h5>
 
-										<form id="customerDetails">
+										<form id="manualDetails">
 											<div id="template">
 												<div class="row">
-
-												<div class="col-md-4">
+													<div id="loader" style="display: none;">
+														<div id="status">&nbsp;</div>
+													</div>
+													<div class="col-md-4">
 														<div class="group form-group">
-															<label class="bmd-label-floating select-label">MUI ID<span
-																class="impp"><sup>*</sup></span></label> <input type="text"
-																class="form-control form-control-sm" name="mui"
-																id="mui">
+															<label class="bmd-label-floating select-label">MUI
+																ID<span class="impp"><sup>*</sup></span>
+															</label> <input type="text" class="form-control form-control-sm"
+																name="mui" id="mui">
 														</div>
 													</div>
 
 
 
 													<div class="col-md-4">
-														<div class="group form-group">
+														<div
+															class="form-group has-feedback has-success bmd-form-group is-filled">
 															<label class="bmd-label-floating select-label">Timestamp<span
 																class="impp"><sup>*</sup></span></label> <input type="text"
 																class="form-control form-control-sm" name="timestamp"
@@ -92,7 +97,8 @@
 														</div>
 													</div>
 													<div class="col-md-4">
-														<div class="group form-group">
+														<div
+															class="form-group has-feedback has-success bmd-form-group is-filled">
 															<label class="bmd-label-floating select-label">Sync
 																Time<span class="impp"><sup>*</sup></span>
 															</label> <input type="text" class="form-control form-control-sm"
@@ -101,11 +107,13 @@
 													</div>
 
 													<div class="col-md-4">
-														<div class="group form-group">
+														<div
+															class="form-group has-feedback has-success bmd-form-group is-filled">
 															<label class="bmd-label-floating select-label">Sync
 																Interval<span class="impp"><sup>*</sup></span>
-															</label> <input type="text" class="form-control form-control-sm"
-																name="syncInterval" id="syncInterval">
+															</label> <input type="number"
+																class="form-control form-control-sm" name="syncInterval"
+																id="syncInterval" min="0" max="9999" maxlength="4">
 														</div>
 													</div>
 
@@ -124,7 +132,8 @@
 													</div>
 
 													<div class="col-md-4">
-														<div class="group form-group">
+														<div
+															class="form-group has-feedback has-success bmd-form-group is-filled">
 															<label class="bmd-label-floating select-label">Battery
 																Voltage<span class="impp"><sup>*</sup></span>
 															</label> <input type="text" class="form-control form-control-sm"
@@ -132,7 +141,18 @@
 														</div>
 													</div>
 
-
+													<div class="col-md-4">
+														<div
+															class="form-group has-feedback has-success bmd-form-group is-filled">
+															<label class="bmd-label-floating select-label">Select
+																Valve Status<span class="impp"><sup>*</sup></span>
+															</label> <select class="form-control form-control-sm select2"
+																id="valveStatus" name="valveStatus">
+																<option value="0">Close</option>
+																<option value="1">Open</option>
+															</select>
+														</div>
+													</div>
 
 													<div class="col-md-4">
 														<div
@@ -149,7 +169,8 @@
 													</div>
 
 													<div class="col-md-4">
-														<div class="group form-group">
+														<div
+															class="form-group has-feedback has-success bmd-form-group is-filled">
 															<label class="bmd-label-floating select-label">Credit<span
 																class="impp"><sup>*</sup></span></label> <input type="text"
 																class="form-control form-control-sm" name="credit"
@@ -170,7 +191,8 @@
 													</div>
 
 													<div class="col-md-4">
-														<div class="group form-group">
+														<div
+															class="form-group has-feedback has-success bmd-form-group is-filled">
 															<label class="bmd-label-floating select-label">Emergency
 																Credit<span class="impp"><sup>*</sup></span>
 															</label> <input type="text" class="form-control form-control-sm"
@@ -180,17 +202,20 @@
 
 
 													<div class="col-md-4">
-														<div class="group form-group">
+														<div
+															class="form-group has-feedback has-success bmd-form-group is-filled">
 															<label class="bmd-label-floating select-label">Min
 																Elapsed<span class="impp"><sup>*</sup></span>
-															</label> <input type="text" class="form-control form-control-sm"
-																name="minElapsed" id="minElapsed">
+															</label> <input type="number"
+																class="form-control form-control-sm" name="minElapsed"
+																id="minElapsed">
 														</div>
 													</div>
 
 
 													<div class="col-md-4">
-														<div class="group form-group">
+														<div
+															class="form-group has-feedback has-success bmd-form-group is-filled">
 															<label class="bmd-label-floating select-label">Reading<span
 																class="impp"><sup>*</sup></span></label> <input type="text"
 																class="form-control form-control-sm" name="reading"
@@ -198,35 +223,44 @@
 														</div>
 													</div>
 
-<div class="custom-control custom-checkbox">
-    <input type="checkbox" class="custom-control-input" id="door">
-    <label class="custom-control-label" for="defaultUnchecked">Door Open</label>
-</div>
+													<div class="col-md-4"></div>
 
-<div class="custom-control custom-checkbox">
-    <input type="checkbox" class="custom-control-input" id="magnetic">
-    <label class="custom-control-label" for="defaultUnchecked">Magnetic</label>
-</div>
+													<div class="custom-control custom-checkbox checkArea">
+														<input type="checkbox" class="custom-control-input"
+															id="door"> <label class="custom-control-label"
+															for="door">Door Open</label>
+													</div>
 
-<div class="custom-control custom-checkbox">
-    <input type="checkbox" class="custom-control-input" id="schedule">
-    <label class="custom-control-label" for="defaultUnchecked">Schedule Disconnect</label>
-</div>
+													<div class="custom-control custom-checkbox checkArea">
+														<input type="checkbox" class="custom-control-input"
+															id="magnetic"> <label
+															class="custom-control-label" for="magnetic">Magnetic</label>
+													</div>
 
-<div class="custom-control custom-checkbox">
-    <input type="checkbox" class="custom-control-input" id="rtc">
-    <label class="custom-control-label" for="defaultUnchecked">RTC</label>
-</div>
+													<div class="custom-control custom-checkbox checkArea">
+														<input type="checkbox" class="custom-control-input"
+															id="schedule"> <label
+															class="custom-control-label" for="schedule">Schedule
+															Disconnect</label>
+													</div>
 
-<div class="custom-control custom-checkbox">
-    <input type="checkbox" class="custom-control-input" id="low">
-    <label class="custom-control-label" for="defaultUnchecked">Low Battery</label>
-</div>
+													<div class="custom-control custom-checkbox checkArea">
+														<input type="checkbox" class="custom-control-input"
+															id="rtc"> <label class="custom-control-label"
+															for="rtc">RTC</label>
+													</div>
 
-<div class="custom-control custom-checkbox">
-    <input type="checkbox" class="custom-control-input" id="balance">
-    <label class="custom-control-label" for="defaultUnchecked">Low balance</label>
-</div>
+													<div class="custom-control custom-checkbox checkArea">
+														<input type="checkbox" class="custom-control-input"
+															id="low"> <label class="custom-control-label"
+															for="low">Low Battery</label>
+													</div>
+
+													<div class="custom-control custom-checkbox checkArea">
+														<input type="checkbox" class="custom-control-input"
+															id="balance"> <label class="custom-control-label"
+															for="balance">Low balance</label>
+													</div>
 												</div>
 											</div>
 
@@ -234,10 +268,8 @@
 
 												<div class="col-md-12 text-right">
 													<button class="btn btn-primary submit-button" value="Save!"
-														id="customerAdd" type="button" disabled>Save</button>
-													<button type="button"
-														class="btn btn-danger btn-raised resetFilter"
-														id="resetFilter">Reset</button>
+														id="manual" type="button" disabled>Save</button>
+
 
 												</div>
 											</div>
@@ -260,11 +292,16 @@
 		}
 	%>
 
+	<script type="text/javascript"
+		src="//cdn.jsdelivr.net/jquery.bootstrapvalidator/0.5.0/js/bootstrapValidator.min.js"></script>
 
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-datetimepicker/2.7.1/js/bootstrap-material-datetimepicker.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/locale/ja.js"></script>
+
+	<script type="text/javascript"
+		src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script>
+	<script type="text/javascript"
+		src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-datetimepicker/2.7.1/js/bootstrap-material-datetimepicker.min.js"></script>
+	<script type="text/javascript"
+		src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/locale/ja.js"></script>
 
 
 	<script src="js/dropdown.js"></script>
@@ -273,10 +310,54 @@
 	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
 
 	<script
+		src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+
+	<script
+		src="https://cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js"></script>
+
+	<script
+		src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.colVis.min.js"></script>
+
+	<script
+		src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
+
+
+	<script
+		src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
+
+	<script
+		src="https://cdn.datatables.net/1.10.12/js/dataTables.bootstrap.min.js"></script>
+
+
+	<script
+		src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.bootstrap.min.js"></script>
+
+
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
+
+	<script
+		src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js"></script>
+
+	<script
+		src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
+
+
+
+	<script
+		src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+
+	<script
+		src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+
+
+
+	<script
 		src="https://cdn.datatables.net/responsive/2.2.3/js/responsive.bootstrap4.min.js"></script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
-		
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+
 
 	<script
 		src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.js"></script>
@@ -287,25 +368,25 @@
 	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 	<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-<script>
-$(function () {
-$('#timestamp').bootstrapMaterialDatePicker({
-	 format: 'YYYY-MM-DD HH:mm:ss',
-	clearBtn : true,
-	todayBtn : "linked",
-	weekStart : 1,
-})
 
+	<script>
+		$(function() {
+			$('#timestamp').bootstrapMaterialDatePicker({
+				format : 'YYYY-MM-DD HH:mm:ss',
+				clearBtn : true,
+				todayBtn : "linked",
+				weekStart : 1,
+			})
 
-$('#syncTime').bootstrapMaterialDatePicker({
-	 format: 'HH:mm:ss',
-	clearBtn : true,
-	todayBtn : "linked",
-	weekStart : 1,
-})
+			$('#syncTime').bootstrapMaterialDatePicker({
+				format : 'HH:mm:ss',
+				clearBtn : true,
+				todayBtn : "linked",
+				weekStart : 1,
+			})
 
-});
-</script>
+		});
+	</script>
 </body>
 
 </html>
