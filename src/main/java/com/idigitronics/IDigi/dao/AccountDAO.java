@@ -246,7 +246,7 @@ public class AccountDAO {
 			ResultSet rs = pstmt.executeQuery();
 			if (rs.next()) {
 
-				ps = con.prepareStatement("INSERT INTO topup (CommunityID, BlockID, CustomerID, MIUID, CustomerMeterID, TariffID, Amount, FixedCharges, ReconnectionCharges, Source, ModeOfPayment, CreatedByID, CreatedByRoleID, CustomerUniqueID, AcknowledgeDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
+				ps = con.prepareStatement("INSERT INTO topup (CommunityID, BlockID, CustomerID, MIUID, CustomerMeterID, TariffID, Amount, Status, FixedCharges, ReconnectionCharges, Source, ModeOfPayment, CreatedByID, CreatedByRoleID, CustomerUniqueID, AcknowledgeDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
 
 				ps.setInt(1, rs.getInt("CommunityID"));
 				ps.setInt(2, rs.getInt("BlockID"));
@@ -255,13 +255,14 @@ public class AccountDAO {
 				ps.setLong(5, topUpRequestVO.getCustomerMeterID());
 				ps.setInt(6, rs.getInt("TariffID"));
 				ps.setFloat(7, topUpRequestVO.getAmount());
-				ps.setInt(8, topUpRequestVO.getFixedCharges());
-				ps.setFloat(9, topUpRequestVO.getReconnectionCharges());
-				ps.setString(10, topUpRequestVO.getSource());
-				ps.setString(11, topUpRequestVO.getModeOfPayment());
-				ps.setInt(12, topUpRequestVO.getTransactedByID());
-				ps.setInt(13, topUpRequestVO.getTransactedByRoleID());
-				ps.setString(14, topUpRequestVO.getCustomerUniqueID());
+				ps.setInt(8, 10);
+				ps.setInt(9, topUpRequestVO.getFixedCharges());
+				ps.setFloat(10, topUpRequestVO.getReconnectionCharges());
+				ps.setString(11, topUpRequestVO.getSource());
+				ps.setString(12, topUpRequestVO.getModeOfPayment());
+				ps.setInt(13, topUpRequestVO.getTransactedByID());
+				ps.setInt(14, topUpRequestVO.getTransactedByRoleID());
+				ps.setString(15, topUpRequestVO.getCustomerUniqueID());
 
 				if (ps.executeUpdate() > 0) {
 
@@ -341,7 +342,7 @@ public class AccountDAO {
 								responseVO.setMessage("Payment Captured & Topup Request Submitted Successfully");
 								
 							} else {
-								ps = con.prepareStatement("UPDATE topup SET Status = 11 WHERE RazorPayOrderID = ? AND TransactionID = ?");
+								ps = con.prepareStatement("UPDATE topup SET Status = 10 WHERE RazorPayOrderID = ? AND TransactionID = ?");
 
 								ps.setString(1, checkOutRequestVO.getRazorpay_order_id());
 								ps.setLong(2, checkOutRequestVO.getTransactionID());
@@ -651,7 +652,7 @@ public class AccountDAO {
 		try {
 			con = getConnection();
 
-			String query = "SELECT t.TransactionID, c.CommunityName, b.BlockName, cd.FirstName, cd.HouseNumber, cd.CreatedByID, cd.LastName, cd.CustomerUniqueID, t.MIUID, t.CustomerMeterID, t.Amount, tr.AlarmCredit, t.FixedCharges, tr.EmergencyCredit, t.Status, t.ModeOfPayment, t.PaymentStatus, t.RazorPayOrderID, t.RazorPayPaymentID, t.RazorPayRefundID, t.RazorPayRefundStatus, t.TransactionDate, t.AcknowledgeDate FROM topup AS t \r\n"
+			String query = "SELECT t.TransactionID, c.CommunityName, b.BlockName, cd.FirstName, cd.HouseNumber, cd.CreatedByID, cd.LastName, cd.CustomerUniqueID, t.MIUID, t.CustomerMeterID, t.Amount, tr.AlarmCredit, t.FixedCharges, t.ReconnectionCharges, tr.EmergencyCredit, t.Status, t.ModeOfPayment, t.PaymentStatus, t.RazorPayOrderID, t.RazorPayPaymentID, t.RazorPayRefundID, t.RazorPayRefundStatus, t.TransactionDate, t.AcknowledgeDate FROM topup AS t \r\n"
 					+ "LEFT JOIN community AS c ON t.CommunityID = c.CommunityID LEFT JOIN block AS b ON t.BlockID = b.BlockID LEFT JOIN tariff AS tr ON tr.TariffID = t.tariffID \r\n"
 					+ "LEFT JOIN customerdetails AS cd ON t.CustomerUniqueID = cd.CustomerUniqueID LEFT JOIN customermeterdetails as cmd ON cd.CustomerID = cmd.CustomerID WHERE t.TransactionID = "+ transactionID;
 
