@@ -83,7 +83,7 @@ public class ExtraMethodsDAO {
 	
 	Gson gson = new Gson();
 	
-	public String sendmail(MailRequestVO mailrequestvo) {
+	public String sendmail(MailRequestVO mailrequestvo)  {
 		
 		String result = "Failure";
 		Properties props = new Properties();
@@ -103,10 +103,6 @@ public class ExtraMethodsDAO {
 			message.setFrom(new InternetAddress(ExtraConstants.fromEmail));// change accordingly
 			message.addRecipient(Message.RecipientType.TO, new InternetAddress(mailrequestvo.getToEmail()));
 			message.setSubject(mailrequestvo.getSubject());
-
-
-			
-			
 			
 			if(!mailrequestvo.getFileLocation().equalsIgnoreCase("NoAttachment")) { 
 			 DataSource source = new FileDataSource(mailrequestvo.getFileLocation());  
@@ -119,6 +115,7 @@ public class ExtraMethodsDAO {
 
 		} catch (MessagingException e) {
 			e.printStackTrace();
+			result = "Failure";
 		}
 		
 		return result;

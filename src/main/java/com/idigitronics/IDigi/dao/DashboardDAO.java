@@ -1567,6 +1567,7 @@ public class DashboardDAO {
 			
 		} catch(Exception e) {
 			e.printStackTrace();
+			result = "Failure";
 		}
 		
 		return result;
