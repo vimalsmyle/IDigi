@@ -232,7 +232,7 @@ public class AccountDAO {
 		return responsevo;
 	}
 
-	public long inserttopuponline(TopUpRequestVO topUpRequestVO) {
+	/*public long inserttopuponline(TopUpRequestVO topUpRequestVO) {
 
 		Connection con = null;
 		PreparedStatement ps = null;
@@ -283,7 +283,7 @@ public class AccountDAO {
 
 		}
 		return transactionID;
-	}
+	}*/
 
 	public ResponseVO updatepayment(CheckOutRequestVO checkOutRequestVO) throws SQLException, ClassNotFoundException {
 
@@ -342,7 +342,7 @@ public class AccountDAO {
 								responseVO.setMessage("Payment Captured & Topup Request Submitted Successfully");
 								
 							} else {
-								ps = con.prepareStatement("UPDATE topup SET Status = 10 WHERE RazorPayOrderID = ? AND TransactionID = ?");
+								ps = con.prepareStatement("UPDATE topup SET Status = 11 WHERE RazorPayOrderID = ? AND TransactionID = ?");
 
 								ps.setString(1, checkOutRequestVO.getRazorpay_order_id());
 								ps.setLong(2, checkOutRequestVO.getTransactionID());
@@ -359,7 +359,7 @@ public class AccountDAO {
 				}
 
 			} else {
-				ps = con.prepareStatement("UPDATE topup SET PaymentStatus = 2, RazorPayPaymentID = ?, ErrorResponse = ? WHERE RazorPayOrderID = ? AND TransactionID = ?");
+				ps = con.prepareStatement("UPDATE topup SET PaymentStatus = 2, Status = 11, RazorPayPaymentID = ?, ErrorResponse = ? WHERE RazorPayOrderID = ? AND TransactionID = ?");
 
 				ps.setString(1, checkOutRequestVO.getError().getMetadata().getPaymentId());
 				ps.setString(2, checkOutRequestVO.getError().toString());
@@ -468,7 +468,7 @@ public class AccountDAO {
 				ps.setLong(5, topUpRequestVO.getCustomerMeterID());
 				ps.setInt(6, rs.getInt("TariffID"));
 				ps.setFloat(7, topUpRequestVO.getAmount());
-				ps.setInt(8, topUpRequestVO.getStatus());
+				ps.setInt(8, 10);
 				ps.setInt(9, topUpRequestVO.getFixedCharges());
 				ps.setFloat(10, topUpRequestVO.getReconnectionCharges());
 				ps.setString(11, topUpRequestVO.getSource());
@@ -587,7 +587,7 @@ public class AccountDAO {
 				statusvo.setAlarmCredit(rs.getString("AlarmCredit"));
 				statusvo.setEmergencyCredit(rs.getString("EmergencyCredit"));
 				statusvo.setTransactionDate(ExtraMethodsDAO.datetimeformatter(rs.getString("TransactionDate")));
-				statusvo.setStatus(rs.getInt("Status") == 0 ? "Passed"	: rs.getInt("Status") == 1 ? "Already Executed" : rs.getInt("Status") == 2 ? "Invalid Syntax"	: rs.getInt("Status") == 3 ? "Invalid Parameters" : rs.getInt("Status") == 4 ? "Value Cannot be Applied" : rs.getInt("Status") == 5 ? "Value Not in Range" : rs.getInt("Status") == 6 ? "Command Not Found"	: rs.getInt("Status") == 7	? "Device Not Found" : rs.getInt("Status") == 8 ? "Transaction Discarded" : rs.getInt("Status") == 9 ? "Transaction not Found" : rs.getInt("Status") == 10 ? "Pending": "Unknown Failure");
+				statusvo.setStatus(rs.getInt("Status") == 0 ? "Passed"	: rs.getInt("Status") == 1 ? "Already Executed" : rs.getInt("Status") == 2 ? "Invalid Syntax"	: rs.getInt("Status") == 3 ? "Invalid Parameters" : rs.getInt("Status") == 4 ? "Value Cannot be Applied" : rs.getInt("Status") == 5 ? "Value Not in Range" : rs.getInt("Status") == 6 ? "Command Not Found"	: rs.getInt("Status") == 7	? "Device Not Found" : rs.getInt("Status") == 8 ? "Transaction Discarded" : rs.getInt("Status") == 9 ? "Transaction not Found" : rs.getInt("Status") == 10 ? "Pending": rs.getInt("Status") == 11 ? "Failed" : "Unknown Failure");
 
 				pstmt1 = con.prepareStatement("SELECT user.ID, user.UserName, userrole.RoleDescription FROM USER LEFT JOIN userrole ON user.RoleID = userrole.RoleID WHERE user.ID = "+ rs.getInt("CreatedByID"));
 				rs1 = pstmt1.executeQuery();
