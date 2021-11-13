@@ -112,10 +112,23 @@ public class AccountController {
 
 		return statusresponsevo;
 	}
+	
+
+	@RequestMapping(value = "/status/retry/{transactionID}", method = RequestMethod.POST, produces = "application/json")
+	public @ResponseBody
+	ResponseVO retryTopup(@PathVariable("transactionID") long transactionID)
+			throws SQLException {
+		
+		ResponseVO responsevo = new ResponseVO();
+		responsevo = accountdao.retryTopup(transactionID);
+
+		return responsevo;
+	}
+	
 
 	@RequestMapping(value = "/status/delete/{transactionID}", method = RequestMethod.POST, produces = "application/json")
 	public @ResponseBody
-	ResponseVO deletestatus(@PathVariable("transactionID") int transactionID)
+	ResponseVO deletestatus(@PathVariable("transactionID") long transactionID)
 			throws SQLException {
 		
 		ResponseVO responsevo = new ResponseVO();

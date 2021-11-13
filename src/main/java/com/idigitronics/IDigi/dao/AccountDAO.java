@@ -68,6 +68,7 @@ import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.property.HorizontalAlignment;
 import com.itextpdf.layout.property.TextAlignment;
 import com.itextpdf.layout.property.VerticalAlignment;
+import com.mysql.cj.protocol.Resultset;
 
 /**
  * @author K VimaL Kumar
@@ -102,6 +103,8 @@ public class AccountDAO {
 		Prefill prefill = new Prefill();
 		Notes notes = new Notes();
 		Theme theme = new Theme();
+		
+//		topup status = 0 = passed; 10 = pending; 11 = failed, 12 = retry
 
 		try {
 			con = getConnection();
@@ -342,14 +345,14 @@ public class AccountDAO {
 								responseVO.setMessage("Payment Captured & Topup Request Submitted Successfully");
 								
 							} else {
-								ps = con.prepareStatement("UPDATE topup SET Status = 11 WHERE RazorPayOrderID = ? AND TransactionID = ?");
+								ps = con.prepareStatement("UPDATE topup SET Status = 12 WHERE RazorPayOrderID = ? AND TransactionID = ?");
 
 								ps.setString(1, checkOutRequestVO.getRazorpay_order_id());
 								ps.setLong(2, checkOutRequestVO.getTransactionID());
 								
 								if(ps.executeUpdate() > 0) {
 									responseVO.setResult("Failure");
-									responseVO.setMessage("Payment Captured but Topup Request Submission Failed. Deducted Amount will be Refunded in 14 Days");
+									responseVO.setMessage("Payment Captured retry Topup Request From Status Page After Sometime");
 								}
 							}
 						}
@@ -417,9 +420,12 @@ public class AccountDAO {
 		RestCallVO restcallvo = new RestCallVO();
 		ExtraMethodsDAO extramethodsdao = new ExtraMethodsDAO();
 		int restcallresponse = 0;
+		Connection con = null;
 
 		try {
-
+			
+			con = getConnection();
+			
 			restcallvo.setMiuID(topUpRequestVO.getMiuID().toLowerCase());
 			restcallvo.setEmergency_credit(topUpRequestVO.getEmergencyCredit());
 			restcallvo.setCredit(topUpRequestVO.getAmount()	- (topUpRequestVO.getFixedCharges() + topUpRequestVO.getReconnectionCharges()));
@@ -432,6 +438,15 @@ public class AccountDAO {
 				
 				restcallvo.setTransaction_id(inserttopup(topUpRequestVO));
 				restcallresponse = extramethodsdao.postdata(restcallvo);
+				
+				if(restcallresponse != 200) {
+					PreparedStatement ps = con.prepareStatement("UPDATE topup SET Status = 11 WHERE TransactionID = ?");
+
+					ps.setLong(1, restcallvo.getTransaction_id());
+					
+					ps.executeUpdate();
+				}
+				
 			} else {
 				restcallvo.setTransaction_id(topUpRequestVO.getTransactionID());
 				restcallresponse = extramethodsdao.postdata(restcallvo);
@@ -458,7 +473,7 @@ public class AccountDAO {
 			ResultSet rs = pstmt.executeQuery();
 			if (rs.next()) {
 
-				String sql = "INSERT INTO topup (CommunityID, BlockID, CustomerID, MIUID, CustomerMeterID, TariffID, Amount, Status, FixedCharges, ReconnectionCharges, Source, ModeOfPayment, PaymentStatus, RazorPayOrderID, RazorPayPaymentID, RazorPaySignature, CreatedByID, CreatedByRoleID, CustomerUniqueID, AcknowledgeDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())";
+				String sql = "INSERT INTO topup (CommunityID, BlockID, CustomerID, MIUID, CustomerMeterID, TariffID, Amount, EmergencyCredit, Status, FixedCharges, ReconnectionCharges, Source, ModeOfPayment, PaymentStatus, RazorPayOrderID, RazorPayPaymentID, RazorPaySignature, CreatedByID, CreatedByRoleID, CustomerUniqueID, AcknowledgeDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())";
 				ps = con.prepareStatement(sql);
 
 				ps.setInt(1, rs.getInt("CommunityID"));
@@ -468,18 +483,19 @@ public class AccountDAO {
 				ps.setLong(5, topUpRequestVO.getCustomerMeterID());
 				ps.setInt(6, rs.getInt("TariffID"));
 				ps.setFloat(7, topUpRequestVO.getAmount());
-				ps.setInt(8, 10);
-				ps.setInt(9, topUpRequestVO.getFixedCharges());
-				ps.setFloat(10, topUpRequestVO.getReconnectionCharges());
-				ps.setString(11, topUpRequestVO.getSource());
-				ps.setString(12, topUpRequestVO.getModeOfPayment());
-				ps.setInt(13, topUpRequestVO.getPaymentStatus());
-				ps.setString(14, topUpRequestVO.getRazorPayOrderID());
-				ps.setString(15, topUpRequestVO.getRazorPayPaymentID());
-				ps.setString(16, topUpRequestVO.getRazorPaySignature());
-				ps.setInt(17, topUpRequestVO.getTransactedByID());
-				ps.setInt(18, topUpRequestVO.getTransactedByRoleID());
-				ps.setString(19, topUpRequestVO.getCustomerUniqueID());
+				ps.setFloat(8, topUpRequestVO.getEmergencyCredit());
+				ps.setInt(9, 10);
+				ps.setInt(10, topUpRequestVO.getFixedCharges());
+				ps.setFloat(11, topUpRequestVO.getReconnectionCharges());
+				ps.setString(12, topUpRequestVO.getSource());
+				ps.setString(13, topUpRequestVO.getModeOfPayment());
+				ps.setInt(14, topUpRequestVO.getPaymentStatus());
+				ps.setString(15, topUpRequestVO.getRazorPayOrderID());
+				ps.setString(16, topUpRequestVO.getRazorPayPaymentID());
+				ps.setString(17, topUpRequestVO.getRazorPaySignature());
+				ps.setInt(18, topUpRequestVO.getTransactedByID());
+				ps.setInt(19, topUpRequestVO.getTransactedByRoleID());
+				ps.setString(20, topUpRequestVO.getCustomerUniqueID());
 
 				if (ps.executeUpdate() > 0) {
 					PreparedStatement ps1 = con.prepareStatement("SELECT MAX(TransactionID) as TransactionID from topup");
@@ -587,7 +603,7 @@ public class AccountDAO {
 				statusvo.setAlarmCredit(rs.getString("AlarmCredit"));
 				statusvo.setEmergencyCredit(rs.getString("EmergencyCredit"));
 				statusvo.setTransactionDate(ExtraMethodsDAO.datetimeformatter(rs.getString("TransactionDate")));
-				statusvo.setStatus(rs.getInt("Status") == 0 ? "Passed"	: rs.getInt("Status") == 1 ? "Already Executed" : rs.getInt("Status") == 2 ? "Invalid Syntax"	: rs.getInt("Status") == 3 ? "Invalid Parameters" : rs.getInt("Status") == 4 ? "Value Cannot be Applied" : rs.getInt("Status") == 5 ? "Value Not in Range" : rs.getInt("Status") == 6 ? "Command Not Found"	: rs.getInt("Status") == 7	? "Device Not Found" : rs.getInt("Status") == 8 ? "Transaction Discarded" : rs.getInt("Status") == 9 ? "Transaction not Found" : rs.getInt("Status") == 10 ? "Pending": rs.getInt("Status") == 11 ? "Failed" : "Unknown Failure");
+				statusvo.setStatus(rs.getInt("Status") == 0 ? "Passed"	:  rs.getInt("Status") == 10 ? "Pending" : rs.getInt("Status") == 12 ? "Retry" : "Failed");
 
 				pstmt1 = con.prepareStatement("SELECT user.ID, user.UserName, userrole.RoleDescription FROM USER LEFT JOIN userrole ON user.RoleID = userrole.RoleID WHERE user.ID = "+ rs.getInt("CreatedByID"));
 				rs1 = pstmt1.executeQuery();
@@ -607,8 +623,61 @@ public class AccountDAO {
 		}
 		return statuslist;
 	}
+	
+	public ResponseVO retryTopup(long transactionID) throws SQLException {
+		// TODO Auto-generated method stub
 
-	public ResponseVO deletestatus(int transactionID) throws SQLException {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResponseVO responsevo = new ResponseVO();
+
+		try {
+			con = getConnection();
+
+			pstmt = con.prepareStatement("SELECT * FROM topup WHERE Status = 12 AND TransactionID = " + transactionID);
+			ResultSet rs = pstmt.executeQuery();
+			
+			if (rs.next()) {
+				
+				TopUpRequestVO topUpRequestVO = new TopUpRequestVO();
+				
+				topUpRequestVO.setTransactionID(transactionID);
+				topUpRequestVO.setMiuID(rs.getString("MIUID"));
+				topUpRequestVO.setEmergencyCredit(rs.getFloat("EmergencyCredit"));
+				topUpRequestVO.setFixedCharges(rs.getInt("FixedCharges"));
+				topUpRequestVO.setReconnectionCharges(rs.getInt("ReconnectionCharges"));
+				
+				PreparedStatement ps = con.prepareStatement("SELECT GatewayIP, GatewayPort FROM gateway WHERE GatewayID = (SELECT GatewayID FROM customermeterdetails WHERE CustomerMeterID = "+rs.getLong("CustomerMeterID") +")");
+				ResultSet rs1 = ps.executeQuery();
+				if(rs1.next()) {
+					topUpRequestVO.setGatewayIP(rs1.getString("GatewayIP"));
+					topUpRequestVO.setGatewayPort(rs1.getInt("GatewayPort"));
+				} 
+				
+				if(sendPayLoadToGateway(topUpRequestVO) == 200) {
+					responsevo.setResult("Success");
+					responsevo.setMessage("Retry Request raised Successfully");
+				} else {
+					responsevo.setResult("Failed");
+					responsevo.setMessage("Retry Request Failed. Please Try After Sometime");
+				}
+				
+			}
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			responsevo.setMessage("INTERNAL SERVER ERROR");
+			responsevo.setResult("Failure");
+
+		} finally {
+			pstmt.close();
+			con.close();
+		}
+
+		return responsevo;
+	}
+
+	public ResponseVO deletestatus(long transactionID) throws SQLException {
 		// TODO Auto-generated method stub
 
 		Connection con = null;
