@@ -633,15 +633,20 @@ $(document)
 																	+ "<i class='material-icons' style='color:#17e9e9;cursor:pointer'>delete</i>"
 																	+ "</a>";
 
-														} else if (row.Status == "Passed"
-																|| row.Status == "Pending") {
+														} else if (row.Status == "Passed") {
 															return "<a onclick='getReceiptTransactionID("
 																	+ row.transactionID
 																	+ ")'>"
 																	+ "<i class='material-icons' style='color:#17e9e9;cursor:pointer'>receipt</i>"
 																	+ "</a>"
-														} else if (row.Status == "Unknown Failure" ||row.Status == "Pending...waiting for acknowledge") {
+														} else if (row.Status == "Pending") {
 															return "---"
+														} else if (row.Status == "Retry"){
+															return "<a onclick='getRetryTransactionID("
+															+ row.transactionID
+															+ ")'>"
+															+ "<i class='material-icons' style='color:#17e9e9;cursor:pointer'>repeat</i>"
+															+ "</a>";
 														}
 
 													}
@@ -1031,6 +1036,36 @@ function getDeleteTransactionID(transID) {
 				type : "POST",
 				contentType : "application/json",
 				url : "./status/delete/" + transID,
+				dataType : "JSON",
+				success : function(data) {
+					// alert("Success====" + data.result);
+					if (data.result == "Success") {
+						bootbox.confirm(data.Message, function(result) {
+							window.location = "topupStatus.jsp";
+						});
+
+					} else {
+						bootbox.alert(data.Message);
+						return false;
+					}
+				}
+			});
+		} else if (result == false) {
+			// alert("@"+false)
+
+		}
+	});
+}
+
+function getRetryTransactionID(transID) {
+
+	bootbox.confirm("ARE YOU SURE TO RETRY TOPUP", function(result) {
+		// alert(result);
+		if (result == true) {
+			$.ajax({
+				type : "POST",
+				contentType : "application/json",
+				url : "./status/retry/" + transID,
 				dataType : "JSON",
 				success : function(data) {
 					// alert("Success====" + data.result);

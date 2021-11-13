@@ -646,6 +646,7 @@ public class AccountDAO {
 				topUpRequestVO.setEmergencyCredit(rs.getFloat("EmergencyCredit"));
 				topUpRequestVO.setFixedCharges(rs.getInt("FixedCharges"));
 				topUpRequestVO.setReconnectionCharges(rs.getInt("ReconnectionCharges"));
+				topUpRequestVO.setModeOfPayment("Online");
 				
 				PreparedStatement ps = con.prepareStatement("SELECT GatewayIP, GatewayPort FROM gateway WHERE GatewayID = (SELECT GatewayID FROM customermeterdetails WHERE CustomerMeterID = "+rs.getLong("CustomerMeterID") +")");
 				ResultSet rs1 = ps.executeQuery();
