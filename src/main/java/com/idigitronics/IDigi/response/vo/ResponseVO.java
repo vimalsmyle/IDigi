@@ -4,7 +4,6 @@
 package com.idigitronics.IDigi.response.vo;
 
 import java.io.ByteArrayInputStream;
-import java.io.FileOutputStream;
 import java.util.HashMap;
 
 /**
@@ -24,6 +23,7 @@ public class ResponseVO {
 	private HashMap<Long, String> dropDownAllCustomerMeters;
 	private TopupDetailsResponseVO topupdetails;
 	private BillDetailsResponseVO billdetails;
+	private LastReadingResponseVO lastReadingDetails; 
 	private String result;
 	private String Message;
 	private String fileName;
@@ -147,6 +147,12 @@ public class ResponseVO {
 	}
 	public void setByteArrayInputStream(ByteArrayInputStream byteArrayInputStream) {
 		this.byteArrayInputStream = byteArrayInputStream;
+	}
+	public LastReadingResponseVO getLastReadingDetails() {
+		return lastReadingDetails;
+	}
+	public void setLastReadingDetails(LastReadingResponseVO lastReadingDetails) {
+		this.lastReadingDetails = lastReadingDetails;
 	}
 	
 }

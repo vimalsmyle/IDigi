@@ -14,7 +14,11 @@ import java.util.HashMap;
 
 import com.idigitronics.IDigi.constants.DataBaseConstants;
 import com.idigitronics.IDigi.request.vo.LoginVO;
+import com.idigitronics.IDigi.request.vo.Status;
 import com.idigitronics.IDigi.response.vo.BillDetailsResponseVO;
+import com.idigitronics.IDigi.response.vo.DashboardResponseVO;
+import com.idigitronics.IDigi.response.vo.IndividualDashboardResponseVO;
+import com.idigitronics.IDigi.response.vo.LastReadingResponseVO;
 import com.idigitronics.IDigi.response.vo.TopupDetailsResponseVO;
 
 /**
@@ -97,6 +101,25 @@ public class DropDownDAO {
 			// TODO Auto-generated catch block
 		}
 		return houses;
+	}
+	
+	public HashMap<Long, String> gettotalcustomers() {
+		// TODO Auto-generated method stub
+		HashMap<Long, String> customers = new HashMap<Long, String>();
+		
+		Connection con = null;
+		try {
+			con = getConnection();
+			PreparedStatement pstmt = con.prepareStatement("SELECT CustomerUniqueID, CustomerID from customerdetails");
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				customers.put(rs.getLong("CustomerID"), rs.getString("CustomerUniqueID"));
+			}
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+		}
+		return customers;
 	}
 	
 	public HashMap<Long, String> getallcustomersbasedontype(String type, int blockID, int roleid, String id) {
@@ -357,6 +380,61 @@ public class DropDownDAO {
 			
 		}
 		return tariffs;
+	}
+
+	public LastReadingResponseVO getLastReading(Long customerMeterID) throws SQLException {
+		// TODO Auto-generated method stub
+		
+		Connection con = null;
+		LastReadingResponseVO lastReadingResponseVO = new LastReadingResponseVO();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		try {
+			con = getConnection();
+			pstmt = con.prepareStatement("SELECT * FROM balancelog WHERE CustomerMeterID = "+customerMeterID+" ORDERBY ReadingID DESC LIMIT 0,1");
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				
+				lastReadingResponseVO.setReadingID(rs.getLong("ReadingID"));
+				lastReadingResponseVO.setMiuID(rs.getString("MIUID"));
+				lastReadingResponseVO.setType(rs.getString("MeterType").equalsIgnoreCase("Water") ? 1 : rs.getString("MeterType").equalsIgnoreCase("Gas") ? 2 : rs.getString("MeterType").equalsIgnoreCase("Energy") ? 3 : 0);
+				lastReadingResponseVO.setSync_time(rs.getString("SyncTime"));
+				lastReadingResponseVO.setSync_interval(rs.getInt("SyncInterval"));
+				lastReadingResponseVO.setPre_post_paid(rs.getInt("PayType"));
+				lastReadingResponseVO.setBat_volt(rs.getFloat("BatteryVoltage"));
+				lastReadingResponseVO.setValve_configuration(rs.getInt("ValveConfiguration"));
+				lastReadingResponseVO.setValve_live_status(rs.getInt("ValveStatus"));
+				lastReadingResponseVO.setCredit(rs.getFloat("Balance"));
+				lastReadingResponseVO.setTariff(rs.getFloat("Tariff"));
+				lastReadingResponseVO.setEmergency_credit(rs.getLong("EmergencyCredit"));
+				lastReadingResponseVO.setDays_elapsed_after_valve_trip(rs.getInt("Minutes"));
+				lastReadingResponseVO.setReading(rs.getFloat("Reading"));
+				
+				Status status = new Status();
+				
+				status.setDoor_open(rs.getInt("DoorOpenTamper"));
+				status.setLow_bal(rs.getInt("LowBalance"));
+				status.setLow_bat(rs.getInt("LowBattery"));
+				status.setMagnetic(rs.getInt("MagneticTamper"));
+				status.setRtc_fault(rs.getInt("RTCFault"));
+				status.setSchedule_disconnect(rs.getInt("Vacation"));
+				
+				lastReadingResponseVO.setStatus(status);
+				lastReadingResponseVO.setLogDate(ExtraMethodsDAO.datetimeformatter(rs.getString("LogDate")));
+				
+			}
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+		}
+		 finally {
+			 	pstmt.close();
+				rs.close();
+				con.close();
+			}
+		
+		return lastReadingResponseVO;
 	}
 
 }

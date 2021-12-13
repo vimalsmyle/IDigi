@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.google.gson.Gson;
 import com.idigitronics.IDigi.dao.DropDownDAO;
 import com.idigitronics.IDigi.response.vo.ResponseVO;
 
@@ -22,7 +21,6 @@ import com.idigitronics.IDigi.response.vo.ResponseVO;
 @Controller
 public class DropDownController {
 	
-	Gson gson = new Gson();
 	DropDownDAO dropdowndao = new DropDownDAO();
 	
 	@RequestMapping(value = "/communities/{roleID}/{id}",method = RequestMethod.GET, 
@@ -55,12 +53,32 @@ public class DropDownController {
 		return responsevo;
 	}
 	
+	@RequestMapping(value = "/customers",method = RequestMethod.GET, 
+			produces="application/json")
+	public @ResponseBody ResponseVO getallCustomers() {
+		
+		ResponseVO responsevo = new ResponseVO();
+		responsevo.setDropDownCustomers(dropdowndao.gettotalcustomers());
+		
+		return responsevo;
+	}
+	
 	@RequestMapping(value = "/customermeters/{payType}/{CustomerUniqueID}",method = RequestMethod.GET, produces="application/json")
 	public @ResponseBody ResponseVO getcustomermeters(@PathVariable("CustomerUniqueID") String customerUniqueID, @PathVariable("payType") String payType) throws SQLException {
 		
 		ResponseVO responsevo = new ResponseVO();
 		responsevo.setDropDownCustomerMeters(dropdowndao.getcustomermeters(customerUniqueID, payType));
 
+		return responsevo;
+	}
+	
+	@RequestMapping(value = "/meterreading/{CustomerMeterID}",method = RequestMethod.GET, 
+			produces="application/json")
+	public @ResponseBody ResponseVO getLastReading(@PathVariable ("CustomerMeterID") Long CustomerMeterID) throws SQLException {
+		
+		ResponseVO responsevo = new ResponseVO();
+		responsevo.setLastReadingDetails(dropdowndao.getLastReading(CustomerMeterID));
+		
 		return responsevo;
 	}
 	
