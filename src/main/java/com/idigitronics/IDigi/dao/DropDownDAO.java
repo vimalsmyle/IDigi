@@ -392,7 +392,7 @@ public class DropDownDAO {
 		
 		try {
 			con = getConnection();
-			pstmt = con.prepareStatement("SELECT * FROM balancelog WHERE CustomerMeterID = "+customerMeterID+" ORDERBY ReadingID DESC LIMIT 0,1");
+			pstmt = con.prepareStatement("SELECT * FROM balancelog WHERE CustomerMeterID = "+customerMeterID+" ORDER BY ReadingID DESC LIMIT 0,1");
 			rs = pstmt.executeQuery();
 			if (rs.next()) {
 				
@@ -401,7 +401,7 @@ public class DropDownDAO {
 				lastReadingResponseVO.setType(rs.getString("MeterType").equalsIgnoreCase("Water") ? 1 : rs.getString("MeterType").equalsIgnoreCase("Gas") ? 2 : rs.getString("MeterType").equalsIgnoreCase("Energy") ? 3 : 0);
 				lastReadingResponseVO.setSync_time(rs.getString("SyncTime"));
 				lastReadingResponseVO.setSync_interval(rs.getInt("SyncInterval"));
-				lastReadingResponseVO.setPre_post_paid(rs.getInt("PayType"));
+				lastReadingResponseVO.setPre_post_paid(rs.getString("PayType").equalsIgnoreCase("Postpaid") ? 0 : 1);
 				lastReadingResponseVO.setBat_volt(rs.getFloat("BatteryVoltage"));
 				lastReadingResponseVO.setValve_configuration(rs.getInt("ValveConfiguration"));
 				lastReadingResponseVO.setValve_live_status(rs.getInt("ValveStatus"));
@@ -427,10 +427,11 @@ public class DropDownDAO {
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		 finally {
 			 	pstmt.close();
-				rs.close();
+//				rs.close();
 				con.close();
 			}
 		
