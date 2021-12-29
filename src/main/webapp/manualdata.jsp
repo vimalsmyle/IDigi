@@ -65,11 +65,13 @@
 														<div id="status">&nbsp;</div>
 													</div>
 													<div class="col-md-4">
-														<div class="group form-group">
-															<label class="bmd-label-floating select-label">MUI
-																ID<span class="impp"><sup>*</sup></span>
-															</label> <input type="text" class="form-control form-control-sm"
-																name="mui" id="mui">
+														<div
+															class="form-group has-feedback has-success bmd-form-group is-filled">
+															<label class="bmd-label-floating select-label">Select
+																CRN/CAN/UAN</label> <select class="form-control"
+																id="manualCRNAll" name="manualCRNAll"
+																onchange="showMetersbyCRN(this.value);">
+															</select>
 														</div>
 													</div>
 
@@ -78,10 +80,11 @@
 													<div class="col-md-4">
 														<div
 															class="form-group has-feedback has-success bmd-form-group is-filled">
-															<label class="bmd-label-floating select-label">Timestamp<span
-																class="impp"><sup>*</sup></span></label> <input type="text"
-																class="form-control form-control-sm" name="timestamp"
-																id="timestamp">
+															<label class="bmd-label-floating select-label">Select
+																MIU</label> <select class="form-control"
+																id="manualCRNAll" name="manualCRNAll"
+																onchange="showMetersbyCRN(this.value);">
+															</select>
 														</div>
 													</div>
 													<div class="col-md-4">

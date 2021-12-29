@@ -108,13 +108,16 @@ $(document)
 														
 													}
 													
-													else if(row.commands[0].status == "Failed"){
+													else if(row.commands[0].status == "Failed" || 
+															row.commands[0].status ==  "Command Not Found"){
 														return "<a onclick='getDeleteTransactionID("
 														+ row.transactionID
 														+ ")'>"
 														+ "<i class='material-icons' style='color:#17e9e9; cursor:pointer;'>delete</i>"
 														+ "</a>"
 														
+													}else{
+														return "---";
 													}
 													}
 													
@@ -283,12 +286,15 @@ $(document)
 																					
 																				}
 																				
-																				else if(row.commands[0].status == "Failed"){
+																				else if(row.commands[0].status == "Failed" || row.commands[0].status ==  "Command Not Found"){
 																					return "<a onclick='getDeleteTransactionID("
 																					+ row.transactionID
 																					+ ")'>"
 																					+ "<i class='material-icons' style='color:#17e9e9; cursor:pointer;'>delete</i>"
 																					+ "</a>"
+																					
+																				}else{
+																					return "---";
 																					
 																				}
 																				}

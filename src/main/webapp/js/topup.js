@@ -647,6 +647,9 @@ $(document)
 															+ ")'>"
 															+ "<i class='material-icons' style='color:#17e9e9;cursor:pointer'>repeat</i>"
 															+ "</a>";
+														}else{
+															return "---";
+															
 														}
 
 													}
@@ -904,6 +907,15 @@ $(document)
 																									+ "</a>"
 																						} else if (row.Status == "Pending...waiting for acknowledge") {
 																							return "---"
+																						} else if (row.Status == "Retry"){
+																							return "<a onclick='getRetryTransactionID("
+																							+ row.transactionID
+																							+ ")'>"
+																							+ "<i class='material-icons' style='color:#17e9e9;cursor:pointer'>repeat</i>"
+																							+ "</a>";
+																						}else{
+																							return "---";
+																							
 																						}
 
 																					}
