@@ -91,7 +91,7 @@
 													<div class="col-md-4">
 														<div
 															class="form-group has-feedback has-success bmd-form-group is-filled">
-															<label class="bmd-label-floating select-label">Reading
+															<label class="bmd-label-floating select-label">Previous Reading
 															</label> <input type="text" class="form-control form-control-sm"
 																name="oldreading" id="oldreading" disabled>
 														</div>

@@ -74,47 +74,55 @@ $(document)
 														})
 												return false;
 													}
-													
+												}
+												
+												if(parseFloat($("#oldreading").val())>=parseFloat($("#currentreading").val())){
+													swal
+													.fire({
+														title : "error",
+														text : "Reading must be greater than previous reading",
+														icon : "error"
+													})
+											return false;
 												}
 
 												
 												var dataLoad;
-												$.getJSON("./meterreading/"+$("#allMeters").val(), function(data) {
-													dataLoad=data;
+												$.getJSON("./meterreading/"+$("#allMeters").val(), function(datares) {
+													dataLoad=datares;
 													console.log(dataLoad);
 												
 												
 											
 												var data2={}
-												/*data2["door_open"] = document.getElementById("door").checked==true?"1":"0";
-												data2["magnetic"] = document.getElementById("magnetic").checked==true?"1":"0";
-												data2["schedule_disconnect"] = document.getElementById("schedule").checked==true?"1":"0";
-												data2["rtc_fault"] = document.getElementById("rtc").checked==true?"1":"0";
-												data2["low_bat"] = document.getElementById("low").checked==true?"1":"0";
-												data2["low_bal"] = document.getElementById("balance").checked==true?"1":"0";*/
+												data2["door_open"] = dataLoad.lastReadingDetails.status.door_open;
+												data2["magnetic"] = dataLoad.lastReadingDetails.status.magnetic;
+												data2["schedule_disconnect"] = dataLoad.lastReadingDetails.status.schedule_disconnect;
+												data2["rtc_fault"] = dataLoad.lastReadingDetails.status.rtc_fault;
+												data2["low_bat"] =dataLoad.lastReadingDetails.status.low_bat;
+												data2["low_bal"] = dataLoad.lastReadingDetails.status.low_bal;
 												//data1["timestamp"] = $("#timestamp").val();
 												data1["type"] = dataLoad.lastReadingDetails.type;
-												//data1["sync_time"] = $("#syncTime").val();
+												data1["sync_time"] = dataLoad.lastReadingDetails.sync_time;
 												data1["sync_interval"] = dataLoad.lastReadingDetails.sync_interval;
 												data1["pre_post_paid"] = dataLoad.lastReadingDetails.pre_post_paid;
 												data1["bat_volt"] =dataLoad.lastReadingDetails.bat_volt;
 												data1["valve_live_status"] = dataLoad.lastReadingDetails.valve_live_status;
 												data1["valve_configuration"] = dataLoad.lastReadingDetails.valve_configuration;
-												//data1["credit"] = $("#credit").val();
+												data1["credit"] =  dataLoad.lastReadingDetails.credit;
 												data1["tariff"] = dataLoad.lastReadingDetails.tariff;
 												data1["topupSMS"] = dataLoad.lastReadingDetails.topupSMS;
 												data1["emergency_credit"] = dataLoad.lastReadingDetails.emergency_credit;
 												data1["min_elapsed_after_valve_trip"] = dataLoad.lastReadingDetails.days_elapsed_after_valve_trip;
 												data1["reading"] = $("#currentreading").val();
 												data1["status"] = data2;
-												});
 												
 												$("#loader").show();
 												$
 														.ajax({
 															type : "POST",
 															contentType : "application/json",
-															url : "./server/api/"+$("#mui").val()+"/status",
+															url : "./server/api/"+$('#allMeters option:selected').text()+"/status",
 															data : JSON
 																	.stringify(data1),
 															dataType : "JSON",
@@ -166,6 +174,7 @@ $(document)
 														});
 												return false;
 											});
+												});
 						});
 
 
@@ -191,6 +200,6 @@ function showDetailsbyMeter(val){
 	$.getJSON("./meterreading/"+val, function(data) {
 		console.log(data);
 		$("#oldreading").val(data.lastReadingDetails.reading);
-		$("#lastUpdatedTime").val(data.lastReadingDetails.reading);
+		$("#lastUpdatedTime").val(data.lastReadingDetails.logDate);
 	});
 }
