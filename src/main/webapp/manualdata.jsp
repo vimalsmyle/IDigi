@@ -82,188 +82,42 @@
 															class="form-group has-feedback has-success bmd-form-group is-filled">
 															<label class="bmd-label-floating select-label">Select
 																MIU</label> <select class="form-control"
-																id="manualCRNAll" name="manualCRNAll"
-																onchange="showMetersbyCRN(this.value);">
+																id="allMeters" name="allMeters"
+																onchange="showDetailsbyMeter(this.value);">
 															</select>
 														</div>
 													</div>
+													
 													<div class="col-md-4">
 														<div
 															class="form-group has-feedback has-success bmd-form-group is-filled">
-															<label class="bmd-label-floating select-label">Select
-																type<span class="impp"><sup>*</sup></span>
-															</label> <select class="form-control form-control-sm select2"
-																id="type" name="type">
-																<option value="1">Water</option>
-																<option value="2">Gas</option>
-															</select>
-														</div>
-													</div>
-													<div class="col-md-4">
-														<div
-															class="form-group has-feedback has-success bmd-form-group is-filled">
-															<label class="bmd-label-floating select-label">Sync
-																Time<span class="impp"><sup>*</sup></span>
+															<label class="bmd-label-floating select-label">Reading
 															</label> <input type="text" class="form-control form-control-sm"
-																name="syncTime" id="syncTime">
+																name="oldreading" id="oldreading" disabled>
 														</div>
 													</div>
 
 													<div class="col-md-4">
 														<div
 															class="form-group has-feedback has-success bmd-form-group is-filled">
-															<label class="bmd-label-floating select-label">Sync
-																Interval<span class="impp"><sup>*</sup></span>
-															</label> <input type="number"
-																class="form-control form-control-sm" name="syncInterval"
-																id="syncInterval" min="0" max="9999" maxlength="4">
+															<label class="bmd-label-floating select-label">Last updated time
+															</label> <input type="text"
+																class="form-control form-control-sm" name="lastUpdatedTime"
+																id="lastUpdatedTime" disabled>
 														</div>
 													</div>
-
-
+													
+													
 													<div class="col-md-4">
 														<div
 															class="form-group has-feedback has-success bmd-form-group is-filled">
-															<label class="bmd-label-floating select-label">Select
-																Paid<span class="impp"><sup>*</sup></span>
-															</label> <select class="form-control form-control-sm select2"
-																id="paid" name="paid">
-																<option value="0">Prepaid</option>
-																<option value="1">Postpaid</option>
-															</select>
+															<label class="bmd-label-floating select-label">Current Reading
+															</label> <input type="text"
+																class="form-control form-control-sm" name="currentreading"
+																id="currentreading">
 														</div>
 													</div>
-
-													<div class="col-md-4">
-														<div
-															class="form-group has-feedback has-success bmd-form-group is-filled">
-															<label class="bmd-label-floating select-label">Battery
-																Voltage<span class="impp"><sup>*</sup></span>
-															</label> <input type="text" class="form-control form-control-sm"
-																name="batteryVoltage" id="batteryVoltage">
-														</div>
-													</div>
-
-													<div class="col-md-4">
-														<div
-															class="form-group has-feedback has-success bmd-form-group is-filled">
-															<label class="bmd-label-floating select-label">Select
-																Valve Status<span class="impp"><sup>*</sup></span>
-															</label> <select class="form-control form-control-sm select2"
-																id="valveStatus" name="valveStatus">
-																<option value="0">Close</option>
-																<option value="1">Open</option>
-															</select>
-														</div>
-													</div>
-
-													<div class="col-md-4">
-														<div
-															class="form-group has-feedback has-success bmd-form-group is-filled">
-															<label class="bmd-label-floating select-label">Select
-																Valve<span class="impp"><sup>*</sup></span>
-															</label> <select class="form-control form-control-sm select2"
-																id="valve" name="valve">
-																<option value="0">Close</option>
-																<option value="1">Open</option>
-																<option value="2">Auto</option>
-															</select>
-														</div>
-													</div>
-
-													<div class="col-md-4">
-														<div
-															class="form-group has-feedback has-success bmd-form-group is-filled">
-															<label class="bmd-label-floating select-label">Credit<span
-																class="impp"><sup>*</sup></span></label> <input type="text"
-																class="form-control form-control-sm" name="credit"
-																id="credit">
-														</div>
-													</div>
-
-													<div class="col-md-4">
-														<div
-															class="form-group has-feedback has-success bmd-form-group is-filled">
-															<label class="bmd-label-floating select-label">Select
-																Tariff<span class="impp"><sup>*</sup></span>
-															</label> <select class="form-control form-control-sm select2"
-																id="tariff" name="tariff">
-
-															</select>
-														</div>
-													</div>
-
-													<div class="col-md-4">
-														<div
-															class="form-group has-feedback has-success bmd-form-group is-filled">
-															<label class="bmd-label-floating select-label">Emergency
-																Credit<span class="impp"><sup>*</sup></span>
-															</label> <input type="text" class="form-control form-control-sm"
-																name="emergencyCredit" id="emergencyCredit">
-														</div>
-													</div>
-
-
-													<div class="col-md-4">
-														<div
-															class="form-group has-feedback has-success bmd-form-group is-filled">
-															<label class="bmd-label-floating select-label">Min
-																Elapsed<span class="impp"><sup>*</sup></span>
-															</label> <input type="number"
-																class="form-control form-control-sm" name="minElapsed"
-																id="minElapsed">
-														</div>
-													</div>
-
-
-													<div class="col-md-4">
-														<div
-															class="form-group has-feedback has-success bmd-form-group is-filled">
-															<label class="bmd-label-floating select-label">Reading<span
-																class="impp"><sup>*</sup></span></label> <input type="text"
-																class="form-control form-control-sm" name="reading"
-																id="reading">
-														</div>
-													</div>
-
-													<div class="col-md-4"></div>
-
-													<div class="custom-control custom-checkbox checkArea">
-														<input type="checkbox" class="custom-control-input"
-															id="door"> <label class="custom-control-label"
-															for="door">Door Open</label>
-													</div>
-
-													<div class="custom-control custom-checkbox checkArea">
-														<input type="checkbox" class="custom-control-input"
-															id="magnetic"> <label
-															class="custom-control-label" for="magnetic">Magnetic</label>
-													</div>
-
-													<div class="custom-control custom-checkbox checkArea">
-														<input type="checkbox" class="custom-control-input"
-															id="schedule"> <label
-															class="custom-control-label" for="schedule">Schedule
-															Disconnect</label>
-													</div>
-
-													<div class="custom-control custom-checkbox checkArea">
-														<input type="checkbox" class="custom-control-input"
-															id="rtc"> <label class="custom-control-label"
-															for="rtc">RTC</label>
-													</div>
-
-													<div class="custom-control custom-checkbox checkArea">
-														<input type="checkbox" class="custom-control-input"
-															id="low"> <label class="custom-control-label"
-															for="low">Low Battery</label>
-													</div>
-
-													<div class="custom-control custom-checkbox checkArea">
-														<input type="checkbox" class="custom-control-input"
-															id="balance"> <label class="custom-control-label"
-															for="balance">Low balance</label>
-													</div>
+													
 												</div>
 											</div>
 
@@ -271,7 +125,7 @@
 
 												<div class="col-md-12 text-right">
 													<button class="btn btn-primary submit-button" value="Save!"
-														id="manual" type="button" disabled>Save</button>
+														id="manual" type="button">Save</button>
 
 
 												</div>

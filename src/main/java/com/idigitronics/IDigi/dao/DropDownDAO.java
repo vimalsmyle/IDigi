@@ -430,7 +430,7 @@ public class DropDownDAO {
 		}
 		 finally {
 			 	pstmt.close();
-				rs.close();
+				//rs.close();
 				con.close();
 			}
 		
