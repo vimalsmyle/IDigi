@@ -57,7 +57,9 @@
 						<form id="customerDetails">
 						<div id="template">
 						<div class="row">
-						
+						<div id="loader" style="display: none;">
+														<div id="status">&nbsp;</div>
+													</div>
 						<%if(!user_id.equalsIgnoreCase("2")) {%>
 							<div class="col-md-4">
 								<div class="form-group has-feedback has-success bmd-form-group is-filled">

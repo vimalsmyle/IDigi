@@ -320,7 +320,7 @@ $(document)
 												data1["address"] = $("#communityAddressAdd").val();
 										
 												$('#communityAdd').prop('disabled', true).addClass('disabled').off( "click" );
-												
+												$("#loader").show();
 												$
 														.ajax({
 															type : "POST",
@@ -332,7 +332,7 @@ $(document)
 
 															success : function(
 																	data) {
-																
+																$("#loader").hide();
 																if (data.result == "Success") {
 
 																	/*alert( "data"
@@ -376,7 +376,7 @@ $(document)
 										data1["address"] = $("#communityAddressEdit").val();
 								
 										$('#communityEditsave').prop('disabled', true).addClass('disabled').off( "click" );
-										
+										$("#loader").show();
 										$
 												.ajax({
 													type : "POST",
@@ -393,7 +393,7 @@ $(document)
 
 															/*alert( "data"
 																	+ data.result);*/
-															
+															$("#loader").hide();
 															swal({
 																  title: "Saved",
 																  text: data.Message,

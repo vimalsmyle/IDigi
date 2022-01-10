@@ -1146,6 +1146,9 @@ $(document)
 											//	$('#customerAdd').prop('disabled', true).addClass('disabled').off( "click" );
 												console.log(JSON
 														.stringify(data1));
+												
+												$("#loader").show();
+												
 												$
 														.ajax({
 															type : "POST",
@@ -1160,6 +1163,7 @@ $(document)
 																/*alert("data"
 																		+ JSON
 																				.stringify(data));*/
+																$("#loader").hide();
 																if (data.result == "Success") {
 
 																	swal.fire({
@@ -1246,6 +1250,8 @@ $(document)
 										$('#customerEditsave').prop('disabled', true).addClass('disabled').off( "click" );
 										/*alert("===>"
 												+ JSON.stringify(data1));*/
+										
+										$("#loader").show();
 										$
 												.ajax({
 													type : "POST",
@@ -1257,6 +1263,7 @@ $(document)
 
 													success : function(
 															data) {
+														$("#loader").hide();
 														if (data.result == "Success") {
 
 															swal.fire({

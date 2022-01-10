@@ -354,7 +354,7 @@ $(document)
 												data1["roleID"] = sessionStorage.getItem("roleID");
 
 												$('#blockAdd').prop('disabled', true).addClass('disabled').off( "click" );
-												
+												$("#loader").show();
 												/*console.log("===>"
 														+ JSON.stringify(data1));*/
 												$
@@ -368,7 +368,7 @@ $(document)
 
 															success : function(
 																	data) {
-
+																$("#loader").hide();
 																if (data.result == "Success") {
 
 																	swal.fire({
@@ -433,6 +433,7 @@ $(document)
 										/*alert("===>"
 												+ JSON.stringify(data1));*/
 										$('#blockEditsave').prop('disabled', true).addClass('disabled').off( "click" );
+										$("#loader").show();
 										$
 												.ajax({
 													type : "POST",
@@ -447,6 +448,7 @@ $(document)
 														/*alert("data"
 																+ JSON
 																		.stringify(data));*/
+														$("#loader").hide();
 														if (data.result == "Success") {
 
 															/*alert( "data"

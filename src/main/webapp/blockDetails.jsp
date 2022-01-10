@@ -51,6 +51,9 @@
 
 						<div class="row mr-0 ml-0">
 							<div class="right_data col-md-12 mt-4 mb-4">
+							<div id="loader" style="display: none;">
+														<div id="status">&nbsp;</div>
+													</div>
 								<!--Right start-->
 								<div class="row">
 									<div class="col-md-12">
