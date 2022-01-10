@@ -102,7 +102,7 @@ $(document)
 													
 														return "---";
 														
-													}else if(row.commands[0].status == "Pending" || row.commands[0].status == "Pending...waiting for acknowledge"){
+													}else if(row.commands[0].status == "Pending" || row.commands[0].status == "Pending...waiting for acknowledge" || row.commands[0].status=="Already Executed"){
 														
 														return "---";
 														
@@ -280,7 +280,7 @@ $(document)
 																				
 																					return "---";
 																					
-																				}else if(row.commands[0].status == "Pending" || row.commands[0].status == "Pending...waiting for acknowledge"){
+																				}else if(row.commands[0].status == "Pending" || row.commands[0].status == "Pending...waiting for acknowledge" || row.commands[0].status=="Already Executed"){
 																					
 																					return "---";
 																					

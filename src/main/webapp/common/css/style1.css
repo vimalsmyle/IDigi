@@ -1237,13 +1237,17 @@ label, .select2-container {
 	height: 38px !important;
 }
 
+.help-block{
+	color:red;
+}
+
 #preloader,#loader {
 	position: fixed;
 	top: 0;
 	left: 0;
 	right: 0;
 	bottom: 0;
-	background-image: url(../../common/images/icons/progress.gif);
+	background-image: url(../../common/images/icons/Spinner-3.gif);
     background-size: 15%;
     background-repeat: no-repeat;
     height: 100%;
