@@ -959,7 +959,7 @@ public class DashboardDAO {
 				}
 			}
 			
-			String query = "SELECT DISTINCT dbl.CustomerUniqueID, dbl.ReadingID, dbl.MainBalanceLogID, dbl.EmergencyCredit, dbl.CustomerMeterID, dbl.MIUID, dbl.PayType, dbl.MeterType, dbl.Reading, dbl.Balance, dbl.LowBattery, dbl.ValveStatus, dbl.ValveConfiguration, dbl.DoorOpenTamper, dbl.MagneticTamper, dbl.Vacation, dbl.RTCFault, dbl.LowBalance, dbl.Minutes, dbl.LogDate FROM displaybalancelog AS dbl WHERE dbl.MeterType = '"+type+"' <change>";
+			String query = "SELECT DISTINCT dbl.CustomerUniqueID, dbl.ReadingID, dbl.MainBalanceLogID, dbl.EmergencyCredit, dbl.CustomerMeterID, dbl.MIUID, dbl.PayType, dbl.MeterType, dbl.Reading, dbl.Balance, dbl.LowBattery, dbl.ValveStatus, dbl.ValveConfiguration, dbl.DoorOpenTamper, dbl.MagneticTamper, dbl.Vacation, dbl.RTCFault, dbl.LowBalance, dbl.Minutes, dbl.LogDate FROM displaybalancelog AS dbl WHERE dbl.MeterType = '"+type+"' AND dbl.MIUID IN (SELECT MIUID FROM customermeterdetails WHERE MeterType = '"+type+"') <change>";
 
 			pstmt = con.prepareStatement(query.replaceAll("<change>", ((roleid == 1 || roleid == 4) && !id.equalsIgnoreCase("0")) ? "AND dbl.CommunityID = "+communityid+" ORDER BY dbl.LogDate DESC" : ((roleid == 1 || roleid == 4) && id.equalsIgnoreCase("0")) ? "ORDER BY dbl.LogDate DESC" : (roleid == 2 || roleid == 5) ? "AND dbl.BlockID = "+id+ " ORDER BY dbl.LogDate DESC" : (roleid == 3) ? "AND dbl.CustomerUniqueID = '"+id+"'":""));
 			rs = pstmt.executeQuery();
@@ -1304,7 +1304,7 @@ public class DashboardDAO {
 					pstmt.setString(9, dataRequestVO.getType() == 1 ? "Water" : dataRequestVO.getType() == 2 ? "Gas" : dataRequestVO.getType() == 3 ? "Energy" : "");
 					pstmt.setString(10, dataRequestVO.getSync_time());
 					pstmt.setInt(11, dataRequestVO.getSync_interval());
-					pstmt.setString(12, dataRequestVO.getPre_post_paid() == 0 ? "Prepaid" : "Postpaid");
+					pstmt.setString(12, dataRequestVO.getPre_post_paid() == 1 ? "Prepaid" : "Postpaid");
 					pstmt.setFloat(13, dataRequestVO.getBat_volt());
 					pstmt.setInt(14, rs.getInt("TariffID"));
 					pstmt.setFloat(15, dataRequestVO.getTariff());
@@ -1347,7 +1347,7 @@ public class DashboardDAO {
 								pstmt1.setString(10, dataRequestVO.getType() == 1 ? "Water" : dataRequestVO.getType() == 2 ? "Gas" : dataRequestVO.getType() == 3 ? "Energy" : "");
 								pstmt1.setString(11, dataRequestVO.getSync_time());
 								pstmt1.setInt(12, dataRequestVO.getSync_interval());
-								pstmt1.setString(13, dataRequestVO.getPre_post_paid() == 0 ? "Prepaid" : "Postpaid");
+								pstmt1.setString(13, dataRequestVO.getPre_post_paid() == 1 ? "Prepaid" : "Postpaid");
 								pstmt1.setFloat(14, dataRequestVO.getBat_volt());
 								pstmt1.setInt(15, rs.getInt("TariffID"));
 								pstmt1.setFloat(16, dataRequestVO.getTariff());
@@ -1380,7 +1380,7 @@ public class DashboardDAO {
 									pstmt1.setString(10, dataRequestVO.getType() == 1 ? "Water" : dataRequestVO.getType() == 2 ? "Gas" : dataRequestVO.getType() == 3 ? "Energy" : "");
 									pstmt1.setString(11, dataRequestVO.getSync_time());
 									pstmt1.setInt(12, dataRequestVO.getSync_interval());
-									pstmt1.setString(13, dataRequestVO.getPre_post_paid() == 0 ? "Prepaid" : "Postpaid");
+									pstmt1.setString(13, dataRequestVO.getPre_post_paid() == 1 ? "Prepaid" : "Postpaid");
 									pstmt1.setFloat(14, dataRequestVO.getBat_volt());
 									pstmt1.setInt(15, rs.getInt("TariffID"));
 									pstmt1.setFloat(16, dataRequestVO.getTariff());
