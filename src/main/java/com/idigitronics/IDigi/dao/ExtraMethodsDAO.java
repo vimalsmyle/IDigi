@@ -212,6 +212,7 @@ public class ExtraMethodsDAO {
 	
 	
 	@Scheduled(cron="30 6 2 * * *") // scheduled for every month 2nd day at 06:30
+//	@Scheduled(cron="15 15 * * * *") 
 	public void individualbillgeneration() throws SQLException {
 		
 		Connection con = null;
@@ -219,8 +220,11 @@ public class ExtraMethodsDAO {
 		PreparedStatement pstmt1 = null;
 		PreparedStatement pstmt2 = null;
 		PreparedStatement pstmt3 = null;
+		PreparedStatement pstmt4 = null;
+		PreparedStatement pstmt5 = null;
 		ResultSet rs = null;
 		ResultSet check = null;
+		ResultSet check1 = null;
 		ResultSet rs1 = null;
 		ResultSet rs2 = null;
 		float consumption = 0;
@@ -231,7 +235,8 @@ public class ExtraMethodsDAO {
 			con = getConnection();
 			LocalDate currentdate = LocalDate.now();
 			
-			check = con.prepareStatement("SELECT * FROM billingdetails WHERE BillMonth = "+((currentdate.getMonthValue() - 1) == 0 ? 12 : (currentdate.getMonthValue() - 1)) +" AND BillYear = "+(currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear())).executeQuery();
+			pstmt4 =con.prepareStatement("SELECT * FROM billingdetails WHERE BillMonth = "+((currentdate.getMonthValue() - 1) == 0 ? 12 : (currentdate.getMonthValue() - 1)) +" AND BillYear = "+(currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear())); 
+			check = pstmt4.executeQuery();
 			
 			if(check.next()) {
 				logger.debug("Individual Bills already generated for current month" + LocalDateTime.now());
@@ -317,14 +322,23 @@ public class ExtraMethodsDAO {
 				
 				}
 			
-					billgeneration();
+			pstmt5 = con.prepareStatement("SELECT * FROM customerbillingdetails WHERE BillMonth = "+((currentdate.getMonthValue() - 1) == 0 ? 12 : (currentdate.getMonthValue() - 1)) +" AND BillYear = "+(currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear()));
+			check1 = pstmt5.executeQuery();
+			
+			if(check1.next()) {
+				logger.debug("Bills already generated for current month" + LocalDateTime.now());
+				System.out.println("Bills already generated for current month" + LocalDateTime.now());
+			} else {
+				billgeneration();
+			}
+			
 			}	
 		} catch (Exception e) {
 			e.printStackTrace();
 			
 		} finally {
-			pstmt.close();
-			rs.close();
+			pstmt4.close();
+			check.close();
 			con.close();
 		}
 		
@@ -412,7 +426,7 @@ public class ExtraMethodsDAO {
 					pstmt2.setFloat(8, 0);					
 				}
 				pstmt2.setString(9, currentdate.plusDays(rs.getInt("DueDayCount")).toString());
-				pstmt2.setInt(10, currentdate.getMonthValue() - 1);
+				pstmt2.setInt(10, ((currentdate.getMonthValue() - 1) == 0 ? 12 : (currentdate.getMonthValue() - 1)));
 				pstmt2.setInt(11, currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear());
 				
 				if(pstmt2.executeUpdate() > 0) {
