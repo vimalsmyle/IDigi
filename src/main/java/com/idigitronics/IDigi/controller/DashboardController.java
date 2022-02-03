@@ -46,6 +46,9 @@ public class DashboardController {
 
 		DashboardDAO dashboarddao = new DashboardDAO();
 		DashboardResponseVO dasboardresponsevo = new DashboardResponseVO();
+		
+		communityName = (!communityName.equalsIgnoreCase("0") ? communityName.replace("%20", " ") : communityName);
+		blockName = (!blockName.equalsIgnoreCase("0") ? blockName.replace("%20", " ") : blockName);
 
 		dasboardresponsevo.setData(dashboarddao.getDashboarddetails(type, communityName, blockName, customerUniqueID, filter));
 		dasboardresponsevo.setTotal(dasboardresponsevo.getData().size());
@@ -75,6 +78,9 @@ public class DashboardController {
 
 		DashboardDAO dashboarddao = new DashboardDAO();
 		DashboardResponseVO dasboardresponsevo = new DashboardResponseVO();
+		
+		communityName = (!communityName.equalsIgnoreCase("0") ? communityName.replace("%20", " ") : communityName);
+		blockName = (!blockName.equalsIgnoreCase("0") ? blockName.replace("%20", " ") : blockName);
 
 		dasboardresponsevo.setData(dashboarddao.getFilterDashboarddetails(communityName, blockName, filtervo, type));
 		dasboardresponsevo.setTotal(dasboardresponsevo.getData().size());
@@ -102,6 +108,8 @@ public class DashboardController {
 	public @ResponseBody HomeResponseVO homedashboarddetails(@PathVariable("type") String type, @PathVariable("roleid") int roleid, @PathVariable("id") String id) throws SQLException {
 
 		DashboardDAO dashboarddao = new DashboardDAO();
+		
+		id = (!id.equalsIgnoreCase("0") ? id.replace("%20", " ") : id);
 
 		return dashboarddao.getHomeDashboardDetails(type, roleid, id);
 	}
@@ -110,6 +118,7 @@ public class DashboardController {
 	public @ResponseBody GraphResponseVO graphdashboarddetails(@PathVariable("type") String type, @PathVariable("year") int year, @PathVariable("month") int month, @PathVariable("communityName") String communityName) throws SQLException {
 
 		DashboardDAO dashboarddao = new DashboardDAO();
+		communityName = (!communityName.equalsIgnoreCase("0") ? communityName.replace("%20", " ") : communityName);
 
 		return dashboarddao.getGraphDashboardDetails(type, year, month, communityName);
 	}
