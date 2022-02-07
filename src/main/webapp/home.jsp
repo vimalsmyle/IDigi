@@ -56,8 +56,161 @@
 								|| user_id.equalsIgnoreCase("5")) {
 				%>
 
+
+
+
 				<div class="row">
 					<div class="col-md-12">
+					
+					
+					
+					<div class="page-header">
+							<h3>Water</h3>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<div class="box">
+									<!-- <div class="box-header with-border">
+              <h3 class="box-title">Monthly Recap Report</h3>
+			</div> -->
+									<%
+										if (!user_id.equalsIgnoreCase("2") || !user_id.equalsIgnoreCase("5")) {
+									%>
+									<div class="box-body">
+										<div class="row">
+											<div class="col-md-12">
+												<div id="container1"
+													style="width: 100%; height: 400px; margin: 0 auto"></div>
+											</div>
+										</div>
+									</div>
+									<%
+										}
+									%>
+									<div class="box-footer">
+
+										<div class="container">
+											<div class="row">
+												<div class="col-md-12">
+
+													<section class="logo-carousel slider" data-arrows="true">
+														<div class="slide sliding-block">
+
+															<div class="text-xs font-weight-bold text-uppercase">
+																<h5 class="description-header" id="waterActive"></h5>
+																<span class="description-text"
+																	onClick="redirection(1,'Water')">Active <i
+																	class="fa fa-chevron-right view_details"
+																	aria-hidden="true"></i>
+																</span>
+															</div>
+
+														</div>
+
+														<div class="slide sliding-block">
+
+															<div class="text-xs font-weight-bold text-uppercase">
+																<h5 class="description-header" id="waterInactive"></h5>
+																<span class="description-text"
+																	onClick="redirection(2,'Water')">In-Active <i
+																	class="fa fa-chevron-right view_details"
+																	aria-hidden="true"></i>
+																</span>
+															</div>
+
+														</div>
+														<div class="slide sliding-block">
+
+															<div class="text-xs font-weight-bold text-uppercase">
+																<h5 class="description-header" id="waterLive"></h5>
+																<span class="description-text"
+																	onClick="redirection(3,'Water')">Live <i
+																	class="fa fa-chevron-right view_details"
+																	aria-hidden="true"></i>
+																</span>
+															</div>
+
+														</div>
+
+														<div class="slide sliding-block">
+
+															<div class="text-xs font-weight-bold text-uppercase">
+																<h5 class="description-header" id="waternonLive"></h5>
+																<span class="description-text"
+																	onClick="redirection(4,'Water')">Non-Live <i
+																	class="fa fa-chevron-right view_details"
+																	aria-hidden="true"></i>
+																</span>
+															</div>
+
+														</div>
+
+														<div class="slide sliding-block">
+
+															<div class="text-xs font-weight-bold text-uppercase">
+																<h5 class="description-header" id="wateremergency"></h5>
+																<span class="description-text"
+																	onClick="redirection(6,'Water')">Emergency <i
+																	class="fa fa-chevron-right view_details"
+																	aria-hidden="true"></i>
+																</span>
+															</div>
+
+														</div>
+
+														<div class="slide sliding-block">
+
+															<div class="text-xs font-weight-bold text-uppercase">
+																<h5 class="description-header" id="waterLowbattery"></h5>
+																<span class="description-text"
+																	onClick="redirection(5,'Water')">Low Battery <i
+																	class="fa fa-chevron-right view_details"
+																	aria-hidden="true"></i>
+																</span>
+															</div>
+
+														</div>
+														<%
+															if (user_id.equalsIgnoreCase("2")) {
+														%>
+														<div class="slide sliding-block">
+
+															<div class="text-xs font-weight-bold text-uppercase">
+																<h5 class="description-header" id="gasActivePercentage"></h5>
+																<span class="description-text"
+																	onClick="dashboardAll('Water')">All Details<i
+																	class="fa fa-chevron-right view_details"
+																	aria-hidden="true"></i>
+																</span>
+															</div>
+
+														</div>
+														<%
+															}
+														%>
+														<!-- <div class="slide sliding-block">
+
+															<div class="text-xs font-weight-bold text-uppercase">
+																<h5 class="description-header"
+																	id="waterActivePercentage"></h5>
+																<span class="description-text">Active Percentage</span>
+															</div>
+
+														</div> -->
+
+
+													</section>
+
+
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					
+					
 						<div class="page-header">
 							<h3>Gas</h3>
 						</div>
@@ -212,151 +365,7 @@
 
 
 
-						<div class="page-header">
-							<h3>Water</h3>
-						</div>
-						<div class="row">
-							<div class="col-md-12">
-								<div class="box">
-									<!-- <div class="box-header with-border">
-              <h3 class="box-title">Monthly Recap Report</h3>
-			</div> -->
-									<%
-										if (!user_id.equalsIgnoreCase("2") || !user_id.equalsIgnoreCase("5")) {
-									%>
-									<div class="box-body">
-										<div class="row">
-											<div class="col-md-12">
-												<div id="container1"
-													style="width: 100%; height: 400px; margin: 0 auto"></div>
-											</div>
-										</div>
-									</div>
-									<%
-										}
-									%>
-									<div class="box-footer">
-
-										<div class="container">
-											<div class="row">
-												<div class="col-md-12">
-
-													<section class="logo-carousel slider" data-arrows="true">
-														<div class="slide sliding-block">
-
-															<div class="text-xs font-weight-bold text-uppercase">
-																<h5 class="description-header" id="waterActive"></h5>
-																<span class="description-text"
-																	onClick="redirection(1,'Water')">Active <i
-																	class="fa fa-chevron-right view_details"
-																	aria-hidden="true"></i>
-																</span>
-															</div>
-
-														</div>
-
-														<div class="slide sliding-block">
-
-															<div class="text-xs font-weight-bold text-uppercase">
-																<h5 class="description-header" id="waterInactive"></h5>
-																<span class="description-text"
-																	onClick="redirection(2,'Water')">In-Active <i
-																	class="fa fa-chevron-right view_details"
-																	aria-hidden="true"></i>
-																</span>
-															</div>
-
-														</div>
-														<div class="slide sliding-block">
-
-															<div class="text-xs font-weight-bold text-uppercase">
-																<h5 class="description-header" id="waterLive"></h5>
-																<span class="description-text"
-																	onClick="redirection(3,'Water')">Live <i
-																	class="fa fa-chevron-right view_details"
-																	aria-hidden="true"></i>
-																</span>
-															</div>
-
-														</div>
-
-														<div class="slide sliding-block">
-
-															<div class="text-xs font-weight-bold text-uppercase">
-																<h5 class="description-header" id="waternonLive"></h5>
-																<span class="description-text"
-																	onClick="redirection(4,'Water')">Non-Live <i
-																	class="fa fa-chevron-right view_details"
-																	aria-hidden="true"></i>
-																</span>
-															</div>
-
-														</div>
-
-														<div class="slide sliding-block">
-
-															<div class="text-xs font-weight-bold text-uppercase">
-																<h5 class="description-header" id="wateremergency"></h5>
-																<span class="description-text"
-																	onClick="redirection(6,'Water')">Emergency <i
-																	class="fa fa-chevron-right view_details"
-																	aria-hidden="true"></i>
-																</span>
-															</div>
-
-														</div>
-
-														<div class="slide sliding-block">
-
-															<div class="text-xs font-weight-bold text-uppercase">
-																<h5 class="description-header" id="waterLowbattery"></h5>
-																<span class="description-text"
-																	onClick="redirection(5,'Water')">Low Battery <i
-																	class="fa fa-chevron-right view_details"
-																	aria-hidden="true"></i>
-																</span>
-															</div>
-
-														</div>
-														<%
-															if (user_id.equalsIgnoreCase("2")) {
-														%>
-														<div class="slide sliding-block">
-
-															<div class="text-xs font-weight-bold text-uppercase">
-																<h5 class="description-header" id="gasActivePercentage"></h5>
-																<span class="description-text"
-																	onClick="dashboardAll('Water')">All Details<i
-																	class="fa fa-chevron-right view_details"
-																	aria-hidden="true"></i>
-																</span>
-															</div>
-
-														</div>
-														<%
-															}
-														%>
-														<!-- <div class="slide sliding-block">
-
-															<div class="text-xs font-weight-bold text-uppercase">
-																<h5 class="description-header"
-																	id="waterActivePercentage"></h5>
-																<span class="description-text">Active Percentage</span>
-															</div>
-
-														</div> -->
-
-
-													</section>
-
-
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
+						
 
 
 						<!-- End-->

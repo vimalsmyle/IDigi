@@ -185,8 +185,8 @@ $(document)
 										return false;
 											}
 											
-											if ($("#sync_interval").val()!="" && $("#sync_interval").val() <= "2"
-													&& $("#sync_interval").val() <= "1440") {
+											if ($("#sync_interval").val()!="" && $("#sync_interval").val() >= 2
+													&& $("#sync_interval").val() >= 1440) {
 
 												swal
 														.fire({
@@ -196,6 +196,15 @@ $(document)
 														})
 												return false;
 
+											}else if($("#sync_interval").val()=="1" || $("#sync_interval").val()=="2" || $("#sync_interval").val()=="0"){
+												swal
+												.fire({
+													title : "error",
+													text : "Please enter between 2 and 1440",
+													icon : "error"
+												})
+										return false;
+												
 											}
 											var json = {};
 											json["value"] = $("#sync_interval")
