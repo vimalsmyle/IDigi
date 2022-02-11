@@ -59,11 +59,11 @@
 							</div>
 						</div>
 						
-						<input type="hidden" value=<%=communityName%> id="comName">
+						<input type="hidden" value='<%=communityName%>' id="comName">
 						
-						<input type="hidden" value=<%=blockName%> id="blockName">
+						<input type="hidden" value='<%=blockName%>' id="blockName">
 						
-						<input type="hidden" value=<%=type%> id="type">
+						<input type="hidden" value='<%=type%>' id="type">
 						
 						
 
