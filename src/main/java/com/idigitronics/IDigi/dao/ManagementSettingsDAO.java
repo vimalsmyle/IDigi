@@ -99,9 +99,9 @@ public class ManagementSettingsDAO {
 			ex.printStackTrace();
 		} finally {
 			pstmt.close();
-			pstmt1.close();
+//			pstmt1.close();
 			rs.close();
-			rs1.close();
+//			rs1.close();
 			con.close();
 		}
 		return user_list;
