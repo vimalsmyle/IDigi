@@ -22,7 +22,8 @@ $(document)
 						$(".accordionFilter").show();
 					}
 					
-					
+					var filter = (sessionStorage.getItem("filterId")==undefined || sessionStorage.getItem("filterId")==null)
+					?"0":sessionStorage.getItem("filterId");
 					console.log("./dashboard/"
 							+ $("#type").val() + "/"
 							+ $("#comName").val() + "/"
@@ -91,7 +92,7 @@ $(document)
 													+ $("#type").val() + "/"
 													+ $("#comName").val() + "/"
 													+ $("#blockName").val()
-													+ "/0/"+filterId,
+													+ "/0/"+filter,
 											"type" : "GET",
 											"data" : function(search) {
 											},
