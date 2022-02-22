@@ -88,6 +88,7 @@ function redirection(obj,type){
 		window.location = "topupStatus.jsp";
 	}
 	else{
+		sessionStorage.removeItem("filterId");
 		sessionStorage.setItem("filterId",obj);
 		
 		if (sessionStorage

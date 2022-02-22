@@ -92,7 +92,7 @@ $(document)
 													+ $("#type").val() + "/"
 													+ $("#comName").val() + "/"
 													+ $("#blockName").val()
-													+ "/0/"+filter,
+													+ "/0/"+0,
 											"type" : "GET",
 											"data" : function(search) {
 											},
@@ -251,12 +251,13 @@ function executeDownloadDashboard(data){
 
 function getCustomerMeters(CRNNumber) {
 	
-		
+	var filter = (sessionStorage.getItem("filterId")==undefined || sessionStorage.getItem("filterId")==null)
+	?"0":sessionStorage.getItem("filterId");
 	$
 			.getJSON(
 					"./dashboard/" + $("#type").val() + "/"
 							+ $("#comName").val() + "/" + $("#blockName").val()
-							+ "/"+CRNNumber+"/0",
+							+ "/"+CRNNumber+"/"+filter,
 					function(data) {
 						$
 								.each(
