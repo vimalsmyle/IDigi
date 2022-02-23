@@ -100,6 +100,7 @@ $(document)
 																				// value:
 																				// ' +
 																				// this.y);
+																				sessionStorage.removeItem("filterId");
 																				window.location = "blockDashboard.jsp?com="
 																						+ this.category;
 
@@ -156,6 +157,7 @@ $(document)
 																				// value:
 																				// ' +
 																				// this.y);
+																				sessionStorage.removeItem("filterId");
 																				window.location = "blockDashboard.jsp?com="
 																						+ this.category;
 

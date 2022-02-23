@@ -92,7 +92,7 @@ $(document)
 													+ $("#type").val() + "/"
 													+ $("#comName").val() + "/"
 													+ $("#blockName").val()
-													+ "/0/"+0,
+													+ "/0/"+filterId,
 											"type" : "GET",
 											"data" : function(search) {
 											},
@@ -204,7 +204,7 @@ $(document)
 										}
 
 									})
-sessionStorage.removeItem("filterId");
+//sessionStorage.removeItem("filterId");
 				
 				});
 
@@ -358,9 +358,9 @@ function getCustomerMeters(CRNNumber) {
 																						type,
 																						row) {
 																					return "<span id=color style = color:"
-																							+ row.magneticTamper
-																							+ ">"
 																							+ row.magnetictamperColor
+																							+ ">"
+																							+ row.magneticTamper
 																							+ "</span>"
 																				},
 																				"defaultContent" : ""

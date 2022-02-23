@@ -152,24 +152,20 @@ public class DashboardDAO {
 					individualDashboardResponseVO.setDooropentamperColor((rs3.getInt("DoorOpenTamper") == 0) ? "GREEN" : "RED");
 					individualDashboardResponseVO.setMagneticTamper((rs3.getInt("MagneticTamper") == 0) ? "NO" : (rs3.getInt("MagneticTamper") == 1) ? "YES" : "NO");
 					individualDashboardResponseVO.setMagnetictamperColor((rs3.getInt("MagneticTamper") == 0) ? "GREEN" : "RED");
+					individualDashboardResponseVO.setTariff((rs3.getString("Tariff").equalsIgnoreCase("0.00") ? "---" : rs3.getString("Tariff")));
+					individualDashboardResponseVO.setValveStatus((rs3.getInt("ValveStatus") == 1) ? "OPEN" : (rs3.getInt("ValveStatus") == 0) ? "CLOSED" : "");
+					individualDashboardResponseVO.setValveStatusColor((rs3.getInt("ValveStatus") == 1) ? "GREEN" : (rs3.getInt("ValveStatus") == 0) ? "RED" : "");
+					individualDashboardResponseVO.setVacationStatus(rs3.getInt("Vacation") == 1 ? "YES" : "NO");
+					individualDashboardResponseVO.setVacationColor(rs3.getInt("Vacation") == 1 ? "ORANGE" : "BLACK");
 					
 					if(rs3.getString("PayType").equalsIgnoreCase("Prepaid")) {
 						
 						individualDashboardResponseVO.setBalance(rs3.getString("Balance"));
 						individualDashboardResponseVO.setEmergencyCredit(rs3.getString("EmergencyCredit"));
-						individualDashboardResponseVO.setTariff((rs3.getString("Tariff")));
-						individualDashboardResponseVO.setValveStatus((rs3.getInt("ValveStatus") == 1) ? "OPEN" : (rs3.getInt("ValveStatus") == 0) ? "CLOSED" : "");
-						individualDashboardResponseVO.setValveStatusColor((rs3.getInt("ValveStatus") == 1) ? "GREEN" : (rs3.getInt("ValveStatus") == 0) ? "RED" : "");
-						individualDashboardResponseVO.setVacationStatus(rs3.getInt("Vacation") == 1 ? "YES" : "NO");
-						individualDashboardResponseVO.setVacationColor(rs3.getInt("Vacation") == 1 ? "ORANGE" : "BLACK");
+						
 					} else {
 						individualDashboardResponseVO.setBalance("---");
 						individualDashboardResponseVO.setEmergencyCredit("---");
-						individualDashboardResponseVO.setTariff("---");
-						individualDashboardResponseVO.setValveStatus("---");
-						individualDashboardResponseVO.setValveStatusColor("---");
-						individualDashboardResponseVO.setVacationStatus("---");
-						individualDashboardResponseVO.setVacationColor("---");
 						individualDashboardResponseVO.setLastTopupAmount("---");
 						individualDashboardResponseVO.setLastRechargeDate("---");
 					}

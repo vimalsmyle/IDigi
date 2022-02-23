@@ -72,6 +72,7 @@ $(document)
 		        	                        click: function () {
 		        	                           // alert('Category: ' + this.category + ', value: ' + this.y);
 		        	                            //window.location="./dashboard/Gas/"+comUrl+"/"+this.category+"/"+0+"/"+0;
+		        	                        	sessionStorage.removeItem("filterId");
 		        	                            window.location = "customerDashboard.jsp?com="+comUrl+"&block="+this.category+"&type=Gas";
 		        	                        }
 		        	                    }
@@ -118,6 +119,7 @@ $(document)
 		        	                        click: function () {
 		        	                            //alert('Category: ' + this.category + ', value: ' + this.y);
 		        	                           // window.location="./dashboard/water/"+comUrl+"/"+this.category+"/"+0+"/"+0;
+		        	                        	sessionStorage.removeItem("filterId");
 		        	                            window.location = "customerDashboard.jsp?com="+comUrl+"&block="+this.category+"&type=water";
 		        	                        }
 		        	                    }
