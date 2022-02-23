@@ -74,7 +74,7 @@
               <h3 class="box-title">Monthly Recap Report</h3>
 			</div> -->
 									<%
-										if (!user_id.equalsIgnoreCase("2") || !user_id.equalsIgnoreCase("5")) {
+										if (user_id.equalsIgnoreCase("1") || user_id.equalsIgnoreCase("4")) {
 									%>
 									<div class="box-body">
 										<div class="row">
@@ -171,7 +171,7 @@
 
 														</div>
 														<%
-															if (user_id.equalsIgnoreCase("2")) {
+															if (user_id.equalsIgnoreCase("2") || user_id.equalsIgnoreCase("5")) {
 														%>
 														<div class="slide sliding-block">
 
@@ -219,7 +219,7 @@
 								<div class="box">
 									<div class="box-body">
 										<%
-											if (!user_id.equalsIgnoreCase("2") || !user_id.equalsIgnoreCase("5")) {
+											if (user_id.equalsIgnoreCase("1") || user_id.equalsIgnoreCase("4")) {
 										%>
 										<div class="row">
 											<div class="col-md-12">
@@ -317,7 +317,7 @@
 
 
 														<%
-															if (user_id.equalsIgnoreCase("2")) {
+															if (user_id.equalsIgnoreCase("2") || user_id.equalsIgnoreCase("5")) {
 														%>
 														<div class="slide sliding-block">
 
