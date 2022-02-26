@@ -116,7 +116,6 @@
                  
                   <a href="manualBilling.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-star"></i> <span class="textData">Manual Billing</span></a>
                  
-                  <a href="manualdata.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-star"></i> <span class="textData">Manual Data</span></a>
                  
                  
                <%}%>
