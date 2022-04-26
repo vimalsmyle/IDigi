@@ -118,8 +118,8 @@ public class DashboardDAO {
 				dashboardvo.setLastName(rs.getString("LastName"));
 				dashboardvo.setCustomerUniqueID(rs.getString("CustomerUniqueID"));
 				
-				String query = "SELECT dbl.ReadingID, dbl.MainBalanceLogID, dbl.CustomerMeterID, dbl.MIUID, cmd.MeterSerialNumber, cmd.PayType, cmd.MeterType, ms.MeterSize, ms.PerUnitValue, dbl.Tariff, dbl.Reading, dbl.Balance, dbl.EmergencyCredit, dbl.ValveStatus, dbl.BatteryVoltage, "
-						+ "dbl.LowBattery, dbl.DoorOpenTamper, dbl.MagneticTamper, dbl.RTCFault, dbl.Vacation, dbl.LowBalance, dbl.LogDate FROM displaybalancelog AS dbl LEFT JOIN customermeterdetails AS cmd ON cmd.CustomerMeterID = dbl.CustomerMeterID LEFT JOIN metersize AS ms ON ms.MeterSizeID = cmd.MeterSizeID WHERE cmd.CustomerID = ? AND cmd.MeterType = '" + type +"'";
+				String query = "SELECT dbl.ReadingID, dbl.MainBalanceLogID, dbl.CustomerMeterID, dbl.MIUID, cmd.MeterSerialNumber, cmd.PayType, cmd.MeterType, ms.MeterSize, ms.PerUnitValue, g.GatewayName, dbl.Tariff, dbl.Reading, dbl.Balance, dbl.EmergencyCredit, dbl.ValveStatus, dbl.BatteryVoltage, "
+						+ "dbl.LowBattery, dbl.DoorOpenTamper, dbl.MagneticTamper, dbl.RTCFault, dbl.Vacation, dbl.LowBalance, dbl.LogDate FROM displaybalancelog AS dbl LEFT JOIN customermeterdetails AS cmd ON cmd.CustomerMeterID = dbl.CustomerMeterID LEFT JOIN metersize AS ms ON ms.MeterSizeID = cmd.MeterSizeID LEFT JOIN gateway AS g ON g.GatewayID = cmd.GatewayID WHERE cmd.CustomerID = ? AND cmd.MeterType = '" + type +"'";
 				
 				StringBuilder stringBuilder = new StringBuilder(query);
 				if(filter != 0) {
@@ -144,6 +144,7 @@ public class DashboardDAO {
 					individualDashboardResponseVO.setMiuID(rs3.getString("MIUID"));
 					individualDashboardResponseVO.setCustomerMeterID(rs3.getInt("CustomerMeterID"));
 					individualDashboardResponseVO.setMeterSize(rs3.getFloat("MeterSize"));
+					individualDashboardResponseVO.setGatewayName(rs3.getString("GatewayName"));
 					individualDashboardResponseVO.setReading(rs3.getFloat("Reading"));
 					individualDashboardResponseVO.setConsumption((int) (individualDashboardResponseVO.getReading() * rs3.getFloat("PerUnitValue")));
 					individualDashboardResponseVO.setBattery(rs3.getInt("BatteryVoltage"));
@@ -448,8 +449,8 @@ public class DashboardDAO {
 				dashboardvo.setLastName(rs.getString("LastName"));
 				dashboardvo.setCustomerUniqueID(rs.getString("CustomerUniqueID"));
 				
-				String query = "SELECT dbl.ReadingID, dbl.MainBalanceLogID, dbl.CustomerMeterID, dbl.MIUID, cmd.MeterSerialNumber, cmd.PayType, dbl.Tariff, dbl.Reading, dbl.Balance, dbl.EmergencyCredit, dbl.ValveStatus, dbl.BatteryVoltage, "
-						+ "dbl.LowBattery, dbl.DoorOpenTamper, dbl.MagneticTamper, dbl.RTCFault, dbl.Vacation, dbl.LowBalance, dbl.LogDate, ms.MeterSize, ms.PerUnitValue FROM displaybalancelog AS dbl LEFT JOIN customermeterdetails AS cmd ON cmd.CustomerMeterID = dbl.CustomerMeterID LEFT JOIN metersize AS ms ON ms.MeterSizeID = cmd.MeterSizeID WHERE cmd.CustomerID = ? AND cmd.MeterType = '" + type+"'";
+				String query = "SELECT dbl.ReadingID, dbl.MainBalanceLogID, dbl.CustomerMeterID, dbl.MIUID, cmd.MeterSerialNumber, cmd.PayType, g.GatewayName, dbl.Tariff, dbl.Reading, dbl.Balance, dbl.EmergencyCredit, dbl.ValveStatus, dbl.BatteryVoltage, "
+						+ "dbl.LowBattery, dbl.DoorOpenTamper, dbl.MagneticTamper, dbl.RTCFault, dbl.Vacation, dbl.LowBalance, dbl.LogDate, ms.MeterSize, ms.PerUnitValue FROM displaybalancelog AS dbl LEFT JOIN customermeterdetails AS cmd ON cmd.CustomerMeterID = dbl.CustomerMeterID LEFT JOIN metersize AS ms ON ms.MeterSizeID = cmd.MeterSizeID LEFT JOIN gateway AS g ON g.GatewayID = cmd.GatewayID WHERE cmd.CustomerID = ? AND cmd.MeterType = '" + type+"'";
 				
 				/*String oldquery = "SELECT DISTINCT c.CommunityName, b.BlockName, cd.FirstName,cd.CustomerUniqueID, cd.LastName, cd.HouseNumber, cmd.MeterSerialNumber, dbl.ReadingID, dbl.MainBalanceLogID, dbl.EmergencyCredit, \r\n" + 
 						"dbl.MIUID, dbl.Reading, dbl.Balance, dbl.BatteryVoltage, dbl.LowBattery, dbl.Tariff, dbl.ValveStatus, dbl.DoorOpenTamper, dbl.MagneticTamper, dbl.RTCFault, dbl.Vacation, dbl.LowBalance, dbl.LogDate\r\n" + 
@@ -484,6 +485,7 @@ public class DashboardDAO {
 							
 							individualDashboardResponseVO.setMeterSerialNumber(rs2.getString("MeterSerialNumber"));
 							individualDashboardResponseVO.setMiuID(rs2.getString("MIUID"));
+							individualDashboardResponseVO.setGatewayName(rs2.getString("GatewayName"));
 							individualDashboardResponseVO.setReading(rs2.getFloat("Reading"));
 							individualDashboardResponseVO.setConsumption((int) (individualDashboardResponseVO.getReading() * rs2.getFloat("PerUnitValue")));
 							individualDashboardResponseVO.setBattery(rs2.getInt("BatteryVoltage"));

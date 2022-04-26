@@ -329,6 +329,14 @@ public class CommunitySetUpBO {
 					"MOBILE NUMBER CAN CONTAIN ONLY NUMERIC VALUES OF EXACTLY 10 DIGITS");
 		}
 		
+		for(int i = 0; i < customervo.getMeters().size(); i++) {
+			
+			if(communitysetupdao.checkMIUID(customervo.getMeters().get(i).getMiuID())) {
+				throw new BusinessException(customervo.getMeters().get(i).getMiuID() +" - MIUID IS ALREADY REGISTERED");
+			}
+			
+		}
+		
 		return communitysetupdao.editcustomer(customervo);
 	}
 
