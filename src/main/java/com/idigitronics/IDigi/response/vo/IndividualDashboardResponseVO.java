@@ -24,6 +24,7 @@ public class IndividualDashboardResponseVO {
 	private String valveStatusColor;
 	private String tariff;
 	private String tariffName;
+	private String gatewayName;
 	private String doorOpenTamper;
 	private String magneticTamper;
 	private String rtcFault;
@@ -260,6 +261,14 @@ public class IndividualDashboardResponseVO {
 
 	public void setMeterSize(float meterSize) {
 		this.meterSize = meterSize;
+	}
+
+	public String getGatewayName() {
+		return gatewayName;
+	}
+
+	public void setGatewayName(String gatewayName) {
+		this.gatewayName = gatewayName;
 	}
 
 }
