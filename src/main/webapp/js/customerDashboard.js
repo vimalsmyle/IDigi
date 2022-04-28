@@ -317,6 +317,10 @@ function getCustomerMeters(CRNNumber) {
 
 																			},
 																			{
+																				"data" : "gateway"
+
+																			},
+																			{
 																				"data" : "reading"
 																			},
 																			{
