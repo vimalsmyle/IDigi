@@ -719,14 +719,14 @@ public class ExtraMethodsDAO {
 				smsRequestVO.setMessage(message);
 				smsRequestVO.setToMobileNumber(rs.getString("MobileNumber"));
 				
-				sendsms(smsRequestVO);
+//				sendsms(smsRequestVO);
 				
 				mailRequestVO.setSubject("Consumption Bill for " + billMonthYear);
 				mailRequestVO.setToEmail(rs.getString("Email"));
 				mailRequestVO.setFileLocation(drivename+ "/" +rs.getString("CustomerUniqueID") + ".pdf");
 				mailRequestVO.setMessage(message);
 				
-				sendmail(mailRequestVO);
+//				sendmail(mailRequestVO);
 			}
 			
 			}
