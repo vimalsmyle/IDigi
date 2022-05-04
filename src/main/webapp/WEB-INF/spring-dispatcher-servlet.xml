@@ -19,7 +19,7 @@
 	
 	<task:annotation-driven />
 	
-	 <!-- <bean id="individualbillgeneration" class="com.idigitronics.IDigi.dao.ExtraMethodsDAO"> </bean> -->
+	 <bean id="individualbillgeneration" class="com.idigitronics.IDigi.dao.ExtraMethodsDAO"> </bean>
 	 	<!-- <property name="targetObject" ref="ExtraMethodsDAO" />
   		<property name="targetMethod" value="individualbillgeneration" />   -->
 	 <!-- <bean id="billgeneration" class="com.idigitronics.IDigi.dao.ExtraMethodsDAO"></bean> -->
