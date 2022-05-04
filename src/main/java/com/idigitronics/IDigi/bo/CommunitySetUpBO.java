@@ -335,7 +335,7 @@ public class CommunitySetUpBO {
 				throw new BusinessException(customervo.getMeters().get(i).getMiuID() +" - MIUID IS ALREADY REGISTERED");
 			}
 			
-			if(customervo.getMeters().get(i).getMeterSizeID() < 0 || customervo.getMeters().get(i).getGatewayID() < 0) {
+			if(customervo.getMeters().get(i).getMeterSizeID() <= 0 || customervo.getMeters().get(i).getGatewayID() <= 0) {
 				throw new BusinessException("METERSIZE & GATEWAY ARE MANDATORY");
 			}
 			
