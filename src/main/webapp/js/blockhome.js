@@ -17,8 +17,8 @@ $(document)
 			//var Options = "";
   	  document.querySelector("#gasActive").innerText = data.active;
   	  document.querySelector("#gasInactive").innerText = data.inActive;
-  	  document.querySelector("#gasLive").innerText = data.nonLive;
-  	  document.querySelector("#gasnonLive").innerText = data.live;
+  	  document.querySelector("#gasLive").innerText = data.live;
+  	  document.querySelector("#gasnonLive").innerText = data.nonLive;
   	  document.querySelector("#gasemergency").innerText = data.emergency;
   	  document.querySelector("#gasLowbattery").innerText = data.lowBattery;
   	//  document.querySelector("#gasActivePercentage").innerText = data.activePercentage;
@@ -32,8 +32,8 @@ $(document)
 			//var Options = "";
 		  document.querySelector("#waterActive").innerText = data.active;
 	  	  document.querySelector("#waterInactive").innerText = data.inActive;
-	  	  document.querySelector("#waterLive").innerText = data.nonLive;
-	  	  document.querySelector("#waternonLive").innerText = data.live;
+	  	  document.querySelector("#waterLive").innerText = data.live;
+	  	  document.querySelector("#waternonLive").innerText = data.nonLive;
 	  	  document.querySelector("#wateremergency").innerText = data.emergency;
 	  	  document.querySelector("#waterLowbattery").innerText = data.lowBattery;
 	  //	  document.querySelector("#waterActivePercentage").innerText = data.activePercentage;
