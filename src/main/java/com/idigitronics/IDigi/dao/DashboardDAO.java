@@ -1285,7 +1285,7 @@ public class DashboardDAO {
 		try {
 			con = getConnection();
 			
-				PreparedStatement pstmt2 = con.prepareStatement("SELECT cd.CommunityID, cd.BlockID, cd.CustomerID, cmd.CustomerMeterID, cmd.TariffID, t.Tariff, cmd.MeterSerialNumber, cd.CustomerUniqueID, cmd.MeterSizeID from customerdetails as cd LEFT JOIN customermeterdetails as cmd ON cd.CustomerID = cmd.CustomerID LEFT JOIN tariff as t on t.TariffID = cmd.TariffID WHERE cmd.MIUID = ?");
+				PreparedStatement pstmt2 = con.prepareStatement("SELECT cd.CommunityID, cd.BlockID, cd.CustomerID, cmd.CustomerMeterID, cmd.TariffID, t.Tariff, cmd.MeterSerialNumber, cd.CustomerUniqueID, cmd.MeterSizeID, cmd.ThresholdMaximum, cmd.ThresholdMinimum from customerdetails as cd LEFT JOIN customermeterdetails as cmd ON cd.CustomerID = cmd.CustomerID LEFT JOIN tariff as t on t.TariffID = cmd.TariffID WHERE cmd.MIUID = ?");
 				pstmt2.setString(1, miuID);
 				ResultSet rs = pstmt2.executeQuery();
 				if(rs.next()) {
@@ -1479,6 +1479,28 @@ public class DashboardDAO {
 							alertMessage = "Your Recharge for MIUID: <MIU> with CRN/CAN/UAN: <CRN> is successful. Available Balance: "+dataRequestVO.getCredit()+"/- and Emergency Credit: "+dataRequestVO.getEmergency_credit()+"/-.";
 							alertMessage = alertMessage.replaceAll("<MIU>", resultSet.getString("MIUID"));
 							sendalertsms(1, alertMessage, resultSet.getString("MIUID"));
+						}
+						
+						PreparedStatement thresholdAlert = con.prepareStatement("SELECT ((SELECT Reading FROM balancelog WHERE CustomerMeterID = 2 ORDER BY ReadingID DESC LIMIT 0,1) - (SELECT Reading FROM balancelog WHERE CustomerMeterID = 2 ORDER BY ReadingID DESC LIMIT 1,1)) AS Threshold");
+						ResultSet thresholdResult = thresholdAlert.executeQuery();
+						
+						if(thresholdResult.next()) {
+							
+							if(thresholdResult.getFloat("Threshold") >= rs.getFloat("ThresholdMaximum")) {
+								
+								alertMessage = "The Consumption in MIUID: <MIU> with CRN/CAN/UAN: <CRN>, at H.No: <house>, Community Name: <community>, Block Name: <block> is above Threshold Value i.e. "+rs.getFloat("ThresholdMaximum")+".";
+								alertMessage = alertMessage.replaceAll("<MIU>", resultSet.getString("MIUID"));
+								sendalertmail("Maximum Threshold Alert!!!", alertMessage, resultSet.getString("MIUID"));
+								sendalertsms(0, alertMessage, resultSet.getString("MIUID"));
+								
+							} else if(thresholdResult.getFloat("Threshold") <= rs.getFloat("ThresholdMinimum")) {
+								
+								alertMessage = "The Consumption in MIUID: <MIU> with CRN/CAN/UAN: <CRN>, at H.No: <house>, Community Name: <community>, Block Name: <block> is below Threshold Value i.e. "+rs.getFloat("ThresholdMinimum")+".";
+								alertMessage = alertMessage.replaceAll("<MIU>", resultSet.getString("MIUID"));
+								sendalertmail("Minimum Threshold Alert!!!", alertMessage, resultSet.getString("MIUID"));
+								sendalertsms(0, alertMessage, resultSet.getString("MIUID"));
+							}
+							
 						}
 						
 					}

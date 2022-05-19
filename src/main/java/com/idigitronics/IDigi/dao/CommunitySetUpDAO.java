@@ -902,7 +902,7 @@ public class CommunitySetUpDAO {
 				customervo.setCustomerID(rs.getLong("CustomerID"));
 				customervo.setAction((roleid == 1 || roleid == 2 || roleid == 3 ? true : false));
 				
-				PreparedStatement pstmt2 = con.prepareStatement("SELECT cmd.CustomerMeterID, cmd.MIUID, cmd.MeterSerialNumber, cmd.MeterType, cmd.PayType, cmd.Location, cmd.TariffID, cmd.GatewayID, g.GatewayName, ms.MeterSize FROM customermeterdetails AS cmd LEFT JOIN gateway AS g ON g.GatewayID = cmd.GatewayID LEFT JOIN metersize AS ms ON ms.MeterSizeID = cmd.MeterSizeID WHERE cmd.CustomerID = " + customervo.getCustomerID());
+				PreparedStatement pstmt2 = con.prepareStatement("SELECT cmd.CustomerMeterID, cmd.MIUID, cmd.MeterSerialNumber, cmd.MeterType, cmd.PayType, cmd.Location, cmd.TariffID, cmd.GatewayID, cmd.ThresholdMaximum, cmd.ThresholdMinimum, g.GatewayName, ms.MeterSize FROM customermeterdetails AS cmd LEFT JOIN gateway AS g ON g.GatewayID = cmd.GatewayID LEFT JOIN metersize AS ms ON ms.MeterSizeID = cmd.MeterSizeID WHERE cmd.CustomerID = " + customervo.getCustomerID());
 				
 				ResultSet rs2 = pstmt2.executeQuery();
 				
@@ -920,6 +920,8 @@ public class CommunitySetUpDAO {
 					metervo.setTariffID(rs2.getInt("TariffID"));
 					metervo.setGatewayID(rs2.getInt("GatewayID"));
 					metervo.setGatewayName(rs2.getString("GatewayName"));
+					metervo.setThresholdMaximum(rs2.getFloat("ThresholdMaximum"));
+					metervo.setThresholdMinimum(rs2.getFloat("ThresholdMinimum"));
 					
 					PreparedStatement pstmt3 = con.prepareStatement("SELECT TariffName from tariff WHERE TariffID = "+ metervo.getTariffID());
 					
@@ -993,7 +995,7 @@ public class CommunitySetUpDAO {
 					
 					for(int i = 0; i < customervo.getMeters().size(); i++) {
 						
-						PreparedStatement pstmt4 = con.prepareStatement("INSERT INTO customermeterdetails (CustomerID, CustomerUniqueID, MIUID, MeterSerialNumber, MeterType, MeterSizeID, PayType, TariffID, GatewayID, Location, ModifiedDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
+						PreparedStatement pstmt4 = con.prepareStatement("INSERT INTO customermeterdetails (CustomerID, CustomerUniqueID, MIUID, MeterSerialNumber, MeterType, MeterSizeID, PayType, TariffID, GatewayID, Location, ThresholdMaximum, ThresholdMinimum, ModifiedDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
 						pstmt4.setInt(1, rs.getInt("CustomerID"));
 						pstmt4.setString(2, customervo.getCustomerUniqueID());
 						pstmt4.setString(3, customervo.getMeters().get(i).getMiuID().toLowerCase());
@@ -1004,6 +1006,8 @@ public class CommunitySetUpDAO {
 						pstmt4.setInt(8, customervo.getMeters().get(i).getTariffID());
 						pstmt4.setInt(9, customervo.getMeters().get(i).getGatewayID());
 						pstmt4.setString(10, customervo.getMeters().get(i).getLocation());
+						pstmt4.setFloat(11, customervo.getMeters().get(i).getThresholdMaximum());
+						pstmt4.setFloat(12, customervo.getMeters().get(i).getThresholdMinimum());
 						
 						if(pstmt4.executeUpdate() > 0) {
 							responsevo.setResult("Success");
@@ -1138,7 +1142,7 @@ public class CommunitySetUpDAO {
 	            if (pstmt.executeUpdate() > 0) {
 	            	
 	            	for(int i = 0; i < customervo.getMeters().size(); i++) {
-	            		con.prepareStatement("UPDATE customermeterdetails SET MIUID = '"+customervo.getMeters().get(i).getMiuID()+"', GatewayID = " +customervo.getMeters().get(i).getGatewayID()+ ", MeterSizeID = " +customervo.getMeters().get(i).getMeterSizeID() +", ModifiedDate = NOW() WHERE CustomerMeterID = " + customervo.getMeters().get(i).getCustomerMeterID()).executeUpdate();
+	            		con.prepareStatement("UPDATE customermeterdetails SET MIUID = '"+customervo.getMeters().get(i).getMiuID()+"', GatewayID = " +customervo.getMeters().get(i).getGatewayID()+ ", MeterSizeID = " +customervo.getMeters().get(i).getMeterSizeID() +", ThresholdMaximum = "+customervo.getMeters().get(i).getThresholdMaximum() +", ThresholdMinimum = "+customervo.getMeters().get(i).getThresholdMinimum()+", ModifiedDate = NOW() WHERE CustomerMeterID = " + customervo.getMeters().get(i).getCustomerMeterID()).executeUpdate();
 	            	}
 	            	
 	            	PreparedStatement pstmt1 = con.prepareStatement("UPDATE USER SET UserName = CONCAT (?, (SELECT LastName FROM customerdetails WHERE CustomerUniqueID = ?)), MobileNumber = ?, Email = ? WHERE CustomerUniqueID = ?");
@@ -1199,7 +1203,7 @@ public class CommunitySetUpDAO {
 				while (rs.next()) {
 
 					pstmt6 = con.prepareStatement(
-							"INSERT INTO customerdeletemeter (CustomerMeterID, CustomerID, CustomerUniqueID, MIUID, MeterSerialNumber, MeterType, MeterSizeID, PayType, Location, ModifiedDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
+							"INSERT INTO customerdeletemeter (CustomerMeterID, CustomerID, CustomerUniqueID, MIUID, MeterSerialNumber, MeterType, MeterSizeID, PayType, TariffID, Location, ThresholdMaximum, ThresholdMinimum, ModifiedDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
 
 					pstmt6.setInt(1, rs.getInt("CustomerMeterID"));
 					pstmt6.setInt(2, rs.getInt("CustomerID"));
@@ -1209,7 +1213,10 @@ public class CommunitySetUpDAO {
 					pstmt6.setString(6, rs.getString("MeterType"));
 					pstmt6.setInt(7, rs.getInt("MeterSizeID"));
 					pstmt6.setString(8, rs.getString("PayType"));
-					pstmt6.setString(9, rs.getString("Location"));
+					pstmt6.setInt(9, rs.getInt("TariffID"));
+					pstmt6.setString(10, rs.getString("Location"));
+					pstmt6.setFloat(11, rs.getFloat("ThresholdMaximum"));
+					pstmt6.setFloat(12, rs.getFloat("ThresholdMinimum"));
 
 					pstmt6.executeUpdate();					
 				}

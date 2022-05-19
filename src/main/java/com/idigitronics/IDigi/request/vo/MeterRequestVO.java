@@ -20,6 +20,8 @@ public class MeterRequestVO {
 	private int gatewayID;
 	private String gatewayName;
 	private String location;
+	private float thresholdMaximum;
+	private float thresholdMinimum;
 	private String tariffName;
 	private String modifiedDate;
 	
@@ -100,6 +102,18 @@ public class MeterRequestVO {
 	}
 	public void setMeterSizeID(int meterSizeID) {
 		this.meterSizeID = meterSizeID;
+	}
+	public float getThresholdMaximum() {
+		return thresholdMaximum;
+	}
+	public void setThresholdMaximum(float thresholdMaximum) {
+		this.thresholdMaximum = thresholdMaximum;
+	}
+	public float getThresholdMinimum() {
+		return thresholdMinimum;
+	}
+	public void setThresholdMinimum(float thresholdMinimum) {
+		this.thresholdMinimum = thresholdMinimum;
 	}
 	
 }
