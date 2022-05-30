@@ -357,7 +357,6 @@ public class ExtraMethodsDAO {
 		SMSRequestVO smsRequestVO = null;
 		MailRequestVO mailRequestVO = null;
 		List<IndividualBillingResponseVO> individualBillsList = null;
-		IndividualBillingResponseVO individualBillingResponseVO = null;
 		
 		try {
 			
@@ -389,7 +388,7 @@ public class ExtraMethodsDAO {
 				pstmt1 = con.prepareStatement("SELECT * FROM billingdetails WHERE CustomerID = " + rs.getInt("CustomerID") + " AND BillMonth = "+ (currentdate.getMonthValue() - 1) + " AND BillYear = " + (currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear()));
 				rs1 = pstmt1.executeQuery();
 				while (rs1.next()) {
-					individualBillingResponseVO = new IndividualBillingResponseVO();
+					IndividualBillingResponseVO individualBillingResponseVO = new IndividualBillingResponseVO();
 					totalamount = rs1.getFloat("BillAmount") + totalamount;
 					totalConsumption = rs1.getFloat("Consumption") + totalConsumption;
 					individualBillingResponseVO.setBillingID(rs1.getLong("BillingID"));
