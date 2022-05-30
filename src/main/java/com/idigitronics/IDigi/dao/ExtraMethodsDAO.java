@@ -356,7 +356,6 @@ public class ExtraMethodsDAO {
 		ResultSet check = null;
 		SMSRequestVO smsRequestVO = null;
 		MailRequestVO mailRequestVO = null;
-		List<IndividualBillingResponseVO> individualBillsList = null;
 		
 		try {
 			
@@ -372,10 +371,10 @@ public class ExtraMethodsDAO {
 				
 			String billMonthYear = ((currentdate.getMonthValue() == 1) ? "December" : (currentdate.getMonthValue() == 2) ? "January" : (currentdate.getMonthValue() == 3) ? "February" : (currentdate.getMonthValue() == 4) ? "March" : (currentdate.getMonthValue() == 5) ? "April" : (currentdate.getMonthValue() == 6) ? "May" : (currentdate.getMonthValue() == 7) ? "June" : (currentdate.getMonthValue() == 8) ? "July" : (currentdate.getMonthValue() == 9) ? "August" : (currentdate.getMonthValue() == 10) ? "September" : (currentdate.getMonthValue() == 11) ? "October" : (currentdate.getMonthValue() == 12) ? "November" :"" ) + "-" + ((currentdate.getMonthValue() - 1 == 0) ? currentdate.getYear() - 1 : currentdate.getYear());
 			String drivename = "D:/Bills/" + (currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear()+"/"+(currentdate.getMonthValue() - 1));
-			individualBillsList = new LinkedList<IndividualBillingResponseVO>();
 			pstmt = con.prepareStatement("SELECT cd.CommunityID, c.CommunityName, cd.BlockID, b.BlockName, cd.CustomerID, cd.CustomerUniqueID, cd.HouseNumber, cd.FirstName, cd.LastName, cd.Email, cd.MobileNumber, al.GST, al.LateFee, al.DueDayCount, al.VendorGSTNumber, al.CustomerGSTNumber FROM customerdetails AS cd LEFT JOIN community AS c ON c.CommunityID = cd.CommunityID LEFT JOIN block AS b ON cd.BlockID = b.BlockID JOIN alertsettings AS al WHERE cd.CustomerID IN (SELECT DISTINCT CustomerID FROM customermeterdetails WHERE PayType= 'Postpaid')");
 			rs = pstmt.executeQuery();
 			while(rs.next()) {
+				List<IndividualBillingResponseVO> individualBillsList = new LinkedList<IndividualBillingResponseVO>();
 				logger.debug("in billgeneration" + LocalDateTime.now());
 				System.out.println("in billgeneration" + LocalDateTime.now());
 				float totalamount = 0;
