@@ -9,6 +9,10 @@ $(document).ready(function() {
 	$.getJSON("./customer/"+sessionStorage.getItem("roleID")+"/"+sessionStorage.getItem("ID")+"/-1", function(data) {
 	$.each(data.data, function(i, item) {
 		if ($("#custUniqueId").val() == item.CustomerUniqueID) {
+			
+			
+			
+			
 			var rowCount = 0;
 			var rowCountArray=[];
 			$('#communityNameEdit').val(item.communityName).trigger("change");
@@ -93,9 +97,9 @@ $(document).ready(function() {
 						+"</div></div>"+
 						"<div class=col-md-4>" +
 						"<div id='formmeterSizeEdit' class='group form-group has-feedback has-success bmd-form-group is-filled'>"
-						+"<label class=bmd-label-floating>Meter Size<span class=impp><sup>*</sup></span></label> <input "
-						+"type=text class='form-control form-control-sm' name=meterSizeAdd["+rowCount+"]"
-						+" disabled id=meterSizeAdd-"+rowCount+">"
+						+"<label class=bmd-label-floating>Meter Size<span class=impp><sup>*</sup></span></label> " +
+						"<select class='form-control form-control-sm select2'   id=meterSizeAdd-"+rowCount+" name=meterSizeAdd["+rowCount+"]>"+
+						"</select>"
 						+"</div></div>"+
 						"<div class=col-md-4>" +
 						"<div class='group form-group has-feedback has-success bmd-form-group is-filled'>"
@@ -125,7 +129,24 @@ $(document).ready(function() {
 						+"<label class=bmd-label-floating>Location<span class=impp><sup>*</sup></span></label> <input "
 						+"type=text class='form-control form-control-sm' disabled name=locationAdd["+rowCount+"]"
 						+" id=locationAdd-"+rowCount+">"
+						+"</div></div>   " +
+						
+						
+						"<div class=col-md-4>" +
+						"<div id='formThresholdMaximumEdit' class='group form-group has-feedback has-success bmd-form-group is-filled'>"
+						+"<label class=bmd-label-floating>Threshold Maximum<span class=impp><sup>*</sup></span></label> <input "
+						+"type=number class='form-control form-control-sm'  name=thresholdMaximumAdd["+rowCount+"]"
+						+" id=thresholdMaximumAdd-"+rowCount+">"
+						+"</div></div>   " +
+						
+						"<div class=col-md-4>" +
+						"<div id='formthreshold MinimumEdit' class='group form-group has-feedback has-success bmd-form-group is-filled'>"
+						+"<label class=bmd-label-floating>Threshold Minimum<span class=impp><sup>*</sup></span></label> <input "
+						+"type=number class='form-control form-control-sm'  name=thresholdMinimumAdd["+rowCount+"]"
+						+" id=thresholdMinimumAdd-"+rowCount+">"
 						+"<hr></div></div>   " +
+						
+						
 								"</div>" +
 								"</div>");
 				
@@ -139,7 +160,7 @@ $(document).ready(function() {
 				$("#meterSerialNumberAdd-"+rowCount).val(meter.meterSerialNumber);
 				$("#formmeterSerialNumberAdd").addClass("group form-group has-feedback has-success bmd-form-group is-filled");
 				$("#selectMeterType-"+rowCount).val(meter.meterType);
-				$("#meterSizeAdd-"+rowCount).val(meter.meterSize);
+			
 				$("#formmeterSizeAdd").addClass("group form-group has-feedback has-success bmd-form-group is-filled");
 				$("#payTypeAdd-"+rowCount).val(meter.payType);
 				$("#selectTariffName-"+rowCount).val(meter.tariffID);
@@ -147,6 +168,12 @@ $(document).ready(function() {
 				//$("#gatewayIDAdd-"+rowCount).val(meter.gatewayID);
 				$("#locationAdd-"+rowCount).val(meter.location);
 				$("#formlocationAdd").addClass("group form-group has-feedback has-success bmd-form-group is-filled");
+				
+				$("#thresholdMaximumAdd-"+rowCount).val(meter.thresholdMaximum);
+				$("#formThresholdMaximumAdd").addClass("group form-group has-feedback has-success bmd-form-group is-filled");
+				
+				$("#thresholdMinimumAdd-"+rowCount).val(meter.thresholdMinimum);
+				$("#formThresholdMinimumAdd").addClass("group form-group has-feedback has-success bmd-form-group is-filled");
 				
 				
 				
@@ -259,11 +286,24 @@ $(document).ready(function() {
 					$("#gatewayIDAdd-"+rowCount).val(meter.gatewayID);
 					
 					
+					$.getJSON("./metersizes/"+meter.meterType, function(data) {
+						var Options = '<option value=-1>Select  Meter Size</option>';
+						$.each(data.dropDownMeterSizes, function(key, value) {
+							Options = Options + '<option value=' + key + '>' + value
+									+ '</option>';
+						});
+						$('#meterSizeAdd-'+rowCount).append(Options);
+					});
+					
+					
+					
 			});
 			 });
 			if(rowCount>13){
+				$("#meterSizeAdd-"+rowCount).val(meter.meterSize);
 				$("#addMeter").hide();
 			}else{
+				$("#meterSizeAdd-"+rowCount).val(meter.meterSize);
 				$("#addMeter").show();
 			}
 			
@@ -518,7 +558,25 @@ $("#addMeter")
 									+"<label class=bmd-label-floating>Location<span class=impp><sup>*</sup></span></label> <input "
 									+"type=text class='form-control form-control-sm' name=locationAdd["+rowCount+"]"
 									+" id=locationAdd-"+rowCount+">"
+									+"</div></div>   " +
+									
+									
+									"<div class=col-md-4>" +
+									"<div class='group form-group'>"
+									+"<label class=bmd-label-floating>Threshold Maximum<span class=impp><sup>*</sup></span></label> <input "
+									+"type=number class='form-control form-control-sm' name=thresholdMaximumAdd["+rowCount+"]"
+									+" id=thresholdMaximumAdd-"+rowCount+">"
+									+"</div></div>   " +
+									
+									
+									"<div class=col-md-4>" +
+									"<div class='group form-group'>"
+									+"<label class=bmd-label-floating>Threshold Minimum<span class=impp><sup>*</sup></span></label> <input "
+									+"type=number class='form-control form-control-sm' name=thresholdMinimum["+rowCount+"]"
+									+" id=thresholdMinimum-"+rowCount+">"
 									+"<hr></div></div>   " +
+									
+									
 											" <div class='col-md-12 text-right'>" 
 									+" 	<button class='btn btn-danger' value='Remove Meter!' onclick='$(this).removeMeter("+rowCount+")' id='removeMeter' " +
 											"type='button'>Remove Meter</button>" +
@@ -618,6 +676,47 @@ $("#addMeter")
 					}
 		        }
 			 );
+			 
+			 $('#customerDetails').bootstrapValidator('addField','thresholdMaximumAdd['+rowCount+']', {
+		        	message : 'Threshold maximum is not valid',
+					validators : {
+						notEmpty : {
+							message : 'Threshold maximum is required and cannot be empty'
+						},
+						stringLength : {
+							min : 1,
+							max : 30,
+							message : 'Threshold maximum must be more than 1 and less than 30 characters long'
+						},
+						regexp : {
+							regexp : /^[0-9][0-9.]+$/,
+							message : 'Threshold maximum can only consist of numeric'
+						}
+					}
+		        }
+			 );
+			 
+			 $('#customerDetails').bootstrapValidator('addField','thresholdMinimumAdd['+rowCount+']', {
+		        	message : 'Threshold minimum is not valid',
+					validators : {
+						notEmpty : {
+							message : 'Threshold minimum is required and cannot be empty'
+						},
+						stringLength : {
+							min : 1,
+							max : 30,
+							message : 'Threshold minimum must be more than 1 and less than 30 characters long'
+						},
+						regexp : {
+							regexp : /^[0-9][0-9.]+$/,
+							message : 'Threshold minimum can only consist of numeric'
+						}
+					}
+		        }
+			 );
+			 
+			 
+			 
 			 rowCountArray.push(rowCount)
 			 $("#rowCountArray").val(rowCountArray);		
 			 $("#rowCount").val(rowCount);
@@ -1121,6 +1220,10 @@ $(document)
 													array["tariffID"] = $("#selectTariffName-"+i).val();
 													array["gatewayID"] = $("#gatewayIDAdd-"+i).val();
 													array["location"] = $("#locationAdd-"+i).val();
+													
+													array["thresholdMaximum"] = $("#thresholdMaximumAdd-"+i).val();
+													array["thresholdMinimum"] = $("#thresholdMinimumAdd-"+i).val();
+													
 													meterDetails.push(array);
 												}
 												
@@ -1217,7 +1320,14 @@ $(document)
 											var meterDetails = [];
 											for(var i=1;parseInt($("#rowCount").val())>=i;i++){
 												var array ={};
-												
+											if($("#meterSizeAdd-"+i).val() == -1 || $("#meterSizeAdd-"+i).val() == null || $("#meterSizeAdd-"+i).val() == "Select  Meter Size"){
+													swal.fire({
+														  title: "error",
+														  text: "Select Meter Size. For Meter - "+$("#miuIDAdd-"+i).val(),
+														  icon: "error"
+														});
+													return false;
+												} 
 												array["miuID"] = $("#miuIDAdd-"+i).val();
 												array["meterSerialNumber"] = $("#meterSerialNumberAdd-"+i).val();
 												array["meterType"] = $("#selectMeterType-"+i).val();
@@ -1226,6 +1336,8 @@ $(document)
 												array["gatewayID"] = $("#gatewayIDAdd-"+i).val();
 												array["customerMeterID"] = $("#customerMeterIDAdd-"+i).val();
 												array["location"] = $("#locationAdd-"+i).val();
+												array["thresholdMaximum"] = $("#thresholdMaximumAdd-"+i).val();
+												array["thresholdMinimum"] = $("#thresholdMinimumAdd-"+i).val();
 												meterDetails.push(array);
 											}
 											
