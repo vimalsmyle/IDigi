@@ -285,7 +285,7 @@ public class CommunitySetUpBO {
 		
 		for(int i = 0; i < customervo.getMeters().size(); i++) {
 			
-			if(communitysetupdao.checkMIUID(customervo.getMeters().get(i).getMiuID())) {
+			if(communitysetupdao.checkMIUID(customervo.getMeters().get(i).getMiuID(), 0)) {
 				throw new BusinessException(customervo.getMeters().get(i).getMiuID() +" - MIUID IS ALREADY REGISTERED");
 			}
 			
@@ -331,7 +331,7 @@ public class CommunitySetUpBO {
 		
 		for(int i = 0; i < customervo.getMeters().size(); i++) {
 			
-			if(communitysetupdao.checkMIUID(customervo.getMeters().get(i).getMiuID())) {
+			if(communitysetupdao.checkMIUID(customervo.getMeters().get(i).getMiuID(), customervo.getMeters().get(i).getCustomerMeterID())) {
 				throw new BusinessException(customervo.getMeters().get(i).getMiuID() +" - MIUID IS ALREADY REGISTERED");
 			}
 			
