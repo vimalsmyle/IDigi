@@ -38,6 +38,11 @@ CREATE TABLE `alertsettings` (
   KEY `AlertID` (`AlertID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1 MAX_ROWS=1;
 
+/*Data for the table `alertsettings` */
+
+insert  into `alertsettings`(`AlertID`,`NoAMRInterval`,`TimeOut`,`ReconnectionCharges`,`LateFee`,`ReconnectionChargeDays`,`DueDayCount`,`BillGenerationDate`,`GST`,`VendorGSTNumber`,`CustomerGSTNumber`,`RegisteredDate`,`ModifiedDate`) values 
+(1,2880,330,51,50,2,10,'2nd of everymonth',9,NULL,NULL,'2021-05-18 18:52:34','2021-09-06 21:13:09');
+
 /*Table structure for table `balancelog` */
 
 DROP TABLE IF EXISTS `balancelog`;
@@ -527,6 +532,11 @@ CREATE TABLE `user` (
   PRIMARY KEY (`ID`),
   KEY `CommunityID` (`CommunityID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=54 DEFAULT CHARSET=latin1;
+
+/*Data for the table `user` */
+
+insert  into `user`(`ID`,`UserID`,`UserName`,`UserPassword`,`RoleID`,`ActiveStatus`,`CommunityID`,`BlockID`,`CustomerID`,`CustomerUniqueID`,`MobileNumber`,`Email`,`CreatedByID`,`CreatedByRoleID`,`RegisteredDate`,`ModifiedDate`) values 
+(1,'Superadmin','Idigitronics','cvp/LzpadrQT+2k0WDjyOQ==',1,1,0,0,0,NULL,NULL,NULL,0,0,'2021-05-01 17:19:40','2021-05-01 17:19:37');
 
 /*Table structure for table `userrole` */
 
