@@ -1504,7 +1504,7 @@ public class CommunitySetUpDAO {
 		return result;
 	}
 	
-	public boolean checkMIUID(String miuID) throws SQLException {
+	public boolean checkMIUID(String miuID, long id) throws SQLException {
 		// TODO Auto-generated method stub
 		
 		Connection con = null;
@@ -1519,7 +1519,7 @@ public class CommunitySetUpDAO {
 		rs = pstmt.executeQuery();
 		
 		if(rs.next()) {
-				result = true;
+			if(id == rs.getInt("CustomerMeterID")) {result = false;	} else if (id == 0) {result = true; } else {result = true; }
 			}
 		
 		} catch (Exception ex) {
