@@ -207,6 +207,8 @@
 								<th>Tariff Name</th>
 								<th>Gateway Name</th>
 								<th>Location</th>
+								<th>Threshold Maximum</th>
+								<th>Threshold Minimum</th>
 							</tr>
 						</thead>
 						<tbody>

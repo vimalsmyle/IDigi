@@ -562,7 +562,7 @@ $("#addMeter")
 									
 									
 									"<div class=col-md-4>" +
-									"<div class='group form-group'>"
+									"<div class='group form-group has-feedback has-success bmd-form-group is-filled'>"
 									+"<label class=bmd-label-floating>Threshold Maximum<span class=impp><sup>*</sup></span></label> <input "
 									+"type=number class='form-control form-control-sm' name=thresholdMaximumAdd["+rowCount+"]"
 									+" id=thresholdMaximumAdd-"+rowCount+">"
@@ -570,10 +570,10 @@ $("#addMeter")
 									
 									
 									"<div class=col-md-4>" +
-									"<div class='group form-group'>"
+									"<div class='group form-group has-feedback has-success bmd-form-group is-filled'>"
 									+"<label class=bmd-label-floating>Threshold Minimum<span class=impp><sup>*</sup></span></label> <input "
-									+"type=number class='form-control form-control-sm' name=thresholdMinimum["+rowCount+"]"
-									+" id=thresholdMinimum-"+rowCount+">"
+									+"type=number class='form-control form-control-sm' name=thresholdMinimumAdd["+rowCount+"]"
+									+" id=thresholdMinimumAdd-"+rowCount+">"
 									+"<hr></div></div>   " +
 									
 									
@@ -677,7 +677,7 @@ $("#addMeter")
 		        }
 			 );
 			 
-			 $('#customerDetails').bootstrapValidator('addField','thresholdMaximumAdd['+rowCount+']', {
+			/* $('#customerDetails').bootstrapValidator('addField','thresholdMaximumAdd['+rowCount+']', {
 		        	message : 'Threshold maximum is not valid',
 					validators : {
 						notEmpty : {
@@ -713,7 +713,7 @@ $("#addMeter")
 						}
 					}
 		        }
-			 );
+			 );*/
 			 
 			 
 			 
@@ -1528,6 +1528,12 @@ function getCustomerMeters(CRNNumber){
 								},
 								 {
 									"data" : "location"
+								},
+								 {
+									"data" : "thresholdMaximum"
+								},
+								 {
+									"data" : "thresholdMinimum"
 								}
 									
 									
