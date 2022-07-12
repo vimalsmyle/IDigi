@@ -7,18 +7,11 @@ package com.idigitronics.IDigi.constants;
 
 public class DataBaseConstants {
 
-/*	public static final String DRIVER_CLASS = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
-	public static final String DRIVER_URL = "jdbc:sqlserver://192.168.1.201:1433;DatabaseName=PAYGTL_LORA_BLE";
-	public static final String USER_NAME = "sa";
-	public static final String PASSWORD = "hanbit";*/
-	
-	
 	public static final String DRIVER_CLASS = "com.mysql.cj.jdbc.Driver";
-//	public static final String DRIVER_URL = "jdbc:mysql://172.16.0.201:3306/paygtl_lora_ble";
 //	public static final String DRIVER_URL = "jdbc:mysql://localhost:3306/idigi";
 //	public static final String DRIVER_URL = "jdbc:mysql://49.207.3.214:3306/idigi";
 	public static final String DRIVER_URL = "jdbc:mysql://localhost:3306/idigitest";
 	public static final String USER_NAME = "root";
-	public static final String PASSWORD = "lamiv";
-//	public static final String PASSWORD = "root";
+//	public static final String PASSWORD = "lamiv";
+	public static final String PASSWORD = "root";
 }

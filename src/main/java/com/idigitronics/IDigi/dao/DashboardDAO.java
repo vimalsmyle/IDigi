@@ -1307,7 +1307,7 @@ public class DashboardDAO {
 					pstmt.setInt(14, rs.getInt("TariffID"));
 					pstmt.setFloat(15, dataRequestVO.getTariff());
 					pstmt.setInt(16, dataRequestVO.getValve_configuration());
-					pstmt.setInt(17, dataRequestVO.getValve_live_status());
+					pstmt.setInt(17, dataRequestVO.getPre_post_paid() == 1 ? dataRequestVO.getValve_configuration() : 1);
 					pstmt.setFloat(18, dataRequestVO.getCredit());
 					pstmt.setFloat(19, dataRequestVO.getEmergency_credit());
 					pstmt.setInt(20, dataRequestVO.getDays_elapsed_after_valve_trip());
@@ -1350,7 +1350,7 @@ public class DashboardDAO {
 								pstmt1.setInt(15, rs.getInt("TariffID"));
 								pstmt1.setFloat(16, dataRequestVO.getTariff());
 								pstmt1.setInt(17, dataRequestVO.getValve_configuration());
-								pstmt1.setInt(18, dataRequestVO.getValve_live_status());
+								pstmt1.setInt(18, dataRequestVO.getPre_post_paid() == 1 ? dataRequestVO.getValve_configuration() : 1);
 								pstmt1.setFloat(19, dataRequestVO.getCredit());
 								pstmt1.setFloat(20, dataRequestVO.getEmergency_credit());
 								pstmt1.setInt(21, dataRequestVO.getDays_elapsed_after_valve_trip());
@@ -1383,7 +1383,7 @@ public class DashboardDAO {
 									pstmt1.setInt(15, rs.getInt("TariffID"));
 									pstmt1.setFloat(16, dataRequestVO.getTariff());
 									pstmt1.setInt(17, dataRequestVO.getValve_configuration());
-									pstmt1.setInt(18, dataRequestVO.getValve_live_status());
+									pstmt1.setInt(18, dataRequestVO.getPre_post_paid() == 1 ? dataRequestVO.getValve_configuration() : 1);
 									pstmt1.setFloat(19, dataRequestVO.getCredit());
 									pstmt1.setFloat(20, dataRequestVO.getEmergency_credit());
 									pstmt1.setInt(21, dataRequestVO.getDays_elapsed_after_valve_trip());
