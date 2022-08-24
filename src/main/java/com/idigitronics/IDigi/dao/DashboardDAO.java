@@ -12,6 +12,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
@@ -754,8 +755,8 @@ public class DashboardDAO {
 							int totalConsumptionPerDayMonthYear = 0;
 						
 						// last 30 days	
-						
-						for(int i = 30; i>0; i-- ) {
+							
+						for(int i = 2; i>0; i-- ) {
 							
 								int customerConsumption = 0;
 								
@@ -1327,7 +1328,7 @@ public class DashboardDAO {
 						
 						if(rs2.next()) {
 							
-							PreparedStatement pstmt3 = con.prepareStatement("SELECT * FROM displaybalancelog WHERE MIUID = ? ");
+							PreparedStatement pstmt3 = con.prepareStatement("SELECT * FROM displaybalancelog WHERE MIUID = ? AND CustomerMeterID = " + rs.getInt("CustomerMeterID"));
 							pstmt3.setString(1, miuID);
 							ResultSet rs1 = pstmt3.executeQuery();
 							

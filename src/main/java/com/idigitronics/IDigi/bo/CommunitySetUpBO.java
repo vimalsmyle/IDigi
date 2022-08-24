@@ -329,7 +329,7 @@ public class CommunitySetUpBO {
 					"MOBILE NUMBER CAN CONTAIN ONLY NUMERIC VALUES OF EXACTLY 10 DIGITS");
 		}
 		
-		for(int i = 0; i < customervo.getMeters().size(); i++) {
+	/*	for(int i = 0; i < customervo.getMeters().size(); i++) {
 			
 			if(communitysetupdao.checkMIUID(customervo.getMeters().get(i).getMiuID(), customervo.getMeters().get(i).getCustomerMeterID())) {
 				throw new BusinessException(customervo.getMeters().get(i).getMiuID() +" - MIUID IS ALREADY REGISTERED");
@@ -339,7 +339,7 @@ public class CommunitySetUpBO {
 				throw new BusinessException("METERSIZE & GATEWAY ARE MANDATORY");
 			}
 			
-		}
+		}*/
 		
 		return communitysetupdao.editcustomer(customervo);
 	}
