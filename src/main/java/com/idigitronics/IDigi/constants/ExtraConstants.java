@@ -11,7 +11,7 @@ public class ExtraConstants {
 	public static final String LocalURL = "http://localhost:8080/IDigi";
 //	public static final String StaticIP = "http://49.207.3.214:8080/";
 	public static final String IDIGIIMAGEURL=LocalURL+"/common/images/logo-white.png";
-//	public static final String IDIGIIMAGEURL= ApplicationURL+"/common/images/1-hanbit.png";
+//	public static final String IDIGIIMAGEURL= ApplicationURL+"/common/images/Idigi-Logo.png";
 	public static final String CLIENTIMAGEURL= LocalURL+"/common/images/logo-white.png";
 //	public static final String CLIENTIMAGEURL=ApplicationURL+"/common/images/raychem.png";
 	public static final String fromEmail = "support@idigitronics.com";
