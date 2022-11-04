@@ -1,6 +1,6 @@
 /*
 SQLyog Community v13.1.1 (64 bit)
-MySQL - 5.5.62 : Database - idigi_standard
+MySQL - 5.5.62 : Database - idigitest
 *********************************************************************
 */
 
@@ -12,9 +12,9 @@ MySQL - 5.5.62 : Database - idigi_standard
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-CREATE DATABASE /*!32312 IF NOT EXISTS*/`idigi_standard` /*!40100 DEFAULT CHARACTER SET latin1 */;
+CREATE DATABASE /*!32312 IF NOT EXISTS*/`idigitest` /*!40100 DEFAULT CHARACTER SET latin1 */;
 
-USE `idigi_standard`;
+USE `idigitest`;
 
 /*Table structure for table `alertsettings` */
 
@@ -32,6 +32,7 @@ CREATE TABLE `alertsettings` (
   `GST` int(11) NOT NULL,
   `VendorGSTNumber` varchar(100) DEFAULT NULL,
   `CustomerGSTNumber` varchar(100) DEFAULT NULL,
+  `Remarks` varchar(1000) DEFAULT NULL,
   `RegisteredDate` datetime NOT NULL,
   `ModifiedDate` datetime NOT NULL,
   PRIMARY KEY (`AlertID`),
@@ -40,8 +41,8 @@ CREATE TABLE `alertsettings` (
 
 /*Data for the table `alertsettings` */
 
-insert  into `alertsettings`(`AlertID`,`NoAMRInterval`,`TimeOut`,`ReconnectionCharges`,`LateFee`,`ReconnectionChargeDays`,`DueDayCount`,`BillGenerationDate`,`GST`,`VendorGSTNumber`,`CustomerGSTNumber`,`RegisteredDate`,`ModifiedDate`) values 
-(1,2880,330,51,50,2,10,'2nd of everymonth',9,NULL,NULL,'2021-05-18 18:52:34','2021-09-06 21:13:09');
+insert  into `alertsettings`(`AlertID`,`NoAMRInterval`,`TimeOut`,`ReconnectionCharges`,`LateFee`,`ReconnectionChargeDays`,`DueDayCount`,`BillGenerationDate`,`GST`,`VendorGSTNumber`,`CustomerGSTNumber`,`Remarks`,`RegisteredDate`,`ModifiedDate`) values 
+(1,2880,330,51,50,2,10,'2nd of everymonth',9,NULL,NULL,NULL,'2021-05-18 18:52:34','2021-09-06 21:13:09');
 
 /*Table structure for table `balancelog` */
 
@@ -78,7 +79,7 @@ CREATE TABLE `balancelog` (
   `LowBalance` tinyint(4) DEFAULT NULL,
   `LogDate` datetime NOT NULL,
   PRIMARY KEY (`ReadingID`)
-) ENGINE=InnoDB AUTO_INCREMENT=942 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*Data for the table `balancelog` */
 
@@ -106,7 +107,7 @@ CREATE TABLE `billingdetails` (
   `LogDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `ModifiedDate` datetime DEFAULT NULL,
   PRIMARY KEY (`BillingID`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*Data for the table `billingdetails` */
 
@@ -136,7 +137,7 @@ CREATE TABLE `billingpaymentdetails` (
   `TransactionDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `AcknowledgeDate` datetime DEFAULT NULL,
   PRIMARY KEY (`TransactionID`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*Data for the table `billingpaymentdetails` */
 
@@ -156,7 +157,7 @@ CREATE TABLE `block` (
   `CreatedDate` datetime NOT NULL,
   `ModifiedDate` datetime NOT NULL,
   PRIMARY KEY (`BlockID`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*Data for the table `block` */
 
@@ -172,7 +173,7 @@ CREATE TABLE `command` (
   `CustomerUniqueID` varchar(100) NOT NULL,
   `CreatedDate` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`TransactionID`)
-) ENGINE=InnoDB AUTO_INCREMENT=81 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*Data for the table `command` */
 
@@ -189,7 +190,7 @@ CREATE TABLE `commanddetails` (
   `RegisteredDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `ModifiedDate` datetime DEFAULT NULL,
   PRIMARY KEY (`CommandDetailsID`)
-) ENGINE=InnoDB AUTO_INCREMENT=76 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*Data for the table `commanddetails` */
 
@@ -206,7 +207,7 @@ CREATE TABLE `community` (
   `CreatedDate` datetime NOT NULL,
   `ModifiedDate` datetime DEFAULT NULL,
   PRIMARY KEY (`CommunityID`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*Data for the table `community` */
 
@@ -231,7 +232,7 @@ CREATE TABLE `customerbillingdetails` (
   `LogDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `ModifiedDate` datetime DEFAULT NULL,
   PRIMARY KEY (`CustomerBillingID`)
-) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*Data for the table `customerbillingdetails` */
 
@@ -257,7 +258,7 @@ CREATE TABLE `customerdeletedetails` (
   `ModifiedDate` datetime DEFAULT NULL,
   PRIMARY KEY (`CustomerDeleteID`,`CustomerUniqueID`),
   UNIQUE KEY `CRNNumber` (`CustomerUniqueID`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*Data for the table `customerdeletedetails` */
 
@@ -275,11 +276,14 @@ CREATE TABLE `customerdeletemeter` (
   `MeterType` varchar(12) NOT NULL,
   `MeterSizeID` int(11) DEFAULT NULL,
   `PayType` varchar(10) NOT NULL,
+  `TariffID` int(11) DEFAULT NULL,
   `Location` varchar(100) DEFAULT NULL,
+  `ThresholdMaximum` float DEFAULT NULL,
+  `ThresholdMinimum` float DEFAULT NULL,
   `RegisteredDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `ModifiedDate` datetime NOT NULL,
   PRIMARY KEY (`CustomerMeterDeleteID`)
-) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*Data for the table `customerdeletemeter` */
 
@@ -304,7 +308,7 @@ CREATE TABLE `customerdetails` (
   `ModifiedDate` datetime DEFAULT NULL,
   PRIMARY KEY (`CustomerID`,`CustomerUniqueID`),
   UNIQUE KEY `CRNNumber` (`CustomerUniqueID`)
-) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*Data for the table `customerdetails` */
 
@@ -324,10 +328,12 @@ CREATE TABLE `customermeterdetails` (
   `TariffID` int(11) NOT NULL,
   `GatewayID` int(11) NOT NULL,
   `Location` varchar(100) DEFAULT NULL,
+  `ThresholdMaximum` float DEFAULT NULL,
+  `ThresholdMinimum` float DEFAULT NULL,
   `RegisteredDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `ModifiedDate` datetime NOT NULL,
   PRIMARY KEY (`CustomerMeterID`)
-) ENGINE=InnoDB AUTO_INCREMENT=68 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*Data for the table `customermeterdetails` */
 
@@ -367,7 +373,7 @@ CREATE TABLE `displaybalancelog` (
   `LowBalance` tinyint(4) DEFAULT NULL,
   `LogDate` datetime NOT NULL,
   PRIMARY KEY (`ReadingID`)
-) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*Data for the table `displaybalancelog` */
 
@@ -388,7 +394,7 @@ CREATE TABLE `feedback` (
   `RegisteredDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `ModifiedDate` datetime NOT NULL,
   PRIMARY KEY (`FeedbackID`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*Data for the table `feedback` */
 
@@ -405,7 +411,7 @@ CREATE TABLE `gateway` (
   `RegisteredDate` datetime NOT NULL,
   `ModifiedDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`GatewayID`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*Data for the table `gateway` */
 
@@ -439,7 +445,7 @@ CREATE TABLE `metersize` (
   `CreatedDate` datetime NOT NULL,
   `ModifiedDate` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`MeterSizeID`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*Data for the table `metersize` */
 
@@ -484,7 +490,7 @@ CREATE TABLE `tariff` (
   `RegisteredDate` datetime NOT NULL,
   `ModifiedDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`TariffID`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*Data for the table `tariff` */
 
@@ -520,7 +526,7 @@ CREATE TABLE `topup` (
   `TransactionDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `AcknowledgeDate` datetime NOT NULL,
   PRIMARY KEY (`TransactionID`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*Data for the table `topup` */
 
@@ -568,7 +574,7 @@ CREATE TABLE `user` (
   `ModifiedDate` datetime DEFAULT NULL,
   PRIMARY KEY (`ID`),
   KEY `CommunityID` (`CommunityID`)
-) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 /*Data for the table `user` */
 
@@ -616,7 +622,7 @@ CREATE TABLE `vacation` (
   `RegisteredDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `ModifiedDate` datetime NOT NULL,
   PRIMARY KEY (`VacationID`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*Data for the table `vacation` */
 

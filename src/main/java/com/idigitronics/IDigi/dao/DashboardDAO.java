@@ -756,7 +756,7 @@ public class DashboardDAO {
 						
 						// last 30 days	
 							
-						for(int i = 2; i>0; i-- ) {
+//						for(int i = 2; i>0; i-- ) {
 							
 								int customerConsumption = 0;
 								
@@ -777,7 +777,7 @@ public class DashboardDAO {
 										String query = "SELECT ((SELECT Reading FROM balancelog WHERE CustomerMeterID = ? AND LogDate BETWEEN CONCAT(CURDATE() - INTERVAL <day> DAY, ' 00:00:00') AND CONCAT(CURDATE() - INTERVAL <day> DAY, ' 23:59:59') ORDER BY ReadingID DESC LIMIT 0,1) \r\n" + 
 												 		"- (SELECT Reading FROM balancelog WHERE CustomerMeterID = ? AND LogDate BETWEEN CONCAT(CURDATE() - INTERVAL <day> DAY, ' 00:00:00') AND CONCAT(CURDATE() - INTERVAL <day> DAY, ' 23:59:59') ORDER BY ReadingID ASC LIMIT 0,1)) AS Units, CURDATE() - INTERVAL <day> DAY AS consumptiondate";
 							
-										pstmt = con.prepareStatement(query.replaceAll("<day>", ""+i));
+										pstmt = con.prepareStatement(query.replaceAll("<day>", ""+1));
 										pstmt.setInt(1, rs1.getInt("CustomerMeterID"));
 										pstmt.setInt(2, rs1.getInt("CustomerMeterID"));
 										rs = pstmt.executeQuery();
@@ -790,7 +790,7 @@ public class DashboardDAO {
 								
 								totalConsumptionPerDayMonthYear = totalConsumptionPerDayMonthYear + customerConsumption;
 								
-							}
+//							}
 						
 						xAxis.add(id != 0 ? rs3.getString("BlockName") : rs3.getString("CommunityName"));
 						yAxis.add(totalConsumptionPerDayMonthYear);

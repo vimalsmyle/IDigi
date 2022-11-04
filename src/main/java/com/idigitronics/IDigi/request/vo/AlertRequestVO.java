@@ -20,6 +20,7 @@ public class AlertRequestVO {
 	private int GST;
 	private String vendorGSTNumber;
 	private String customerGSTNumber;
+	private String remarks;
 	private int dueDayCount;
 	
 	public int getAlertID() {
@@ -93,6 +94,12 @@ public class AlertRequestVO {
 	}
 	public void setBillGenerationDate(String billGenerationDate) {
 		this.billGenerationDate = billGenerationDate;
+	}
+	public String getRemarks() {
+		return remarks;
+	}
+	public void setRemarks(String remarks) {
+		this.remarks = remarks;
 	}
 	
 }

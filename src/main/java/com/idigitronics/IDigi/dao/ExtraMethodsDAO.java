@@ -354,8 +354,7 @@ public class ExtraMethodsDAO {
 		ResultSet rs = null;
 		ResultSet rs1 = null;
 		ResultSet check = null;
-		SMSRequestVO smsRequestVO = null;
-		MailRequestVO mailRequestVO = null;
+		boolean billsGenerated = false;
 		
 		try {
 			
@@ -365,13 +364,14 @@ public class ExtraMethodsDAO {
 			check = con.prepareStatement("SELECT * FROM customerbillingdetails WHERE BillMonth = "+((currentdate.getMonthValue() - 1) == 0 ? 12 : (currentdate.getMonthValue() - 1)) +" AND BillYear = "+(currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear())).executeQuery();
 			
 			if(check.next()) {
+				billsGenerated = true;
 				logger.debug("Bills already generated for current month" + LocalDateTime.now());
 				System.out.println("Bills already generated for current month" + LocalDateTime.now());
 			} else {
 				
 			String billMonthYear = ((currentdate.getMonthValue() == 1) ? "December" : (currentdate.getMonthValue() == 2) ? "January" : (currentdate.getMonthValue() == 3) ? "February" : (currentdate.getMonthValue() == 4) ? "March" : (currentdate.getMonthValue() == 5) ? "April" : (currentdate.getMonthValue() == 6) ? "May" : (currentdate.getMonthValue() == 7) ? "June" : (currentdate.getMonthValue() == 8) ? "July" : (currentdate.getMonthValue() == 9) ? "August" : (currentdate.getMonthValue() == 10) ? "September" : (currentdate.getMonthValue() == 11) ? "October" : (currentdate.getMonthValue() == 12) ? "November" :"" ) + "-" + ((currentdate.getMonthValue() - 1 == 0) ? currentdate.getYear() - 1 : currentdate.getYear());
 			String drivename = "D:/Bills/" + (currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear()+"/"+(currentdate.getMonthValue() - 1));
-			pstmt = con.prepareStatement("SELECT cd.CommunityID, c.CommunityName, cd.BlockID, b.BlockName, cd.CustomerID, cd.CustomerUniqueID, cd.HouseNumber, cd.FirstName, cd.LastName, cd.Email, cd.MobileNumber, al.GST, al.LateFee, al.DueDayCount, al.VendorGSTNumber, al.CustomerGSTNumber FROM customerdetails AS cd LEFT JOIN community AS c ON c.CommunityID = cd.CommunityID LEFT JOIN block AS b ON cd.BlockID = b.BlockID JOIN alertsettings AS al WHERE cd.CustomerID IN (SELECT DISTINCT CustomerID FROM customermeterdetails WHERE PayType= 'Postpaid')");
+			pstmt = con.prepareStatement("SELECT cd.CommunityID, c.CommunityName, cd.BlockID, b.BlockName, cd.CustomerID, cd.CustomerUniqueID, cd.HouseNumber, cd.FirstName, cd.LastName, cd.Email, cd.MobileNumber, al.GST, al.LateFee, al.DueDayCount, al.VendorGSTNumber, al.CustomerGSTNumber, al.Remarks FROM customerdetails AS cd LEFT JOIN community AS c ON c.CommunityID = cd.CommunityID LEFT JOIN block AS b ON cd.BlockID = b.BlockID JOIN alertsettings AS al WHERE cd.CustomerID IN (SELECT DISTINCT CustomerID FROM customermeterdetails WHERE PayType= 'Postpaid')");
 			rs = pstmt.executeQuery();
 			while(rs.next()) {
 				List<IndividualBillingResponseVO> individualBillsList = new LinkedList<IndividualBillingResponseVO>();
@@ -381,8 +381,6 @@ public class ExtraMethodsDAO {
 				float totalConsumption = 0;
 				float previousDues = 0;
 				long invoiceNumber = 0;
-				smsRequestVO = new SMSRequestVO();
-				mailRequestVO = new MailRequestVO();
 				
 				pstmt1 = con.prepareStatement("SELECT * FROM billingdetails WHERE CustomerID = " + rs.getInt("CustomerID") + " AND BillMonth = "+ (currentdate.getMonthValue() - 1) + " AND BillYear = " + (currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear()));
 				rs1 = pstmt1.executeQuery();
@@ -439,8 +437,9 @@ public class ExtraMethodsDAO {
 					pdfDocument.addNewPage();
 					Document document = new Document(pdfDocument);
 					Paragraph newLine = new Paragraph("\n");
-					Paragraph head = new Paragraph("Bill");
+					Paragraph head = new Paragraph("Invoice");
 					Paragraph disclaimer = new Paragraph(ExtraConstants.Disclaimer);
+					Paragraph remarks = new Paragraph(rs.getString("Remarks"));
 					Paragraph copyRight = new Paragraph("----------------------------------All  rights reserved by IDigitronics ® Hyderabad---------------------------------");
 					PdfFont font = new PdfFontFactory().createFont(FontConstants.TIMES_BOLD);
 
@@ -705,6 +704,8 @@ public class ExtraMethodsDAO {
 					datatable.addCell(totalBillAmount);
 					
 					document.add(datatable.setHorizontalAlignment(HorizontalAlignment.CENTER));
+					document.add(newLine);
+					document.add(remarks.setHorizontalAlignment(HorizontalAlignment.CENTER).setFont(font));
 					document.add(disclaimer.setHorizontalAlignment(HorizontalAlignment.CENTER).setFont(font));
 					document.add(newLine);
 
@@ -713,18 +714,6 @@ public class ExtraMethodsDAO {
 					
 				}
 				
-				String message = "Dear "+ rs.getString("FirstName") + " " + rs.getString("LastName") + ", \n \n Your Bill of Amount " + (totalamount + tax + previousDues) + "/- for the consumption of " + billMonthYear +" has been generated. Kindly pay the bill before " + currentdate.plusDays(rs.getInt("DueDayCount")).toString() + " to avoid late fee charges. Thank You";
-				smsRequestVO.setMessage(message);
-				smsRequestVO.setToMobileNumber(rs.getString("MobileNumber"));
-				
-//				sendsms(smsRequestVO);
-				
-				mailRequestVO.setSubject("Consumption Bill for " + billMonthYear);
-				mailRequestVO.setToEmail(rs.getString("Email"));
-				mailRequestVO.setFileLocation(drivename+ "/" +rs.getString("CustomerUniqueID") + ".pdf");
-				mailRequestVO.setMessage(message);
-				
-//				sendmail(mailRequestVO);
 			}
 			
 			}
@@ -735,6 +724,64 @@ public class ExtraMethodsDAO {
 		} finally {
 //			pstmt.close();
 			check.close();
+			con.close();
+			if(!billsGenerated) {BillSmsAndMail();}
+		}
+		
+	}
+	
+	
+//	@Scheduled(cron="30 7 3 * * *") // scheduled for every month 3rd day at 7:30
+	public void BillSmsAndMail() throws SQLException {
+		
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		ResultSet rs1 = null;
+		SMSRequestVO smsRequestVO = null;
+		MailRequestVO mailRequestVO = null;
+		
+		try {
+			
+			con = getConnection();
+			LocalDate currentdate = LocalDate.now();
+			
+			String billMonthYear = ((currentdate.getMonthValue() == 1) ? "December" : (currentdate.getMonthValue() == 2) ? "January" : (currentdate.getMonthValue() == 3) ? "February" : (currentdate.getMonthValue() == 4) ? "March" : (currentdate.getMonthValue() == 5) ? "April" : (currentdate.getMonthValue() == 6) ? "May" : (currentdate.getMonthValue() == 7) ? "June" : (currentdate.getMonthValue() == 8) ? "July" : (currentdate.getMonthValue() == 9) ? "August" : (currentdate.getMonthValue() == 10) ? "September" : (currentdate.getMonthValue() == 11) ? "October" : (currentdate.getMonthValue() == 12) ? "November" :"" ) + "-" + ((currentdate.getMonthValue() - 1 == 0) ? currentdate.getYear() - 1 : currentdate.getYear());
+			String drivename = "D:/Bills/" + (currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear()+"/"+(currentdate.getMonthValue() - 1));
+			pstmt = con.prepareStatement("SELECT cd.CommunityID, c.CommunityName, cd.BlockID, b.BlockName, cd.CustomerID, cd.CustomerUniqueID, cd.HouseNumber, cd.FirstName, cd.LastName, cd.Email, cd.MobileNumber, al.GST, al.LateFee, al.DueDayCount, al.VendorGSTNumber, al.CustomerGSTNumber FROM customerdetails AS cd LEFT JOIN community AS c ON c.CommunityID = cd.CommunityID LEFT JOIN block AS b ON cd.BlockID = b.BlockID JOIN alertsettings AS al WHERE cd.CustomerID IN (SELECT DISTINCT CustomerID FROM customermeterdetails WHERE PayType= 'Postpaid')");
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				
+				rs1 = con.prepareStatement("SELECT * FROM customerbillingdetails WHERE CustomerID = "+rs.getLong("CustomerID")+ " And BillMonth = "+((currentdate.getMonthValue() - 1) == 0 ? 12 : (currentdate.getMonthValue() - 1)) +" AND BillYear = "+(currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear())).executeQuery();
+				
+				if(rs1.next()) {
+					logger.debug("Sending Bill message and email for the current month for Customer: "+rs.getLong("CustomerID") +"-"+ rs.getString("FirstName") + " " + rs.getString("LastName") + "at " + LocalDateTime.now());
+					System.out.println("Sending Bill message and email for the current month for Customer: "+rs.getLong("CustomerID") +"-"+ rs.getString("FirstName") + " " + rs.getString("LastName") + "at " + LocalDateTime.now());
+				
+				smsRequestVO = new SMSRequestVO();
+				mailRequestVO = new MailRequestVO();
+				
+				String message = "Dear "+ rs.getString("FirstName") + " " + rs.getString("LastName") + ", \n \n Your Bill of Amount " + (rs1.getFloat("TotalAmount") + rs1.getFloat("TaxAmount") + rs1.getFloat("PreviousDues")) + "/- for the consumption of " + billMonthYear +" has been generated. Kindly pay the bill before " + currentdate.plusDays(rs.getInt("DueDayCount")).toString() + " to avoid late fee charges. Thank You";
+				smsRequestVO.setMessage(message);
+				smsRequestVO.setToMobileNumber(rs.getString("MobileNumber"));
+				
+				mailRequestVO.setSubject("Consumption Bill for " + billMonthYear);
+				mailRequestVO.setToEmail(rs.getString("Email"));
+				mailRequestVO.setFileLocation(drivename+ "/" +rs.getString("CustomerUniqueID") + ".pdf");
+				mailRequestVO.setMessage(message);
+				
+				sendsms(smsRequestVO);				
+				sendmail(mailRequestVO);
+			}
+			
+		}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+		} finally {
+			pstmt.close();
+			rs1.close();
 			con.close();
 		}
 		
