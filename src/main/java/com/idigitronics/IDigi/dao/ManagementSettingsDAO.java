@@ -13,6 +13,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.google.gson.Gson;
 import com.idigitronics.IDigi.constants.DataBaseConstants;
 import com.idigitronics.IDigi.exceptions.BusinessException;
@@ -208,7 +210,7 @@ public class ManagementSettingsDAO {
 				alertvo.setGST(rs.getInt("GST"));
 				alertvo.setVendorGSTNumber(rs.getString("VendorGSTNumber"));
 				alertvo.setCustomerGSTNumber(rs.getString("CustomerGSTNumber"));
-				alertvo.setRemarks(rs.getString("Remarks"));
+				alertvo.setRemarks(StringUtils.isBlank(rs.getString("Remarks"))==true?"":rs.getString("Remarks"));
 				alertvo.setRegisteredDate(ExtraMethodsDAO.datetimeformatter(rs.getString("ModifiedDate")));
 				alertvo.setAlertID(rs.getInt("AlertID"));
 				alert_settings_list.add(alertvo);

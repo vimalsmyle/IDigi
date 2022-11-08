@@ -50,6 +50,7 @@ $(document)
 					}
 					
 					$('#billingstatusTable1').hide();
+					var responseD;
 					table = $('#billingstatusTable')
 							.DataTable(
 									{
@@ -78,6 +79,7 @@ $(document)
 											},
 											"complete" : function(json) {
 												console.log(json);
+												responseD = json.responseJSON;
 												return json.data;
 											},
 										},
@@ -186,35 +188,19 @@ $(document)
 													"targets" : "_all"
 												} ],
 										"buttons" : [
-												{
-													extend : 'excel',
-													footer : 'true',
-													//text : 'Excel',
-													exportOptions : {
-														columns : [ 0, 1, 2, 3,
-																4, 5, 6, 7, 8,
-																9, 10, 11, 12,
-																13, 14, 15 ]
-													},
-													//className: 'custom-btn fa fa-file-excel-o',
-													title : 'ReCharge Status'
-												},
-
-												{
-													extend : 'pdf',
-													footer : 'true',
-													exportOptions : {
-														columns : [ 0, 1, 2, 3,
-																4, 5, 6, 7, 8,
-																9, 10, 11, 12,
-																13, 14, 15 ]
-													},
-													//className: 'custom-btn fa fa-file-pdf-o',
-													//text : 'pdf',
-													orientation : 'landscape',
-													title : 'ReCharge Status',
-													pageSize : 'LEGAL'
-												}/*,
+											{
+												extend : 'excel',
+												footer : 'true',
+												// text : 'Excel',
+												title : 'Billing',
+											// className: 'custom-btn fa
+											// fa-file-excel-o'
+												
+												action:function(e,dt,node,config){
+													executeDownloadDashboard(responseD);
+												}
+												
+											}/*,
 												{
 
 													className : 'customButton',
@@ -301,6 +287,7 @@ $(document)
 																+ "<'row'<'col-sm-12'tr>>"
 																+ "<'row'<'col-sm-6 text-black'i><'col-sm-6 text-black'p>>";
 														var hCols = [ 3, 4 ];
+														var responseDD=d.data;
 														table = $(
 																'#billingstatusTable1')
 																.DataTable(
@@ -439,61 +426,19 @@ $(document)
 																						"targets" : "_all"
 																					} ],
 																			"buttons" : [
-																					{
-																						extend : 'excel',
-																						footer : 'true',
-																						//text : 'Excel',
-																						//className: 'custom-btn fa fa-file-excel-o',
-																						exportOptions : {
-																							columns : [
-																									0,
-																									1,
-																									2,
-																									3,
-																									4,
-																									5,
-																									6,
-																									7,
-																									8,
-																									9,
-																									10,
-																									11,
-																									12,
-																									13,
-																									14,
-																									15 ]
-																						},
-																						title : 'Billing Status'
-																					},
-
-																					{
-																						extend : 'pdf',
-																						footer : 'true',
-																						//className: 'custom-btn fa fa-file-excel-o',
-																						exportOptions : {
-																							columns : [
-																									0,
-																									1,
-																									2,
-																									3,
-																									4,
-																									5,
-																									6,
-																									7,
-																									8,
-																									9,
-																									10,
-																									11,
-																									12,
-																									13,
-																									14,
-																									15 ]
-																						},
-																						//text : 'pdf',
-																						orientation : 'landscape',
-																						title : 'Billing Status',
-																						pageSize : 'LEGAL'
-																					},
+																				{
+																					extend : 'excel',
+																					footer : 'true',
+																					// text : 'Excel',
+																					title : 'Billing',
+																				// className: 'custom-btn fa
+																				// fa-file-excel-o'
+																					
+																					action:function(e,dt,node,config){
+																						executeDownloadDashboard(responseDD);
+																					}
+																					
+																				},
 																					{
 																						text : 'Reset',
 																						action : function(
@@ -648,4 +593,43 @@ function getPayBillTransactionID(customerUniqueID){
 	});
 }
 
+function executeDownloadDashboard(data){
+	console.log(data);
+	
+	bootbox.confirm("ARE YOU SURE TO DOWNLOAD EXCEL", function(result) {
+		// alert(result);
+		if (result == true) {
+			$.ajax({
+				type : "POST",
+				contentType : "application/json",
+				url : ".//billing/excel",
+				xhrFields:{
+					responseType:'blob'
+				},
+				headers:{
+					'Accept':'application/json',
+					'contentType' : 'application/json'
+						},
+				data : JSON
+				.stringify(data),
+				success : function(data) {
+					
+					var blob =  data;
+					var downloadUrl = URL.createObjectURL(blob);
+					var a= document.createElement("a");
+					a.href = downloadUrl;
+					a.download = "Dashboard.xlsx";
+					document.body.appendChild(a);
+					a.click();
+					
+					
+				}
+			});
+		} else if (result == false) {
+			 alert("@"+false)
+
+		}
+	});
+	
+}
 

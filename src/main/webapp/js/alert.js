@@ -77,6 +77,8 @@ table = $('#alertTable')
 												},
 												{
 													"data" : "GST"
+												},{
+													"data" : "remarks"
 												},
 												{
 													"data" : "dueDayCount"
@@ -240,6 +242,18 @@ $(document)
 													}
 												}
 											},
+											remarkAdd : {
+												message : 'Remark is not valid',
+												validators : {
+													notEmpty : {
+														message : 'Remark is required and cannot be empty'
+													},
+													regexp : {
+														regexp : /[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$/,
+														message : 'Remark can only consist of number'
+													}
+												}
+											},
 											duedatecountAdd : {
 												message : 'Due Date Count is not valid',
 												validators : {
@@ -342,6 +356,18 @@ $(document)
 													}
 												}
 											},
+											remarkEdit1 : {
+												message : 'Remark is not valid',
+												validators : {
+													notEmpty : {
+														message : 'Remark is required and cannot be empty'
+													},
+													regexp : {
+														regexp : /[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$/,
+														message : 'Remark can only consist of number'
+													}
+												}
+											},
 											duedatecountEdit1 : {
 												message : 'Due Date Count is not valid',
 												validators : {
@@ -427,6 +453,7 @@ $(document)
 								data1["lateFee"] = $("#lateFeeAdd").val();
 
 								data1["GST"] = $("#gstAdd").val();
+								data1["remark"] = $("#remarkAdd").val();
 								data1["dueDayCount"] = $("#duedatecountAdd")
 										.val();
 
@@ -492,6 +519,7 @@ $(document)
 												.val();
 
 										data1["GST"] = $("#gstEdit1").val();
+										data1["remark"] = $("#remarkEdit1").val();
 										data1["dueDayCount"] = $(
 												"#duedatecountEdit1").val();
 

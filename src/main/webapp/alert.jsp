@@ -70,6 +70,7 @@
 									<th>Bill Generation Date</th>
 									<th>Late Fee</th>
 									<th>GST</th>
+									<th>Remark</th>
 									<th>Due Date Count</th>
 									<th>Date</th>
 									<th>Edit</th>
@@ -161,6 +162,14 @@
 									<label class="bmd-label-floating">GST<span class=impp><sup>*</sup></span></label> <input
 										type="text" class="form-control" name="gstAdd"
 										id="gstAdd">
+								</div>
+							</div>
+							
+							<div class="col-md-6">
+								<div class="group form-group">
+									<label class="bmd-label-floating">Remark<span class=impp><sup>*</sup></span></label> <input
+										type="text" class="form-control" name="remarkAdd"
+										id="remarkAdd">
 								</div>
 							</div>
 							
@@ -274,6 +283,14 @@
 									<label class="bmd-label-floating">GST<span class=impp><sup>*</sup></span></label> <input
 										type="text" class="form-control" name="gstEdit1"
 										id="gstEdit1">
+								</div>
+							</div>
+							
+							<div class="col-md-6">
+								<div class="group form-group">
+									<label class="bmd-label-floating">Remark<span class=impp><sup>*</sup></span></label> <input
+										type="text" class="form-control" name="remarkEdit1"
+										id="remarkEdit1">
 								</div>
 							</div>
 							
