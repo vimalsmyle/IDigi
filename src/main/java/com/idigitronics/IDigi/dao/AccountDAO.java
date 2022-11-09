@@ -1113,43 +1113,46 @@ public class AccountDAO {
         headercell5.setCellValue("Total Amount");
         
         org.apache.poi.ss.usermodel.Cell headercell6 = header.createCell(++columnCount);
-        headercell6.setCellValue("MIUID");
+        headercell6.setCellValue("Transacted By");
         
         org.apache.poi.ss.usermodel.Cell headercell7 = header.createCell(++columnCount);
-        headercell7.setCellValue("Meter Type");
+        headercell7.setCellValue("Mode of Payment");
         
         org.apache.poi.ss.usermodel.Cell headercell8 = header.createCell(++columnCount);
-        headercell8.setCellValue("Previous Reading");
+        headercell8.setCellValue("Paid Date");
         
         org.apache.poi.ss.usermodel.Cell headercell9 = header.createCell(++columnCount);
-        headercell9.setCellValue("Present Reading");
+        headercell9.setCellValue("Bill Month");
         
         org.apache.poi.ss.usermodel.Cell headercell10 = header.createCell(++columnCount);
-        headercell10.setCellValue("Consumption");
+        headercell10.setCellValue("Bill Year");
         
         org.apache.poi.ss.usermodel.Cell headercell11 = header.createCell(++columnCount);
-        headercell11.setCellValue("Tariff");
+        headercell11.setCellValue("Log Date");
         
         org.apache.poi.ss.usermodel.Cell headercell12 = header.createCell(++columnCount);
-        headercell12.setCellValue("Transacted By");
+        headercell12.setCellValue("Status");
         
         org.apache.poi.ss.usermodel.Cell headercell13 = header.createCell(++columnCount);
-        headercell13.setCellValue("Mode of Payment");
-                
-        org.apache.poi.ss.usermodel.Cell headercell14 = header.createCell(++columnCount);
-        headercell14.setCellValue("Paid Date");
+        headercell13.setCellValue("MIUID");
         
+        org.apache.poi.ss.usermodel.Cell headercell14 = header.createCell(++columnCount);
+        headercell14.setCellValue("Meter Type");
+                
         org.apache.poi.ss.usermodel.Cell headercell15 = header.createCell(++columnCount);
-        headercell15.setCellValue("Bill Month");
+        headercell15.setCellValue("Previous Reading");
         
         org.apache.poi.ss.usermodel.Cell headercell16 = header.createCell(++columnCount);
-        headercell16.setCellValue("Bill Year");
+        headercell16.setCellValue("Present Reading");
         
         org.apache.poi.ss.usermodel.Cell headercell17 = header.createCell(++columnCount);
-        headercell17.setCellValue("Log Date");
+        headercell17.setCellValue("Consumption");
         
         org.apache.poi.ss.usermodel.Cell headercell18 = header.createCell(++columnCount);
-        headercell18.setCellValue("Status");
+        headercell18.setCellValue("Tariff");
+        
+        org.apache.poi.ss.usermodel.Cell headercell19 = header.createCell(++columnCount);
+        headercell19.setCellValue("Bill Amount");
         
         for(int i = 0; i< billingResponseVO.getData().size(); i++) {
         	
@@ -1171,54 +1174,56 @@ public class AccountDAO {
             org.apache.poi.ss.usermodel.Cell cell5 = data.createCell(++billingColumnCount);
             cell5.setCellValue(billingResponseVO.getData().get(i).getTotalAmount());
             
+            org.apache.poi.ss.usermodel.Cell cell6 = data.createCell(++billingColumnCount);
+        	cell6.setCellValue(billingResponseVO.getData().get(i).getTransactedBy());
+        	
+        	org.apache.poi.ss.usermodel.Cell cell7 = data.createCell(++billingColumnCount);
+        	cell7.setCellValue(billingResponseVO.getData().get(i).getModeOfPayment());
+        	
+        	org.apache.poi.ss.usermodel.Cell cell8 = data.createCell(++billingColumnCount);
+        	cell8.setCellValue(billingResponseVO.getData().get(i).getPaidDate());
+        	
+        	org.apache.poi.ss.usermodel.Cell cell9 = data.createCell(++billingColumnCount);
+        	cell9.setCellValue(billingResponseVO.getData().get(i).getBillMonth());
+        	
+        	org.apache.poi.ss.usermodel.Cell cell10 = data.createCell(++billingColumnCount);
+        	cell10.setCellValue(billingResponseVO.getData().get(i).getBillYear());
+        	
+        	org.apache.poi.ss.usermodel.Cell cell11 = data.createCell(++billingColumnCount);
+        	cell11.setCellValue(billingResponseVO.getData().get(i).getLogDate());
+        	
+        	org.apache.poi.ss.usermodel.Cell cell12 = data.createCell(++billingColumnCount);
+        	cell12.setCellValue(billingResponseVO.getData().get(i).getStatus());
+            
             for(int j = 0; j < billingResponseVO.getData().get(i).getIndividualbills().size(); j++) {
             	
-            	individualBillingColumnCount = 5;
+            	individualBillingColumnCount = 12;
             	
-            	org.apache.poi.ss.usermodel.Cell cell6 = data.createCell(individualBillingColumnCount);
-            	cell6.setCellValue(billingResponseVO.getData().get(i).getIndividualbills().get(j).getMiuID());
+            	org.apache.poi.ss.usermodel.Cell cell13 = data.createCell(individualBillingColumnCount);
+            	cell13.setCellValue(billingResponseVO.getData().get(i).getIndividualbills().get(j).getMiuID());
             	
-            	org.apache.poi.ss.usermodel.Cell cell7 = data.createCell(++individualBillingColumnCount);
-            	cell7.setCellValue(billingResponseVO.getData().get(i).getIndividualbills().get(j).getMeterType());
+            	org.apache.poi.ss.usermodel.Cell cell14 = data.createCell(++individualBillingColumnCount);
+            	cell14.setCellValue(billingResponseVO.getData().get(i).getIndividualbills().get(j).getMeterType());
             	
-            	org.apache.poi.ss.usermodel.Cell cell8 = data.createCell(++individualBillingColumnCount);
-            	cell8.setCellValue(billingResponseVO.getData().get(i).getIndividualbills().get(j).getPreviousReading());
+            	org.apache.poi.ss.usermodel.Cell cell15 = data.createCell(++individualBillingColumnCount);
+            	cell15.setCellValue(billingResponseVO.getData().get(i).getIndividualbills().get(j).getPreviousReading());
             	
-            	org.apache.poi.ss.usermodel.Cell cell9 = data.createCell(++individualBillingColumnCount);
-            	cell9.setCellValue(billingResponseVO.getData().get(i).getIndividualbills().get(j).getPresentReading());
+            	org.apache.poi.ss.usermodel.Cell cell16 = data.createCell(++individualBillingColumnCount);
+            	cell16.setCellValue(billingResponseVO.getData().get(i).getIndividualbills().get(j).getPresentReading());
             	
-            	org.apache.poi.ss.usermodel.Cell cell10 = data.createCell(++individualBillingColumnCount);
-            	cell10.setCellValue(billingResponseVO.getData().get(i).getIndividualbills().get(j).getConsumption());
+            	org.apache.poi.ss.usermodel.Cell cell17 = data.createCell(++individualBillingColumnCount);
+            	cell17.setCellValue(billingResponseVO.getData().get(i).getIndividualbills().get(j).getConsumption());
             	
-            	org.apache.poi.ss.usermodel.Cell cell11 = data.createCell(++individualBillingColumnCount);
-            	cell11.setCellValue(billingResponseVO.getData().get(i).getIndividualbills().get(j).getTariff());
+            	org.apache.poi.ss.usermodel.Cell cell18 = data.createCell(++individualBillingColumnCount);
+            	cell18.setCellValue(billingResponseVO.getData().get(i).getIndividualbills().get(j).getTariff());
+            	
+            	org.apache.poi.ss.usermodel.Cell cell19 = data.createCell(++individualBillingColumnCount);
+            	cell19.setCellValue(billingResponseVO.getData().get(i).getIndividualbills().get(j).getBillAmount());
             	
             	if(j < billingResponseVO.getData().get(i).getIndividualbills().size() - 1) { data = spreadsheet.createRow(spreadsheet.getLastRowNum()+1); }
             	
             }
-            
-            
-            org.apache.poi.ss.usermodel.Cell cell12 = data.createCell(++individualBillingColumnCount);
-        	cell12.setCellValue(billingResponseVO.getData().get(i).getTransactedBy());
-        	
-        	org.apache.poi.ss.usermodel.Cell cell13 = data.createCell(++individualBillingColumnCount);
-        	cell13.setCellValue(billingResponseVO.getData().get(i).getModeOfPayment());
-        	
-        	org.apache.poi.ss.usermodel.Cell cell14 = data.createCell(++individualBillingColumnCount);
-        	cell14.setCellValue(billingResponseVO.getData().get(i).getPaidDate());
-        	
-        	org.apache.poi.ss.usermodel.Cell cell15 = data.createCell(++individualBillingColumnCount);
-        	cell15.setCellValue(billingResponseVO.getData().get(i).getBillMonth());
-        	
-        	org.apache.poi.ss.usermodel.Cell cell16 = data.createCell(++individualBillingColumnCount);
-        	cell16.setCellValue(billingResponseVO.getData().get(i).getBillYear());
-        	
-        	org.apache.poi.ss.usermodel.Cell cell17 = data.createCell(++individualBillingColumnCount);
-        	cell17.setCellValue(billingResponseVO.getData().get(i).getLogDate());
-        	
-        	org.apache.poi.ss.usermodel.Cell cell18 = data.createCell(++individualBillingColumnCount);
-        	cell18.setCellValue(billingResponseVO.getData().get(i).getStatus());
-        	
+                       
         }
         
         workbook.write(outByteStream);

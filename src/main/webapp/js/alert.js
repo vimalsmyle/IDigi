@@ -243,14 +243,10 @@ $(document)
 												}
 											},
 											remarkAdd : {
-												message : 'Remark is not valid',
+												message : 'Remarks are not valid',
 												validators : {
 													notEmpty : {
-														message : 'Remark is required and cannot be empty'
-													},
-													regexp : {
-														regexp : /[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$/,
-														message : 'Remark can only consist of number'
+														message : 'Remarks are required and cannot be empty'
 													}
 												}
 											},
@@ -357,14 +353,10 @@ $(document)
 												}
 											},
 											remarkEdit1 : {
-												message : 'Remark is not valid',
+												message : 'Remarks are not valid',
 												validators : {
 													notEmpty : {
-														message : 'Remark is required and cannot be empty'
-													},
-													regexp : {
-														regexp : /[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$/,
-														message : 'Remark can only consist of number'
+														message : 'Remarks are required and cannot be empty'
 													}
 												}
 											},
@@ -453,7 +445,7 @@ $(document)
 								data1["lateFee"] = $("#lateFeeAdd").val();
 
 								data1["GST"] = $("#gstAdd").val();
-								data1["remark"] = $("#remarkAdd").val();
+								data1["remarks"] = $("#remarkAdd").val();
 								data1["dueDayCount"] = $("#duedatecountAdd")
 										.val();
 
@@ -519,7 +511,7 @@ $(document)
 												.val();
 
 										data1["GST"] = $("#gstEdit1").val();
-										data1["remark"] = $("#remarkEdit1").val();
+										data1["remarks"] = $("#remarkEdit1").val();
 										data1["dueDayCount"] = $(
 												"#duedatecountEdit1").val();
 
@@ -646,6 +638,12 @@ function getAlertFormEdit(id) {
 												$('#gstEdit1').val(item.GST)
 														.trigger("change");
 												$("#formgstEdit")
+														.addClass(
+																"group form-group has-feedback has-success bmd-form-group is-filled")
+																
+												$('#remarkEdit1').val(item.remarks)
+														.trigger("change");
+												$("#formremarks")
 														.addClass(
 																"group form-group has-feedback has-success bmd-form-group is-filled")
 

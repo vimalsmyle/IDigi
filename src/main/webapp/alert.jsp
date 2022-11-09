@@ -70,7 +70,7 @@
 									<th>Bill Generation Date</th>
 									<th>Late Fee</th>
 									<th>GST</th>
-									<th>Remark</th>
+									<th>Remarks</th>
 									<th>Due Date Count</th>
 									<th>Date</th>
 									<th>Edit</th>

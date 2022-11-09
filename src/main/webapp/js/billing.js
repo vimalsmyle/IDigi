@@ -618,7 +618,7 @@ function executeDownloadDashboard(data){
 					var downloadUrl = URL.createObjectURL(blob);
 					var a= document.createElement("a");
 					a.href = downloadUrl;
-					a.download = "Dashboard.xlsx";
+					a.download = "Billing.xlsx";
 					document.body.appendChild(a);
 					a.click();
 					
