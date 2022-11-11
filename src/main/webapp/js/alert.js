@@ -357,6 +357,11 @@ $(document)
 												validators : {
 													notEmpty : {
 														message : 'Remarks are required and cannot be empty'
+													},
+													stringLength : {
+														min : 2,
+														max : 1000,
+														message : 'Remarks cannot be more than 1000 characters'
 													}
 												}
 											},
