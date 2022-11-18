@@ -130,7 +130,7 @@ $(document)
 															},
 															stringLength : {
 																min : 1,
-																max : 4,
+																max : 6,
 																message : 'Per Unit must be more than 1 and less than 4 characters long'
 															},
 															regexp : {
@@ -227,7 +227,7 @@ $(document)
 													},
 													stringLength : {
 														min : 1,
-														max : 4,
+														max : 6,
 														message : 'Per Unit must be more than 1 and less than 4 characters long'
 													},
 													regexp : {
