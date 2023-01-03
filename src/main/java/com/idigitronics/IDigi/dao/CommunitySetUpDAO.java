@@ -12,6 +12,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -872,10 +873,15 @@ public class CommunitySetUpDAO {
 		List<MeterRequestVO> customer_meter_list = null;
 		CustomerResponseVO customervo = null;
 		MeterRequestVO metervo = null;
-		
+		DropDownDAO dropdowndao = new DropDownDAO();
 		try {
 			con = getConnection();
 			customer_list = new LinkedList<CustomerResponseVO>();
+			
+			
+			HashMap<Integer, Integer> gasDropdown = dropdowndao.getallmetersizes("Gas");
+			
+			HashMap<Integer, Integer> waterDropdown = dropdowndao.getallmetersizes("Water");
 		
 			// create a view for this
 			
@@ -902,7 +908,7 @@ public class CommunitySetUpDAO {
 				customervo.setCustomerID(rs.getLong("CustomerID"));
 				customervo.setAction((roleid == 1 || roleid == 2 || roleid == 3 ? true : false));
 				
-				PreparedStatement pstmt2 = con.prepareStatement("SELECT cmd.CustomerMeterID, cmd.MIUID, cmd.MeterSerialNumber, cmd.MeterType, cmd.PayType, cmd.Location, cmd.TariffID, cmd.GatewayID, cmd.ThresholdMaximum, cmd.ThresholdMinimum, g.GatewayName, ms.MeterSize FROM customermeterdetails AS cmd LEFT JOIN gateway AS g ON g.GatewayID = cmd.GatewayID LEFT JOIN metersize AS ms ON ms.MeterSizeID = cmd.MeterSizeID WHERE cmd.CustomerID = " + customervo.getCustomerID());
+				PreparedStatement pstmt2 = con.prepareStatement("SELECT cmd.CustomerMeterID, cmd.MIUID, cmd.MeterSerialNumber, cmd.MeterType, cmd.PayType, cmd.Location, cmd.TariffID, cmd.GatewayID, cmd.ThresholdMaximum, cmd.ThresholdMinimum, g.GatewayName, ms.MeterSize, ms.MeterSizeID FROM customermeterdetails AS cmd LEFT JOIN gateway AS g ON g.GatewayID = cmd.GatewayID LEFT JOIN metersize AS ms ON ms.MeterSizeID = cmd.MeterSizeID WHERE cmd.CustomerID = " + customervo.getCustomerID());
 				
 				ResultSet rs2 = pstmt2.executeQuery();
 				
@@ -916,6 +922,10 @@ public class CommunitySetUpDAO {
 					metervo.setMeterType(rs2.getString("MeterType"));
 					metervo.setPayType(rs2.getString("PayType"));
 					metervo.setMeterSize(rs2.getFloat("MeterSize"));
+					
+					metervo.setMeterIDSize(rs2.getInt("MeterSizeID"));
+					
+					
 					metervo.setLocation(rs2.getString("Location"));
 					metervo.setTariffID(rs2.getInt("TariffID"));
 					metervo.setGatewayID(rs2.getInt("GatewayID"));
@@ -932,6 +942,9 @@ public class CommunitySetUpDAO {
 						metervo.setTariffName(rs3.getString("TariffName"));
 						
 					}
+					
+					metervo.setGasDropdown(gasDropdown);
+					metervo.setWaterDropdown(waterDropdown);
 					
 					customer_meter_list.add(metervo);
 				}

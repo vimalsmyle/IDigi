@@ -776,7 +776,7 @@ public class ExtraMethodsDAO {
 				mailRequestVO.setMessage(message);
 				
 				sendsms(smsRequestVO);				
-				sendmail(mailRequestVO);
+//				sendmail(mailRequestVO);
 			}
 			
 		}

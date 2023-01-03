@@ -24,7 +24,6 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-
 import com.google.gson.Gson;
 import com.idigitronics.IDigi.constants.DataBaseConstants;
 import com.idigitronics.IDigi.constants.ExtraConstants;
@@ -33,7 +32,6 @@ import com.idigitronics.IDigi.request.vo.CheckOutRequestVO;
 import com.idigitronics.IDigi.request.vo.CommandGroupRequestVO;
 import com.idigitronics.IDigi.request.vo.ConfigurationRequestVO;
 import com.idigitronics.IDigi.request.vo.DataRequestVO;
-import com.idigitronics.IDigi.request.vo.MailRequestVO;
 import com.idigitronics.IDigi.request.vo.PayBillRequestVO;
 import com.idigitronics.IDigi.request.vo.RazorPayOrderVO;
 import com.idigitronics.IDigi.request.vo.RazorpayRequestVO;
@@ -68,7 +66,6 @@ import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.property.HorizontalAlignment;
 import com.itextpdf.layout.property.TextAlignment;
 import com.itextpdf.layout.property.VerticalAlignment;
-import com.mysql.cj.protocol.Resultset;
 
 /**
  * @author K VimaL Kumar
