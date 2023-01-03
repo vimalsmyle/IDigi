@@ -744,7 +744,7 @@ public class AccountDAO {
 					Paragraph head = new Paragraph("Receipt");
 					Paragraph disclaimer = new Paragraph(ExtraConstants.Disclaimer);
 					Paragraph copyRight = new Paragraph(
-							"------------------------------------All  rights reserved by IDigitronics ® Hyderabad-----------------------------------");
+							"------------------------------------All  rights reserved by IDigitronics ï¿½ Hyderabad-----------------------------------");
 					PdfFont font = new PdfFontFactory().createFont(FontConstants.TIMES_BOLD);
 
 					// change according to the image directory
@@ -998,7 +998,7 @@ public class AccountDAO {
 		
 		try {
 			con = getConnection();
-			String query = "SELECT c.CommunityName, b.BlockName, cd.FirstName, cd.LastName, cd.HouseNumber, cd.CustomerUniqueID, cd.CustomerID, cbd.CustomerBillingID, cbd.TotalAmount, cbd.TaxAmount, cbd.TotalConsumption, cbd.PreviousDues, cbd.DueDate, cbd.Status, cbd.BillMonth, cbd.BillYear, cbd.LogDate FROM customerdetails AS cd LEFT JOIN customerbillingdetails AS cbd ON cd.CustomerID = cbd.CustomerID LEFT JOIN community AS c ON c.CommunityID = cd.CommunityID LEFT JOIN block AS b ON b.BlockID = cd.BlockID WHERE cbd.BillMonth = "+ (currentdate.getMonthValue() - 1) +" AND cbd.BillYear = "+ (currentdate.getMonthValue() == 1 ? (currentdate.getYear() - 1) : currentdate.getYear()) +" <change>"; 
+			String query = "SELECT c.CommunityName, b.BlockName, cd.FirstName, cd.LastName, cd.HouseNumber, cd.CustomerUniqueID, cd.CustomerID, cbd.CustomerBillingID, cbd.TotalAmount, cbd.TaxAmount, cbd.TotalConsumption, cbd.PreviousDues, cbd.DueDate, cbd.Status, cbd.BillMonth, cbd.BillYear, cbd.LogDate FROM customerdetails AS cd LEFT JOIN customerbillingdetails AS cbd ON cd.CustomerID = cbd.CustomerID LEFT JOIN community AS c ON c.CommunityID = cd.CommunityID LEFT JOIN block AS b ON b.BlockID = cd.BlockID WHERE cbd.BillMonth = "+ ((currentdate.getMonthValue() - 1) == 0 ? 12 : (currentdate.getMonthValue() - 1)) +" AND cbd.BillYear = "+ (currentdate.getMonthValue() == 1 ? (currentdate.getYear() - 1) : currentdate.getYear()) +" <change>"; 
 			pstmt = con.prepareStatement(query.replaceAll("<change>", ((roleid == 1 || roleid == 4) && (filterCid == -1)) ? "ORDER BY cd.CustomerID DESC" : ((roleid == 1 || roleid == 4) && (filterCid != -1)) ? " AND cd.CommunityID = "+filterCid+" ORDER BY cd.CustomerID DESC" : (roleid == 2 || roleid == 5) ? "AND cd.BlockID = "+id+ " ORDER BY cd.CustomerID DESC" : (roleid == 3) ? "AND cd.CustomerUniqueID = '"+id+"'":""));
 			rs = pstmt.executeQuery();
 			
@@ -1448,7 +1448,7 @@ public class AccountDAO {
 					Paragraph newLine = new Paragraph("\n");
 					Paragraph head = new Paragraph("Receipt");
 					Paragraph disclaimer = new Paragraph(ExtraConstants.Disclaimer);
-					Paragraph copyRight = new Paragraph("----------------------------------All  rights reserved by IDigitronics ® Hyderabad---------------------------------");
+					Paragraph copyRight = new Paragraph("----------------------------------All  rights reserved by IDigitronics ï¿½ Hyderabad---------------------------------");
 					PdfFont font = new PdfFontFactory().createFont(FontConstants.TIMES_BOLD);
 
 					// change according to the image directory

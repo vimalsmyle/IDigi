@@ -279,7 +279,7 @@ public class ExtraMethodsDAO {
 						pstmt3.setInt(11, rs.getInt("TariffID"));
 						pstmt3.setFloat(12, rs.getFloat("Tariff"));
 						pstmt3.setFloat(13, billAmount);
-						pstmt3.setInt(14, currentdate.getMonthValue() - 1);
+						pstmt3.setInt(14, ((currentdate.getMonthValue() - 1) == 0 ? 12 : (currentdate.getMonthValue() - 1)));
 						pstmt3.setInt(15, currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear());
 						
 						if(pstmt3.executeUpdate() > 0) {
@@ -442,7 +442,7 @@ public class ExtraMethodsDAO {
 					Paragraph head = new Paragraph("Invoice");
 					Paragraph disclaimer = new Paragraph(ExtraConstants.Disclaimer);
 					Paragraph remarks = new Paragraph("Remarks: "+rs.getString("Remarks"));
-					Paragraph copyRight = new Paragraph("----------------------------------All  rights reserved by IDigitronics ® Hyderabad---------------------------------");
+					Paragraph copyRight = new Paragraph("----------------------------------All  rights reserved by IDigitronics ï¿½ Hyderabad---------------------------------");
 					PdfFont font = new PdfFontFactory().createFont(FontConstants.TIMES_BOLD);
 
 					// change according to the image directory
