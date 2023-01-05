@@ -1038,7 +1038,7 @@ public class AccountDAO {
 				billingresponsevo.setBillYear(rs.getInt("BillYear"));
 				billingresponsevo.setLogDate(rs.getString("LogDate"));
 				
-				pstmt1 = con.prepareStatement("SELECT * FROM billingdetails WHERE CustomerID = " + rs.getInt("CustomerID") + " AND BillMonth = "+ (currentdate.getMonthValue() - 1) + " AND BillYear = " + (currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear()));
+				pstmt1 = con.prepareStatement("SELECT * FROM billingdetails WHERE CustomerID = " + rs.getInt("CustomerID") + " AND BillMonth = "+ ((currentdate.getMonthValue() - 1) == 0 ? 12 : (currentdate.getMonthValue() - 1)) + " AND BillYear = " + (currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear()));
 				rs1 = pstmt1.executeQuery();
 				individualbills = new LinkedList<IndividualBillingResponseVO>();
 				while (rs1.next()) {
