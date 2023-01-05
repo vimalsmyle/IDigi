@@ -730,7 +730,7 @@ public class ExtraMethodsDAO {
 //			pstmt.close();
 			check.close();
 			con.close();
-//			if(!billsGenerated) {BillSmsAndMail();}
+			if(!billsGenerated) {BillSmsAndMail();}
 		}
 		
 	}
