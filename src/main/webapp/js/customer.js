@@ -10,7 +10,8 @@ $(document).ready(function() {
 	$.each(data.data, function(i, item) {
 		if ($("#custUniqueId").val() == item.CustomerUniqueID) {
 			
-			
+			var GasOptions;
+			var WaterOptions;
 			
 			
 			var rowCount = 0;
@@ -67,7 +68,26 @@ $(document).ready(function() {
 				$.each(data.dropDownGateways, function(key, value) {
 					OptionsGatewayEdit = OptionsGatewayEdit + "<option value='" + key + "'>" + value
 							+ "</option>";
+					
+					
+					/*$.getJSON("./metersizes/Gas", function(data) {
+						 GasOptions = '<option value=-1>Select  Meter Size</option>';
+						$.each(data.dropDownMeterSizes, function(key, value) {
+							GasOptions = GasOptions + '<option value=' + key + '>' + value
+									+ '</option>';
+						});
+					});
+					
+					$.getJSON("./metersizes/Water", function(data) {
+						 WaterOptions = '<option value=-1>Select  Meter Size</option>';
+						$.each(data.dropDownMeterSizes, function(key, value) {
+							WaterOptions = WaterOptions + '<option value=' + key + '>' + value
+									+ '</option>';
+						});
+					});*/
 				});
+				
+				
 			
 			$.each(item.meters, function(i, meter) {
 				rowCount++;
@@ -285,25 +305,40 @@ $(document).ready(function() {
 					
 					$("#gatewayIDAdd-"+rowCount).val(meter.gatewayID);
 					
-					
-					$.getJSON("./metersizes/"+meter.meterType, function(data) {
-						var Options = '<option value=-1>Select  Meter Size</option>';
-						$.each(data.dropDownMeterSizes, function(key, value) {
-							Options = Options + '<option value=' + key + '>' + value
-									+ '</option>';
-						});
-						$('#meterSizeAdd-'+rowCount).append(Options);
+					var GasOptions;
+					$.each(meter.gasDropdown, function(key, value) {
+						GasOptions = GasOptions + '<option value=' + key + '>' + value
+								+ '</option>';
 					});
+					
+					var WaterOptions;
+					$.each(meter.waterDropdown, function(key, value) {
+						WaterOptions = WaterOptions + '<option value=' + key + '>' + value
+								+ '</option>';
+					});
+					
+					
+					if(meter.meterType=="Gas"){
+						$("#meterSizeAdd-"+rowCount).append(GasOptions);
+						$("#meterSizeAdd-"+rowCount).val(meter.meterIDSize).change();
+					}else{
+						$("#meterSizeAdd-"+rowCount).append(WaterOptions);
+						$("#meterSizeAdd-"+rowCount).val(meter.meterIDSize).change();
+					}
+					
+					
+					
+					
 					
 					
 					
 			});
 			 });
 			if(rowCount>13){
-				$("#meterSizeAdd-"+rowCount).val(meter.meterSize);
+				$("#meterSizeAdd-"+rowCount).val(item.meters.length);
 				$("#addMeter").hide();
 			}else{
-				$("#meterSizeAdd-"+rowCount).val(meter.meterSize);
+				$("#meterSizeAdd-"+rowCount).val(item.meters.length);
 				$("#addMeter").show();
 			}
 			

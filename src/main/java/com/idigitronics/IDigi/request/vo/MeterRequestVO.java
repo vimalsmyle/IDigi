@@ -3,6 +3,8 @@
  */
 package com.idigitronics.IDigi.request.vo;
 
+import java.util.HashMap;
+
 /**
  * @author K VimaL Kumar
  *
@@ -15,6 +17,7 @@ public class MeterRequestVO {
 	private String meterType;
 	private float meterSize;
 	private int meterSizeID;
+	private Integer meterIDSize;
 	private String payType;
 	private int tariffID;
 	private int gatewayID;
@@ -24,6 +27,8 @@ public class MeterRequestVO {
 	private float thresholdMinimum;
 	private String tariffName;
 	private String modifiedDate;
+	private HashMap<Integer, Integer> gasDropdown;
+	private HashMap<Integer, Integer> waterDropdown;
 	
 	public String getMiuID() {
 		return miuID;
@@ -115,5 +120,26 @@ public class MeterRequestVO {
 	public void setThresholdMinimum(float thresholdMinimum) {
 		this.thresholdMinimum = thresholdMinimum;
 	}
+	public HashMap<Integer, Integer> getGasDropdown() {
+		return gasDropdown;
+	}
+	public void setGasDropdown(HashMap<Integer, Integer> gasDropdown) {
+		this.gasDropdown = gasDropdown;
+	}
+	public HashMap<Integer, Integer> getWaterDropdown() {
+		return waterDropdown;
+	}
+	public void setWaterDropdown(HashMap<Integer, Integer> waterDropdown) {
+		this.waterDropdown = waterDropdown;
+	}
+	public Integer getMeterIDSize() {
+		return meterIDSize;
+	}
+	public void setMeterIDSize(Integer meterIDSize) {
+		this.meterIDSize = meterIDSize;
+	}
+	
+	
+	
 	
 }

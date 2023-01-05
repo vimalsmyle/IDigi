@@ -279,7 +279,7 @@ public class ExtraMethodsDAO {
 						pstmt3.setInt(11, rs.getInt("TariffID"));
 						pstmt3.setFloat(12, rs.getFloat("Tariff"));
 						pstmt3.setFloat(13, billAmount);
-						pstmt3.setInt(14, currentdate.getMonthValue() - 1);
+						pstmt3.setInt(14, ((currentdate.getMonthValue() - 1) == 0 ? 12 : (currentdate.getMonthValue() - 1)));
 						pstmt3.setInt(15, currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear());
 						
 						if(pstmt3.executeUpdate() > 0) {
@@ -373,7 +373,7 @@ public class ExtraMethodsDAO {
 			} else {
 				
 			String billMonthYear = ((currentdate.getMonthValue() == 1) ? "December" : (currentdate.getMonthValue() == 2) ? "January" : (currentdate.getMonthValue() == 3) ? "February" : (currentdate.getMonthValue() == 4) ? "March" : (currentdate.getMonthValue() == 5) ? "April" : (currentdate.getMonthValue() == 6) ? "May" : (currentdate.getMonthValue() == 7) ? "June" : (currentdate.getMonthValue() == 8) ? "July" : (currentdate.getMonthValue() == 9) ? "August" : (currentdate.getMonthValue() == 10) ? "September" : (currentdate.getMonthValue() == 11) ? "October" : (currentdate.getMonthValue() == 12) ? "November" :"" ) + "-" + ((currentdate.getMonthValue() - 1 == 0) ? currentdate.getYear() - 1 : currentdate.getYear());
-			String drivename = "D:/Bills/" + (currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear()+"/"+(currentdate.getMonthValue() - 1));
+			String drivename = "D:/Bills/" + (currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear()+"/"+((currentdate.getMonthValue() - 1) == 0 ? 12 : (currentdate.getMonthValue() - 1)));
 			pstmt = con.prepareStatement("SELECT cd.CommunityID, c.CommunityName, cd.BlockID, b.BlockName, cd.CustomerID, cd.CustomerUniqueID, cd.HouseNumber, cd.FirstName, cd.LastName, cd.Email, cd.MobileNumber, al.GST, al.LateFee, al.DueDayCount, al.VendorGSTNumber, al.CustomerGSTNumber, al.Remarks FROM customerdetails AS cd LEFT JOIN community AS c ON c.CommunityID = cd.CommunityID LEFT JOIN block AS b ON cd.BlockID = b.BlockID JOIN alertsettings AS al WHERE cd.CustomerID IN (SELECT DISTINCT bd.CustomerID FROM customermeterdetails cd LEFT JOIN billingdetails AS bd ON cd.CustomerID = bd.CustomerID WHERE cd.PayType = 'Postpaid' AND bd.BillMonth = "+((currentdate.getMonthValue() - 1) == 0 ? 12 : (currentdate.getMonthValue() - 1))+" AND bd.BillYear = "+(currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear())+")");
 			rs = pstmt.executeQuery();
 			while(rs.next()) {
@@ -385,7 +385,7 @@ public class ExtraMethodsDAO {
 				float previousDues = 0;
 				long invoiceNumber = 0;
 				
-				pstmt1 = con.prepareStatement("SELECT * FROM billingdetails WHERE CustomerID = " + rs.getInt("CustomerID") + " AND BillMonth = "+ (currentdate.getMonthValue() - 1) + " AND BillYear = " + (currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear()));
+				pstmt1 = con.prepareStatement("SELECT * FROM billingdetails WHERE CustomerID = " + rs.getInt("CustomerID") + " AND BillMonth = "+ ((currentdate.getMonthValue() - 1) == 0 ? 12 : (currentdate.getMonthValue() - 1)) + " AND BillYear = " + (currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear()));
 				rs1 = pstmt1.executeQuery();
 				while (rs1.next()) {
 					IndividualBillingResponseVO individualBillingResponseVO = new IndividualBillingResponseVO();
@@ -442,7 +442,7 @@ public class ExtraMethodsDAO {
 					Paragraph head = new Paragraph("Invoice");
 					Paragraph disclaimer = new Paragraph(ExtraConstants.Disclaimer);
 					Paragraph remarks = new Paragraph("Remarks: "+rs.getString("Remarks"));
-					Paragraph copyRight = new Paragraph("----------------------------------All  rights reserved by IDigitronics ® Hyderabad---------------------------------");
+					Paragraph copyRight = new Paragraph("----------------------------------All  rights reserved by IDigitronics ï¿½ Hyderabad---------------------------------");
 					PdfFont font = new PdfFontFactory().createFont(FontConstants.TIMES_BOLD);
 
 					// change according to the image directory
@@ -730,7 +730,7 @@ public class ExtraMethodsDAO {
 //			pstmt.close();
 			check.close();
 			con.close();
-			if(!billsGenerated) {BillSmsAndMail();}
+//			if(!billsGenerated) {BillSmsAndMail();}
 		}
 		
 	}
@@ -776,7 +776,7 @@ public class ExtraMethodsDAO {
 				mailRequestVO.setMessage(message);
 				
 				sendsms(smsRequestVO);				
-				sendmail(mailRequestVO);
+//				sendmail(mailRequestVO);
 			}
 			
 		}

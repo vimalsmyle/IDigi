@@ -68,7 +68,7 @@
 														<div
 															class="form-group has-feedback has-success bmd-form-group is-filled">
 															<label class="bmd-label-floating select-label">Select
-																CRN/CAN/UAN</label> <select class="form-control"
+																CRN/CAN/UAN</label> <select class="form-control select2"
 																id="manualCRNAll" name="manualCRNAll"
 																onchange="showMetersbyCRN(this.value);">
 															</select>
