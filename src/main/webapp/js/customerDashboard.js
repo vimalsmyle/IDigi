@@ -607,7 +607,7 @@ $("#dashboardFilter")
 													// fa-file-excel-o'
 														
 														action:function(e,dt,node,config){
-															executeDownloadDashboard(responseD);
+															executeDownloadFilterDashboard(responseD);
 														}
 														
 													}/*,
@@ -639,3 +639,42 @@ $("#dashboardFilter")
 			return false;
 		});
 
+function executeDownloadFilterDashboard(data){
+	console.log(data);
+	
+	bootbox.confirm("ARE YOU SURE TO DOWNLOAD EXCEL", function(result) {
+		// alert(result);
+		if (result == true) {
+			$.ajax({
+				type : "POST",
+				contentType : "application/json",
+				url : "./filterdashboard/excel",
+				xhrFields:{
+					responseType:'blob'
+				},
+				headers:{
+					'Accept':'application/json',
+					'contentType' : 'application/json'
+						},
+				data : JSON
+				.stringify(data),
+				success : function(data) {
+					
+					var blob =  data;
+					var downloadUrl = URL.createObjectURL(blob);
+					var a= document.createElement("a");
+					a.href = downloadUrl;
+					a.download = "FilterDashboard.xlsx";
+					document.body.appendChild(a);
+					a.click();
+					
+					
+				}
+			});
+		} else if (result == false) {
+			 alert("@"+false)
+
+		}
+	});
+	
+}
