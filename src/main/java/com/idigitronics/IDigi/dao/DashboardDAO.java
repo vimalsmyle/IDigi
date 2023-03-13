@@ -12,6 +12,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -57,7 +58,7 @@ public class DashboardDAO {
 		return connection;
 	}
 
-	public List<DashboardResponseVO> getDashboarddetails(String type, String communityName, String blockName, String customerUniqueID, int filter)
+	public List<DashboardResponseVO> getDashboarddetails(String type, String communityName, String blockName, String customerUniqueID, int filter, FilterVO filtervo)
 			throws SQLException {
 		Connection con = null;
 		PreparedStatement pstmt = null;
@@ -130,6 +131,25 @@ public class DashboardDAO {
 					stringBuilder.append((filter == 1 || filter == 2) ? " AND dbl.ValveStatus = "+ (filter == 1 ? 1 : 0) : (filter == 3 || filter == 4) ? (filter == 3 ? " AND dbl.LogDate >= (NOW() - INTERVAL (SELECT NoAMRInterval/(24*60) FROM alertsettings) DAY) " : " AND dbl.LogDate <= (NOW() - INTERVAL (SELECT NoAMRInterval/(24*60) FROM alertsettings) DAY) " ) :  (filter == 5) ? " AND dbl.LowBattery = "+ 1: (filter == 6) ? " AND dbl.Balance <= 0" : "");
 					
 				}
+				
+				if(filtervo != null) {
+					LocalDateTime dateTime = LocalDateTime.now();  
+				    DateTimeFormatter dateTimeFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");  
+					
+					if(!filtervo.getDateFrom().equalsIgnoreCase("null") || !filtervo.getDateTo().equalsIgnoreCase("null")) {
+						stringBuilder.append(" AND dbl.LogDate BETWEEN '" + filtervo.getDateFrom() + "' AND '" + (filtervo.getDateTo() != null ? filtervo.getDateTo()+"'" : "'"+dateTime.format(dateTimeFormat)+"'"));
+					}
+					if(filtervo.getReadingFrom() != 0 || filtervo.getReadingTo() != 0) {
+						stringBuilder.append(" AND dbl.Reading BETWEEN " + (filtervo.getReadingFrom() != 0 ? filtervo.getReadingFrom() : 0) + " AND " + (filtervo.getReadingTo() != 0 ? filtervo.getReadingTo() : 9999999));
+					}
+					if(filtervo.getBatteryVoltageFrom() != 0 || filtervo.getBatteryVoltageTo() != 0) {
+						stringBuilder.append(" AND dbl.BatteryVoltage BETWEEN " + (filtervo.getBatteryVoltageFrom() != 0 ? (filtervo.getBatteryVoltageFrom()) : 0) + " AND " + (filtervo.getBatteryVoltageTo() != 0 ? (filtervo.getBatteryVoltageTo()) : 100));
+					}
+					if(filtervo.getTamperType() > 0) {
+						stringBuilder.append(filtervo.getTamperType() == 1 ? " AND dbl.DoorOpenTamper = 1" : " AND dbl.MagneticTamper = 1");
+					}
+				}
+				
 				stringBuilder.append(" ORDER BY dbl.LogDate DESC");
 				pstmt3 = con.prepareStatement(stringBuilder.toString());
 				pstmt3.setInt(1, rs.getInt("CustomerID"));
@@ -203,7 +223,46 @@ public class DashboardDAO {
 						}
 					}
 					
-					individualDashboardList.add(individualDashboardResponseVO);
+					if(filtervo != null) {
+						SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+						SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+						
+						if(!filtervo.getDateFrom().equalsIgnoreCase("null") || !filtervo.getDateTo().equalsIgnoreCase("null")) {
+							
+							long fromDateInMinutes = TimeUnit.MILLISECONDS.toMinutes(sdf.parse(filtervo.getDateFrom()).getTime());
+							long toDateInMinutes = (!filtervo.getDateTo().equalsIgnoreCase("null") ? TimeUnit.MILLISECONDS.toMinutes(sdf.parse(filtervo.getDateTo()).getTime()) : 0);
+							long responseDateInMinutes = TimeUnit.MILLISECONDS.toMinutes(sdf1.parse(individualDashboardResponseVO.getTimeStamp()).getTime());
+							long currentDateInMinutes = TimeUnit.MILLISECONDS.toMinutes(currentDateTime.getTime());
+							
+							if((responseDateInMinutes >= fromDateInMinutes) && (responseDateInMinutes <= (toDateInMinutes != 0 ? toDateInMinutes : currentDateInMinutes))) {
+								individualDashboardList.add(individualDashboardResponseVO);
+							}
+							
+						}
+						if(filtervo.getReadingFrom() != 0 || filtervo.getReadingTo() != 0) {
+							
+							if((individualDashboardResponseVO.getReading() >= filtervo.getReadingFrom()) && (individualDashboardResponseVO.getReading() <= filtervo.getReadingTo())) {
+								individualDashboardList.add(individualDashboardResponseVO);
+							}
+							
+						}
+						if(filtervo.getBatteryVoltageFrom() != 0 || filtervo.getBatteryVoltageTo() != 0) {
+							
+							if((individualDashboardResponseVO.getBattery() >= filtervo.getBatteryVoltageFrom()) && (individualDashboardResponseVO.getBattery() <= (filtervo.getBatteryVoltageTo() != 0 ? (filtervo.getBatteryVoltageTo()) : 100))) {
+								individualDashboardList.add(individualDashboardResponseVO);
+							}
+						}
+						if(filtervo.getTamperType() > 0) {
+//							check what if both tampers occur...what value comes from front end
+							if(((filtervo.getTamperType() == 1) && individualDashboardResponseVO.getMagneticTamper().equalsIgnoreCase("YES") || (filtervo.getTamperType() == 2) && individualDashboardResponseVO.getDoorOpenTamper().equalsIgnoreCase("YES")) || ((filtervo.getTamperType() == 3) && (individualDashboardResponseVO.getMagneticTamper().equalsIgnoreCase("YES")) && (individualDashboardResponseVO.getDoorOpenTamper().equalsIgnoreCase("YES")))) {
+								individualDashboardList.add(individualDashboardResponseVO);
+							}
+							
+						}
+					} else {
+						individualDashboardList.add(individualDashboardResponseVO);
+					}
+					
 				}
 				dashboardvo.setNonCommunicating(nonCommunicating);
 				dashboardvo.setDasboarddata(individualDashboardList);
@@ -416,153 +475,155 @@ public class DashboardDAO {
 	public List<DashboardResponseVO> getFilterDashboarddetails(String communityName, String blockName, FilterVO filtervo, String type) throws SQLException {
 		// TODO Auto-generated method stub
 
-		Connection con = null;
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		List<DashboardResponseVO> dashboard_list = null;
-		DashboardResponseVO dashboardvo = null;
-		int noAMRInterval = 0;
-		int communityID = 0;
-		int blockID = 0;
+//		Connection con = null;
+//		PreparedStatement pstmt = null;
+//		ResultSet rs = null;
+//		DashboardResponseVO dashboardvo = null;
+//		int noAMRInterval = 0;
+//		int communityID = 0;
+//		int blockID = 0;
 		
-		List<IndividualDashboardResponseVO> individualDashboardList = null;
-		IndividualDashboardResponseVO individualDashboardResponseVO = null;
+		List<DashboardResponseVO> dashboard_list = null;
+//		List<IndividualDashboardResponseVO> individualDashboardList = null;
+//		IndividualDashboardResponseVO individualDashboardResponseVO = null;
 		
 		try {
-			con = getConnection();
-			dashboard_list = new LinkedList<DashboardResponseVO>();
+//			con = getConnection();
+//			dashboard_list = new LinkedList<DashboardResponseVO>();
 			
-			PreparedStatement pstmt1 = con.prepareStatement("SELECT * FROM alertsettings");
-			ResultSet rs1 = pstmt1.executeQuery();
-			if(rs1.next()) {
-				
-				noAMRInterval = rs1.getInt("NoAMRInterval");
-			}
-
-			PreparedStatement pstmt4 = con.prepareStatement("SELECT b.CommunityID, b.BlockID FROM block AS b Where b.BlockName = '" + blockName.trim() +"' AND b.CommunityID = (SELECT CommunityID FROM community WHERE CommunityName = '"+communityName+"')");
-			ResultSet rs4 = pstmt4.executeQuery();
-				
-				if(rs4.next()) {
-					blockID = rs4.getInt("BlockID");
-					communityID = rs4.getInt("CommunityID");
-				}
-				
-//				mainquery = mainquery.replaceAll("<main>", (blockID == 0) ? "WHERE cd.CommunityID = "+communityID : (blockID !=0) ? "WHERE cd.CommunityID = "+communityID +" AND cd.BlockID = "+blockID : (blockID !=0) ? "WHERE cd.CommunityID = "+communityID +" AND cd.BlockID = "+blockID + " AND cd.CustomerUniqueID = '" + customerUniqueID +"'" : "");
-				
-//			String mainquery = "SELECT c.CommunityName, b.BlockName, cd.HouseNumber, cd.FirstName, cd.LastName, cd.CustomerUniqueID, cd.CustomerID FROM customerdetails AS cd LEFT JOIN community AS c ON cd.CommunityID = c.CommunityID LEFT JOIN block AS b ON b.BlockID = cd.BlockID <main>";
+			dashboard_list = getDashboarddetails(type, communityName, blockName, "0", 0, filtervo);
 			
-//			mainquery = mainquery.replaceAll("<main>", blockID ==0 ?"WHERE cd.CommunityID = "+communityID : blockID !=0 ? "WHERE cd.CommunityID = "+communityID +" AND cd.BlockID = "+blockID : "");
-			
-			pstmt = con.prepareStatement("SELECT c.CommunityName, b.BlockName, cd.HouseNumber, cd.FirstName, cd.LastName, cd.CustomerUniqueID, cd.CustomerID FROM customerdetails AS cd LEFT JOIN community AS c ON cd.CommunityID = c.CommunityID LEFT JOIN block AS b ON b.BlockID = cd.BlockID WHERE cd.BlockID = "+ blockID+" AND cd.CommunityID = " +communityID);
-			rs = pstmt.executeQuery();
-			while (rs.next()) {
-				
-				dashboardvo = new DashboardResponseVO();
-				individualDashboardList = new LinkedList<IndividualDashboardResponseVO>();
-				
-				dashboardvo.setCommunityName(rs.getString("CommunityName"));
-				dashboardvo.setBlockName(rs.getString("BlockName"));
-				dashboardvo.setHouseNumber(rs.getString("HouseNumber"));
-				dashboardvo.setFirstName(rs.getString("FirstName"));
-				dashboardvo.setLastName(rs.getString("LastName"));
-				dashboardvo.setCustomerUniqueID(rs.getString("CustomerUniqueID"));
-				
-				String query = "SELECT dbl.ReadingID, dbl.MainBalanceLogID, dbl.CustomerMeterID, dbl.MIUID, cmd.MeterSerialNumber, cmd.PayType, g.GatewayName, dbl.Tariff, dbl.Reading, dbl.Balance, dbl.EmergencyCredit, dbl.ValveStatus, dbl.BatteryVoltage, "
-						+ "dbl.LowBattery, dbl.DoorOpenTamper, dbl.MagneticTamper, dbl.RTCFault, dbl.Vacation, dbl.LowBalance, dbl.LogDate, ms.MeterSize, ms.PerUnitValue FROM displaybalancelog AS dbl LEFT JOIN customermeterdetails AS cmd ON cmd.CustomerMeterID = dbl.CustomerMeterID LEFT JOIN metersize AS ms ON ms.MeterSizeID = cmd.MeterSizeID LEFT JOIN gateway AS g ON g.GatewayID = cmd.GatewayID WHERE cmd.CustomerID = ? AND cmd.MeterType = '" + type+"'";
-				
-				/*String oldquery = "SELECT DISTINCT c.CommunityName, b.BlockName, cd.FirstName,cd.CustomerUniqueID, cd.LastName, cd.HouseNumber, cmd.MeterSerialNumber, dbl.ReadingID, dbl.MainBalanceLogID, dbl.EmergencyCredit, \r\n" + 
-						"dbl.MIUID, dbl.Reading, dbl.Balance, dbl.BatteryVoltage, dbl.LowBattery, dbl.Tariff, dbl.ValveStatus, dbl.DoorOpenTamper, dbl.MagneticTamper, dbl.RTCFault, dbl.Vacation, dbl.LowBalance, dbl.LogDate\r\n" + 
-						"FROM displaybalancelog AS dbl LEFT JOIN community AS c ON c.communityID = dbl.CommunityID LEFT JOIN block AS b ON b.BlockID = dbl.BlockID\r\n" + 
-						"LEFT JOIN customerdetails AS cd ON cd.CustomerID = dbl.CustomerID LEFT JOIN customermeterdetails AS cmd ON cmd.CustomerMeterID = dbl.CustomerMeterID WHERE 1=1 <change>";*/
-				
-						StringBuilder stringBuilder = new StringBuilder(query);
-					
-						LocalDateTime dateTime = LocalDateTime.now();  
-					    DateTimeFormatter dateTimeFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");  
-						
-						if(!filtervo.getDateFrom().equalsIgnoreCase("null") || !filtervo.getDateTo().equalsIgnoreCase("null")) {
-							stringBuilder.append(" AND dbl.LogDate BETWEEN '" + filtervo.getDateFrom() + "' AND '" + (filtervo.getDateTo() != null ? filtervo.getDateTo()+"'" : "'"+dateTime.format(dateTimeFormat)+"'"));
-						}
-						if(filtervo.getReadingFrom() != 0 || filtervo.getReadingTo() != 0) {
-							stringBuilder.append(" AND dbl.Reading BETWEEN " + (filtervo.getReadingFrom() != 0 ? filtervo.getReadingFrom() : 0) + " AND " + (filtervo.getReadingTo() != 0 ? filtervo.getReadingTo() : 9999999));
-						}
-						if(filtervo.getBatteryVoltageFrom() != 0 || filtervo.getBatteryVoltageTo() != 0) {
-							stringBuilder.append(" AND dbl.BatteryVoltage BETWEEN " + (filtervo.getBatteryVoltageFrom() != 0 ? (filtervo.getBatteryVoltageFrom()) : 0) + " AND " + (filtervo.getBatteryVoltageTo() != 0 ? (filtervo.getBatteryVoltageTo()) : 100));
-						}
-						if(filtervo.getTamperType() > 0) {
-							stringBuilder.append(filtervo.getTamperType() == 1 ? " AND dbl.DoorOpenTamper = 1" : " AND dbl.MagneticTamper = 1");
-						}
-							stringBuilder.append(" ORDER BY dbl.LogDate DESC");
-
-						PreparedStatement pstmt2 = con.prepareStatement(stringBuilder.toString());
-						pstmt2.setInt(1, rs.getInt("CustomerID"));
-						ResultSet rs2 = pstmt2.executeQuery();
-						while (rs2.next()) {
-							
-							individualDashboardResponseVO = new IndividualDashboardResponseVO();
-							
-							individualDashboardResponseVO.setMeterSerialNumber(rs2.getString("MeterSerialNumber"));
-							individualDashboardResponseVO.setMiuID(rs2.getString("MIUID"));
-							individualDashboardResponseVO.setGatewayName(rs2.getString("GatewayName"));
-							individualDashboardResponseVO.setReading(rs2.getFloat("Reading"));
-							individualDashboardResponseVO.setConsumption((int) (individualDashboardResponseVO.getReading() * rs2.getFloat("PerUnitValue")));
-							individualDashboardResponseVO.setBattery(rs2.getInt("BatteryVoltage"));
-							individualDashboardResponseVO.setBatteryColor((rs2.getInt("LowBattery") == 1 ) ? "RED" : "GREEN");
-							individualDashboardResponseVO.setDoorOpenTamper((rs2.getInt("DoorOpenTamper") == 0) ? "NO" : (rs2.getInt("DoorOpenTamper") == 1) ? "YES" : "NO");
-							individualDashboardResponseVO.setDooropentamperColor((rs2.getInt("DoorOpenTamper") == 0) ? "GREEN" : "RED");
-							individualDashboardResponseVO.setMagneticTamper((rs2.getInt("MagneticTamper") == 0) ? "NO" : (rs2.getInt("MagneticTamper") == 1) ? "YES" : "NO");
-							individualDashboardResponseVO.setMagnetictamperColor((rs2.getInt("MagneticTamper") == 0) ? "GREEN" : "RED");
-							
-							if(rs2.getString("PayType").equalsIgnoreCase("Prepaid")) {
-								
-								individualDashboardResponseVO.setBalance(rs2.getString("Balance"));
-								individualDashboardResponseVO.setEmergencyCredit(rs2.getString("EmergencyCredit"));
-								individualDashboardResponseVO.setTariff((rs2.getString("Tariff")));
-								individualDashboardResponseVO.setValveStatus((rs2.getInt("ValveStatus") == 1) ? "OPEN" : (rs2.getInt("ValveStatus") == 0) ? "CLOSED" : "");
-								individualDashboardResponseVO.setValveStatusColor((rs2.getInt("ValveStatus") == 1) ? "GREEN" : (rs2.getInt("ValveStatus") == 0) ? "RED" : "");
-								individualDashboardResponseVO.setVacationStatus(rs2.getInt("Vacation") == 1 ? "YES" : "NO");
-								individualDashboardResponseVO.setVacationColor(rs2.getInt("Vacation") == 1 ? "ORANGE" : "BLACK");
-							} else {
-								individualDashboardResponseVO.setBalance("---");
-								individualDashboardResponseVO.setEmergencyCredit("---");
-								individualDashboardResponseVO.setTariff("---");
-								individualDashboardResponseVO.setValveStatus("---");
-								individualDashboardResponseVO.setValveStatusColor("---");
-								individualDashboardResponseVO.setVacationStatus("---");
-								individualDashboardResponseVO.setVacationColor("---");
-							}
-							
-							individualDashboardResponseVO.setTimeStamp(ExtraMethodsDAO.datetimeformatter(rs2.getString("LogDate")));
-							
-							Date currentDateTime = new Date();
-							
-							long minutes = TimeUnit.MILLISECONDS.toMinutes(currentDateTime.getTime() - (rs2.getTimestamp("LogDate")).getTime());
-							
-							if(minutes > noAMRInterval) {
-								individualDashboardResponseVO.setDateColor("RED");
-								individualDashboardResponseVO.setCommunicationStatus("NO");
-							}else if(minutes > 1440 && minutes < noAMRInterval) {
-								individualDashboardResponseVO.setDateColor("ORANGE");
-								individualDashboardResponseVO.setCommunicationStatus("YES");
-							} else {
-								individualDashboardResponseVO.setDateColor("GREEN");
-								individualDashboardResponseVO.setCommunicationStatus("YES");
-							}
-							individualDashboardList.add(individualDashboardResponseVO);
-				
-			}
-					dashboardvo.setDasboarddata(individualDashboardList);
-					dashboard_list.add(dashboardvo);
-					dashboard_list.removeIf(e -> e.getDasboarddata().size()==0);
-			}
+//			PreparedStatement pstmt1 = con.prepareStatement("SELECT * FROM alertsettings");
+//			ResultSet rs1 = pstmt1.executeQuery();
+//			if(rs1.next()) {
+//				
+//				noAMRInterval = rs1.getInt("NoAMRInterval");
+//			}
+//
+//			PreparedStatement pstmt4 = con.prepareStatement("SELECT b.CommunityID, b.BlockID FROM block AS b Where b.BlockName = '" + blockName.trim() +"' AND b.CommunityID = (SELECT CommunityID FROM community WHERE CommunityName = '"+communityName+"')");
+//			ResultSet rs4 = pstmt4.executeQuery();
+//				
+//				if(rs4.next()) {
+//					blockID = rs4.getInt("BlockID");
+//					communityID = rs4.getInt("CommunityID");
+//				}
+//				
+////				mainquery = mainquery.replaceAll("<main>", (blockID == 0) ? "WHERE cd.CommunityID = "+communityID : (blockID !=0) ? "WHERE cd.CommunityID = "+communityID +" AND cd.BlockID = "+blockID : (blockID !=0) ? "WHERE cd.CommunityID = "+communityID +" AND cd.BlockID = "+blockID + " AND cd.CustomerUniqueID = '" + customerUniqueID +"'" : "");
+//				
+////			String mainquery = "SELECT c.CommunityName, b.BlockName, cd.HouseNumber, cd.FirstName, cd.LastName, cd.CustomerUniqueID, cd.CustomerID FROM customerdetails AS cd LEFT JOIN community AS c ON cd.CommunityID = c.CommunityID LEFT JOIN block AS b ON b.BlockID = cd.BlockID <main>";
+//			
+////			mainquery = mainquery.replaceAll("<main>", blockID ==0 ?"WHERE cd.CommunityID = "+communityID : blockID !=0 ? "WHERE cd.CommunityID = "+communityID +" AND cd.BlockID = "+blockID : "");
+//			
+//			pstmt = con.prepareStatement("SELECT c.CommunityName, b.BlockName, cd.HouseNumber, cd.FirstName, cd.LastName, cd.CustomerUniqueID, cd.CustomerID FROM customerdetails AS cd LEFT JOIN community AS c ON cd.CommunityID = c.CommunityID LEFT JOIN block AS b ON b.BlockID = cd.BlockID WHERE cd.BlockID = "+ blockID+" AND cd.CommunityID = " +communityID);
+//			rs = pstmt.executeQuery();
+//			while (rs.next()) {
+//				
+//				dashboardvo = new DashboardResponseVO();
+//				individualDashboardList = new LinkedList<IndividualDashboardResponseVO>();
+//				
+//				dashboardvo.setCommunityName(rs.getString("CommunityName"));
+//				dashboardvo.setBlockName(rs.getString("BlockName"));
+//				dashboardvo.setHouseNumber(rs.getString("HouseNumber"));
+//				dashboardvo.setFirstName(rs.getString("FirstName"));
+//				dashboardvo.setLastName(rs.getString("LastName"));
+//				dashboardvo.setCustomerUniqueID(rs.getString("CustomerUniqueID"));
+//				
+//				String query = "SELECT dbl.ReadingID, dbl.MainBalanceLogID, dbl.CustomerMeterID, dbl.MIUID, cmd.MeterSerialNumber, cmd.PayType, g.GatewayName, dbl.Tariff, dbl.Reading, dbl.Balance, dbl.EmergencyCredit, dbl.ValveStatus, dbl.BatteryVoltage, "
+//						+ "dbl.LowBattery, dbl.DoorOpenTamper, dbl.MagneticTamper, dbl.RTCFault, dbl.Vacation, dbl.LowBalance, dbl.LogDate, ms.MeterSize, ms.PerUnitValue FROM displaybalancelog AS dbl LEFT JOIN customermeterdetails AS cmd ON cmd.CustomerMeterID = dbl.CustomerMeterID LEFT JOIN metersize AS ms ON ms.MeterSizeID = cmd.MeterSizeID LEFT JOIN gateway AS g ON g.GatewayID = cmd.GatewayID WHERE cmd.CustomerID = ? AND cmd.MeterType = '" + type+"'";
+//				
+//				/*String query = "SELECT DISTINCT c.CommunityName, b.BlockName, cd.FirstName,cd.CustomerUniqueID, cd.LastName, cd.HouseNumber, cmd.MeterSerialNumber, dbl.ReadingID, dbl.MainBalanceLogID, dbl.EmergencyCredit, \r\n" + 
+//						"dbl.MIUID, dbl.Reading, dbl.Balance, dbl.BatteryVoltage, dbl.LowBattery, dbl.Tariff, dbl.ValveStatus, dbl.DoorOpenTamper, dbl.MagneticTamper, dbl.RTCFault, dbl.Vacation, dbl.LowBalance, dbl.LogDate\r\n" + 
+//						"FROM displaybalancelog AS dbl LEFT JOIN community AS c ON c.communityID = dbl.CommunityID LEFT JOIN block AS b ON b.BlockID = dbl.BlockID\r\n" + 
+//						"LEFT JOIN customerdetails AS cd ON cd.CustomerID = dbl.CustomerID LEFT JOIN customermeterdetails AS cmd ON cmd.CustomerMeterID = dbl.CustomerMeterID WHERE 1=1 <change>";*/
+//				
+//						StringBuilder stringBuilder = new StringBuilder(query);
+//					
+//						LocalDateTime dateTime = LocalDateTime.now();  
+//					    DateTimeFormatter dateTimeFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");  
+//						
+//						if(!filtervo.getDateFrom().equalsIgnoreCase("null") || !filtervo.getDateTo().equalsIgnoreCase("null")) {
+//							stringBuilder.append(" AND dbl.LogDate BETWEEN '" + filtervo.getDateFrom() + "' AND '" + (filtervo.getDateTo() != null ? filtervo.getDateTo()+"'" : "'"+dateTime.format(dateTimeFormat)+"'"));
+//						}
+//						if(filtervo.getReadingFrom() != 0 || filtervo.getReadingTo() != 0) {
+//							stringBuilder.append(" AND dbl.Reading BETWEEN " + (filtervo.getReadingFrom() != 0 ? filtervo.getReadingFrom() : 0) + " AND " + (filtervo.getReadingTo() != 0 ? filtervo.getReadingTo() : 9999999));
+//						}
+//						if(filtervo.getBatteryVoltageFrom() != 0 || filtervo.getBatteryVoltageTo() != 0) {
+//							stringBuilder.append(" AND dbl.BatteryVoltage BETWEEN " + (filtervo.getBatteryVoltageFrom() != 0 ? (filtervo.getBatteryVoltageFrom()) : 0) + " AND " + (filtervo.getBatteryVoltageTo() != 0 ? (filtervo.getBatteryVoltageTo()) : 100));
+//						}
+//						if(filtervo.getTamperType() > 0) {
+//							stringBuilder.append(filtervo.getTamperType() == 1 ? " AND dbl.DoorOpenTamper = 1" : " AND dbl.MagneticTamper = 1");
+//						}
+//							stringBuilder.append(" ORDER BY dbl.LogDate DESC");
+//
+//						PreparedStatement pstmt2 = con.prepareStatement(stringBuilder.toString());
+//						pstmt2.setInt(1, rs.getInt("CustomerID"));
+//						ResultSet rs2 = pstmt2.executeQuery();
+//						while (rs2.next()) {
+//							
+//							individualDashboardResponseVO = new IndividualDashboardResponseVO();
+//							
+//							individualDashboardResponseVO.setMeterSerialNumber(rs2.getString("MeterSerialNumber"));
+//							individualDashboardResponseVO.setMiuID(rs2.getString("MIUID"));
+//							individualDashboardResponseVO.setGatewayName(rs2.getString("GatewayName"));
+//							individualDashboardResponseVO.setReading(rs2.getFloat("Reading"));
+//							individualDashboardResponseVO.setConsumption((int) (individualDashboardResponseVO.getReading() * rs2.getFloat("PerUnitValue")));
+//							individualDashboardResponseVO.setBattery(rs2.getInt("BatteryVoltage"));
+//							individualDashboardResponseVO.setBatteryColor((rs2.getInt("LowBattery") == 1 ) ? "RED" : "GREEN");
+//							individualDashboardResponseVO.setDoorOpenTamper((rs2.getInt("DoorOpenTamper") == 0) ? "NO" : (rs2.getInt("DoorOpenTamper") == 1) ? "YES" : "NO");
+//							individualDashboardResponseVO.setDooropentamperColor((rs2.getInt("DoorOpenTamper") == 0) ? "GREEN" : "RED");
+//							individualDashboardResponseVO.setMagneticTamper((rs2.getInt("MagneticTamper") == 0) ? "NO" : (rs2.getInt("MagneticTamper") == 1) ? "YES" : "NO");
+//							individualDashboardResponseVO.setMagnetictamperColor((rs2.getInt("MagneticTamper") == 0) ? "GREEN" : "RED");
+//							
+//							if(rs2.getString("PayType").equalsIgnoreCase("Prepaid")) {
+//								
+//								individualDashboardResponseVO.setBalance(rs2.getString("Balance"));
+//								individualDashboardResponseVO.setEmergencyCredit(rs2.getString("EmergencyCredit"));
+//								individualDashboardResponseVO.setTariff((rs2.getString("Tariff")));
+//								individualDashboardResponseVO.setValveStatus((rs2.getInt("ValveStatus") == 1) ? "OPEN" : (rs2.getInt("ValveStatus") == 0) ? "CLOSED" : "");
+//								individualDashboardResponseVO.setValveStatusColor((rs2.getInt("ValveStatus") == 1) ? "GREEN" : (rs2.getInt("ValveStatus") == 0) ? "RED" : "");
+//								individualDashboardResponseVO.setVacationStatus(rs2.getInt("Vacation") == 1 ? "YES" : "NO");
+//								individualDashboardResponseVO.setVacationColor(rs2.getInt("Vacation") == 1 ? "ORANGE" : "BLACK");
+//							} else {
+//								individualDashboardResponseVO.setBalance("---");
+//								individualDashboardResponseVO.setEmergencyCredit("---");
+//								individualDashboardResponseVO.setTariff("---");
+//								individualDashboardResponseVO.setValveStatus("---");
+//								individualDashboardResponseVO.setValveStatusColor("---");
+//								individualDashboardResponseVO.setVacationStatus("---");
+//								individualDashboardResponseVO.setVacationColor("---");
+//							}
+//							
+//							individualDashboardResponseVO.setTimeStamp(ExtraMethodsDAO.datetimeformatter(rs2.getString("LogDate")));
+//							
+//							Date currentDateTime = new Date();
+//							
+//							long minutes = TimeUnit.MILLISECONDS.toMinutes(currentDateTime.getTime() - (rs2.getTimestamp("LogDate")).getTime());
+//							
+//							if(minutes > noAMRInterval) {
+//								individualDashboardResponseVO.setDateColor("RED");
+//								individualDashboardResponseVO.setCommunicationStatus("NO");
+//							}else if(minutes > 1440 && minutes < noAMRInterval) {
+//								individualDashboardResponseVO.setDateColor("ORANGE");
+//								individualDashboardResponseVO.setCommunicationStatus("YES");
+//							} else {
+//								individualDashboardResponseVO.setDateColor("GREEN");
+//								individualDashboardResponseVO.setCommunicationStatus("YES");
+//							}
+//							individualDashboardList.add(individualDashboardResponseVO);
+//				
+//			}
+//					dashboardvo.setDasboarddata(individualDashboardList);
+//					dashboard_list.add(dashboardvo);
+//					dashboard_list.removeIf(e -> e.getDasboarddata().size()==0);
+//			}
 		}
 
 		catch (Exception ex) {
 			ex.printStackTrace();
 		} finally {
-			pstmt.close();
-			rs.close();
-			con.close();
+//			pstmt.close();
+//			rs.close();
+//			con.close();
 		}
 		return dashboard_list;
 	}
@@ -992,7 +1053,7 @@ public class DashboardDAO {
 				}
 			}
 			
-			List<DashboardResponseVO> responselist = ((roleid == 1 || roleid == 4) ? getDashboarddetails(type, id, "0", "0", 0) : getDashboarddetails(type, "0", id, "0", 0));
+			List<DashboardResponseVO> responselist = ((roleid == 1 || roleid == 4) ? getDashboarddetails(type, id, "0", "0", 0, null) : getDashboarddetails(type, "0", id, "0", 0, null));
 			int size = responselist.size();
 			
 			for(int i = 0; i < size; i++) {
@@ -1002,9 +1063,11 @@ public class DashboardDAO {
 					amr++;
 					Date currentDateTime = new Date();
 					
-//					long minutes = TimeUnit.MILLISECONDS.toMinutes(currentDateTime.getTime() - (responselist.get(i).getDasboarddata().get(j).getTimeStamp().getTime());
+					SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+					Date logDate = sdf.parse(responselist.get(i).getDasboarddata().get(j).getTimeStamp());
+					long minutes = TimeUnit.MILLISECONDS.toMinutes(currentDateTime.getTime() - (logDate.getTime()));
 					
-//					if(minutes > noAMRInterval) { nonLive++; } else { live++; }
+					if(minutes > noAMRInterval) { nonLive++; } else { live++; }
 					if(responselist.get(i).getDasboarddata().get(j).getValveStatus().equalsIgnoreCase("Open")) { active++; } else { inActive++; }
 					if(!responselist.get(i).getDasboarddata().get(j).getBalance().equalsIgnoreCase("---") && responselist.get(i).getDasboarddata().get(j).getPayType().equalsIgnoreCase("Prepaid")) { if(Integer.parseInt((responselist.get(i).getDasboarddata().get(j).getBalance())) <= 0) { emergency++; } }
 					if(responselist.get(i).getDasboarddata().get(j).getBatteryColor().equalsIgnoreCase("RED")) { lowBattery++; }
@@ -1074,8 +1137,8 @@ public class DashboardDAO {
 		catch (Exception ex) {
 			ex.printStackTrace();
 		} finally {
-			pstmt.close();
-			rs.close();
+//			pstmt.close();
+//			rs.close();
 			con.close();
 		}
 		return homeResponseVO;

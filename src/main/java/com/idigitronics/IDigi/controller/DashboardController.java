@@ -50,7 +50,7 @@ public class DashboardController {
 		communityName = (!communityName.equalsIgnoreCase("0") ? communityName.replace("%20", " ") : communityName);
 		blockName = (!blockName.equalsIgnoreCase("0") ? blockName.replace("%20", " ") : blockName);
 
-		dasboardresponsevo.setData(dashboarddao.getDashboarddetails(type, communityName, blockName, customerUniqueID, filter));
+		dasboardresponsevo.setData(dashboarddao.getDashboarddetails(type, communityName, blockName, customerUniqueID, filter, null));
 		dasboardresponsevo.setTotal(dasboardresponsevo.getData().size());
 		dasboardresponsevo.setNonCommunicating(dasboardresponsevo.getData().size() == 0 ? 0 : dasboardresponsevo.getData().get(dasboardresponsevo.getData().size()-1).getNonCommunicating());
 		dasboardresponsevo.setCommunicating(dasboardresponsevo.getData().size() == 0 ? 0 : dasboardresponsevo.getData().size()-dasboardresponsevo.getNonCommunicating());
