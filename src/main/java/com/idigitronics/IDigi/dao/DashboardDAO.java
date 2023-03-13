@@ -303,10 +303,10 @@ public class DashboardDAO {
         
         for(int i = 0; i< dashboardResponseVO.getData().size(); i++) {
         	
-        	int dataColumnCount = 0;
+        	
         	XSSFRow data = spreadsheet.createRow(spreadsheet.getLastRowNum()+1);
         	
-        	Cell cell1 = data.createCell(dataColumnCount);
+        	/*Cell cell1 = data.createCell(dataColumnCount);
             cell1.setCellValue(dashboardResponseVO.getData().get(i).getCommunityName());
             
             Cell cell2 = data.createCell(++dataColumnCount);
@@ -319,9 +319,26 @@ public class DashboardDAO {
             cell4.setCellValue(dashboardResponseVO.getData().get(i).getFirstName()+" "+dashboardResponseVO.getData().get(i).getLastName());
             
             Cell cell5 = data.createCell(++dataColumnCount);
-            cell5.setCellValue(dashboardResponseVO.getData().get(i).getHouseNumber());
+            cell5.setCellValue(dashboardResponseVO.getData().get(i).getHouseNumber());*/
             
             for(int j = 0; j < dashboardResponseVO.getData().get(i).getDasboarddata().size(); j++) {
+            	
+            	int dataColumnCount = 0;
+            	
+            	Cell cell1 = data.createCell(dataColumnCount);
+                cell1.setCellValue(dashboardResponseVO.getData().get(i).getCommunityName());
+                
+                Cell cell2 = data.createCell(++dataColumnCount);
+                cell2.setCellValue(dashboardResponseVO.getData().get(i).getBlockName());
+                
+                Cell cell3 = data.createCell(++dataColumnCount);
+                cell3.setCellValue(dashboardResponseVO.getData().get(i).getCustomerUniqueID());
+                
+                Cell cell4 = data.createCell(++dataColumnCount);
+                cell4.setCellValue(dashboardResponseVO.getData().get(i).getFirstName()+" "+dashboardResponseVO.getData().get(i).getLastName());
+                
+                Cell cell5 = data.createCell(++dataColumnCount);
+                cell5.setCellValue(dashboardResponseVO.getData().get(i).getHouseNumber());
             	
             	int dashboarDataColumnCount = 5;
             	
@@ -630,10 +647,10 @@ public class DashboardDAO {
         
         for(int i = 0; i< dashboardResponseVO.getData().size(); i++) {
         	
-        	int dataColumnCount = 0;
+        	
         	XSSFRow data = spreadsheet.createRow(spreadsheet.getLastRowNum()+1);
         	
-        	Cell cell1 = data.createCell(dataColumnCount);
+        	/*Cell cell1 = data.createCell(dataColumnCount);
             cell1.setCellValue(dashboardResponseVO.getData().get(i).getCommunityName());
             
             Cell cell2 = data.createCell(++dataColumnCount);
@@ -646,10 +663,27 @@ public class DashboardDAO {
             cell4.setCellValue(dashboardResponseVO.getData().get(i).getFirstName()+" "+dashboardResponseVO.getData().get(i).getLastName());
             
             Cell cell5 = data.createCell(++dataColumnCount);
-            cell5.setCellValue(dashboardResponseVO.getData().get(i).getHouseNumber());
+            cell5.setCellValue(dashboardResponseVO.getData().get(i).getHouseNumber());*/
             
             for(int j = 0; j < dashboardResponseVO.getData().get(i).getDasboarddata().size(); j++) {
+ 
+            	int dataColumnCount = 0;
             	
+            	Cell cell1 = data.createCell(dataColumnCount);
+                cell1.setCellValue(dashboardResponseVO.getData().get(i).getCommunityName());
+                
+                Cell cell2 = data.createCell(++dataColumnCount);
+                cell2.setCellValue(dashboardResponseVO.getData().get(i).getBlockName());
+                
+                Cell cell3 = data.createCell(++dataColumnCount);
+                cell3.setCellValue(dashboardResponseVO.getData().get(i).getCustomerUniqueID());
+                
+                Cell cell4 = data.createCell(++dataColumnCount);
+                cell4.setCellValue(dashboardResponseVO.getData().get(i).getFirstName()+" "+dashboardResponseVO.getData().get(i).getLastName());
+                
+                Cell cell5 = data.createCell(++dataColumnCount);
+                cell5.setCellValue(dashboardResponseVO.getData().get(i).getHouseNumber());
+                
             	int dashboarDataColumnCount = 5;
             	
             	Cell cell6 = data.createCell(dashboarDataColumnCount);
@@ -958,7 +992,26 @@ public class DashboardDAO {
 				}
 			}
 			
-			String query = "SELECT DISTINCT dbl.CustomerUniqueID, dbl.ReadingID, dbl.MainBalanceLogID, dbl.EmergencyCredit, dbl.CustomerMeterID, dbl.MIUID, dbl.PayType, dbl.MeterType, dbl.Reading, dbl.Balance, dbl.LowBattery, dbl.ValveStatus, dbl.ValveConfiguration, dbl.DoorOpenTamper, dbl.MagneticTamper, dbl.Vacation, dbl.RTCFault, dbl.LowBalance, dbl.Minutes, dbl.LogDate FROM displaybalancelog AS dbl WHERE dbl.MeterType = '"+type+"' AND dbl.MIUID IN (SELECT MIUID FROM customermeterdetails WHERE MeterType = '"+type+"') <change>";
+			List<DashboardResponseVO> responselist = ((roleid == 1 || roleid == 4) ? getDashboarddetails(type, id, "0", "0", 0) : getDashboarddetails(type, "0", id, "0", 0));
+			int size = responselist.size();
+			
+			for(int i = 0; i < size; i++) {
+				
+				for(int j = 0; j < responselist.get(i).getDasboarddata().size(); j++) {
+					
+					amr++;
+					Date currentDateTime = new Date();
+					
+//					long minutes = TimeUnit.MILLISECONDS.toMinutes(currentDateTime.getTime() - (responselist.get(i).getDasboarddata().get(j).getTimeStamp().getTime());
+					
+//					if(minutes > noAMRInterval) { nonLive++; } else { live++; }
+					if(responselist.get(i).getDasboarddata().get(j).getValveStatus().equalsIgnoreCase("Open")) { active++; } else { inActive++; }
+					if(!responselist.get(i).getDasboarddata().get(j).getBalance().equalsIgnoreCase("---") && responselist.get(i).getDasboarddata().get(j).getPayType().equalsIgnoreCase("Prepaid")) { if(Integer.parseInt((responselist.get(i).getDasboarddata().get(j).getBalance())) <= 0) { emergency++; } }
+					if(responselist.get(i).getDasboarddata().get(j).getBatteryColor().equalsIgnoreCase("RED")) { lowBattery++; }
+				}
+			}
+			
+			/*String query = "SELECT DISTINCT dbl.CustomerUniqueID, dbl.ReadingID, dbl.MainBalanceLogID, dbl.EmergencyCredit, dbl.CustomerMeterID, dbl.MIUID, dbl.PayType, dbl.MeterType, dbl.Reading, dbl.Balance, dbl.LowBattery, dbl.ValveStatus, dbl.ValveConfiguration, dbl.DoorOpenTamper, dbl.MagneticTamper, dbl.Vacation, dbl.RTCFault, dbl.LowBalance, dbl.Minutes, dbl.LogDate FROM displaybalancelog AS dbl WHERE dbl.MeterType = '"+type+"' AND dbl.MIUID IN (SELECT MIUID FROM customermeterdetails WHERE MeterType = '"+type+"') <change>";
 
 			pstmt = con.prepareStatement(query.replaceAll("<change>", ((roleid == 1 || roleid == 4) && !id.equalsIgnoreCase("0")) ? "AND dbl.CommunityID = "+communityid+" ORDER BY dbl.LogDate DESC" : ((roleid == 1 || roleid == 4) && id.equalsIgnoreCase("0")) ? "ORDER BY dbl.LogDate DESC" : (roleid == 2 || roleid == 5) ? "AND dbl.BlockID = "+id+ " ORDER BY dbl.LogDate DESC" : (roleid == 3) ? "AND dbl.CustomerUniqueID = '"+id+"'":""));
 			rs = pstmt.executeQuery();
@@ -975,7 +1028,7 @@ public class DashboardDAO {
 				if(rs.getInt("Balance") <= 0 && rs.getString("PayType").equalsIgnoreCase("Prepaid")) { emergency++; }
 				if(rs.getInt("LowBattery") == 1) { lowBattery++; }
 				
-			}
+			}*/
 			
 			homeResponseVO.setLive(live);
 			homeResponseVO.setLivePercentage(amr == 0 ? 0 : (live*100/amr));
