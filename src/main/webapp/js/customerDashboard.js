@@ -643,7 +643,7 @@ function executeDownloadFilterDashboard(data){
 	console.log(data);
 	
 	bootbox.confirm("ARE YOU SURE TO DOWNLOAD EXCEL", function(result) {
-		// alert(result);
+		 alert(result);
 		if (result == true) {
 			$.ajax({
 				type : "POST",
