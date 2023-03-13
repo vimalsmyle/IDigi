@@ -249,6 +249,177 @@ function executeDownloadDashboard(data){
 	
 }
 
+
+function getCustomerMetersWithData(data) {
+	
+	console.log(data);
+	
+	console.log(JSON.stringify(data));
+												$('#customerMeterTable')
+														.DataTable(
+																{
+																	"dom" : "<'row'<'col-sm-4 headname'><'col-sm-2'><'col-sm-1'><'col-sm-2'f>>"
+																			+ "<'row'<'col-sm-4'B><'col-sm-2'l><'col-sm-2'><'col-sm-2'><'col-sm-1 addevent'>>"
+																			+ "<'row'<'col-sm-12'tr>>"
+																			+ "<'row'<'col-sm-6 text-black'i><'col-sm-6 text-black'p>>",
+
+																	"language" : {
+																		"emptyTable" : "No data available in table"
+																	},
+
+																	"responsive" : true,
+																	"serverSide" : false,
+																	"bDestroy" : true,
+																	"bPaginate": true,
+																	"pagging" : true,
+																	"bProcessing" : true,
+																	"ordering" : true,
+																	"order" : [ 0, "desc" ],
+																	"lengthMenu" : [ 5, 10, 25, 30, 50, 75 ],
+																	"pageLength" : 25,
+																	"fixedHeader": {
+															            "header": true,
+															            "headerOffset": 45,
+															            },
+															        "scrollX": true,
+																	"data" : data.dasboarddata,
+
+																	"columns" : [
+																		{
+																			"mData" : "action",
+																			"render" : function(
+																					data,
+																					type,
+																					row) {
+																				return "<span id=color style = color:"
+																						+ row.dateColor
+																						+ ">"
+																						+ row.timeStamp
+																						+ "</span>"
+																			},
+																			"defaultContent" : ""
+																		},	
+																	{
+																		"data" : "meterSerialNumber"
+																	},
+																			{
+																				"data" : "miuID"
+
+																			},
+																			{
+																				"data" : "gatewayName"
+
+																			},
+																			{
+																				"data" : "reading"
+																			},
+																			{
+																				"data" : "consumption"
+
+																			},
+																			{
+																				"mData" : "action",
+																				"render" : function(
+																						data,
+																						type,
+																						row) {
+																					return "<span id=color style = color:"
+																							+ row.batteryColor
+																							+ ">"
+																							+ row.battery
+																							+ "</span>"
+																				},
+																				"defaultContent" : ""
+																			},
+																			{
+																				"mData" : "action",
+																				"render" : function(
+																						data,
+																						type,
+																						row) {
+																					return "<span id=color style = color:"
+																							+ row.dooropentamperColor
+																							+ ">"
+																							+ row.doorOpenTamper
+																							+ "</span>"
+																				},
+																				"defaultContent" : ""
+																			},
+																			{
+																				"mData" : "action",
+																				"render" : function(
+																						data,
+																						type,
+																						row) {
+																					return "<span id=color style = color:"
+																							+ row.magnetictamperColor
+																							+ ">"
+																							+ row.magneticTamper
+																							+ "</span>"
+																				},
+																				"defaultContent" : ""
+																			},
+																			{
+																				"data" : "balance"
+																			},
+																			{
+																				"data" : "emergencyCredit"
+																			},
+																			{
+																				"data" : "payType"
+																			},
+																			{
+																				"mData" : "action",
+																				"render" : function(
+																						data,
+																						type,
+																						row) {
+																					return "<span id=color style = color:"
+																							+ row.valveStatusColor
+																							+ ">"
+																							+ row.valveStatus
+																							+ "</span>"
+																				},
+																				"defaultContent" : ""
+																			},
+																			{
+																				"data" : "tariff"
+																			},
+																			{
+																				"data" : "communicationStatus"
+																			},
+																			{
+																				"mData" : "action",
+																				"render" : function(
+																						data,
+																						type,
+																						row) {
+																					return "<span id=color style = color:"
+																							+ row.vacationColor
+																							+ ">"
+																							+ row.vacationStatus
+																							+ "</span>"
+																				},
+																				"defaultContent" : ""
+																			},
+																			{
+																				"data" : "lastTopupAmount"
+																			}
+
+																	],
+																	"columnDefs" : [],
+																	"buttons" : []
+																})
+																$('#myCustomerMeters').on('shown.bs.modal', function(e){
+																	   $($.fn.dataTable.tables(true)).DataTable()
+																	      .columns.adjust()
+																	      .responsive.recalc();
+															});
+			
+}
+
+
+
 function getCustomerMeters(CRNNumber) {
 	
 	var filter = (sessionStorage.getItem("filterId")==undefined || sessionStorage.getItem("filterId")==null)
@@ -487,7 +658,7 @@ $("#dashboardFilter")
 			data1["tamperType"] = $("#tamper").val();
 
 			//alert(JSON.stringify(data1));
-			var responseD;
+			var responseD1;
 			$
 					.ajax({
 						type : "POST",
@@ -498,9 +669,9 @@ $("#dashboardFilter")
 						dataType : "JSON",
 
 						success : function(d) {
-							responseD = d.data;
+							responseD1 = d;
 							//if (data.result == "Success") {
-							$('#liveTable').dataTable()._fnAjaxUpdate();
+							//$('#liveTable').dataTable()._fnAjaxUpdate();
 							//$("#form").hide();
 							//$("#tablereport").show();
 								console.log(JSON.stringify(d));
@@ -575,10 +746,8 @@ $("#dashboardFilter")
 																	"render" : function(data,
 																			type, row) {
 
-																		return "<a href=# id=CustomerMeters data-toggle=modal data-target=#myCustomerMeters onclick='getCustomerMeters(\""
-																				+ row.customerUniqueID
-																				+ "\")'>"
-																				+ "Multiple"
+																		return "<a href=# id=CustomerMeters data-toggle=modal data-target=#myCustomerMeters onclick='getCustomerMetersWithData(" + JSON.stringify(row) + ")'>"
+																				+ 'Multiple'
 																				+ "</a>"
 
 																	}
@@ -607,7 +776,7 @@ $("#dashboardFilter")
 													// fa-file-excel-o'
 														
 														action:function(e,dt,node,config){
-															executeDownloadFilterDashboard(responseD);
+															executeDownloadFilterDashboard(responseD1);
 														}
 														
 													}/*,
@@ -643,7 +812,7 @@ function executeDownloadFilterDashboard(data){
 	console.log(data);
 	
 	bootbox.confirm("ARE YOU SURE TO DOWNLOAD EXCEL", function(result) {
-		 alert(result);
+		// alert(result);
 		if (result == true) {
 			$.ajax({
 				type : "POST",
@@ -658,9 +827,9 @@ function executeDownloadFilterDashboard(data){
 						},
 				data : JSON
 				.stringify(data),
-				success : function(data) {
+				success : function(data1) {
 					
-					var blob =  data;
+					var blob =  data1;
 					var downloadUrl = URL.createObjectURL(blob);
 					var a= document.createElement("a");
 					a.href = downloadUrl;
@@ -672,7 +841,7 @@ function executeDownloadFilterDashboard(data){
 				}
 			});
 		} else if (result == false) {
-			 alert("@"+false)
+			 //alert("@"+false)
 
 		}
 	});

@@ -76,6 +76,9 @@
 									<%
 										if (user_id.equalsIgnoreCase("1") || user_id.equalsIgnoreCase("4")) {
 									%>
+									
+									<div class="waterloadDiv"><img src="common/images/load.gif" alt="" width="50" height="50" style="" id="waterLoader" class="waterLoad"></div>
+									
 									<div class="box-body">
 										<div class="row">
 											<div class="col-md-12">
@@ -218,9 +221,11 @@
 							<div class="col-md-12">
 								<div class="box">
 									<div class="box-body">
+										<img src="common/images/load.gif" alt="" width="50" height="50" style="" id="gasLoader"></div>
 										<%
 											if (user_id.equalsIgnoreCase("1") || user_id.equalsIgnoreCase("4")) {
 										%>
+										
 										<div class="row">
 											<div class="col-md-12">
 												<div id="container"
@@ -230,7 +235,7 @@
 										<%
 											}
 										%>
-									</div>
+									
 									<div class="box-footer">
 										<div class="container">
 											<div class="row">

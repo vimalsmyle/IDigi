@@ -64,6 +64,11 @@
 									<!-- <div class="box-header with-border">
               <h3 class="box-title">Monthly Recap Report</h3>
 			</div> -->
+			<div class="waterloadDiv">
+			<img src="common/images/load.gif" alt="" width="50" height="50" style="" id="waterLoader" class="waterLoad">
+			</div>
+									
+									
 									<div class="box-body">
 										<div class="row">
 											<div class="col-md-12">
@@ -202,6 +207,8 @@
 						<div class="row">
 							<div class="col-md-12">
 								<div class="box">
+								<div class="box-body">
+										<img src="common/images/load.gif" alt="" width="50" height="50" style="" id="gasLoader"></div>
 									<div class="box-body">
 										<div class="row">
 											<div class="col-md-12">

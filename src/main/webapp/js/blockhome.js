@@ -51,7 +51,7 @@ $(document)
 			dataType : "JSON",
 
 			success : function(d) {
-
+				$("#gasLoader").hide();
 				$('#container').highcharts(
 						{
 							chart: {
@@ -97,7 +97,7 @@ $(document)
 			dataType : "JSON",
 
 			success : function(d) {
-
+				$("#waterLoader").hide();
 				$('#container1').highcharts(
 						{
 							chart: {
