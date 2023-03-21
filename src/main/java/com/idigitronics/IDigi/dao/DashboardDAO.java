@@ -229,8 +229,8 @@ public class DashboardDAO {
 						
 						if(!filtervo.getDateFrom().equalsIgnoreCase("null") || !filtervo.getDateTo().equalsIgnoreCase("null")) {
 							
-							long fromDateInMinutes = TimeUnit.MILLISECONDS.toMinutes(sdf.parse(filtervo.getDateFrom()).getTime());
-							long toDateInMinutes = (!filtervo.getDateTo().equalsIgnoreCase("null") ? TimeUnit.MILLISECONDS.toMinutes(sdf.parse(filtervo.getDateTo()).getTime()) : 0);
+							long fromDateInMinutes = TimeUnit.MILLISECONDS.toMinutes(sdf.parse(filtervo.getDateFrom() + " 00:00:00").getTime());
+							long toDateInMinutes = (!filtervo.getDateTo().equalsIgnoreCase("null") ? TimeUnit.MILLISECONDS.toMinutes(sdf.parse(filtervo.getDateTo()+ " 23:59:59").getTime()) : 0);
 							long responseDateInMinutes = TimeUnit.MILLISECONDS.toMinutes(sdf1.parse(individualDashboardResponseVO.getTimeStamp()).getTime());
 							long currentDateInMinutes = TimeUnit.MILLISECONDS.toMinutes(currentDateTime.getTime());
 							
@@ -241,7 +241,7 @@ public class DashboardDAO {
 						}
 						if(filtervo.getReadingFrom() != 0 || filtervo.getReadingTo() != 0) {
 							
-							if((individualDashboardResponseVO.getReading() >= filtervo.getReadingFrom()) && (individualDashboardResponseVO.getReading() <= filtervo.getReadingTo())) {
+							if((individualDashboardResponseVO.getReading() >= filtervo.getReadingFrom()) && (individualDashboardResponseVO.getReading() <= (filtervo.getReadingTo() != 0 ? (filtervo.getReadingTo()) : 9999999))) {
 								individualDashboardList.add(individualDashboardResponseVO);
 							}
 							
@@ -253,7 +253,6 @@ public class DashboardDAO {
 							}
 						}
 						if(filtervo.getTamperType() > 0) {
-//							check what if both tampers occur...what value comes from front end
 							if(((filtervo.getTamperType() == 1) && individualDashboardResponseVO.getMagneticTamper().equalsIgnoreCase("YES") || (filtervo.getTamperType() == 2) && individualDashboardResponseVO.getDoorOpenTamper().equalsIgnoreCase("YES")) || ((filtervo.getTamperType() == 3) && (individualDashboardResponseVO.getMagneticTamper().equalsIgnoreCase("YES")) && (individualDashboardResponseVO.getDoorOpenTamper().equalsIgnoreCase("YES")))) {
 								individualDashboardList.add(individualDashboardResponseVO);
 							}
