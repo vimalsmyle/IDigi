@@ -13,7 +13,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
@@ -121,7 +120,7 @@ public class DashboardDAO {
 				dashboardvo.setCustomerUniqueID(rs.getString("CustomerUniqueID"));
 				
 				String query = "SELECT dbl.ReadingID, dbl.MainBalanceLogID, dbl.CustomerMeterID, dbl.MIUID, cmd.MeterSerialNumber, cmd.PayType, cmd.MeterType, ms.MeterSize, ms.PerUnitValue, g.GatewayName, dbl.Tariff, dbl.Reading, dbl.Balance, dbl.EmergencyCredit, dbl.ValveStatus, dbl.BatteryVoltage, "
-						+ "dbl.LowBattery, dbl.DoorOpenTamper, dbl.MagneticTamper, dbl.RTCFault, dbl.Vacation, dbl.LowBalance, dbl.LogDate FROM displaybalancelog AS dbl LEFT JOIN customermeterdetails AS cmd ON cmd.CustomerMeterID = dbl.CustomerMeterID LEFT JOIN metersize AS ms ON ms.MeterSizeID = cmd.MeterSizeID LEFT JOIN gateway AS g ON g.GatewayID = cmd.GatewayID WHERE cmd.CustomerID = ? AND cmd.MeterType = '" + type +"'";
+						+ "dbl.LowBattery, dbl.DoorOpenTamper, dbl.MagneticTamper, dbl.RTCFault, dbl.Vacation, dbl.LowBalance, dbl.LogDate FROM displaybalancelog AS dbl LEFT JOIN customermeterdetails AS cmd ON cmd.CustomerMeterID = dbl.CustomerMeterID LEFT JOIN metersize AS ms ON ms.MeterSizeID = cmd.MeterSizeID LEFT JOIN gateway AS g ON g.GatewayID = cmd.GatewayID WHERE dbl.CustomerID = ? AND cmd.MeterType = '" + type +"'";
 				
 				StringBuilder stringBuilder = new StringBuilder(query);
 				if(filter != 0) {
@@ -229,8 +228,8 @@ public class DashboardDAO {
 						
 						if(!filtervo.getDateFrom().equalsIgnoreCase("null") || !filtervo.getDateTo().equalsIgnoreCase("null")) {
 							
-							long fromDateInMinutes = TimeUnit.MILLISECONDS.toMinutes(sdf.parse(filtervo.getDateFrom() + " 00:00:00").getTime());
-							long toDateInMinutes = (!filtervo.getDateTo().equalsIgnoreCase("null") ? TimeUnit.MILLISECONDS.toMinutes(sdf.parse(filtervo.getDateTo()+ " 23:59:59").getTime()) : 0);
+							long fromDateInMinutes = TimeUnit.MILLISECONDS.toMinutes(sdf.parse(filtervo.getDateFrom()).getTime());
+							long toDateInMinutes = (!filtervo.getDateTo().equalsIgnoreCase("null") ? TimeUnit.MILLISECONDS.toMinutes(sdf.parse(filtervo.getDateTo()).getTime()) : 0);
 							long responseDateInMinutes = TimeUnit.MILLISECONDS.toMinutes(sdf1.parse(individualDashboardResponseVO.getTimeStamp()).getTime());
 							long currentDateInMinutes = TimeUnit.MILLISECONDS.toMinutes(currentDateTime.getTime());
 							
@@ -1140,6 +1139,8 @@ public class DashboardDAO {
 //			rs.close();
 			con.close();
 		}
+		logger.debug("Total count of "+type+" AMRs in the application: " + homeResponseVO.getAmr());
+		System.out.println("Total count of "+type+" AMRs in the application: " + homeResponseVO.getAmr());
 		return homeResponseVO;
 	}
 	
