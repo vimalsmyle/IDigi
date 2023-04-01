@@ -1156,7 +1156,7 @@ public class CommunitySetUpDAO {
 	            	
 	            	for(int i = 0; i < customervo.getMeters().size(); i++) {
 	            		con.prepareStatement("UPDATE customermeterdetails SET MIUID = '"+customervo.getMeters().get(i).getMiuID().trim()+"', GatewayID = " +customervo.getMeters().get(i).getGatewayID()+ ", MeterSizeID = " +customervo.getMeters().get(i).getMeterSizeID() +", ThresholdMaximum = "+customervo.getMeters().get(i).getThresholdMaximum() +", ThresholdMinimum = "+customervo.getMeters().get(i).getThresholdMinimum()+", ModifiedDate = NOW() WHERE CustomerMeterID = " + customervo.getMeters().get(i).getCustomerMeterID()).executeUpdate();
-	            		con.prepareStatement("UPDATE displaybalancelog SET MIUID = '"+customervo.getMeters().get(i).getMiuID().trim()+"', WHERE CustomerMeterID = " + customervo.getMeters().get(i).getCustomerMeterID()).executeUpdate();
+	            		con.prepareStatement("UPDATE displaybalancelog SET MIUID = '"+customervo.getMeters().get(i).getMiuID().trim()+"' WHERE CustomerMeterID = " + customervo.getMeters().get(i).getCustomerMeterID()).executeUpdate();
 	            		
 	            	}
 	            	
