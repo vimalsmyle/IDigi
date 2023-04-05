@@ -1008,11 +1008,9 @@ public class DashboardDAO {
 	public HomeResponseVO getHomeDashboardDetails(String type, int roleid, String id)
 			throws SQLException {
 		Connection con = null;
-		PreparedStatement pstmt = null;
 		PreparedStatement pstmt2 = null;
 		PreparedStatement pstmt3 = null;
 		PreparedStatement pstmt4 = null;
-		ResultSet rs = null;
 		ResultSet rs2 = null;
 		ResultSet rs3 = null;
 		ResultSet rs4 = null;
@@ -1027,7 +1025,6 @@ public class DashboardDAO {
 		int lowBattery = 0;
 		int amr = 0;
 		int consumption = 0;
-		int communityid = 0;
 		
 		try {
 			
@@ -1043,15 +1040,16 @@ public class DashboardDAO {
 				noAMRInterval = rs1.getInt("NoAMRInterval");
 			}
 			
-			if(!id.equalsIgnoreCase("0") && (roleid == 1 || roleid == 4)) {
-				PreparedStatement pstmt5 = con.prepareStatement("SELECT CommunityID FROM community WHERE CommunityName = '"+id+"'");
+			/*if(!id.equalsIgnoreCase("0") && (roleid == 1 || roleid == 4)) {
+				PreparedStatement pstmt5 = con.prepareStatement("SELECT CommunityID, CommunityName FROM community WHERE CommunityName = '"+id+"'");
 				ResultSet rs5 = pstmt5.executeQuery();
 				if(rs5.next()) {
 					communityid = rs5.getInt("CommunityID");
+					communityName = rs5.getString("CommunityName");
 				}
-			}
+			}*/
 			
-			List<DashboardResponseVO> responselist = ((roleid == 1 || roleid == 4) ? getDashboarddetails(type, id, "0", "0", 0, null) : getDashboarddetails(type, "0", id, "0", 0, null));
+			List<DashboardResponseVO> responselist = getDashboarddetails(type, id, "0", "0", 0, null);
 			int size = responselist.size();
 			
 			for(int i = 0; i < size; i++) {
