@@ -221,7 +221,7 @@ $(document)
 											label : {
 												connectorAllowed : false
 											},
-											pointStart : 2010
+									//		pointStart : 2010
 										}
 									},
 
