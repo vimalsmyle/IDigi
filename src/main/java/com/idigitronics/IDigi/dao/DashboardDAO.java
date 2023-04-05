@@ -1025,6 +1025,8 @@ public class DashboardDAO {
 		int lowBattery = 0;
 		int amr = 0;
 		int consumption = 0;
+		String blockName = "0";
+		String communityName = "0";
 		
 		try {
 			
@@ -1040,16 +1042,16 @@ public class DashboardDAO {
 				noAMRInterval = rs1.getInt("NoAMRInterval");
 			}
 			
-			/*if(!id.equalsIgnoreCase("0") && (roleid == 1 || roleid == 4)) {
-				PreparedStatement pstmt5 = con.prepareStatement("SELECT CommunityID, CommunityName FROM community WHERE CommunityName = '"+id+"'");
+			if(!id.equalsIgnoreCase("0") && (roleid == 2 || roleid == 5)) {
+				PreparedStatement pstmt5 = con.prepareStatement("SELECT b.BlockName, c.CommunityName FROM block AS b LEFT JOIN Community AS c ON b.CommunityID = c.CommunityID WHERE BlockID = '"+id+"'");
 				ResultSet rs5 = pstmt5.executeQuery();
 				if(rs5.next()) {
-					communityid = rs5.getInt("CommunityID");
+					blockName = rs5.getString("BlockName");
 					communityName = rs5.getString("CommunityName");
 				}
-			}*/
+			}
 			
-			List<DashboardResponseVO> responselist = getDashboarddetails(type, id, "0", "0", 0, null);
+			List<DashboardResponseVO> responselist = ((roleid == 1 || roleid == 4) ? getDashboarddetails(type, "0", "0", "0", 0, null) : getDashboarddetails(type, communityName, blockName, "0", 0, null));
 			int size = responselist.size();
 			
 			for(int i = 0; i < size; i++) {
@@ -1306,10 +1308,10 @@ public class DashboardDAO {
 						if (rs.next()) {
 							
 							totalGasMetersConsumptionPerDay = totalGasMetersConsumptionPerDay + (rs.getString("Units") == null ? 0 : rs.getInt("Units"));
+							xAxis.add(rs.getString("consumptiondate"));
 						}
 					}
 					
-					xAxis.add(rs.getString("consumptiondate"));
 					gasData.add(totalGasMetersConsumptionPerDay);
 				}
 				
