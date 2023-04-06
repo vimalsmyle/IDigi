@@ -507,9 +507,9 @@ function getCustomerMeters(type){
 																				type,
 																				row) {
 																			return "<span id=color style = color:"
-																					+ row.magneticTamper
-																					+ ">"
 																					+ row.magnetictamperColor
+																					+ ">"
+																					+ row.magneticTamper
 																					+ "</span>"
 																		},
 																		"defaultContent" : ""
