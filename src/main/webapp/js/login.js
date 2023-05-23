@@ -40,7 +40,7 @@ $(document)
 																message : 'username must be more than 6 and less than 30 characters long'
 															},
 															regexp : {
-																regexp : /^[a-zA-Z0-9_]+$/,
+																regexp : /^[a-zA-Z0-9_\s]+$/,
 																message : 'username can only consist of alphabetical and number'
 															},
 															different : {
