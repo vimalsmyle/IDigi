@@ -917,7 +917,7 @@ public class DashboardDAO {
 					
 					if(minutes > noAMRInterval) { nonLive++; } else { live++; }
 					if(responselist.get(i).getDasboarddata().get(j).getValveStatus().equalsIgnoreCase("Open")) { active++; } else { inActive++; }
-					if(!responselist.get(i).getDasboarddata().get(j).getBalance().equalsIgnoreCase("---") && responselist.get(i).getDasboarddata().get(j).getPayType().equalsIgnoreCase("Prepaid")) { if(Integer.parseInt((responselist.get(i).getDasboarddata().get(j).getBalance())) <= 0) { emergency++; } }
+					if((!responselist.get(i).getDasboarddata().get(j).getBalance().equalsIgnoreCase("---")) && (responselist.get(i).getDasboarddata().get(j).getPayType().equalsIgnoreCase("Prepaid"))) { if(Float.parseFloat((responselist.get(i).getDasboarddata().get(j).getBalance())) <= 0) { emergency++; } }
 					if(responselist.get(i).getDasboarddata().get(j).getBatteryColor().equalsIgnoreCase("RED")) { lowBattery++; }
 				}
 			}
