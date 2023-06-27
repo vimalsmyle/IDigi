@@ -296,6 +296,13 @@ public class CommunitySetUpController {
 		return customerresponsevo;
 	}
 	
+	@RequestMapping(value = "/customer/{miuID}", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody
+	ResponseVO getCustomerDetailsByMiuID(@PathVariable("miuID") String miuID) throws SQLException {
+
+		return communitysetupdao.getCustomerDetailsByMiuID(miuID);
+	}
+	
 	@RequestMapping(value = "/customer/excel", method = RequestMethod.POST, produces = "application/xlsx", consumes = "application/json")
 	public ResponseEntity<InputStreamResource> customerDetailsfile(@RequestBody CustomerResponseVO customerResponseVO) throws SQLException, FileNotFoundException {
 

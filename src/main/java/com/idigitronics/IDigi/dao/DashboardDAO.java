@@ -1199,7 +1199,7 @@ public class DashboardDAO {
 
 		ResponseVO responsevo = new ResponseVO();
 		
-		dataRequestVO.setSource("gateway");
+		dataRequestVO.setSource("Gateway");
 		
 		try {
 			
@@ -1240,7 +1240,7 @@ public class DashboardDAO {
 				ResultSet rs = pstmt2.executeQuery();
 				if(rs.next()) {
 					
-					pstmt = con.prepareStatement("INSERT INTO balancelog (MIUID, CommunityID, BlockID, CustomerID, CustomerMeterID, MeterSizeID, MeterSerialNumber, CustomerUniqueID, MeterType, SyncTime, SyncInterval, PayType, BatteryVoltage, TariffID, Tariff, ValveConfiguration, ValveStatus, Balance, EmergencyCredit, Minutes, Reading, DoorOpenTamper, MagneticTamper, Vacation, RTCFault, LowBattery, LowBalance, LogDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
+					pstmt = con.prepareStatement("INSERT INTO balancelog (MIUID, CommunityID, BlockID, CustomerID, CustomerMeterID, MeterSizeID, MeterSerialNumber, CustomerUniqueID, MeterType, SyncTime, SyncInterval, PayType, BatteryVoltage, TariffID, Tariff, ValveConfiguration, ValveStatus, Balance, EmergencyCredit, Minutes, Reading, DoorOpenTamper, MagneticTamper, Vacation, RTCFault, LowBattery, LowBalance, Source, LogDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
 					pstmt.setString(1, miuID);
 					pstmt.setInt(2, rs.getInt("CommunityID"));
 					pstmt.setInt(3, rs.getInt("BlockID"));
@@ -1268,6 +1268,7 @@ public class DashboardDAO {
 					pstmt.setInt(25, dataRequestVO.getStatus().getRtc_fault());
 					pstmt.setInt(26, dataRequestVO.getStatus().getLow_bat());
 					pstmt.setInt(27, dataRequestVO.getStatus().getLow_bal());
+					pstmt.setString(28, dataRequestVO.getSource());
 					
 					if (pstmt.executeUpdate() > 0) {
 						
@@ -1311,11 +1312,12 @@ public class DashboardDAO {
 								pstmt1.setInt(26, dataRequestVO.getStatus().getRtc_fault());
 								pstmt1.setInt(27, dataRequestVO.getStatus().getLow_bat());
 								pstmt1.setInt(28, dataRequestVO.getStatus().getLow_bal());
-								pstmt1.setInt(29, rs.getInt("CustomerMeterID"));
+								pstmt1.setString(29, dataRequestVO.getSource());
+								pstmt1.setInt(30, rs.getInt("CustomerMeterID"));
 								
 							} else {
 								
-									pstmt1 = con.prepareStatement("INSERT INTO displaybalancelog (MainBalanceLogID, MIUID, CommunityID, BlockID, CustomerID, CustomerMeterID, MeterSizeID, MeterSerialNumber, CustomerUniqueID, MeterType, SyncTime, SyncInterval, PayType, BatteryVoltage, TariffID, Tariff, ValveConfiguration, ValveStatus, Balance, EmergencyCredit, Minutes, Reading, DoorOpenTamper, MagneticTamper, Vacation, RTCFault, LowBattery, LowBalance, LogDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
+									pstmt1 = con.prepareStatement("INSERT INTO displaybalancelog (MainBalanceLogID, MIUID, CommunityID, BlockID, CustomerID, CustomerMeterID, MeterSizeID, MeterSerialNumber, CustomerUniqueID, MeterType, SyncTime, SyncInterval, PayType, BatteryVoltage, TariffID, Tariff, ValveConfiguration, ValveStatus, Balance, EmergencyCredit, Minutes, Reading, DoorOpenTamper, MagneticTamper, Vacation, RTCFault, LowBattery, LowBalance, Source, LogDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
 									pstmt1.setInt(1, rs2.getInt("ReadingID"));
 									pstmt1.setString(2, miuID);
 									pstmt1.setInt(3, rs.getInt("CommunityID"));
@@ -1344,6 +1346,7 @@ public class DashboardDAO {
 									pstmt1.setInt(26, dataRequestVO.getStatus().getRtc_fault());
 									pstmt1.setInt(27, dataRequestVO.getStatus().getLow_bat());
 									pstmt1.setInt(28, dataRequestVO.getStatus().getLow_bal());
+									pstmt1.setString(29, dataRequestVO.getSource());
 							}
 							
 						}

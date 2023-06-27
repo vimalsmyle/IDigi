@@ -972,6 +972,112 @@ public class CommunitySetUpDAO {
 		return customer_list;
 	}
 	
+	public ResponseVO getCustomerDetailsByMiuID(String miuID) throws SQLException {
+		// TODO Auto-generated method stub
+		
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		PreparedStatement pstmt1 = null;
+		ResultSet rs = null;
+		ResultSet rs1 = null;
+		CustomerResponseVO customervo = null;
+		MeterRequestVO metervo = null;
+		ResponseVO responsevo = new ResponseVO();
+		try {
+			con = getConnection();
+			
+			pstmt = con.prepareStatement("SELECT cmd.CustomerMeterID, cmd.CustomerID, cmd.MeterSerialNumber, cmd.MeterType, cmd.PayType, cmd.Location, cmd.TariffID, cmd.GatewayID, cmd.ThresholdMaximum, cmd.ThresholdMinimum, g.GatewayName, ms.MeterSize, ms.MeterSizeID FROM customermeterdetails AS cmd LEFT JOIN gateway AS g ON g.GatewayID = cmd.GatewayID LEFT JOIN metersize AS ms ON ms.MeterSizeID = cmd.MeterSizeID WHERE cmd.MIUID = '" + miuID + "'");
+			rs = pstmt.executeQuery();
+
+			if (rs.next()) {
+				
+				metervo = new MeterRequestVO();
+				customervo = new CustomerResponseVO();
+				
+				metervo.setCustomerMeterID(rs.getInt("CustomerMeterID"));
+				metervo.setMiuID(miuID);
+				metervo.setMeterSerialNumber(rs.getString("MeterSerialNumber"));
+				metervo.setMeterType(rs.getString("MeterType"));
+				metervo.setPayType(rs.getString("PayType"));
+				metervo.setMeterSize(rs.getFloat("MeterSize"));
+//				metervo.setMeterIDSize(rs.getInt("MeterSizeID"));
+				metervo.setLocation(rs.getString("Location"));
+//				metervo.setTariffID(rs.getInt("TariffID"));
+//				metervo.setGatewayID(rs.getInt("GatewayID"));
+				metervo.setGatewayName(rs.getString("GatewayName"));
+				metervo.setThresholdMaximum(rs.getFloat("ThresholdMaximum"));
+				metervo.setThresholdMinimum(rs.getFloat("ThresholdMinimum"));
+				
+				customervo.setCustomerID(rs.getLong("CustomerID"));
+				
+				pstmt1 = con.prepareStatement("SELECT c.CommunityName, b.BlockName, cd.CustomerID, cd.HouseNumber, cd.FirstName, cd.LastName, cd.Email, cd.MobileNumber, cd.CustomerUniqueID, cd.CreatedByID, cd.CreatedByRoleID, cd.ModifiedDate\n" + 
+							"FROM customerdetails AS cd LEFT JOIN community AS c ON cd.CommunityID = c.CommunityID LEFT JOIN block AS b ON b.BlockID = cd.BlockID WHERE cd.CustomerID = " +customervo.getCustomerID());
+				
+				rs1 = pstmt1.executeQuery();
+				
+				if (rs1.next()) {
+					
+					customervo.setCommunityName(rs1.getString("CommunityName"));
+					customervo.setBlockName(rs1.getString("BlockName"));
+					customervo.setFirstName(rs1.getString("FirstName"));
+					customervo.setLastName(rs1.getString("LastName"));
+					customervo.setEmail(rs1.getString("Email"));
+					customervo.setMobileNumber(rs1.getString("MobileNumber"));
+					customervo.setHouseNumber(rs1.getString("HouseNumber"));
+					customervo.setCustomerUniqueID(rs1.getString("CustomerUniqueID"));
+					
+					if(metervo.getPayType().equalsIgnoreCase("Prepaid")) {
+						
+						PreparedStatement pstmt2 = con.prepareStatement("select Amount from topup where customerMeterID = "+metervo.getCustomerMeterID()+" AND PaymentStatus = 1 AND Status IN (0,10) order by TransactionDate desc Limit 1");
+						
+						ResultSet rs2 = pstmt2.executeQuery();
+						
+						if(rs2.next()) {
+							
+							metervo.setAvailableBalance(rs2.getString("Amount"));
+							
+						} else {
+							metervo.setAvailableBalance("---");
+						}
+						
+					} else {
+						metervo.setAvailableBalance("---");
+					}
+					
+					PreparedStatement pstmt3 = con.prepareStatement("SELECT TariffName from tariff WHERE TariffID = "+ metervo.getTariffID());
+					
+					ResultSet rs3 = pstmt3.executeQuery();
+					
+					if(rs3.next()) {
+						
+						metervo.setTariffName(rs3.getString("TariffName"));
+						
+					}
+					
+				}
+				
+				customervo.setMeterDetails(metervo);
+				
+				customervo.setDate(ExtraMethodsDAO.datetimeformatter(rs1.getString("ModifiedDate")));
+				
+				responsevo.setCustomerDetails(customervo);
+				responsevo.setResult("Success");
+				responsevo.setMessage("Customer Details Retrieved Successfully");
+
+			} else {
+				responsevo.setResult("Failure");
+				responsevo.setMessage("MIUID is not registered with any Customer");
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			pstmt.close();
+			rs.close();
+			con.close();
+		}
+		return responsevo;
+	}
+	
 	public ResponseVO addcustomer(CustomerRequestVO customervo) throws SQLException {
 		// TODO Auto-generated method stub
 

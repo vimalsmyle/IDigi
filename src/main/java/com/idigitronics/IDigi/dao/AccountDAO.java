@@ -209,13 +209,15 @@ public class AccountDAO {
 						} else {
 							topUpRequestVO.setPaymentStatus(1);
 							responsevo.setPaymentMode("Cash");
-							if(sendPayLoadToGateway(topUpRequestVO) == 200) {
-								responsevo.setResult("Success");
-								responsevo.setMessage("Topup Request Submitted Successfully");	
-							} else {
-								responsevo.setResult("Failure");
-								responsevo.setMessage("Topup Request Failed. Please Try After Sometime");
-							}
+							
+								if(sendPayLoadToGateway(topUpRequestVO) == 200) {
+									responsevo.setResult("Success");
+									responsevo.setMessage("Topup Request Submitted/Raised Successfully");	
+								} else {
+									responsevo.setResult("Failure");
+									responsevo.setMessage("Topup Request Failed. Please Try After Sometime");
+								}
+								
 						}
 					}
 				 
@@ -434,14 +436,21 @@ public class AccountDAO {
 			if(topUpRequestVO.getModeOfPayment().equalsIgnoreCase("Cash")) {
 				
 				restcallvo.setTransaction_id(inserttopup(topUpRequestVO));
-				restcallresponse = extramethodsdao.postdata(restcallvo);
 				
-				if(restcallresponse != 200) {
-					PreparedStatement ps = con.prepareStatement("UPDATE topup SET Status = 11 WHERE TransactionID = ?");
-
-					ps.setLong(1, restcallvo.getTransaction_id());
+				if(topUpRequestVO.getSource().equalsIgnoreCase("web")) {
 					
-					ps.executeUpdate();
+					restcallresponse = extramethodsdao.postdata(restcallvo);
+					
+					if(restcallresponse != 200) {
+						PreparedStatement ps = con.prepareStatement("UPDATE topup SET Status = 11 WHERE TransactionID = ?");
+
+						ps.setLong(1, restcallvo.getTransaction_id());
+						
+						ps.executeUpdate();
+					}
+					
+				} else {
+					restcallresponse = 200;
 				}
 				
 			} else {

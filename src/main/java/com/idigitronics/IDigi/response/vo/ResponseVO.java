@@ -29,10 +29,13 @@ public class ResponseVO {
 	private String fileName;
 	private String location;
 	private UserDetails userDetails;
+	private CustomerResponseVO customerDetails;
 	private CheckoutDetails checkoutDetails;
 	private String paymentMode;
 	private String payType;
 	private ByteArrayInputStream byteArrayInputStream;
+	private String token;
+	private long transactedByID;
 	
 	public UserDetails getUserDetails() {
 		return userDetails;
@@ -153,6 +156,24 @@ public class ResponseVO {
 	}
 	public void setLastReadingDetails(LastReadingResponseVO lastReadingDetails) {
 		this.lastReadingDetails = lastReadingDetails;
+	}
+	public String getToken() {
+		return token;
+	}
+	public void setToken(String token) {
+		this.token = token;
+	}
+	public CustomerResponseVO getCustomerDetails() {
+		return customerDetails;
+	}
+	public void setCustomerDetails(CustomerResponseVO customerDetails) {
+		this.customerDetails = customerDetails;
+	}
+	public long getTransactedByID() {
+		return transactedByID;
+	}
+	public void setTransactedByID(long transactedByID) {
+		this.transactedByID = transactedByID;
 	}
 	
 }

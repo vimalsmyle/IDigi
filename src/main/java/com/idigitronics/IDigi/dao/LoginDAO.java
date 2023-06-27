@@ -207,8 +207,10 @@ public class LoginDAO {
 								responsevo.setResult("Success");
 								responsevo.setMessage("Successfully Logged In");
 								
-							} else if (resultSet.getInt("RoleID") == 6 && loginvo.getSource().equalsIgnoreCase("mobile")) {
+							} else if (resultSet.getInt("RoleID") == 1 && loginvo.getSource().equalsIgnoreCase("mobile")) {
 								
+								responsevo.setTransactedByID(resultSet.getInt("ID"));
+								responsevo.setToken("token");								
 								responsevo.setResult("Success");
 								responsevo.setMessage("Successfully Logged In");
 							

@@ -24,7 +24,7 @@ public class DataRequestVO {
 	private int days_elapsed_after_valve_trip;
 	private float reading;
 	private Status status;
-	private int transaction_id;
+	private long transaction_id;
 	private int cmd_status;
 	
 	private String source;
@@ -126,10 +126,10 @@ public class DataRequestVO {
 	public void setSource(String source) {
 		this.source = source;
 	}
-	public int getTransaction_id() {
+	public long getTransaction_id() {
 		return transaction_id;
 	}
-	public void setTransaction_id(int transaction_id) {
+	public void setTransaction_id(long transaction_id) {
 		this.transaction_id = transaction_id;
 	}
 	public int getCmd_status() {

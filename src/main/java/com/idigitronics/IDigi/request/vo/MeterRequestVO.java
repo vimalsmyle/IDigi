@@ -26,6 +26,7 @@ public class MeterRequestVO {
 	private float thresholdMaximum;
 	private float thresholdMinimum;
 	private String tariffName;
+	private String availableBalance;
 	private String modifiedDate;
 	private HashMap<Integer, Integer> gasDropdown;
 	private HashMap<Integer, Integer> waterDropdown;
@@ -138,8 +139,11 @@ public class MeterRequestVO {
 	public void setMeterIDSize(Integer meterIDSize) {
 		this.meterIDSize = meterIDSize;
 	}
-	
-	
-	
+	public String getAvailableBalance() {
+		return availableBalance;
+	}
+	public void setAvailableBalance(String availableBalance) {
+		this.availableBalance = availableBalance;
+	}
 	
 }

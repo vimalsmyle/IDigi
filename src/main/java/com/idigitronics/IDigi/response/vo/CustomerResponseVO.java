@@ -28,6 +28,7 @@ public class CustomerResponseVO {
 	private String userID;
 	private int requestID;
 	private boolean action;
+	private MeterRequestVO meterDetails;
 	
 	
 	private List<MeterRequestVO> meters;
@@ -134,6 +135,12 @@ public class CustomerResponseVO {
 	}
 	public void setAction(boolean action) {
 		this.action = action;
+	}
+	public MeterRequestVO getMeterDetails() {
+		return meterDetails;
+	}
+	public void setMeterDetails(MeterRequestVO meterDetails) {
+		this.meterDetails = meterDetails;
 	}
 	
 }

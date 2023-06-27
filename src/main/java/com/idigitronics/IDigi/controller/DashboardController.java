@@ -156,16 +156,37 @@ public class DashboardController {
 	}
 	
 	
-	@RequestMapping(value = "/datafrommobile", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	@RequestMapping(value = "/datafrommobile/{device_eui}", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	public @ResponseBody
-	ResponseVO datafrommobile(@RequestBody DataRequestVO dataRequestVO) {
+	ResponseVO datafrommobile(@RequestBody DataRequestVO dataRequestVO, @PathVariable("device_eui") String miuID) {
 
 		DashboardDAO dashboarddao = new DashboardDAO();
 		ResponseVO responsevo = new ResponseVO();
 
 		try {
-			responsevo.setResult(dashboarddao.insertdashboard(dataRequestVO, dataRequestVO.getMiuID()));
-			responsevo.setMessage("Data Inserted Successfully");
+			dataRequestVO.setSource("Mobile");
+			dataRequestVO.setMiuID(miuID);
+			
+			try {
+				
+				logger.debug("Data of Device ID: "+miuID+" received from mobile");
+				
+				
+					if (dataRequestVO.getType() > 0) {
+						
+						logger.debug("Battery Voltage: "+dataRequestVO.getBat_volt());
+						
+						responsevo.setResult(dashboarddao.insertdashboard(dataRequestVO, dataRequestVO.getMiuID()));
+						responsevo.setMessage("Data Inserted Successfully");
+					
+						
+					} else {
+						responsevo.setResult("Invalid Meter Type");
+					}
+
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
 			
 		} catch (Exception ex) {
 			ex.printStackTrace();
