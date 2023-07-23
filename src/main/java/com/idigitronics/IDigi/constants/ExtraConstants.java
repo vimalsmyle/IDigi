@@ -15,8 +15,10 @@ public class ExtraConstants {
 //	public static final String IDIGIIMAGEURL= ApplicationURL+"/common/images/Idigi-Logo.png";
 	public static final String CLIENTIMAGEURL= LocalURL+"/common/images/logo-white.png";
 //	public static final String CLIENTIMAGEURL=ApplicationURL+"/common/images/raychem.png";
-	public static final String fromEmail = "support@idigitronics.com";
-	public static final String fromEmailPassword = "M1rage@24"; 
+//	public static final String fromEmail = "support@idigitronics.com";
+//	public static final String fromEmailPassword = "M1rage@24"; 
+	public static final String fromEmail = "info.idigitronics@gmail.com";
+	public static final String fromEmailPassword = "idigitronics@123"; 
 	public static final String SenderID = "&senderid="+"SJSMTH&msg=";
 	public static final String SMSAPI = "http://sms.textmysms.com/app/smsapi/index.php?key=360EDC1AD67720&campaign=0&routeid=26&type=text&contacts=";
 	public static final String RZPKeyID = "rzp_test_ym55ShYP4avccH"; // live = rzp_live_bnuQgY7vzc3u3p  test = rzp_test_ym55ShYP4avccH 

@@ -28,12 +28,14 @@ public class IndividualDashboardResponseVO {
 	private String doorOpenTamper;
 	private String magneticTamper;
 	private String rtcFault;
+	private String nfcTamper;
 	private String timeStamp;
 	private String dateColor;
 	private String batteryColor;
 	private String communicationStatus;
 	private String dooropentamperColor;
 	private String magnetictamperColor;
+	private String nfcTamperColor;
 	private String vacationStatus;
 	private String vacationColor;
 	private String lastRechargeDate;
@@ -269,6 +271,22 @@ public class IndividualDashboardResponseVO {
 
 	public void setGatewayName(String gatewayName) {
 		this.gatewayName = gatewayName;
+	}
+
+	public String getNfcTamper() {
+		return nfcTamper;
+	}
+
+	public void setNfcTamper(String nfcTamper) {
+		this.nfcTamper = nfcTamper;
+	}
+
+	public String getNfcTamperColor() {
+		return nfcTamperColor;
+	}
+
+	public void setNfcTamperColor(String nfcTamperColor) {
+		this.nfcTamperColor = nfcTamperColor;
 	}
 
 }

@@ -120,7 +120,7 @@ public class DashboardDAO {
 				dashboardvo.setCustomerUniqueID(rs.getString("CustomerUniqueID"));
 				
 				String query = "SELECT dbl.ReadingID, dbl.MainBalanceLogID, dbl.CustomerMeterID, dbl.MIUID, cmd.MeterSerialNumber, cmd.PayType, cmd.MeterType, ms.MeterSize, ms.PerUnitValue, g.GatewayName, dbl.Tariff, dbl.Reading, dbl.Balance, dbl.EmergencyCredit, dbl.ValveStatus, dbl.BatteryVoltage, "
-						+ "dbl.LowBattery, dbl.DoorOpenTamper, dbl.MagneticTamper, dbl.RTCFault, dbl.Vacation, dbl.LowBalance, dbl.LogDate FROM displaybalancelog AS dbl LEFT JOIN customermeterdetails AS cmd ON cmd.CustomerMeterID = dbl.CustomerMeterID LEFT JOIN metersize AS ms ON ms.MeterSizeID = cmd.MeterSizeID LEFT JOIN gateway AS g ON g.GatewayID = cmd.GatewayID WHERE dbl.CustomerID = ? AND cmd.MeterType = '" + type +"'";
+						+ "dbl.LowBattery, dbl.DoorOpenTamper, dbl.MagneticTamper, dbl.RTCFault, dbl.Vacation, dbl.LowBalance, dbl.NFCTamper, dbl.LogDate FROM displaybalancelog AS dbl LEFT JOIN customermeterdetails AS cmd ON cmd.CustomerMeterID = dbl.CustomerMeterID LEFT JOIN metersize AS ms ON ms.MeterSizeID = cmd.MeterSizeID LEFT JOIN gateway AS g ON g.GatewayID = cmd.GatewayID WHERE dbl.CustomerID = ? AND cmd.MeterType = '" + type +"'";
 				
 				StringBuilder stringBuilder = new StringBuilder(query);
 				if(filter != 0) {
@@ -145,7 +145,7 @@ public class DashboardDAO {
 						stringBuilder.append(" AND dbl.BatteryVoltage BETWEEN " + (filtervo.getBatteryVoltageFrom() != 0 ? (filtervo.getBatteryVoltageFrom()) : 0) + " AND " + (filtervo.getBatteryVoltageTo() != 0 ? (filtervo.getBatteryVoltageTo()) : 100));
 					}
 					if(filtervo.getTamperType() > 0) {
-						stringBuilder.append(filtervo.getTamperType() == 1 ? " AND dbl.DoorOpenTamper = 1" : " AND dbl.MagneticTamper = 1");
+						stringBuilder.append(filtervo.getTamperType() == 1 ? " AND dbl.DoorOpenTamper = 1" : filtervo.getTamperType() == 2 ? " AND dbl.MagneticTamper = 1" : filtervo.getTamperType() == 3 ? " AND dbl.NFCTamper = 1" : " ");
 					}
 				}
 				
@@ -173,6 +173,8 @@ public class DashboardDAO {
 					individualDashboardResponseVO.setDooropentamperColor((rs3.getInt("DoorOpenTamper") == 0) ? "GREEN" : "RED");
 					individualDashboardResponseVO.setMagneticTamper((rs3.getInt("MagneticTamper") == 0) ? "NO" : (rs3.getInt("MagneticTamper") == 1) ? "YES" : "NO");
 					individualDashboardResponseVO.setMagnetictamperColor((rs3.getInt("MagneticTamper") == 0) ? "GREEN" : "RED");
+					individualDashboardResponseVO.setNfcTamper((rs3.getInt("NFCTamper") == 0) ? "NO" : (rs3.getInt("NFCTamper") == 1) ? "YES" : "NO");
+					individualDashboardResponseVO.setNfcTamperColor((rs3.getInt("NFCTamper") == 0) ? "GREEN" : "RED");
 					individualDashboardResponseVO.setTariff((rs3.getString("Tariff").equalsIgnoreCase("0.00") ? "---" : rs3.getString("Tariff")));
 					individualDashboardResponseVO.setValveStatus((rs3.getInt("ValveStatus") == 1) ? "OPEN" : (rs3.getInt("ValveStatus") == 0) ? "CLOSED" : "");
 					individualDashboardResponseVO.setValveStatusColor((rs3.getInt("ValveStatus") == 1) ? "GREEN" : (rs3.getInt("ValveStatus") == 0) ? "RED" : "");
@@ -1240,7 +1242,9 @@ public class DashboardDAO {
 				ResultSet rs = pstmt2.executeQuery();
 				if(rs.next()) {
 					
-					pstmt = con.prepareStatement("INSERT INTO balancelog (MIUID, CommunityID, BlockID, CustomerID, CustomerMeterID, MeterSizeID, MeterSerialNumber, CustomerUniqueID, MeterType, SyncTime, SyncInterval, PayType, BatteryVoltage, TariffID, Tariff, ValveConfiguration, ValveStatus, Balance, EmergencyCredit, Minutes, Reading, DoorOpenTamper, MagneticTamper, Vacation, RTCFault, LowBattery, LowBalance, Source, LogDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
+					if(validateRequest(dataRequestVO, miuID, rs.getLong("CustomerMeterID"))) {
+					
+					pstmt = con.prepareStatement("INSERT INTO balancelog (MIUID, CommunityID, BlockID, CustomerID, CustomerMeterID, MeterSizeID, MeterSerialNumber, CustomerUniqueID, MeterType, SyncTime, SyncInterval, PayType, BatteryVoltage, TariffID, Tariff, ValveConfiguration, ValveStatus, Balance, EmergencyCredit, Minutes, Reading, DoorOpenTamper, MagneticTamper, Vacation, RTCFault, LowBattery, LowBalance, NFCTamper, Source, LogDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
 					pstmt.setString(1, miuID);
 					pstmt.setInt(2, rs.getInt("CommunityID"));
 					pstmt.setInt(3, rs.getInt("BlockID"));
@@ -1268,7 +1272,8 @@ public class DashboardDAO {
 					pstmt.setInt(25, dataRequestVO.getStatus().getRtc_fault());
 					pstmt.setInt(26, dataRequestVO.getStatus().getLow_bat());
 					pstmt.setInt(27, dataRequestVO.getStatus().getLow_bal());
-					pstmt.setString(28, dataRequestVO.getSource());
+					pstmt.setInt(28, dataRequestVO.getStatus().getLow_bal()); // change to nfc tamper after getting the name from Amar
+					pstmt.setString(29, dataRequestVO.getSource());
 					
 					if (pstmt.executeUpdate() > 0) {
 						
@@ -1283,7 +1288,7 @@ public class DashboardDAO {
 							ResultSet rs1 = pstmt3.executeQuery();
 							
 							if(rs1.next()) {
-								pstmt1 = con.prepareStatement("UPDATE displaybalancelog SET MainBalanceLogID = ?, MIUID = ?, CommunityID = ?, BlockID = ?, CustomerID = ?, CustomerMeterID = ?, MeterSizeID =?, MeterSerialNumber = ?, CustomerUniqueID = ?, MeterType = ?, SyncTime = ?, SyncInterval = ?, PayType = ?, BatteryVoltage = ?, TariffID = ?, Tariff = ?, ValveConfiguration = ?,  ValveStatus = ?, Balance = ?, EmergencyCredit = ?, Minutes = ?, Reading = ?, DoorOpenTamper = ?, MagneticTamper = ?, Vacation = ?, RTCFault = ?, LowBattery = ?, LowBalance = ?, LogDate = NOW() WHERE CustomerMeterID = ? ");
+								pstmt1 = con.prepareStatement("UPDATE displaybalancelog SET MainBalanceLogID = ?, MIUID = ?, CommunityID = ?, BlockID = ?, CustomerID = ?, CustomerMeterID = ?, MeterSizeID =?, MeterSerialNumber = ?, CustomerUniqueID = ?, MeterType = ?, SyncTime = ?, SyncInterval = ?, PayType = ?, BatteryVoltage = ?, TariffID = ?, Tariff = ?, ValveConfiguration = ?,  ValveStatus = ?, Balance = ?, EmergencyCredit = ?, Minutes = ?, Reading = ?, DoorOpenTamper = ?, MagneticTamper = ?, Vacation = ?, RTCFault = ?, LowBattery = ?, LowBalance = ?, NFCTamper = ?, LogDate = NOW() WHERE CustomerMeterID = ? ");
 								pstmt1.setInt(1, rs2.getInt("ReadingID"));
 								pstmt1.setString(2, miuID);
 								pstmt1.setInt(3, rs.getInt("CommunityID"));
@@ -1312,12 +1317,13 @@ public class DashboardDAO {
 								pstmt1.setInt(26, dataRequestVO.getStatus().getRtc_fault());
 								pstmt1.setInt(27, dataRequestVO.getStatus().getLow_bat());
 								pstmt1.setInt(28, dataRequestVO.getStatus().getLow_bal());
-								pstmt1.setString(29, dataRequestVO.getSource());
-								pstmt1.setInt(30, rs.getInt("CustomerMeterID"));
+								pstmt.setInt(29, dataRequestVO.getStatus().getLow_bal()); // change to nfc tamper after getting the name from Amar
+								pstmt1.setString(30, dataRequestVO.getSource());
+								pstmt1.setInt(31, rs.getInt("CustomerMeterID"));
 								
 							} else {
 								
-									pstmt1 = con.prepareStatement("INSERT INTO displaybalancelog (MainBalanceLogID, MIUID, CommunityID, BlockID, CustomerID, CustomerMeterID, MeterSizeID, MeterSerialNumber, CustomerUniqueID, MeterType, SyncTime, SyncInterval, PayType, BatteryVoltage, TariffID, Tariff, ValveConfiguration, ValveStatus, Balance, EmergencyCredit, Minutes, Reading, DoorOpenTamper, MagneticTamper, Vacation, RTCFault, LowBattery, LowBalance, Source, LogDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
+									pstmt1 = con.prepareStatement("INSERT INTO displaybalancelog (MainBalanceLogID, MIUID, CommunityID, BlockID, CustomerID, CustomerMeterID, MeterSizeID, MeterSerialNumber, CustomerUniqueID, MeterType, SyncTime, SyncInterval, PayType, BatteryVoltage, TariffID, Tariff, ValveConfiguration, ValveStatus, Balance, EmergencyCredit, Minutes, Reading, DoorOpenTamper, MagneticTamper, Vacation, RTCFault, LowBattery, LowBalance, NFCTamper, Source, LogDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
 									pstmt1.setInt(1, rs2.getInt("ReadingID"));
 									pstmt1.setString(2, miuID);
 									pstmt1.setInt(3, rs.getInt("CommunityID"));
@@ -1346,7 +1352,8 @@ public class DashboardDAO {
 									pstmt1.setInt(26, dataRequestVO.getStatus().getRtc_fault());
 									pstmt1.setInt(27, dataRequestVO.getStatus().getLow_bat());
 									pstmt1.setInt(28, dataRequestVO.getStatus().getLow_bal());
-									pstmt1.setString(29, dataRequestVO.getSource());
+									pstmt.setInt(29, dataRequestVO.getStatus().getLow_bal()); // change to nfc tamper after getting the name from Amar
+									pstmt1.setString(30, dataRequestVO.getSource());
 							}
 							
 						}
@@ -1355,7 +1362,7 @@ public class DashboardDAO {
 						result = "Success";
 						}
 						
-						String query = "SELECT LogDate, MIUID, DoorOpenTamper, MagneticTamper, LowBattery, LowBalance FROM balancelog WHERE CustomerMeterID = ? AND CustomerUniqueID = ? AND <condition> AND LogDate BETWEEN (CONCAT(CURDATE(), ' 00:00:00')) AND NOW() ORDER BY LogDate DESC";
+						String query = "SELECT LogDate, MIUID, DoorOpenTamper, MagneticTamper, LowBattery, LowBalance, NFCTamper FROM balancelog WHERE CustomerMeterID = ? AND CustomerUniqueID = ? AND <condition> AND LogDate BETWEEN (CONCAT(CURDATE(), ' 00:00:00')) AND NOW() ORDER BY LogDate DESC";
 						
 						if (dataRequestVO.getStatus().getLow_bat() == 1) {
 							
@@ -1380,8 +1387,8 @@ public class DashboardDAO {
 							}
 						} 
 						
-						if (dataRequestVO.getStatus().getDoor_open() == 1 || dataRequestVO.getStatus().getMagnetic() == 1) {
-							ps = con.prepareStatement(query.replaceAll("<condition>", dataRequestVO.getStatus().getDoor_open() == 1 ? "DoorOpenTamper = 1" : dataRequestVO.getStatus().getMagnetic() == 1 ? "MagneticTamper = 1" : ""));
+						if (dataRequestVO.getStatus().getDoor_open() == 1 || dataRequestVO.getStatus().getMagnetic() == 1 || dataRequestVO.getStatus().getMagnetic() == 1) {  // change to nfc tamper after getting the name from Amar
+							ps = con.prepareStatement(query.replaceAll("<condition>", dataRequestVO.getStatus().getDoor_open() == 1 ? "DoorOpenTamper = 1" : dataRequestVO.getStatus().getMagnetic() == 1 ? "MagneticTamper = 1" : dataRequestVO.getStatus().getMagnetic() == 1 ? "NFCTamper = 1" : ""));
 							ps.setInt(1, rs.getInt("CustomerMeterID"));
 							ps.setString(2, rs.getString("CustomerUniqueID"));
 							resultSet = ps.executeQuery(); 
@@ -1397,7 +1404,7 @@ public class DashboardDAO {
 							if(size == 1) {
 								alertMessage = "There is a <tamper> Tamper at <timestamp>, in MIUID: <MIU> with CRN/CAN/UAN: <CRN>, at H.No: <house>, Community Name: <community>, Block Name: <block>.";
 								alertMessage = alertMessage.replaceAll("<MIU>", resultSet.getString("MIUID"));
-								alertMessage = alertMessage.replaceAll("<tamper>", dataRequestVO.getStatus().getDoor_open() == 1 ? "Door Open Tamper" : dataRequestVO.getStatus().getMagnetic() == 1 ? "Magnetic Tamper" : "");
+								alertMessage = alertMessage.replaceAll("<tamper>", dataRequestVO.getStatus().getDoor_open() == 1 ? "Door Open Tamper" : dataRequestVO.getStatus().getMagnetic() == 1 ? "Magnetic Tamper" : dataRequestVO.getStatus().getMagnetic() == 1 ? "NFC Tamper" : ""); // change to nfc tamper after getting the name from Amar
 								alertMessage = alertMessage.replaceAll("<timestamp>", resultSet.getString("LogDate"));
 								sendalertmail("Tamper Alert!!!", alertMessage, resultSet.getString("MIUID"));
 								sendalertsms(0, alertMessage, resultSet.getString("MIUID"));
@@ -1434,7 +1441,7 @@ public class DashboardDAO {
 							sendalertsms(1, alertMessage, resultSet.getString("MIUID"));
 						}
 						
-						PreparedStatement thresholdAlert = con.prepareStatement("SELECT ((SELECT Reading FROM balancelog WHERE CustomerMeterID = 2 ORDER BY ReadingID DESC LIMIT 0,1) - (SELECT Reading FROM balancelog WHERE CustomerMeterID = 2 ORDER BY ReadingID DESC LIMIT 1,1)) AS Threshold");
+						PreparedStatement thresholdAlert = con.prepareStatement("SELECT ((SELECT Reading FROM balancelog WHERE CustomerMeterID = "+ rs.getLong("CustomerMeterID")+" ORDER BY ReadingID DESC LIMIT 0,1) - (SELECT Reading FROM balancelog WHERE CustomerMeterID = "+ rs.getLong("CustomerMeterID") +" ORDER BY ReadingID DESC LIMIT 1,1)) AS Threshold");
 						ResultSet thresholdResult = thresholdAlert.executeQuery();
 						
 						if(thresholdResult.next()) {
@@ -1458,7 +1465,15 @@ public class DashboardDAO {
 						
 					}
 					
+				} else {
+					
+					alertMessage = "The Reading of MIUID: <MIU> with CRN/CAN/UAN: <CRN>, at H.No: <house>, Community Name: <community>, Block Name: <block> is less than the previous reading i.e. "+rs.getFloat("ThresholdMaximum")+".";
+					alertMessage = alertMessage.replaceAll("<MIU>", miuID);
+					sendalertmail("Maximum Threshold Alert!!!", alertMessage, miuID);
+					sendalertsms(0, alertMessage, miuID);
+					
 				}
+		}
 				
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -1467,6 +1482,34 @@ public class DashboardDAO {
 		return result;
 	}
 	
+	private boolean validateRequest(DataRequestVO dataRequestVO, String miuID, Long cutomerMeterID) throws ClassNotFoundException {
+		// TODO Auto-generated method stub
+		
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		
+		try {
+			con = getConnection();
+			
+			pstmt = con.prepareStatement("SELECT * FROM displaybalancelog WHERE MIUID = ? AND CustomerMeterID = " + cutomerMeterID);
+			pstmt.setString(1, miuID);
+			ResultSet rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				
+				if(dataRequestVO.getReading() < rs.getLong("Reading")) {
+					return false;
+				}
+				
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return true;
+	}
+
 	public String sendalertsms(int i, String message, String miuID) {
 		// TODO Auto-generated method stub
 		ExtraMethodsDAO extraMethodsDao = new ExtraMethodsDAO();
