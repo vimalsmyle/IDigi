@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.idigitronics.IDigi.dao.DropDownDAO;
+import com.idigitronics.IDigi.dao.ExtraMethodsDAO;
+import com.idigitronics.IDigi.request.vo.MailRequestVO;
 import com.idigitronics.IDigi.response.vo.ResponseVO;
 
 /**
@@ -143,6 +145,22 @@ public class DropDownController {
 		
 		ResponseVO responsevo = new ResponseVO();
 		responsevo.setDropDownMeterSizes(dropdowndao.getallmetersizes(type));
+
+		return responsevo;
+	}
+	
+	@RequestMapping(value = "/testmail",method = RequestMethod.GET, produces="application/json")
+	public @ResponseBody ResponseVO testmail() throws SQLException {
+		
+		ResponseVO responsevo = new ResponseVO();
+		responsevo.setResult("success");
+		ExtraMethodsDAO extraMethodsDAO = new ExtraMethodsDAO();
+		MailRequestVO mailRequestVO = new MailRequestVO();
+		mailRequestVO.setFileLocation("NoAttachment");
+		mailRequestVO.setToEmail("kvk9889@gmail.com");
+		mailRequestVO.setSubject("test");
+		mailRequestVO.setMessage("testing email");
+		extraMethodsDAO.sendmail(mailRequestVO);
 
 		return responsevo;
 	}

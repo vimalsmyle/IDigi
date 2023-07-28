@@ -145,7 +145,7 @@ public class ReportsDAO {
 			if(type.equalsIgnoreCase("Tabular")) {
 				
 				String query = "SELECT DISTINCT c.CommunityName, b.BlockName, cd.FirstName, cd.LastName, cd.HouseNumber, cd.CustomerUniqueID, bl.ReadingID, bl.EmergencyCredit, \r\n" + 
-						"bl.MIUID, bl.Reading, bl.Balance, bl.BatteryVoltage, bl.Tariff, bl.ValveStatus, bl.DoorOpenTamper, bl.MagneticTamper, bl.LowBattery, bl.LowBalance, bl.LogDate, ms.MeterSize, ms.PerUnitValue \r\n" + 
+						"bl.MIUID, bl.Reading, bl.Balance, bl.BatteryVoltage, bl.Tariff, bl.ValveStatus, bl.DoorOpenTamper, bl.MagneticTamper, bl.NFCTamper, bl.LowBattery, bl.LowBalance, bl.LogDate, ms.MeterSize, ms.PerUnitValue \r\n" + 
 						"FROM balancelog AS bl LEFT JOIN community AS c ON c.communityID = bl.CommunityID LEFT JOIN block AS b ON b.BlockID = bl.BlockID\r\n" + 
 						"LEFT JOIN customerdetails AS cd ON cd.CustomerID = bl.CustomerID LEFT JOIN customermeterdetails AS cmd ON cd.CustomerID = cmd.CustomerID LEFT JOIN metersize AS ms ON ms.MeterSizeID = bl.MeterSizeID WHERE bl.CustomerUniqueID = ? AND bl.LogDate BETWEEN ? AND ? ";
 					pstmt = con.prepareStatement(query);
@@ -433,7 +433,7 @@ public class ReportsDAO {
 			String query = "SELECT DISTINCT c.CommunityName, b.BlockName, cd.FirstName, cd.LastName, cd.HouseNumber, cd.CustomerUniqueID, bl.ReadingID, bl.EmergencyCredit, \r\n" + 
 					"bl.MIUID, bl.Reading, bl.Balance, bl.BatteryVoltage, bl.Tariff, bl.ValveStatus, bl.DoorOpenTamper, bl.MagneticTamper, bl.LowBattery, bl.LowBalance, bl.LogDate\r\n" + 
 					"FROM balancelog AS bl LEFT JOIN community AS c ON c.communityID = bl.CommunityID LEFT JOIN block AS b ON b.BlockID = bl.BlockID\r\n" + 
-					"LEFT JOIN customerdetails AS cd ON cd.CustomerUniqueID = bl.CustomerUniqueID WHERE bl.CustomerUniqueID = ? AND bl.LogDate BETWEEN ? AND ? AND (bl.DoorOpenTamper = 1 OR bl.MagneticTamper = 1 OR bl.LowBattery = 1 OR bl.LowBalance = 1)";
+					"LEFT JOIN customerdetails AS cd ON cd.CustomerUniqueID = bl.CustomerUniqueID WHERE bl.CustomerUniqueID = ? AND bl.LogDate BETWEEN ? AND ? AND (bl.DoorOpenTamper = 1 OR bl.MagneticTamper = 1 OR bl.NFCTamper = 1 OR bl.LowBattery = 1 OR bl.LowBalance = 1)";
 				pstmt = con.prepareStatement(query);
 				pstmt.setString(1, alarmRequestVO.getCustomerUniqueID());
 				pstmt.setString(2, alarmRequestVO.getFromDate() + " 00:00:01.001");
@@ -453,6 +453,7 @@ public class ReportsDAO {
 						alarmsResponseVO.setBatteryVoltage(rs.getString("BatteryVoltage"));
 						alarmsResponseVO.setDoorOpenTamper((rs.getInt("DoorOpenTamper") == 0) ? "NO" : "YES");
 						alarmsResponseVO.setMagneticTamper((rs.getInt("MagneticTamper") == 0) ? "NO" : "YES");
+						alarmsResponseVO.setNfcTamper((rs.getInt("NFCTamper") == 0) ? "NO" : "YES");
 //						alarmsResponseVO.setSolonideStatus(rs.getInt("SolonideStatus") == 1 ? "CLOSED" : "OPEN");
 						alarmsResponseVO.setDateTime(ExtraMethodsDAO.datetimeformatter(rs.getString("LogDate")));
 						alarmsResponseVO.setBatteryColor((rs.getInt("LowBattery") == 1 ) ? "RED" : "GREEN");

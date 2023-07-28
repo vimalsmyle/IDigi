@@ -15,6 +15,7 @@ public class Status {
 	private int rtc_fault;
 	private int low_bat;
 	private int low_bal;
+	private int nfc_tamper;
 	
 	public int getDoor_open() {
 		return door_open;
@@ -51,6 +52,12 @@ public class Status {
 	}
 	public void setLow_bal(int low_bal) {
 		this.low_bal = low_bal;
+	}
+	public int getNfc_tamper() {
+		return nfc_tamper;
+	}
+	public void setNfc_tamper(int nfc_tamper) {
+		this.nfc_tamper = nfc_tamper;
 	}
 	
 }

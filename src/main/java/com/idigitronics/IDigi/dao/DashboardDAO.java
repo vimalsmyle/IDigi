@@ -340,25 +340,28 @@ public class DashboardDAO {
         headercell13.setCellValue("Magnetic Tamper");
         
         Cell headercell14 = header.createCell(++columnCount);
-        headercell14.setCellValue("Balance");
+        headercell14.setCellValue("NFC Tamper");
         
         Cell headercell15 = header.createCell(++columnCount);
-        headercell15.setCellValue("Emergency Credit");
-                
-        Cell headercell16 = header.createCell(++columnCount);
-        headercell16.setCellValue("Pay Type");
+        headercell15.setCellValue("Balance");
         
+        Cell headercell16 = header.createCell(++columnCount);
+        headercell16.setCellValue("Emergency Credit");
+                
         Cell headercell17 = header.createCell(++columnCount);
-        headercell17.setCellValue("Tariff");
+        headercell17.setCellValue("Pay Type");
         
         Cell headercell18 = header.createCell(++columnCount);
-        headercell18.setCellValue("Valve Status");
+        headercell18.setCellValue("Tariff");
         
         Cell headercell19 = header.createCell(++columnCount);
-        headercell19.setCellValue("Vacation Status");
+        headercell19.setCellValue("Valve Status");
         
         Cell headercell20 = header.createCell(++columnCount);
-        headercell20.setCellValue("Last Topup Amount");
+        headercell20.setCellValue("Vacation Status");
+        
+        Cell headercell21 = header.createCell(++columnCount);
+        headercell21.setCellValue("Last Topup Amount");
         
         for(int i = 0; i< dashboardResponseVO.getData().size(); i++) {
         	
@@ -426,25 +429,28 @@ public class DashboardDAO {
             	cell13.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getMagneticTamper());
             	
             	Cell cell14 = data.createCell(++dashboarDataColumnCount);
-            	cell14.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getBalance());
+            	cell14.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getNfcTamper());
             	
             	Cell cell15 = data.createCell(++dashboarDataColumnCount);
-            	cell15.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getEmergencyCredit());
+            	cell15.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getBalance());
             	
             	Cell cell16 = data.createCell(++dashboarDataColumnCount);
-            	cell16.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getPayType());
+            	cell16.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getEmergencyCredit());
             	
             	Cell cell17 = data.createCell(++dashboarDataColumnCount);
-            	cell17.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getTariff());
+            	cell17.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getPayType());
             	
             	Cell cell18 = data.createCell(++dashboarDataColumnCount);
-            	cell18.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getValveStatus());
+            	cell18.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getTariff());
             	
             	Cell cell19 = data.createCell(++dashboarDataColumnCount);
-            	cell19.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getVacationStatus());
+            	cell19.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getValveStatus());
             	
             	Cell cell20 = data.createCell(++dashboarDataColumnCount);
-            	cell20.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getLastTopupAmount());
+            	cell20.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getVacationStatus());
+            	
+            	Cell cell21 = data.createCell(++dashboarDataColumnCount);
+            	cell21.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getLastTopupAmount());
             	
             	if(j < dashboardResponseVO.getData().get(i).getDasboarddata().size() - 1) { data = spreadsheet.createRow(spreadsheet.getLastRowNum()+1); }
             	
@@ -536,25 +542,28 @@ public class DashboardDAO {
         headercell13.setCellValue("Magnetic Tamper");
         
         Cell headercell14 = header.createCell(++columnCount);
-        headercell14.setCellValue("Balance");
+        headercell14.setCellValue("NFC Tamper");
         
         Cell headercell15 = header.createCell(++columnCount);
-        headercell15.setCellValue("Emergency Credit");
-                
-        Cell headercell16 = header.createCell(++columnCount);
-        headercell16.setCellValue("Pay Type");
+        headercell15.setCellValue("Balance");
         
+        Cell headercell16 = header.createCell(++columnCount);
+        headercell16.setCellValue("Emergency Credit");
+                
         Cell headercell17 = header.createCell(++columnCount);
-        headercell17.setCellValue("Tariff");
+        headercell17.setCellValue("Pay Type");
         
         Cell headercell18 = header.createCell(++columnCount);
-        headercell18.setCellValue("Valve Status");
+        headercell18.setCellValue("Tariff");
         
         Cell headercell19 = header.createCell(++columnCount);
-        headercell19.setCellValue("Vacation Status");
+        headercell19.setCellValue("Valve Status");
         
         Cell headercell20 = header.createCell(++columnCount);
-        headercell20.setCellValue("Last Topup Amount");
+        headercell20.setCellValue("Vacation Status");
+        
+        Cell headercell21 = header.createCell(++columnCount);
+        headercell21.setCellValue("Last Topup Amount");
         
         for(int i = 0; i< dashboardResponseVO.getData().size(); i++) {
         	
@@ -622,25 +631,28 @@ public class DashboardDAO {
             	cell13.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getMagneticTamper());
             	
             	Cell cell14 = data.createCell(++dashboarDataColumnCount);
-            	cell14.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getBalance());
+            	cell14.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getNfcTamper());
             	
             	Cell cell15 = data.createCell(++dashboarDataColumnCount);
-            	cell15.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getEmergencyCredit());
+            	cell15.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getBalance());
             	
             	Cell cell16 = data.createCell(++dashboarDataColumnCount);
-            	cell16.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getPayType());
+            	cell16.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getEmergencyCredit());
             	
             	Cell cell17 = data.createCell(++dashboarDataColumnCount);
-            	cell17.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getTariff());
+            	cell17.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getPayType());
             	
             	Cell cell18 = data.createCell(++dashboarDataColumnCount);
-            	cell18.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getValveStatus());
+            	cell18.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getTariff());
             	
             	Cell cell19 = data.createCell(++dashboarDataColumnCount);
-            	cell19.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getVacationStatus());
+            	cell19.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getValveStatus());
             	
             	Cell cell20 = data.createCell(++dashboarDataColumnCount);
-            	cell20.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getLastTopupAmount());
+            	cell20.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getVacationStatus());
+            	
+            	Cell cell21 = data.createCell(++dashboarDataColumnCount);
+            	cell21.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getLastTopupAmount());
             	
             	if(j < dashboardResponseVO.getData().get(i).getDasboarddata().size() - 1) { data = spreadsheet.createRow(spreadsheet.getLastRowNum()+1); }
             	
@@ -1272,7 +1284,7 @@ public class DashboardDAO {
 					pstmt.setInt(25, dataRequestVO.getStatus().getRtc_fault());
 					pstmt.setInt(26, dataRequestVO.getStatus().getLow_bat());
 					pstmt.setInt(27, dataRequestVO.getStatus().getLow_bal());
-					pstmt.setInt(28, dataRequestVO.getStatus().getLow_bal()); // change to nfc tamper after getting the name from Amar
+					pstmt.setInt(28, dataRequestVO.getStatus().getNfc_tamper()); 
 					pstmt.setString(29, dataRequestVO.getSource());
 					
 					if (pstmt.executeUpdate() > 0) {
@@ -1317,7 +1329,7 @@ public class DashboardDAO {
 								pstmt1.setInt(26, dataRequestVO.getStatus().getRtc_fault());
 								pstmt1.setInt(27, dataRequestVO.getStatus().getLow_bat());
 								pstmt1.setInt(28, dataRequestVO.getStatus().getLow_bal());
-								pstmt.setInt(29, dataRequestVO.getStatus().getLow_bal()); // change to nfc tamper after getting the name from Amar
+								pstmt.setInt(29, dataRequestVO.getStatus().getNfc_tamper()); 
 								pstmt1.setString(30, dataRequestVO.getSource());
 								pstmt1.setInt(31, rs.getInt("CustomerMeterID"));
 								
@@ -1352,7 +1364,7 @@ public class DashboardDAO {
 									pstmt1.setInt(26, dataRequestVO.getStatus().getRtc_fault());
 									pstmt1.setInt(27, dataRequestVO.getStatus().getLow_bat());
 									pstmt1.setInt(28, dataRequestVO.getStatus().getLow_bal());
-									pstmt.setInt(29, dataRequestVO.getStatus().getLow_bal()); // change to nfc tamper after getting the name from Amar
+									pstmt.setInt(29, dataRequestVO.getStatus().getNfc_tamper()); 
 									pstmt1.setString(30, dataRequestVO.getSource());
 							}
 							
@@ -1404,7 +1416,7 @@ public class DashboardDAO {
 							if(size == 1) {
 								alertMessage = "There is a <tamper> Tamper at <timestamp>, in MIUID: <MIU> with CRN/CAN/UAN: <CRN>, at H.No: <house>, Community Name: <community>, Block Name: <block>.";
 								alertMessage = alertMessage.replaceAll("<MIU>", resultSet.getString("MIUID"));
-								alertMessage = alertMessage.replaceAll("<tamper>", dataRequestVO.getStatus().getDoor_open() == 1 ? "Door Open Tamper" : dataRequestVO.getStatus().getMagnetic() == 1 ? "Magnetic Tamper" : dataRequestVO.getStatus().getMagnetic() == 1 ? "NFC Tamper" : ""); // change to nfc tamper after getting the name from Amar
+								alertMessage = alertMessage.replaceAll("<tamper>", dataRequestVO.getStatus().getDoor_open() == 1 ? "Door Open Tamper" : dataRequestVO.getStatus().getMagnetic() == 1 ? "Magnetic Tamper" : dataRequestVO.getStatus().getNfc_tamper() == 1 ? "NFC Tamper" : ""); 
 								alertMessage = alertMessage.replaceAll("<timestamp>", resultSet.getString("LogDate"));
 								sendalertmail("Tamper Alert!!!", alertMessage, resultSet.getString("MIUID"));
 								sendalertsms(0, alertMessage, resultSet.getString("MIUID"));
