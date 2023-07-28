@@ -681,7 +681,7 @@ public class CommunitySetUpDAO {
 					smsRequestVO.setToMobileNumber(blockvo.getMobileNumber());
 					smsRequestVO.setMessage("Please Save the Credentials for further communications \n" + " UserID: " + mailrequestvo.getUserID() + "\n Password: " + mailrequestvo.getUserPassword()+ "\n Use URL for login : "+ ExtraConstants.ApplicationURL);
 					
-//					extraMethodsDAO.sendsms(smsRequestVO);
+					extraMethodsDAO.sendsms(smsRequestVO);
 					
 					if(extraMethodsDAO.sendmail(mailrequestvo).equalsIgnoreCase("Success")) {
 						extraMethodsDAO.sendsms(smsRequestVO);
