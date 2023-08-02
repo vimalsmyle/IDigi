@@ -25,7 +25,6 @@ import com.idigitronics.IDigi.request.vo.UserManagementRequestVO;
 import com.idigitronics.IDigi.response.vo.ResponseVO;
 import com.idigitronics.IDigi.response.vo.UserDetails;
 import com.idigitronics.IDigi.utils.Encryptor;
-import com.mysql.cj.protocol.Resultset;
 
 /**
  * @author K VimaL Kumar 
