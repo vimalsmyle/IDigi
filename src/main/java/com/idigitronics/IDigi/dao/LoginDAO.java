@@ -73,12 +73,12 @@ public class LoginDAO {
 
 					if (loginvo.getPassword().equals(resultSet.getString("UserPassword"))) {
 
-						if (loginvo.getSource().equalsIgnoreCase("web")) {
+//						if (loginvo.getSource().equalsIgnoreCase("web")) {
 							
-							/*if(resultSet.getInt("RoleID") == 6) {
+							if(resultSet.getInt("RoleID") == 6) {
 								
 								throw new BusinessException("USER NOT AUTHORIZED TO LOGIN");
-							}*/
+							}
 
 							userDetails.setRoleID(resultSet.getInt("RoleID"));
 							userDetails.setBlockID(resultSet.getInt("BlockID"));
@@ -127,7 +127,7 @@ public class LoginDAO {
 							responsevo.setResult("Success");
 							responsevo.setMessage("Successfully Logged In");
 
-						} else {
+						/*} else {
 
 							if (resultSet.getInt("RoleID") == 3 && loginvo.getSource().equalsIgnoreCase("mobile")) {
 								
@@ -179,8 +179,8 @@ public class LoginDAO {
 								
 								userDetails.setMeters(customer_meter_list);
 								
-								CommandGroupRequestVO commandGroupRequestVO = null;
-								List<CommandGroupRequestVO> pendingCommands = new LinkedList<>();
+//								CommandGroupRequestVO commandGroupRequestVO = null;
+//								List<CommandGroupRequestVO> pendingCommands = new LinkedList<>();
 								
 								userDetails.setID(resultSet.getInt("ID"));
 								if (userDetails.getCustomerUniqueID() != null) {
@@ -209,7 +209,12 @@ public class LoginDAO {
 							} else if (resultSet.getInt("RoleID") == 1 && loginvo.getSource().equalsIgnoreCase("mobile")) {
 								
 								responsevo.setTransactedByID(resultSet.getInt("ID"));
-								responsevo.setToken("token");								
+								responsevo.setResult("Success");
+								responsevo.setMessage("Successfully Logged In");
+							
+							} else if (resultSet.getInt("RoleID") == 2 && loginvo.getSource().equalsIgnoreCase("mobile")) {
+								
+								responsevo.setTransactedByID(resultSet.getInt("ID"));
 								responsevo.setResult("Success");
 								responsevo.setMessage("Successfully Logged In");
 							
@@ -218,7 +223,7 @@ public class LoginDAO {
 								
 							}
 
-						}
+						}*/
 
 					} else {
 						responsevo.setResult("Failure");

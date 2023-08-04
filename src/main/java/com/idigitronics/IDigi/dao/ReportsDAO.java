@@ -384,7 +384,7 @@ public class ReportsDAO {
 							
 							individualAlarmsResponseVO.setMiuID(rs4.getString("MIUID"));
 							individualAlarmsResponseVO.setDifference(rs2.getInt("Minutes"));
-							PreparedStatement pstmt3 = con.prepareStatement("SELECT BatteryVoltage, DoorOpenTamper, MagneticTamper, LogDate, LowBattery, LowBalance FROM displaybalancelog WHERE MIUID = ?");
+							PreparedStatement pstmt3 = con.prepareStatement("SELECT BatteryVoltage, DoorOpenTamper, MagneticTamper, NFCTamper, LogDate, LowBattery, LowBalance FROM displaybalancelog WHERE MIUID = ?");
 							pstmt3.setString(1, rs4.getString("MIUID"));
 							ResultSet rs3 = pstmt3.executeQuery();
 							if(rs3.next()) {
@@ -392,6 +392,7 @@ public class ReportsDAO {
 								individualAlarmsResponseVO.setBatteryVoltage(rs3.getInt("LowBattery")==1 ? rs3.getString("BatteryVoltage") : "---");	
 								individualAlarmsResponseVO.setDoorOpenTamper(rs3.getInt("DoorOpenTamper")==1 ? "YES" : "NO");	
 								individualAlarmsResponseVO.setMagneticTamper(rs3.getInt("MagneticTamper")==1 ? "YES" : "NO");
+								individualAlarmsResponseVO.setMagneticTamper(rs3.getInt("NFCTamper")==1 ? "YES" : "NO");
 								individualAlarmsResponseVO.setLowBalance(rs3.getInt("LowBalance")==1 ? "YES" : "NO");
 							}
 							alarmsList.add(individualAlarmsResponseVO);

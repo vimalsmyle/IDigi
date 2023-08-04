@@ -13,6 +13,7 @@ public class IndividualAlarmsResponseVO {
 	private String dateTime;
 	private String doorOpenTamper;
 	private String magneticTamper;
+	private String nfcTamper;
 	private String batteryVoltage;
 	private String lowBattery;
 	private String lowBalance;
@@ -79,6 +80,12 @@ public class IndividualAlarmsResponseVO {
 	}
 	public void setBatteryColor(String batteryColor) {
 		this.batteryColor = batteryColor;
+	}
+	public String getNfcTamper() {
+		return nfcTamper;
+	}
+	public void setNfcTamper(String nfcTamper) {
+		this.nfcTamper = nfcTamper;
 	}
 	
 }

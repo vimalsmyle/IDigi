@@ -417,6 +417,7 @@ public class DropDownDAO {
 				status.setLow_bal(rs.getInt("LowBalance"));
 				status.setLow_bat(rs.getInt("LowBattery"));
 				status.setMagnetic(rs.getInt("MagneticTamper"));
+				status.setNfc_tamper(rs.getInt("NFCTamper"));
 				status.setRtc_fault(rs.getInt("RTCFault"));
 				status.setSchedule_disconnect(rs.getInt("Vacation"));
 				

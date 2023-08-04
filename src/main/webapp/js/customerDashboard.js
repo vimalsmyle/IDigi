@@ -360,6 +360,20 @@ function getCustomerMetersWithData(data) {
 																				"defaultContent" : ""
 																			},
 																			{
+																				"mData" : "action",
+																				"render" : function(
+																						data,
+																						type,
+																						row) {
+																					return "<span id=color style = color:"
+																							+ row.nfcTamperColor
+																							+ ">"
+																							+ row.nfcTamper
+																							+ "</span>"
+																				},
+																				"defaultContent" : ""
+																			},
+																			{
 																				"data" : "balance"
 																			},
 																			{
@@ -536,6 +550,20 @@ function getCustomerMeters(CRNNumber) {
 																							+ row.magnetictamperColor
 																							+ ">"
 																							+ row.magneticTamper
+																							+ "</span>"
+																				},
+																				"defaultContent" : ""
+																			},
+																			{
+																				"mData" : "action",
+																				"render" : function(
+																						data,
+																						type,
+																						row) {
+																					return "<span id=color style = color:"
+																							+ row.nfcTamperColor
+																							+ ">"
+																							+ row.nfcTamper
 																							+ "</span>"
 																				},
 																				"defaultContent" : ""

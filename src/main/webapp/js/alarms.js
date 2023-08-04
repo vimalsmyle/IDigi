@@ -261,6 +261,9 @@
 																													"data" : "magneticTamper",
 																											    	"defaultContent": ""
 																													},{
+																														"data" : "nfcTamper",
+																												    	"defaultContent": ""
+																														},{
 																														"data" : "lowBalance",
 																												    	"defaultContent": ""
 																														}

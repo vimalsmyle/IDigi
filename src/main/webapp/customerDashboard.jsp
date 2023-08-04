@@ -135,6 +135,7 @@
 																<option value="1">Magnetic Tamper</option>
 																<option value="2">Door Open</option>
 																<option value="3">MAG - Door</option>
+																<option value="4">NFC Tamper</option>
 															</select>
 														</div>
 													</div>
@@ -251,6 +252,7 @@
 								<th>Battery</th>
 								<th>Box AMR Tamper</th>
 								<th>Magnetic Tamper</th>
+								<th>NFC Tamper</th>
 								<th>Balance</th>
 								<th>Emergency Credit</th>
 								<th>Pay Type</th>

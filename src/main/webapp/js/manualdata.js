@@ -101,6 +101,7 @@ $(document)
 												data2["rtc_fault"] = dataLoad.lastReadingDetails.status.rtc_fault;
 												data2["low_bat"] =dataLoad.lastReadingDetails.status.low_bat;
 												data2["low_bal"] = dataLoad.lastReadingDetails.status.low_bal;
+												data2["nfc_tamper"] = dataLoad.lastReadingDetails.status.nfc_tamper;
 												//data1["timestamp"] = $("#timestamp").val();
 												data1["type"] = dataLoad.lastReadingDetails.type;
 												data1["sync_time"] = dataLoad.lastReadingDetails.sync_time;

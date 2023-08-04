@@ -145,7 +145,7 @@ public class DashboardDAO {
 						stringBuilder.append(" AND dbl.BatteryVoltage BETWEEN " + (filtervo.getBatteryVoltageFrom() != 0 ? (filtervo.getBatteryVoltageFrom()) : 0) + " AND " + (filtervo.getBatteryVoltageTo() != 0 ? (filtervo.getBatteryVoltageTo()) : 100));
 					}
 					if(filtervo.getTamperType() > 0) {
-						stringBuilder.append(filtervo.getTamperType() == 1 ? " AND dbl.DoorOpenTamper = 1" : filtervo.getTamperType() == 2 ? " AND dbl.MagneticTamper = 1" : filtervo.getTamperType() == 3 ? " AND dbl.NFCTamper = 1" : " ");
+						stringBuilder.append(filtervo.getTamperType() == 1 ? " AND dbl.DoorOpenTamper = 1" : filtervo.getTamperType() == 2 ? " AND dbl.MagneticTamper = 1" : filtervo.getTamperType() == 3 ? " AND dbl.DoorOpenTamper = 1 AND dbl.MagneticTamper = 1" : filtervo.getTamperType() == 4 ? " AND dbl.NFCTamper = 1" : " ");
 					}
 				}
 				
@@ -173,8 +173,8 @@ public class DashboardDAO {
 					individualDashboardResponseVO.setDooropentamperColor((rs3.getInt("DoorOpenTamper") == 0) ? "GREEN" : "RED");
 					individualDashboardResponseVO.setMagneticTamper((rs3.getInt("MagneticTamper") == 0) ? "NO" : (rs3.getInt("MagneticTamper") == 1) ? "YES" : "NO");
 					individualDashboardResponseVO.setMagnetictamperColor((rs3.getInt("MagneticTamper") == 0) ? "GREEN" : "RED");
-					individualDashboardResponseVO.setNfcTamper((rs3.getInt("NFCTamper") == 0) ? "NO" : (rs3.getInt("NFCTamper") == 1) ? "YES" : "NO");
-					individualDashboardResponseVO.setNfcTamperColor((rs3.getInt("NFCTamper") == 0) ? "GREEN" : "RED");
+					individualDashboardResponseVO.setNfcTamper((rs3.getInt("NFCTamper") == 0 || rs3.getString("NFCTamper").equalsIgnoreCase("NULL")) ? "NO" : (rs3.getInt("NFCTamper") == 1) ? "YES" : "NO");
+					individualDashboardResponseVO.setNfcTamperColor((rs3.getInt("NFCTamper") == 0 || rs3.getString("NFCTamper").equalsIgnoreCase("NULL")) ? "GREEN" : "RED");
 					individualDashboardResponseVO.setTariff((rs3.getString("Tariff").equalsIgnoreCase("0.00") ? "---" : rs3.getString("Tariff")));
 					individualDashboardResponseVO.setValveStatus((rs3.getInt("ValveStatus") == 1) ? "OPEN" : (rs3.getInt("ValveStatus") == 0) ? "CLOSED" : "");
 					individualDashboardResponseVO.setValveStatusColor((rs3.getInt("ValveStatus") == 1) ? "GREEN" : (rs3.getInt("ValveStatus") == 0) ? "RED" : "");
