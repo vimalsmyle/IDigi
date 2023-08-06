@@ -20,6 +20,7 @@ public class MeterRequestVO {
 	private Integer meterIDSize;
 	private String payType;
 	private int tariffID;
+	private String tariff;
 	private int gatewayID;
 	private String gatewayName;
 	private String location;
@@ -144,6 +145,12 @@ public class MeterRequestVO {
 	}
 	public void setAvailableBalance(String availableBalance) {
 		this.availableBalance = availableBalance;
+	}
+	public String getTariff() {
+		return tariff;
+	}
+	public void setTariff(String tariff) {
+		this.tariff = tariff;
 	}
 	
 }

@@ -63,7 +63,7 @@ public class LoginDAO {
 			}
 			
 			pstmt = con.prepareStatement(
-					"SELECT u.ID, u.UserID, u.UserName, u.UserPassword, u.RoleID, u.CommunityID, c.CommunityName, u.BlockID, u.CustomerID, u.CustomerUniqueID, b.BlockName, b.Email AS bemail, b.MobileNumber AS bmobile, cd.MobileNumber AS cmobile, cd.Email AS cemail FROM USER AS u LEFT JOIN community AS c ON c.CommunityID = u.CommunityID LEFT JOIN block AS b ON b.BlockID = u.BlockID LEFT JOIN customerdetails AS cd ON cd.CustomerUniqueID = u.CustomerUniqueID WHERE u.UserID = ? AND u.UserPassword = ?");
+					"SELECT u.ID, u.UserID, u.UserName, u.UserPassword, u.RoleID, u.CommunityID, c.CommunityName, u.BlockID, u.CustomerID, u.CustomerUniqueID, b.BlockName, b.Email AS bemail, b.MobileNumber AS bmobile, cd.MobileNumber AS cmobile, cd.Email AS cemail, cd.HouseNumber FROM USER AS u LEFT JOIN community AS c ON c.CommunityID = u.CommunityID LEFT JOIN block AS b ON b.BlockID = u.BlockID LEFT JOIN customerdetails AS cd ON cd.CustomerUniqueID = u.CustomerUniqueID WHERE u.UserID = ? AND u.UserPassword = ?");
 			pstmt.setString(1, loginvo.getUserID());
 			pstmt.setString(2, loginvo.getPassword());
 			resultSet = pstmt.executeQuery();
@@ -90,39 +90,29 @@ public class LoginDAO {
 							userDetails.setCommunity(resultSet.getInt("CommunityID"));
 							userDetails.setCommunityName(resultSet.getString("CommunityName"));
 							userDetails.setBlockName(resultSet.getString("BlockName"));
+							userDetails.setHouseNo(resultSet.getString("HouseNumber"));
 							userDetails.setID(resultSet.getInt("ID"));
 							
-							/*String viewQuery = "SELECT DISTINCT cmd.MeterType FROM customerdetails AS cd LEFT JOIN customermeterdetails AS cmd ON cd.CustomerID = cmd.CustomerID WHERE cmd.MeterType IN ('Gas', 'Water', 'Energy') <id>";
-							PreparedStatement pstmt4 = con.prepareStatement(viewQuery.replace("<id>", (userDetails.getRoleID() == 1 || userDetails.getRoleID() == 4) ? "" : (userDetails.getRoleID() == 2 || userDetails.getRoleID() == 5) ? "AND cd.BlockID = "+userDetails.getBlockID() : (userDetails.getRoleID() == 3) ? "AND cd.CustomerID = "+userDetails.getCustomerID() : ""));
-							ResultSet rs4 = pstmt4.executeQuery();
-							
-							if(rs4.next()) {
+							if(userDetails.getRoleID() == 3) {
 								
-								/*if(rs4.getString("MeterType").equalsIgnoreCase("Gas")) {
-										userDetails.setGas(true);
-										rs4.next();
-									} else if (rs4.getString("MeterType").equalsIgnoreCase("Water")) {
-										userDetails.setWater(true);
-										rs4.next();
-									} else if (rs4.getString("MeterType").equalsIgnoreCase("Energy")) {
-										userDetails.setEnergy(true);
-										rs4.next();
-									}
+								PreparedStatement pstmt4 = con.prepareStatement("SELECT DISTINCT cmd.MeterType FROM customerdetails AS cd LEFT JOIN customermeterdetails AS cmd ON cd.CustomerID = cmd.CustomerID WHERE cmd.MeterType IN ('Gas', 'Water', 'Energy') AND cd.CustomerID = "+userDetails.getCustomerID());
+								ResultSet rs4 = pstmt4.executeQuery();
 								
-								if(rs4.getString("MeterType").equalsIgnoreCase("Water")) {
-									userDetails.setWater(true);
-									rs4.next();
-								} else if (rs4.getString("MeterType").equalsIgnoreCase("Gas")) {
-									userDetails.setGas(true);
-									rs4.next();
-								} else if (rs4.getString("MeterType").equalsIgnoreCase("Energy")) {
-									userDetails.setEnergy(true);
-									rs4.next();
+								while(rs4.next()) {
+									
+										if(rs4.getString("MeterType").equalsIgnoreCase("Gas")) {
+											userDetails.setGas(true);
+										} 
+										if (rs4.getString("MeterType").equalsIgnoreCase("Water")) {
+											userDetails.setWater(true);
+										}
+										if (rs4.getString("MeterType").equalsIgnoreCase("Energy")) {
+											userDetails.setEnergy(true);
+										}
 								}
 								
-							}*/
-
-
+							}
+							
 							responsevo.setUserDetails(userDetails);
 							responsevo.setResult("Success");
 							responsevo.setMessage("Successfully Logged In");

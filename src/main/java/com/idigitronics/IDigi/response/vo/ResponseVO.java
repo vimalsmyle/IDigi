@@ -36,6 +36,7 @@ public class ResponseVO {
 	private ByteArrayInputStream byteArrayInputStream;
 	private String token;
 	private long transactedByID;
+	private long transactionID;
 	
 	public UserDetails getUserDetails() {
 		return userDetails;
@@ -174,6 +175,12 @@ public class ResponseVO {
 	}
 	public void setTransactedByID(long transactedByID) {
 		this.transactedByID = transactedByID;
+	}
+	public long getTransactionID() {
+		return transactionID;
+	}
+	public void setTransactionID(long transactionID) {
+		this.transactionID = transactionID;
 	}
 	
 }

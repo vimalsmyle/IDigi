@@ -48,6 +48,7 @@ import com.idigitronics.IDigi.response.vo.Notes;
 import com.idigitronics.IDigi.response.vo.Prefill;
 import com.idigitronics.IDigi.response.vo.RazorPayResponseVO;
 import com.idigitronics.IDigi.response.vo.ResponseVO;
+import com.idigitronics.IDigi.response.vo.RestCallResponseVO;
 import com.idigitronics.IDigi.response.vo.StatusResponseVO;
 import com.idigitronics.IDigi.response.vo.Theme;
 import com.idigitronics.IDigi.utils.Signature;
@@ -133,7 +134,7 @@ public class AccountDAO {
 							topUpRequestVO.setFixedCharges(rs1.getInt("FixedCharges"));
 						}
 
-						PreparedStatement pstmt2 = con.prepareStatement("SELECT al.ReconnectionCharges, al.ReconnectionChargeDays, dbl.Minutes FROM displaybalancelog AS dbl JOIN alertsettings AS al WHERE dbl.CustomerUniqueID = '"
+						/*PreparedStatement pstmt2 = con.prepareStatement("SELECT al.ReconnectionCharges, al.ReconnectionChargeDays, dbl.Minutes FROM displaybalancelog AS dbl JOIN alertsettings AS al WHERE dbl.CustomerUniqueID = '"
 										+ topUpRequestVO.getCustomerUniqueID() + "' AND dbl.CustomerMeterID = " + topUpRequestVO.getCustomerMeterID());
 						ResultSet rs2 = pstmt2.executeQuery();
 
@@ -146,7 +147,7 @@ public class AccountDAO {
 						if (topUpRequestVO.getAmount() <= topUpRequestVO.getFixedCharges()
 								|| topUpRequestVO.getAmount() <= topUpRequestVO.getReconnectionCharges()) {
 							throw new BusinessException("RECHARGE AMOUNT MUST BE GREATER THAN FIXED CHARGES & RECONNECTION CHARGES");
-						}
+						}*/
 
 						if (topUpRequestVO.getModeOfPayment().equalsIgnoreCase("Online")) {
 
@@ -200,6 +201,9 @@ public class AccountDAO {
 									responsevo.setPayType("Prepaid");
 									responsevo.setResult("Success");
 									responsevo.setMessage("Order Created Successfully. Proceed to CheckOut");
+								} else {
+									responsevo.setResult("Failure");
+									responsevo.setMessage("Order Creation Failed. Please Try After Sometime");
 								}
 							} else {
 
@@ -209,11 +213,14 @@ public class AccountDAO {
 						} else {
 							topUpRequestVO.setPaymentStatus(1);
 							responsevo.setPaymentMode("Cash");
+							RestCallResponseVO restCallResponseVO = sendPayLoadToGateway(topUpRequestVO);
 							
-								if(sendPayLoadToGateway(topUpRequestVO) == 200) {
+								if(restCallResponseVO.getRestcallresponse() == 200) {
+									responsevo.setTransactionID(restCallResponseVO.getTransactionID());
 									responsevo.setResult("Success");
 									responsevo.setMessage("Topup Request Submitted/Raised Successfully");	
 								} else {
+									responsevo.setTransactionID(restCallResponseVO.getTransactionID());
 									responsevo.setResult("Failure");
 									responsevo.setMessage("Topup Request Failed. Please Try After Sometime");
 								}
@@ -338,7 +345,7 @@ public class AccountDAO {
 							responseVO.setResult("Success");
 							responseVO.setMessage("Payment Captured Successfully");
 						} else {
-							if (sendPayLoadToGateway(topUpRequestVO) == 200) {
+							if (sendPayLoadToGateway(topUpRequestVO).getRestcallresponse() == 200) {
 								logger.debug("Payload sent to gateway at " + LocalDateTime.now());
 								responseVO.setResult("Success");
 								responseVO.setMessage("Payment Captured & Topup Request Submitted Successfully");
@@ -414,11 +421,11 @@ public class AccountDAO {
 		return responseVO;
 	}
 
-	public long sendPayLoadToGateway(TopUpRequestVO topUpRequestVO) throws SQLException {
+	public RestCallResponseVO sendPayLoadToGateway(TopUpRequestVO topUpRequestVO) throws SQLException {
 
 		RestCallVO restcallvo = new RestCallVO();
 		ExtraMethodsDAO extramethodsdao = new ExtraMethodsDAO();
-		int restcallresponse = 0;
+		RestCallResponseVO restCallResponseVO = new RestCallResponseVO();
 		Connection con = null;
 
 		try {
@@ -436,12 +443,13 @@ public class AccountDAO {
 			if(topUpRequestVO.getModeOfPayment().equalsIgnoreCase("Cash")) {
 				
 				restcallvo.setTransaction_id(inserttopup(topUpRequestVO));
+				restCallResponseVO.setTransactionID(restcallvo.getTransaction_id());
 				
 				if(topUpRequestVO.getSource().equalsIgnoreCase("web")) {
 					
-					restcallresponse = extramethodsdao.postdata(restcallvo);
+					restCallResponseVO.setRestcallresponse(extramethodsdao.postdata(restcallvo));
 					
-					if(restcallresponse != 200) {
+					if(restCallResponseVO.getRestcallresponse() != 200) {
 						PreparedStatement ps = con.prepareStatement("UPDATE topup SET Status = 11 WHERE TransactionID = ?");
 
 						ps.setLong(1, restcallvo.getTransaction_id());
@@ -450,19 +458,19 @@ public class AccountDAO {
 					}
 					
 				} else {
-					restcallresponse = 200;
+					restCallResponseVO.setRestcallresponse(200);
 				}
 				
 			} else {
 				restcallvo.setTransaction_id(topUpRequestVO.getTransactionID());
-				restcallresponse = extramethodsdao.postdata(restcallvo);
+				restCallResponseVO.setRestcallresponse(extramethodsdao.postdata(restcallvo));
 			}
 			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		return restcallresponse;
+		return restCallResponseVO;
 	}
 
 	public int inserttopup(TopUpRequestVO topUpRequestVO) {
@@ -661,7 +669,7 @@ public class AccountDAO {
 					topUpRequestVO.setGatewayPort(rs1.getInt("GatewayPort"));
 				} 
 				
-				if(sendPayLoadToGateway(topUpRequestVO) == 200) {
+				if(sendPayLoadToGateway(topUpRequestVO).getRestcallresponse() == 200) {
 					responsevo.setResult("Success");
 					responsevo.setMessage("Retry Request raised Successfully");
 				} else {
@@ -2038,6 +2046,34 @@ public class AccountDAO {
 					result = true;
 			}
 		} catch (Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			pstmt.close();
+			rs.close();
+			con.close();
+		}
+
+		return result;
+	}
+
+	public boolean checktypeOfMeter(long customerMeterID) throws SQLException {
+		// TODO Auto-generated method stub
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		Boolean result = false;
+
+		try {
+			con = getConnection();
+			pstmt = con.prepareStatement("SELECT PayType FROM customermeterdetails WHERE CustomerMeterID = "+customerMeterID);
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				if (rs.getString("PayType").equalsIgnoreCase("PostPaid") || !rs.getString("PayType").equalsIgnoreCase("Prepaid")) {
+
+					result = true;
+			}
+		} 
+		}catch (Exception ex) {
 			ex.printStackTrace();
 		} finally {
 			pstmt.close();

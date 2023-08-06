@@ -1000,10 +1000,10 @@ public class CommunitySetUpDAO {
 				metervo.setMeterType(rs.getString("MeterType"));
 				metervo.setPayType(rs.getString("PayType"));
 				metervo.setMeterSize(rs.getFloat("MeterSize"));
-//				metervo.setMeterIDSize(rs.getInt("MeterSizeID"));
+				metervo.setMeterIDSize(rs.getInt("MeterSizeID"));
 				metervo.setLocation(rs.getString("Location"));
-//				metervo.setTariffID(rs.getInt("TariffID"));
-//				metervo.setGatewayID(rs.getInt("GatewayID"));
+				metervo.setTariffID(rs.getInt("TariffID"));
+				metervo.setGatewayID(rs.getInt("GatewayID"));
 				metervo.setGatewayName(rs.getString("GatewayName"));
 				metervo.setThresholdMaximum(rs.getFloat("ThresholdMaximum"));
 				metervo.setThresholdMinimum(rs.getFloat("ThresholdMinimum"));
@@ -1044,13 +1044,14 @@ public class CommunitySetUpDAO {
 						metervo.setAvailableBalance("---");
 					}
 					
-					PreparedStatement pstmt3 = con.prepareStatement("SELECT TariffName from tariff WHERE TariffID = "+ metervo.getTariffID());
+					PreparedStatement pstmt3 = con.prepareStatement("SELECT TariffName, Tariff from tariff WHERE TariffID = "+ metervo.getTariffID());
 					
 					ResultSet rs3 = pstmt3.executeQuery();
 					
 					if(rs3.next()) {
 						
 						metervo.setTariffName(rs3.getString("TariffName"));
+						metervo.setTariff(rs3.getString("Tariff"));
 						
 					}
 					

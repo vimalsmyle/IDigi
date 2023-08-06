@@ -95,7 +95,7 @@ public class DropDownController {
 	
 	@RequestMapping(value = "/topupdetails/{CustomerUniqueID}/{CustomerMeterID}",method = RequestMethod.GET, 
 			produces="application/json")
-	public @ResponseBody ResponseVO gettopupdetails(@PathVariable ("CustomerUniqueID") String CustomerUniqueID, @PathVariable ("CustomerMeterID") int CustomerMeterID) throws SQLException {
+	public @ResponseBody ResponseVO gettopupdetails(@PathVariable ("CustomerUniqueID") String CustomerUniqueID, @PathVariable ("CustomerMeterID") Long CustomerMeterID) throws SQLException {
 		
 		ResponseVO responsevo = new ResponseVO();
 		responsevo.setTopupdetails(dropdowndao.gettopupdetails(CustomerUniqueID, CustomerMeterID));

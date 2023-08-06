@@ -144,7 +144,7 @@ public class DropDownDAO {
 	}
 	
 	
-	public TopupDetailsResponseVO gettopupdetails(String CustomerUniqueID, int customerMeterID) throws SQLException {
+	public TopupDetailsResponseVO gettopupdetails(String CustomerUniqueID, Long customerMeterID) throws SQLException {
 		// TODO Auto-generated method stub
 		Connection con = null;
 		PreparedStatement pstmt = null;
@@ -159,7 +159,7 @@ public class DropDownDAO {
 			LocalDateTime dateTime = LocalDateTime.now();
 
 					ps = con.prepareStatement("SELECT cmd.MIUID, cmd.MeterSerialNumber, cmd.CustomerMeterID, t.TariffID, t.TariffName, t.Tariff, t.EmergencyCredit, t.AlarmCredit, t.FixedCharges FROM customermeterdetails AS cmd LEFT JOIN tariff AS t ON t.TariffID = cmd.TariffID WHERE cmd.CustomerMeterID = ?");
-			        ps.setInt(1, customerMeterID);
+			        ps.setLong(1, customerMeterID);
 			        rs = ps.executeQuery();
 			        if (rs.next()) {
 			        	topupdetailsresponsevo.setMiuID(rs.getString("MIUID"));
