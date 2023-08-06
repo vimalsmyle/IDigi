@@ -38,6 +38,7 @@ import com.idigitronics.IDigi.response.vo.HomeResponseVO;
 import com.idigitronics.IDigi.response.vo.IndividualDashboardResponseVO;
 import com.idigitronics.IDigi.response.vo.ResponseVO;
 import com.idigitronics.IDigi.response.vo.Series;
+import com.idigitronics.IDigi.response.vo.ValidateResponseVO;
 
 
 /**
@@ -1253,8 +1254,8 @@ public class DashboardDAO {
 				pstmt2.setString(1, miuID);
 				ResultSet rs = pstmt2.executeQuery();
 				if(rs.next()) {
-					
-					if(validateRequest(dataRequestVO, miuID, rs.getLong("CustomerMeterID"))) {
+					ValidateResponseVO validateResponseVO = validateRequest(dataRequestVO, miuID, rs.getLong("CustomerMeterID"));
+					if(validateResponseVO.isResult()) {
 					
 					pstmt = con.prepareStatement("INSERT INTO balancelog (MIUID, CommunityID, BlockID, CustomerID, CustomerMeterID, MeterSizeID, MeterSerialNumber, CustomerUniqueID, MeterType, SyncTime, SyncInterval, PayType, BatteryVoltage, TariffID, Tariff, ValveConfiguration, ValveStatus, Balance, EmergencyCredit, Minutes, Reading, DoorOpenTamper, MagneticTamper, Vacation, RTCFault, LowBattery, LowBalance, NFCTamper, Source, LogDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
 					pstmt.setString(1, miuID);
@@ -1479,9 +1480,9 @@ public class DashboardDAO {
 					
 				} else {
 					
-					alertMessage = "The Reading of MIUID: <MIU> with CRN/CAN/UAN: <CRN>, at H.No: <house>, Community Name: <community>, Block Name: <block> is less than the previous reading i.e. "+rs.getFloat("ThresholdMaximum")+".";
+					alertMessage = "The Reading of MIUID: <MIU> with CRN/CAN/UAN: <CRN>, at H.No: <house>, Community Name: <community>, Block Name: <block> is less than the previous reading: "+validateResponseVO.getPreviousReading()+".";
 					alertMessage = alertMessage.replaceAll("<MIU>", miuID);
-					sendalertmail("Maximum Threshold Alert!!!", alertMessage, miuID);
+					sendalertmail("Zero Reading Alert!!!", alertMessage, miuID);
 					sendalertsms(0, alertMessage, miuID);
 					
 				}
@@ -1494,11 +1495,12 @@ public class DashboardDAO {
 		return result;
 	}
 	
-	private boolean validateRequest(DataRequestVO dataRequestVO, String miuID, Long cutomerMeterID) throws ClassNotFoundException {
+	private ValidateResponseVO validateRequest(DataRequestVO dataRequestVO, String miuID, Long cutomerMeterID) throws ClassNotFoundException {
 		// TODO Auto-generated method stub
 		
 		Connection con = null;
 		PreparedStatement pstmt = null;
+		ValidateResponseVO validateResponseVO = new ValidateResponseVO();
 		
 		try {
 			con = getConnection();
@@ -1510,7 +1512,8 @@ public class DashboardDAO {
 			if(rs.next()) {
 				
 				if(dataRequestVO.getReading() < rs.getLong("Reading")) {
-					return false;
+					validateResponseVO.setResult(false);
+					validateResponseVO.setPreviousReading(rs.getLong("Reading"));
 				}
 				
 			}
@@ -1519,7 +1522,7 @@ public class DashboardDAO {
 			e.printStackTrace();
 		}
 		
-		return true;
+		return validateResponseVO;
 	}
 
 	public String sendalertsms(int i, String message, String miuID) {
