@@ -24,8 +24,8 @@ import java.util.Properties;
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
 import javax.activation.FileDataSource;
+import javax.mail.Authenticator;
 import javax.mail.Message;
-import javax.mail.MessagingException;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
@@ -83,7 +83,7 @@ public class ExtraMethodsDAO {
 	
 	Gson gson = new Gson();
 	
-	public String sendmail(MailRequestVO mailrequestvo)  {
+/*	public String sendmail(MailRequestVO mailrequestvo)  {
 		
 		String result = "Failure";
 		Properties props = new Properties();
@@ -94,23 +94,6 @@ public class ExtraMethodsDAO {
 //		props.put("mail.smtp.auth", "true");
 //		props.put("mail.smtp.port", "587");
 		
-		// for gmail 
-		/*props.put("mail.smtp.host", "smtp.gmail.com");
-		props.put("mail.smtp.port", "465");
-		props.put("mail.smtp.auth", "true");
-		props.put("mail.smtp.starttls.enable", true);
-		props.put("mail.smtp.socketFactory.port", "465");
-		props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-		props.put("mail.smtp.socketFactory.fallback", "false");
-		props.put("mail.debug", "true");*/
-		
-		props.put("mail.smtp.host", "smtp.gmail.com");
-	    props.put("mail.smtp.port", "587");
-	    props.put("mail.smtp.auth", "true");
-	    props.put("mail.smtp.ssl.protocols", "TLSv1.2");
-	    props.put("mail.smtp.starttls.enable", "true");
-		
-
 		Session session = Session.getDefaultInstance(props, new javax.mail.Authenticator() {
 			protected PasswordAuthentication getPasswordAuthentication() {
 				return new PasswordAuthentication(ExtraConstants.fromEmail, ExtraConstants.fromEmailPassword);// change accordingly
@@ -136,6 +119,45 @@ public class ExtraMethodsDAO {
 			result = "Failure";
 		}
 		
+		return result;
+		
+	}*/
+	
+	public String sendmail(MailRequestVO mailrequestvo)  {
+		
+		String result = "Failure";
+		Properties props = new Properties();
+		
+		    props.put("mail.smtp.user", ExtraConstants.fromEmail);
+		    props.put("mail.smtp.host", "smtp.gmail.com");
+		    props.put("mail.smtp.port", "465");
+		    props.put("mail.smtp.starttls.enable", "true");
+		    props.put("mail.smtp.ssl.protocols", "TLSv1.2");
+		    props.put("mail.smtp.auth", "true");
+		    props.put("mail.smtp.socketFactory.port", "465");
+		    props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+		    props.put("mail.smtp.socketFactory.fallback", "false");
+
+		    try {
+		      Authenticator auth = new SMTPAuthenticator();
+		      Session session = Session.getInstance(props, auth);
+
+		      MimeMessage msg = new MimeMessage(session);
+		      msg.setText(mailrequestvo.getMessage());
+		      msg.setSubject(mailrequestvo.getSubject());
+		      msg.setFrom(new InternetAddress(ExtraConstants.fromEmail));
+		      msg.addRecipient(Message.RecipientType.TO, new InternetAddress(mailrequestvo.getToEmail()));
+		      if(!mailrequestvo.getFileLocation().equalsIgnoreCase("NoAttachment")) { 
+					 DataSource source = new FileDataSource(mailrequestvo.getFileLocation());  
+					 msg.setDataHandler(new DataHandler(source));
+					 msg.setFileName(new File(mailrequestvo.getFileLocation()).getName());
+					}
+		      Transport.send(msg);
+		      result = "Success";
+		    } catch (Exception mex) {
+		      mex.printStackTrace();
+		    }
+
 		return result;
 		
 	}
@@ -227,7 +249,6 @@ public class ExtraMethodsDAO {
 	in.close();
 	return responses.toString();
 }
-	
 	
 	@Scheduled(cron="30 6 2 * * *") // scheduled for every month 2nd day at 06:30
 //	@Scheduled(cron="15 15 * * * *") 
@@ -794,7 +815,7 @@ public class ExtraMethodsDAO {
 				mailRequestVO.setMessage(message);
 				
 				sendsms(smsRequestVO);				
-//				sendmail(mailRequestVO);
+				sendmail(mailRequestVO);
 			}
 			
 		}
@@ -916,4 +937,11 @@ public class ExtraMethodsDAO {
 		SimpleDateFormat clientFormat = new SimpleDateFormat("yyyy/MM/dd");
 		return clientFormat.format(IdigiFormat.parse(date));
 	}
+	
+	  private class SMTPAuthenticator extends javax.mail.Authenticator {
+
+		    public PasswordAuthentication getPasswordAuthentication() {
+		      return new PasswordAuthentication(ExtraConstants.fromEmail, ExtraConstants.fromEmailPassword);
+		    }
+		  }
 }
