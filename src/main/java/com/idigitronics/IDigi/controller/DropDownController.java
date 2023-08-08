@@ -157,6 +157,7 @@ public class DropDownController {
 		ExtraMethodsDAO extraMethodsDAO = new ExtraMethodsDAO();
 		MailRequestVO mailRequestVO = new MailRequestVO();
 		mailRequestVO.setFileLocation("NoAttachment");
+//		mailRequestVO.setFileLocation("D:/Bills/2023/7/123.pdf");
 		mailRequestVO.setToEmail("kvk9889@gmail.com");
 		mailRequestVO.setSubject("test");
 		mailRequestVO.setMessage("testing email");
