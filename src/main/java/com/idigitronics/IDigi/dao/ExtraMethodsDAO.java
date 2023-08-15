@@ -250,7 +250,7 @@ public class ExtraMethodsDAO {
 	return responses.toString();
 }
 	
-	@Scheduled(cron="30 6 2 * * *") // scheduled for every month 2nd day at 06:30
+//	@Scheduled(cron="30 6 2 * * *") // scheduled for every month 2nd day at 06:30
 //	@Scheduled(cron="15 15 * * * *") 
 	public void individualbillgeneration() throws SQLException {
 		

@@ -1225,10 +1225,11 @@ public class DashboardDAO {
 					logger.debug("Battery Voltage: "+dataRequestVO.getBat_volt());
 					
 					responsevo.setResult(insertdashboard(dataRequestVO, miuID));
-				
+					responsevo.setMessage(responsevo.getResult().equalsIgnoreCase("Success") ? "Data Inserted Successfully" : "Data Insertion Failed");
 					
 				} else {
 					responsevo.setResult("Invalid Meter Type");
+					responsevo.setMessage("Data Insertion Failed");
 				}
 
 		} catch (Exception ex) {
@@ -1301,7 +1302,7 @@ public class DashboardDAO {
 							ResultSet rs1 = pstmt3.executeQuery();
 							
 							if(rs1.next()) {
-								pstmt1 = con.prepareStatement("UPDATE displaybalancelog SET MainBalanceLogID = ?, MIUID = ?, CommunityID = ?, BlockID = ?, CustomerID = ?, CustomerMeterID = ?, MeterSizeID =?, MeterSerialNumber = ?, CustomerUniqueID = ?, MeterType = ?, SyncTime = ?, SyncInterval = ?, PayType = ?, BatteryVoltage = ?, TariffID = ?, Tariff = ?, ValveConfiguration = ?,  ValveStatus = ?, Balance = ?, EmergencyCredit = ?, Minutes = ?, Reading = ?, DoorOpenTamper = ?, MagneticTamper = ?, Vacation = ?, RTCFault = ?, LowBattery = ?, LowBalance = ?, NFCTamper = ?, LogDate = NOW() WHERE CustomerMeterID = ? ");
+								pstmt1 = con.prepareStatement("UPDATE displaybalancelog SET MainBalanceLogID = ?, MIUID = ?, CommunityID = ?, BlockID = ?, CustomerID = ?, CustomerMeterID = ?, MeterSizeID =?, MeterSerialNumber = ?, CustomerUniqueID = ?, MeterType = ?, SyncTime = ?, SyncInterval = ?, PayType = ?, BatteryVoltage = ?, TariffID = ?, Tariff = ?, ValveConfiguration = ?,  ValveStatus = ?, Balance = ?, EmergencyCredit = ?, Minutes = ?, Reading = ?, DoorOpenTamper = ?, MagneticTamper = ?, Vacation = ?, RTCFault = ?, LowBattery = ?, LowBalance = ?, NFCTamper = ?, Source = ?, LogDate = NOW() WHERE CustomerMeterID = ? ");
 								pstmt1.setInt(1, rs2.getInt("ReadingID"));
 								pstmt1.setString(2, miuID);
 								pstmt1.setInt(3, rs.getInt("CommunityID"));
@@ -1330,7 +1331,7 @@ public class DashboardDAO {
 								pstmt1.setInt(26, dataRequestVO.getStatus().getRtc_fault());
 								pstmt1.setInt(27, dataRequestVO.getStatus().getLow_bat());
 								pstmt1.setInt(28, dataRequestVO.getStatus().getLow_bal());
-								pstmt.setInt(29, dataRequestVO.getStatus().getNfc_tamper()); 
+								pstmt1.setInt(29, dataRequestVO.getStatus().getNfc_tamper()); 
 								pstmt1.setString(30, dataRequestVO.getSource());
 								pstmt1.setInt(31, rs.getInt("CustomerMeterID"));
 								
@@ -1365,7 +1366,7 @@ public class DashboardDAO {
 									pstmt1.setInt(26, dataRequestVO.getStatus().getRtc_fault());
 									pstmt1.setInt(27, dataRequestVO.getStatus().getLow_bat());
 									pstmt1.setInt(28, dataRequestVO.getStatus().getLow_bal());
-									pstmt.setInt(29, dataRequestVO.getStatus().getNfc_tamper()); 
+									pstmt1.setInt(29, dataRequestVO.getStatus().getNfc_tamper()); 
 									pstmt1.setString(30, dataRequestVO.getSource());
 							}
 							
@@ -1400,8 +1401,8 @@ public class DashboardDAO {
 							}
 						} 
 						
-						if (dataRequestVO.getStatus().getDoor_open() == 1 || dataRequestVO.getStatus().getMagnetic() == 1 || dataRequestVO.getStatus().getMagnetic() == 1) {  // change to nfc tamper after getting the name from Amar
-							ps = con.prepareStatement(query.replaceAll("<condition>", dataRequestVO.getStatus().getDoor_open() == 1 ? "DoorOpenTamper = 1" : dataRequestVO.getStatus().getMagnetic() == 1 ? "MagneticTamper = 1" : dataRequestVO.getStatus().getMagnetic() == 1 ? "NFCTamper = 1" : ""));
+						if (dataRequestVO.getStatus().getDoor_open() == 1 || dataRequestVO.getStatus().getMagnetic() == 1 || dataRequestVO.getStatus().getNfc_tamper() == 1) {  
+							ps = con.prepareStatement(query.replaceAll("<condition>", dataRequestVO.getStatus().getDoor_open() == 1 ? "DoorOpenTamper = 1" : dataRequestVO.getStatus().getMagnetic() == 1 ? "MagneticTamper = 1" : dataRequestVO.getStatus().getNfc_tamper() == 1 ? "NFCTamper = 1" : ""));
 							ps.setInt(1, rs.getInt("CustomerMeterID"));
 							ps.setString(2, rs.getString("CustomerUniqueID"));
 							resultSet = ps.executeQuery(); 
@@ -1454,7 +1455,7 @@ public class DashboardDAO {
 							sendalertsms(1, alertMessage, resultSet.getString("MIUID"));
 						}
 						
-						PreparedStatement thresholdAlert = con.prepareStatement("SELECT ((SELECT Reading FROM balancelog WHERE CustomerMeterID = "+ rs.getLong("CustomerMeterID")+" ORDER BY ReadingID DESC LIMIT 0,1) - (SELECT Reading FROM balancelog WHERE CustomerMeterID = "+ rs.getLong("CustomerMeterID") +" ORDER BY ReadingID DESC LIMIT 1,1)) AS Threshold");
+						PreparedStatement thresholdAlert = con.prepareStatement("SELECT ((SELECT Reading FROM balancelog WHERE CustomerMeterID = "+ rs.getLong("CustomerMeterID")+" ORDER BY ReadingID DESC LIMIT 0,1) - (SELECT Reading FROM balancelog WHERE CustomerMeterID = "+ rs.getLong("CustomerMeterID") +" ORDER BY ReadingID DESC LIMIT 2,1)) AS Threshold");
 						ResultSet thresholdResult = thresholdAlert.executeQuery();
 						
 						if(thresholdResult.next()) {
@@ -1462,16 +1463,16 @@ public class DashboardDAO {
 							if(thresholdResult.getFloat("Threshold") >= rs.getFloat("ThresholdMaximum")) {
 								
 								alertMessage = "The Consumption in MIUID: <MIU> with CRN/CAN/UAN: <CRN>, at H.No: <house>, Community Name: <community>, Block Name: <block> is above Threshold Value i.e. "+rs.getFloat("ThresholdMaximum")+".";
-								alertMessage = alertMessage.replaceAll("<MIU>", resultSet.getString("MIUID"));
-								sendalertmail("Maximum Threshold Alert!!!", alertMessage, resultSet.getString("MIUID"));
-								sendalertsms(0, alertMessage, resultSet.getString("MIUID"));
+								alertMessage = alertMessage.replaceAll("<MIU>", miuID);
+								sendalertmail("Maximum Threshold Alert!!!", alertMessage, miuID);
+								sendalertsms(0, alertMessage, miuID);
 								
 							} else if(thresholdResult.getFloat("Threshold") <= rs.getFloat("ThresholdMinimum")) {
 								
 								alertMessage = "The Consumption in MIUID: <MIU> with CRN/CAN/UAN: <CRN>, at H.No: <house>, Community Name: <community>, Block Name: <block> is below Threshold Value i.e. "+rs.getFloat("ThresholdMinimum")+".";
-								alertMessage = alertMessage.replaceAll("<MIU>", resultSet.getString("MIUID"));
-								sendalertmail("Minimum Threshold Alert!!!", alertMessage, resultSet.getString("MIUID"));
-								sendalertsms(0, alertMessage, resultSet.getString("MIUID"));
+								alertMessage = alertMessage.replaceAll("<MIU>", miuID);
+								sendalertmail("Minimum Threshold Alert!!!", alertMessage, miuID);
+								sendalertsms(0, alertMessage, miuID);
 							}
 							
 						}
@@ -1514,8 +1515,14 @@ public class DashboardDAO {
 				if(dataRequestVO.getReading() < rs.getLong("Reading")) {
 					validateResponseVO.setResult(false);
 					validateResponseVO.setPreviousReading(rs.getLong("Reading"));
+				} else {
+					validateResponseVO.setResult(true);
+					validateResponseVO.setPreviousReading(rs.getLong("Reading"));
 				}
 				
+			} else {
+				validateResponseVO.setResult(true);
+				validateResponseVO.setPreviousReading(0);
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -1602,6 +1609,11 @@ public class DashboardDAO {
 		}
 		
 		return result;
+	}
+
+	public boolean validateToken(DataRequestVO dataRequestVO) {
+		// TODO Auto-generated method stub
+		return true;
 	}
 
 }

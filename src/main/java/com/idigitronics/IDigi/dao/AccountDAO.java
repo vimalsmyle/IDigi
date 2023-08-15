@@ -217,6 +217,8 @@ public class AccountDAO {
 							
 								if(restCallResponseVO.getRestcallresponse() == 200) {
 									responsevo.setTransactionID(restCallResponseVO.getTransactionID());
+									responsevo.setTariff(rs1.getString("Tariff"));
+									responsevo.setEmergencyCredit(rs1.getString("EmergencyCredit"));
 									responsevo.setResult("Success");
 									responsevo.setMessage("Topup Request Submitted/Raised Successfully");	
 								} else {
@@ -2068,7 +2070,7 @@ public class AccountDAO {
 			pstmt = con.prepareStatement("SELECT PayType FROM customermeterdetails WHERE CustomerMeterID = "+customerMeterID);
 			rs = pstmt.executeQuery();
 			if (rs.next()) {
-				if (rs.getString("PayType").equalsIgnoreCase("PostPaid") || !rs.getString("PayType").equalsIgnoreCase("Prepaid")) {
+				if (!rs.getString("PayType").trim().equalsIgnoreCase("Prepaid")) {
 
 					result = true;
 			}

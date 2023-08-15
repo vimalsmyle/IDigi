@@ -26,6 +26,7 @@ public class DataRequestVO {
 	private Status status;
 	private long transaction_id;
 	private int cmd_status;
+	private String token;
 	
 	private String source;
 	private boolean topupSMS;
@@ -143,6 +144,12 @@ public class DataRequestVO {
 	}
 	public void setTopupSMS(boolean topupSMS) {
 		this.topupSMS = topupSMS;
+	}
+	public String getToken() {
+		return token;
+	}
+	public void setToken(String token) {
+		this.token = token;
 	}
 	
 }

@@ -37,6 +37,8 @@ public class ResponseVO {
 	private String token;
 	private long transactedByID;
 	private long transactionID;
+	private String tariff;
+	private String emergencyCredit;
 	
 	public UserDetails getUserDetails() {
 		return userDetails;
@@ -181,6 +183,18 @@ public class ResponseVO {
 	}
 	public void setTransactionID(long transactionID) {
 		this.transactionID = transactionID;
+	}
+	public String getTariff() {
+		return tariff;
+	}
+	public void setTariff(String tariff) {
+		this.tariff = tariff;
+	}
+	public String getEmergencyCredit() {
+		return emergencyCredit;
+	}
+	public void setEmergencyCredit(String emergencyCredit) {
+		this.emergencyCredit = emergencyCredit;
 	}
 	
 }

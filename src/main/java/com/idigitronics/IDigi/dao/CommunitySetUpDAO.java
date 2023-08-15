@@ -1028,13 +1028,13 @@ public class CommunitySetUpDAO {
 					
 					if(metervo.getPayType().equalsIgnoreCase("Prepaid")) {
 						
-						PreparedStatement pstmt2 = con.prepareStatement("select Amount from topup where customerMeterID = "+metervo.getCustomerMeterID()+" AND PaymentStatus = 1 AND Status IN (0,10) order by TransactionDate desc Limit 1");
+						PreparedStatement pstmt2 = con.prepareStatement("select Balance from displaybalancelog where customerMeterID = "+metervo.getCustomerMeterID());
 						
 						ResultSet rs2 = pstmt2.executeQuery();
 						
 						if(rs2.next()) {
 							
-							metervo.setAvailableBalance(rs2.getString("Amount"));
+							metervo.setAvailableBalance(rs2.getString("Balance"));
 							
 						} else {
 							metervo.setAvailableBalance("---");
@@ -1044,7 +1044,7 @@ public class CommunitySetUpDAO {
 						metervo.setAvailableBalance("---");
 					}
 					
-					PreparedStatement pstmt3 = con.prepareStatement("SELECT TariffName, Tariff from tariff WHERE TariffID = "+ metervo.getTariffID());
+					PreparedStatement pstmt3 = con.prepareStatement("SELECT TariffName, Tariff, EmergencyCredit from tariff WHERE TariffID = "+ metervo.getTariffID());
 					
 					ResultSet rs3 = pstmt3.executeQuery();
 					
@@ -1052,6 +1052,7 @@ public class CommunitySetUpDAO {
 						
 						metervo.setTariffName(rs3.getString("TariffName"));
 						metervo.setTariff(rs3.getString("Tariff"));
+						metervo.setEmergencyCredit(rs3.getString("EmergencyCredit"));
 						
 					}
 					

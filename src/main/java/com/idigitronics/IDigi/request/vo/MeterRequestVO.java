@@ -31,6 +31,7 @@ public class MeterRequestVO {
 	private String modifiedDate;
 	private HashMap<Integer, Integer> gasDropdown;
 	private HashMap<Integer, Integer> waterDropdown;
+	private String emergencyCredit;
 	
 	public String getMiuID() {
 		return miuID;
@@ -151,6 +152,12 @@ public class MeterRequestVO {
 	}
 	public void setTariff(String tariff) {
 		this.tariff = tariff;
+	}
+	public String getEmergencyCredit() {
+		return emergencyCredit;
+	}
+	public void setEmergencyCredit(String emergencyCredit) {
+		this.emergencyCredit = emergencyCredit;
 	}
 	
 }

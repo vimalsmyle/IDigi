@@ -19,7 +19,8 @@
 		"schedule_disconnect": 0,
 		"rtc_fault": 0,
 		"low_bat": 0, 
-		"low_bal": 0
+		"low_bal": 0,
+		"nfc_tamper" : 0
 	}
 }
 
@@ -44,6 +45,7 @@
 		"schedule_disconnect": 0,
 		"rtc_fault": 0,
 		"low_bat": 0, 
-		"low_bal": 0
+		"low_bal": 0,
+		"nfc_tamper" : 0
 	}
 }
