@@ -4,11 +4,14 @@
 package com.idigitronics.IDigi.dao;
 
 import java.io.File;
+import java.security.SecureRandom;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Base64;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -26,6 +29,9 @@ import com.idigitronics.IDigi.response.vo.ResponseVO;
 import com.idigitronics.IDigi.response.vo.UserDetails;
 import com.idigitronics.IDigi.utils.Encryptor;
 
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+
 /**
  * @author K VimaL Kumar 
  * 
@@ -33,6 +39,8 @@ import com.idigitronics.IDigi.utils.Encryptor;
 public class LoginDAO {
 
 	public Connection con = null;
+	private static final SecureRandom secureRandom = new SecureRandom(); //threadsafe
+	private static final Base64.Encoder base64Encoder = Base64.getUrlEncoder(); //threadsafe
 
 	public static Connection getConnection() throws ClassNotFoundException, SQLException {
 		Connection connection = null;
@@ -116,6 +124,14 @@ public class LoginDAO {
 							responsevo.setUserDetails(userDetails);
 							responsevo.setResult("Success");
 							responsevo.setMessage("Successfully Logged In");
+							
+							if(loginvo.getSource().equalsIgnoreCase("mobile")) {
+								
+//								String securityKey = generateNewToken();
+								
+								responsevo.setToken(generateJwtToken(loginvo.getUserID(), ExtraConstants.JWTKey, 86400000));
+								
+							}
 
 						/*} else {
 
@@ -398,5 +414,30 @@ public class LoginDAO {
 		return result;
 
 	}
+	
+//	public static String generateNewToken() {
+//	    byte[] randomBytes = new byte[8];
+//	    secureRandom.nextBytes(randomBytes);
+//	    return base64Encoder.encodeToString(randomBytes);
+//	}
+	
+    public static String generateJwtToken(String subject, String secretKey, long expirationMillis) {
+        Date now = new Date();
+        Date expiration = new Date(now.getTime() + expirationMillis);
+        
+//        String subject = "user123";
+//        String secretKey = "yourSecretKey"; // Replace with your own secret key
+//        long expirationMillis = 3600000; // Token will expire in 1 hour
+//
+//        String jwtToken = generateJwtToken(subject, secretKey, expirationMillis);
+//        System.out.println("Generated JWT: " + jwtToken);
+
+        return Jwts.builder()
+                .setSubject(subject)
+                .setIssuedAt(now)
+                .setExpiration(expiration)
+                .signWith(SignatureAlgorithm.HS256, secretKey)
+                .compact();
+    }
 
 }

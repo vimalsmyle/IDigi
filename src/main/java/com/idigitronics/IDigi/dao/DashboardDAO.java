@@ -7,6 +7,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.security.Key;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -40,6 +41,11 @@ import com.idigitronics.IDigi.response.vo.ResponseVO;
 import com.idigitronics.IDigi.response.vo.Series;
 import com.idigitronics.IDigi.response.vo.ValidateResponseVO;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
+
 
 /**
  * @author k VimaL Kumar
@@ -48,6 +54,7 @@ import com.idigitronics.IDigi.response.vo.ValidateResponseVO;
 public class DashboardDAO {
 	
 	private static final Logger logger = Logger.getLogger(DashboardDAO.class);
+	 private static final Key SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
 	public static Connection getConnection() throws ClassNotFoundException,
 			SQLException {
@@ -1613,7 +1620,22 @@ public class DashboardDAO {
 
 	public boolean validateToken(DataRequestVO dataRequestVO) {
 		// TODO Auto-generated method stub
-		return true;
+		
+		        try {
+		            Claims claims = Jwts.parserBuilder()
+		                    .setSigningKey(SECRET_KEY)
+		                    .build()
+		                    .parseClaimsJws(dataRequestVO.getToken())
+		                    .getBody();
+
+		            Date expirationDate = claims.getExpiration();
+		            Date now = new Date();
+
+		            return !expirationDate.before(now); // Token is not expired
+		        } catch (Exception e) {
+		            return false; // Token validation failed
+		        }
+		
 	}
 
 }
