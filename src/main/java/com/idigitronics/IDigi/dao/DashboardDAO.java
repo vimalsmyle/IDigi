@@ -41,10 +41,10 @@ import com.idigitronics.IDigi.response.vo.ResponseVO;
 import com.idigitronics.IDigi.response.vo.Series;
 import com.idigitronics.IDigi.response.vo.ValidateResponseVO;
 
-import io.jsonwebtoken.Claims;
+/*import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.security.Keys;*/
 
 
 /**
@@ -54,7 +54,7 @@ import io.jsonwebtoken.security.Keys;
 public class DashboardDAO {
 	
 	private static final Logger logger = Logger.getLogger(DashboardDAO.class);
-	 private static final Key SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+//	 private static final Key SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
 	public static Connection getConnection() throws ClassNotFoundException,
 			SQLException {
@@ -1379,7 +1379,7 @@ public class DashboardDAO {
 							
 						}
 						
-						pstmt1.executeUpdate();{
+						if(pstmt1.executeUpdate()>0) {
 						result = "Success";
 						}
 						
@@ -1618,7 +1618,7 @@ public class DashboardDAO {
 		return result;
 	}
 
-	public boolean validateToken(DataRequestVO dataRequestVO) {
+/*	public boolean validateToken(DataRequestVO dataRequestVO) {
 		// TODO Auto-generated method stub
 		
 		        try {
@@ -1636,6 +1636,6 @@ public class DashboardDAO {
 		            return false; // Token validation failed
 		        }
 		
-	}
+	}*/
 
 }

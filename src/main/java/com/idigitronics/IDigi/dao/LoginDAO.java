@@ -29,8 +29,8 @@ import com.idigitronics.IDigi.response.vo.ResponseVO;
 import com.idigitronics.IDigi.response.vo.UserDetails;
 import com.idigitronics.IDigi.utils.Encryptor;
 
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+//import io.jsonwebtoken.Jwts;
+//import io.jsonwebtoken.SignatureAlgorithm;
 
 /**
  * @author K VimaL Kumar 
@@ -129,7 +129,7 @@ public class LoginDAO {
 								
 //								String securityKey = generateNewToken();
 								
-								responsevo.setToken(generateJwtToken(loginvo.getUserID(), ExtraConstants.JWTKey, 86400000));
+//								responsevo.setToken(generateJwtToken(loginvo.getUserID(), ExtraConstants.JWTKey, 86400000));
 								
 							}
 
@@ -421,7 +421,7 @@ public class LoginDAO {
 //	    return base64Encoder.encodeToString(randomBytes);
 //	}
 	
-    public static String generateJwtToken(String subject, String secretKey, long expirationMillis) {
+/*    public static String generateJwtToken(String subject, String secretKey, long expirationMillis) {
         Date now = new Date();
         Date expiration = new Date(now.getTime() + expirationMillis);
         
@@ -438,6 +438,6 @@ public class LoginDAO {
                 .setExpiration(expiration)
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
-    }
+    }*/
 
 }
