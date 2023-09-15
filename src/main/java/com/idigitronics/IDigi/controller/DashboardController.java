@@ -174,18 +174,18 @@ public class DashboardController {
 				
 					if (dataRequestVO.getType() > 0) {
 						
-//						if(dashboarddao.validateToken(dataRequestVO)) {
+						if(dashboarddao.validateToken(dataRequestVO)) {
 							
 							logger.debug("Battery Voltage: "+dataRequestVO.getBat_volt());
 							
 							responsevo.setResult(dashboarddao.insertdashboard(dataRequestVO, dataRequestVO.getMiuID()));
 							responsevo.setMessage(responsevo.getResult().equalsIgnoreCase("Success") ? "Data Inserted Successfully" : "Data Insertion Failed");
 							
-/*						} else {
+						} else {
 							responsevo.setResult("Failure");
 							responsevo.setMessage("Token Validation Failed");
 						}
-*/						
+						
 					} else {
 						responsevo.setResult("Failure");
 						responsevo.setMessage("Invalid Meter Type");

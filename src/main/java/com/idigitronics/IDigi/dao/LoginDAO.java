@@ -127,7 +127,13 @@ public class LoginDAO {
 							
 							if(loginvo.getSource().equalsIgnoreCase("mobile")) {
 								
-//								String securityKey = generateNewToken();
+								String securityKey = generateNewToken();
+								
+								PreparedStatement pstmt3 = con.prepareStatement("UPDATE user SET Token = '"+ securityKey + "' WHERE ID = "+userDetails.getID());
+								
+								if (pstmt3.executeUpdate() > 0) {
+									responsevo.setToken(securityKey);
+								}
 								
 //								responsevo.setToken(generateJwtToken(loginvo.getUserID(), ExtraConstants.JWTKey, 86400000));
 								
@@ -415,11 +421,11 @@ public class LoginDAO {
 
 	}
 	
-//	public static String generateNewToken() {
-//	    byte[] randomBytes = new byte[8];
-//	    secureRandom.nextBytes(randomBytes);
-//	    return base64Encoder.encodeToString(randomBytes);
-//	}
+	public static String generateNewToken() {
+	    byte[] randomBytes = new byte[8];
+	    secureRandom.nextBytes(randomBytes);
+	    return base64Encoder.encodeToString(randomBytes);
+	}
 	
 /*    public static String generateJwtToken(String subject, String secretKey, long expirationMillis) {
         Date now = new Date();

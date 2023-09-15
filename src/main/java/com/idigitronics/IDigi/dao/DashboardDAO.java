@@ -1618,24 +1618,27 @@ public class DashboardDAO {
 		return result;
 	}
 
-/*	public boolean validateToken(DataRequestVO dataRequestVO) {
+	public boolean validateToken(DataRequestVO dataRequestVO) {
 		// TODO Auto-generated method stub
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		Connection con = null;
 		
 		        try {
-		            Claims claims = Jwts.parserBuilder()
-		                    .setSigningKey(SECRET_KEY)
-		                    .build()
-		                    .parseClaimsJws(dataRequestVO.getToken())
-		                    .getBody();
+		        	con = getConnection();
+		        	pstmt = con.prepareStatement("SELECT * FROM user WHERE ID = "+dataRequestVO.getID());
+		        	rs = pstmt.executeQuery();
+		        	
+		        	if(rs.next()) {
+		        		if(rs.getString("Token").equals(dataRequestVO.getToken())) {
+		        		return true;
+		        		}
+		        	}
 
-		            Date expirationDate = claims.getExpiration();
-		            Date now = new Date();
-
-		            return !expirationDate.before(now); // Token is not expired
 		        } catch (Exception e) {
 		            return false; // Token validation failed
 		        }
-		
-	}*/
+		    return false;
+	}
 
 }
