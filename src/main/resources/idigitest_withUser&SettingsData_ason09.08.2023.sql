@@ -644,6 +644,7 @@ CREATE TABLE `user` (
   `UserPassword` varchar(100) NOT NULL,
   `RoleID` int NOT NULL,
   `ActiveStatus` int NOT NULL,
+  `Token` varchar(45) DEFAULT NULL,
   `CommunityID` bigint NOT NULL,
   `BlockID` bigint DEFAULT NULL,
   `CustomerID` bigint DEFAULT NULL,
@@ -664,7 +665,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'Superadmin','Idigitronics','cvp/LzpadrQT+2k0WDjyOQ==',1,1,0,0,0,NULL,NULL,NULL,0,0,SYSDATE(),SYSDATE());
+INSERT INTO `user` VALUES (1,'Superadmin','Idigitronics','cvp/LzpadrQT+2k0WDjyOQ==',1,1,NULL,0,0,0,NULL,NULL,NULL,0,0,SYSDATE(),SYSDATE());
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 --

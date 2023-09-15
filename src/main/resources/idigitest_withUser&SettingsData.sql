@@ -519,6 +519,7 @@ CREATE TABLE `user` (
   `UserPassword` varchar(100) NOT NULL,
   `RoleID` int(11) NOT NULL,
   `ActiveStatus` int(11) NOT NULL,
+  `Token` varchar(45) DEFAULT NULL,
   `CommunityID` bigint(20) NOT NULL,
   `BlockID` bigint(20) DEFAULT NULL,
   `CustomerID` bigint(20) DEFAULT NULL,
@@ -536,7 +537,7 @@ CREATE TABLE `user` (
 /*Data for the table `user` */
 
 insert  into `user`(`ID`,`UserID`,`UserName`,`UserPassword`,`RoleID`,`ActiveStatus`,`CommunityID`,`BlockID`,`CustomerID`,`CustomerUniqueID`,`MobileNumber`,`Email`,`CreatedByID`,`CreatedByRoleID`,`RegisteredDate`,`ModifiedDate`) values 
-(1,'Superadmin','Idigitronics','cvp/LzpadrQT+2k0WDjyOQ==',1,1,0,0,0,NULL,NULL,NULL,0,0,'2021-05-01 17:19:40','2021-05-01 17:19:37');
+(1,'Superadmin','Idigitronics','cvp/LzpadrQT+2k0WDjyOQ==',1,1,NULL,0,0,0,NULL,NULL,NULL,0,0,SYSDATE(),SYSDATE());
 
 /*Table structure for table `userrole` */
 
