@@ -1265,7 +1265,7 @@ public class DashboardDAO {
 					ValidateResponseVO validateResponseVO = validateRequest(dataRequestVO, miuID, rs.getLong("CustomerMeterID"));
 					if(validateResponseVO.isResult()) {
 					
-					pstmt = con.prepareStatement("INSERT INTO balancelog (MIUID, CommunityID, BlockID, CustomerID, CustomerMeterID, MeterSizeID, MeterSerialNumber, CustomerUniqueID, MeterType, SyncTime, SyncInterval, PayType, BatteryVoltage, TariffID, Tariff, ValveConfiguration, ValveStatus, Balance, EmergencyCredit, Minutes, Reading, DoorOpenTamper, MagneticTamper, Vacation, RTCFault, LowBattery, LowBalance, NFCTamper, Source, LogDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
+					pstmt = con.prepareStatement("INSERT INTO balancelog (MIUID, CommunityID, BlockID, CustomerID, CustomerMeterID, MeterSizeID, MeterSerialNumber, CustomerUniqueID, MeterType, SyncTime, SyncInterval, PayType, BatteryVoltage, TariffID, Tariff, ValveConfiguration, ValveStatus, Balance, EmergencyCredit, Minutes, Reading, DoorOpenTamper, MagneticTamper, Vacation, RTCFault, LowBattery, LowBalance, NFCTamper, Source, ID, LogDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
 					pstmt.setString(1, miuID);
 					pstmt.setInt(2, rs.getInt("CommunityID"));
 					pstmt.setInt(3, rs.getInt("BlockID"));
@@ -1295,7 +1295,7 @@ public class DashboardDAO {
 					pstmt.setInt(27, dataRequestVO.getStatus().getLow_bal());
 					pstmt.setInt(28, dataRequestVO.getStatus().getNfc_tamper()); 
 					pstmt.setString(29, dataRequestVO.getSource());
-					
+					pstmt.setInt(30, dataRequestVO.getSource().equalsIgnoreCase("Mobile") ? dataRequestVO.getID() : 0);
 					if (pstmt.executeUpdate() > 0) {
 						
 						PreparedStatement pstmt4 = con.prepareStatement("SELECT MAX(ReadingID) as ReadingID FROM balancelog WHERE MIUID = ?");
@@ -1309,7 +1309,7 @@ public class DashboardDAO {
 							ResultSet rs1 = pstmt3.executeQuery();
 							
 							if(rs1.next()) {
-								pstmt1 = con.prepareStatement("UPDATE displaybalancelog SET MainBalanceLogID = ?, MIUID = ?, CommunityID = ?, BlockID = ?, CustomerID = ?, CustomerMeterID = ?, MeterSizeID =?, MeterSerialNumber = ?, CustomerUniqueID = ?, MeterType = ?, SyncTime = ?, SyncInterval = ?, PayType = ?, BatteryVoltage = ?, TariffID = ?, Tariff = ?, ValveConfiguration = ?,  ValveStatus = ?, Balance = ?, EmergencyCredit = ?, Minutes = ?, Reading = ?, DoorOpenTamper = ?, MagneticTamper = ?, Vacation = ?, RTCFault = ?, LowBattery = ?, LowBalance = ?, NFCTamper = ?, Source = ?, LogDate = NOW() WHERE CustomerMeterID = ? ");
+								pstmt1 = con.prepareStatement("UPDATE displaybalancelog SET MainBalanceLogID = ?, MIUID = ?, CommunityID = ?, BlockID = ?, CustomerID = ?, CustomerMeterID = ?, MeterSizeID =?, MeterSerialNumber = ?, CustomerUniqueID = ?, MeterType = ?, SyncTime = ?, SyncInterval = ?, PayType = ?, BatteryVoltage = ?, TariffID = ?, Tariff = ?, ValveConfiguration = ?,  ValveStatus = ?, Balance = ?, EmergencyCredit = ?, Minutes = ?, Reading = ?, DoorOpenTamper = ?, MagneticTamper = ?, Vacation = ?, RTCFault = ?, LowBattery = ?, LowBalance = ?, NFCTamper = ?, Source = ?, ID = ?, LogDate = NOW() WHERE CustomerMeterID = ? ");
 								pstmt1.setInt(1, rs2.getInt("ReadingID"));
 								pstmt1.setString(2, miuID);
 								pstmt1.setInt(3, rs.getInt("CommunityID"));
@@ -1340,11 +1340,12 @@ public class DashboardDAO {
 								pstmt1.setInt(28, dataRequestVO.getStatus().getLow_bal());
 								pstmt1.setInt(29, dataRequestVO.getStatus().getNfc_tamper()); 
 								pstmt1.setString(30, dataRequestVO.getSource());
-								pstmt1.setInt(31, rs.getInt("CustomerMeterID"));
+								pstmt.setInt(31, dataRequestVO.getSource().equalsIgnoreCase("Mobile") ? dataRequestVO.getID() : 0);
+								pstmt1.setInt(32, rs.getInt("CustomerMeterID"));
 								
 							} else {
 								
-									pstmt1 = con.prepareStatement("INSERT INTO displaybalancelog (MainBalanceLogID, MIUID, CommunityID, BlockID, CustomerID, CustomerMeterID, MeterSizeID, MeterSerialNumber, CustomerUniqueID, MeterType, SyncTime, SyncInterval, PayType, BatteryVoltage, TariffID, Tariff, ValveConfiguration, ValveStatus, Balance, EmergencyCredit, Minutes, Reading, DoorOpenTamper, MagneticTamper, Vacation, RTCFault, LowBattery, LowBalance, NFCTamper, Source, LogDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
+									pstmt1 = con.prepareStatement("INSERT INTO displaybalancelog (MainBalanceLogID, MIUID, CommunityID, BlockID, CustomerID, CustomerMeterID, MeterSizeID, MeterSerialNumber, CustomerUniqueID, MeterType, SyncTime, SyncInterval, PayType, BatteryVoltage, TariffID, Tariff, ValveConfiguration, ValveStatus, Balance, EmergencyCredit, Minutes, Reading, DoorOpenTamper, MagneticTamper, Vacation, RTCFault, LowBattery, LowBalance, NFCTamper, Source, ID, LogDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
 									pstmt1.setInt(1, rs2.getInt("ReadingID"));
 									pstmt1.setString(2, miuID);
 									pstmt1.setInt(3, rs.getInt("CommunityID"));
@@ -1375,6 +1376,7 @@ public class DashboardDAO {
 									pstmt1.setInt(28, dataRequestVO.getStatus().getLow_bal());
 									pstmt1.setInt(29, dataRequestVO.getStatus().getNfc_tamper()); 
 									pstmt1.setString(30, dataRequestVO.getSource());
+									pstmt.setInt(31, dataRequestVO.getSource().equalsIgnoreCase("Mobile") ? dataRequestVO.getID() : 0);
 							}
 							
 						}
