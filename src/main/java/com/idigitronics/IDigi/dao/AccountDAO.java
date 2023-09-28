@@ -733,7 +733,7 @@ public class AccountDAO {
 		ResultSet rs = null;
 		ResultSet rs1 = null;
 		ResponseVO responsevo = new ResponseVO();
-		String drivename = "D:/TopupReceipts/";
+		String drivename = "D:/TopupReceipts";
 
 		try {
 			con = getConnection();
@@ -755,7 +755,7 @@ public class AccountDAO {
 						directory.mkdir();
 					}
 
-					PdfWriter writer = new PdfWriter(drivename + transactionID + ".pdf");
+					PdfWriter writer = new PdfWriter(drivename + "/" + transactionID + ".pdf");
 					PdfDocument pdfDocument = new PdfDocument(writer);
 					pdfDocument.addNewPage();
 					Document document = new Document(pdfDocument);
@@ -1437,7 +1437,7 @@ public class AccountDAO {
 		ResultSet rs = null;
 		ResultSet rs1 = null;
 		ResponseVO responsevo = new ResponseVO();
-		String drivename = "D:/BillReceipts/";
+		String drivename = "D:/BillReceipts";
 		
 		try {
 			con = getConnection();
@@ -1460,7 +1460,7 @@ public class AccountDAO {
 						directory.mkdirs();
 					}
 
-					PdfWriter writer = new PdfWriter(drivename + transactionID + ".pdf");
+					PdfWriter writer = new PdfWriter(drivename + "/"+ transactionID + ".pdf");
 					PdfDocument pdfDocument = new PdfDocument(writer);
 					pdfDocument.addNewPage();
 					Document document = new Document(pdfDocument);
