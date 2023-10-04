@@ -755,7 +755,7 @@ public class AccountDAO {
 						directory.mkdir();
 					}
 
-					PdfWriter writer = new PdfWriter(drivename + "/" + transactionID + ".pdf");
+					PdfWriter writer = new PdfWriter(drivename + transactionID + ".pdf");
 					PdfDocument pdfDocument = new PdfDocument(writer);
 					pdfDocument.addNewPage();
 					Document document = new Document(pdfDocument);
@@ -940,8 +940,6 @@ public class AccountDAO {
 					Cell cell10 = new Cell();
 					cell10.add("Order ID: ");
 					cell10.setTextAlignment(TextAlignment.CENTER);
-
-					System.out.println(rs.getString("RazorPayOrderID"));
 
 					Cell OrderID = new Cell();
 					OrderID.add(rs.getString("RazorPayOrderID") == null ? "---" : rs.getString("RazorPayOrderID"));
@@ -1437,7 +1435,7 @@ public class AccountDAO {
 		ResultSet rs = null;
 		ResultSet rs1 = null;
 		ResponseVO responsevo = new ResponseVO();
-		String drivename = "D:/BillReceipts";
+		String drivename = "D:/BillReceipts/";
 		
 		try {
 			con = getConnection();
@@ -1460,7 +1458,7 @@ public class AccountDAO {
 						directory.mkdirs();
 					}
 
-					PdfWriter writer = new PdfWriter(drivename + "/"+ transactionID + ".pdf");
+					PdfWriter writer = new PdfWriter(drivename + transactionID + ".pdf");
 					PdfDocument pdfDocument = new PdfDocument(writer);
 					pdfDocument.addNewPage();
 					Document document = new Document(pdfDocument);
