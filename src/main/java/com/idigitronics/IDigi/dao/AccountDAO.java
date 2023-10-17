@@ -545,7 +545,8 @@ public class AccountDAO {
 			
 			if(ps.executeUpdate() > 0) {
 				
-					dataRequestVO.setTopupSMS(dataRequestVO.getCmd_status() == 0 ? true : false);  
+					dataRequestVO.setTopupSMS(true); 
+					dataRequestVO.setTopupStatus(dataRequestVO.getCmd_status() == 0 ? "Success" : dataRequestVO.getCmd_status() == 10 ? "Pending" : "Failure");
 					responsevo = dashboarddao.postDashboarddetails(dataRequestVO, miuID);
 				
 			}

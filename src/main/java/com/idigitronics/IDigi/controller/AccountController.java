@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 
+import org.apache.log4j.Logger;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.google.gson.Gson;
 import com.idigitronics.IDigi.bo.AccountBO;
 import com.idigitronics.IDigi.dao.AccountDAO;
+import com.idigitronics.IDigi.dao.DashboardDAO;
 import com.idigitronics.IDigi.dao.ExtraMethodsDAO;
 import com.idigitronics.IDigi.exceptions.BusinessException;
 import com.idigitronics.IDigi.request.vo.CheckOutRequestVO;
@@ -50,6 +52,8 @@ public class AccountController {
 	Gson gson = new Gson();
 	AccountBO accountbo = new AccountBO();
 	AccountDAO accountdao = new AccountDAO();
+	
+	private static final Logger logger = Logger.getLogger(AccountController.class);
 
 	/* TopUp */
 
@@ -97,6 +101,54 @@ public class AccountController {
 			responsevo.setMessage(e.getMessage());
 		}
 
+		return responsevo;
+	}
+	
+	@RequestMapping(value = "/datafrommobile/recharge/{device_eui}", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	public @ResponseBody
+	ResponseVO datafrommobileafterrecharge(@RequestBody DataRequestVO dataRequestVO, @PathVariable("device_eui") String miuID) {
+
+		DashboardDAO dashboarddao = new DashboardDAO();
+		ResponseVO responsevo = new ResponseVO();
+
+		try {
+			dataRequestVO.setSource("Mobile");
+			dataRequestVO.setMiuID(miuID);
+			
+			try {
+				
+				logger.debug("Data of Device ID: "+miuID+" received from mobile");
+				
+				
+					if (dataRequestVO.getType() > 0) {
+						
+						if(dashboarddao.validateToken(dataRequestVO)) {
+							
+							logger.debug("Battery Voltage: "+dataRequestVO.getBat_volt());
+							
+							responsevo = accountdao.updatetopupstatus(dataRequestVO, dataRequestVO.getMiuID());
+							
+							responsevo.setMessage(responsevo.getResult().equalsIgnoreCase("Success") ? "Data Inserted Successfully" : "Data Insertion Failed");
+							
+						} else {
+							responsevo.setResult("Failure");
+							responsevo.setMessage("Token Validation Failed");
+						}
+						
+					} else {
+						responsevo.setResult("Failure");
+						responsevo.setMessage("Invalid Meter Type");
+					}
+
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+			
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			responsevo.setResult("Failure");
+			responsevo.setMessage("Data Insertion Failed");
+		}
 		return responsevo;
 	}
 	

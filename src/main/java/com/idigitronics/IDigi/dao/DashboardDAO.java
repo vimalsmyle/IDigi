@@ -1221,8 +1221,6 @@ public class DashboardDAO {
 
 		ResponseVO responsevo = new ResponseVO();
 		
-		dataRequestVO.setSource("Gateway");
-		
 		try {
 			
 			logger.debug("Device ID: "+miuID);
@@ -1459,8 +1457,20 @@ public class DashboardDAO {
 						}
 						
 						if(dataRequestVO.isTopupSMS()) {
-							alertMessage = "Your Recharge for MIUID: <MIU> with CRN/CAN/UAN: <CRN> is successful. Available Balance: "+dataRequestVO.getCredit()+"/- and Emergency Credit: "+dataRequestVO.getEmergency_credit()+"/-.";
-							alertMessage = alertMessage.replaceAll("<MIU>", resultSet.getString("MIUID"));
+							if(dataRequestVO.getTopupStatus().equalsIgnoreCase("Success")) {
+								
+								alertMessage = "Your Recharge for MIUID: <MIU> with CRN/CAN/UAN: <CRN> is successful. Available Balance: "+dataRequestVO.getCredit()+"/- and Emergency Credit: "+dataRequestVO.getEmergency_credit()+"/-.";
+								alertMessage = alertMessage.replaceAll("<MIU>", resultSet.getString("MIUID"));
+								
+							} else if (dataRequestVO.getTopupStatus().equalsIgnoreCase("Pending")){
+								alertMessage = "Your Recharge for MIUID: <MIU> with CRN/CAN/UAN: <CRN> is pending. Please wait until further communication from the device. Available Balance: "+dataRequestVO.getCredit()+"/- and Emergency Credit: "+dataRequestVO.getEmergency_credit()+"/-.";
+								alertMessage = alertMessage.replaceAll("<MIU>", resultSet.getString("MIUID"));
+							} else {
+								alertMessage = "Your Recharge for MIUID: <MIU> with CRN/CAN/UAN: <CRN> has failed. Please try after sometime. Available Balance: "+dataRequestVO.getCredit()+"/- and Emergency Credit: "+dataRequestVO.getEmergency_credit()+"/-.";
+								alertMessage = alertMessage.replaceAll("<MIU>", resultSet.getString("MIUID"));
+							}
+							
+							sendalertmail("Recharge Alert!!!", alertMessage, resultSet.getString("MIUID"));
 							sendalertsms(1, alertMessage, resultSet.getString("MIUID"));
 						}
 						

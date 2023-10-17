@@ -31,6 +31,7 @@ public class DataRequestVO {
 	
 	private String source;
 	private boolean topupSMS;
+	private String topupStatus;
 	
 	public long getReadingID() {
 		return readingID;
@@ -158,5 +159,11 @@ public class DataRequestVO {
 	public void setID(int iD) {
 		ID = iD;
 	}
+	public String getTopupStatus() {
+		return topupStatus;
+	}
+	public void setTopupStatus(String topupStatus) {
+		this.topupStatus = topupStatus;
+	}	
 	
 }
