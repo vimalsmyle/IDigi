@@ -1340,7 +1340,7 @@ public class DashboardDAO {
 								pstmt1.setInt(28, dataRequestVO.getStatus().getLow_bal());
 								pstmt1.setInt(29, dataRequestVO.getStatus().getNfc_tamper()); 
 								pstmt1.setString(30, dataRequestVO.getSource());
-								pstmt.setInt(31, dataRequestVO.getSource().equalsIgnoreCase("Mobile") ? dataRequestVO.getID() : 0);
+								pstmt1.setInt(31, dataRequestVO.getSource().equalsIgnoreCase("Mobile") ? dataRequestVO.getID() : 0);
 								pstmt1.setInt(32, rs.getInt("CustomerMeterID"));
 								
 							} else {
@@ -1376,7 +1376,7 @@ public class DashboardDAO {
 									pstmt1.setInt(28, dataRequestVO.getStatus().getLow_bal());
 									pstmt1.setInt(29, dataRequestVO.getStatus().getNfc_tamper()); 
 									pstmt1.setString(30, dataRequestVO.getSource());
-									pstmt.setInt(31, dataRequestVO.getSource().equalsIgnoreCase("Mobile") ? dataRequestVO.getID() : 0);
+									pstmt1.setInt(31, dataRequestVO.getSource().equalsIgnoreCase("Mobile") ? dataRequestVO.getID() : 0);
 							}
 							
 						}
