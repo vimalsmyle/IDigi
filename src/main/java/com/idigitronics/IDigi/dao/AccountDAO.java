@@ -541,7 +541,7 @@ public class AccountDAO {
 		try {
 			con = getConnection();
 			
-			ps = con.prepareStatement("UPDATE topup SET ModifiedDate = NOW(), Status = "+ dataRequestVO.getCmd_status() +" WHERE TransactionID = "+ dataRequestVO.getTransaction_id());
+			ps = con.prepareStatement("UPDATE topup SET AcknowledgeDate = NOW(), Status = "+ dataRequestVO.getCmd_status() +" WHERE TransactionID = "+ dataRequestVO.getTransaction_id());
 			
 			if(ps.executeUpdate() > 0) {
 				

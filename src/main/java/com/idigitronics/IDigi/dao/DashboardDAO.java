@@ -1457,21 +1457,23 @@ public class DashboardDAO {
 						}
 						
 						if(dataRequestVO.isTopupSMS()) {
+							
 							if(dataRequestVO.getTopupStatus().equalsIgnoreCase("Success")) {
 								
 								alertMessage = "Your Recharge for MIUID: <MIU> with CRN/CAN/UAN: <CRN> is successful. Available Balance: "+dataRequestVO.getCredit()+"/- and Emergency Credit: "+dataRequestVO.getEmergency_credit()+"/-.";
-								alertMessage = alertMessage.replaceAll("<MIU>", resultSet.getString("MIUID"));
+								alertMessage = alertMessage.replaceAll("<MIU>", dataRequestVO.getMiuID());
 								
 							} else if (dataRequestVO.getTopupStatus().equalsIgnoreCase("Pending")){
 								alertMessage = "Your Recharge for MIUID: <MIU> with CRN/CAN/UAN: <CRN> is pending. Please wait until further communication from the device. Available Balance: "+dataRequestVO.getCredit()+"/- and Emergency Credit: "+dataRequestVO.getEmergency_credit()+"/-.";
-								alertMessage = alertMessage.replaceAll("<MIU>", resultSet.getString("MIUID"));
+								alertMessage = alertMessage.replaceAll("<MIU>", dataRequestVO.getMiuID());
 							} else {
 								alertMessage = "Your Recharge for MIUID: <MIU> with CRN/CAN/UAN: <CRN> has failed. Please try after sometime. Available Balance: "+dataRequestVO.getCredit()+"/- and Emergency Credit: "+dataRequestVO.getEmergency_credit()+"/-.";
-								alertMessage = alertMessage.replaceAll("<MIU>", resultSet.getString("MIUID"));
+								alertMessage = alertMessage.replaceAll("<MIU>", dataRequestVO.getMiuID());
 							}
 							
-							sendalertmail("Recharge Alert!!!", alertMessage, resultSet.getString("MIUID"));
-							sendalertsms(1, alertMessage, resultSet.getString("MIUID"));
+							sendalertmail("Recharge Alert!!!", alertMessage, dataRequestVO.getMiuID());
+							sendalertsms(1, alertMessage, dataRequestVO.getMiuID());
+						
 						}
 						
 						PreparedStatement thresholdAlert = con.prepareStatement("SELECT ((SELECT Reading FROM balancelog WHERE CustomerMeterID = "+ rs.getLong("CustomerMeterID")+" ORDER BY ReadingID DESC LIMIT 0,1) - (SELECT Reading FROM balancelog WHERE CustomerMeterID = "+ rs.getLong("CustomerMeterID") +" ORDER BY ReadingID DESC LIMIT 2,1)) AS Threshold");
