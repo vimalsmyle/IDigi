@@ -751,7 +751,7 @@ public class AccountDAO {
 				rs1 = pstmt1.executeQuery();
 				if (rs1.next()) {
 
-					File directory = new File(drivename);
+					File directory = new File(drivename); 
 					if (!directory.exists()) {
 						directory.mkdir();
 					}
@@ -761,10 +761,10 @@ public class AccountDAO {
 					pdfDocument.addNewPage();
 					Document document = new Document(pdfDocument);
 					Paragraph newLine = new Paragraph("\n");
-					Paragraph head = new Paragraph("Receipt");
+					Paragraph head = new Paragraph("Gas Bill Receipt");
 					Paragraph disclaimer = new Paragraph(ExtraConstants.Disclaimer);
 					Paragraph copyRight = new Paragraph(
-							"------------------------------------All  rights reserved by IDigitronics � Hyderabad-----------------------------------");
+							"------------------------------------All  rights reserved by IDigitronics Hyderabad-----------------------------------");
 					PdfFont font = new PdfFontFactory().createFont(FontConstants.TIMES_BOLD);
 
 					// change according to the image directory
@@ -817,10 +817,26 @@ public class AccountDAO {
 					Cell table1cell3 = new Cell();
 					table1cell3.add("Invoice No. : " + rs.getInt("TransactionID"));
 					table1cell3.setTextAlignment(TextAlignment.RIGHT);
+					
+					Cell table1cell4 = new Cell();
+					table1cell4.add("Community: " + rs.getString("CommunityName"));
+					table1cell4.setTextAlignment(TextAlignment.LEFT);
+
+					Cell table1cell5 = new Cell();
+					table1cell5.add("Block: " + rs.getString("BlockName"));
+					table1cell5.setTextAlignment(TextAlignment.CENTER);
+
+					Cell table1cell6 = new Cell();
+					table1cell6.add("House No. : " + rs.getString("HouseNumber"));
+					table1cell6.setTextAlignment(TextAlignment.RIGHT);
 
 					table1.addCell(table1cell1.setBorder(Border.NO_BORDER));
 					table1.addCell(table1cell2.setBorder(Border.NO_BORDER));
 					table1.addCell(table1cell3.setBorder(Border.NO_BORDER));
+					table1.startNewRow();
+					table1.addCell(table1cell4.setBorder(Border.NO_BORDER));
+					table1.addCell(table1cell5.setBorder(Border.NO_BORDER));
+					table1.addCell(table1cell6.setBorder(Border.NO_BORDER));
 
 					document.add(table1.setHorizontalAlignment(HorizontalAlignment.CENTER));
 					document.add(newLine);
@@ -842,7 +858,7 @@ public class AccountDAO {
 					datatable.startNewRow();
 
 					Cell cell2 = new Cell();
-					cell2.add("Amount: ");
+					cell2.add("Recharge Amount: ");
 					cell2.setTextAlignment(TextAlignment.CENTER);
 
 					Cell Amount = new Cell();
@@ -854,7 +870,7 @@ public class AccountDAO {
 					datatable.startNewRow();
 
 					Cell cell3 = new Cell();
-					cell3.add("FixedCharges(if any): ");
+					cell3.add("Service Charges(if any): ");
 					cell3.setTextAlignment(TextAlignment.CENTER);
 
 					Cell fixedCharges = new Cell();
@@ -878,7 +894,7 @@ public class AccountDAO {
 					datatable.startNewRow();
 
 					Cell cell5 = new Cell();
-					cell5.add("Amount Updated to Device After Deductions (if any): ");
+					cell5.add("Available Balance Amount: ");
 					cell5.setTextAlignment(TextAlignment.CENTER);
 
 					Cell finalAmount = new Cell();
@@ -889,32 +905,98 @@ public class AccountDAO {
 					datatable.addCell(cell5);
 					datatable.addCell(finalAmount);
 					datatable.startNewRow();
-
+					
 					Cell cell6 = new Cell();
-					cell6.add("Mode of Payment: ");
+					cell6.add("Emergency Amount: ");
 					cell6.setTextAlignment(TextAlignment.CENTER);
+
+					Cell emergencyAmount = new Cell();
+					emergencyAmount.add(rs.getString("EmergencyCredit"));
+					emergencyAmount.setTextAlignment(TextAlignment.CENTER);
+
+					datatable.addCell(cell6);
+					datatable.addCell(emergencyAmount);
+					datatable.startNewRow();
+					
+					Cell cell7 = new Cell();
+					cell7.add("Tariff: ");
+					cell7.setTextAlignment(TextAlignment.CENTER);
+
+					Cell tariff = new Cell();
+					tariff.add(rs.getString("Tariff"));
+					tariff.setTextAlignment(TextAlignment.CENTER);
+
+					datatable.addCell(cell7);
+					datatable.addCell(tariff);
+					datatable.startNewRow();
+					
+					Cell cell8 = new Cell();
+					cell8.add("Previous Reading: ");
+					cell8.setTextAlignment(TextAlignment.CENTER);
+					
+					Cell previousReading = new Cell();
+					
+					PreparedStatement prevReading = con.prepareStatement("SELECT * FROM balancelog WHERE CutomerMeterID = " + rs.getLong("CustomerMeterID"));
+					ResultSet prevReadingrs = prevReading.executeQuery();
+					
+					if(prevReadingrs.next()) {
+						previousReading.add(prevReadingrs.getString("Reading")); //fetch prev reading
+					} else {
+						previousReading.add("---"); //fetch prev reading
+					}
+					
+					previousReading.setTextAlignment(TextAlignment.CENTER);
+
+					datatable.addCell(cell8);
+					datatable.addCell(previousReading);
+					datatable.startNewRow();
+
+					Cell cell9 = new Cell();
+					cell9.add("Present Reading: ");
+					cell9.setTextAlignment(TextAlignment.CENTER);
+
+					Cell presentReading = new Cell();
+					
+					PreparedStatement presReading = con.prepareStatement("SELECT * FROM balancelog WHERE CutomerMeterID = " + rs.getLong("CustomerMeterID"));
+					ResultSet presReadingrs = presReading.executeQuery();
+					
+					if(presReadingrs.next()) {
+						presentReading.add(presReadingrs.getString("Reading")); //fetch prev reading
+					} else {
+						presentReading.add("---"); //fetch prev reading
+					}
+					
+					presentReading.setTextAlignment(TextAlignment.CENTER);
+
+					datatable.addCell(cell9);
+					datatable.addCell(presentReading);
+					datatable.startNewRow();
+					
+					Cell cell10 = new Cell();
+					cell10.add("Mode of Payment: ");
+					cell10.setTextAlignment(TextAlignment.CENTER);
 
 					Cell modeOfPayment = new Cell();
 					modeOfPayment.add(rs.getString("ModeOfPayment"));
 					modeOfPayment.setTextAlignment(TextAlignment.CENTER);
 
-					datatable.addCell(cell6);
+					datatable.addCell(cell10);
 					datatable.addCell(modeOfPayment);
 					datatable.startNewRow();
 
-					Cell cell7 = new Cell();
-					cell7.add("Transaction Initiated By: ");
-					cell7.setTextAlignment(TextAlignment.CENTER);
+					Cell cell11 = new Cell();
+					cell11.add("Transaction Initiated By: ");
+					cell11.setTextAlignment(TextAlignment.CENTER);
 
 					Cell transactedBy = new Cell();
 					transactedBy.add(rs1.getString("UserName"));
 					transactedBy.setTextAlignment(TextAlignment.CENTER);
 
-					datatable.addCell(cell7);
+					datatable.addCell(cell11);
 					datatable.addCell(transactedBy);
 					datatable.startNewRow();
 
-					Cell cell8 = new Cell();
+				/*	Cell cell8 = new Cell();
 					cell8.add("Date of Transaction: ");
 					cell8.setTextAlignment(TextAlignment.CENTER);
 
@@ -924,42 +1006,42 @@ public class AccountDAO {
 
 					datatable.addCell(cell8);
 					datatable.addCell(transactionDate);
-					datatable.startNewRow();
+					datatable.startNewRow(); */
 
-					Cell cell9 = new Cell();
-					cell9.add("Acknowledge Date: ");
-					cell9.setTextAlignment(TextAlignment.CENTER);
+					Cell cell12 = new Cell();
+					cell12.add("Bill Date: ");
+					cell12.setTextAlignment(TextAlignment.CENTER);
 
 					Cell acknowledgeDate = new Cell();
 					acknowledgeDate.add(ExtraMethodsDAO.datetimeformatter(rs.getString("AcknowledgeDate")));
 					acknowledgeDate.setTextAlignment(TextAlignment.CENTER);
 
-					datatable.addCell(cell9);
+					datatable.addCell(cell12);
 					datatable.addCell(acknowledgeDate);
 					datatable.startNewRow();
 
-					Cell cell10 = new Cell();
-					cell10.add("Order ID: ");
-					cell10.setTextAlignment(TextAlignment.CENTER);
+					Cell cell13 = new Cell();
+					cell13.add("Order ID: ");
+					cell13.setTextAlignment(TextAlignment.CENTER);
 
 					Cell OrderID = new Cell();
 					OrderID.add(rs.getString("RazorPayOrderID") == null ? "---" : rs.getString("RazorPayOrderID"));
 					OrderID.setTextAlignment(TextAlignment.CENTER);
 
-					datatable.addCell(cell10);
+					datatable.addCell(cell13);
 					datatable.addCell(OrderID);
 					datatable.startNewRow();
 
-					Cell cell11 = new Cell();
-					cell11.add("Payment ID: ");
-					cell11.setTextAlignment(TextAlignment.CENTER);
+					Cell cell14 = new Cell();
+					cell14.add("Payment ID: ");
+					cell14.setTextAlignment(TextAlignment.CENTER);
 
 					Cell PaymentID = new Cell();
 					PaymentID
 							.add(rs.getString("RazorPayPaymentID") == null ? "---" : rs.getString("RazorPayPaymentID"));
 					PaymentID.setTextAlignment(TextAlignment.CENTER);
 
-					datatable.addCell(cell11);
+					datatable.addCell(cell14);
 					datatable.addCell(PaymentID);
 					datatable.startNewRow();
 
