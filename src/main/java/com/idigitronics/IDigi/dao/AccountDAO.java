@@ -18,6 +18,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 import org.apache.log4j.Logger;
 import org.apache.poi.xssf.usermodel.XSSFRow;
@@ -541,7 +542,8 @@ public class AccountDAO {
 		try {
 			con = getConnection();
 			
-			ps = con.prepareStatement("UPDATE topup SET AcknowledgeDate = NOW(), Status = "+ dataRequestVO.getCmd_status() +" WHERE TransactionID = "+ dataRequestVO.getTransaction_id());
+			//ALTER TABLE `idigitest`.`topup` ADD COLUMN `Reading` DECIMAL(10,2) NULL DEFAULT 0 AFTER `Amount`;
+			ps = con.prepareStatement("UPDATE topup SET AcknowledgeDate = NOW(), Status = "+ dataRequestVO.getCmd_status() + ", Reading = "+dataRequestVO.getReading() +" WHERE TransactionID = "+ dataRequestVO.getTransaction_id());
 			
 			if(ps.executeUpdate() > 0) {
 				
@@ -739,7 +741,7 @@ public class AccountDAO {
 		try {
 			con = getConnection();
 
-			String query = "SELECT t.TransactionID, c.CommunityName, b.BlockName, cd.FirstName, cd.HouseNumber, cd.CreatedByID, cd.LastName, cd.CustomerUniqueID, t.MIUID, t.CustomerMeterID, t.Amount, tr.AlarmCredit, t.FixedCharges, t.ReconnectionCharges, tr.EmergencyCredit, t.Status, t.ModeOfPayment, t.PaymentStatus, t.RazorPayOrderID, t.RazorPayPaymentID, t.RazorPayRefundID, t.RazorPayRefundStatus, t.TransactionDate, t.AcknowledgeDate FROM topup AS t \r\n"
+			String query = "SELECT t.TransactionID, c.CommunityName, b.BlockName, cd.FirstName, cd.HouseNumber, cd.CreatedByID, cd.LastName, cd.CustomerUniqueID, t.MIUID, t.CustomerMeterID, t.Amount, t.Reading, tr.AlarmCredit, t.FixedCharges, t.ReconnectionCharges, tr.EmergencyCredit, tr.Tariff, t.Status, t.ModeOfPayment, t.PaymentStatus, t.RazorPayOrderID, t.RazorPayPaymentID, t.RazorPayRefundID, t.RazorPayRefundStatus, t.TransactionDate, t.AcknowledgeDate FROM topup AS t \r\n"
 					+ "LEFT JOIN community AS c ON t.CommunityID = c.CommunityID LEFT JOIN block AS b ON t.BlockID = b.BlockID LEFT JOIN tariff AS tr ON tr.TariffID = t.tariffID \r\n"
 					+ "LEFT JOIN customerdetails AS cd ON t.CustomerUniqueID = cd.CustomerUniqueID LEFT JOIN customermeterdetails as cmd ON cd.CustomerID = cmd.CustomerID WHERE t.TransactionID = "+ transactionID;
 
@@ -764,7 +766,7 @@ public class AccountDAO {
 					Paragraph head = new Paragraph("Gas Bill Receipt");
 					Paragraph disclaimer = new Paragraph(ExtraConstants.Disclaimer);
 					Paragraph copyRight = new Paragraph(
-							"------------------------------------All  rights reserved by IDigitronics Hyderabad-----------------------------------");
+							"------------------------------------All  rights reserved by IDigitronics Hyderabad----------------------------------");
 					PdfFont font = new PdfFontFactory().createFont(FontConstants.TIMES_BOLD);
 
 					// change according to the image directory
@@ -787,7 +789,7 @@ public class AccountDAO {
 					headtable1.setTextAlignment(TextAlignment.LEFT);
 
 					Cell headtable2 = new Cell();
-					headtable2.add(head.setFontSize(20));
+					headtable2.add(head.setFontSize(17));
 					headtable2.setTextAlignment(TextAlignment.CENTER).setVerticalAlignment(VerticalAlignment.MIDDLE)
 							.setBold().setUnderline().setFont(font);
 
@@ -815,7 +817,7 @@ public class AccountDAO {
 					table1cell2.setTextAlignment(TextAlignment.CENTER);
 
 					Cell table1cell3 = new Cell();
-					table1cell3.add("Invoice No. : " + rs.getInt("TransactionID"));
+					table1cell3.add("Invoice No. : " + transactionID);
 					table1cell3.setTextAlignment(TextAlignment.RIGHT);
 					
 					Cell table1cell4 = new Cell();
@@ -936,13 +938,13 @@ public class AccountDAO {
 					
 					Cell previousReading = new Cell();
 					
-					PreparedStatement prevReading = con.prepareStatement("SELECT * FROM balancelog WHERE CutomerMeterID = " + rs.getLong("CustomerMeterID"));
+					PreparedStatement prevReading = con.prepareStatement("SELECT Reading FROM topup where CustomerMeterID = "+rs.getLong("CustomerMeterID")+" and Status = 0 and TransactionID < "+ transactionID +" order by TransactionID desc Limit 0,1");
 					ResultSet prevReadingrs = prevReading.executeQuery();
 					
 					if(prevReadingrs.next()) {
-						previousReading.add(prevReadingrs.getString("Reading")); //fetch prev reading
+						previousReading.add((Objects.nonNull(prevReadingrs.getString("Reading"))) ? prevReadingrs.getString("Reading") : "---"); //fetch prev reading
 					} else {
-						previousReading.add("---"); //fetch prev reading
+						previousReading.add("---"); 
 					}
 					
 					previousReading.setTextAlignment(TextAlignment.CENTER);
@@ -956,16 +958,7 @@ public class AccountDAO {
 					cell9.setTextAlignment(TextAlignment.CENTER);
 
 					Cell presentReading = new Cell();
-					
-					PreparedStatement presReading = con.prepareStatement("SELECT * FROM balancelog WHERE CutomerMeterID = " + rs.getLong("CustomerMeterID"));
-					ResultSet presReadingrs = presReading.executeQuery();
-					
-					if(presReadingrs.next()) {
-						presentReading.add(presReadingrs.getString("Reading")); //fetch prev reading
-					} else {
-						presentReading.add("---"); //fetch prev reading
-					}
-					
+					presentReading.add((Objects.nonNull(rs.getString("Reading"))) ? rs.getString("Reading") : "---");
 					presentReading.setTextAlignment(TextAlignment.CENTER);
 
 					datatable.addCell(cell9);
@@ -1047,8 +1040,6 @@ public class AccountDAO {
 
 					document.add(datatable.setHorizontalAlignment(HorizontalAlignment.CENTER));
 					document.add(disclaimer.setHorizontalAlignment(HorizontalAlignment.CENTER).setFont(font));
-					document.add(newLine);
-					document.add(newLine);
 					document.add(newLine);
 					document.add(newLine);
 					document.add(newLine);

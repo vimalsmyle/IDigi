@@ -13,7 +13,7 @@ public class ExtraConstants {
 //	public static final String IDIGIIMAGEURL=LocalURL+"/common/images/logo-white.png";
 	public static final String IDIGIIMAGEURL=LocalURL+"/common/images/idigi-new.png";
 //	public static final String IDIGIIMAGEURL= ApplicationURL+"/common/images/Idigi-Logo.png";
-	public static final String CLIENTIMAGEURL= LocalURL+"/common/images/logo-white.png";
+	public static final String CLIENTIMAGEURL= LocalURL+"/common/images/client.png";
 //	public static final String CLIENTIMAGEURL=ApplicationURL+"/common/images/raychem.png";
 //	public static final String fromEmail = "support@idigitronics.com";
 //	public static final String fromEmailPassword = "M1rage@24"; 

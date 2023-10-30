@@ -775,6 +775,7 @@ CREATE TABLE `topup` (
   `CustomerMeterID` bigint NOT NULL,
   `TariffID` int NOT NULL,
   `Amount` decimal(10,0) NOT NULL,
+  `Reading` decimal(10,2) DEFAULT '0',
   `EmergencyCredit` decimal(10,0) NOT NULL,
   `Status` int unsigned NOT NULL DEFAULT '10',
   `FixedCharges` int unsigned DEFAULT '0',
