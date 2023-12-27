@@ -32,12 +32,14 @@ import com.idigitronics.IDigi.request.vo.DataRequestVO;
 import com.idigitronics.IDigi.request.vo.FilterVO;
 import com.idigitronics.IDigi.request.vo.MailRequestVO;
 import com.idigitronics.IDigi.request.vo.SMSRequestVO;
+import com.idigitronics.IDigi.request.vo.SensorDataRequestVO;
 import com.idigitronics.IDigi.response.vo.AllGraphResponseVO;
 import com.idigitronics.IDigi.response.vo.DashboardResponseVO;
 import com.idigitronics.IDigi.response.vo.GraphResponseVO;
 import com.idigitronics.IDigi.response.vo.HomeResponseVO;
 import com.idigitronics.IDigi.response.vo.IndividualDashboardResponseVO;
 import com.idigitronics.IDigi.response.vo.ResponseVO;
+import com.idigitronics.IDigi.response.vo.SensorDashboardResponseVO;
 import com.idigitronics.IDigi.response.vo.Series;
 import com.idigitronics.IDigi.response.vo.ValidateResponseVO;
 
@@ -1653,6 +1655,16 @@ public class DashboardDAO {
 		            return false; // Token validation failed
 		        }
 		    return false;
+	}
+
+	public ResponseVO postSensorDashboarddetails(SensorDataRequestVO sensorDataRequestVO) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List<SensorDashboardResponseVO> getSensorDashboarddetails() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

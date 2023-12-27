@@ -23,11 +23,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.idigitronics.IDigi.dao.DashboardDAO;
 import com.idigitronics.IDigi.request.vo.DataRequestVO;
 import com.idigitronics.IDigi.request.vo.FilterVO;
+import com.idigitronics.IDigi.request.vo.SensorDataRequestVO;
 import com.idigitronics.IDigi.response.vo.AllGraphResponseVO;
 import com.idigitronics.IDigi.response.vo.DashboardResponseVO;
 import com.idigitronics.IDigi.response.vo.GraphResponseVO;
 import com.idigitronics.IDigi.response.vo.HomeResponseVO;
 import com.idigitronics.IDigi.response.vo.ResponseVO;
+import com.idigitronics.IDigi.response.vo.SensorDashboardResponseVO;
 
 
 /**
@@ -202,6 +204,33 @@ public class DashboardController {
 			responsevo.setMessage("Data Insertion Failed");
 		}
 		return responsevo;
+	}
+	
+	@RequestMapping(value = "/SENSORS/{equipment_serial_id}", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	public @ResponseBody ResponseVO postSensorDashboardDetails(@RequestBody SensorDataRequestVO sensorDataRequestVO, @PathVariable("equipment_serial_id") String equipment_serial_id) {
+
+		DashboardDAO dashboarddao = new DashboardDAO();
+		ResponseVO responsevo = new ResponseVO();
+		
+		try {
+			sensorDataRequestVO.setEquipment_serial_id(equipment_serial_id);
+			responsevo = dashboarddao.postSensorDashboarddetails(sensorDataRequestVO);
+		} catch (Exception ex) {
+			logger.error("This is Error message", ex);
+			ex.printStackTrace();
+		}
+		return responsevo;
+	}
+	
+	@RequestMapping(value = "/sensordashboard", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody SensorDashboardResponseVO sensorDashboarddetails() throws SQLException {
+
+		DashboardDAO dashboarddao = new DashboardDAO();
+		SensorDashboardResponseVO sensorDasboardresponsevo = new SensorDashboardResponseVO();
+		
+		sensorDasboardresponsevo.setData(dashboarddao.getSensorDashboarddetails());
+		
+		return sensorDasboardresponsevo;
 	}
 	
 }
