@@ -83,6 +83,8 @@
                  <a href="manualBilling.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-star"></i> <span class="textData">Manual Billing</span></a>
                  
                   <a href="manualdata.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-star"></i> <span class="textData">Manual Data</span></a>
+                  
+                  <li><a href="Sensor.jsp" title="Sensor Dashboard"><img src=common/images/icons/dashboard.png /><span class="nav-label">Sensor Dashboard</span></a></li>
                  
             <%}%>
             <% } else if (user_id.equalsIgnoreCase("2") || user_id.equalsIgnoreCase("5")) {

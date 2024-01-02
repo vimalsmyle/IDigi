@@ -64,6 +64,13 @@
                 <li><a href="Mgmt.jsp" title="User Management"><img src=common/images/icons/usermanagement.png /><span class="nav-label">User Management</span></a></li>
                 
                 <%}%>	
+                
+                <!--  added temporarily for sensor related page -->
+                
+                	<%if(user_id.equalsIgnoreCase("1")){ %>
+                <li><a href="Sensor.jsp" title="Sensor Dashboard"><img src=common/images/icons/dashboard.png /><span class="nav-label">Sensor Dashboard</span></a></li>
+                
+                <%}%>	
 					                
                 <% } else if (user_id.equalsIgnoreCase("2") || user_id.equalsIgnoreCase("5")) {
                 %>
