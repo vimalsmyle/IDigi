@@ -222,8 +222,8 @@ public class DashboardController {
 		return responsevo;
 	}
 	
-	@RequestMapping(value = "/sensordashboard", method = RequestMethod.GET, produces = "application/json")
-	public @ResponseBody SensorDashboardResponseVO sensorDashboarddetails() throws SQLException {
+	@RequestMapping(value = "/sensordashboard/{roleid}/{id}", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody SensorDashboardResponseVO sensorDashboarddetails(@PathVariable("roleid") int roleid, @PathVariable("id") int id) throws SQLException {
 
 		DashboardDAO dashboarddao = new DashboardDAO();
 		SensorDashboardResponseVO sensorDasboardresponsevo = new SensorDashboardResponseVO();

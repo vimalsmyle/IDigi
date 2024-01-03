@@ -57,7 +57,7 @@
 				</div> -->
 				<div class="row">
 					<div class="col-md-12">
-						<table id="alarmTable"
+						<table id="sensorTable"
 							class="table table-striped table-bordered dt-responsive nowrap dataTable no-footer dtr-inline collapsed"
 							style="width: 100%">
 							<thead>
@@ -76,7 +76,7 @@
 							</tbody>
 						</table>
 						
-						<table id="alarmTable1"
+						<table id="sensorTable1"
 							class="table table-striped table-bordered dt-responsive nowrap dataTable no-footer dtr-inline collapsed"
 							style="width: 100%">
 							<thead>
@@ -158,7 +158,7 @@
 	<script type="text/javascript"
 		src="//cdn.jsdelivr.net/jquery.bootstrapvalidator/0.5.0/js/bootstrapValidator.min.js"></script>
 
-	<script src="js/alarms.js"></script>
+	<script src="js/sensor.js"></script>
 	<script src="js/common.js"></script>
 	<script src="js/dropdown.js"></script>
 	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
