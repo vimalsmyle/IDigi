@@ -1659,7 +1659,85 @@ public class DashboardDAO {
 
 	public ResponseVO postSensorDashboarddetails(SensorDataRequestVO sensorDataRequestVO) {
 		// TODO Auto-generated method stub
-		return null;
+		ResponseVO responsevo = new ResponseVO();
+		
+		try {
+			
+			logger.debug("Device ID: "+sensorDataRequestVO.getEquipment_serial_id());
+			
+					logger.debug("Battery Voltage: "+sensorDataRequestVO.getBattery_percentage());
+					
+					responsevo.setResult(insertSensorDashboard(sensorDataRequestVO));
+					responsevo.setMessage(responsevo.getResult().equalsIgnoreCase("Success") ? "Data Inserted Successfully" : "Data Insertion Failed");
+					
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return responsevo;
+	}
+
+	private String insertSensorDashboard(SensorDataRequestVO sensorDataRequestVO) {
+		// TODO Auto-generated method stub
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		PreparedStatement pstmt1 = null;
+		PreparedStatement ps = null;
+		ResultSet resultSet = null;
+		String result = "Failure";
+		
+		try {
+			con = getConnection();
+			
+				PreparedStatement pstmt2 = con.prepareStatement("SELECT cd.CommunityID, cd.BlockID, cd.CustomerID, cmd.CustomerMeterID, cmd.TariffID, t.Tariff, cmd.MeterSerialNumber, cd.CustomerUniqueID, cmd.MeterSizeID, cmd.ThresholdMaximum, cmd.ThresholdMinimum from customerdetails as cd LEFT JOIN customermeterdetails as cmd ON cd.CustomerID = cmd.CustomerID LEFT JOIN tariff as t on t.TariffID = cmd.TariffID WHERE cmd.MIUID = ?");
+				pstmt2.setString(1, sensorDataRequestVO.getEquipment_serial_id());
+				ResultSet rs = pstmt2.executeQuery();
+				if(rs.next()) {
+					
+					pstmt = con.prepareStatement("INSERT INTO sensorlog (MIUID, CommunityID, BlockID, CustomerID, CustomerMeterID, MeterSizeID, MeterSerialNumber, CustomerUniqueID, MeterType, SyncTime, SyncInterval, PayType, BatteryVoltage, TariffID, Tariff, ValveConfiguration, ValveStatus, Balance, EmergencyCredit, Minutes, Reading, DoorOpenTamper, MagneticTamper, Vacation, RTCFault, LowBattery, LowBalance, NFCTamper, Source, ID, LogDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
+					pstmt.setString(1, sensorDataRequestVO.getEquipment_serial_id());
+					pstmt.setInt(2, rs.getInt("CommunityID"));
+					pstmt.setInt(3, rs.getInt("BlockID"));
+					pstmt.setInt(4, rs.getInt("CustomerID"));
+					pstmt.setString(5, rs.getString("CustomerUniqueID"));
+					pstmt.setString(6, sensorDataRequestVO);
+					pstmt.setString(7, sensorDataRequestVO);
+					pstmt.setString(8, sensorDataRequestVO);
+					pstmt.setString(9, sensorDataRequestVO);
+					pstmt.setString(10, sensorDataRequestVO);
+					pstmt.setString(11, sensorDataRequestVO);
+					pstmt.setString(12, sensorDataRequestVO);
+					pstmt.setString(13, sensorDataRequestVO);
+					pstmt.setString(14, sensorDataRequestVO);
+					pstmt.setString(15, sensorDataRequestVO);
+					pstmt.setString(16, sensorDataRequestVO);
+					pstmt.setString(17, sensorDataRequestVO);
+					pstmt.setString(18, sensorDataRequestVO);
+					pstmt.setInt(19, sensorDataRequestVO.getAlarms().getGsm_status());
+					pstmt.setInt(20, sensorDataRequestVO.getAlarms().getEthernet_status());
+					pstmt.setInt(21, sensorDataRequestVO.getAlarms().getNfc_status());
+					pstmt.setInt(22, sensorDataRequestVO.getAlarms().getFlash_status());
+					pstmt.setInt(23, sensorDataRequestVO.getAlarms().getNfc_memory_status());
+					pstmt.setInt(24, sensorDataRequestVO.getAlarms().getFlash_memory_status());
+					pstmt.setInt(25, sensorDataRequestVO.getAlarms().getLow_gsm());
+					pstmt.setInt(26, sensorDataRequestVO.getAlarms().getLow_battery());
+					pstmt.setInt(27, sensorDataRequestVO.getAlarms().getSensor_detachment());
+					pstmt.setInt(28, sensorDataRequestVO.getAlarms().getDoor_open_switch());
+					pstmt.setInt(29, sensorDataRequestVO.getAlarms().getMagnetic_tamper());
+					pstmt.setString(30, sensorDataRequestVO.getTimestamp());
+
+					if (pstmt.executeUpdate() > 0) {
+						
+						result = "Success";
+						
+					}
+					
+		}
+				
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return result;
 	}
 
 	public List<SensorDashboardResponseVO> getSensorDashboarddetails() {

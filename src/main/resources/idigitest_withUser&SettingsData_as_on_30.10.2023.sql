@@ -537,7 +537,7 @@ CREATE TABLE `user` (
 
 /*Data for the table `user` */
 
-insert  into `user`(`ID`,`UserID`,`UserName`,`UserPassword`,`RoleID`,`ActiveStatus`,`CommunityID`,`BlockID`,`CustomerID`,`CustomerUniqueID`,`MobileNumber`,`Email`,`CreatedByID`,`CreatedByRoleID`,`RegisteredDate`,`ModifiedDate`) values 
+insert  into `user`(`ID`,`UserID`,`UserName`,`UserPassword`,`RoleID`,`ActiveStatus`, `Token`,`CommunityID`,`BlockID`,`CustomerID`,`CustomerUniqueID`,`MobileNumber`,`Email`,`CreatedByID`,`CreatedByRoleID`,`RegisteredDate`,`ModifiedDate`) values 
 (1,'Superadmin','Idigitronics','cvp/LzpadrQT+2k0WDjyOQ==',1,1,NULL,0,0,0,NULL,NULL,NULL,0,0,SYSDATE(),SYSDATE());
 
 /*Table structure for table `userrole` */
