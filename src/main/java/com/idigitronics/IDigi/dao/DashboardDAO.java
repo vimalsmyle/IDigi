@@ -7,7 +7,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.security.Key;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -1685,7 +1684,7 @@ public class DashboardDAO {
 		try {
 			con = getConnection();
 			
-				PreparedStatement pstmt2 = con.prepareStatement("SELECT cd.CommunityID, cd.BlockID, cd.CustomerID, cd.CustomerUniqueID from customerdetails as cd LEFT JOIN customermeterdetails as cmd ON cd.CustomerID = cmd.CustomerID LEFT JOIN tariff as t on t.TariffID = cmd.TariffID WHERE cmd.MIUID = ?");
+				PreparedStatement pstmt2 = con.prepareStatement("SELECT cd.CommunityID, cd.BlockID, cd.CustomerID, cd.CustomerUniqueID from customerdetails as cd LEFT JOIN customermeterdetails as cmd ON cd.CustomerID = cmd.CustomerID LEFT JOIN tariff as t on t.TariffID = cmd.TariffID WHERE cd.ActiveStatus = 2 AND cmd.MIUID = ?");
 				pstmt2.setString(1, sensorDataRequestVO.getEquipment_serial_id());
 				ResultSet rs = pstmt2.executeQuery();
 				if(rs.next()) {
@@ -1737,110 +1736,72 @@ public class DashboardDAO {
 		return result;
 	}
 
-	public List<SensorDashboardResponseVO> getSensorDashboarddetails() {
+	public List<SensorDashboardResponseVO> getSensorDashboarddetails() throws SQLException {
 		// TODO Auto-generated method stub
 		Connection con = null;
 		PreparedStatement pstmt = null;
-		PreparedStatement pstmt3 = null;
+		PreparedStatement pstmt1 = null;
 		ResultSet rs = null;
-		ResultSet rs3 = null;
+		ResultSet rs1 = null;
 		List<SensorDashboardResponseVO> sensorDashboardList = null;
-		SensorDashboardResponseVO dashboardvo = null;
+		SensorDashboardResponseVO sensorDashboardResponseVO = null;
 		String mainquery = "";
-		String CustomerUniqueID = "";
 		
 		try {
 			con = getConnection();
 			sensorDashboardList = new LinkedList<SensorDashboardResponseVO>();
 			
-			mainquery = "SELECT c.CommunityName, b.BlockName, cd.HouseNumber, cd.FirstName, cd.LastName, cd.CustomerUniqueID, cd.CustomerID FROM customerdetails AS cd LEFT JOIN community AS c ON cd.CommunityID = c.CommunityID LEFT JOIN block AS b ON b.BlockID = cd.BlockID WHERE cd.CustomerUniqueID = "+CustomerUniqueID;
+			mainquery = "SELECT c.CommunityName, b.BlockName, cd.HouseNumber, cd.FirstName, cd.LastName, cd.CustomerUniqueID, cd.CustomerID FROM customerdetails AS cd LEFT JOIN community AS c ON cd.CommunityID = c.CommunityID LEFT JOIN block AS b ON b.BlockID = cd.BlockID WHERE cd.ActiveStatus = 2";
 				
 			pstmt = con.prepareStatement(mainquery);
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
 				
-				dashboardvo = new SensorDashboardResponseVO();
+				sensorDashboardResponseVO = new SensorDashboardResponseVO();
 				
-				dashboardvo.setCommunityName(rs.getString("CommunityName"));
-				dashboardvo.setBlockName(rs.getString("BlockName"));
-				dashboardvo.setHouseNumber(rs.getString("HouseNumber"));
-				dashboardvo.setFirstName(rs.getString("FirstName"));
-				dashboardvo.setLastName(rs.getString("LastName"));
-				dashboardvo.setCustomerUniqueID(rs.getString("CustomerUniqueID"));
+				sensorDashboardResponseVO.setCommunityName(rs.getString("CommunityName"));
+				sensorDashboardResponseVO.setBlockName(rs.getString("BlockName"));
+				sensorDashboardResponseVO.setHouseNumber(rs.getString("HouseNumber"));
+				sensorDashboardResponseVO.setFirstName(rs.getString("FirstName"));
+				sensorDashboardResponseVO.setLastName(rs.getString("LastName"));
+				sensorDashboardResponseVO.setCustomerUniqueID(rs.getString("CustomerUniqueID"));
 				
-				pstmt3 = con.prepareStatement("SELECT * FROM sensorlog WHERE CustomerUniqueID = "+ CustomerUniqueID + " ORDER BY dbl.LogDate DESC LIMIT 0,1");
-				rs3 = pstmt3.executeQuery();
+				pstmt1 = con.prepareStatement("SELECT * FROM sensorlog WHERE CustomerUniqueID = '"+ sensorDashboardResponseVO.getCustomerUniqueID() + "' AND equiptment_serial_id = '"+sensorDashboardResponseVO.getEquipment_serial_id() +"' ORDER BY LogDate DESC LIMIT 0,1");
+				rs1 = pstmt1.executeQuery();
 				
-				while(rs3.next()) {
+				if(rs1.next()) {
 					
-					individualDashboardResponseVO.setMeterSerialNumber(rs3.getString("MeterSerialNumber"));
-					individualDashboardResponseVO.setPayType(rs3.getString("PayType"));
-					individualDashboardResponseVO.setMeterType(rs3.getString("MeterType"));
-					individualDashboardResponseVO.setMiuID(rs3.getString("MIUID"));
-					individualDashboardResponseVO.setCustomerMeterID(rs3.getInt("CustomerMeterID"));
-					individualDashboardResponseVO.setMeterSize(rs3.getFloat("MeterSize"));
-					individualDashboardResponseVO.setGatewayName(rs3.getString("GatewayName"));
-					individualDashboardResponseVO.setReading(rs3.getFloat("Reading"));
-					individualDashboardResponseVO.setConsumption((int) (individualDashboardResponseVO.getReading() * rs3.getFloat("PerUnitValue")));
-					individualDashboardResponseVO.setBattery(rs3.getInt("BatteryVoltage"));
-					individualDashboardResponseVO.setBatteryColor((rs3.getInt("LowBattery") == 1 ) ? "RED" : "GREEN");
-					individualDashboardResponseVO.setDoorOpenTamper((rs3.getInt("DoorOpenTamper") == 0) ? "NO" : (rs3.getInt("DoorOpenTamper") == 1) ? "YES" : "NO");
-					individualDashboardResponseVO.setDooropentamperColor((rs3.getInt("DoorOpenTamper") == 0) ? "GREEN" : "RED");
-					individualDashboardResponseVO.setMagneticTamper((rs3.getInt("MagneticTamper") == 0) ? "NO" : (rs3.getInt("MagneticTamper") == 1) ? "YES" : "NO");
-					individualDashboardResponseVO.setMagnetictamperColor((rs3.getInt("MagneticTamper") == 0) ? "GREEN" : "RED");
-					individualDashboardResponseVO.setNfcTamper((rs3.getInt("NFCTamper") == 0 || rs3.getString("NFCTamper").equalsIgnoreCase("NULL")) ? "NO" : (rs3.getInt("NFCTamper") == 1) ? "YES" : "NO");
-					individualDashboardResponseVO.setNfcTamperColor((rs3.getInt("NFCTamper") == 0 || rs3.getString("NFCTamper").equalsIgnoreCase("NULL")) ? "GREEN" : "RED");
-					individualDashboardResponseVO.setTariff((rs3.getString("Tariff").equalsIgnoreCase("0.00") ? "---" : rs3.getString("Tariff")));
-					individualDashboardResponseVO.setValveStatus((rs3.getInt("ValveStatus") == 1) ? "OPEN" : (rs3.getInt("ValveStatus") == 0) ? "CLOSED" : "");
-					individualDashboardResponseVO.setValveStatusColor((rs3.getInt("ValveStatus") == 1) ? "GREEN" : (rs3.getInt("ValveStatus") == 0) ? "RED" : "");
-					individualDashboardResponseVO.setVacationStatus(rs3.getInt("Vacation") == 1 ? "YES" : "NO");
-					individualDashboardResponseVO.setVacationColor(rs3.getInt("Vacation") == 1 ? "ORANGE" : "BLACK");
-					
-					if(rs3.getString("PayType").equalsIgnoreCase("Prepaid")) {
-						
-						individualDashboardResponseVO.setBalance(rs3.getString("Balance"));
-						individualDashboardResponseVO.setEmergencyCredit(rs3.getString("EmergencyCredit"));
-						
-					} else {
-						individualDashboardResponseVO.setBalance("---");
-						individualDashboardResponseVO.setEmergencyCredit("---");
-						individualDashboardResponseVO.setLastTopupAmount("---");
-						individualDashboardResponseVO.setLastRechargeDate("---");
-					}
-					
-					individualDashboardResponseVO.setTimeStamp(ExtraMethodsDAO.datetimeformatter(rs3.getString("LogDate")));
-					
-					Date currentDateTime = new Date();
-					
-					long minutes = TimeUnit.MILLISECONDS.toMinutes(currentDateTime.getTime() - (rs3.getTimestamp("LogDate")).getTime());
-
-					if(minutes > noAMRInterval) {
-						nonCommunicating++;
-						individualDashboardResponseVO.setDateColor("RED");
-						individualDashboardResponseVO.setCommunicationStatus("NO");
-					}else if(minutes > 1440 && minutes < noAMRInterval) {
-						individualDashboardResponseVO.setDateColor("ORANGE");
-						individualDashboardResponseVO.setCommunicationStatus("YES");
-					} else {
-						individualDashboardResponseVO.setDateColor("GREEN");
-						individualDashboardResponseVO.setCommunicationStatus("YES");
-					}
-					
-					if(!customerUniqueID.isEmpty() && rs3.getString("PayType").equalsIgnoreCase("Prepaid")) {
-						PreparedStatement pstmt2 = con.prepareStatement("SELECT Amount, TransactionDate FROM topup WHERE CustomerMeterID = "+rs3.getInt("CustomerMeterID")+" AND STATUS = 0 ORDER BY TransactionID DESC LIMIT 0,1") ;
-						ResultSet rs2 = pstmt2.executeQuery();
-						if(rs2.next()) {
-							individualDashboardResponseVO.setLastTopupAmount(rs2.getString("Amount"));
-							individualDashboardResponseVO.setLastRechargeDate(ExtraMethodsDAO.datetimeformatter(rs2.getString("TransactionDate")));
-						} else {
-						
-						individualDashboardResponseVO.setLastTopupAmount("---");
-						individualDashboardResponseVO.setLastRechargeDate("---");
-						}
-					}
+					sensorDashboardResponseVO.setEquipment_serial_id(rs1.getString("equipment_serial_id"));
+					sensorDashboardResponseVO.setReadings(rs1.getString("readings"));
+					sensorDashboardResponseVO.setReader_sensor_status(rs1.getInt("reader_sensor_status") == 0 ? "False" : "True");
+					sensorDashboardResponseVO.setPer_day_flow_rate(rs1.getFloat("per_day_flow_rate"));
+					sensorDashboardResponseVO.setLive_flow_rate(rs1.getFloat("live_flow_rate"));
+					sensorDashboardResponseVO.setRecord_interval(rs1.getInt("record_interval"));
+					sensorDashboardResponseVO.setSync_interval(rs1.getInt("sync_interval"));
+					sensorDashboardResponseVO.setRssi(rs1.getInt("rssi"));
+					sensorDashboardResponseVO.setDigital_outputs(rs1.getInt("digital_outputs") == 0 ? "False" : "True");
+					sensorDashboardResponseVO.setAnalog_inputs(rs1.getFloat("analog_inputs"));
+					sensorDashboardResponseVO.setAnalog_outputs(rs1.getFloat("analog_outputs"));
+					sensorDashboardResponseVO.setVoltage_outputs(rs1.getInt("voltage_outputs"));
+					sensorDashboardResponseVO.setBattery_percentage(rs1.getInt("battery_percentage"));
+					sensorDashboardResponseVO.setOnline_powersupply(rs1.getInt("online_powersupply") == 0 ? "False" : "True");
+					sensorDashboardResponseVO.setGsm_status(rs1.getInt("gsm_status") == 0 ? "False" : "True");
+					sensorDashboardResponseVO.setEthernet_status(rs1.getInt("ethernet_status") == 0 ? "False" : "True");
+					sensorDashboardResponseVO.setNfc_status(rs1.getInt("nfc_status") == 0 ? "False" : "True");
+					sensorDashboardResponseVO.setFlash_status(rs1.getInt("flash_status") == 0 ? "False" : "True");
+					sensorDashboardResponseVO.setNfc_memory_status(rs1.getInt("nfc_memory_status") == 0 ? "False" : "True");
+					sensorDashboardResponseVO.setFlash_memory_status(rs1.getInt("flash_memory_status") == 0 ? "False" : "True");
+					sensorDashboardResponseVO.setLow_gsm(rs1.getInt("low_gsm") == 0 ? "False" : "True");
+					sensorDashboardResponseVO.setLow_battery(rs1.getInt("low_battery") == 0 ? "False" : "True");
+					sensorDashboardResponseVO.setSensor_detachment(rs1.getInt("sensor_detachment") == 0 ? "False" : "True");
+					sensorDashboardResponseVO.setDoor_open_switch(rs1.getInt("door_open_switch") == 0 ? "False" : "True");
+					sensorDashboardResponseVO.setMagnetic_tamper(rs1.getInt("magnetic_tamper") == 0 ? "False" : "True");
+					sensorDashboardResponseVO.setTimestamp(rs1.getString("timestamp"));
+					sensorDashboardResponseVO.setLogDate(ExtraMethodsDAO.datetimeformatter(rs1.getString("LogDate")));
 					
 				}
-				sensorDashboardList.add(dashboardvo);
+				sensorDashboardList.add(sensorDashboardResponseVO);
+				sensorDashboardList.removeIf(e -> e.getEquipment_serial_id()==null);
 				
 			}
 		}
