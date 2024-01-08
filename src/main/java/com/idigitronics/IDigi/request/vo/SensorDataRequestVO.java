@@ -24,7 +24,7 @@ public class SensorDataRequestVO {
 	private int battery_percentage;
 	private int online_powersupply;
 	private Alarms alarms;
-	private String timestamp;
+	private int timestamp;
 	
 	
 	public String getEquipment_serial_id() {
@@ -117,10 +117,10 @@ public class SensorDataRequestVO {
 	public void setAlarms(Alarms alarms) {
 		this.alarms = alarms;
 	}
-	public String getTimestamp() {
+	public int getTimestamp() {
 		return timestamp;
 	}
-	public void setTimestamp(String timestamp) {
+	public void setTimestamp(int timestamp) {
 		this.timestamp = timestamp;
 	}
 	
