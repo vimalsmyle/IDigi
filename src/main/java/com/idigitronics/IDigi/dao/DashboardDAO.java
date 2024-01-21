@@ -12,6 +12,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -1684,42 +1685,70 @@ public class DashboardDAO {
 		try {
 			con = getConnection();
 			
-				PreparedStatement pstmt2 = con.prepareStatement("SELECT cd.CommunityID, cd.BlockID, cd.CustomerID, cd.CustomerUniqueID from customerdetails as cd LEFT JOIN customermeterdetails as cmd ON cd.CustomerID = cmd.CustomerID LEFT JOIN tariff as t on t.TariffID = cmd.TariffID WHERE cd.ActiveStatus = 2 AND cmd.MIUID = ?");
+				PreparedStatement pstmt2 = con.prepareStatement("SELECT cd.CommunityID, cd.BlockID, cd.CustomerID, cd.CustomerUniqueID from customerdetails as cd LEFT JOIN customermeterdetails as cmd ON cd.CustomerID = cmd.CustomerID WHERE cd.ActiveStatus = 2 AND cmd.MIUID = ?");
 				pstmt2.setString(1, sensorDataRequestVO.getEquipment_serial_id());
 				ResultSet rs = pstmt2.executeQuery();
 				if(rs.next()) {
 					
-					pstmt = con.prepareStatement("INSERT INTO sensorlog (equipment_serial_id, CommunityID, BlockID, CustomerID, CustomerUniqueID, readings, reader_sensor_status, per_day_flow_rate, live_flow_rate, record_interval, sync_interval, rssi, digital_outputs, analog_inputs, analog_outputs, voltage_outputs, battery_percentage, online_powersupply, gsm_status, ethernet_status, nfc_status, flash_status, nfc_memory_status, flash_memory_status, low_gsm, low_battery, sensor_detachment, door_open_switch, magnetic_tamper, timestamp, LogDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
+					pstmt = con.prepareStatement("INSERT INTO sensorlog (equipment_serial_id, CommunityID, BlockID, CustomerID, CustomerUniqueID, reading1, reading2, reading3, reading4, reader_sensor_status1, reader_sensor_status2, reader_sensor_status3, reader_sensor_status4, per_day_flow_rate1, per_day_flow_rate2, per_day_flow_rate3, per_day_flow_rate4, live_flow_rate1, live_flow_rate2, live_flow_rate3, live_flow_rate4, record_interval, sync_interval, rssi, digital_outputs1, digital_outputs2, digital_outputs3, digital_outputs4, analog_inputs1, analog_inputs2, analog_inputs3, analog_inputs4, analog_outputs1, analog_outputs2, analog_outputs3, analog_outputs4, voltage_outputs1, voltage_outputs2, voltage_outputs3, voltage_outputs4, battery_percentage, online_powersupply, gsm_status, ethernet_status, nfc_status, flash_status, nfc_memory_status, flash_memory_status, low_gsm, low_battery, sensor_detachment, door_open_switch, magnetic_tamper, timestamp, LogDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
 					pstmt.setString(1, sensorDataRequestVO.getEquipment_serial_id());
 					pstmt.setInt(2, rs.getInt("CommunityID"));
 					pstmt.setInt(3, rs.getInt("BlockID"));
 					pstmt.setInt(4, rs.getInt("CustomerID"));
 					pstmt.setString(5, rs.getString("CustomerUniqueID"));
-					pstmt.setInt(6, sensorDataRequestVO.getReadings());
-					pstmt.setInt(7, sensorDataRequestVO.getReader_sensor_status());
-					pstmt.setFloat(8, sensorDataRequestVO.getPer_day_flow_rate());
-					pstmt.setFloat(9, sensorDataRequestVO.getLive_flow_rate());
-					pstmt.setInt(10, sensorDataRequestVO.getRecord_interval());
-					pstmt.setInt(11, sensorDataRequestVO.getSync_interval());
-					pstmt.setInt(12, sensorDataRequestVO.getRssi());
-					pstmt.setInt(13, sensorDataRequestVO.getDigital_outputs());
-					pstmt.setFloat(14, sensorDataRequestVO.getAnalog_inputs());
-					pstmt.setFloat(15, sensorDataRequestVO.getAnalog_outputs());
-					pstmt.setFloat(16, sensorDataRequestVO.getVoltage_outputs());
-					pstmt.setInt(17, sensorDataRequestVO.getBattery_percentage());
-					pstmt.setInt(18, sensorDataRequestVO.getOnline_powersupply());
-					pstmt.setInt(19, sensorDataRequestVO.getAlarms().getGsm_status());
-					pstmt.setInt(20, sensorDataRequestVO.getAlarms().getEthernet_status());
-					pstmt.setInt(21, sensorDataRequestVO.getAlarms().getNfc_status());
-					pstmt.setInt(22, sensorDataRequestVO.getAlarms().getFlash_status());
-					pstmt.setInt(23, sensorDataRequestVO.getAlarms().getNfc_memory_status());
-					pstmt.setInt(24, sensorDataRequestVO.getAlarms().getFlash_memory_status());
-					pstmt.setInt(25, sensorDataRequestVO.getAlarms().getLow_gsm());
-					pstmt.setInt(26, sensorDataRequestVO.getAlarms().getLow_battery());
-					pstmt.setInt(27, sensorDataRequestVO.getAlarms().getSensor_detachment());
-					pstmt.setInt(28, sensorDataRequestVO.getAlarms().getDoor_open_switch());
-					pstmt.setInt(29, sensorDataRequestVO.getAlarms().getMagnetic_tamper());
-					pstmt.setInt(30, sensorDataRequestVO.getTimestamp());
+					pstmt.setInt(6, sensorDataRequestVO.getReadings().get(0));
+					pstmt.setInt(7, sensorDataRequestVO.getReadings().get(1));
+					pstmt.setInt(8, sensorDataRequestVO.getReadings().get(2));
+					pstmt.setInt(9, sensorDataRequestVO.getReadings().get(3));
+					pstmt.setInt(10, sensorDataRequestVO.getReader_sensor_status().get(0));
+					pstmt.setInt(11, sensorDataRequestVO.getReader_sensor_status().get(1));
+					pstmt.setInt(12, sensorDataRequestVO.getReader_sensor_status().get(2));
+					pstmt.setInt(13, sensorDataRequestVO.getReader_sensor_status().get(3));
+					pstmt.setFloat(14, sensorDataRequestVO.getPer_day_flow_rate().get(0));
+					pstmt.setFloat(15, sensorDataRequestVO.getPer_day_flow_rate().get(1));
+					pstmt.setFloat(16, sensorDataRequestVO.getPer_day_flow_rate().get(2));
+					pstmt.setFloat(17, sensorDataRequestVO.getPer_day_flow_rate().get(3));
+					pstmt.setFloat(18, sensorDataRequestVO.getLive_flow_rate().get(0));
+					pstmt.setFloat(19, sensorDataRequestVO.getLive_flow_rate().get(1));
+					pstmt.setFloat(20, sensorDataRequestVO.getLive_flow_rate().get(2));
+					pstmt.setFloat(21, sensorDataRequestVO.getLive_flow_rate().get(3));
+					pstmt.setInt(22, sensorDataRequestVO.getRecord_interval());
+					pstmt.setInt(23, sensorDataRequestVO.getSync_interval());
+					pstmt.setInt(24, sensorDataRequestVO.getRssi());
+					pstmt.setInt(25, sensorDataRequestVO.getDigital_outputs().get(0));
+					pstmt.setInt(26, sensorDataRequestVO.getDigital_outputs().get(1));
+					pstmt.setInt(27, sensorDataRequestVO.getDigital_outputs().get(2));
+					pstmt.setInt(28, sensorDataRequestVO.getDigital_outputs().get(3));
+					pstmt.setFloat(29, sensorDataRequestVO.getAnalog_inputs().get(0));
+					pstmt.setFloat(30, sensorDataRequestVO.getAnalog_inputs().get(1));
+					pstmt.setFloat(31, sensorDataRequestVO.getAnalog_inputs().get(2));
+					pstmt.setFloat(32, sensorDataRequestVO.getAnalog_inputs().get(3));
+					pstmt.setFloat(33, sensorDataRequestVO.getAnalog_outputs().get(0));
+					pstmt.setFloat(34, sensorDataRequestVO.getAnalog_outputs().get(1));
+					pstmt.setFloat(35, sensorDataRequestVO.getAnalog_outputs().get(2));
+					pstmt.setFloat(36, sensorDataRequestVO.getAnalog_outputs().get(3));
+					pstmt.setFloat(37, sensorDataRequestVO.getVoltage_outputs().get(0));
+					pstmt.setFloat(38, sensorDataRequestVO.getVoltage_outputs().get(1));
+					pstmt.setFloat(39, sensorDataRequestVO.getVoltage_outputs().get(2));
+					pstmt.setFloat(40, sensorDataRequestVO.getVoltage_outputs().get(3));
+					pstmt.setInt(41, sensorDataRequestVO.getBattery_percentage());
+					pstmt.setInt(42, sensorDataRequestVO.getOnline_powersupply());
+					pstmt.setInt(43, sensorDataRequestVO.getAlarms().getGsm_status());
+					pstmt.setInt(44, sensorDataRequestVO.getAlarms().getEthernet_status());
+					pstmt.setInt(45, sensorDataRequestVO.getAlarms().getNfc_status());
+					pstmt.setInt(46, sensorDataRequestVO.getAlarms().getFlash_status());
+					pstmt.setInt(47, sensorDataRequestVO.getAlarms().getNfc_memory_status());
+					pstmt.setInt(48, sensorDataRequestVO.getAlarms().getFlash_memory_status());
+					pstmt.setInt(49, sensorDataRequestVO.getAlarms().getLow_gsm());
+					pstmt.setInt(50, sensorDataRequestVO.getAlarms().getLow_battery());
+					pstmt.setInt(51, sensorDataRequestVO.getAlarms().getSensor_detachment());
+					pstmt.setInt(52, sensorDataRequestVO.getAlarms().getDoor_open_switch());
+					pstmt.setInt(53, sensorDataRequestVO.getAlarms().getMagnetic_tamper());
+					
+					DateFormat obj = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+					Date res = new Date(sensorDataRequestVO.getTimestamp());   
+					
+					pstmt.setString(54, obj.format(res));
 
 					if (pstmt.executeUpdate() > 0) {
 						
@@ -1751,7 +1780,7 @@ public class DashboardDAO {
 			con = getConnection();
 			sensorDashboardList = new LinkedList<SensorDashboardResponseVO>();
 			
-			mainquery = "SELECT c.CommunityName, b.BlockName, cd.HouseNumber, cd.FirstName, cd.LastName, cd.CustomerUniqueID, cd.CustomerID FROM customerdetails AS cd LEFT JOIN community AS c ON cd.CommunityID = c.CommunityID LEFT JOIN block AS b ON b.BlockID = cd.BlockID WHERE cd.ActiveStatus = 2";
+			mainquery = "SELECT c.CommunityName, b.BlockName, cd.HouseNumber, cd.FirstName, cd.LastName, cd.CustomerUniqueID, cd.CustomerID, cmd.MIUID FROM customerdetails AS cd LEFT JOIN community AS c ON cd.CommunityID = c.CommunityID LEFT JOIN block AS b ON b.BlockID = cd.BlockID LEFT JOIN customermeterdetails cmd ON cmd.CustomerID = cd.CustomerID WHERE cd.ActiveStatus = 2";
 				
 			pstmt = con.prepareStatement(mainquery);
 			rs = pstmt.executeQuery();
@@ -1765,24 +1794,48 @@ public class DashboardDAO {
 				sensorDashboardResponseVO.setFirstName(rs.getString("FirstName"));
 				sensorDashboardResponseVO.setLastName(rs.getString("LastName"));
 				sensorDashboardResponseVO.setCustomerUniqueID(rs.getString("CustomerUniqueID"));
+				sensorDashboardResponseVO.setEquipment_serial_id(rs.getString("MIUID"));
 				
-				pstmt1 = con.prepareStatement("SELECT * FROM sensorlog WHERE CustomerUniqueID = '"+ sensorDashboardResponseVO.getCustomerUniqueID() + "' AND equiptment_serial_id = '"+sensorDashboardResponseVO.getEquipment_serial_id() +"' ORDER BY LogDate DESC LIMIT 0,1");
+				pstmt1 = con.prepareStatement("SELECT * FROM sensorlog WHERE CustomerUniqueID = '"+ sensorDashboardResponseVO.getCustomerUniqueID() + "' AND equipment_serial_id = '"+sensorDashboardResponseVO.getEquipment_serial_id() +"' ORDER BY LogDate DESC LIMIT 0,1");
 				rs1 = pstmt1.executeQuery();
 				
 				if(rs1.next()) {
 					
-					sensorDashboardResponseVO.setEquipment_serial_id(rs1.getString("equipment_serial_id"));
-					sensorDashboardResponseVO.setReadings(rs1.getString("readings"));
-					sensorDashboardResponseVO.setReader_sensor_status(rs1.getInt("reader_sensor_status") == 0 ? "False" : "True");
-					sensorDashboardResponseVO.setPer_day_flow_rate(rs1.getFloat("per_day_flow_rate"));
-					sensorDashboardResponseVO.setLive_flow_rate(rs1.getFloat("live_flow_rate"));
+					sensorDashboardResponseVO.setReading1(rs1.getInt("reading1"));
+					sensorDashboardResponseVO.setReading2(rs1.getInt("reading2"));
+					sensorDashboardResponseVO.setReading3(rs1.getInt("reading3"));
+					sensorDashboardResponseVO.setReading4(rs1.getInt("reading4"));
+					sensorDashboardResponseVO.setReader_sensor_status1(rs1.getInt("reader_sensor_status1") == 0 ? "False" : "True");
+					sensorDashboardResponseVO.setReader_sensor_status2(rs1.getInt("reader_sensor_status2") == 0 ? "False" : "True");
+					sensorDashboardResponseVO.setReader_sensor_status3(rs1.getInt("reader_sensor_status3") == 0 ? "False" : "True");
+					sensorDashboardResponseVO.setReader_sensor_status4(rs1.getInt("reader_sensor_status4") == 0 ? "False" : "True");
+					sensorDashboardResponseVO.setPer_day_flow_rate1(rs1.getFloat("per_day_flow_rate1"));
+					sensorDashboardResponseVO.setPer_day_flow_rate2(rs1.getFloat("per_day_flow_rate2"));
+					sensorDashboardResponseVO.setPer_day_flow_rate3(rs1.getFloat("per_day_flow_rate3"));
+					sensorDashboardResponseVO.setPer_day_flow_rate4(rs1.getFloat("per_day_flow_rate4"));
+					sensorDashboardResponseVO.setLive_flow_rate1(rs1.getFloat("live_flow_rate1"));
+					sensorDashboardResponseVO.setLive_flow_rate2(rs1.getFloat("live_flow_rate2"));
+					sensorDashboardResponseVO.setLive_flow_rate3(rs1.getFloat("live_flow_rate3"));
+					sensorDashboardResponseVO.setLive_flow_rate4(rs1.getFloat("live_flow_rate4"));
 					sensorDashboardResponseVO.setRecord_interval(rs1.getInt("record_interval"));
 					sensorDashboardResponseVO.setSync_interval(rs1.getInt("sync_interval"));
 					sensorDashboardResponseVO.setRssi(rs1.getInt("rssi"));
-					sensorDashboardResponseVO.setDigital_outputs(rs1.getInt("digital_outputs") == 0 ? "False" : "True");
-					sensorDashboardResponseVO.setAnalog_inputs(rs1.getFloat("analog_inputs"));
-					sensorDashboardResponseVO.setAnalog_outputs(rs1.getFloat("analog_outputs"));
-					sensorDashboardResponseVO.setVoltage_outputs(rs1.getInt("voltage_outputs"));
+					sensorDashboardResponseVO.setDigital_outputs1(rs1.getInt("digital_outputs1") == 0 ? "False" : "True");
+					sensorDashboardResponseVO.setDigital_outputs2(rs1.getInt("digital_outputs2") == 0 ? "False" : "True");
+					sensorDashboardResponseVO.setDigital_outputs3(rs1.getInt("digital_outputs3") == 0 ? "False" : "True");
+					sensorDashboardResponseVO.setDigital_outputs4(rs1.getInt("digital_outputs4") == 0 ? "False" : "True");
+					sensorDashboardResponseVO.setAnalog_inputs1(rs1.getFloat("analog_inputs1"));
+					sensorDashboardResponseVO.setAnalog_inputs2(rs1.getFloat("analog_inputs2"));
+					sensorDashboardResponseVO.setAnalog_inputs3(rs1.getFloat("analog_inputs3"));
+					sensorDashboardResponseVO.setAnalog_inputs4(rs1.getFloat("analog_inputs4"));
+					sensorDashboardResponseVO.setAnalog_outputs1(rs1.getFloat("analog_outputs1"));
+					sensorDashboardResponseVO.setAnalog_outputs2(rs1.getFloat("analog_outputs2"));
+					sensorDashboardResponseVO.setAnalog_outputs3(rs1.getFloat("analog_outputs3"));
+					sensorDashboardResponseVO.setAnalog_outputs4(rs1.getFloat("analog_outputs4"));
+					sensorDashboardResponseVO.setVoltage_outputs1(rs1.getInt("voltage_outputs1"));
+					sensorDashboardResponseVO.setVoltage_outputs2(rs1.getInt("voltage_outputs2"));
+					sensorDashboardResponseVO.setVoltage_outputs3(rs1.getInt("voltage_outputs3"));
+					sensorDashboardResponseVO.setVoltage_outputs4(rs1.getInt("voltage_outputs4"));
 					sensorDashboardResponseVO.setBattery_percentage(rs1.getInt("battery_percentage"));
 					sensorDashboardResponseVO.setOnline_powersupply(rs1.getInt("online_powersupply") == 0 ? "False" : "True");
 					sensorDashboardResponseVO.setGsm_status(rs1.getInt("gsm_status") == 0 ? "False" : "True");
