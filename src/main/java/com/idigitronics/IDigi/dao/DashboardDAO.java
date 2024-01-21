@@ -1801,6 +1801,7 @@ public class DashboardDAO {
 				
 				if(rs1.next()) {
 					
+					sensorDashboardResponseVO.setReadingID(rs1.getInt("ReadingID"));
 					sensorDashboardResponseVO.setReading1(rs1.getInt("reading1"));
 					sensorDashboardResponseVO.setReading2(rs1.getInt("reading2"));
 					sensorDashboardResponseVO.setReading3(rs1.getInt("reading3"));

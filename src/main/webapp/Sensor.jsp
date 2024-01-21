@@ -66,17 +66,24 @@
 									<th>Block Name</th>
 									<th>House No</th>
 									<th>Sensor ID</th>
+									<th>Reading1</th>
+									<th>Reading2</th>
+									<th>Reading3</th>
+									<th>Reading4</th>
+									<th>record_interval</th>
+									<th>sync_interval</th>
+									<th>rssi</th>
 									<th>Battery (%)</th>
-									<th>Tamper</th>
+									<th>online_powersupply</th>
 									<th>Last Communication Date</th>
-									<th>Difference</th>
+									<th>LogDate</th>
 								</tr>
 							</thead>
 							<tbody>
 							</tbody>
 						</table>
 						
-						<table id="sensorTable1"
+						<!-- <table id="sensorTable1"
 							class="table table-striped table-bordered dt-responsive nowrap dataTable no-footer dtr-inline collapsed"
 							style="width: 100%">
 							<thead>
@@ -84,16 +91,23 @@
 									<th>Community Name</th>
 									<th>Block Name</th>
 									<th>House No</th>
-									<th>AMR ID</th>
+									<th>Sensor ID</th>
+									<th>Reading1</th>
+									<th>Reading2</th>
+									<th>Reading3</th>
+									<th>Reading4</th>
+									<th>record_interval</th>
+									<th>sync_interval</th>
+									<th>rssi</th>
 									<th>Battery (%)</th>
-									<th>Tamper</th>
+									<th>online_powersupply</th>
 									<th>Last Communication Date</th>
-									<th>Difference</th>
+									<th>LogDate</th>
 								</tr>
 							</thead>
 							<tbody>
 							</tbody>
-						</table>
+						</table> -->
 						
 					</div>
 				</div>

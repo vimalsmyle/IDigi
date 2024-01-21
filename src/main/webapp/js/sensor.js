@@ -51,15 +51,51 @@
 												 '</div>';
 											}
 											},{
-										"data" : "meterID"
+										"data" : "equipment_serial_id"
 										},{
-										"data" : "batteryVoltage"
+										"data" : "reading1"
 										},{
-										"data" : "tamper"
+										"data" : "reading2"
 										},{
-										"data" : "dateTime"
+										"data" : "reading3"
 										},{
-										"data" : "difference"
+										"data" : "reading4"
+										},{
+										"data" : "record_interval"
+										},{
+										"data" : "sync_interval"
+										},{
+										"data" : "rssi"
+										},{
+										"data" : "battery_percentage"
+										},{
+										"data" : "online_powersupply"
+										},{
+										"data" : "gsm_status"
+										},{
+										"data" : "ethernet_status"
+										},{
+										"data" : "nfc_status"
+										},{
+										"data" : "flash_status"
+										},{
+										"data" : "nfc_memory_status"
+										},{
+										"data" : "flash_memory_status"
+										},{
+										"data" : "low_gsm"
+										},{
+										"data" : "low_battery"
+										},{
+										"data" : "sensor_detachment"
+										},{
+										"data" : "door_open_switch"
+										},{
+										"data" : "magnetic_tamper"
+										},{
+										"data" : "timestamp"
+										},{
+										"data" : "LogDate"
 										}
 										],
 										"columnDefs" : [ {
