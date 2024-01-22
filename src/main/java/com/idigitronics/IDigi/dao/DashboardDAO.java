@@ -1855,7 +1855,7 @@ public class DashboardDAO {
 					
 				}
 				sensorDashboardList.add(sensorDashboardResponseVO);
-				sensorDashboardList.removeIf(e -> e.getEquipment_serial_id()==null);
+				sensorDashboardList.removeIf(e -> e.getReadingID()==0);
 				
 			}
 		}
