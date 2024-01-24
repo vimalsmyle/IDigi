@@ -55,6 +55,9 @@
                 
                 <%if(user_id.equalsIgnoreCase("1")){ %>
                  <a href="configuration.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><img src=common/images/icons/GAS1.png /> <span class="textData">Meter Commands</span></a>
+               
+                <a href="Sensor.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><img src=common/images/icons/tariff.png /><span class="textData">Sensor</span></a> 
+				
                <!--   <a href="#" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-clock-o"></i> <span class="textData">Meter Commands</span></a>
                 
  -->                 <%}%>
