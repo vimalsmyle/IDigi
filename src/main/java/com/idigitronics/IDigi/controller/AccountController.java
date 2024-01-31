@@ -385,5 +385,18 @@ public class AccountController {
 		
 		return responsevo;
 	}
+	
+	@RequestMapping(value = "/manualsensorbillgeneration", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody ResponseVO manualSensorBillGeneration() throws ClassNotFoundException, SQLException {
+
+		ResponseVO responsevo = new ResponseVO();
+		ExtraMethodsDAO extramethods = new ExtraMethodsDAO();
+		extramethods.sensordatabillgeneration();
+		
+		responsevo.setResult("Success");
+		responsevo.setMessage("Bills Will be Generated. Leave the Application for around 2 hours with Mail, SMS and other servers running.");
+		
+		return responsevo;
+	}
 
 }

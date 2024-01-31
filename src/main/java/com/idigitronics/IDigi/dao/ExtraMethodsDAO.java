@@ -351,7 +351,7 @@ public class ExtraMethodsDAO {
 							pstmt3.setInt(11, rs.getInt("TariffID"));
 							pstmt3.setFloat(12, rs.getFloat("Tariff"));
 							pstmt3.setFloat(13, billAmount);
-							pstmt3.setInt(14, currentdate.getMonthValue() - 1);
+							pstmt3.setInt(14, ((currentdate.getMonthValue() - 1) == 0 ? 12 : (currentdate.getMonthValue() - 1)));
 							pstmt3.setInt(15, currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear());
 							
 							if(pstmt3.executeUpdate() > 0) {
@@ -791,7 +791,7 @@ public class ExtraMethodsDAO {
 			LocalDate currentdate = LocalDate.now();
 			
 			String billMonthYear = ((currentdate.getMonthValue() == 1) ? "December" : (currentdate.getMonthValue() == 2) ? "January" : (currentdate.getMonthValue() == 3) ? "February" : (currentdate.getMonthValue() == 4) ? "March" : (currentdate.getMonthValue() == 5) ? "April" : (currentdate.getMonthValue() == 6) ? "May" : (currentdate.getMonthValue() == 7) ? "June" : (currentdate.getMonthValue() == 8) ? "July" : (currentdate.getMonthValue() == 9) ? "August" : (currentdate.getMonthValue() == 10) ? "September" : (currentdate.getMonthValue() == 11) ? "October" : (currentdate.getMonthValue() == 12) ? "November" :"" ) + "-" + ((currentdate.getMonthValue() - 1 == 0) ? currentdate.getYear() - 1 : currentdate.getYear());
-			String drivename = "D:/Bills/" + (currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear()+"/"+(currentdate.getMonthValue() - 1));
+			String drivename = "D:/Bills/" + (currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear())+"/"+((currentdate.getMonthValue() - 1) == 0 ? 12 : (currentdate.getMonthValue() - 1));
 			pstmt = con.prepareStatement("SELECT cd.CommunityID, c.CommunityName, cd.BlockID, b.BlockName, cd.CustomerID, cd.CustomerUniqueID, cd.HouseNumber, cd.FirstName, cd.LastName, cd.Email, cd.MobileNumber, al.GST, al.LateFee, al.DueDayCount, al.VendorGSTNumber, al.CustomerGSTNumber FROM customerdetails AS cd LEFT JOIN community AS c ON c.CommunityID = cd.CommunityID LEFT JOIN block AS b ON cd.BlockID = b.BlockID JOIN alertsettings AS al WHERE cd.CustomerID IN (SELECT DISTINCT CustomerID FROM customermeterdetails WHERE PayType= 'Postpaid')");
 			rs = pstmt.executeQuery();
 			while(rs.next()) {
@@ -944,4 +944,595 @@ public class ExtraMethodsDAO {
 		      return new PasswordAuthentication(ExtraConstants.fromEmail, ExtraConstants.fromEmailPassword);
 		    }
 		  }
+
+@Scheduled(cron="30 6 3 * * *") // scheduled for every month 2nd day at 06:30
+//@Scheduled(cron="15 15 * * * *") 
+public void sensordatabillgeneration() throws SQLException {
+	
+	Connection con = null;
+	PreparedStatement pstmt = null;
+	PreparedStatement pstmt1 = null;
+	PreparedStatement pstmt2 = null;
+	PreparedStatement pstmt3 = null;
+	PreparedStatement pstmt4 = null;
+	PreparedStatement pstmt5 = null;
+	PreparedStatement pstmt6 = null;
+	ResultSet rs = null;
+	ResultSet check = null;
+	ResultSet check1 = null;
+	ResultSet rs1 = null;
+	ResultSet rs2 = null;
+	ResultSet rs3 = null;
+	float consumption = 0;
+	float billAmount = 0;
+	
+	try {
+		
+		con = getConnection();
+		LocalDate currentdate = LocalDate.now();
+		
+/*		pstmt4 =con.prepareStatement("SELECT * FROM billingdetails WHERE BillMonth = "+((currentdate.getMonthValue() - 1) == 0 ? 12 : (currentdate.getMonthValue() - 1)) +" AND BillYear = "+(currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear())); 
+		check = pstmt4.executeQuery();
+		
+		if(check.next()) {
+			logger.debug("Individual Bills already generated for current month" + LocalDateTime.now());
+			System.out.println("Individual Bills already generated for current month" + LocalDateTime.now());
+		} else {*/
+			
+		pstmt = con.prepareStatement("SELECT cd.CommunityID, cd.BlockID, cd.CustomerID, cd.CustomerUniqueID, cmd.CustomerMeterID, cmd.MIUID, cmd.MeterType, cmd.TariffID, t.Tariff FROM customerdetails AS cd LEFT JOIN customermeterdetails AS cmd ON cd.CustomerID = cmd.CustomerID LEFT JOIN tariff AS t ON t.TariffID = cmd.TariffID WHERE cd.ActiveStatus = 2 AND cmd.PayType = 'Postpaid'");
+		rs = pstmt.executeQuery();
+		while(rs.next()) {
+			logger.debug("in individualbillgeneration" + LocalDateTime.now());
+			System.out.println("in individualbillgeneration" + LocalDateTime.now());
+			//later on change to customermeterid in place of equipment serial id
+			pstmt1 = con.prepareStatement("SELECT reading1, reading2, reading3, reading4, LogDate FROM sensorlog WHERE equipment_serial_id = ? AND MONTH(LogDate) = MONTH(CURDATE() - INTERVAL 1 MONTH) ORDER BY LogDate DESC LIMIT 0,1");
+			pstmt1.setString(1, rs.getString("MIUID"));
+			rs1 = pstmt1.executeQuery();
+			
+			if(rs1.next()) {
+				
+				//later on change to customermeterid in place of equipment serial id
+				pstmt2 = con.prepareStatement("SELECT reading1, reading2, reading3, reading4, LogDate FROM sensorlog WHERE equipment_serial_id = ? AND MONTH(LogDate) = MONTH(CURDATE() - INTERVAL 2 MONTH) ORDER BY LogDate DESC LIMIT 0,1");
+				pstmt2.setString(1, rs.getString("MIUID"));
+				rs2 = pstmt2.executeQuery();
+				
+				if(rs2.next()) {
+				
+			//		for demo purpose we are assuming only 1st reading
+			//		consumption = (rs1.getFloat("reading1") - rs2.getFloat("reading1")) + (rs1.getFloat("reading2") - rs2.getFloat("reading2")) + (rs1.getFloat("reading3") - rs2.getFloat("reading3")) + (rs1.getFloat("reading4") - rs2.getFloat("reading4"));
+					consumption = rs1.getFloat("reading1") - rs2.getFloat("reading1");
+					billAmount = (consumption * rs.getFloat("Tariff"));
+					
+					pstmt3 = con.prepareStatement("INSERT INTO billingdetails (CommunityID, BlockID, CustomerID, CustomerUniqueID, CustomerMeterID, MeterType, MIUID, PreviousReading, PresentReading, Consumption, TariffID, Tariff, BillAmount, BillMonth, BillYear) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+					pstmt3.setInt(1, rs.getInt("CommunityID"));
+					pstmt3.setInt(2, rs.getInt("BlockID"));
+					pstmt3.setInt(3, rs.getInt("CustomerID"));
+					pstmt3.setString(4, rs.getString("CustomerUniqueID"));
+					pstmt3.setInt(5, rs.getInt("CustomerMeterID"));
+					pstmt3.setString(6, rs.getString("MeterType"));
+					pstmt3.setString(7, rs.getString("MIUID"));
+					//		for demo purpose we are assuming only 1st reading
+					pstmt3.setFloat(8, rs2.getFloat("reading1"));
+//					pstmt3.setString(8, rs2.getFloat("reading1") + "/" + rs2.getFloat("reading2") + "/" + rs2.getFloat("reading3") + "/" + rs2.getFloat("reading4"));
+					//		for demo purpose we are assuming only 1st reading
+					pstmt3.setFloat(9, rs1.getFloat("reading1"));
+					pstmt3.setFloat(10, consumption);
+					pstmt3.setInt(11, rs.getInt("TariffID"));
+					pstmt3.setFloat(12, rs.getFloat("Tariff"));
+					pstmt3.setFloat(13, billAmount);
+					pstmt3.setInt(14, ((currentdate.getMonthValue() - 1) == 0 ? 12 : (currentdate.getMonthValue() - 1)));
+					pstmt3.setInt(15, currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear());
+					
+					if(pstmt3.executeUpdate() > 0) {
+//				perform some actions after discussion
+					}
+					
+				} else {
+					
+					pstmt6 = con.prepareStatement("SELECT reading1, reading2, reading3, reading4, LogDate FROM sensorlog WHERE equipment_serial_id = ? AND MONTH(LogDate) = MONTH(CURDATE() - INTERVAL 1 MONTH) AND LogDate != ? ORDER BY LogDate ASC LIMIT 0,1");
+					pstmt6.setString(1, rs.getString("MIUID"));
+					pstmt6.setString(2, rs1.getString("LogDate"));
+					rs3 = pstmt6.executeQuery();
+					
+					if(rs3.next()) {
+						
+//						for demo purpose we are assuming only 1st reading
+				//		consumption = (rs1.getFloat("reading1") - rs2.getFloat("reading1")) + (rs1.getFloat("reading2") - rs2.getFloat("reading2")) + (rs1.getFloat("reading3") - rs2.getFloat("reading3")) + (rs1.getFloat("reading4") - rs2.getFloat("reading4"));
+						
+						consumption = rs1.getFloat("reading1") - rs3.getFloat("reading1");
+						billAmount = (consumption * rs.getFloat("Tariff"));
+						
+						pstmt3 = con.prepareStatement("INSERT INTO billingdetails (CommunityID, BlockID, CustomerID, CustomerUniqueID, CustomerMeterID, MeterType, MIUID, PreviousReading, PresentReading, Consumption, TariffID, Tariff, BillAmount, BillMonth, BillYear) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+						pstmt3.setInt(1, rs.getInt("CommunityID"));
+						pstmt3.setInt(2, rs.getInt("BlockID"));
+						pstmt3.setInt(3, rs.getInt("CustomerID"));
+						pstmt3.setString(4, rs.getString("CustomerUniqueID"));
+						pstmt3.setInt(5, rs.getInt("CustomerMeterID"));
+						pstmt3.setString(6, rs.getString("MeterType"));
+						pstmt3.setString(7, rs.getString("MIUID"));
+						//		for demo purpose we are assuming only 1st reading
+						pstmt3.setFloat(8, rs3.getFloat("reading1"));
+//						pstmt3.setString(8, rs2.getFloat("reading1") + "/" + rs2.getFloat("reading2") + "/" + rs2.getFloat("reading3") + "/" + rs2.getFloat("reading4"));
+						//		for demo purpose we are assuming only 1st reading
+						pstmt3.setFloat(9, rs1.getFloat("reading1"));
+						pstmt3.setFloat(10, consumption);
+						pstmt3.setInt(11, rs.getInt("TariffID"));
+						pstmt3.setFloat(12, rs.getFloat("Tariff"));
+						pstmt3.setFloat(13, billAmount);
+						pstmt3.setInt(14, ((currentdate.getMonthValue() - 1) == 0 ? 12 : (currentdate.getMonthValue() - 1)));
+						pstmt3.setInt(15, currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear());
+						
+						if(pstmt3.executeUpdate() > 0) {
+//					perform some actions after discussion
+						}
+					}
+					
+				}
+			}
+			
+			}
+		
+		pstmt5 = con.prepareStatement("SELECT * FROM customerbillingdetails WHERE BillMonth = "+((currentdate.getMonthValue() - 1) == 0 ? 12 : (currentdate.getMonthValue() - 1)) +" AND BillYear = "+(currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear()));
+		check1 = pstmt5.executeQuery();
+		
+		if(check1.next()) {
+			logger.debug("Bills already generated for current month" + LocalDateTime.now());
+			System.out.println("Bills already generated for current month" + LocalDateTime.now());
+		} else {
+			sensorbillgeneration();
+		}
+		
+//		}	
+	} catch (Exception e) {
+		e.printStackTrace();
+		
+	} finally {
+//		pstmt4.close();
+//		check.close();
+		con.close();
+	}
+}
+	
+	public void sensorbillgeneration() throws SQLException {
+		
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		PreparedStatement pstmt1 = null;
+		PreparedStatement pstmt2 = null;
+		ResultSet rs = null;
+		ResultSet rs1 = null;
+		ResultSet check = null;
+		boolean billsGenerated = false;
+		
+		try {
+			
+			con = getConnection();
+			LocalDate currentdate = LocalDate.now();
+			
+/*			check = con.prepareStatement("SELECT * FROM customerbillingdetails WHERE BillMonth = "+((currentdate.getMonthValue() - 1) == 0 ? 12 : (currentdate.getMonthValue() - 1)) +" AND BillYear = "+(currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear())).executeQuery();
+			
+			if(check.next()) {
+				billsGenerated = true;
+				logger.debug("Bills already generated for current month" + LocalDateTime.now());
+				System.out.println("Bills already generated for current month" + LocalDateTime.now());
+			} else {*/
+				
+			String billMonthYear = ((currentdate.getMonthValue() == 1) ? "December" : (currentdate.getMonthValue() == 2) ? "January" : (currentdate.getMonthValue() == 3) ? "February" : (currentdate.getMonthValue() == 4) ? "March" : (currentdate.getMonthValue() == 5) ? "April" : (currentdate.getMonthValue() == 6) ? "May" : (currentdate.getMonthValue() == 7) ? "June" : (currentdate.getMonthValue() == 8) ? "July" : (currentdate.getMonthValue() == 9) ? "August" : (currentdate.getMonthValue() == 10) ? "September" : (currentdate.getMonthValue() == 11) ? "October" : (currentdate.getMonthValue() == 12) ? "November" :"" ) + "-" + ((currentdate.getMonthValue() - 1 == 0) ? currentdate.getYear() - 1 : currentdate.getYear());
+			String drivename = "D:/Bills/" + (currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear())+"/"+((currentdate.getMonthValue() - 1) == 0 ? 12 : (currentdate.getMonthValue() - 1));
+			pstmt = con.prepareStatement("SELECT cd.CommunityID, c.CommunityName, cd.BlockID, b.BlockName, cd.CustomerID, cd.CustomerUniqueID, cd.HouseNumber, cd.FirstName, cd.LastName, cd.Email, cd.MobileNumber, al.GST, al.LateFee, al.DueDayCount, al.VendorGSTNumber, al.CustomerGSTNumber, al.Remarks FROM customerdetails AS cd LEFT JOIN community AS c ON c.CommunityID = cd.CommunityID LEFT JOIN block AS b ON cd.BlockID = b.BlockID JOIN alertsettings AS al WHERE cd.ActiveStatus = 2 AND cd.CustomerID IN (SELECT DISTINCT bd.CustomerID FROM customermeterdetails cd LEFT JOIN billingdetails AS bd ON cd.CustomerID = bd.CustomerID WHERE cd.PayType = 'Postpaid' AND bd.BillMonth = "+((currentdate.getMonthValue() - 1) == 0 ? 12 : (currentdate.getMonthValue() - 1))+" AND bd.BillYear = "+(currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear())+")");
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				List<IndividualBillingResponseVO> individualBillsList = new LinkedList<IndividualBillingResponseVO>();
+				logger.debug("in billgeneration" + LocalDateTime.now());
+				System.out.println("in billgeneration" + LocalDateTime.now());
+				float totalamount = 0;
+				float totalConsumption = 0;
+				float previousDues = 0;
+				long invoiceNumber = 0;
+				
+				pstmt1 = con.prepareStatement("SELECT * FROM billingdetails WHERE CustomerID = " + rs.getInt("CustomerID") + " AND BillMonth = "+ ((currentdate.getMonthValue() - 1) == 0 ? 12 : (currentdate.getMonthValue() - 1)) + " AND BillYear = " + (currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear()));
+				rs1 = pstmt1.executeQuery();
+				while (rs1.next()) {
+					IndividualBillingResponseVO individualBillingResponseVO = new IndividualBillingResponseVO();
+					totalamount = rs1.getFloat("BillAmount") + totalamount;
+					totalConsumption = rs1.getFloat("Consumption") + totalConsumption;
+					individualBillingResponseVO.setBillingID(rs1.getLong("BillingID"));
+					individualBillingResponseVO.setCustomerMeterID(rs1.getLong("CustomerMeterID"));
+					individualBillingResponseVO.setMeterType(rs1.getString("MeterType"));
+					individualBillingResponseVO.setMiuID(rs1.getString("MIUID"));
+					individualBillingResponseVO.setPreviousReading(rs1.getFloat("PreviousReading"));
+					individualBillingResponseVO.setPresentReading(rs1.getFloat("PresentReading"));
+					individualBillingResponseVO.setConsumption(rs1.getInt("Consumption"));
+					individualBillingResponseVO.setTariff(rs1.getFloat("Tariff"));
+					individualBillingResponseVO.setBillAmount(rs1.getInt("BillAmount"));
+					
+					individualBillsList.add(individualBillingResponseVO);
+				}
+				
+				pstmt2 = con.prepareStatement("INSERT INTO customerbillingdetails (CommunityID, BlockID, CustomerID, CustomerUniqueID, TotalAmount, TaxAmount, TotalConsumption, PreviousDues, DueDate, BillMonth, BillYear, ModifiedDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
+				pstmt2.setInt(1, rs.getInt("CommunityID"));
+				pstmt2.setInt(2, rs.getInt("BlockID"));
+				pstmt2.setInt(3, rs.getInt("CustomerID"));
+				pstmt2.setString(4, rs.getString("CustomerUniqueID"));
+				pstmt2.setFloat(5, totalamount);
+				float tax = ((((rs.getFloat("GST")) * (2))/100) * totalamount);
+				pstmt2.setFloat(6, (tax));
+				pstmt2.setFloat(7, totalConsumption);
+				
+				PreparedStatement pstmt3 = con.prepareStatement("SELECT SUM(cbd.TotalAmount) AS PreviousDues, SUM(cbd.TaxAmount) AS PreviousTaxDues FROM customerbillingdetails AS cbd LEFT JOIN billingpaymentdetails AS bpd ON bpd.CustomerBillingID = cbd.CustomerBillingID WHERE cbd.CustomerID = "+ rs.getInt("CustomerID") +" AND bpd.PaymentStatus != 1");
+				ResultSet rs3 = pstmt3.executeQuery();
+				
+				if(rs3.next()) {
+					previousDues = rs3.getFloat("PreviousDues") + rs3.getFloat("PreviousTaxDues");
+					pstmt2.setFloat(8, previousDues);
+				} else {
+					pstmt2.setFloat(8, 0);					
+				}
+				pstmt2.setString(9, currentdate.plusDays(rs.getInt("DueDayCount")).toString());
+				pstmt2.setInt(10, ((currentdate.getMonthValue() - 1) == 0 ? 12 : (currentdate.getMonthValue() - 1)));
+				pstmt2.setInt(11, currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear());
+				
+				if(pstmt2.executeUpdate() > 0) {
+					
+					File directory = new File(drivename);
+					if (!directory.exists()) {
+						directory.mkdirs();
+					}
+
+					PdfWriter writer = new PdfWriter(drivename + "/" +rs.getString("CustomerUniqueID") + ".pdf");
+					PdfDocument pdfDocument = new PdfDocument(writer);
+					pdfDocument.addNewPage();
+					Document document = new Document(pdfDocument);
+					Paragraph newLine = new Paragraph("\n");
+					Paragraph head = new Paragraph("Invoice");
+					Paragraph disclaimer = new Paragraph(ExtraConstants.Disclaimer);
+					Paragraph remarks = new Paragraph("Remarks: "+rs.getString("Remarks"));
+					Paragraph copyRight = new Paragraph("----------------------------------All  rights reserved by IDigitronics � Hyderabad---------------------------------");
+					PdfFont font = new PdfFontFactory().createFont(FontConstants.TIMES_BOLD);
+
+					// change according to the image directory
+
+					URL idigiurl = new URL(ExtraConstants.IDIGIIMAGEURL);
+					URL clienturl = new URL(ExtraConstants.CLIENTIMAGEURL);
+					Image idigi = new Image(ImageDataFactory.create(idigiurl));
+					Image client = new Image(ImageDataFactory.create(clienturl));
+					
+					idigi.scale(0.5f, 0.5f);
+					client.scale(0.95f, 0.95f);
+
+					float[] headingWidths = { 200F, 130F, 200F };
+
+					Table headTable = new Table(headingWidths);
+
+					Cell headtable1 = new Cell();
+					headtable1.add(idigi);
+					headtable1.setTextAlignment(TextAlignment.LEFT);
+
+					Cell headtable2 = new Cell();
+					headtable2.add(head.setFontSize(20));
+					headtable2.setTextAlignment(TextAlignment.CENTER).setVerticalAlignment(VerticalAlignment.MIDDLE)
+							.setBold().setUnderline().setFont(font);
+
+					Cell headtable3 = new Cell();
+					headtable3.add(client);
+					headtable3.setTextAlignment(TextAlignment.RIGHT);
+
+					headTable.addCell(headtable1.setBorder(Border.NO_BORDER));
+					headTable.addCell(headtable2.setBorder(Border.NO_BORDER));
+//					headTable.addCell(headtable3.setBorder(Border.NO_BORDER));
+
+					document.add(headTable);
+
+					float[] headerWidths = { 180F, 200F, 210F };
+
+					Table table1 = new Table(headerWidths);
+
+					Cell table1cell1 = new Cell();
+					table1cell1.add("Name: " +rs.getString("FirstName") + " " + rs.getString("LastName"));
+					table1cell1.setTextAlignment(TextAlignment.LEFT);
+
+					Cell table1cell2 = new Cell();
+					table1cell2.add("CAN: " + rs.getString("CustomerUniqueID"));
+					table1cell2.setTextAlignment(TextAlignment.LEFT);
+					
+					Cell table1cell3 = new Cell();
+					table1cell3.add("Address: " + rs.getString("HouseNumber")+", " + rs.getString("BlockName") + ", " + rs.getString("CommunityName"));
+					table1cell3.setTextAlignment(TextAlignment.LEFT);
+
+					table1.addCell(table1cell1.setBorder(Border.NO_BORDER));
+					table1.addCell(table1cell2.setBorder(Border.NO_BORDER));
+					table1.addCell(table1cell3.setBorder(Border.NO_BORDER));
+					table1.startNewRow();
+					
+					Cell table1cell4 = new Cell();
+					table1cell4.add("Billing Date: " + ExtraMethodsDAO.dateformatter(currentdate.toString()));
+					table1cell4.setTextAlignment(TextAlignment.LEFT);
+					
+					Cell table1cell5 = new Cell();
+					table1cell5.add("Bill Month-Year: " + billMonthYear);
+					table1cell5.setTextAlignment(TextAlignment.LEFT);
+					
+					Cell table1cell6 = new Cell();
+					table1cell6.add("Due Date: " + ExtraMethodsDAO.dateformatter(currentdate.plusDays(rs.getInt("DueDayCount")).toString()));
+					table1cell6.setTextAlignment(TextAlignment.LEFT);
+					
+					table1.addCell(table1cell4.setBorder(Border.NO_BORDER));
+					table1.addCell(table1cell5.setBorder(Border.NO_BORDER));
+					table1.addCell(table1cell6.setBorder(Border.NO_BORDER));
+					
+					PreparedStatement ps = con.prepareStatement("SELECT MAX(CustomerBillingID) AS InvoiceNumber FROM customerbillingdetails");
+					ResultSet rs2 = ps.executeQuery();
+					
+					if(rs2.next()) {
+						invoiceNumber = rs2.getLong("InvoiceNumber");
+					}
+					
+					Cell table1cell7 = new Cell();
+					table1cell7.add("Invoice No. : " + rs.getString("CommunityName")+"/"+invoiceNumber);
+					table1cell7.setTextAlignment(TextAlignment.LEFT);
+					
+					Cell table1cell8 = new Cell();
+					table1cell8.add("Vendor GSTN: " + rs.getString("VendorGSTNumber"));
+					table1cell8.setTextAlignment(TextAlignment.LEFT);
+					
+					Cell table1cell9 = new Cell();
+					table1cell9.add("Customer GSTN: " + rs.getString("CustomerGSTNumber"));
+					table1cell9.setTextAlignment(TextAlignment.LEFT);
+					
+					table1.addCell(table1cell7.setBorder(Border.NO_BORDER));
+					table1.addCell(table1cell8.setBorder(Border.NO_BORDER));
+					table1.addCell(table1cell9.setBorder(Border.NO_BORDER));
+
+					document.add(table1.setHorizontalAlignment(HorizontalAlignment.CENTER));
+					document.add(newLine);
+
+					float[] columnWidths = { 35F, 100F, 40F, 100F, 100F, 90F, 60F };
+					
+					Table datatablehead = new Table(columnWidths);
+					
+					Cell datatablecell = new Cell();
+					datatablecell.add("S.No");
+					datatablecell.setTextAlignment(TextAlignment.CENTER);
+					
+					Cell datatablecell1 = new Cell();
+					datatablecell1.add("MIUID");
+					datatablecell1.setTextAlignment(TextAlignment.CENTER);
+					
+					Cell datatablecell2 = new Cell();
+					datatablecell2.add("Tariff");
+					datatablecell2.setTextAlignment(TextAlignment.CENTER);
+					
+					Cell datatablecell3 = new Cell();
+					datatablecell3.add("PreviousReading");
+					datatablecell3.setTextAlignment(TextAlignment.CENTER);
+					
+					Cell datatablecell4 = new Cell();
+					datatablecell4.add("PresentReading");
+					datatablecell4.setTextAlignment(TextAlignment.CENTER);
+					
+					Cell datatablecell5 = new Cell();
+					datatablecell5.add("Consumption");
+					datatablecell5.setTextAlignment(TextAlignment.CENTER);
+					
+					Cell datatablecell6 = new Cell();
+					datatablecell6.add("Amount");
+					datatablecell6.setTextAlignment(TextAlignment.CENTER);
+					
+					datatablehead.addCell(datatablecell);
+					datatablehead.addCell(datatablecell1);
+					datatablehead.addCell(datatablecell2);
+					datatablehead.addCell(datatablecell3);
+					datatablehead.addCell(datatablecell4);
+					datatablehead.addCell(datatablecell5);
+					datatablehead.addCell(datatablecell6);
+
+					Table datatable = new Table(columnWidths);
+					
+					for(int i = 0; i<individualBillsList.size(); i++) {
+						
+						Cell datacell = new Cell();
+						datacell.add(""+(i+1));
+						datacell.setTextAlignment(TextAlignment.CENTER);
+						datatablehead.addCell(datacell);
+						
+						Cell datacell1 = new Cell();
+						datacell1.add("" + individualBillsList.get(i).getMiuID());
+						datacell1.setTextAlignment(TextAlignment.CENTER);
+						datatablehead.addCell(datacell1);
+						
+						Cell datacell2 = new Cell();
+						datacell2.add("" +individualBillsList.get(i).getTariff());
+						datacell2.setTextAlignment(TextAlignment.CENTER);
+						datatablehead.addCell(datacell2);
+						
+						Cell datacell3 = new Cell();
+						datacell3.add("" +individualBillsList.get(i).getPreviousReading());
+						datacell3.setTextAlignment(TextAlignment.CENTER);
+						datatablehead.addCell(datacell3);
+						
+						Cell datacell4 = new Cell();
+						datacell4.add("" +individualBillsList.get(i).getPresentReading());
+						datacell4.setTextAlignment(TextAlignment.CENTER);
+						datatablehead.addCell(datacell4);
+						
+						Cell datacell5 = new Cell();
+						datacell5.add("" +individualBillsList.get(i).getConsumption());
+						datacell5.setTextAlignment(TextAlignment.CENTER);
+						datatablehead.addCell(datacell5);
+						
+						Cell datacell6 = new Cell();
+						datacell6.add("" +individualBillsList.get(i).getBillAmount());
+						datacell6.setTextAlignment(TextAlignment.CENTER);
+						datatablehead.addCell(datacell6);
+						
+						datatablehead.startNewRow();
+					}
+					
+					document.add(datatablehead.setHorizontalAlignment(HorizontalAlignment.CENTER));
+					
+					Cell billAmountCell = new Cell();
+					billAmountCell.add("Bill Amount : ");
+					billAmountCell.setTextAlignment(TextAlignment.RIGHT);
+
+					Cell totalAmount = new Cell();
+					totalAmount.add(""+totalamount);
+					totalAmount.setTextAlignment(TextAlignment.CENTER);
+					
+					Cell CGSTCell = new Cell();
+					CGSTCell.add("CGST ("+rs.getFloat("GST")+ " %) : ");
+					CGSTCell.setTextAlignment(TextAlignment.RIGHT);
+
+					Cell CGSTAmount = new Cell();
+					CGSTAmount.add(""+(tax/2));
+					CGSTAmount.setTextAlignment(TextAlignment.CENTER);
+
+					Cell SGSTCell = new Cell();
+					SGSTCell.add("SGST ("+rs.getFloat("GST")+ " %) : ");
+					SGSTCell.setTextAlignment(TextAlignment.RIGHT);
+					
+					Cell SGSTAmount = new Cell();
+					SGSTAmount.add(""+(tax/2));
+					SGSTAmount.setTextAlignment(TextAlignment.CENTER);
+					
+					Cell previousDuescell = new Cell();
+					previousDuescell.add("Previous Dues: ");
+					previousDuescell.setTextAlignment(TextAlignment.RIGHT);
+					
+					Cell previuosDuesAmount = new Cell();
+					previuosDuesAmount.add("" + previousDues);
+					previuosDuesAmount.setTextAlignment(TextAlignment.CENTER);
+					
+					Cell totalBillAmountCell = new Cell();
+					totalBillAmountCell.add("Total Amount : ");
+					totalBillAmountCell.setTextAlignment(TextAlignment.RIGHT);
+
+					Cell totalBillAmount = new Cell();
+					totalBillAmount.add(""+(totalamount + tax + previousDues));
+					totalBillAmount.setTextAlignment(TextAlignment.CENTER);
+					
+					Cell empytcell = new Cell();
+					empytcell.add("");
+					
+					datatable.addCell(empytcell);
+					datatable.addCell(empytcell);
+					datatable.addCell(empytcell);
+					datatable.addCell(empytcell);
+					datatable.addCell(empytcell);
+					datatable.addCell(billAmountCell);
+					datatable.addCell(totalAmount);
+					
+					datatable.addCell(empytcell);
+					datatable.addCell(empytcell);
+					datatable.addCell(empytcell);
+					datatable.addCell(empytcell);
+					datatable.addCell(empytcell);
+					datatable.addCell(CGSTCell);
+					datatable.addCell(CGSTAmount);
+					
+					datatable.addCell(empytcell);
+					datatable.addCell(empytcell);
+					datatable.addCell(empytcell);
+					datatable.addCell(empytcell);
+					datatable.addCell(empytcell);
+					datatable.addCell(SGSTCell);
+					datatable.addCell(SGSTAmount);
+					
+					datatable.addCell(empytcell);
+					datatable.addCell(empytcell);
+					datatable.addCell(empytcell);
+					datatable.addCell(empytcell);
+					datatable.addCell(empytcell);
+					datatable.addCell(previousDuescell);
+					datatable.addCell(previuosDuesAmount);
+					
+					datatable.addCell(empytcell);
+					datatable.addCell(empytcell);
+					datatable.addCell(empytcell);
+					datatable.addCell(empytcell);
+					datatable.addCell(empytcell.setBorder(Border.NO_BORDER));
+					datatable.addCell(totalBillAmountCell);
+					datatable.addCell(totalBillAmount);
+					
+					document.add(datatable.setHorizontalAlignment(HorizontalAlignment.CENTER));
+					document.add(newLine);
+					document.add(remarks.setHorizontalAlignment(HorizontalAlignment.CENTER).setFont(font));
+					document.add(disclaimer.setHorizontalAlignment(HorizontalAlignment.CENTER).setFont(font));
+					document.add(newLine);
+
+					document.add(copyRight.setHorizontalAlignment(HorizontalAlignment.CENTER).setFont(font));
+					document.close();
+					
+				}
+				
+			}
+			
+//			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+		} finally {
+//			pstmt.close();
+//			check.close();
+			con.close();
+			if(!billsGenerated) {sensorBillSmsAndMail();}
+		}
+		
+	}
+
+	
+	public void sensorBillSmsAndMail() throws SQLException {
+		
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		ResultSet rs1 = null;
+		SMSRequestVO smsRequestVO = null;
+		MailRequestVO mailRequestVO = null;
+		
+		try {
+			
+			con = getConnection();
+			LocalDate currentdate = LocalDate.now();
+			
+			String billMonthYear = ((currentdate.getMonthValue() == 1) ? "December" : (currentdate.getMonthValue() == 2) ? "January" : (currentdate.getMonthValue() == 3) ? "February" : (currentdate.getMonthValue() == 4) ? "March" : (currentdate.getMonthValue() == 5) ? "April" : (currentdate.getMonthValue() == 6) ? "May" : (currentdate.getMonthValue() == 7) ? "June" : (currentdate.getMonthValue() == 8) ? "July" : (currentdate.getMonthValue() == 9) ? "August" : (currentdate.getMonthValue() == 10) ? "September" : (currentdate.getMonthValue() == 11) ? "October" : (currentdate.getMonthValue() == 12) ? "November" :"" ) + "-" + ((currentdate.getMonthValue() - 1 == 0) ? currentdate.getYear() - 1 : currentdate.getYear());
+			String drivename = "D:/Bills/" + (currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear())+"/"+((currentdate.getMonthValue() - 1) == 0 ? 12 : (currentdate.getMonthValue() - 1));
+			pstmt = con.prepareStatement("SELECT cd.CommunityID, c.CommunityName, cd.BlockID, b.BlockName, cd.CustomerID, cd.CustomerUniqueID, cd.HouseNumber, cd.FirstName, cd.LastName, cd.Email, cd.MobileNumber, al.GST, al.LateFee, al.DueDayCount, al.VendorGSTNumber, al.CustomerGSTNumber FROM customerdetails AS cd LEFT JOIN community AS c ON c.CommunityID = cd.CommunityID LEFT JOIN block AS b ON cd.BlockID = b.BlockID JOIN alertsettings AS al WHERE cd.ActiveStatus = 2 AND cd.CustomerID IN (SELECT DISTINCT CustomerID FROM customermeterdetails WHERE PayType= 'Postpaid')");
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				
+				rs1 = con.prepareStatement("SELECT * FROM customerbillingdetails WHERE CustomerID = "+rs.getLong("CustomerID")+ " And BillMonth = "+((currentdate.getMonthValue() - 1) == 0 ? 12 : (currentdate.getMonthValue() - 1)) +" AND BillYear = "+(currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear())).executeQuery();
+				
+				if(rs1.next()) {
+					logger.debug("Sending Bill message and email for the current month for Customer: "+rs.getLong("CustomerID") +"-"+ rs.getString("FirstName") + " " + rs.getString("LastName") + " at " + LocalDateTime.now());
+					System.out.println("Sending Bill message and email for the current month for Customer: "+rs.getLong("CustomerID") +"-"+ rs.getString("FirstName") + " " + rs.getString("LastName") + " at " + LocalDateTime.now());
+				
+				smsRequestVO = new SMSRequestVO();
+				mailRequestVO = new MailRequestVO();
+				
+				String message = "Dear "+ rs.getString("FirstName") + " " + rs.getString("LastName") + ", \n \n Your Bill of Amount " + (rs1.getFloat("TotalAmount") + rs1.getFloat("TaxAmount") + rs1.getFloat("PreviousDues")) + "/- for the consumption of " + billMonthYear +" has been generated. Kindly pay the bill before " + currentdate.plusDays(rs.getInt("DueDayCount")).toString() + " to avoid late fee charges. Thank You";
+				smsRequestVO.setMessage(message);
+				smsRequestVO.setToMobileNumber(rs.getString("MobileNumber"));
+				
+				mailRequestVO.setSubject("Consumption Bill for " + billMonthYear);
+				mailRequestVO.setToEmail(rs.getString("Email"));
+				mailRequestVO.setFileLocation(drivename+ "/" +rs.getString("CustomerUniqueID") + ".pdf");
+				mailRequestVO.setMessage(message);
+				
+				sendsms(smsRequestVO);				
+				sendmail(mailRequestVO);
+			}
+			
+		}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+		} finally {
+			pstmt.close();
+			rs1.close();
+			con.close();
+		}
+		
+	}
 }
