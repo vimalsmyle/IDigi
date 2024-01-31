@@ -220,7 +220,7 @@ public class DropDownDAO {
 		
 		try {
 			con = getConnection();
-			pstmt = con.prepareStatement("SELECT CustomerBillingID, TotalAmount, TotalConsumption, TaxAmount, PreviousDues, DueDate, DATEDIFF(NOW(),DueDate) AS DueDays, BillMonth, BillYear, LogDate, LateFee, DueDayCount FROM customerbillingdetails JOIN alertsettings WHERE CustomerUniqueID = '" + customerUniqueID + "' AND BillMonth = "+ (currentdate.getMonthValue() - 1) + " AND BillYear = " + (currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear()));
+			pstmt = con.prepareStatement("SELECT CustomerBillingID, TotalAmount, TotalConsumption, TaxAmount, PreviousDues, DueDate, DATEDIFF(NOW(),DueDate) AS DueDays, BillMonth, BillYear, LogDate, LateFee, DueDayCount FROM customerbillingdetails JOIN alertsettings WHERE CustomerUniqueID = '" + customerUniqueID + "' AND BillMonth = "+ ((currentdate.getMonthValue() - 1) == 0 ? 12 : (currentdate.getMonthValue() - 1)) + " AND BillYear = " + (currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear()));
 			rs = pstmt.executeQuery();
 			if (rs.next()) {
 				billDetailsResponseVO.setCustomerBillingID(rs.getLong("CustomerBillingID"));
