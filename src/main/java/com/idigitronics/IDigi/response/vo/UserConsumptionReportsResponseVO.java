@@ -14,6 +14,8 @@ public class UserConsumptionReportsResponseVO {
 	private String customerUniqueID;
 	private String miuID;
 	private float reading;
+	private float reading1;
+	private float reading2;
 	private int consumption;
 	private float balance;
 	private float battery;
@@ -97,7 +99,17 @@ public class UserConsumptionReportsResponseVO {
 	public void setSizeMeter(String sizeMeter) {
 		this.sizeMeter = sizeMeter;
 	}
-	
-	
+	public float getReading1() {
+		return reading1;
+	}
+	public void setReading1(float reading1) {
+		this.reading1 = reading1;
+	}
+	public float getReading2() {
+		return reading2;
+	}
+	public void setReading2(float reading2) {
+		this.reading2 = reading2;
+	}
 	
 }

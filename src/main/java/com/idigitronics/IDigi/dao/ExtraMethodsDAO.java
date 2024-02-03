@@ -16,6 +16,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.LinkedList;
 import java.util.List;
@@ -250,7 +251,7 @@ public class ExtraMethodsDAO {
 	return responses.toString();
 }
 	
-	@Scheduled(cron="30 6 2 * * *") // scheduled for every month 2nd day at 06:30
+//	@Scheduled(cron="30 6 2 * * *") // scheduled for every month 2nd day at 06:30
 //	@Scheduled(cron="15 15 * * * *") 
 	public void individualbillgeneration() throws SQLException {
 		
@@ -945,7 +946,7 @@ public class ExtraMethodsDAO {
 		    }
 		  }
 
-@Scheduled(cron="30 6 3 * * *") // scheduled for every month 2nd day at 06:30
+//@Scheduled(cron="30 6 3 * * *") // scheduled for every month 3rd day at 06:30
 //@Scheduled(cron="15 15 * * * *") 
 public void sensordatabillgeneration() throws SQLException {
 	
@@ -991,40 +992,53 @@ public void sensordatabillgeneration() throws SQLException {
 			
 			if(rs1.next()) {
 				
+				List<Float> readingList = new ArrayList<Float>();
+				
+				readingList.add(rs1.getFloat("reading1"));
+				readingList.add(rs1.getFloat("reading2"));
+				readingList.add(rs1.getFloat("reading3"));
+				readingList.add(rs1.getFloat("reading4"));
+				
 				//later on change to customermeterid in place of equipment serial id
 				pstmt2 = con.prepareStatement("SELECT reading1, reading2, reading3, reading4, LogDate FROM sensorlog WHERE equipment_serial_id = ? AND MONTH(LogDate) = MONTH(CURDATE() - INTERVAL 2 MONTH) ORDER BY LogDate DESC LIMIT 0,1");
 				pstmt2.setString(1, rs.getString("MIUID"));
 				rs2 = pstmt2.executeQuery();
 				
 				if(rs2.next()) {
-				
-			//		for demo purpose we are assuming only 1st reading
-			//		consumption = (rs1.getFloat("reading1") - rs2.getFloat("reading1")) + (rs1.getFloat("reading2") - rs2.getFloat("reading2")) + (rs1.getFloat("reading3") - rs2.getFloat("reading3")) + (rs1.getFloat("reading4") - rs2.getFloat("reading4"));
-					consumption = rs1.getFloat("reading1") - rs2.getFloat("reading1");
-					billAmount = (consumption * rs.getFloat("Tariff"));
 					
-					pstmt3 = con.prepareStatement("INSERT INTO billingdetails (CommunityID, BlockID, CustomerID, CustomerUniqueID, CustomerMeterID, MeterType, MIUID, PreviousReading, PresentReading, Consumption, TariffID, Tariff, BillAmount, BillMonth, BillYear) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-					pstmt3.setInt(1, rs.getInt("CommunityID"));
-					pstmt3.setInt(2, rs.getInt("BlockID"));
-					pstmt3.setInt(3, rs.getInt("CustomerID"));
-					pstmt3.setString(4, rs.getString("CustomerUniqueID"));
-					pstmt3.setInt(5, rs.getInt("CustomerMeterID"));
-					pstmt3.setString(6, rs.getString("MeterType"));
-					pstmt3.setString(7, rs.getString("MIUID"));
-					//		for demo purpose we are assuming only 1st reading
-					pstmt3.setFloat(8, rs2.getFloat("reading1"));
-//					pstmt3.setString(8, rs2.getFloat("reading1") + "/" + rs2.getFloat("reading2") + "/" + rs2.getFloat("reading3") + "/" + rs2.getFloat("reading4"));
-					//		for demo purpose we are assuming only 1st reading
-					pstmt3.setFloat(9, rs1.getFloat("reading1"));
-					pstmt3.setFloat(10, consumption);
-					pstmt3.setInt(11, rs.getInt("TariffID"));
-					pstmt3.setFloat(12, rs.getFloat("Tariff"));
-					pstmt3.setFloat(13, billAmount);
-					pstmt3.setInt(14, ((currentdate.getMonthValue() - 1) == 0 ? 12 : (currentdate.getMonthValue() - 1)));
-					pstmt3.setInt(15, currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear());
-					
-					if(pstmt3.executeUpdate() > 0) {
-//				perform some actions after discussion
+					for(int i = 0; i< readingList.size(); i++) {
+						
+						if(readingList.get(i) != 0) {
+							
+							//		consumption = (rs1.getFloat("reading1") - rs2.getFloat("reading1")) + (rs1.getFloat("reading2") - rs2.getFloat("reading2")) + (rs1.getFloat("reading3") - rs2.getFloat("reading3")) + (rs1.getFloat("reading4") - rs2.getFloat("reading4"));
+									consumption = rs1.getFloat("reading"+(i+1)) - rs2.getFloat("reading"+(i+1));
+									billAmount = (consumption * rs.getFloat("Tariff"));
+									
+									pstmt3 = con.prepareStatement("INSERT INTO billingdetails (CommunityID, BlockID, CustomerID, CustomerUniqueID, CustomerMeterID, MeterType, MIUID, PreviousReading, PresentReading, Consumption, TariffID, Tariff, BillAmount, BillMonth, BillYear) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+									pstmt3.setInt(1, rs.getInt("CommunityID"));
+									pstmt3.setInt(2, rs.getInt("BlockID"));
+									pstmt3.setInt(3, rs.getInt("CustomerID"));
+									pstmt3.setString(4, rs.getString("CustomerUniqueID"));
+									pstmt3.setInt(5, rs.getInt("CustomerMeterID"));
+									pstmt3.setString(6, rs.getString("MeterType"));
+									pstmt3.setString(7, rs.getString("MIUID"));
+									//		for demo purpose we are assuming only 1st and 2nd reading
+									pstmt3.setFloat(8, rs2.getFloat("reading"+(i+1)));
+//									pstmt3.setString(8, rs2.getFloat("reading1") + "/" + rs2.getFloat("reading2") + "/" + rs2.getFloat("reading3") + "/" + rs2.getFloat("reading4"));
+									//		for demo purpose we are assuming only 1st and 2nd reading
+									pstmt3.setFloat(9, rs1.getFloat("reading"+(i+1)));
+									pstmt3.setFloat(10, consumption);
+									pstmt3.setInt(11, rs.getInt("TariffID"));
+									pstmt3.setFloat(12, rs.getFloat("Tariff"));
+									pstmt3.setFloat(13, billAmount);
+									pstmt3.setInt(14, ((currentdate.getMonthValue() - 1) == 0 ? 12 : (currentdate.getMonthValue() - 1)));
+									pstmt3.setInt(15, currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear());
+									
+									if(pstmt3.executeUpdate() > 0) {
+//								perform some actions after discussion
+									}
+						}
+						
 					}
 					
 				} else {
@@ -1036,34 +1050,39 @@ public void sensordatabillgeneration() throws SQLException {
 					
 					if(rs3.next()) {
 						
-//						for demo purpose we are assuming only 1st reading
-				//		consumption = (rs1.getFloat("reading1") - rs2.getFloat("reading1")) + (rs1.getFloat("reading2") - rs2.getFloat("reading2")) + (rs1.getFloat("reading3") - rs2.getFloat("reading3")) + (rs1.getFloat("reading4") - rs2.getFloat("reading4"));
-						
-						consumption = rs1.getFloat("reading1") - rs3.getFloat("reading1");
-						billAmount = (consumption * rs.getFloat("Tariff"));
-						
-						pstmt3 = con.prepareStatement("INSERT INTO billingdetails (CommunityID, BlockID, CustomerID, CustomerUniqueID, CustomerMeterID, MeterType, MIUID, PreviousReading, PresentReading, Consumption, TariffID, Tariff, BillAmount, BillMonth, BillYear) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-						pstmt3.setInt(1, rs.getInt("CommunityID"));
-						pstmt3.setInt(2, rs.getInt("BlockID"));
-						pstmt3.setInt(3, rs.getInt("CustomerID"));
-						pstmt3.setString(4, rs.getString("CustomerUniqueID"));
-						pstmt3.setInt(5, rs.getInt("CustomerMeterID"));
-						pstmt3.setString(6, rs.getString("MeterType"));
-						pstmt3.setString(7, rs.getString("MIUID"));
-						//		for demo purpose we are assuming only 1st reading
-						pstmt3.setFloat(8, rs3.getFloat("reading1"));
-//						pstmt3.setString(8, rs2.getFloat("reading1") + "/" + rs2.getFloat("reading2") + "/" + rs2.getFloat("reading3") + "/" + rs2.getFloat("reading4"));
-						//		for demo purpose we are assuming only 1st reading
-						pstmt3.setFloat(9, rs1.getFloat("reading1"));
-						pstmt3.setFloat(10, consumption);
-						pstmt3.setInt(11, rs.getInt("TariffID"));
-						pstmt3.setFloat(12, rs.getFloat("Tariff"));
-						pstmt3.setFloat(13, billAmount);
-						pstmt3.setInt(14, ((currentdate.getMonthValue() - 1) == 0 ? 12 : (currentdate.getMonthValue() - 1)));
-						pstmt3.setInt(15, currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear());
-						
-						if(pstmt3.executeUpdate() > 0) {
-//					perform some actions after discussion
+						for(int i = 0; i<= readingList.size(); i++) {
+							
+							if(readingList.get(i) != 0) {
+								
+								//		consumption = (rs1.getFloat("reading1") - rs2.getFloat("reading1")) + (rs1.getFloat("reading2") - rs2.getFloat("reading2")) + (rs1.getFloat("reading3") - rs2.getFloat("reading3")) + (rs1.getFloat("reading4") - rs2.getFloat("reading4"));
+										consumption = rs1.getFloat("reading"+(i+1)) - rs2.getFloat("reading"+(i+1));
+										billAmount = (consumption * rs.getFloat("Tariff"));
+										
+										pstmt3 = con.prepareStatement("INSERT INTO billingdetails (CommunityID, BlockID, CustomerID, CustomerUniqueID, CustomerMeterID, MeterType, MIUID, PreviousReading, PresentReading, Consumption, TariffID, Tariff, BillAmount, BillMonth, BillYear) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+										pstmt3.setInt(1, rs.getInt("CommunityID"));
+										pstmt3.setInt(2, rs.getInt("BlockID"));
+										pstmt3.setInt(3, rs.getInt("CustomerID"));
+										pstmt3.setString(4, rs.getString("CustomerUniqueID"));
+										pstmt3.setInt(5, rs.getInt("CustomerMeterID"));
+										pstmt3.setString(6, rs.getString("MeterType"));
+										pstmt3.setString(7, rs.getString("MIUID"));
+										//		for demo purpose we are assuming only 1st and 2nd reading
+										pstmt3.setFloat(8, rs2.getFloat("reading"+(i+1)));
+//										pstmt3.setString(8, rs2.getFloat("reading1") + "/" + rs2.getFloat("reading2") + "/" + rs2.getFloat("reading3") + "/" + rs2.getFloat("reading4"));
+										//		for demo purpose we are assuming only 1st and 2nd reading
+										pstmt3.setFloat(9, rs1.getFloat("reading"+(i+1)));
+										pstmt3.setFloat(10, consumption);
+										pstmt3.setInt(11, rs.getInt("TariffID"));
+										pstmt3.setFloat(12, rs.getFloat("Tariff"));
+										pstmt3.setFloat(13, billAmount);
+										pstmt3.setInt(14, ((currentdate.getMonthValue() - 1) == 0 ? 12 : (currentdate.getMonthValue() - 1)));
+										pstmt3.setInt(15, currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear());
+										
+										if(pstmt3.executeUpdate() > 0) {
+//									perform some actions after discussion
+										}
+							}
+							
 						}
 					}
 					
