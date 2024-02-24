@@ -105,32 +105,7 @@
 										</table>
 
 
-										<table id="customerTable1"
-											class="table table-striped table-bordered dt-responsive nowrap dataTable no-footer dtr-inline collapsed"
-											style="width: 100%">
-											<thead class="bg-primary text-white">
-												<tr>
-													<th>Community</th>
-													<th>Block</th>
-													<th>CRN/CAN/UAN</th>
-													<th>First Name</th>
-													<th>Last Name</th>
-													<th>House No</th>
-													<th>Email</th>
-													<th>Mobile</th>
-													<th>Meters</th>
-													<th>Created By UserName</th>
-													<th>Created By Role</th>
-													<th>Registration Date</th>
-													<th>Action</th>
-													<th>Action</th>
-												</tr>
-											</thead>
-											<tbody>
-
-
-											</tbody>
-										</table>
+										
 									</div>
 								</div>
 

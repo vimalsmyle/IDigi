@@ -165,6 +165,16 @@
 									
 									 
 									 function getSensorMeters(CRNNumber){
+										 $("#readingBody").empty();
+										 $("#readerSensorStatusBody").empty();
+										 $("#tbodyPerDayFlowRateBody").empty();
+										 $("#tbodyLiveFlowRateBody").empty();
+										 $("#tbodyDigitalOutputBody").empty();
+										 $("#tbodyAnalogInputBody").empty();
+										 
+										 $("#tbodyAnalogOutputBody").empty();
+										 $("#tbodyVoltageOutputBody").empty();
+										 
 										$.getJSON("./sensordashboard/"+sessionStorage.getItem("roleID")+"/"+sessionStorage.getItem("ID"), function(data) {
 											$.each(data.data, function(i, item) {
 												if (CRNNumber == item.equipment_serial_id) {

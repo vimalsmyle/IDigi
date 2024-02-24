@@ -116,8 +116,14 @@ $(document)
 														}
 														$('#userConsumptionsTable_wrapper thead').empty();
 														$('#userConsumptionsTable_wrapper tbody').remove();
-														$("#theadBody").append("<tr><th>Customer Unique ID</th><th>MIU ID</th><th>Reading1</th><th>Reading2</th><th>Battery</th><th>Date Time</th></tr>")
+														$("#theadBody").append("<tr><th>Customer Unique ID</th><th>MIU ID</th><th>Reading1</th><th>Reading2</th>" +
+																"<th>Battery</th><th>Consumption</th><th>Balance</th><th>Tariff</th><th>Alarm Credit</th>" +
+																"<th>Emergency Credit</th><th>Date Time</th></tr>")
 
+														
+														
+														
+														
 														 table = $('#userConsumptionsTable').DataTable(
 																	{
 																		"dom": "<'row'<'col-sm-4 headname'><'col-sm-2'><'col-sm-1'><'col-sm-2'f>>" +"<'row'<'col-sm-4'B><'col-sm-2'l><'col-sm-6 totalCount'>>" + "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-6 text-black'i><'col-sm-6 text-black'p>>",
@@ -143,6 +149,16 @@ $(document)
 																			"data" : "reading2"
 																		}, {
 																			"data" : "battery"
+																		}, {
+																			"data" : "consumption"
+																		}, {
+																			"data" : "balance"
+																		}, {
+																			"data" : "tariff"
+																		}, {
+																			"data" : "alarmCredit"
+																		}, {
+																			"data" : "emergencyCredit"
 																		}, {
 																			"data" : "dateTime"
 																		}],
