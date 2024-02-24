@@ -689,7 +689,7 @@ public class DashboardDAO {
 		return responsevo;
 	}
 	
-	public GraphResponseVO getGraphDashboardDetails(String type, int year, int month, String communityName) {
+/*	public GraphResponseVO getGraphDashboardDetails(String type, int year, int month, String communityName) {
 		// TODO Auto-generated method stub
 		
 		PreparedStatement pstmt = null;
@@ -852,6 +852,196 @@ public class DashboardDAO {
 								pstmt.setInt(2, year);
 								pstmt.setInt(3, month);
 								pstmt.setInt(4, rs1.getInt("CustomerMeterID"));
+								pstmt.setInt(5, year);
+								pstmt.setInt(6, month);
+								rs = pstmt.executeQuery();
+								
+								if(rs.next()) {individualMeterConsumption = individualMeterConsumption + (rs.getString("Units") == null ? 0 : rs.getInt("Units"));}
+								}
+								
+								customerConsumption = customerConsumption +  individualMeterConsumption;
+							}
+							
+							totalConsumptionPerDayMonthYear = totalConsumptionPerDayMonthYear + customerConsumption;
+							
+							}
+						xAxis.add(id != 0 ? rs3.getString("BlockName") : rs3.getString("CommunityName"));
+						yAxis.add(totalConsumptionPerDayMonthYear);
+						}
+					}
+			graphResponseVO.setXAxis(xAxis);
+			graphResponseVO.setYAxis(yAxis);
+
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return graphResponseVO;
+	} */
+	
+	public GraphResponseVO getGraphDashboardDetails(String type, int year, int month, String communityName) {
+		// TODO Auto-generated method stub
+		
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		Connection con = null;
+		
+		GraphResponseVO graphResponseVO = new GraphResponseVO();
+		List<String> xAxis;
+		List<Integer> yAxis;
+		int id = 0;
+		
+		try {
+			con = getConnection();
+			xAxis = new LinkedList<String>();
+			yAxis = new LinkedList<Integer>();
+			
+			if(!communityName.equalsIgnoreCase("0")) {
+				ResultSet rs1 = con.prepareStatement("SELECT * FROM block WHERE CommunityID = (SELECT CommunityID FROM community WHERE CommunityName = '"+communityName+"')").executeQuery();
+				if(rs1.next()) { id = rs1.getInt("CommunityID"); }				
+				}
+			
+					if(year == 0 && month == 0) {
+						
+						String start = "SELECT * FROM <tablename> ";
+						PreparedStatement pstmt3 = con.prepareStatement(start.replaceAll("<tablename>", id != 0 ? "block WHERE CommunityID = "+id : "community"));
+						ResultSet rs3 = pstmt3.executeQuery();
+						
+						while(rs3.next()) {
+							
+							int totalConsumptionPerDayMonthYear = 0;
+						
+						// last 30 days	
+							
+//						for(int i = 2; i>0; i-- ) {
+							
+								int customerConsumption = 0;
+								
+								String mainquery = "SELECT * FROM customerdetails WHERE ActiveStatus = 2 AND <main> ";
+								
+								mainquery = mainquery.replaceAll("<main>", id != 0 ? " CommunityID = "+id+" AND BlockID = "+ rs3.getInt("BlockID")+" ORDER BY CustomerID ASC" : " CommunityID = "+rs3.getInt("CommunityID"));
+								
+								PreparedStatement pstmt2 = con.prepareStatement(mainquery);
+								ResultSet rs2 = pstmt2.executeQuery();
+								while (rs2.next()) {
+									PreparedStatement pstmt1 =  con.prepareStatement("SELECT CustomerMeterID, MIUID FROM Customermeterdetails WHERE CustomerID = " + rs2.getLong("CustomerID") + " AND MeterType = '"+type+"'");
+									ResultSet rs1 = pstmt1.executeQuery();
+									
+									int individualMeterConsumption = 0;
+									
+									while(rs1.next()) {
+										
+										String query = "SELECT ((SELECT sum(reading1 + reading2 + reading3 + reading4) FROM sensorlog WHERE equipment_serial_id = ? AND LogDate BETWEEN CONCAT(CURDATE() - INTERVAL <day> DAY, ' 00:00:00') AND CONCAT(CURDATE() - INTERVAL <day> DAY, ' 23:59:59') GROUP BY ReadingID ORDER BY ReadingID DESC LIMIT 0,1) \r\n" + 
+												 		"- (SELECT sum(reading1 + reading2 + reading3 + reading4) FROM sensorlog WHERE equipment_serial_id = ? AND LogDate BETWEEN CONCAT(CURDATE() - INTERVAL <day> DAY, ' 00:00:00') AND CONCAT(CURDATE() - INTERVAL <day> DAY, ' 23:59:59') GROUP BY ReadingID ORDER BY ReadingID ASC LIMIT 0,1)) AS Units, CURDATE() - INTERVAL <day> DAY AS consumptiondate";
+							
+										pstmt = con.prepareStatement(query.replaceAll("<day>", ""+1));
+										pstmt.setInt(1, rs1.getInt("MIUID"));
+										pstmt.setInt(2, rs1.getInt("MIUID"));
+										rs = pstmt.executeQuery();
+										
+										if(rs.next()) {individualMeterConsumption = individualMeterConsumption + (rs.getString("Units") == null ? 0 : rs.getInt("Units"));}
+										}
+									
+									customerConsumption = customerConsumption +  individualMeterConsumption;
+								}
+								
+								totalConsumptionPerDayMonthYear = totalConsumptionPerDayMonthYear + customerConsumption;
+								
+//							}
+						
+						xAxis.add(id != 0 ? rs3.getString("BlockName") : rs3.getString("CommunityName"));
+						yAxis.add(totalConsumptionPerDayMonthYear);
+							
+						}
+					} 
+					else if (year != 0 &&  month == 0) {
+						
+						String start = "SELECT * FROM <tablename> ";
+						PreparedStatement pstmt3 = con.prepareStatement(start.replaceAll("<tablename>", id != 0 ? "block  WHERE CommunityID = "+id : "community"));
+						ResultSet rs3 = pstmt3.executeQuery();
+						
+						while(rs3.next()) {
+							
+							int totalConsumptionPerDayMonthYear = 0;
+						
+						for(int i = 1; i<=12; i++) {
+							
+							int customerConsumption = 0;
+							
+							String mainquery = "SELECT * FROM customerdetails WHERE ActiveStatus = 2 AND <main>";
+							
+							mainquery = mainquery.replaceAll("<main>", id != 0 ? " CommunityID = "+rs3.getInt("CommunityID")+" AND BlockID = "+ id+" ORDER BY CustomerID ASC" : " CommunityID = "+rs3.getInt("CommunityID"));
+							
+							PreparedStatement pstmt2 = con.prepareStatement(mainquery);
+							ResultSet rs2 = pstmt2.executeQuery();
+							while (rs2.next()) {
+								PreparedStatement pstmt1 =  con.prepareStatement("SELECT CustomerMeterID, MIUID FROM Customermeterdetails WHERE CustomerID = " + rs2.getLong("CustomerID") + " AND MeterType = '"+type+"'");
+								ResultSet rs1 = pstmt1.executeQuery();
+								
+								int individualMeterConsumption = 0;
+								
+								while(rs1.next()) {
+									
+								String query = "SELECT ((SELECT sum(reading1 + reading2 + reading3 + reading4) FROM sensorlog WHERE equipment_serial_id = ? AND YEAR(LogDate) = ? AND MONTH(LogDate) = <month> GROUP BY ReadingID ORDER BY ReadingID DESC LIMIT 0,1) \r\n" + 
+									      "-(SELECT sum(reading1 + reading2 + reading3 + reading4) FROM sensorlog WHERE equipment_serial_id = ? AND YEAR(LogDate) = ? AND MONTH(LogDate) = <month> GROUP BY ReadingID ORDER BY ReadingID ASC LIMIT 0,1)) AS Units";
+					
+								pstmt = con.prepareStatement(query.replaceAll("<month>", ""+i));
+								pstmt.setInt(1, rs1.getInt("MIUID"));
+								pstmt.setInt(2, year);
+								pstmt.setInt(3, rs1.getInt("MIUID"));
+								pstmt.setInt(4, year);
+								rs = pstmt.executeQuery();
+								
+								if(rs.next()) {individualMeterConsumption = individualMeterConsumption + (rs.getString("Units") == null ? 0 : rs.getInt("Units"));}
+								}
+								
+								customerConsumption = customerConsumption +  individualMeterConsumption;
+							}
+							
+							totalConsumptionPerDayMonthYear = totalConsumptionPerDayMonthYear + customerConsumption;
+						}
+							
+							xAxis.add(id != 0 ? rs3.getString("BlockName") : rs3.getString("CommunityName"));
+							yAxis.add(totalConsumptionPerDayMonthYear);
+						}
+					} else if(year != 0 && month != 0) {
+						
+						int j = (month == 2 ? 28 : (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12) ? 31 : 30);
+						
+						String start = "SELECT * FROM <tablename> ";
+						PreparedStatement pstmt3 = con.prepareStatement(start.replaceAll("<tablename>", id != 0 ? "block  WHERE CommunityID = "+id : "community"));
+						ResultSet rs3 = pstmt3.executeQuery();
+						
+						while(rs3.next()) {
+							
+							int totalConsumptionPerDayMonthYear = 0;
+						
+						for(int i = 1; i <= j ; i++) {
+							
+							int customerConsumption = 0;
+							
+							String mainquery = "SELECT * FROM customerdetails WHERE ActiveStatus = 2 AND <main>";
+							
+							mainquery = mainquery.replaceAll("<main>", id != 0 ? " CommunityID = "+rs3.getInt("CommunityID")+" AND BlockID = "+ id+" ORDER BY CustomerID ASC" : " CommunityID = "+rs3.getInt("CommunityID"));
+							
+							PreparedStatement pstmt2 = con.prepareStatement(mainquery);
+							ResultSet rs2 = pstmt2.executeQuery();
+							while (rs2.next()) {
+								PreparedStatement pstmt1 =  con.prepareStatement("SELECT CustomerMeterID, MIUID FROM Customermeterdetails WHERE CustomerID = " + rs2.getLong("CustomerID") + " AND MeterType = '"+type+"'");
+								ResultSet rs1 = pstmt1.executeQuery();
+								
+								int individualMeterConsumption = 0;
+								
+								while(rs1.next()) {
+								
+								String query = "SELECT ((SELECT sum(reading1 + reading2 + reading3 + reading4) FROM sensorlog WHERE equipment_serial_id = ? AND YEAR(LogDate) = ? AND MONTH(LogDate) = ? AND DAY(LogDate) = <day> GROUP BY ReadingID ORDER BY ReadingID DESC LIMIT 0,1) \r\n" + 
+										 "- (SELECT sum(reading1 + reading2 + reading3 + reading4) FROM sensorlog WHERE equipment_serial_id = ? AND YEAR(LogDate) = ? AND MONTH(LogDate) = ? AND DAY(LogDate) = <day> GROUP BY ReadingID ORDER BY ReadingID ASC LIMIT 0,1)) AS Units";
+					
+								pstmt = con.prepareStatement(query.replaceAll("<day>", ""+i));
+								pstmt.setInt(1, rs1.getInt("MIUID"));
+								pstmt.setInt(2, year);
+								pstmt.setInt(3, month);
+								pstmt.setInt(4, rs1.getInt("MIUID"));
 								pstmt.setInt(5, year);
 								pstmt.setInt(6, month);
 								rs = pstmt.executeQuery();
