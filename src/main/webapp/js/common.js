@@ -150,7 +150,7 @@ $(document)
 										.ajax({
 											type : "GET",
 											contentType : "application/json",
-											url : "./manualbillgeneration",
+											url : "./manualsensorbillgeneration",
 											dataType : "JSON",
 
 											success : function(data) {

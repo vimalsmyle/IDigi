@@ -1022,10 +1022,8 @@ public void sensordatabillgeneration() throws SQLException {
 									pstmt3.setInt(5, rs.getInt("CustomerMeterID"));
 									pstmt3.setString(6, rs.getString("MeterType"));
 									pstmt3.setString(7, rs.getString("MIUID"));
-									//		for demo purpose we are assuming only 1st and 2nd reading
 									pstmt3.setFloat(8, rs2.getFloat("reading"+(i+1)));
 //									pstmt3.setString(8, rs2.getFloat("reading1") + "/" + rs2.getFloat("reading2") + "/" + rs2.getFloat("reading3") + "/" + rs2.getFloat("reading4"));
-									//		for demo purpose we are assuming only 1st and 2nd reading
 									pstmt3.setFloat(9, rs1.getFloat("reading"+(i+1)));
 									pstmt3.setFloat(10, consumption);
 									pstmt3.setInt(11, rs.getInt("TariffID"));
@@ -1066,10 +1064,8 @@ public void sensordatabillgeneration() throws SQLException {
 										pstmt3.setInt(5, rs.getInt("CustomerMeterID"));
 										pstmt3.setString(6, rs.getString("MeterType"));
 										pstmt3.setString(7, rs.getString("MIUID"));
-										//		for demo purpose we are assuming only 1st and 2nd reading
 										pstmt3.setFloat(8, rs2.getFloat("reading"+(i+1)));
 //										pstmt3.setString(8, rs2.getFloat("reading1") + "/" + rs2.getFloat("reading2") + "/" + rs2.getFloat("reading3") + "/" + rs2.getFloat("reading4"));
-										//		for demo purpose we are assuming only 1st and 2nd reading
 										pstmt3.setFloat(9, rs1.getFloat("reading"+(i+1)));
 										pstmt3.setFloat(10, consumption);
 										pstmt3.setInt(11, rs.getInt("TariffID"));

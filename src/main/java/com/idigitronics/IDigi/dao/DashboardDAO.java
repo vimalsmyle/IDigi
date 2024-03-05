@@ -935,8 +935,8 @@ public class DashboardDAO {
 												 		"- (SELECT sum(reading1 + reading2 + reading3 + reading4) FROM sensorlog WHERE equipment_serial_id = ? AND LogDate BETWEEN CONCAT(CURDATE() - INTERVAL <day> DAY, ' 00:00:00') AND CONCAT(CURDATE() - INTERVAL <day> DAY, ' 23:59:59') GROUP BY ReadingID ORDER BY ReadingID ASC LIMIT 0,1)) AS Units, CURDATE() - INTERVAL <day> DAY AS consumptiondate";
 							
 										pstmt = con.prepareStatement(query.replaceAll("<day>", ""+1));
-										pstmt.setInt(1, rs1.getInt("MIUID"));
-										pstmt.setInt(2, rs1.getInt("MIUID"));
+										pstmt.setString(1, rs1.getString("MIUID"));
+										pstmt.setString(2, rs1.getString("MIUID"));
 										rs = pstmt.executeQuery();
 										
 										if(rs.next()) {individualMeterConsumption = individualMeterConsumption + (rs.getString("Units") == null ? 0 : rs.getInt("Units"));}
@@ -986,9 +986,9 @@ public class DashboardDAO {
 									      "-(SELECT sum(reading1 + reading2 + reading3 + reading4) FROM sensorlog WHERE equipment_serial_id = ? AND YEAR(LogDate) = ? AND MONTH(LogDate) = <month> GROUP BY ReadingID ORDER BY ReadingID ASC LIMIT 0,1)) AS Units";
 					
 								pstmt = con.prepareStatement(query.replaceAll("<month>", ""+i));
-								pstmt.setInt(1, rs1.getInt("MIUID"));
+								pstmt.setString(1, rs1.getString("MIUID"));
 								pstmt.setInt(2, year);
-								pstmt.setInt(3, rs1.getInt("MIUID"));
+								pstmt.setString(3, rs1.getString("MIUID"));
 								pstmt.setInt(4, year);
 								rs = pstmt.executeQuery();
 								
@@ -1038,10 +1038,10 @@ public class DashboardDAO {
 										 "- (SELECT sum(reading1 + reading2 + reading3 + reading4) FROM sensorlog WHERE equipment_serial_id = ? AND YEAR(LogDate) = ? AND MONTH(LogDate) = ? AND DAY(LogDate) = <day> GROUP BY ReadingID ORDER BY ReadingID ASC LIMIT 0,1)) AS Units";
 					
 								pstmt = con.prepareStatement(query.replaceAll("<day>", ""+i));
-								pstmt.setInt(1, rs1.getInt("MIUID"));
+								pstmt.setString(1, rs1.getString("MIUID"));
 								pstmt.setInt(2, year);
 								pstmt.setInt(3, month);
-								pstmt.setInt(4, rs1.getInt("MIUID"));
+								pstmt.setString(4, rs1.getString("MIUID"));
 								pstmt.setInt(5, year);
 								pstmt.setInt(6, month);
 								rs = pstmt.executeQuery();
@@ -1880,6 +1880,9 @@ public class DashboardDAO {
 				ResultSet rs = pstmt2.executeQuery();
 				if(rs.next()) {
 					
+//					ValidateResponseVO validateResponseVO = validateSensorRequest(sensorDataRequestVO, rs.getLong("CustomerID"));
+//					if(validateResponseVO.isResult()) {
+					
 					pstmt = con.prepareStatement("INSERT INTO sensorlog (equipment_serial_id, CommunityID, BlockID, CustomerID, CustomerUniqueID, reading1, reading2, reading3, reading4, reader_sensor_status1, reader_sensor_status2, reader_sensor_status3, reader_sensor_status4, per_day_flow_rate1, per_day_flow_rate2, per_day_flow_rate3, per_day_flow_rate4, live_flow_rate1, live_flow_rate2, live_flow_rate3, live_flow_rate4, record_interval, sync_interval, rssi, digital_outputs1, digital_outputs2, digital_outputs3, digital_outputs4, analog_inputs1, analog_inputs2, analog_inputs3, analog_inputs4, analog_outputs1, analog_outputs2, analog_outputs3, analog_outputs4, voltage_outputs1, voltage_outputs2, voltage_outputs3, voltage_outputs4, battery_percentage, online_powersupply, gsm_status, ethernet_status, nfc_status, flash_status, nfc_memory_status, flash_memory_status, low_gsm, low_battery, sensor_detachment, door_open_switch, magnetic_tamper, timestamp, LogDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
 					pstmt.setString(1, sensorDataRequestVO.getEquipment_serial_id());
 					pstmt.setInt(2, rs.getInt("CommunityID"));
@@ -1947,6 +1950,7 @@ public class DashboardDAO {
 						result = "Success";
 						
 					}
+//				}
 					
 		}
 				
@@ -1955,6 +1959,40 @@ public class DashboardDAO {
 		}
 		
 		return result;
+	}
+	
+	private ValidateResponseVO validateSensorRequest(SensorDataRequestVO sensorDataRequestVO, Long cutomerID) throws ClassNotFoundException {
+		// TODO Auto-generated method stub
+		
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ValidateResponseVO validateResponseVO = new ValidateResponseVO();
+		
+		try {
+			con = getConnection();
+			
+			pstmt = con.prepareStatement("SELECT * FROM sensorlog WHERE equipment_serial_id = ? AND CustomerID = " + cutomerID + " ORDER BY ReadingID DESC LIMIT 0,1");
+			pstmt.setString(1, sensorDataRequestVO.getEquipment_serial_id());
+			ResultSet rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				
+				if(sensorDataRequestVO.getReadings().get(0) < rs.getLong("reading1") || sensorDataRequestVO.getReadings().get(1) < rs.getLong("reading2") || sensorDataRequestVO.getReadings().get(2) < rs.getLong("reading3") || sensorDataRequestVO.getReadings().get(3) < rs.getLong("reading4")) {
+					validateResponseVO.setResult(false);
+				} else {
+					validateResponseVO.setResult(true);
+				}
+				
+			} else {
+				validateResponseVO.setResult(true);
+				validateResponseVO.setPreviousReading(0);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return validateResponseVO;
 	}
 
 	public List<SensorDashboardResponseVO> getSensorDashboarddetails() throws SQLException {
