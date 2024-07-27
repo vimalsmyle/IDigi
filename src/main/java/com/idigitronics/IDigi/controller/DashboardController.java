@@ -24,6 +24,7 @@ import com.idigitronics.IDigi.dao.DashboardDAO;
 import com.idigitronics.IDigi.request.vo.DataRequestVO;
 import com.idigitronics.IDigi.request.vo.FilterVO;
 import com.idigitronics.IDigi.request.vo.SensorDataRequestVO;
+import com.idigitronics.IDigi.request.vo.SolarDataRequestVO;
 import com.idigitronics.IDigi.response.vo.AllGraphResponseVO;
 import com.idigitronics.IDigi.response.vo.DashboardResponseVO;
 import com.idigitronics.IDigi.response.vo.GraphResponseVO;
@@ -231,6 +232,22 @@ public class DashboardController {
 		sensorDasboardresponsevo.setData(dashboarddao.getSensorDashboarddetails());
 		
 		return sensorDasboardresponsevo;
+	}
+	
+	@RequestMapping(value = "/solarstatus/{blockid}", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	public @ResponseBody ResponseVO postSolarDashboardDetails(@RequestBody SolarDataRequestVO solarDataRequestVO, @PathVariable("blockid") int blockid) {
+
+		DashboardDAO dashboarddao = new DashboardDAO();
+		ResponseVO responsevo = new ResponseVO();
+		
+		try {
+			solarDataRequestVO.setBlockid(blockid);
+			responsevo = dashboarddao.postSolarDashboarddetails(solarDataRequestVO);
+		} catch (Exception ex) {
+			logger.error("This is Error message", ex);
+			ex.printStackTrace();
+		}
+		return responsevo;
 	}
 	
 }

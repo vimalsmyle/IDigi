@@ -33,6 +33,7 @@ import com.idigitronics.IDigi.request.vo.FilterVO;
 import com.idigitronics.IDigi.request.vo.MailRequestVO;
 import com.idigitronics.IDigi.request.vo.SMSRequestVO;
 import com.idigitronics.IDigi.request.vo.SensorDataRequestVO;
+import com.idigitronics.IDigi.request.vo.SolarDataRequestVO;
 import com.idigitronics.IDigi.response.vo.AllGraphResponseVO;
 import com.idigitronics.IDigi.response.vo.DashboardResponseVO;
 import com.idigitronics.IDigi.response.vo.GraphResponseVO;
@@ -2098,6 +2099,67 @@ public class DashboardDAO {
 			con.close();
 		}
 		return sensorDashboardList;
+	}
+
+	public ResponseVO postSolarDashboarddetails(SolarDataRequestVO solarDataRequestVO) {
+		// TODO Auto-generated method stub
+		ResponseVO responsevo = new ResponseVO();
+		
+		try {
+			
+			logger.debug("Block ID -- Home ID: "+solarDataRequestVO.getBlockid() + " -- " + +solarDataRequestVO.getHomeid());
+			
+					responsevo.setResult(insertSolarDashboard(solarDataRequestVO));
+					responsevo.setMessage(responsevo.getResult().equalsIgnoreCase("Success") ? "Data Inserted Successfully" : "Data Insertion Failed");
+					
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return responsevo;
+	}
+
+	private String insertSolarDashboard(SolarDataRequestVO solarDataRequestVO) {
+		// TODO Auto-generated method stub
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		String result = "Failure";
+		
+		try {
+			con = getConnection();
+			
+				PreparedStatement pstmt2 = con.prepareStatement("SELECT cd.CommunityID, cd.BlockID, cd.CustomerID, cd.CustomerUniqueID from customerdetails as cd LEFT JOIN customermeterdetails as cmd ON cd.CustomerID = cmd.CustomerID WHERE cd.ActiveStatus = 2 AND cmd.MIUID = ?");
+				pstmt2.setInt(1, solarDataRequestVO.getHomeid());
+				ResultSet rs = pstmt2.executeQuery();
+				if(rs.next()) {
+					
+//					ValidateResponseVO validateResponseVO = validateSensorRequest(sensorDataRequestVO, rs.getLong("CustomerID"));
+//					if(validateResponseVO.isResult()) {
+					
+					pstmt = con.prepareStatement("INSERT INTO solarlog (Device_BlockID, HomeID, CommunityID, BlockID, CustomerID, CustomerUniqueID, Relay_Status, R_Status, Y_Status, B_Status, LogDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
+					pstmt.setInt(1, solarDataRequestVO.getHomeid());
+					pstmt.setInt(2, rs.getInt("CommunityID"));
+					pstmt.setInt(3, rs.getInt("BlockID"));
+					pstmt.setInt(4, rs.getInt("CustomerID"));
+					pstmt.setString(5, rs.getString("CustomerUniqueID"));
+					pstmt.setInt(6, solarDataRequestVO.getRelay_status());
+					pstmt.setInt(7, solarDataRequestVO.getR_status());
+					pstmt.setInt(8, solarDataRequestVO.getY_status());
+					pstmt.setInt(9, solarDataRequestVO.getB_status());
+
+					if (pstmt.executeUpdate() > 0) {
+						
+						result = "Success";
+						
+					}
+//				}
+					
+		}
+				
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return result;
 	}
 
 }
