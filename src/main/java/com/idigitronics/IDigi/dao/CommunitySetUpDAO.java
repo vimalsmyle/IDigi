@@ -1114,6 +1114,8 @@ public class CommunitySetUpDAO {
 				ResultSet rs = pstmt1.executeQuery();
 				if(rs.next()) {
 					
+					if(customervo.getMeters().size() > 0 && !customervo.isSolar()) {
+					
 					for(int i = 0; i < customervo.getMeters().size(); i++) {
 						
 						PreparedStatement pstmt4 = con.prepareStatement("INSERT INTO customermeterdetails (CustomerID, CustomerUniqueID, MIUID, MeterSerialNumber, MeterType, MeterSizeID, PayType, TariffID, GatewayID, Location, ThresholdMaximum, ThresholdMinimum, ModifiedDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
@@ -1134,6 +1136,8 @@ public class CommunitySetUpDAO {
 							responsevo.setResult("Success");
 						}
 						
+					}
+					
 					}
 					
 					usermanagementvo.setBlockID(customervo.getBlockID());
@@ -1262,10 +1266,13 @@ public class CommunitySetUpDAO {
 
 	            if (pstmt.executeUpdate() > 0) {
 	            	
+	            	if(customervo.getMeters().size() > 0 && !customervo.isSolar()) {
+	            	
 	            	for(int i = 0; i < customervo.getMeters().size(); i++) {
 	            		con.prepareStatement("UPDATE customermeterdetails SET MIUID = '"+customervo.getMeters().get(i).getMiuID().trim()+"', GatewayID = " +customervo.getMeters().get(i).getGatewayID()+ ", MeterSizeID = " +customervo.getMeters().get(i).getMeterSizeID() +", ThresholdMaximum = "+customervo.getMeters().get(i).getThresholdMaximum() +", ThresholdMinimum = "+customervo.getMeters().get(i).getThresholdMinimum()+", ModifiedDate = NOW() WHERE CustomerMeterID = " + customervo.getMeters().get(i).getCustomerMeterID()).executeUpdate();
 	            		con.prepareStatement("UPDATE displaybalancelog SET MIUID = '"+customervo.getMeters().get(i).getMiuID().trim()+"' WHERE CustomerMeterID = " + customervo.getMeters().get(i).getCustomerMeterID()).executeUpdate();
 	            		
+	            		}
 	            	}
 	            	
 	            	PreparedStatement pstmt1 = con.prepareStatement("UPDATE USER SET UserName = CONCAT (?, (SELECT LastName FROM customerdetails WHERE CustomerUniqueID = ?)), MobileNumber = ?, Email = ? WHERE CustomerUniqueID = ?");
@@ -1278,7 +1285,6 @@ public class CommunitySetUpDAO {
 	            		responsevo.setResult("Success");
 	            		responsevo.setMessage("Customer Details Updated Successfully");
 	            	}
-	            	
 	            }
 			}
 			

@@ -175,9 +175,33 @@ public class ReportsDAO {
 						
 					}
 					
-			} else {
+			} else if (type.equalsIgnoreCase("solar")){
 				
-				// for graphical
+				String query = "SELECT DISTINCT c.CommunityName, b.BlockName, cd.FirstName, cd.LastName, cd.HouseNumber, cd.CustomerUniqueID, sl.ReadingID, \r\n" + 
+						"sl.Device_BlockID, sl.Relay_Status, sl.R_Status, sl.Y_Status, sl.B_Status, sl.LogDate \r\n" + 
+						"FROM solarlog AS sl LEFT JOIN community AS c ON c.communityID = sl.CommunityID LEFT JOIN block AS b ON b.BlockID = sl.BlockID\r\n" + 
+						"LEFT JOIN customerdetails AS cd ON cd.CustomerID = sl.CustomerID WHERE sl.CustomerUniqueID = ? AND sl.LogDate BETWEEN ? AND ? ";
+					
+					pstmt = con.prepareStatement(query);
+					pstmt.setString(1, userconsumptionreportsrequestvo.getCustomerUniqueID());
+					pstmt.setString(2, userconsumptionreportsrequestvo.getFromDate()+ " 00:00:01.001");
+					pstmt.setString(3,userconsumptionreportsrequestvo.getToDate()+ " 23:59:59.999");
+
+					rs = pstmt.executeQuery();
+					while (rs.next()) {
+
+						userconsumptionreportsresponsevo = new UserConsumptionReportsResponseVO();
+						
+						userconsumptionreportsresponsevo.setCustomerUniqueID(rs.getString("CustomerUniqueID"));
+						userconsumptionreportsresponsevo.setRelayStatus(rs.getInt("Relay_Status") == 0 ? "OFF" : "ON" );
+						userconsumptionreportsresponsevo.setrStatus(rs.getInt("R_Status") == 0 ? "OFF" : "ON" );
+						userconsumptionreportsresponsevo.setyStatus(rs.getInt("Y_Status") == 0 ? "OFF" : "ON" );
+						userconsumptionreportsresponsevo.setbStatus(rs.getInt("B_Status") == 0 ? "OFF" : "ON" );
+						userconsumptionreportsresponsevo.setDateTime(ExtraMethodsDAO.datetimeformatter(rs.getString("LogDate")));
+						
+						userconsumptionreportsresponselist.add(userconsumptionreportsresponsevo);
+						
+					}
 				
 			}
 			
@@ -191,7 +215,6 @@ public class ReportsDAO {
 		
 		return userconsumptionreportsresponselist;
 	}
-	
 	
 	/* TopUp Summary */
 

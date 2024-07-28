@@ -6,7 +6,7 @@ package com.idigitronics.IDigi.controller;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.SQLException;
-
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.springframework.core.io.InputStreamResource;
@@ -31,6 +31,7 @@ import com.idigitronics.IDigi.response.vo.GraphResponseVO;
 import com.idigitronics.IDigi.response.vo.HomeResponseVO;
 import com.idigitronics.IDigi.response.vo.ResponseVO;
 import com.idigitronics.IDigi.response.vo.SensorDashboardResponseVO;
+import com.idigitronics.IDigi.response.vo.SolarDashboardResponseVO;
 
 
 /**
@@ -42,7 +43,6 @@ import com.idigitronics.IDigi.response.vo.SensorDashboardResponseVO;
 public class DashboardController {
 
 	private static final Logger logger = Logger.getLogger(DashboardController.class);
-	
 	
 	@RequestMapping(value = "/dashboard/{type}/{communityName}/{blockName}/{customerUniqueID}/{filter}", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody DashboardResponseVO dashboarddetails(@PathVariable("type") String type, @PathVariable("communityName") String communityName, @PathVariable("blockName") String blockName, @PathVariable("customerUniqueID") String customerUniqueID, @PathVariable("filter") int filter) throws SQLException {
@@ -159,10 +159,8 @@ public class DashboardController {
 		return responsevo;
 	}
 	
-	
 	@RequestMapping(value = "/datafrommobile/{device_eui}", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
-	public @ResponseBody
-	ResponseVO datafrommobile(@RequestBody DataRequestVO dataRequestVO, @PathVariable("device_eui") String miuID) {
+	public @ResponseBody ResponseVO datafrommobile(@RequestBody DataRequestVO dataRequestVO, @PathVariable("device_eui") String miuID) {
 
 		DashboardDAO dashboarddao = new DashboardDAO();
 		ResponseVO responsevo = new ResponseVO();
@@ -248,6 +246,39 @@ public class DashboardController {
 			ex.printStackTrace();
 		}
 		return responsevo;
+	}
+	
+	@RequestMapping(value = "/solardashboard/{communityName}/{blockName}/{customerUniqueID}", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody SolarDashboardResponseVO solarDashboarddetails(@PathVariable("communityName") String communityName, @PathVariable("blockName") String blockName, @PathVariable("customerUniqueID") String customerUniqueID) throws SQLException {
+
+		DashboardDAO dashboarddao = new DashboardDAO();
+		SolarDashboardResponseVO solarDasboardresponsevo = new SolarDashboardResponseVO();
+		
+		communityName = (!communityName.equalsIgnoreCase("0") ? communityName.replace("%20", " ") : communityName);
+		blockName = (!blockName.equalsIgnoreCase("0") ? blockName.replace("%20", " ") : blockName);
+		
+		solarDasboardresponsevo.setData(dashboarddao.getSolarDashboarddetails(communityName, blockName, customerUniqueID));
+		
+		return solarDasboardresponsevo;
+	}
+	
+	@RequestMapping(value = "/solarhomedashboard/{roleid}/{id}", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody HomeResponseVO solarHomedashboarddetails(@PathVariable("roleid") int roleid, @PathVariable("id") String id) throws SQLException {
+
+		DashboardDAO dashboarddao = new DashboardDAO();
+		
+		id = (!id.equalsIgnoreCase("0") ? id.replace("%20", " ") : id);
+
+		return dashboarddao.getSolarHomeDashboardDetails(roleid, id);
+	}
+	
+	@RequestMapping(value = "/solargraph/{communityName}", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody List<GraphResponseVO> solarGraphdashboarddetails(@PathVariable("communityName") String communityName) throws SQLException {
+
+		DashboardDAO dashboarddao = new DashboardDAO();
+		communityName = (!communityName.equalsIgnoreCase("0") ? communityName.replace("%20", " ") : communityName);
+
+		return dashboarddao.getSolarGraphDashboardDetails(communityName);
 	}
 	
 }

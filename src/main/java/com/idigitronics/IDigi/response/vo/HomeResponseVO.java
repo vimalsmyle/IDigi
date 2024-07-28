@@ -25,6 +25,8 @@ public class HomeResponseVO {
 	private int topup;
 	private int amr;
 	private int amrPercentage;
+	private int solar;
+	private int solarPercentage;
 	
 	public int getActive() {
 		return active;
@@ -121,6 +123,18 @@ public class HomeResponseVO {
 	}
 	public void setAmrPercentage(int amrPercentage) {
 		this.amrPercentage = amrPercentage;
+	}
+	public int getSolar() {
+		return solar;
+	}
+	public void setSolar(int solar) {
+		this.solar = solar;
+	}
+	public int getSolarPercentage() {
+		return solarPercentage;
+	}
+	public void setSolarPercentage(int solarPercentage) {
+		this.solarPercentage = solarPercentage;
 	}
 	
 }

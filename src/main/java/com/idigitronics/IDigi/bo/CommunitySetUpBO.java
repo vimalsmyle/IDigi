@@ -254,7 +254,7 @@ public class CommunitySetUpBO {
 			throw new BusinessException("ALL FIELDS ARE MANDATORY");
 		}
 		
-		if(customervo.getMeters().size() == 0) {
+		if(customervo.getMeters().size() == 0 && !customervo.isSolar()) {
 			throw new BusinessException("NO METERS ASSIGNED TO CUSTOMER");
 		}
 
@@ -283,6 +283,8 @@ public class CommunitySetUpBO {
 			throw new BusinessException(customervo.getCustomerUniqueID() + " - CUSTOMERUNIQUEID IS ALREADY REGISTERED");
 		}
 		
+		if(customervo.getMeters().size() > 0 && !customervo.isSolar()) {
+		
 		for(int i = 0; i < customervo.getMeters().size(); i++) {
 			
 			if(communitysetupdao.checkMIUID(customervo.getMeters().get(i).getMiuID(), 0)) {
@@ -296,6 +298,7 @@ public class CommunitySetUpBO {
 			if(customervo.getMeters().get(i).getGatewayID()==-1) {
 				throw new BusinessException(customervo.getMeters().get(i).getMiuID() +" - GATEWAY IS NOT SELECTED");
 			}
+		}
 		}
 		
 		return communitysetupdao.addcustomer(customervo);

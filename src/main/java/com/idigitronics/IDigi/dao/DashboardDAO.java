@@ -16,6 +16,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -42,6 +43,7 @@ import com.idigitronics.IDigi.response.vo.IndividualDashboardResponseVO;
 import com.idigitronics.IDigi.response.vo.ResponseVO;
 import com.idigitronics.IDigi.response.vo.SensorDashboardResponseVO;
 import com.idigitronics.IDigi.response.vo.Series;
+import com.idigitronics.IDigi.response.vo.SolarDashboardResponseVO;
 import com.idigitronics.IDigi.response.vo.ValidateResponseVO;
 
 /*import io.jsonwebtoken.Claims;
@@ -2100,6 +2102,87 @@ public class DashboardDAO {
 		}
 		return sensorDashboardList;
 	}
+	
+	public List<SolarDashboardResponseVO> getSolarDashboarddetails(String communityName, String blockName, String customerUniqueID) throws SQLException {
+		// TODO Auto-generated method stub
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		PreparedStatement pstmt1 = null;
+		ResultSet rs = null;
+		ResultSet rs1 = null;
+		List<SolarDashboardResponseVO> solarDashboardList = null;
+		SolarDashboardResponseVO solarDashboardResponseVO = null;
+		String mainquery = "";
+		int communityID = 0;
+		int blockID = 0;
+		
+		try {
+			con = getConnection();
+			solarDashboardList = new LinkedList<SolarDashboardResponseVO>();
+			
+			if(communityName.equalsIgnoreCase("0")) {
+				
+				mainquery = "SELECT c.CommunityName, b.BlockName, cd.HouseNumber, cd.FirstName, cd.LastName, cd.CustomerUniqueID, cd.CustomerID FROM customerdetails AS cd LEFT JOIN community AS c ON cd.CommunityID = c.CommunityID LEFT JOIN block AS b ON b.BlockID = cd.BlockID";
+				
+			} else {
+				
+				String IDquery = "SELECT * FROM <tablename>";
+				PreparedStatement pstmt4 = con.prepareStatement(IDquery.replaceAll("<tablename>", (!blockName.equalsIgnoreCase("0") ? "block WHERE BlockName = '"+blockName+"' AND CommunityID = (SELECT CommunityID FROM community WHERE CommunityName = '"+communityName+"')" : "community WHERE CommunityName = '"+communityName+"'")));
+				ResultSet rs4 = pstmt4.executeQuery();
+				if(rs4.next()) {
+					blockID = (!blockName.equalsIgnoreCase("0") ? rs4.getInt("BlockID") : 0);
+					communityID = rs4.getInt("CommunityID");
+				}
+				
+				mainquery = "SELECT c.CommunityName, b.BlockName, cd.HouseNumber, cd.FirstName, cd.LastName, cd.CustomerUniqueID, cd.CustomerID FROM customerdetails AS cd LEFT JOIN community AS c ON cd.CommunityID = c.CommunityID LEFT JOIN block AS b ON b.BlockID = cd.BlockID <main>";
+				
+				mainquery = mainquery.replaceAll("<main>", (blockID == 0 && customerUniqueID.equalsIgnoreCase("0")) ?"WHERE cd.CommunityID = "+communityID : (blockID !=0 && customerUniqueID.equalsIgnoreCase("0")) ? "WHERE cd.CommunityID = "+communityID +" AND cd.BlockID = "+blockID : (blockID !=0 && !customerUniqueID.equalsIgnoreCase("0")) ? "WHERE cd.CommunityID = "+communityID +" AND cd.BlockID = "+blockID + " AND cd.CustomerUniqueID = '" + customerUniqueID +"'" : "");
+				
+			}
+			
+			//mainquery = "SELECT c.CommunityName, b.BlockName, cd.HouseNumber, cd.FirstName, cd.LastName, cd.CustomerUniqueID, cd.CustomerID, cmd.MIUID FROM customerdetails AS cd LEFT JOIN community AS c ON cd.CommunityID = c.CommunityID LEFT JOIN block AS b ON b.BlockID = cd.BlockID LEFT JOIN customermeterdetails cmd ON cmd.CustomerID = cd.CustomerID WHERE cd.ActiveStatus = 2";
+				
+			pstmt = con.prepareStatement(mainquery);
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				
+				solarDashboardResponseVO = new SolarDashboardResponseVO();
+				
+				solarDashboardResponseVO.setCommunityName(rs.getString("CommunityName"));
+				solarDashboardResponseVO.setBlockName(rs.getString("BlockName"));
+				solarDashboardResponseVO.setHouseNumber(rs.getString("HouseNumber"));
+				solarDashboardResponseVO.setFirstName(rs.getString("FirstName"));
+				solarDashboardResponseVO.setLastName(rs.getString("LastName"));
+				solarDashboardResponseVO.setCustomerUniqueID(rs.getString("CustomerUniqueID"));
+				
+				pstmt1 = con.prepareStatement("SELECT * FROM solarlog WHERE CustomerUniqueID = '"+ solarDashboardResponseVO.getCustomerUniqueID() + "' ORDER BY LogDate DESC LIMIT 0,1");
+				rs1 = pstmt1.executeQuery();
+				
+				if(rs1.next()) {
+					solarDashboardResponseVO.setReadingID(rs1.getInt("ReadingID"));
+					solarDashboardResponseVO.setDeviceBlockID(rs.getString("Device_BlockID"));
+					solarDashboardResponseVO.setRelayStatus(rs1.getInt("Relay_Status") == 0 ? "OFF" : "ON");
+					solarDashboardResponseVO.setrStatus(rs1.getInt("R_Status") == 0 ? "OFF" : "ON");
+					solarDashboardResponseVO.setyStatus(rs1.getInt("Y_Status") == 0 ? "OFF" : "ON");
+					solarDashboardResponseVO.setbStatus(rs1.getInt("B_Status") == 0 ? "OFF" : "ON");
+					solarDashboardResponseVO.setLogDate(ExtraMethodsDAO.datetimeformatter(rs1.getString("LogDate")));
+					
+				}
+				solarDashboardList.add(solarDashboardResponseVO);
+				solarDashboardList.removeIf(e -> e.getReadingID()==0);
+				
+			}
+		}
+
+		catch (Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			pstmt.close();
+			rs.close();
+			con.close();
+		}
+		return solarDashboardList;
+	}
 
 	public ResponseVO postSolarDashboarddetails(SolarDataRequestVO solarDataRequestVO) {
 		// TODO Auto-generated method stub
@@ -2127,39 +2210,180 @@ public class DashboardDAO {
 		try {
 			con = getConnection();
 			
-				PreparedStatement pstmt2 = con.prepareStatement("SELECT cd.CommunityID, cd.BlockID, cd.CustomerID, cd.CustomerUniqueID from customerdetails as cd LEFT JOIN customermeterdetails as cmd ON cd.CustomerID = cmd.CustomerID WHERE cd.ActiveStatus = 2 AND cmd.MIUID = ?");
-				pstmt2.setInt(1, solarDataRequestVO.getHomeid());
+				PreparedStatement pstmt2 = con.prepareStatement("SELECT cd.CommunityID, cd.BlockID, cd.CustomerID, cd.CustomerUniqueID, cd.HouseNumber from customerdetails as cd WHERE cd.HouseNumber = ?");
+				pstmt2.setString(1, "villa-"+solarDataRequestVO.getHomeid());
 				ResultSet rs = pstmt2.executeQuery();
 				if(rs.next()) {
 					
-//					ValidateResponseVO validateResponseVO = validateSensorRequest(sensorDataRequestVO, rs.getLong("CustomerID"));
-//					if(validateResponseVO.isResult()) {
+					ValidateResponseVO insertOrUpdate = checkChangeInRelayStatus(solarDataRequestVO, rs.getLong("CustomerID"));
+					if(insertOrUpdate.isResult()) {
 					
-					pstmt = con.prepareStatement("INSERT INTO solarlog (Device_BlockID, HomeID, CommunityID, BlockID, CustomerID, CustomerUniqueID, Relay_Status, R_Status, Y_Status, B_Status, LogDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
-					pstmt.setInt(1, solarDataRequestVO.getHomeid());
+					pstmt = con.prepareStatement("INSERT INTO solarlog (Device_BlockID, CommunityID, BlockID, HouseNumber, CustomerID, CustomerUniqueID, Relay_Status, R_Status, Y_Status, B_Status, LogDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
+
+					}
+					else {
+						
+						pstmt = con.prepareStatement("UPDATE solarlog SET Device_BlockID = ?, CommunityID = ?, BlockID = ?, HouseNumber = ?, CustomerID = ?, CustomerUniqueID = ?, Relay_Status = ?, R_Status = ?, Y_Status = ?, B_Status = ?, LogDate = NOW() WHERE ReadingID = ?");
+						pstmt.setLong(11, insertOrUpdate.getReadingID());
+
+					}
+					
+					pstmt.setInt(1, solarDataRequestVO.getBlockid());
 					pstmt.setInt(2, rs.getInt("CommunityID"));
 					pstmt.setInt(3, rs.getInt("BlockID"));
-					pstmt.setInt(4, rs.getInt("CustomerID"));
-					pstmt.setString(5, rs.getString("CustomerUniqueID"));
-					pstmt.setInt(6, solarDataRequestVO.getRelay_status());
-					pstmt.setInt(7, solarDataRequestVO.getR_status());
-					pstmt.setInt(8, solarDataRequestVO.getY_status());
-					pstmt.setInt(9, solarDataRequestVO.getB_status());
-
-					if (pstmt.executeUpdate() > 0) {
-						
-						result = "Success";
-						
-					}
-//				}
+					pstmt.setString(4, "villa-"+solarDataRequestVO.getHomeid());
+					pstmt.setInt(5, rs.getInt("CustomerID"));
+					pstmt.setString(6, rs.getString("CustomerUniqueID"));
+					pstmt.setInt(7, solarDataRequestVO.getRelay_status());
+					pstmt.setInt(8, solarDataRequestVO.getR_status());
+					pstmt.setInt(9, solarDataRequestVO.getY_status());
+					pstmt.setInt(10, solarDataRequestVO.getB_status());
 					
-		}
+					if (pstmt.executeUpdate() > 0) {
+						result = "Success";
+					}
+		} 
 				
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
 		return result;
+	}
+
+	private ValidateResponseVO checkChangeInRelayStatus(SolarDataRequestVO solarDataRequestVO, long cutomerID) throws ClassNotFoundException {
+		// TODO Auto-generated method stub
+		
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ValidateResponseVO validateResponseVO = new ValidateResponseVO();
+		
+		try {
+			con = getConnection();
+			
+			pstmt = con.prepareStatement("SELECT * FROM solarlog WHERE HouseNumber = ? AND CustomerID = " + cutomerID + " ORDER BY ReadingID DESC LIMIT 0,1");
+			pstmt.setString(1, "villa-"+solarDataRequestVO.getHomeid());
+			ResultSet rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				
+				if(solarDataRequestVO.getRelay_status() !=  rs.getInt("Relay_Status")) {
+					validateResponseVO.setResult(true);
+				} else {
+					validateResponseVO.setResult(false);
+				}
+				
+			} else {
+				validateResponseVO.setResult(true);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return validateResponseVO;
+	}
+
+	public HomeResponseVO getSolarHomeDashboardDetails(int roleid, String id) throws SQLException {
+		// TODO Auto-generated method stub
+		Connection con = null;
+		
+		HomeResponseVO homeResponseVO = null;
+		int active = 0;
+		int inActive = 0;
+		String blockName = "0";
+		String communityName = "0";
+		
+		try {
+			
+			con = getConnection();
+			homeResponseVO = new HomeResponseVO();
+			
+			if(!id.equalsIgnoreCase("0") && (roleid == 2 || roleid == 5)) {
+				PreparedStatement pstmt = con.prepareStatement("SELECT b.BlockName, c.CommunityName FROM block AS b LEFT JOIN Community AS c ON b.CommunityID = c.CommunityID WHERE BlockID = '"+id+"'");
+				ResultSet rs = pstmt.executeQuery();
+				if(rs.next()) {
+					blockName = rs.getString("BlockName");
+					communityName = rs.getString("CommunityName");
+				}
+			}
+			
+			List<SolarDashboardResponseVO> responselist = ((roleid == 1 || roleid == 4) ? getSolarDashboarddetails("0", "0", "0") : getSolarDashboarddetails(communityName, blockName, "0"));
+			
+			for(int i = 0; i < responselist.size(); i++) {
+				
+				if(responselist.get(i).getRelayStatus().equalsIgnoreCase("0")) { inActive++; } 
+				else { active++; } 
+				
+			}
+			
+			homeResponseVO.setActive(active);
+			homeResponseVO.setActivePercentage(responselist.size() == 0 ? 0 : (active*100/responselist.size()));
+			homeResponseVO.setInActive(inActive);
+			homeResponseVO.setInActivePercentage(responselist.size() == 0 ? 0 : (inActive*100/responselist.size()));
+			homeResponseVO.setSolar(responselist.size());
+			homeResponseVO.setSolarPercentage(responselist.size() == 0 ? 0 : 100);
+			
+		}
+
+		catch (Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			con.close();
+		}
+		logger.debug("Total count of Solar Devices in the application: " + homeResponseVO.getAmr());
+		System.out.println("Total count of Solar Devices in the application: " + homeResponseVO.getAmr());
+		return homeResponseVO;
+	}
+
+	public List<GraphResponseVO> getSolarGraphDashboardDetails(String communityName) {
+		// TODO Auto-generated method stub
+		Connection con = null;
+		
+		List<GraphResponseVO> responseList = new ArrayList<GraphResponseVO>();;
+		int id = 0;
+		
+		try {
+			con = getConnection();
+			
+			if(!communityName.equalsIgnoreCase("0")) {
+				ResultSet rs1 = con.prepareStatement("SELECT * FROM block WHERE CommunityID = (SELECT CommunityID FROM community WHERE CommunityName = '"+communityName+"')").executeQuery();
+				if(rs1.next()) { id = rs1.getInt("CommunityID"); }				
+				}
+			
+						String start = "SELECT * FROM <tablename> ";
+						PreparedStatement pstmt3 = con.prepareStatement(start.replaceAll("<tablename>", id != 0 ? "block WHERE CommunityID = "+id : "community"));
+						ResultSet rs3 = pstmt3.executeQuery();
+						
+						while(rs3.next()) {
+							
+								String mainquery = "SELECT * FROM solarlog WHERE <main> ";
+								
+								mainquery = mainquery.replaceAll("<main>", id != 0 ? " CommunityID = "+id+" AND BlockID = "+ rs3.getInt("BlockID")+" ORDER BY CustomerID ASC" : " CommunityID = "+rs3.getInt("CommunityID"));
+								
+								PreparedStatement pstmt2 = con.prepareStatement(mainquery);
+								ResultSet rs2 = pstmt2.executeQuery();
+								
+								while(rs2.next()) {
+									
+									GraphResponseVO graphResponseVO = new GraphResponseVO();
+									graphResponseVO.setDeviceBlockID(rs2.getInt("Device_BlockID"));
+									graphResponseVO.setHouseNumber(rs2.getString("HouseNumber"));
+									graphResponseVO.setCustomerUniqueID(rs2.getString("CustomerUniqueID"));
+									graphResponseVO.setRelayStatus(rs2.getInt("Relay_Status") == 0 ? "OFF" : "ON");
+									graphResponseVO.setColour(rs2.getInt("Relay_Status") == 0 ? "Red" : "Green");
+									
+									responseList.add(graphResponseVO);
+									
+								}
+
+						}
+
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return responseList;
 	}
 
 }

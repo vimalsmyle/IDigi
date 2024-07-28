@@ -25,6 +25,8 @@ public class CustomerRequestVO {
 	private int loggedInRoleID;
 	private String loggedInUserID;
 	
+	private boolean isSolar;
+	
 	public long getCustomerID() {
 		return customerID;
 	}
@@ -102,5 +104,11 @@ public class CustomerRequestVO {
 	}
 	public void setMeters(List<MeterRequestVO> meters) {
 		this.meters = meters;
+	}
+	public boolean isSolar() {
+		return isSolar;
+	}
+	public void setSolar(boolean isSolar) {
+		this.isSolar = isSolar;
 	}
 }

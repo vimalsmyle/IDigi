@@ -11,6 +11,7 @@ public class ValidateResponseVO {
 	
 	private boolean result;
 	private long previousReading;
+	private long readingID;
 	
 	public boolean isResult() {
 		return result;
@@ -23,6 +24,12 @@ public class ValidateResponseVO {
 	}
 	public void setPreviousReading(long previousReading) {
 		this.previousReading = previousReading;
+	}
+	public long getReadingID() {
+		return readingID;
+	}
+	public void setReadingID(long readingID) {
+		this.readingID = readingID;
 	}
 	
 }

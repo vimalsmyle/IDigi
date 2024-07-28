@@ -62,15 +62,18 @@ public class ReportsController {
 
 		UserConsumptionReportsResponseVO userConsumptionReportsResponseVO = new UserConsumptionReportsResponseVO();
 		
-		userConsumptionReportsResponseVO.setData(reportsdao.getuserconsumptionreportsdetails(userConsumptionRequestVO, type));
-		
-		List<String> miuIdList = userConsumptionReportsResponseVO.getData().stream() 
-				  .filter(distinctByKey(p -> p.getMiuID())).map(e->e.getMiuID())
-				  .collect(Collectors.toList());
-		
-		userConsumptionReportsResponseVO.setSizeMeter(String.valueOf(miuIdList.size()));
-	
-		
+			userConsumptionReportsResponseVO.setData(reportsdao.getuserconsumptionreportsdetails(userConsumptionRequestVO, type));
+			
+			if(!type.equalsIgnoreCase("solar")) {
+				
+				List<String> miuIdList = userConsumptionReportsResponseVO.getData().stream() 
+						  .filter(distinctByKey(p -> p.getMiuID())).map(e->e.getMiuID())
+						  .collect(Collectors.toList());
+				
+				userConsumptionReportsResponseVO.setSizeMeter(String.valueOf(miuIdList.size()));
+				
+			}
+			
 		return userConsumptionReportsResponseVO;
 	}
 	

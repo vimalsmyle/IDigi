@@ -25,6 +25,11 @@ public class UserConsumptionReportsResponseVO {
 	private String dateTime;
 	private String sizeMeter;
 	
+	private String relayStatus;
+	private String rStatus;
+	private String yStatus;
+	private String bStatus;
+	
 	private List<UserConsumptionReportsResponseVO> data;
 	
 	public String getCustomerUniqueID() {
@@ -110,6 +115,30 @@ public class UserConsumptionReportsResponseVO {
 	}
 	public void setReading2(float reading2) {
 		this.reading2 = reading2;
+	}
+	public String getRelayStatus() {
+		return relayStatus;
+	}
+	public void setRelayStatus(String relayStatus) {
+		this.relayStatus = relayStatus;
+	}
+	public String getyStatus() {
+		return yStatus;
+	}
+	public void setyStatus(String yStatus) {
+		this.yStatus = yStatus;
+	}
+	public String getrStatus() {
+		return rStatus;
+	}
+	public void setrStatus(String rStatus) {
+		this.rStatus = rStatus;
+	}
+	public String getbStatus() {
+		return bStatus;
+	}
+	public void setbStatus(String bStatus) {
+		this.bStatus = bStatus;
 	}
 	
 }
