@@ -2160,7 +2160,7 @@ public class DashboardDAO {
 				
 				if(rs1.next()) {
 					solarDashboardResponseVO.setReadingID(rs1.getInt("ReadingID"));
-					solarDashboardResponseVO.setDeviceBlockID(rs.getString("Device_BlockID"));
+					solarDashboardResponseVO.setDeviceBlockID(rs1.getString("Device_BlockID"));
 					solarDashboardResponseVO.setRelayStatus(rs1.getInt("Relay_Status") == 0 ? "OFF" : "ON");
 					solarDashboardResponseVO.setrStatus(rs1.getInt("R_Status") == 0 ? "OFF" : "ON");
 					solarDashboardResponseVO.setyStatus(rs1.getInt("Y_Status") == 0 ? "OFF" : "ON");
