@@ -2271,6 +2271,7 @@ public class DashboardDAO {
 					validateResponseVO.setResult(true);
 				} else {
 					validateResponseVO.setResult(false);
+					validateResponseVO.setReadingID(rs.getLong("ReadingID"));
 				}
 				
 			} else {
@@ -2312,7 +2313,7 @@ public class DashboardDAO {
 			
 			for(int i = 0; i < responselist.size(); i++) {
 				
-				if(responselist.get(i).getRelayStatus().equalsIgnoreCase("0")) { inActive++; } 
+				if(responselist.get(i).getRelayStatus().equalsIgnoreCase("OFF")) { inActive++; } 
 				else { active++; } 
 				
 			}
@@ -2331,8 +2332,8 @@ public class DashboardDAO {
 		} finally {
 			con.close();
 		}
-		logger.debug("Total count of Solar Devices in the application: " + homeResponseVO.getAmr());
-		System.out.println("Total count of Solar Devices in the application: " + homeResponseVO.getAmr());
+		logger.debug("Total count of Solar Devices in the application: " + homeResponseVO.getSolar());
+		System.out.println("Total count of Solar Devices in the application: " + homeResponseVO.getSolar());
 		return homeResponseVO;
 	}
 
@@ -2340,7 +2341,7 @@ public class DashboardDAO {
 		// TODO Auto-generated method stub
 		Connection con = null;
 		
-		List<GraphResponseVO> responseList = new ArrayList<GraphResponseVO>();;
+		List<GraphResponseVO> resultList = new ArrayList<GraphResponseVO>();
 		int id = 0;
 		
 		try {
@@ -2357,33 +2358,27 @@ public class DashboardDAO {
 						
 						while(rs3.next()) {
 							
-								String mainquery = "SELECT * FROM solarlog WHERE <main> ";
+							List<SolarDashboardResponseVO> responselist = getSolarDashboarddetails(communityName, (id != 0 ? rs3.getString("BlockName") : "0"), "0");	
+							
+							for(SolarDashboardResponseVO res : responselist) {
 								
-								mainquery = mainquery.replaceAll("<main>", id != 0 ? " CommunityID = "+id+" AND BlockID = "+ rs3.getInt("BlockID")+" ORDER BY CustomerID ASC" : " CommunityID = "+rs3.getInt("CommunityID"));
-								
-								PreparedStatement pstmt2 = con.prepareStatement(mainquery);
-								ResultSet rs2 = pstmt2.executeQuery();
-								
-								while(rs2.next()) {
-									
+							}
 									GraphResponseVO graphResponseVO = new GraphResponseVO();
-									graphResponseVO.setDeviceBlockID(rs2.getInt("Device_BlockID"));
-									graphResponseVO.setHouseNumber(rs2.getString("HouseNumber"));
-									graphResponseVO.setCustomerUniqueID(rs2.getString("CustomerUniqueID"));
-									graphResponseVO.setRelayStatus(rs2.getInt("Relay_Status") == 0 ? "OFF" : "ON");
-									graphResponseVO.setColour(rs2.getInt("Relay_Status") == 0 ? "Red" : "Green");
+//									graphResponseVO.setDeviceBlockID(rs2.getInt("Device_BlockID"));
+//									graphResponseVO.setHouseNumber(rs2.getString("HouseNumber"));
+//									graphResponseVO.setCustomerUniqueID(rs2.getString("CustomerUniqueID"));
+//									graphResponseVO.setRelayStatus(rs2.getInt("Relay_Status") == 0 ? "OFF" : "ON");
+//									graphResponseVO.setColour(rs2.getInt("Relay_Status") == 0 ? "Red" : "Green");
 									
-									responseList.add(graphResponseVO);
+									resultList.add(graphResponseVO);
 									
-								}
-
 						}
 
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
 		
-		return responseList;
+		return resultList;
 	}
 
 }

@@ -333,9 +333,9 @@ public class CommunitySetUpController {
 		return responsevo;
 	}
 
-	@RequestMapping(value = "/customer/edit/{CustomerUniqueID}", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	@RequestMapping(value = "/customer/edit/{customerUniqueID}", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	public @ResponseBody
-	ResponseVO editcustomer(@PathVariable("CustomerUniqueID") String CustomerUniqueID,
+	ResponseVO editcustomer(@PathVariable("customerUniqueID") String CustomerUniqueID,
 			@RequestBody CustomerRequestVO customervo) throws ClassNotFoundException,
 			BusinessException, SQLException {
 		ResponseVO responsevo = new ResponseVO();
