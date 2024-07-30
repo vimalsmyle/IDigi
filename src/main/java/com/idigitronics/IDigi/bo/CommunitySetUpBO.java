@@ -254,9 +254,9 @@ public class CommunitySetUpBO {
 			throw new BusinessException("ALL FIELDS ARE MANDATORY");
 		}
 		
-		if(customervo.getMeters().size() == 0 && !customervo.isSolar()) {
-			throw new BusinessException("NO METERS ASSIGNED TO CUSTOMER");
-		}
+//		if(customervo.getMeters().size() == 0) {
+//			throw new BusinessException("NO METERS ASSIGNED TO CUSTOMER");
+//		}
 
 		if (checkName(customervo.getFirstName()) == true || checkName(customervo.getLastName()) == true) {
 			throw new BusinessException("NAME MUST BE ALPHANUMERIC ONLY");
@@ -283,7 +283,7 @@ public class CommunitySetUpBO {
 			throw new BusinessException(customervo.getCustomerUniqueID() + " - CUSTOMERUNIQUEID IS ALREADY REGISTERED");
 		}
 		
-		if(customervo.getMeters().size() > 0 && !customervo.isSolar()) {
+		if(customervo.getMeters().size() > 0) {
 		
 		for(int i = 0; i < customervo.getMeters().size(); i++) {
 			
