@@ -13,14 +13,10 @@ public class GraphResponseVO {
 	private List<String> xAxis;
 	private List<Integer> yAxis;
 	
-	private int deviceBlockID;
-	private String houseNumber;
-	private String customerUniqueID;
-	private String relayStatus;
-	private String colour;
+	private List<SolarDashboardResponseVO> block1List;
+	private List<SolarDashboardResponseVO> block2List;
+	private List<SolarDashboardResponseVO> block3List;
 	
-	private List<GraphResponseVO> data;
-
 	public List<String> getXAxis() {
 	return xAxis;
 	}
@@ -37,53 +33,30 @@ public class GraphResponseVO {
 	this.yAxis = yAxis;
 	}
 
-	public int getDeviceBlockID() {
-		return deviceBlockID;
+	public List<SolarDashboardResponseVO> getBlock1List() {
+		return block1List;
 	}
 
-	public void setDeviceBlockID(int deviceBlockID) {
-		this.deviceBlockID = deviceBlockID;
+	public void setBlock1List(List<SolarDashboardResponseVO> block1List) {
+		this.block1List = block1List;
 	}
 
-	public String getHouseNumber() {
-		return houseNumber;
+	public List<SolarDashboardResponseVO> getBlock2List() {
+		return block2List;
 	}
 
-	public void setHouseNumber(String houseNumber) {
-		this.houseNumber = houseNumber;
+	public void setBlock2List(List<SolarDashboardResponseVO> block2List) {
+		this.block2List = block2List;
 	}
 
-	public String getCustomerUniqueID() {
-		return customerUniqueID;
+	public List<SolarDashboardResponseVO> getBlock3List() {
+		return block3List;
 	}
 
-	public void setCustomerUniqueID(String customerUniqueID) {
-		this.customerUniqueID = customerUniqueID;
-	}
-
-	public String getRelayStatus() {
-		return relayStatus;
-	}
-
-	public void setRelayStatus(String relayStatus) {
-		this.relayStatus = relayStatus;
-	}
-
-	public List<GraphResponseVO> getData() {
-		return data;
-	}
-
-	public void setData(List<GraphResponseVO> data) {
-		this.data = data;
-	}
-
-	public String getColour() {
-		return colour;
-	}
-
-	public void setColour(String colour) {
-		this.colour = colour;
+	public void setBlock3List(List<SolarDashboardResponseVO> block3List) {
+		this.block3List = block3List;
 	}
 	
 	
+
 }

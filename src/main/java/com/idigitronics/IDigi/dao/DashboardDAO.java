@@ -2337,11 +2337,16 @@ public class DashboardDAO {
 		return homeResponseVO;
 	}
 
-	public List<GraphResponseVO> getSolarGraphDashboardDetails(String communityName) {
+	public GraphResponseVO getSolarGraphDashboardDetails(String communityName) {
 		// TODO Auto-generated method stub
 		Connection con = null;
 		
-		List<GraphResponseVO> resultList = new ArrayList<GraphResponseVO>();
+		List<SolarDashboardResponseVO> block1List = new ArrayList<SolarDashboardResponseVO>();
+		List<SolarDashboardResponseVO> block2List = new ArrayList<SolarDashboardResponseVO>();
+		List<SolarDashboardResponseVO> block3List = new ArrayList<SolarDashboardResponseVO>();
+		
+		GraphResponseVO response = new GraphResponseVO();
+		
 		int id = 0;
 		
 		try {
@@ -2362,23 +2367,25 @@ public class DashboardDAO {
 							
 							for(SolarDashboardResponseVO res : responselist) {
 								
+								if(res.getDeviceBlockID().equalsIgnoreCase("1")) {
+									block1List.add(res);
+								} else if(res.getDeviceBlockID().equalsIgnoreCase("2")) {
+									block2List.add(res);
+								} else if(res.getDeviceBlockID().equalsIgnoreCase("3")) {
+									block3List.add(res);
+								}
 							}
-									GraphResponseVO graphResponseVO = new GraphResponseVO();
-//									graphResponseVO.setDeviceBlockID(rs2.getInt("Device_BlockID"));
-//									graphResponseVO.setHouseNumber(rs2.getString("HouseNumber"));
-//									graphResponseVO.setCustomerUniqueID(rs2.getString("CustomerUniqueID"));
-//									graphResponseVO.setRelayStatus(rs2.getInt("Relay_Status") == 0 ? "OFF" : "ON");
-//									graphResponseVO.setColour(rs2.getInt("Relay_Status") == 0 ? "Red" : "Green");
-									
-									resultList.add(graphResponseVO);
-									
+							response.setBlock1List(block1List);
+							response.setBlock2List(block2List);
+							response.setBlock3List(block3List);
+							
 						}
 
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
 		
-		return resultList;
+		return response;
 	}
 
 }

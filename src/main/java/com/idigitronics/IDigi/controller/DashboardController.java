@@ -273,7 +273,7 @@ public class DashboardController {
 	}
 	
 	@RequestMapping(value = "/solargraph/{communityName}", method = RequestMethod.GET, produces = "application/json")
-	public @ResponseBody List<GraphResponseVO> solarGraphdashboarddetails(@PathVariable("communityName") String communityName) throws SQLException {
+	public @ResponseBody GraphResponseVO solarGraphdashboarddetails(@PathVariable("communityName") String communityName) throws SQLException {
 
 		DashboardDAO dashboarddao = new DashboardDAO();
 		communityName = (!communityName.equalsIgnoreCase("0") ? communityName.replace("%20", " ") : communityName);
