@@ -205,6 +205,52 @@ public class DashboardController {
 		return responsevo;
 	}
 	
+	@RequestMapping(value = "/datafromble/{device_eui}", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	public @ResponseBody ResponseVO dataFromBle(@RequestBody DataRequestVO dataRequestVO, @PathVariable("device_eui") String miuID) {
+
+		DashboardDAO dashboarddao = new DashboardDAO();
+		ResponseVO responsevo = new ResponseVO();
+
+		try {
+			dataRequestVO.setSource("BLE");
+			dataRequestVO.setMiuID(miuID);
+			
+			try {
+				
+				logger.debug("Data of Device ID: "+miuID+" received from BLE");
+				
+				
+					if (dataRequestVO.getType() > 0) {
+						
+						if(dashboarddao.validateToken(dataRequestVO)) {
+							
+							logger.debug("Battery Voltage: "+dataRequestVO.getBat_volt());
+							
+							responsevo.setResult(dashboarddao.insertdashboard(dataRequestVO, dataRequestVO.getMiuID()));
+							responsevo.setMessage(responsevo.getResult().equalsIgnoreCase("Success") ? "Data Inserted Successfully" : "Data Insertion Failed");
+							
+						} else {
+							responsevo.setResult("Failure");
+							responsevo.setMessage("Token Validation Failed");
+						}
+						
+					} else {
+						responsevo.setResult("Failure");
+						responsevo.setMessage("Invalid Meter Type");
+					}
+
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+			
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			responsevo.setResult("Failure");
+			responsevo.setMessage("Data Insertion Failed");
+		}
+		return responsevo;
+	}
+	
 	@RequestMapping(value = "/SENSORS/{equipment_serial_id}", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	public @ResponseBody ResponseVO postSensorDashboardDetails(@RequestBody SensorDataRequestVO sensorDataRequestVO, @PathVariable("equipment_serial_id") String equipment_serial_id) {
 

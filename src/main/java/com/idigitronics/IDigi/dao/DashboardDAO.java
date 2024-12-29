@@ -35,6 +35,7 @@ import com.idigitronics.IDigi.request.vo.MailRequestVO;
 import com.idigitronics.IDigi.request.vo.SMSRequestVO;
 import com.idigitronics.IDigi.request.vo.SensorDataRequestVO;
 import com.idigitronics.IDigi.request.vo.SolarDataRequestVO;
+import com.idigitronics.IDigi.request.vo.Status;
 import com.idigitronics.IDigi.response.vo.AllGraphResponseVO;
 import com.idigitronics.IDigi.response.vo.DashboardResponseVO;
 import com.idigitronics.IDigi.response.vo.GraphResponseVO;
@@ -1480,6 +1481,21 @@ public class DashboardDAO {
 					pstmt.setFloat(19, dataRequestVO.getEmergency_credit());
 					pstmt.setInt(20, dataRequestVO.getDays_elapsed_after_valve_trip());
 					pstmt.setFloat(21, dataRequestVO.getReading());
+					
+					if(dataRequestVO.getStatus() == null) {
+						
+						Status status = new Status();
+						status.setDoor_open(0);
+						status.setMagnetic(0);
+						status.setSchedule_disconnect(0);
+						status.setRtc_fault(0);
+						status.setLow_bat(0);
+						status.setLow_bal(0);
+						status.setNfc_tamper(0);
+						
+						dataRequestVO.setStatus(status);
+					}
+					
 					pstmt.setInt(22, dataRequestVO.getStatus().getDoor_open());
 					pstmt.setInt(23, dataRequestVO.getStatus().getMagnetic());
 					pstmt.setInt(24, dataRequestVO.getStatus().getSchedule_disconnect());
@@ -1525,6 +1541,21 @@ public class DashboardDAO {
 								pstmt1.setFloat(20, dataRequestVO.getEmergency_credit());
 								pstmt1.setInt(21, dataRequestVO.getDays_elapsed_after_valve_trip());
 								pstmt1.setFloat(22, dataRequestVO.getReading());
+								
+								if(dataRequestVO.getStatus() == null) {
+									
+									Status status = new Status();
+									status.setDoor_open(0);
+									status.setMagnetic(0);
+									status.setSchedule_disconnect(0);
+									status.setRtc_fault(0);
+									status.setLow_bat(0);
+									status.setLow_bal(0);
+									status.setNfc_tamper(0);
+									
+									dataRequestVO.setStatus(status);
+								}
+								
 								pstmt1.setInt(23, dataRequestVO.getStatus().getDoor_open());
 								pstmt1.setInt(24, dataRequestVO.getStatus().getMagnetic());
 								pstmt1.setInt(25, dataRequestVO.getStatus().getSchedule_disconnect());
@@ -1561,6 +1592,21 @@ public class DashboardDAO {
 									pstmt1.setFloat(20, dataRequestVO.getEmergency_credit());
 									pstmt1.setInt(21, dataRequestVO.getDays_elapsed_after_valve_trip());
 									pstmt1.setFloat(22, dataRequestVO.getReading());
+									
+									if(dataRequestVO.getStatus() == null) {
+										
+										Status status = new Status();
+										status.setDoor_open(0);
+										status.setMagnetic(0);
+										status.setSchedule_disconnect(0);
+										status.setRtc_fault(0);
+										status.setLow_bat(0);
+										status.setLow_bal(0);
+										status.setNfc_tamper(0);
+										
+										dataRequestVO.setStatus(status);
+									}
+									
 									pstmt1.setInt(23, dataRequestVO.getStatus().getDoor_open());
 									pstmt1.setInt(24, dataRequestVO.getStatus().getMagnetic());
 									pstmt1.setInt(25, dataRequestVO.getStatus().getSchedule_disconnect());
