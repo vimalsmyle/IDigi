@@ -63,6 +63,68 @@ $(document)
 											// = data.inActivePercentage;
 
 										});
+						
+						
+						
+						// solar Graph
+						
+						$
+						.getJSON(
+								"./solarhomedashboard/"
+										+ sessionStorage
+												.getItem("roleID")
+										+ "/"
+										+ sessionStorage.getItem("ID"),
+								function(data) {
+									document
+											.querySelector("#solarActive").innerText = data.active;
+									document
+											.querySelector("#solarInactive").innerText = data.inActive;
+									document.querySelector("#solarLive").innerText = data.live;
+									document
+											.querySelector("#solarnonLive").innerText = data.nonLive;
+									document
+											.querySelector("#solaremergency").innerText = data.emergency;
+									document
+											.querySelector("#solarLowbattery").innerText = data.lowBattery;
+									
+								});
+						
+						
+// solar Graph view
+						
+$.getJSON("./solargraph/"+sessionStorage
+						.getItem("communityName"), function(data) {
+    console.log("solargraph", data);
+    console.log("Cname", sessionStorage
+						.getItem("communityName"));
+
+    // Function to handle list rendering based on the provided list and element ID
+    function renderList(listData, listElementId) {
+        const listElement = $(listElementId);
+        listData.forEach(item => {
+            // Determine background color based on rStatus
+            const colorCode = item.rStatus === "OFF" ? 'red' : 'green';
+
+            // Concatenate multiple pieces of data into one string for the title
+            const titleText = `House Name: ${item.HouseNumber}\nName: ${item.firstName} ${item.lastName}\nBlockName: ${item.blockName}`;
+
+            // Create and append the list item
+            const listItem = $('<div></div>')
+                .text("")
+                .css('background-color', colorCode)
+                .attr('title', titleText);  // Set the concatenated title
+            listElement.append(listItem);
+        });
+    }
+
+    // Render the data for each block list
+    renderList(data.block1List, '#data-list');
+    renderList(data.block2List, '#data-list1');
+    renderList(data.block3List, '#data-list2');
+});
+
+	
 
 						$
 								.ajax({

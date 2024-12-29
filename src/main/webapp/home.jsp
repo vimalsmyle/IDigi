@@ -22,6 +22,39 @@
 <link href="common/css/materialize.fontawsome.css" rel="stylesheet">
 
 
+<style>
+            .sec{
+                margin: 0 auto;
+                height: 50vh;
+                width: 50vh;
+                            }
+            .axis{
+                border-left: 2px solid #000;
+                border-bottom: 2px solid #000;
+            }
+            .cube-p{
+                height: 40vh;
+               
+                border: 1px solid #000;
+                margin: 10px;
+                display: flex;
+                align-items: end;
+            }
+            .child{
+                margin: 0;
+                padding: 0;
+                list-style: none;
+                display: flex;
+                    flex-wrap: wrap;
+                
+            }
+            .child div{
+                width:3vh;
+                height:3vh;
+                margin: 2px;
+                }
+        </style>
+
 
 <title>DashBoard</title>
 </head>
@@ -370,6 +403,215 @@
 
 
 
+						
+						
+						<div class="page-header">
+							<h3>Solar</h3>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<div class="box">
+									<div class="box-body">
+										</div>
+										<%
+											if (user_id.equalsIgnoreCase("1") || user_id.equalsIgnoreCase("4")) {
+										%>
+										
+										
+										
+										<main>
+            <section class="sec">
+                <div class="">
+                <div class="row axis">
+		<div class="col-md-4 p-3">
+                  <div class="cube-p">
+                        <div class="child" id="data-list">
+                            
+                           
+                        </div>
+
+                    </div>
+                </div>
+                		<div class="col-md-4 p-3">
+                  <div class="cube-p">
+                        <div class="child" id="data-list1">
+                            
+                           
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-md-4 p-3">
+                  <div class="cube-p">
+                        <div class="child" id="data-list2">
+                            
+                           
+                        </div>
+
+                    </div>
+                </div>
+			</div>
+		</div>
+			
+
+
+            </section>
+        </main>
+										
+										
+										
+										
+										<%
+											}
+										%>
+									
+									<div class="box-footer">
+										<div class="container">
+											<div class="row">
+												<div class="col-md-12">
+
+													<section class="logo-carousel slider" data-arrows="true">
+														<div class="slide sliding-block">
+
+															<div class="text-xs font-weight-bold text-uppercase">
+																<h5 class="description-header" id="solarActive"></h5>
+																<span class="description-text"
+																	onClick="redirection(1,'solar')">Active <i
+																	class="fa fa-chevron-right view_details"
+																	aria-hidden="true"></i>
+																</span>
+															</div>
+
+														</div>
+
+														<div class="slide sliding-block">
+
+															<div class="text-xs font-weight-bold text-uppercase">
+																<h5 class="description-header" id="solarInactive"></h5>
+																<span class="description-text"
+																	onClick="redirection(2,'solar')">In-Active <i
+																	class="fa fa-chevron-right view_details"
+																	aria-hidden="true"></i>
+																</span>
+
+															</div>
+
+														</div>
+														<div class="slide sliding-block">
+
+															<div class="text-xs font-weight-bold text-uppercase">
+																<h5 class="description-header" id="solarLive"></h5>
+																<span class="description-text"
+																	onClick="redirection(3,'solar')">Live <i
+																	class="fa fa-chevron-right view_details"
+																	aria-hidden="true"></i>
+																</span>
+															</div>
+
+														</div>
+
+														<div class="slide sliding-block">
+
+															<div class="text-xs font-weight-bold text-uppercase">
+																<h5 class="description-header" id="solarnonLive"></h5>
+																<span class="description-text"
+																	onClick="redirection(4,'solar')">Non-Live <i
+																	class="fa fa-chevron-right view_details"
+																	aria-hidden="true"></i>
+																</span>
+															</div>
+
+														</div>
+
+														<div class="slide sliding-block">
+
+															<div class="text-xs font-weight-bold text-uppercase">
+																<h5 class="description-header" id="solaremergency"></h5>
+																<span class="description-text"
+																	onClick="redirection(6,'solar')">Emergency <i
+																	class="fa fa-chevron-right view_details"
+																	aria-hidden="true"></i>
+																</span>
+															</div>
+
+														</div>
+
+														<div class="slide sliding-block">
+
+															<div class="text-xs font-weight-bold text-uppercase">
+																<h5 class="description-header" id="solarLowbattery"></h5>
+																<span class="description-text"
+																	onClick="redirection(5,'solar')">Low Battery <i
+																	class="fa fa-chevron-right view_details"
+																	aria-hidden="true"></i>
+																</span>
+															</div>
+
+														</div>
+
+
+														<%
+															if (user_id.equalsIgnoreCase("2") || user_id.equalsIgnoreCase("5")) {
+														%>
+														<div class="slide sliding-block">
+
+															<div class="text-xs font-weight-bold text-uppercase">
+																<h5 class="description-header" id="gasActivePercentage"></h5>
+																<span class="description-text"
+																	onClick="dashboardAll('Gas')">All Details<i
+																	class="fa fa-chevron-right view_details"
+																	aria-hidden="true"></i>
+																</span>
+															</div>
+
+														</div>
+														<%
+															}
+														%>
+
+														<!--						<div class="slide sliding-block">
+
+															<div class="text-xs font-weight-bold text-uppercase">
+																<h5 class="description-header"
+																	id="gasinactivePercentage"></h5>
+																<span class="description-text">in-Active
+																	Percentage</span>
+															</div>
+
+														</div> -->
+
+
+
+
+													</section>
+
+
+												</div>
+											</div>
+										</div>
+
+									</div>
+								</div>
+							</div>
+						</div>
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
 						
 
 
