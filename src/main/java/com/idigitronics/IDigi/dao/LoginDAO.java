@@ -94,7 +94,7 @@ public class LoginDAO {
 							
 							pstmt5 = con.prepareStatement("SELECT CommunityID, CommunityName FROM community");
 							resultSet5 = pstmt5.executeQuery();
-							if (!resultSet5.next()) {
+							if (resultSet5.next()) {
 								communityId = resultSet5.getInt("CommunityID");
 								communityName = resultSet5.getString("CommunityName");
 							}
