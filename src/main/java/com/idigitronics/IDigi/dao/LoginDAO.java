@@ -56,11 +56,15 @@ public class LoginDAO {
 		PreparedStatement pstmt = null;
 		ResultSet resultSet = null;
 		PreparedStatement pstmt1 = null;
+		PreparedStatement pstmt5 = null;
 		ResultSet resultSet1 = null;
+		ResultSet resultSet5 = null;
 		ResponseVO responsevo = new ResponseVO();
 		UserDetails userDetails = new UserDetails();
 		MeterRequestVO metervo = null;
 		List<MeterRequestVO> customer_meter_list = null;
+		int communityId = 0;
+		String communityName = "";
 
 		try {
 			con = getConnection();
@@ -87,6 +91,13 @@ public class LoginDAO {
 								
 								throw new BusinessException("USER NOT AUTHORIZED TO LOGIN");
 							}
+							
+							pstmt5 = con.prepareStatement("SELECT CommunityID, CommunityName FROM community");
+							resultSet5 = pstmt5.executeQuery();
+							if (resultSet5.next()) {
+								communityId = resultSet5.getInt("CommunityID");
+								communityName = resultSet5.getString("CommunityName");
+							}
 
 							userDetails.setRoleID(resultSet.getInt("RoleID"));
 							userDetails.setBlockID(resultSet.getInt("BlockID"));
@@ -95,8 +106,8 @@ public class LoginDAO {
 							userDetails.setCustomerID(resultSet.getInt("CustomerID"));
 							userDetails.setCustomerUniqueID(resultSet.getString("CustomerUniqueID"));
 							userDetails.setuserName(resultSet.getString("UserName"));
-							userDetails.setCommunity(resultSet.getInt("CommunityID"));
-							userDetails.setCommunityName(resultSet.getString("CommunityName"));
+							userDetails.setCommunity(userDetails.getRoleID() == 1 ? communityId : resultSet.getInt("CommunityID"));
+							userDetails.setCommunityName(userDetails.getRoleID() == 1 ? communityName : resultSet.getString("CommunityName"));
 							userDetails.setBlockName(resultSet.getString("BlockName"));
 							userDetails.setHouseNo(resultSet.getString("HouseNumber"));
 							userDetails.setID(resultSet.getInt("ID"));
