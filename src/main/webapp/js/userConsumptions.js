@@ -282,7 +282,7 @@ $(document)
 																	
 																	
 														 $("div.headname").html('<h3>User Consumptions</h3>');
-														 var template = `<b>CAN:</b><span>`+d.data[0].customerUniqueID+`</span><b>&nbsp&nbspNo. of meters: </b>`+d.sizeMeter;
+														 var template = `<b>CAN:</b><span>`+d.data[0].customerUniqueID+`</span>`;
 														 $(".totalCount")
 															.html(template);
 															

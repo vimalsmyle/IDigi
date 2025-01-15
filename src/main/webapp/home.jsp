@@ -476,9 +476,7 @@
 															<div class="text-xs font-weight-bold text-uppercase">
 																<h5 class="description-header" id="solarActive"></h5>
 																<span class="description-text"
-																	onClick="redirection(1,'solar')">Active <i
-																	class="fa fa-chevron-right view_details"
-																	aria-hidden="true"></i>
+																	>Active 
 																</span>
 															</div>
 
@@ -489,9 +487,7 @@
 															<div class="text-xs font-weight-bold text-uppercase">
 																<h5 class="description-header" id="solarInactive"></h5>
 																<span class="description-text"
-																	onClick="redirection(2,'solar')">In-Active <i
-																	class="fa fa-chevron-right view_details"
-																	aria-hidden="true"></i>
+																	>In-Active
 																</span>
 
 															</div>
@@ -502,9 +498,7 @@
 															<div class="text-xs font-weight-bold text-uppercase">
 																<h5 class="description-header" id="solarLive"></h5>
 																<span class="description-text"
-																	onClick="redirection(3,'solar')">Live <i
-																	class="fa fa-chevron-right view_details"
-																	aria-hidden="true"></i>
+																	>Live 
 																</span>
 															</div>
 
@@ -515,9 +509,7 @@
 															<div class="text-xs font-weight-bold text-uppercase">
 																<h5 class="description-header" id="solarnonLive"></h5>
 																<span class="description-text"
-																	onClick="redirection(4,'solar')">Non-Live <i
-																	class="fa fa-chevron-right view_details"
-																	aria-hidden="true"></i>
+																	>Non-Live
 																</span>
 															</div>
 
@@ -528,9 +520,7 @@
 															<div class="text-xs font-weight-bold text-uppercase">
 																<h5 class="description-header" id="solaremergency"></h5>
 																<span class="description-text"
-																	onClick="redirection(6,'solar')">Emergency <i
-																	class="fa fa-chevron-right view_details"
-																	aria-hidden="true"></i>
+																	>Emergency 
 																</span>
 															</div>
 
@@ -541,9 +531,7 @@
 															<div class="text-xs font-weight-bold text-uppercase">
 																<h5 class="description-header" id="solarLowbattery"></h5>
 																<span class="description-text"
-																	onClick="redirection(5,'solar')">Low Battery <i
-																	class="fa fa-chevron-right view_details"
-																	aria-hidden="true"></i>
+																	>Low Battery 
 																</span>
 															</div>
 

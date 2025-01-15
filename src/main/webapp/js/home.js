@@ -93,8 +93,7 @@ $(document)
 						
 // solar Graph view
 						
-$.getJSON("./solargraph/"+sessionStorage
-						.getItem("communityName"), function(data) {
+$.getJSON("./solargraph/"+sessionStorage.getItem("communityName"), function(data) {
     console.log("solargraph", data);
     console.log("Cname", sessionStorage
 						.getItem("communityName"));
@@ -113,7 +112,12 @@ $.getJSON("./solargraph/"+sessionStorage
             const listItem = $('<div></div>')
                 .text("")
                 .css('background-color', colorCode)
-                .attr('title', titleText);  // Set the concatenated title
+               
+                .attr('title', titleText)
+                 .on('click', function() {
+		        	window.location="./solarDashboard.jsp?com="+item.communityName+"&block"+item.blockName+"&customerUniqueID"+item.customerUniqueID
+   				 });
+    
             listElement.append(listItem);
         });
     }
@@ -637,3 +641,6 @@ function getCustomerMeters(type){
 						
 					});
 	}
+	
+	
+	

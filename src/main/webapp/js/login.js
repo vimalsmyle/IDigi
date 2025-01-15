@@ -107,6 +107,10 @@ $(document)
 
 																	sessionStorage.setItem("userID",$("#username").val());
 																	
+																	sessionStorage.setItem("communityName",data.userDetails.communityName);
+																	
+																	
+																	
 																	if (data.userDetails.roleID == 1) {
 
 																		sessionStorage
