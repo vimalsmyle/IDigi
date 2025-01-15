@@ -71,7 +71,7 @@
 						
 
 						<div id="accordion" class="accordionFilter">
-							<div class="card">
+							<!-- <div class="card">
 								<div class="card-header">
 									<span class="mr-auto">Advance Filter</span> <a
 										class="card-link float-right" data-toggle="collapse"
@@ -161,17 +161,13 @@
 															class="btn btn-secondary btn-raised mr-4"
 															id="resetFilter">Reset</button>
 													</div>
-													<!-- <div class="col-md-1">
-														<button type="button"
-															class="btn btn-secondary btn-raised mr-3 resetFilter"
-															id="resetFilter">Reset</button>
-													</div> -->
+													
 												</div>
 											</form>
 										</div>
 									</div>
 								</div>
-							</div>
+							</div> -->
 						</div>
 
 						<div class="row mr-0 ml-0">

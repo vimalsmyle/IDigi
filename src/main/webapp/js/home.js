@@ -115,7 +115,7 @@ $.getJSON("./solargraph/"+sessionStorage.getItem("communityName"), function(data
                
                 .attr('title', titleText)
                  .on('click', function() {
-		        	window.location="./solarDashboard.jsp?com="+item.communityName+"&block"+item.blockName+"&customerUniqueID"+item.customerUniqueID
+		        	window.location="./solarDashboard.jsp?com="+item.communityName+"&block="+item.blockName+"&customerUniqueID="+item.customerUniqueID
    				 });
     
             listElement.append(listItem);
