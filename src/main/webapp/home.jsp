@@ -247,7 +247,7 @@
 						</div>
 					
 					
-						<div class="page-header">
+<%-- 						<div class="page-header">
 							<h3>Gas</h3>
 						</div>
 						<div class="row">
@@ -404,7 +404,7 @@
 
 
 						
-						
+	 --%>					
 						<div class="page-header">
 							<h3>Solar</h3>
 						</div>
@@ -493,7 +493,7 @@
 															</div>
 
 														</div>
-														<div class="slide sliding-block">
+													<!-- 	<div class="slide sliding-block">
 
 															<div class="text-xs font-weight-bold text-uppercase">
 																<h5 class="description-header" id="solarLive"></h5>
@@ -535,7 +535,7 @@
 																</span>
 															</div>
 
-														</div>
+														</div> -->
 
 
 														<%
