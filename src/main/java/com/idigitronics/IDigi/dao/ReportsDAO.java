@@ -8,12 +8,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-
-import org.eclipse.collections.impl.map.mutable.ConcurrentHashMap;
 
 import com.idigitronics.IDigi.constants.DataBaseConstants;
 import com.idigitronics.IDigi.request.vo.AlarmRequestVO;
@@ -144,15 +138,10 @@ public class ReportsDAO {
 			
 			if(type.equalsIgnoreCase("Tabular")) {
 				
-//				String query = "SELECT DISTINCT c.CommunityName, b.BlockName, cd.FirstName, cd.LastName, cd.HouseNumber, cd.CustomerUniqueID, bl.ReadingID, bl.EmergencyCredit, \r\n" + 
-//						"bl.MIUID, bl.Reading, bl.Balance, bl.BatteryVoltage, bl.Tariff, bl.ValveStatus, bl.DoorOpenTamper, bl.MagneticTamper, bl.NFCTamper, bl.LowBattery, bl.LowBalance, bl.LogDate, ms.MeterSize, ms.PerUnitValue \r\n" + 
-//						"FROM balancelog AS bl LEFT JOIN community AS c ON c.communityID = bl.CommunityID LEFT JOIN block AS b ON b.BlockID = bl.BlockID\r\n" + 
-//						"LEFT JOIN customerdetails AS cd ON cd.CustomerID = bl.CustomerID LEFT JOIN customermeterdetails AS cmd ON cd.CustomerID = cmd.CustomerID LEFT JOIN metersize AS ms ON ms.MeterSizeID = bl.MeterSizeID WHERE bl.CustomerUniqueID = ? AND bl.LogDate BETWEEN ? AND ? ";
-					
-				String query = "SELECT DISTINCT c.CommunityName, b.BlockName, cd.FirstName, cd.LastName, cd.HouseNumber, cd.CustomerUniqueID, bl.ReadingID, \r\n" + 
-						"bl.equipment_serial_id, bl.reading1, bl.reading2, bl.battery_percentage, bl.LogDate \r\n" + 
-						"FROM sensorlog AS bl LEFT JOIN community AS c ON c.communityID = bl.CommunityID LEFT JOIN block AS b ON b.BlockID = bl.BlockID\r\n" + 
-						"LEFT JOIN customerdetails AS cd ON cd.CustomerID = bl.CustomerID LEFT JOIN customermeterdetails AS cmd ON cd.CustomerID = cmd.CustomerID WHERE bl.CustomerUniqueID = ? AND bl.LogDate BETWEEN ? AND ? ";
+				String query = "SELECT DISTINCT c.CommunityName, b.BlockName, cd.FirstName, cd.LastName, cd.HouseNumber, cd.CustomerUniqueID, bl.ReadingID, bl.EmergencyCredit, \r\n" + 
+						"bl.MIUID, bl.Reading, bl.Balance, bl.BatteryVoltage, bl.Tariff, bl.ValveStatus, bl.DoorOpenTamper, bl.MagneticTamper, bl.NFCTamper, bl.LowBattery, bl.LowBalance, bl.LogDate, ms.MeterSize, ms.PerUnitValue \r\n" + 
+						"FROM balancelog AS bl LEFT JOIN community AS c ON c.communityID = bl.CommunityID LEFT JOIN block AS b ON b.BlockID = bl.BlockID\r\n" + 
+						"LEFT JOIN customerdetails AS cd ON cd.CustomerID = bl.CustomerID LEFT JOIN customermeterdetails AS cmd ON cd.CustomerID = cmd.CustomerID LEFT JOIN metersize AS ms ON ms.MeterSizeID = bl.MeterSizeID WHERE bl.CustomerUniqueID = ? AND bl.LogDate BETWEEN ? AND ? ";
 					
 					pstmt = con.prepareStatement(query);
 					pstmt.setString(1, userconsumptionreportsrequestvo.getCustomerUniqueID());
@@ -165,10 +154,12 @@ public class ReportsDAO {
 						userconsumptionreportsresponsevo = new UserConsumptionReportsResponseVO();
 						
 						userconsumptionreportsresponsevo.setCustomerUniqueID(rs.getString("CustomerUniqueID"));
-						userconsumptionreportsresponsevo.setMiuID(rs.getString("equipment_serial_id"));
-						userconsumptionreportsresponsevo.setReading1(rs.getFloat("reading1"));
-						userconsumptionreportsresponsevo.setReading2(rs.getFloat("reading2"));
-						userconsumptionreportsresponsevo.setBattery(rs.getInt("battery_percentage"));
+						userconsumptionreportsresponsevo.setMiuID(rs.getString("MIUID"));
+						userconsumptionreportsresponsevo.setReading(rs.getFloat("Reading"));
+						userconsumptionreportsresponsevo.setBattery(rs.getInt("BatteryVoltage"));
+						userconsumptionreportsresponsevo.setBalance(rs.getFloat("Balance"));
+						userconsumptionreportsresponsevo.setTariff(rs.getFloat("Tariff"));
+						userconsumptionreportsresponsevo.setEmergencyCredit(rs.getFloat("EmergencyCredit"));
 						userconsumptionreportsresponsevo.setDateTime(ExtraMethodsDAO.datetimeformatter(rs.getString("LogDate")));
 						
 						userconsumptionreportsresponselist.add(userconsumptionreportsresponsevo);
@@ -197,6 +188,34 @@ public class ReportsDAO {
 						userconsumptionreportsresponsevo.setrStatus(rs.getInt("R_Status") == 0 ? "OFF" : "ON" );
 						userconsumptionreportsresponsevo.setyStatus(rs.getInt("Y_Status") == 0 ? "OFF" : "ON" );
 						userconsumptionreportsresponsevo.setbStatus(rs.getInt("B_Status") == 0 ? "OFF" : "ON" );
+						userconsumptionreportsresponsevo.setDateTime(ExtraMethodsDAO.datetimeformatter(rs.getString("LogDate")));
+						
+						userconsumptionreportsresponselist.add(userconsumptionreportsresponsevo);
+						
+					}
+				
+			} else if (type.equalsIgnoreCase("sensor")){
+				
+				String query = "SELECT DISTINCT c.CommunityName, b.BlockName, cd.FirstName, cd.LastName, cd.HouseNumber, cd.CustomerUniqueID, bl.ReadingID, \r\n" + 
+						"bl.equipment_serial_id, bl.reading1, bl.reading2, bl.battery_percentage, bl.LogDate \r\n" + 
+						"FROM sensorlog AS bl LEFT JOIN community AS c ON c.communityID = bl.CommunityID LEFT JOIN block AS b ON b.BlockID = bl.BlockID\r\n" + 
+						"LEFT JOIN customerdetails AS cd ON cd.CustomerID = bl.CustomerID LEFT JOIN customermeterdetails AS cmd ON cd.CustomerID = cmd.CustomerID WHERE bl.CustomerUniqueID = ? AND bl.LogDate BETWEEN ? AND ? ";
+					
+					pstmt = con.prepareStatement(query);
+					pstmt.setString(1, userconsumptionreportsrequestvo.getCustomerUniqueID());
+					pstmt.setString(2, userconsumptionreportsrequestvo.getFromDate()+ " 00:00:01.001");
+					pstmt.setString(3,userconsumptionreportsrequestvo.getToDate()+ " 23:59:59.999");
+
+					rs = pstmt.executeQuery();
+					while (rs.next()) {
+
+						userconsumptionreportsresponsevo = new UserConsumptionReportsResponseVO();
+						
+						userconsumptionreportsresponsevo.setCustomerUniqueID(rs.getString("CustomerUniqueID"));
+						userconsumptionreportsresponsevo.setMiuID(rs.getString("equipment_serial_id"));
+						userconsumptionreportsresponsevo.setReading1(rs.getFloat("reading1"));
+						userconsumptionreportsresponsevo.setReading2(rs.getFloat("reading2"));
+						userconsumptionreportsresponsevo.setBattery(rs.getInt("battery_percentage"));
 						userconsumptionreportsresponsevo.setDateTime(ExtraMethodsDAO.datetimeformatter(rs.getString("LogDate")));
 						
 						userconsumptionreportsresponselist.add(userconsumptionreportsresponsevo);

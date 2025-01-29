@@ -247,7 +247,7 @@
 						</div>
 					
 					
-<%-- 						<div class="page-header">
+ 						<div class="page-header">
 							<h3>Gas</h3>
 						</div>
 						<div class="row">
@@ -404,7 +404,7 @@
 
 
 						
-	 --%>					
+	 					
 						<div class="page-header">
 							<h3>Solar</h3>
 						</div>
