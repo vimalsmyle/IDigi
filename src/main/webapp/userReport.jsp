@@ -102,6 +102,7 @@
 																onchange="showReportType(this.value);">
 																<option value='-1'>Select Type</option>
 																<option value='Tabular'>Tabular</option>
+																<option value='Sensor'>Sensor</option>
 																<option value='solar'>Solar</option>
 															</select>
 														</div>
