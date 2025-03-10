@@ -736,7 +736,7 @@ public class AccountDAO {
 		ResultSet rs = null;
 		ResultSet rs1 = null;
 		ResponseVO responsevo = new ResponseVO();
-		String drivename = "D:/TopupReceipts";
+		String drivename = "C:/TopupReceipts/";
 
 		try {
 			con = getConnection();
@@ -1509,7 +1509,7 @@ public class AccountDAO {
 		ResultSet rs = null;
 		ResultSet rs1 = null;
 		ResponseVO responsevo = new ResponseVO();
-		String drivename = "D:/BillReceipts/";
+		String drivename = "C:/BillReceipts/";
 		
 		try {
 			con = getConnection();
