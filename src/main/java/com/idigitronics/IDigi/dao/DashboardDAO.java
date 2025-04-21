@@ -133,7 +133,7 @@ public class DashboardDAO {
 				dashboardvo.setLastName(rs.getString("LastName"));
 				dashboardvo.setCustomerUniqueID(rs.getString("CustomerUniqueID"));
 				
-				String query = "SELECT dbl.ReadingID, dbl.MainBalanceLogID, dbl.CustomerMeterID, dbl.MIUID, cmd.MeterSerialNumber, cmd.PayType, cmd.MeterType, ms.MeterSize, ms.PerUnitValue, g.GatewayName, dbl.Tariff, dbl.Reading, dbl.Balance, dbl.EmergencyCredit, dbl.ValveStatus, dbl.BatteryVoltage, "
+				String query = "SELECT dbl.ReadingID, dbl.MainBalanceLogID, dbl.CustomerMeterID, dbl.MIUID, cmd.MeterSerialNumber, cmd.PayType, cmd.MeterType, cmd.Location, ms.MeterSize, ms.PerUnitValue, g.GatewayName, dbl.Tariff, dbl.Reading, dbl.Balance, dbl.EmergencyCredit, dbl.ValveStatus, dbl.BatteryVoltage, "
 						+ "dbl.LowBattery, dbl.DoorOpenTamper, dbl.MagneticTamper, dbl.RTCFault, dbl.Vacation, dbl.LowBalance, dbl.NFCTamper, dbl.LogDate FROM displaybalancelog AS dbl LEFT JOIN customermeterdetails AS cmd ON cmd.CustomerMeterID = dbl.CustomerMeterID LEFT JOIN metersize AS ms ON ms.MeterSizeID = cmd.MeterSizeID LEFT JOIN gateway AS g ON g.GatewayID = cmd.GatewayID WHERE dbl.CustomerID = ? AND cmd.MeterType = '" + type +"'";
 				
 				StringBuilder stringBuilder = new StringBuilder(query);
@@ -179,6 +179,7 @@ public class DashboardDAO {
 					individualDashboardResponseVO.setCustomerMeterID(rs3.getInt("CustomerMeterID"));
 					individualDashboardResponseVO.setMeterSize(rs3.getFloat("MeterSize"));
 					individualDashboardResponseVO.setGatewayName(rs3.getString("GatewayName"));
+					individualDashboardResponseVO.setLocation(rs3.getString("Location"));
 					individualDashboardResponseVO.setReading(rs3.getFloat("Reading"));
 					individualDashboardResponseVO.setConsumption((int) (individualDashboardResponseVO.getReading() * rs3.getFloat("PerUnitValue")));
 					individualDashboardResponseVO.setBattery(rs3.getInt("BatteryVoltage"));
@@ -377,6 +378,9 @@ public class DashboardDAO {
         Cell headercell21 = header.createCell(++columnCount);
         headercell21.setCellValue("Last Topup Amount");
         
+        Cell headercell22 = header.createCell(++columnCount);
+        headercell22.setCellValue("Location");
+        
         for(int i = 0; i< dashboardResponseVO.getData().size(); i++) {
         	
         	
@@ -465,6 +469,9 @@ public class DashboardDAO {
             	
             	Cell cell21 = data.createCell(++dashboarDataColumnCount);
             	cell21.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getLastTopupAmount());
+            	
+            	Cell cell22 = data.createCell(++dashboarDataColumnCount);
+            	cell22.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getLocation());
             	
             	if(j < dashboardResponseVO.getData().get(i).getDasboarddata().size() - 1) { data = spreadsheet.createRow(spreadsheet.getLastRowNum()+1); }
             	
@@ -579,6 +586,9 @@ public class DashboardDAO {
         Cell headercell21 = header.createCell(++columnCount);
         headercell21.setCellValue("Last Topup Amount");
         
+        Cell headercell22 = header.createCell(++columnCount);
+        headercell22.setCellValue("Location");
+        
         for(int i = 0; i< dashboardResponseVO.getData().size(); i++) {
         	
         	
@@ -667,6 +677,9 @@ public class DashboardDAO {
             	
             	Cell cell21 = data.createCell(++dashboarDataColumnCount);
             	cell21.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getLastTopupAmount());
+            	
+            	Cell cell22 = data.createCell(++dashboarDataColumnCount);
+             	cell22.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getLocation());
             	
             	if(j < dashboardResponseVO.getData().get(i).getDasboarddata().size() - 1) { data = spreadsheet.createRow(spreadsheet.getLastRowNum()+1); }
             	
