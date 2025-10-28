@@ -29,6 +29,7 @@ public class CustomerResponseVO {
 	private int requestID;
 	private boolean action;
 	private MeterRequestVO meterDetails;
+	private String status;
 	
 	
 	private List<MeterRequestVO> meters;
@@ -141,6 +142,12 @@ public class CustomerResponseVO {
 	}
 	public void setMeterDetails(MeterRequestVO meterDetails) {
 		this.meterDetails = meterDetails;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
 	}
 	
 }

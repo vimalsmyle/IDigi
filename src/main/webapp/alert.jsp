@@ -72,6 +72,7 @@
 									<th>GST</th>
 									<th>Remarks</th>
 									<th>Due Date Count</th>
+									<th>Max No. of Registrations</th>
 									<th>Date</th>
 									<th>Edit</th>
 								</tr>
@@ -178,6 +179,13 @@
 									<label class="bmd-label-floating">Due Date Count<span class=impp><sup>*</sup></span></label> <input
 										type="text" class="form-control" name="duedatecountAdd"
 										id="duedatecountAdd">
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="group form-group">
+									<label class="bmd-label-floating">Max No. of Registrations<span class=impp><sup>*</sup></span></label> <input
+										type="text" class="form-control" name="maximumnumberofregistrationsAdd"
+										id="maximumnumberofregistrationsAdd">
 								</div>
 							</div>
 							<div class="col-md-6">
@@ -299,6 +307,14 @@
 									<label class="bmd-label-floating">Due Date Count<span class=impp><sup>*</sup></span></label> <input
 										type="text" class="form-control" name="duedatecountEdit1"
 										id="duedatecountEdit1">
+								</div>
+							</div>
+							
+							<div class="col-md-6">
+								<div id="formmaximumnumberofregistrationsEdit" class="group form-group">
+									<label class="bmd-label-floating">Max No. of Registrations<span class=impp><sup>*</sup></span></label> <input
+										type="text" class="form-control" name="maximumnumberofregistrationsEdit1"
+										id="maximumnumberofregistrationsEdit1">
 								</div>
 							</div>
 							

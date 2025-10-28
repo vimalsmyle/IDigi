@@ -5,10 +5,16 @@ package com.idigitronics.IDigi.controller;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.security.KeyStoreException;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.UUID;
 
 import org.apache.log4j.Logger;
+import org.eclipse.paho.client.mqttv3.MqttClient;
+import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
+import org.eclipse.paho.client.mqttv3.MqttException;
+import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -20,6 +26,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.google.gson.Gson;
+import com.idigitronics.IDigi.request.vo.MqttPostVO;
 import com.idigitronics.IDigi.dao.DashboardDAO;
 import com.idigitronics.IDigi.request.vo.DataRequestVO;
 import com.idigitronics.IDigi.request.vo.FilterVO;
@@ -325,6 +333,59 @@ public class DashboardController {
 		communityName = (!communityName.equalsIgnoreCase("0") ? communityName.replace("%20", " ") : communityName);
 
 		return dashboarddao.getSolarGraphDashboardDetails(communityName);
+	}
+	
+	@RequestMapping(value = "/pingmqtt", method = RequestMethod.GET)
+	public void mqttMode () throws KeyStoreException, FileNotFoundException {
+		
+		String broker = "mqtt://rak-gateway.local:1883";
+		String clientId = "mqttx_e1370f53";
+		MqttPostVO data = new MqttPostVO();
+		data.setConfirmed(true);
+		data.setfPort(103);
+		data.setReference(clientId);
+//		data.setData(Base64.getEncoder().encodeToString(Integer.toHexString(0).getBytes()));
+		data.setData("AAE=");
+		Gson gson = new Gson();
+		 int qos = 2;
+		 String topic = "application/357/event/a0bf500000da7ada/tx";
+		 
+		 String acktopic = "application/357/node/a0bf500000da7ada/ack";
+		 
+			 try {
+		            MqttClient sampleClient = new MqttClient(broker, clientId);
+		            MqttConnectOptions connOpts = new MqttConnectOptions();
+		            connOpts.setCleanSession(true);
+		            connOpts.setAutomaticReconnect(true);
+		            connOpts.setUserName("hanbitsolutions");
+		            connOpts.setPassword("73fa0fd1ae718628878d86b288c591745d740f18".toCharArray());
+		            System.out.println("Connecting to broker: "+broker);
+		            sampleClient.connect(connOpts);
+		            if(sampleClient.isConnected()) {
+		            	  System.out.println("Connected");
+		            }
+		            
+		            System.out.println("Publishing message: "+gson.toJson(data));
+		            MqttMessage message = new MqttMessage(gson.toJson(data).getBytes());
+		            message.setQos(qos);
+		            message.setRetained(true);
+		            sampleClient.publish(topic, message);
+		            System.out.println("Message published");
+		            sampleClient.disconnect();
+		            System.out.println("Disconnected");
+		           
+		        } catch(MqttException me) {
+		            System.out.println("reason "+me.getReasonCode());
+		            System.out.println("msg "+me.getMessage());
+		            System.out.println("loc "+me.getLocalizedMessage());
+		            System.out.println("cause "+me.getCause());
+		            System.out.println("excep "+me);
+		            me.printStackTrace();
+		        }
+			
+			
+		
+		
 	}
 	
 }

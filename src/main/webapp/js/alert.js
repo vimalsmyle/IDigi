@@ -77,11 +77,15 @@ table = $('#alertTable')
 												},
 												{
 													"data" : "GST"
-												},{
+												},
+												{
 													"data" : "remarks"
 												},
 												{
 													"data" : "dueDayCount"
+												},
+												{
+													"data" : "maximumNumberOfRegistrations"
 												},
 												{
 													"data" : "registeredDate"
@@ -261,6 +265,18 @@ $(document)
 														message : 'Due Date Count can only consist of number'
 													}
 												}
+											},
+											maximumnumberofregistrationsAdd : {
+												message : 'Maximum Number of Registrations is not valid',
+												validators : {
+													notEmpty : {
+														message : 'Maximum Number of Registrations is required and cannot be empty'
+													},
+													regexp : {
+														regexp : /[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$/,
+														message : 'Maximum Number of Registrations can only consist of number'
+													}
+												}
 											}
 										}
 									});
@@ -376,6 +392,18 @@ $(document)
 														message : 'Due Date Count can only consist of number'
 													}
 												}
+											},
+											maximumnumberofregistrationsEdit1 : {
+												message : 'Maximum Number of Registrations is not valid',
+												validators : {
+													notEmpty : {
+														message : 'Maximum Number of Registrations is required and cannot be empty'
+													},
+													regexp : {
+														regexp : /[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$/,
+														message : 'Maximum Number of Registrations can only consist of number'
+													}
+												}
 											}
 										}
 									});
@@ -453,6 +481,7 @@ $(document)
 								data1["remarks"] = $("#remarkAdd").val();
 								data1["dueDayCount"] = $("#duedatecountAdd")
 										.val();
+								data1["maximumNumberOfRegistrations"] = $("#maximumnumberofregistrationsAdd").val();
 
 								$.ajax({
 									type : "POST",
@@ -517,8 +546,8 @@ $(document)
 
 										data1["GST"] = $("#gstEdit1").val();
 										data1["remarks"] = $("#remarkEdit1").val();
-										data1["dueDayCount"] = $(
-												"#duedatecountEdit1").val();
+										data1["dueDayCount"] = $("#duedatecountEdit1").val();
+										data1["maximumNumberOfRegistrations"] = $("#maximumnumberofregistrationsEdit1").val();
 
 										$
 												.ajax({
@@ -656,6 +685,12 @@ function getAlertFormEdit(id) {
 														item.dueDayCount)
 														.trigger("change");
 												$("#formduedatecountEdit")
+														.addClass(
+																"group form-group has-feedback has-success bmd-form-group is-filled")
+												$('#maximumNumberOfRegistrationsEdit1').val(
+														item.maximumNumberOfRegistrations)
+														.trigger("change");
+												$("#formmaximumnumberofregistrationsEdit")
 														.addClass(
 																"group form-group has-feedback has-success bmd-form-group is-filled")
 

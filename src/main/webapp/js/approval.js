@@ -42,7 +42,7 @@ $(document)
 										"columns" : [
 											
 												{
-													"data" : "firstName"
+													"data" : "firstName" + " " + "lastName"
 												},
 												{
 													"data" : "email"
@@ -50,6 +50,9 @@ $(document)
 												},
 												 {
 														"data" : "mobileNumber"
+												},
+												{
+														"data" : "status"
 												},
 												 {
 													"data" : "userID"

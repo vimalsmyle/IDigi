@@ -22,6 +22,7 @@ public class AlertRequestVO {
 	private String customerGSTNumber;
 	private String remarks;
 	private int dueDayCount;
+	private int maximumNumberOfRegistrations;
 	
 	public int getAlertID() {
 		return alertID;
@@ -100,6 +101,12 @@ public class AlertRequestVO {
 	}
 	public void setRemarks(String remarks) {
 		this.remarks = remarks;
+	}
+	public int getMaximumNumberOfRegistrations() {
+		return maximumNumberOfRegistrations;
+	}
+	public void setMaximumNumberOfRegistrations(int maximumNumberOfRegistrations) {
+		this.maximumNumberOfRegistrations = maximumNumberOfRegistrations;
 	}
 	
 }

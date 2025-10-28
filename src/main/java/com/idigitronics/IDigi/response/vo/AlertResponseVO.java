@@ -25,6 +25,7 @@ public class AlertResponseVO {
 	private String customerGSTNumber;
 	private String remarks;
 	private int dueDayCount;
+	private int maximumNumberOfRegistrations;
 		
 	private List<AlertResponseVO> data;
 
@@ -146,6 +147,14 @@ public class AlertResponseVO {
 
 	public void setRemarks(String remarks) {
 		this.remarks = remarks;
+	}
+
+	public int getMaximumNumberOfRegistrations() {
+		return maximumNumberOfRegistrations;
+	}
+
+	public void setMaximumNumberOfRegistrations(int maximumNumberOfRegistrations) {
+		this.maximumNumberOfRegistrations = maximumNumberOfRegistrations;
 	}
 
 }

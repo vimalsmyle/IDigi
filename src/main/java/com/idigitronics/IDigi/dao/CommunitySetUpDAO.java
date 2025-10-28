@@ -1239,14 +1239,15 @@ public class CommunitySetUpDAO {
 					customervo.setCustomerID(rs.getInt("CustomerID"));
 					customervo.setBlockID(rs.getInt("BlockID"));
 				
-				pstmt = con.prepareStatement("INSERT INTO updaterequestcustomermeterdetails (BlockID, CustomerID, CustomerUniqueID, FirstName, Email, MobileNumber, ToBeApprovedByID) VALUES (?, ?, ?, ?, ?, ?, (SELECT CreatedByID FROM user WHERE CustomerUniqueID = ?))");
+				pstmt = con.prepareStatement("INSERT INTO updaterequestcustomermeterdetails (BlockID, CustomerID, CustomerUniqueID, FirstName, LastName, Email, MobileNumber, ToBeApprovedByID) VALUES (?, ?, ?, ?, ?, ?, ?, (SELECT CreatedByID FROM user WHERE CustomerUniqueID = ?))");
 				pstmt.setInt(1, customervo.getBlockID());
 				pstmt.setLong(2, customervo.getCustomerID());
 				pstmt.setString(3, customervo.getCustomerUniqueID());
 				pstmt.setString(4, customervo.getFirstName());
-				pstmt.setString(5, customervo.getEmail());
-				pstmt.setString(6, customervo.getMobileNumber());
-				pstmt.setString(7, customervo.getCustomerUniqueID());
+				pstmt.setString(5, customervo.getLastName());
+				pstmt.setString(6, customervo.getEmail());
+				pstmt.setString(7, customervo.getMobileNumber());
+				pstmt.setString(8, customervo.getCustomerUniqueID());
 				
 				if (pstmt.executeUpdate() > 0) {
 					responsevo.setResult("Success");
@@ -1256,13 +1257,14 @@ public class CommunitySetUpDAO {
 				}
 				
 			}else {
-				pstmt = con.prepareStatement("UPDATE customerdetails SET HouseNumber=?, FirstName=?, Email=?, MobileNumber=?, ModifiedDate=NOW() WHERE CustomerUniqueID = ?");
+				pstmt = con.prepareStatement("UPDATE customerdetails SET HouseNumber=?, FirstName=?, LastName = ?, Email=?, MobileNumber=?, ModifiedDate=NOW() WHERE CustomerUniqueID = ?");
 	            
 				pstmt.setString(1, customervo.getHouseNumber());
 	            pstmt.setString(2, customervo.getFirstName());
-	            pstmt.setString(3, customervo.getEmail());
-	            pstmt.setString(4, customervo.getMobileNumber());
-	            pstmt.setString(5, customervo.getCustomerUniqueID());
+	            pstmt.setString(3, customervo.getLastName());
+	            pstmt.setString(4, customervo.getEmail());
+	            pstmt.setString(5, customervo.getMobileNumber());
+	            pstmt.setString(6, customervo.getCustomerUniqueID());
 
 	            if (pstmt.executeUpdate() > 0) {
 	            	
@@ -1275,13 +1277,14 @@ public class CommunitySetUpDAO {
 	            		}
 	            	}
 	            	
-	            	PreparedStatement pstmt1 = con.prepareStatement("UPDATE USER SET UserName = CONCAT (?, (SELECT LastName FROM customerdetails WHERE CustomerUniqueID = ?)), MobileNumber = ?, Email = ? WHERE CustomerUniqueID = ?");
-	            	pstmt1.setString(1, customervo.getFirstName() + " ");
+	            	PreparedStatement pstmt1 = con.prepareStatement("UPDATE USER SET UserName = ?, MobileNumber = ?, Email = ? WHERE CustomerUniqueID = ?");
+	            	pstmt1.setString(1, customervo.getFirstName() + " " + customervo.getLastName());
 	            	pstmt1.setString(2, customervo.getCustomerUniqueID());
 	            	pstmt1.setString(3, customervo.getMobileNumber());
 	            	pstmt1.setString(4, customervo.getEmail());
 	            	pstmt1.setString(5, customervo.getCustomerUniqueID());
 	            	if(pstmt1.executeUpdate() > 0) {
+	            		
 	            		responsevo.setResult("Success");
 	            		responsevo.setMessage("Customer Details Updated Successfully");
 	            	}
@@ -1401,7 +1404,7 @@ public class CommunitySetUpDAO {
 		con = getConnection();
 		updaterequestlist = new LinkedList<CustomerResponseVO>();
 		
-		pstmt = con.prepareStatement("SELECT RequestID, CustomerID, CustomerUniqueID, FirstName, Email, MobileNumber FROM updaterequestcustomermeterdetails WHERE BlockID = ?");
+		pstmt = con.prepareStatement("SELECT RequestID, CustomerID, CustomerUniqueID, FirstName, LastName, Email, MobileNumber, Status FROM updaterequestcustomermeterdetails WHERE BlockID = ?");
 		pstmt.setInt(1, blockid);
 		
 		rs = pstmt.executeQuery();
@@ -1411,8 +1414,10 @@ public class CommunitySetUpDAO {
         	customerresponsevo.setRequestID(rs.getInt("RequestID"));
         	customerresponsevo.setCustomerUniqueID(rs.getString("CustomerUniqueID"));
         	customerresponsevo.setFirstName(rs.getString("FirstName"));
+        	customerresponsevo.setLastName(rs.getString("LastName"));
         	customerresponsevo.setEmail(rs.getString("Email"));
         	customerresponsevo.setMobileNumber(rs.getString("MobileNumber"));
+        	customerresponsevo.setStatus(rs.getString("Status"));
         	
         	PreparedStatement pstmt1 = con.prepareStatement("SELECT UserID FROM user WHERE CustomerUniqueID = ?");
         	pstmt1.setString(1, rs.getString("CustomerUniqueID"));
@@ -1447,8 +1452,9 @@ public class CommunitySetUpDAO {
 			
 			if(action == 1) {
 				
-				pstmt = con.prepareStatement("UPDATE customerdetails AS cd INNER JOIN updaterequestcustomermeterdetails AS urcmd ON cd.CustomerUniqueID = urcmd.CustomerUniqueID SET cd.FirstName = urcmd.FirstName, cd.Email = urcmd.Email, cd.MobileNumber = urcmd.MobileNumber, cd.ModifiedDate = NOW() WHERE cd.CustomerUniqueID = (SELECT CustomerUniqueID FROM updaterequestcustomermeterdetails WHERE RequestID = ?)");
+				pstmt = con.prepareStatement("UPDATE customerdetails AS cd INNER JOIN updaterequestcustomermeterdetails AS urcmd ON cd.CustomerUniqueID = urcmd.CustomerUniqueID SET cd.FirstName = urcmd.FirstName, cd.LastName = urcmd.LastName, cd.Email = urcmd.Email, cd.MobileNumber = urcmd.MobileNumber, cd.ModifiedDate = NOW() WHERE urcmd.RequestID = ? and cd.CustomerUniqueID = (SELECT CustomerUniqueID FROM updaterequestcustomermeterdetails WHERE RequestID = ?)");
 	            pstmt.setInt(1, requestid);
+	            pstmt.setInt(2, requestid);
 
 	            if (pstmt.executeUpdate() > 0) {
 	            	
@@ -1456,29 +1462,59 @@ public class CommunitySetUpDAO {
 	            	ResultSet rs = pstmt2.executeQuery();
 	            	if(rs.next()) {
 	            		
-	            		PreparedStatement pstmt3 = con.prepareStatement("UPDATE USER SET UserName = CONCAT (?, (SELECT LastName FROM customerdetails WHERE CustomerUniqueID = ?)), MobileNumber = ?, EmailID = ? WHERE CustomerUniqueID = ?");
-		            	pstmt3.setString(1, rs.getString("FirstName")+ " ");
-		            	pstmt3.setString(2, rs.getString("CustomerUniqueID"));
-		            	pstmt3.setString(3, rs.getString("MobileNumber"));
-		            	pstmt3.setString(4, rs.getString("EmailID"));
-		            	pstmt3.setString(5, rs.getString("CustomerUniqueID"));
+	            		PreparedStatement pstmt3 = con.prepareStatement("UPDATE USER SET UserName = ?, MobileNumber = ?, Email = ? WHERE CustomerUniqueID = ?");
+		            	pstmt3.setString(1, rs.getString("FirstName") + " " + rs.getString("LastName"));
+		            	pstmt3.setString(2, rs.getString("MobileNumber"));
+		            	pstmt3.setString(3, rs.getString("Email"));
+		            	pstmt3.setString(4, rs.getString("CustomerUniqueID"));
+		            	
 		            	if(pstmt3.executeUpdate() > 0) {
-		            		PreparedStatement pstmt1 = con.prepareStatement("DELETE FROM updaterequestcustomermeterdetails WHERE RequestID = ?");
+		            		PreparedStatement pstmt1 = con.prepareStatement("UPDATE updaterequestcustomermeterdetails SET Status = 'Approved' WHERE RequestID = ?");
 			            	pstmt1.setInt(1, requestid);
 			            	if(pstmt1.executeUpdate() > 0) {
-			            		responsevo.setResult("Success");
-			            		responsevo.setMessage("Approved");
+			            		
+			            		// send email with login details after approval.
+			            		
+			            		ExtraMethodsDAO extraMethodsDAO = new ExtraMethodsDAO();
+								MailRequestVO mailrequestvo = new MailRequestVO();
+								
+								mailrequestvo.setFileLocation("NoAttachment");
+								mailrequestvo.setToEmail(rs.getString("Email"));
+								mailrequestvo.setUserID(rs.getString("CustomerUniqueID"));
+								
+								PreparedStatement pstmt4 = con.prepareStatement("SELECT * FROM user WHERE CustomerUniqueID = '" + mailrequestvo.getUserID() + "' ");
+								ResultSet rs4 = pstmt4.executeQuery();
+								
+								if(rs4.next()) {
+									mailrequestvo.setUserPassword(Encryptor.decrypt(ExtraConstants.key1, ExtraConstants.key2, rs4.getString("UserPassword")));
+								}
+								
+								mailrequestvo.setSubject("Customer Login Details for CRN/CAN/UAN: " + mailrequestvo.getUserID());
+								mailrequestvo.setMessage("Please Save the Credentials for further communications \n"
+										+ " UserID: " + mailrequestvo.getUserID() + "\n Password: " + mailrequestvo.getUserPassword() + "\n Use URL for login : "+ ExtraConstants.ApplicationURL);
+								
+								String result = extraMethodsDAO.sendmail(mailrequestvo);
+								
+								if(result.equalsIgnoreCase("Success")) {
+									responsevo.setResult("Success");
+									responsevo.setMessage("Customer Details Approved Successfully and an email with login credentials have been sent to the customer updated email id");
+								}else {
+									responsevo.setResult("Success");
+									responsevo.setMessage("Customer Details Approved Successfully but due to internal server Error Credentials have not been sent to the registered Mail ID.");
+								}
+			            		
 			            	}
 		            	}
 	            	}
 	            	
 	            }
 
-			}else {
+			} else {
 				
-				PreparedStatement pstmt1 = con.prepareStatement("DELETE FROM updaterequestcustomermeterdetails WHERE RequestID = ?");
+				PreparedStatement pstmt1 = con.prepareStatement("UPDATE updaterequestcustomermeterdetails SET Status = 'Rejected' WHERE RequestID = ?");
             	pstmt1.setInt(1, requestid);
             	if(pstmt1.executeUpdate() > 0) {
+            		// send email with reasons after rejection.
             		responsevo.setResult("Success");
             		responsevo.setMessage("Rejected Successfully");
             	}
@@ -1671,7 +1707,7 @@ public class CommunitySetUpDAO {
 		try{
 		con = getConnection();
 		
-		pstmt = con.prepareStatement("SELECT CustomerUniqueID from updaterequestcustomermeterdetails where CustomerUniqueID = ?");
+		pstmt = con.prepareStatement("SELECT CustomerUniqueID from updaterequestcustomermeterdetails where CustomerUniqueID = ? AND Status = 'Pending'");
 		pstmt.setString(1, CustomerUniqueID);
 		
 		rs = pstmt.executeQuery();
@@ -1967,6 +2003,85 @@ public class CommunitySetUpDAO {
 		}
 
 		return result;
+	}
+
+	public boolean checkCustomersRegistrationCount() throws SQLException {
+		// TODO Auto-generated method stub
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		boolean result = false;
+
+		try {
+			con = getConnection();
+			pstmt = con.prepareStatement("select count(CustomerID) >= (SELECT MaximumNumberOfRegistrations FROM alertsettings) as count from customerdetails");
+			ResultSet rs = pstmt.executeQuery();
+			if (rs.next()) {
+				if(rs.getInt("count") == 1) {
+					result = true;
+				}
+			} 
+			
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			pstmt.close();
+			con.close();
+		}
+
+		return result;
+	}
+
+	public ResponseVO customerupdatesrequeststatus(String customerUniqueID) throws SQLException {
+		// TODO Auto-generated method stub
+		
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		ResponseVO responsevo = new ResponseVO();
+		CustomerResponseVO customerResponseVO = null;
+		
+		try{
+		con = getConnection();
+		
+		pstmt = con.prepareStatement("SELECT * from updaterequestcustomermeterdetails where CustomerUniqueID = ? order by RegistrationDate Desc limit 1");
+		pstmt.setString(1, customerUniqueID);
+		
+		rs = pstmt.executeQuery();
+        if (rs.next()) {
+        	customerResponseVO = new CustomerResponseVO();
+        	customerResponseVO.setRequestID(rs.getInt("RequestID"));
+        	customerResponseVO.setStatus(rs.getString("Status"));
+        	customerResponseVO.setFirstName(rs.getString("FirstName"));
+        	customerResponseVO.setLastName(rs.getString("LastName"));
+        	customerResponseVO.setEmail(rs.getString("Email"));
+        	customerResponseVO.setMobileNumber(rs.getString("MobileNumber"));
+        	
+        	responsevo.setCustomerDetails(customerResponseVO);
+        	
+        	if(rs.getString("Status").equalsIgnoreCase("Approved")) {
+        		responsevo.setResult("Success");
+        		responsevo.setMessage("Customer Details Approved Successfully and an email with login credentials have been sent to the updated email id");
+        	} else if (rs.getString("Status").equalsIgnoreCase("Rejected")) {
+        		responsevo.setResult("Failure");
+        		responsevo.setMessage("Update Request has been rejected please contact administrator");
+        	} else {
+        		responsevo.setResult("Success");
+        		responsevo.setMessage("Pending for approval");
+        	}
+			
+        	} else {
+        		responsevo.setResult("Success");
+				responsevo.setMessage("No Pending Requests are available");
+        	}
+		}
+		catch (Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			pstmt.close();
+			con.close();
+		}
+		
+		return responsevo;
 	}
 
 }

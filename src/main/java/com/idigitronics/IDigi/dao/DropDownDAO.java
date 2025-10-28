@@ -16,6 +16,7 @@ import com.idigitronics.IDigi.constants.DataBaseConstants;
 import com.idigitronics.IDigi.request.vo.LoginVO;
 import com.idigitronics.IDigi.request.vo.Status;
 import com.idigitronics.IDigi.response.vo.BillDetailsResponseVO;
+import com.idigitronics.IDigi.response.vo.CustomerResponseVO;
 import com.idigitronics.IDigi.response.vo.DashboardResponseVO;
 import com.idigitronics.IDigi.response.vo.IndividualDashboardResponseVO;
 import com.idigitronics.IDigi.response.vo.LastReadingResponseVO;
@@ -437,6 +438,40 @@ public class DropDownDAO {
 			}
 		
 		return lastReadingResponseVO;
+	}
+
+	public CustomerResponseVO getcustomerdetails(int blockID, int communityId, String houseNumber) throws SQLException {
+		// TODO Auto-generated method stub
+		
+		Connection con = null;
+		CustomerResponseVO customerResponseVO = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		try {
+			con = getConnection();
+			pstmt = con.prepareStatement("SELECT * FROM customerdetails WHERE HouseNumber = '" + houseNumber + "' and BlockID = " + blockID + " and CommunityID = " + communityId);
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				customerResponseVO = new CustomerResponseVO();
+				customerResponseVO.setCustomerID(rs.getLong("CustomerID"));
+				customerResponseVO.setFirstName(rs.getString("FirstName"));
+				customerResponseVO.setLastName(rs.getString("LastName"));
+				customerResponseVO.setEmail(rs.getString("Email"));
+				customerResponseVO.setMobileNumber(rs.getString("MobileNumber"));
+				customerResponseVO.setUserID(rs.getString("CustomerUniqueID"));
+			}
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+		}
+		 finally {
+			 	pstmt.close();
+				rs.close();
+				con.close();
+			}
+		
+		return customerResponseVO;
 	}
 
 }

@@ -65,6 +65,24 @@ public class DropDownController {
 		return responsevo;
 	}
 	
+	@RequestMapping(value = "/customerdetails/{communityID}/{blockID}/{houseNumber}",method = RequestMethod.GET, 
+			produces="application/json")
+	public @ResponseBody ResponseVO getcustomerdetails(@PathVariable("communityID") int communityId, @PathVariable("blockID") int blockID, @PathVariable ("houseNumber") String houseNumber) throws SQLException {
+		
+		ResponseVO responsevo = new ResponseVO();
+		responsevo.setCustomerDetails(dropdowndao.getcustomerdetails(blockID, communityId, houseNumber));
+		
+		if(responsevo.getCustomerDetails() != null) {
+			responsevo.setResult("Success");
+			responsevo.setMessage("Customer Details Retrieved Successfully");
+		} else {
+			responsevo.setResult("Failure");
+			responsevo.setMessage("Customer Details Not Found");
+		}
+		
+		return responsevo;
+	}
+	
 	@RequestMapping(value = "/customermeters/{payType}/{CustomerUniqueID}",method = RequestMethod.GET, produces="application/json")
 	public @ResponseBody ResponseVO getcustomermeters(@PathVariable("CustomerUniqueID") String customerUniqueID, @PathVariable("payType") String payType) throws SQLException {
 		

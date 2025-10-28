@@ -67,6 +67,7 @@
 													<th>Customer Name</th>
 													<th>Email</th>
 													<th>Mobile Number</th>
+													<th>Status</th>
 													<th>User ID</th>
 													<th>Action</th>
 												</tr>

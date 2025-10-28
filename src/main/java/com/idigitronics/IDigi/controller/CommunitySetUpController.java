@@ -383,6 +383,17 @@ public class CommunitySetUpController {
 		return customerresponsevo;
 	}
 	
+	@RequestMapping(value = "/customerupdatesrequeststatus/{CustomerUniqueID}", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody
+	ResponseVO customerupdatesrequeststatus(@PathVariable("CustomerUniqueID") String CustomerUniqueID) throws SQLException {
+
+		ResponseVO responsevo = new ResponseVO();
+
+		responsevo = communitysetupdao.customerupdatesrequeststatus(CustomerUniqueID);
+
+		return responsevo;
+	}
+	
 	@RequestMapping(value = "/approverequest/{requestID}/{action}", method = RequestMethod.POST, produces = "application/json")
 	public @ResponseBody
 	ResponseVO approverequest(@PathVariable("requestID") int requestid, @PathVariable("action") int action) throws ClassNotFoundException,
