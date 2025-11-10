@@ -59,7 +59,7 @@ $(document)
 												},{
 													"mData" : "action",
 													"render" : function(data, type, row) {
-														
+														if (row.status && row.status.toLowerCase() == "pending") {
 														return "<a href=# onclick='getApprovalORRejected("
 														+ row.requestID+","+'"1"'
 														+ ")'>"
@@ -68,7 +68,9 @@ $(document)
 														+ row.requestID+","+'"0"'
 														+ ")'>"
 														+ "<img src=common/images/reject.png /></a>"
-																													
+														} else {
+														            return "-";
+														        }													
 																													
 													}
 													}],

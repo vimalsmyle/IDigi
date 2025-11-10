@@ -84,7 +84,7 @@
 								<div id="formlastNameEdit" class="form-group">
 									<label class="bmd-label-floating">Last Name</label> <input
 										type="text" class="form-control" name="lastNameEdit"
-										id="lastNameEdit" disabled>
+										id="lastNameEdit">
 								</div>
 							</div>
 							

@@ -295,7 +295,7 @@
 							</div>
 							
 							<div class="col-md-6">
-								<div class="group form-group">
+								<div class="group form-group" id="formremarks">
 									<label class="bmd-label-floating">Remark<span class=impp><sup>*</sup></span></label> <input
 										type="text" class="form-control" name="remarkEdit1"
 										id="remarkEdit1">

@@ -1380,6 +1380,7 @@ $(document)
 										var data1 = {}
 										
 										data1["firstName"] = $("#firstNameEdit").val();
+										data1["lastName"] = $("#lastNameEdit").val();
 										//data1["houseNumber"] = $("#houseNoEdit").val();
 										data1["mobileNumber"] = $("#mobileNoEdit").val();
 										data1["email"] = $("#emailEdit").val();

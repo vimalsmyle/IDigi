@@ -1279,10 +1279,9 @@ public class CommunitySetUpDAO {
 	            	
 	            	PreparedStatement pstmt1 = con.prepareStatement("UPDATE USER SET UserName = ?, MobileNumber = ?, Email = ? WHERE CustomerUniqueID = ?");
 	            	pstmt1.setString(1, customervo.getFirstName() + " " + customervo.getLastName());
-	            	pstmt1.setString(2, customervo.getCustomerUniqueID());
-	            	pstmt1.setString(3, customervo.getMobileNumber());
-	            	pstmt1.setString(4, customervo.getEmail());
-	            	pstmt1.setString(5, customervo.getCustomerUniqueID());
+	            	pstmt1.setString(2, customervo.getMobileNumber());
+	            	pstmt1.setString(3, customervo.getEmail());
+	            	pstmt1.setString(4, customervo.getCustomerUniqueID());
 	            	if(pstmt1.executeUpdate() > 0) {
 	            		
 	            		responsevo.setResult("Success");

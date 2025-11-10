@@ -400,7 +400,7 @@ $(document)
 														message : 'Maximum Number of Registrations is required and cannot be empty'
 													},
 													regexp : {
-														regexp : /[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$/,
+														 regexp: /^[0-9]+$/,
 														message : 'Maximum Number of Registrations can only consist of number'
 													}
 												}
@@ -658,10 +658,10 @@ function getAlertFormEdit(id) {
 												$('#billGenerationEdit1').val(
 														item.billGenerationDate)
 														.trigger("change");
-												/*$("#formbillgenerationEdit")
+												$("#formbillgenerationEdit")
 														.addClass(
 																"group form-group has-feedback has-success bmd-form-group is-filled")
-*/
+
 												$('#lateFeeEdit1').val(
 														item.lateFee).trigger(
 														"change");
@@ -687,7 +687,7 @@ function getAlertFormEdit(id) {
 												$("#formduedatecountEdit")
 														.addClass(
 																"group form-group has-feedback has-success bmd-form-group is-filled")
-												$('#maximumNumberOfRegistrationsEdit1').val(
+												$('#maximumnumberofregistrationsEdit1').val(
 														item.maximumNumberOfRegistrations)
 														.trigger("change");
 												$("#formmaximumnumberofregistrationsEdit")
