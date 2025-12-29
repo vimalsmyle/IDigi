@@ -1118,7 +1118,7 @@ public class CommunitySetUpDAO {
 					
 					for(int i = 0; i < customervo.getMeters().size(); i++) {
 						
-						PreparedStatement pstmt4 = con.prepareStatement("INSERT INTO customermeterdetails (CustomerID, CustomerUniqueID, MIUID, MeterSerialNumber, MeterType, MeterSizeID, PayType, TariffID, GatewayID, Location, ThresholdMaximum, ThresholdMinimum, ModifiedDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
+						PreparedStatement pstmt4 = con.prepareStatement("INSERT INTO customermeterdetails (CustomerID, CustomerUniqueID, MIUID, MeterSerialNumber, MeterType, MeterSizeID, PayType, TariffID, GatewayID, Location, ThresholdMaximum, ThresholdMinimum, DefaultReading, ModifiedDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
 						pstmt4.setInt(1, rs.getInt("CustomerID"));
 						pstmt4.setString(2, customervo.getCustomerUniqueID());
 						pstmt4.setString(3, customervo.getMeters().get(i).getMiuID().toLowerCase());
@@ -1131,6 +1131,7 @@ public class CommunitySetUpDAO {
 						pstmt4.setString(10, customervo.getMeters().get(i).getLocation());
 						pstmt4.setFloat(11, customervo.getMeters().get(i).getThresholdMaximum());
 						pstmt4.setFloat(12, customervo.getMeters().get(i).getThresholdMinimum());
+						pstmt4.setFloat(13, customervo.getMeters().get(i).getDefaultReading());
 						
 						if(pstmt4.executeUpdate() > 0) {
 							responsevo.setResult("Success");
@@ -1271,7 +1272,7 @@ public class CommunitySetUpDAO {
 	            	if(customervo.getMeters().size() > 0) {
 	            	
 	            	for(int i = 0; i < customervo.getMeters().size(); i++) {
-	            		con.prepareStatement("UPDATE customermeterdetails SET MIUID = '"+customervo.getMeters().get(i).getMiuID().trim()+"', GatewayID = " +customervo.getMeters().get(i).getGatewayID()+ ", MeterSizeID = " +customervo.getMeters().get(i).getMeterSizeID() +", ThresholdMaximum = "+customervo.getMeters().get(i).getThresholdMaximum() +", ThresholdMinimum = "+customervo.getMeters().get(i).getThresholdMinimum()+", ModifiedDate = NOW() WHERE CustomerMeterID = " + customervo.getMeters().get(i).getCustomerMeterID()).executeUpdate();
+	            		con.prepareStatement("UPDATE customermeterdetails SET MIUID = '"+customervo.getMeters().get(i).getMiuID().trim()+"', GatewayID = " +customervo.getMeters().get(i).getGatewayID()+ ", MeterSizeID = " +customervo.getMeters().get(i).getMeterSizeID() +", ThresholdMaximum = "+customervo.getMeters().get(i).getThresholdMaximum() +", ThresholdMinimum = "+customervo.getMeters().get(i).getThresholdMinimum()+", DefaultReading = " +customervo.getMeters().get(i).getDefaultReading()+ ", ModifiedDate = NOW() WHERE CustomerMeterID = " + customervo.getMeters().get(i).getCustomerMeterID()).executeUpdate();
 	            		con.prepareStatement("UPDATE displaybalancelog SET MIUID = '"+customervo.getMeters().get(i).getMiuID().trim()+"' WHERE CustomerMeterID = " + customervo.getMeters().get(i).getCustomerMeterID()).executeUpdate();
 	            		
 	            		}
@@ -1334,7 +1335,7 @@ public class CommunitySetUpDAO {
 				while (rs.next()) {
 
 					pstmt6 = con.prepareStatement(
-							"INSERT INTO customerdeletemeter (CustomerMeterID, CustomerID, CustomerUniqueID, MIUID, MeterSerialNumber, MeterType, MeterSizeID, PayType, TariffID, Location, ThresholdMaximum, ThresholdMinimum, ModifiedDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
+							"INSERT INTO customerdeletemeter (CustomerMeterID, CustomerID, CustomerUniqueID, MIUID, MeterSerialNumber, MeterType, MeterSizeID, PayType, TariffID, Location, ThresholdMaximum, ThresholdMinimum, DefaultReading, ModifiedDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
 
 					pstmt6.setInt(1, rs.getInt("CustomerMeterID"));
 					pstmt6.setInt(2, rs.getInt("CustomerID"));
@@ -1348,6 +1349,7 @@ public class CommunitySetUpDAO {
 					pstmt6.setString(10, rs.getString("Location"));
 					pstmt6.setFloat(11, rs.getFloat("ThresholdMaximum"));
 					pstmt6.setFloat(12, rs.getFloat("ThresholdMinimum"));
+					pstmt6.setFloat(13, rs.getFloat("DefaultReading"));
 
 					pstmt6.executeUpdate();					
 				}
@@ -1412,7 +1414,7 @@ public class CommunitySetUpDAO {
         	customerresponsevo = new CustomerResponseVO();
         	customerresponsevo.setRequestID(rs.getInt("RequestID"));
         	customerresponsevo.setCustomerUniqueID(rs.getString("CustomerUniqueID"));
-        	customerresponsevo.setFirstName(rs.getString("FirstName"));
+        	customerresponsevo.setFirstName(rs.getString("FirstName") + " " + rs.getString("LastName"));
         	customerresponsevo.setLastName(rs.getString("LastName"));
         	customerresponsevo.setEmail(rs.getString("Email"));
         	customerresponsevo.setMobileNumber(rs.getString("MobileNumber"));

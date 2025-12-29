@@ -26,6 +26,7 @@ public class MeterRequestVO {
 	private String location;
 	private float thresholdMaximum;
 	private float thresholdMinimum;
+	private float defaultReading;
 	private String tariffName;
 	private String availableBalance;
 	private String modifiedDate;
@@ -159,5 +160,12 @@ public class MeterRequestVO {
 	public void setEmergencyCredit(String emergencyCredit) {
 		this.emergencyCredit = emergencyCredit;
 	}
+	public float getDefaultReading() {
+		return defaultReading;
+	}
+	public void setDefaultReading(float defaultReading) {
+		this.defaultReading = defaultReading;
+	}
+	
 	
 }

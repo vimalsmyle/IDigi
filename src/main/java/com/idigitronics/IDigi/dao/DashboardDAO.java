@@ -1465,10 +1465,11 @@ public class DashboardDAO {
 		try {
 			con = getConnection();
 			
-				PreparedStatement pstmt2 = con.prepareStatement("SELECT cd.CommunityID, cd.BlockID, cd.CustomerID, cmd.CustomerMeterID, cmd.TariffID, t.Tariff, cmd.MeterSerialNumber, cd.CustomerUniqueID, cmd.MeterSizeID, cmd.ThresholdMaximum, cmd.ThresholdMinimum from customerdetails as cd LEFT JOIN customermeterdetails as cmd ON cd.CustomerID = cmd.CustomerID LEFT JOIN tariff as t on t.TariffID = cmd.TariffID WHERE cmd.MIUID = ?");
+				PreparedStatement pstmt2 = con.prepareStatement("SELECT cd.CommunityID, cd.BlockID, cd.CustomerID, cmd.CustomerMeterID, cmd.TariffID, t.Tariff, cmd.MeterSerialNumber, cd.CustomerUniqueID, cmd.MeterSizeID, cmd.ThresholdMaximum, cmd.ThresholdMinimum, cmd.DefaultReading from customerdetails as cd LEFT JOIN customermeterdetails as cmd ON cd.CustomerID = cmd.CustomerID LEFT JOIN tariff as t on t.TariffID = cmd.TariffID WHERE cmd.MIUID = ?");
 				pstmt2.setString(1, miuID);
 				ResultSet rs = pstmt2.executeQuery();
 				if(rs.next()) {
+					dataRequestVO.setReading(dataRequestVO.getReading()+rs.getFloat("DefaultReading"));
 					ValidateResponseVO validateResponseVO = validateRequest(dataRequestVO, miuID, rs.getLong("CustomerMeterID"));
 					if(validateResponseVO.isResult()) {
 					

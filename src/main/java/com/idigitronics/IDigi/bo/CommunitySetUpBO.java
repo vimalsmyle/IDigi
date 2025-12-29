@@ -302,6 +302,9 @@ public class CommunitySetUpBO {
 			if(customervo.getMeters().get(i).getGatewayID()==-1) {
 				throw new BusinessException(customervo.getMeters().get(i).getMiuID() +" - GATEWAY IS NOT SELECTED");
 			}
+			if(customervo.getMeters().get(i).getDefaultReading()<0) {
+				throw new BusinessException(customervo.getMeters().get(i).getMiuID() +" - DEFAULT READING CANNOT BE LESS THAN ZERO");
+			}
 		}
 		}
 		

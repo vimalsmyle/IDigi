@@ -42,7 +42,7 @@ $(document)
 										"columns" : [
 											
 												{
-													"data" : "firstName" + " " + "lastName"
+													"data" : "firstName"
 												},
 												{
 													"data" : "email"

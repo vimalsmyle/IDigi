@@ -11,10 +11,13 @@ import java.util.List;
 import java.util.UUID;
 
 import org.apache.log4j.Logger;
+import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
+import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
+import org.eclipse.paho.client.mqttv3.internal.wire.MqttSubscribe;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -25,10 +28,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.Gson;
 import com.idigitronics.IDigi.request.vo.MqttPostVO;
 import com.idigitronics.IDigi.dao.DashboardDAO;
+import com.idigitronics.IDigi.dao.SimpleMqttCallBack;
 import com.idigitronics.IDigi.request.vo.DataRequestVO;
 import com.idigitronics.IDigi.request.vo.FilterVO;
 import com.idigitronics.IDigi.request.vo.SensorDataRequestVO;
@@ -47,7 +52,7 @@ import com.idigitronics.IDigi.response.vo.SolarDashboardResponseVO;
  * 
  */
 
-@Controller
+@RestController
 public class DashboardController {
 
 	private static final Logger logger = Logger.getLogger(DashboardController.class);
@@ -335,41 +340,76 @@ public class DashboardController {
 		return dashboarddao.getSolarGraphDashboardDetails(communityName);
 	}
 	
-	@RequestMapping(value = "/pingmqtt", method = RequestMethod.GET)
+	@RequestMapping(value = "/pingmqttold", method = RequestMethod.GET)
 	public void mqttMode () throws KeyStoreException, FileNotFoundException {
 		
-		String broker = "mqtt://rak-gateway.local:1883";
-		String clientId = "mqttx_e1370f53";
+		String broker = "tcp://43.249.226.135:1883";
+		String clientId = "mqttx_15cf9bad";
+		String devID = "506f980000000d02";
 		MqttPostVO data = new MqttPostVO();
 		data.setConfirmed(true);
-		data.setfPort(103);
+		data.setfPort(1883);
 		data.setReference(clientId);
 //		data.setData(Base64.getEncoder().encodeToString(Integer.toHexString(0).getBytes()));
 		data.setData("AAE=");
 		Gson gson = new Gson();
 		 int qos = 2;
-		 String topic = "application/357/event/a0bf500000da7ada/tx";
+		 String topic = "application/3/device/"+devID+"/event/up";
 		 
-		 String acktopic = "application/357/node/a0bf500000da7ada/ack";
+//		 String topic = "application/#";
+		 
+//		 String acktopic = "application/357/node/a0bf500000da7ada/ack";
 		 
 			 try {
+				 
+//				 let RAK_MQTT_LISTEN_UP_EVENT_TOPIC="application/+/device/+/event/up"; //to server
+//				 let RAK_MQTT_LISTEN_DEVICE_RX_TOPIC="application/+/device/+/rx";
+				 
+//				 let RAK_MQTT_LISTEN_DOWN_EVENT_TOPIC="application/+/device/+/command/down"; //to device
+//				 let RAK_MQTT_LISTEN_DEVICE_TX_TOPIC="application/+/device/+/tx";
+				 
+				 
 		            MqttClient sampleClient = new MqttClient(broker, clientId);
 		            MqttConnectOptions connOpts = new MqttConnectOptions();
 		            connOpts.setCleanSession(true);
 		            connOpts.setAutomaticReconnect(true);
-		            connOpts.setUserName("hanbitsolutions");
-		            connOpts.setPassword("73fa0fd1ae718628878d86b288c591745d740f18".toCharArray());
+//		            connOpts.setUserName("hanbitsolutions");
+//		            connOpts.setPassword("73fa0fd1ae718628878d86b288c591745d740f18".toCharArray());
 		            System.out.println("Connecting to broker: "+broker);
 		            sampleClient.connect(connOpts);
 		            if(sampleClient.isConnected()) {
 		            	  System.out.println("Connected");
+		            	  
 		            }
 		            
 		            System.out.println("Publishing message: "+gson.toJson(data));
 		            MqttMessage message = new MqttMessage(gson.toJson(data).getBytes());
 		            message.setQos(qos);
 		            message.setRetained(true);
-		            sampleClient.publish(topic, message);
+//		            sampleClient.publish(topic, message);
+		            
+		            sampleClient.setCallback(new MqttCallback() {
+		            	  public void messageArrived(String topic, MqttMessage message1) throws Exception {
+		            		    System.out.println("topic: " + topic);
+		            		    System.out.println("qos: " + message1.getQos());
+		            		    System.out.println("message content: " + new String(message1.getPayload()));
+		            	  }
+
+						@Override
+						public void connectionLost(Throwable cause) {
+							// TODO Auto-generated method stub
+							System.out.println("connectionLost: " + cause.getMessage());
+							
+						}
+
+						@Override
+						public void deliveryComplete(IMqttDeliveryToken token) {
+							// TODO Auto-generated method stub
+							System.out.println("deliveryComplete: " + token.isComplete());
+						}});
+		            
+		            sampleClient.subscribe(topic, qos);
+		            
 		            System.out.println("Message published");
 		            sampleClient.disconnect();
 		            System.out.println("Disconnected");
@@ -382,10 +422,46 @@ public class DashboardController {
 		            System.out.println("excep "+me);
 		            me.printStackTrace();
 		        }
-			
-			
-		
 		
 	}
+	
+	
+	@RequestMapping(value = "/pingmqtt", method = RequestMethod.GET)
+	public void mqtt() {
+		
+//	String broker = "tcp://broker.emqx.io:1883";
+//    String clientId = "demo_client";
+//    String topic = "topic/test";
+    int subQos = 0;
+    int pubQos = 1;
+    String msg = "Hello MQTT";
+    String broker = "tcp://43.249.226.135:1883";
+	String clientId = "mqttx_15cf9bad";
+//	String clientId = "mqttx_f5aa0bcb";
+//	String topic = "application/3/device/506f980000000d02/event/up";
+	String topic = "application/357/node/a0bf500000da7ada/tx";
+//	String topic = "application/#";
+
+    try {
+        MqttClient client = new MqttClient(broker, clientId);
+        MqttConnectOptions options = new MqttConnectOptions();
+        client.connect(options);
+
+        if (client.isConnected()) {
+            client.subscribe(topic);
+            client.setCallback(new SimpleMqttCallBack());
+
+            MqttMessage message = new MqttMessage(msg.getBytes());
+            message.setQos(pubQos);
+//            client.publish(topic, message);
+        }
+
+        client.disconnect();
+        client.close();
+
+    } catch (MqttException e) {
+        e.printStackTrace();
+    }
+}
 	
 }
