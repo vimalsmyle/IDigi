@@ -23,37 +23,40 @@
 
 
 <style>
-            .sec{
-                margin: 0 auto;
-                height: 50vh;
-                width: 50vh;
-                            }
-            .axis{
-                border-left: 2px solid #000;
-                border-bottom: 2px solid #000;
-            }
-            .cube-p{
-                height: 40vh;
-               
-                border: 1px solid #000;
-                margin: 10px;
-                display: flex;
-                align-items: end;
-            }
-            .child{
-                margin: 0;
-                padding: 0;
-                list-style: none;
-                display: flex;
-                    flex-wrap: wrap;
-                
-            }
-            .child div{
-                width:3vh;
-                height:3vh;
-                margin: 2px;
-                }
-        </style>
+.sec {
+	margin: 0 auto;
+	height: 50vh;
+	width: 50vh;
+}
+
+.axis {
+	border-left: 2px solid #000;
+	border-bottom: 2px solid #000;
+}
+
+.cube-p {
+	height: 40vh;
+	border: 1px solid #000;
+	margin: 10px;
+	display: block;
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+
+.child {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.child div {
+	width: 3vh;
+	height: 3vh;
+	margin: 2px;
+}
+</style>
 
 
 <title>DashBoard</title>
@@ -94,10 +97,10 @@
 
 				<div class="row">
 					<div class="col-md-12">
-					
-					
-					
-					<div class="page-header">
+
+
+
+						<div class="page-header">
 							<h3>Water</h3>
 						</div>
 						<div class="row">
@@ -109,9 +112,12 @@
 									<%
 										if (user_id.equalsIgnoreCase("1") || user_id.equalsIgnoreCase("4")) {
 									%>
-									
-									<div class="waterloadDiv"><img src="common/images/load.gif" alt="" width="50" height="50" style="" id="waterLoader" class="waterLoad"></div>
-									
+
+									<div class="waterloadDiv">
+										<img src="common/images/load.gif" alt="" width="50"
+											height="50" style="" id="waterLoader" class="waterLoad">
+									</div>
+
 									<div class="box-body">
 										<div class="row">
 											<div class="col-md-12">
@@ -245,30 +251,32 @@
 								</div>
 							</div>
 						</div>
-					
-					
- 						<div class="page-header">
+
+
+						<div class="page-header">
 							<h3>Gas</h3>
 						</div>
 						<div class="row">
 							<div class="col-md-12">
 								<div class="box">
 									<div class="box-body">
-										<img src="common/images/load.gif" alt="" width="50" height="50" style="" id="gasLoader"></div>
-										<%
+										<img src="common/images/load.gif" alt="" width="50"
+											height="50" style="" id="gasLoader">
+									</div>
+									<%
 											if (user_id.equalsIgnoreCase("1") || user_id.equalsIgnoreCase("4")) {
 										%>
-										
-										<div class="row">
-											<div class="col-md-12">
-												<div id="container"
-													style="width: 100%; height: 400px; margin: 0 auto"></div>
-											</div>
+
+									<div class="row">
+										<div class="col-md-12">
+											<div id="container"
+												style="width: 100%; height: 400px; margin: 0 auto"></div>
 										</div>
-										<%
+									</div>
+									<%
 											}
 										%>
-									
+
 									<div class="box-footer">
 										<div class="container">
 											<div class="row">
@@ -403,68 +411,58 @@
 
 
 
-						
-	 					
+
+
 						<div class="page-header">
 							<h3>Solar</h3>
 						</div>
 						<div class="row">
 							<div class="col-md-12">
 								<div class="box">
-									<div class="box-body">
-										</div>
-										<%
+									<div class="box-body"></div>
+									<%
 											if (user_id.equalsIgnoreCase("1") || user_id.equalsIgnoreCase("4")) {
 										%>
-										
-										
-										
-										<main>
-            <section class="sec">
-                <div class="">
-                <div class="row axis">
-		<div class="col-md-4 p-3">
-                  <div class="cube-p">
-                        <div class="child" id="data-list">
-                            
-                           
-                        </div>
-
-                    </div>
-                </div>
-                		<div class="col-md-4 p-3">
-                  <div class="cube-p">
-                        <div class="child" id="data-list1">
-                            
-                           
-                        </div>
-
-                    </div>
-                </div>
-                <div class="col-md-4 p-3">
-                  <div class="cube-p">
-                        <div class="child" id="data-list2">
-                            
-                           
-                        </div>
-
-                    </div>
-                </div>
-			</div>
-		</div>
-			
 
 
-            </section>
-        </main>
-										
-										
-										
-										
-										<%
+
+									<main>
+										<section class="sec">
+											<div class="">
+												<div class="row axis">
+													<div class="col-md-4 p-3">
+														<div class="cube-p">
+															<div class="child" id="data-list"></div>
+
+														</div>
+													</div>
+													<div class="col-md-4 p-3">
+														<div class="cube-p">
+															<div class="child" id="data-list1"></div>
+
+														</div>
+													</div>
+													<div class="col-md-4 p-3">
+														<div class="cube-p">
+															<div class="child" id="data-list2"></div>
+
+														</div>
+													</div>
+												</div>
+											</div>
+
+
+
+										</section>
+									</main>
+
+
+
+
+									<%
 											}
 										%>
-									
+
 									<div class="box-footer">
 										<div class="container">
 											<div class="row">
@@ -475,8 +473,7 @@
 
 															<div class="text-xs font-weight-bold text-uppercase">
 																<h5 class="description-header" id="solarActive"></h5>
-																<span class="description-text"
-																	>Active 
+																<span class="description-text">Active
 																</span>
 															</div>
 
@@ -486,14 +483,13 @@
 
 															<div class="text-xs font-weight-bold text-uppercase">
 																<h5 class="description-header" id="solarInactive"></h5>
-																<span class="description-text"
-																	>In-Active
+																<span class="description-text">In-Active
 																</span>
 
 															</div>
 
 														</div>
-													<!-- 	<div class="slide sliding-block">
+														<!-- 	<div class="slide sliding-block">
 
 															<div class="text-xs font-weight-bold text-uppercase">
 																<h5 class="description-header" id="solarLive"></h5>
@@ -582,25 +578,25 @@
 								</div>
 							</div>
 						</div>
-						
-						
-						
-						
-						
-						
-						
-						
-						
-						
-						
-						
-						
-						
-						
-						
-						
-						
-						
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 						<!-- End-->
@@ -809,45 +805,49 @@
 
 	<script src="js/home.js"></script>
 	<script src="js/common.js"></script>
-	
-		
+
+
 	<script
 		src="https://cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js"></script>
-		
-		<script
+
+	<script
 		src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.colVis.min.js"></script>
-		
-		<script
+
+	<script
 		src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
-		
-		
-		<script
+
+
+	<script
 		src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
-		
-		
-		<script
-		src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.bootstrap.min.js"></script>	
-		
-		
-		<script
+
+
+	<script
+		src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.bootstrap.min.js"></script>
+
+
+	<script
 		src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
-		
-		<script
-		src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js"></script>	
-		
-		<script
+
+	<script
+		src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js"></script>
+
+	<script
 		src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
-		
-		
-	<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-<script  src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
-<script  src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
-<script  src="https://cdn.datatables.net/responsive/2.2.3/js/responsive.bootstrap4.min.js"></script>
-		
-		<script
+
+
+	<script
+		src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+	<script
+		src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+	<script
+		src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+	<script
+		src="https://cdn.datatables.net/responsive/2.2.3/js/responsive.bootstrap4.min.js"></script>
+
+	<script
 		src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/5.4.0/bootbox.min.js"></script>
-		
-		<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 	<script src="https://code.highcharts.com/highcharts.js"></script>
 	<script

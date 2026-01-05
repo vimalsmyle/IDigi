@@ -209,6 +209,7 @@
 								<th>Location</th>
 								<th>Threshold Maximum</th>
 								<th>Threshold Minimum</th>
+								<th>Default Reading</th>
 							</tr>
 						</thead>
 						<tbody>

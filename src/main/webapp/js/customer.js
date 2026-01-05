@@ -166,6 +166,13 @@ $(document).ready(function() {
 						+" id=thresholdMinimumAdd-"+rowCount+">"
 						+"<hr></div></div>   " +
 						
+						"<div class=col-md-4>" +
+												"<div id='formdefaultReadingEdit' class='group form-group has-feedback has-success bmd-form-group is-filled'>"
+												+"<label class=bmd-label-floating>Default Reading<span class=impp><sup>*</sup></span></label> <input "
+												+"type=number class='form-control form-control-sm'  name=defaultReadingAdd["+rowCount+"]"
+												+" id=defaultReadingAdd-"+rowCount+">"
+												+"<hr></div></div>   " +
+						
 						
 								"</div>" +
 								"</div>");
@@ -194,6 +201,9 @@ $(document).ready(function() {
 				
 				$("#thresholdMinimumAdd-"+rowCount).val(meter.thresholdMinimum);
 				$("#formThresholdMinimumAdd").addClass("group form-group has-feedback has-success bmd-form-group is-filled");
+				
+				$("#defaultReadingAdd-"+rowCount).val(meter.defaultReading);
+								$("#formdefaultReadingAdd").addClass("group form-group has-feedback has-success bmd-form-group is-filled");
 				
 				
 				
@@ -609,6 +619,13 @@ $("#addMeter")
 									+"<label class=bmd-label-floating>Threshold Minimum<span class=impp><sup>*</sup></span></label> <input "
 									+"type=number class='form-control form-control-sm' name=thresholdMinimumAdd["+rowCount+"]"
 									+" id=thresholdMinimumAdd-"+rowCount+">"
+									+"<hr></div></div>   " +
+									
+									"<div class=col-md-4>" +
+									"<div class='group form-group has-feedback has-success bmd-form-group is-filled'>"
+									+"<label class=bmd-label-floating>Default Reading<span class=impp><sup>*</sup></span></label> <input "
+									+"type=number class='form-control form-control-sm' name=defaultReadingAdd["+rowCount+"]"
+									+" id=defaultReadingAdd-"+rowCount+">"
 									+"<hr></div></div>   " +
 									
 									
@@ -1258,6 +1275,7 @@ $(document)
 													
 													array["thresholdMaximum"] = $("#thresholdMaximumAdd-"+i).val();
 													array["thresholdMinimum"] = $("#thresholdMinimumAdd-"+i).val();
+													array["defaultReading"] = $("#defaultReadingAdd-"+i).val();
 													
 													meterDetails.push(array);
 												}
@@ -1373,6 +1391,7 @@ $(document)
 												array["location"] = $("#locationAdd-"+i).val();
 												array["thresholdMaximum"] = $("#thresholdMaximumAdd-"+i).val();
 												array["thresholdMinimum"] = $("#thresholdMinimumAdd-"+i).val();
+												array["defaultReading"] = $("#defaultReadingAdd-"+i).val();
 												meterDetails.push(array);
 											}
 											
@@ -1570,7 +1589,10 @@ function getCustomerMeters(CRNNumber){
 								},
 								 {
 									"data" : "thresholdMinimum"
-								}
+								},
+								{
+																	"data" : "defaultReading"
+																}
 									
 									
 									],

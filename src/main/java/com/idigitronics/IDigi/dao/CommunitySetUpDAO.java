@@ -908,7 +908,7 @@ public class CommunitySetUpDAO {
 				customervo.setCustomerID(rs.getLong("CustomerID"));
 				customervo.setAction((roleid == 1 || roleid == 2 || roleid == 3 ? true : false));
 				
-				PreparedStatement pstmt2 = con.prepareStatement("SELECT cmd.CustomerMeterID, cmd.MIUID, cmd.MeterSerialNumber, cmd.MeterType, cmd.PayType, cmd.Location, cmd.TariffID, cmd.GatewayID, cmd.ThresholdMaximum, cmd.ThresholdMinimum, g.GatewayName, ms.MeterSize, ms.MeterSizeID FROM customermeterdetails AS cmd LEFT JOIN gateway AS g ON g.GatewayID = cmd.GatewayID LEFT JOIN metersize AS ms ON ms.MeterSizeID = cmd.MeterSizeID WHERE cmd.CustomerID = " + customervo.getCustomerID());
+				PreparedStatement pstmt2 = con.prepareStatement("SELECT cmd.CustomerMeterID, cmd.MIUID, cmd.MeterSerialNumber, cmd.MeterType, cmd.PayType, cmd.Location, cmd.TariffID, cmd.GatewayID, cmd.ThresholdMaximum, cmd.ThresholdMinimum, cmd.DefaultReading, g.GatewayName, ms.MeterSize, ms.MeterSizeID FROM customermeterdetails AS cmd LEFT JOIN gateway AS g ON g.GatewayID = cmd.GatewayID LEFT JOIN metersize AS ms ON ms.MeterSizeID = cmd.MeterSizeID WHERE cmd.CustomerID = " + customervo.getCustomerID());
 				
 				ResultSet rs2 = pstmt2.executeQuery();
 				
@@ -932,6 +932,7 @@ public class CommunitySetUpDAO {
 					metervo.setGatewayName(rs2.getString("GatewayName"));
 					metervo.setThresholdMaximum(rs2.getFloat("ThresholdMaximum"));
 					metervo.setThresholdMinimum(rs2.getFloat("ThresholdMinimum"));
+					metervo.setDefaultReading(rs2.getFloat("DefaultReading"));
 					
 					PreparedStatement pstmt3 = con.prepareStatement("SELECT TariffName from tariff WHERE TariffID = "+ metervo.getTariffID());
 					
@@ -986,7 +987,7 @@ public class CommunitySetUpDAO {
 		try {
 			con = getConnection();
 			
-			pstmt = con.prepareStatement("SELECT cmd.CustomerMeterID, cmd.CustomerID, cmd.MeterSerialNumber, cmd.MeterType, cmd.PayType, cmd.Location, cmd.TariffID, cmd.GatewayID, cmd.ThresholdMaximum, cmd.ThresholdMinimum, g.GatewayName, ms.MeterSize, ms.MeterSizeID FROM customermeterdetails AS cmd LEFT JOIN gateway AS g ON g.GatewayID = cmd.GatewayID LEFT JOIN metersize AS ms ON ms.MeterSizeID = cmd.MeterSizeID WHERE cmd.MIUID = '" + miuID + "'");
+			pstmt = con.prepareStatement("SELECT cmd.CustomerMeterID, cmd.CustomerID, cmd.MeterSerialNumber, cmd.MeterType, cmd.PayType, cmd.Location, cmd.TariffID, cmd.GatewayID, cmd.ThresholdMaximum, cmd.ThresholdMinimum, cmd.DefaultReading, g.GatewayName, ms.MeterSize, ms.MeterSizeID FROM customermeterdetails AS cmd LEFT JOIN gateway AS g ON g.GatewayID = cmd.GatewayID LEFT JOIN metersize AS ms ON ms.MeterSizeID = cmd.MeterSizeID WHERE cmd.MIUID = '" + miuID + "'");
 			rs = pstmt.executeQuery();
 
 			if (rs.next()) {
@@ -1007,6 +1008,7 @@ public class CommunitySetUpDAO {
 				metervo.setGatewayName(rs.getString("GatewayName"));
 				metervo.setThresholdMaximum(rs.getFloat("ThresholdMaximum"));
 				metervo.setThresholdMinimum(rs.getFloat("ThresholdMinimum"));
+				metervo.setDefaultReading(rs.getFloat("DefaultReading"));
 				
 				customervo.setCustomerID(rs.getLong("CustomerID"));
 				
