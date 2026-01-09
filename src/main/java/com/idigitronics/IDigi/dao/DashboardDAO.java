@@ -2401,9 +2401,9 @@ public class DashboardDAO {
 		// TODO Auto-generated method stub
 		Connection con = null;
 		
-		List<SolarDashboardResponseVO> block1List = new ArrayList<SolarDashboardResponseVO>();
-		List<SolarDashboardResponseVO> block2List = new ArrayList<SolarDashboardResponseVO>();
-		List<SolarDashboardResponseVO> block3List = new ArrayList<SolarDashboardResponseVO>();
+		List<SolarDashboardResponseVO> green = new ArrayList<SolarDashboardResponseVO>();  // relay on
+		List<SolarDashboardResponseVO> red = new ArrayList<SolarDashboardResponseVO>();  // relay off
+//		List<SolarDashboardResponseVO> block3List = new ArrayList<SolarDashboardResponseVO>();  // non communicating
 		
 		GraphResponseVO response = new GraphResponseVO();
 		
@@ -2427,19 +2427,17 @@ public class DashboardDAO {
 							
 							for(SolarDashboardResponseVO res : responselist) {
 								
-								if(res.getDeviceBlockID().equalsIgnoreCase("1")) {
-									block1List.add(res);
-								} else if(res.getDeviceBlockID().equalsIgnoreCase("2")) {
-									block2List.add(res);
-								} else if(res.getDeviceBlockID().equalsIgnoreCase("3")) {
-									block3List.add(res);
+								if(res.getRelayStatus().equalsIgnoreCase("ON")) {
+									green.add(res);
+								} else {
+									red.add(res);
+									}
 								}
 							}
-							response.setBlock1List(block1List);
-							response.setBlock2List(block2List);
-							response.setBlock3List(block3List);
+							response.setGreen(green);
+							response.setRed(red);
+//							response.setBlock3List(block3List);
 							
-						}
 
 		} catch(Exception e) {
 			e.printStackTrace();

@@ -52,7 +52,7 @@ import com.idigitronics.IDigi.response.vo.SolarDashboardResponseVO;
  * 
  */
 
-@RestController
+@Controller
 public class DashboardController {
 
 	private static final Logger logger = Logger.getLogger(DashboardController.class);
