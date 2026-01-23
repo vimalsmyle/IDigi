@@ -15,7 +15,7 @@ public class GraphResponseVO {
 	
 	private List<SolarDashboardResponseVO> green;
 	private List<SolarDashboardResponseVO> red;
-//	private List<SolarDashboardResponseVO> block3List;
+	private List<SolarDashboardResponseVO> master;
 	
 	public List<String> getXAxis() {
 	return xAxis;
@@ -48,16 +48,13 @@ public class GraphResponseVO {
 		this.red = red;
 	}
 
+	public List<SolarDashboardResponseVO> getMaster() {
+		return master;
+	}
 
-//
-//	public List<SolarDashboardResponseVO> getBlock3List() {
-//		return block3List;
-//	}
-//
-//	public void setBlock3List(List<SolarDashboardResponseVO> block3List) {
-//		this.block3List = block3List;
-//	}
-//	
+	public void setMaster(List<SolarDashboardResponseVO> master) {
+		this.master = master;
+	}
 	
 
 }

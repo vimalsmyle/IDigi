@@ -180,7 +180,7 @@ public class DashboardDAO {
 					individualDashboardResponseVO.setMeterSize(rs3.getFloat("MeterSize"));
 					individualDashboardResponseVO.setGatewayName(rs3.getString("GatewayName"));
 					individualDashboardResponseVO.setLocation(rs3.getString("Location"));
-					individualDashboardResponseVO.setReading(rs3.getFloat("Reading"));
+					individualDashboardResponseVO.setReading(rs3.getFloat("Reading")/1000);
 					individualDashboardResponseVO.setConsumption((int) (individualDashboardResponseVO.getReading() * rs3.getFloat("PerUnitValue")));
 					individualDashboardResponseVO.setBattery(rs3.getInt("BatteryVoltage"));
 					individualDashboardResponseVO.setBatteryColor((rs3.getInt("LowBattery") == 1 ) ? "RED" : "GREEN");
@@ -340,10 +340,10 @@ public class DashboardDAO {
         headercell8.setCellValue("MIU ID");
         
         Cell headercell9 = header.createCell(++columnCount);
-        headercell9.setCellValue("Reading");
+        headercell9.setCellValue("Reading" + (dashboardResponseVO.getData().size()>0 ? (dashboardResponseVO.getData().get(0).getDasboarddata().get(0).getMeterType().equalsIgnoreCase("GAS") ? "M\u00B3" : "KL") : ""));
         
         Cell headercell10 = header.createCell(++columnCount);
-        headercell10.setCellValue("Consumption");
+        headercell10.setCellValue("Consumption" + (dashboardResponseVO.getData().size()>0 ? (dashboardResponseVO.getData().get(0).getDasboarddata().get(0).getMeterType().equalsIgnoreCase("GAS") ? "M\u00B3" : "KL") : ""));
         
         Cell headercell11 = header.createCell(++columnCount);
         headercell11.setCellValue("Battery");
@@ -548,10 +548,10 @@ public class DashboardDAO {
         headercell8.setCellValue("MIU ID");
         
         Cell headercell9 = header.createCell(++columnCount);
-        headercell9.setCellValue("Reading");
+        headercell9.setCellValue("Reading" + (dashboardResponseVO.getData().size()>0 ? (dashboardResponseVO.getData().get(0).getDasboarddata().get(0).getMeterType().equalsIgnoreCase("GAS") ? "M\u00B3" : "KL") : ""));
         
         Cell headercell10 = header.createCell(++columnCount);
-        headercell10.setCellValue("Consumption");
+        headercell10.setCellValue("Consumption" + (dashboardResponseVO.getData().size()>0 ? (dashboardResponseVO.getData().get(0).getDasboarddata().get(0).getMeterType().equalsIgnoreCase("GAS") ? "M\u00B3" : "KL") : ""));
         
         Cell headercell11 = header.createCell(++columnCount);
         headercell11.setCellValue("Battery");
@@ -1860,7 +1860,7 @@ public class DashboardDAO {
 		try {
 			con = getConnection();
 			
-			pstmt = con.prepareStatement("SELECT cd.Email AS customerEmail, b.Email AS adminEmail, b.BlockName as BlockName, c.CommunityName as CommunityName, cd.CustomerUniqueID, cd.HouseNumber FROM customerdetails as cd LEFT JOIN customermeterdetails AS cmd ON cd.CustomerID = cmd.CustomerID LEFT JOIN block AS b ON b.BlockID = cd.BlockID LEFT JOIN community AS c ON c.CommunityID = cd.CommunityID WHERE cmd.MIUID = '"+ miuID+"'");
+			pstmt = con.prepareStatement("SELECT cd.Email AS customerEmail, b.Email AS adminEmail, b.BlockName as BlockName, c.CommunityName as CommunityName, cd.CustomerUniqueID, cd.HouseNumber FROM customerdetails as cd LEFT JOIN customermeterdetails AS cmd ON cd.CustomerID = cmd.CustomerID LEFT JOIN block AS b ON b.BlockID = cd.BlockID LEFT JOIN community AS c ON c.CommunityID = cd.CommunityID WHERE " + (subject.equalsIgnoreCase("Solar Power Status Changed!!!") ? " cd.HouseNumber =  '" : " cmd.MIUID = '") + miuID+"'");
 			rs = pstmt.executeQuery();
 			
 			if(rs.next()) {
@@ -2301,6 +2301,20 @@ public class DashboardDAO {
 					
 					if (pstmt.executeUpdate() > 0) {
 						result = "Success";
+						
+						if(insertOrUpdate.isResult()) {
+							
+							sendalertmail("Solar Power Status Changed!!!", "The Solar Power Generation of " + " villa-"+solarDataRequestVO.getHomeid() + " has been switched " + (solarDataRequestVO.getRelay_status() == 0 ? " OFF. " : " ON. ") , "villa-"+solarDataRequestVO.getHomeid());
+							
+//							if(solarDataRequestVO.getRelay_status() == 0) {
+//								PreparedStatement pstmt1 = con.prepareStatement("SELECT LogDate from idigitest.solarlog where Relay_Status = 1 and HouseNumber = " + " villa-"+solarDataRequestVO.getHomeid() +" Limit 0,1");
+//								ResultSet rs1 = pstmt1.executeQuery();
+//								Date currentDateTime = new Date();
+//								
+//								long minutes = TimeUnit.MILLISECONDS.toMinutes(currentDateTime.getTime() - (rs1.getTimestamp("LogDate")).getTime());
+//							}
+
+							}
 					}
 		} 
 				
@@ -2403,7 +2417,7 @@ public class DashboardDAO {
 		
 		List<SolarDashboardResponseVO> green = new ArrayList<SolarDashboardResponseVO>();  // relay on
 		List<SolarDashboardResponseVO> red = new ArrayList<SolarDashboardResponseVO>();  // relay off
-//		List<SolarDashboardResponseVO> block3List = new ArrayList<SolarDashboardResponseVO>();  // non communicating
+		List<SolarDashboardResponseVO> master = new ArrayList<SolarDashboardResponseVO>();  // master
 		
 		GraphResponseVO response = new GraphResponseVO();
 		
@@ -2427,16 +2441,19 @@ public class DashboardDAO {
 							
 							for(SolarDashboardResponseVO res : responselist) {
 								
-								if(res.getRelayStatus().equalsIgnoreCase("ON")) {
+								if(res.getRelayStatus().equalsIgnoreCase("ON") && !res.getHouseNumber().equalsIgnoreCase("villa-0")) {
 									green.add(res);
-								} else {
+								} else if (res.getRelayStatus().equalsIgnoreCase("OFF") && !res.getHouseNumber().equalsIgnoreCase("villa-0")) {
 									red.add(res);
 									}
+								else {
+									master.add(res);
+								}
 								}
 							}
 							response.setGreen(green);
 							response.setRed(red);
-//							response.setBlock3List(block3List);
+							response.setMaster(master);
 							
 
 		} catch(Exception e) {

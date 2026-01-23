@@ -50,6 +50,7 @@ import com.idigitronics.IDigi.request.vo.RazorpayRequestVO;
 import com.idigitronics.IDigi.request.vo.RestCallVO;
 import com.idigitronics.IDigi.request.vo.SMSRequestVO;
 import com.idigitronics.IDigi.response.vo.IndividualBillingResponseVO;
+import com.idigitronics.IDigi.response.vo.FromEmailDetails;
 import com.itextpdf.io.font.FontConstants;
 import com.itextpdf.io.image.ImageDataFactory;
 import com.itextpdf.kernel.font.PdfFont;
@@ -129,24 +130,27 @@ public class ExtraMethodsDAO {
 		String result = "Failure";
 		Properties props = new Properties();
 		
-		    props.put("mail.smtp.user", ExtraConstants.fromEmail);
-		    props.put("mail.smtp.host", "smtp.gmail.com");
-		    props.put("mail.smtp.port", "465");
-		    props.put("mail.smtp.starttls.enable", "true");
-		    props.put("mail.smtp.ssl.protocols", "TLSv1.2");
-		    props.put("mail.smtp.auth", "true");
-		    props.put("mail.smtp.socketFactory.port", "465");
-		    props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-		    props.put("mail.smtp.socketFactory.fallback", "false");
-
 		    try {
+		    	
+		    	FromEmailDetails details = getFromEmailDetails();
+		    	
+		    	props.put("mail.smtp.user", details.getEmail());
+			    props.put("mail.smtp.host", "smtp.gmail.com");
+			    props.put("mail.smtp.port", "465");
+			    props.put("mail.smtp.starttls.enable", "true");
+			    props.put("mail.smtp.ssl.protocols", "TLSv1.2");
+			    props.put("mail.smtp.auth", "true");
+			    props.put("mail.smtp.socketFactory.port", "465");
+			    props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+			    props.put("mail.smtp.socketFactory.fallback", "false");
+		    	
 		      Authenticator auth = new SMTPAuthenticator();
 		      Session session = Session.getInstance(props, auth);
 
 		      MimeMessage msg = new MimeMessage(session);
 		      msg.setText(mailrequestvo.getMessage());
 		      msg.setSubject(mailrequestvo.getSubject());
-		      msg.setFrom(new InternetAddress(ExtraConstants.fromEmail));
+		      msg.setFrom(new InternetAddress(details.getEmail()));
 		      msg.addRecipient(Message.RecipientType.TO, new InternetAddress(mailrequestvo.getToEmail()));
 		      if(!mailrequestvo.getFileLocation().equalsIgnoreCase("NoAttachment")) { 
 					 DataSource source = new FileDataSource(mailrequestvo.getFileLocation());  
@@ -940,11 +944,54 @@ public class ExtraMethodsDAO {
 	}
 	
 	  private class SMTPAuthenticator extends javax.mail.Authenticator {
-
+		  
 		    public PasswordAuthentication getPasswordAuthentication() {
-		      return new PasswordAuthentication(ExtraConstants.fromEmail, ExtraConstants.fromEmailPassword);
+		    	
+		    	FromEmailDetails details = null;
+		    	
+		    	try {
+					details = getFromEmailDetails();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		    	
+		      return new PasswordAuthentication(details.getEmail(), details.getPassword());
 		    }
 		  }
+	  
+public static FromEmailDetails getFromEmailDetails() throws SQLException {
+	
+	FromEmailDetails details = new FromEmailDetails();
+	
+	Connection con = null;
+	PreparedStatement pstmt = null;
+	ResultSet rs = null;
+	
+	try {
+		con = getConnection();
+		
+		pstmt = con.prepareStatement("SELECT EmailID, Password FROM alertsettings");
+		rs = pstmt.executeQuery();
+		
+		if(rs.next()) {
+			details.setEmail(rs.getString("EmailID"));
+			details.setPassword(rs.getString("Password"));
+		}
+		
+	} catch (Exception e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	finally {
+		pstmt.close();
+		rs.close();
+		con.close();
+	}
+	
+	return details;
+	
+}
 
 //@Scheduled(cron="30 6 3 * * *") // scheduled for every month 3rd day at 06:30
 //@Scheduled(cron="15 15 * * * *") 

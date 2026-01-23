@@ -155,7 +155,7 @@ public class ReportsDAO {
 						
 						userconsumptionreportsresponsevo.setCustomerUniqueID(rs.getString("CustomerUniqueID"));
 						userconsumptionreportsresponsevo.setMiuID(rs.getString("MIUID"));
-						userconsumptionreportsresponsevo.setReading(rs.getFloat("Reading"));
+						userconsumptionreportsresponsevo.setReading(rs.getFloat("Reading")/1000);
 						userconsumptionreportsresponsevo.setBattery(rs.getInt("BatteryVoltage"));
 						userconsumptionreportsresponsevo.setBalance(rs.getFloat("Balance"));
 						userconsumptionreportsresponsevo.setTariff(rs.getFloat("Tariff"));
