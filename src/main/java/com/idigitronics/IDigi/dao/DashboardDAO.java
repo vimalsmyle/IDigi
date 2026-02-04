@@ -706,7 +706,7 @@ public class DashboardDAO {
 		return responsevo;
 	}
 	
-/*	public GraphResponseVO getGraphDashboardDetails(String type, int year, int month, String communityName) {
+	public GraphResponseVO getGraphDashboardDetails(String type, int year, int month, String communityName) {
 		// TODO Auto-generated method stub
 		
 		PreparedStatement pstmt = null;
@@ -894,9 +894,9 @@ public class DashboardDAO {
 		}
 		
 		return graphResponseVO;
-	} */
+	} 
 	
-	public GraphResponseVO getGraphDashboardDetails(String type, int year, int month, String communityName) {
+/*	public GraphResponseVO getGraphDashboardDetails(String type, int year, int month, String communityName) {
 		// TODO Auto-generated method stub
 		
 		PreparedStatement pstmt = null;
@@ -1084,7 +1084,7 @@ public class DashboardDAO {
 		}
 		
 		return graphResponseVO;
-	}
+	}*/
 	
 	public HomeResponseVO getHomeDashboardDetails(String type, int roleid, String id)
 			throws SQLException {
