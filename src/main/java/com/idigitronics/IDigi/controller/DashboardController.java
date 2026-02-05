@@ -264,7 +264,7 @@ public class DashboardController {
 		return responsevo;
 	}
 	
-	@RequestMapping(value = "/SENSORS/{equipment_serial_id}", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+/*	@RequestMapping(value = "/SENSORS/{equipment_serial_id}", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	public @ResponseBody ResponseVO postSensorDashboardDetails(@RequestBody SensorDataRequestVO sensorDataRequestVO, @PathVariable("equipment_serial_id") String equipment_serial_id) {
 
 		DashboardDAO dashboarddao = new DashboardDAO();
@@ -289,7 +289,7 @@ public class DashboardController {
 		sensorDasboardresponsevo.setData(dashboarddao.getSensorDashboarddetails());
 		
 		return sensorDasboardresponsevo;
-	}
+	}*/
 	
 	@RequestMapping(value = "/solarstatus/{blockid}", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	public @ResponseBody ResponseVO postSolarDashboardDetails(@RequestBody SolarDataRequestVO solarDataRequestVO, @PathVariable("blockid") int blockid) {

@@ -1910,7 +1910,7 @@ public class DashboardDAO {
 		    return false;
 	}
 
-	public ResponseVO postSensorDashboarddetails(SensorDataRequestVO sensorDataRequestVO) {
+/*	public ResponseVO postSensorDashboarddetails(SensorDataRequestVO sensorDataRequestVO) {
 		// TODO Auto-generated method stub
 		ResponseVO responsevo = new ResponseVO();
 		
@@ -2161,7 +2161,7 @@ public class DashboardDAO {
 			con.close();
 		}
 		return sensorDashboardList;
-	}
+	}*/
 	
 	public List<SolarDashboardResponseVO> getSolarDashboarddetails(String communityName, String blockName, String customerUniqueID) throws SQLException {
 		// TODO Auto-generated method stub

@@ -255,7 +255,7 @@ public class ExtraMethodsDAO {
 	return responses.toString();
 }
 	
-//	@Scheduled(cron="30 6 2 * * *") // scheduled for every month 2nd day at 06:30
+	@Scheduled(cron="30 6 2 * * *") // scheduled for every month 2nd day at 06:30
 //	@Scheduled(cron="15 15 * * * *") 
 	public void individualbillgeneration() throws SQLException {
 		
@@ -993,7 +993,7 @@ public static FromEmailDetails getFromEmailDetails() throws SQLException {
 	
 }
 
-//@Scheduled(cron="30 6 3 * * *") // scheduled for every month 3rd day at 06:30
+/*//@Scheduled(cron="30 6 3 * * *") // scheduled for every month 3rd day at 06:30
 //@Scheduled(cron="15 15 * * * *") 
 public void sensordatabillgeneration() throws SQLException {
 	
@@ -1025,7 +1025,7 @@ public void sensordatabillgeneration() throws SQLException {
 		if(check.next()) {
 			logger.debug("Individual Bills already generated for current month" + LocalDateTime.now());
 			System.out.println("Individual Bills already generated for current month" + LocalDateTime.now());
-		} else {*/
+		} else {
 			
 		pstmt = con.prepareStatement("SELECT cd.CommunityID, cd.BlockID, cd.CustomerID, cd.CustomerUniqueID, cmd.CustomerMeterID, cmd.MIUID, cmd.MeterType, cmd.TariffID, t.Tariff FROM customerdetails AS cd LEFT JOIN customermeterdetails AS cmd ON cd.CustomerID = cmd.CustomerID LEFT JOIN tariff AS t ON t.TariffID = cmd.TariffID WHERE cd.ActiveStatus = 2 AND cmd.PayType = 'Postpaid'");
 		rs = pstmt.executeQuery();
@@ -1177,7 +1177,7 @@ public void sensordatabillgeneration() throws SQLException {
 				billsGenerated = true;
 				logger.debug("Bills already generated for current month" + LocalDateTime.now());
 				System.out.println("Bills already generated for current month" + LocalDateTime.now());
-			} else {*/
+			} else {
 				
 			String billMonthYear = ((currentdate.getMonthValue() == 1) ? "December" : (currentdate.getMonthValue() == 2) ? "January" : (currentdate.getMonthValue() == 3) ? "February" : (currentdate.getMonthValue() == 4) ? "March" : (currentdate.getMonthValue() == 5) ? "April" : (currentdate.getMonthValue() == 6) ? "May" : (currentdate.getMonthValue() == 7) ? "June" : (currentdate.getMonthValue() == 8) ? "July" : (currentdate.getMonthValue() == 9) ? "August" : (currentdate.getMonthValue() == 10) ? "September" : (currentdate.getMonthValue() == 11) ? "October" : (currentdate.getMonthValue() == 12) ? "November" :"" ) + "-" + ((currentdate.getMonthValue() - 1 == 0) ? currentdate.getYear() - 1 : currentdate.getYear());
 			String drivename = "C:/Bills/" + (currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear())+"/"+((currentdate.getMonthValue() - 1) == 0 ? 12 : (currentdate.getMonthValue() - 1));
@@ -1596,5 +1596,5 @@ public void sensordatabillgeneration() throws SQLException {
 			con.close();
 		}
 		
-	}
+	}*/
 }
