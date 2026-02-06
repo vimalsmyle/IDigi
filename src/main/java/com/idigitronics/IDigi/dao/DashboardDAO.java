@@ -2451,8 +2451,8 @@ public class DashboardDAO {
 								}
 								}
 							}
-							response.setGreen(green);
-							response.setRed(red);
+//							response.setGreen(green);
+//							response.setRed(red);
 							response.setMaster(master);
 							
 

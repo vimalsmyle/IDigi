@@ -493,20 +493,26 @@ function getCustomerMeters(CRNNumber) {
 																						+ "</span>"
 																			},
 																			"defaultContent" : ""
+																		},
+																		{
+																			"data" : "location"
+																		},
+																		{
+																			"data" : "reading"
+																		},
+																		{
+																			"data" : "miuID"
+																		},
+																		{
+																			"data" : "meterType"
 																		},	
 																	{
 																		"data" : "meterSerialNumber"
 																	},
-																			{
-																				"data" : "miuID"
-
-																			},
+																			
 																			{
 																				"data" : "gatewayName"
 
-																			},
-																			{
-																				"data" : "reading"
 																			},
 																			{
 																				"data" : "consumption"

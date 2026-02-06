@@ -412,7 +412,7 @@
 
 
 
-
+<!--
 						<div class="page-header">
 							<h3>Solar</h3>
 						</div>
@@ -531,7 +531,7 @@
 																</span>
 															</div>
 
-														</div> -->
+														</div> 
 
 
 														<%
@@ -553,7 +553,7 @@
 															}
 														%>
 
-														<!--						<div class="slide sliding-block">
+																				<div class="slide sliding-block">
 
 															<div class="text-xs font-weight-bold text-uppercase">
 																<h5 class="description-header"
@@ -562,7 +562,7 @@
 																	Percentage</span>
 															</div>
 
-														</div> -->
+														</div> 
 
 
 
@@ -577,7 +577,7 @@
 									</div>
 								</div>
 							</div>
-						</div>
+						</div> -->
 
 
 

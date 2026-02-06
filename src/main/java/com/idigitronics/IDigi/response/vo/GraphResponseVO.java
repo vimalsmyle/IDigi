@@ -13,8 +13,9 @@ public class GraphResponseVO {
 	private List<String> xAxis;
 	private List<Integer> yAxis;
 	
-	private List<SolarDashboardResponseVO> green;
-	private List<SolarDashboardResponseVO> red;
+	private List<SolarDashboardResponseVO> block1;
+	private List<SolarDashboardResponseVO> block2;
+	private List<SolarDashboardResponseVO> block3;
 	private List<SolarDashboardResponseVO> master;
 	
 	public List<String> getXAxis() {
@@ -32,20 +33,29 @@ public class GraphResponseVO {
 	public void setYAxis(List<Integer> yAxis) {
 	this.yAxis = yAxis;
 	}
-	public List<SolarDashboardResponseVO> getGreen() {
-		return green;
+
+	public List<SolarDashboardResponseVO> getBlock1() {
+		return block1;
 	}
 
-	public void setGreen(List<SolarDashboardResponseVO> green) {
-		this.green = green;
+	public void setBlock1(List<SolarDashboardResponseVO> block1) {
+		this.block1 = block1;
 	}
 
-	public List<SolarDashboardResponseVO> getRed() {
-		return red;
+	public List<SolarDashboardResponseVO> getBlock2() {
+		return block2;
 	}
 
-	public void setRed(List<SolarDashboardResponseVO> red) {
-		this.red = red;
+	public void setBlock2(List<SolarDashboardResponseVO> block2) {
+		this.block2 = block2;
+	}
+
+	public List<SolarDashboardResponseVO> getBlock3() {
+		return block3;
+	}
+
+	public void setBlock3(List<SolarDashboardResponseVO> block3) {
+		this.block3 = block3;
 	}
 
 	public List<SolarDashboardResponseVO> getMaster() {
@@ -56,5 +66,4 @@ public class GraphResponseVO {
 		this.master = master;
 	}
 	
-
 }

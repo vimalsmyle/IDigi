@@ -244,10 +244,12 @@
 						<thead>
 							<tr>
 								<th>TimeStamp</th>
-								<th>Meter Serial Number</th>
-								<th>MIU ID</th>
-								<th>Gateway</th>
+								<th>Location</th>
 								<th>Reading</th>
+								<th>MIU ID</th>								
+								<th>Meter Type</th>
+								<th>Meter Serial Number</th>
+								<th>Gateway</th>
 								<th>Consumption</th>
 								<th>Battery</th>
 								<th>Box AMR Tamper</th>

@@ -253,7 +253,7 @@ public class AccountController {
 		
 		LocalDate currentdate = LocalDate.now();
 		
-		responsevo.setLocation("D:/Bills/" + (currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear())+"/"+((currentdate.getMonthValue() - 1) == 0 ? 12 : (currentdate.getMonthValue() - 1)) + "/");
+		responsevo.setLocation("C:/Bills/" + (currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear())+"/"+((currentdate.getMonthValue() - 1) == 0 ? 12 : (currentdate.getMonthValue() - 1)) + "/");
 		responsevo.setFileName(customerUniqueID + ".pdf");
 	
 		File file = new File(responsevo.getLocation() + responsevo.getFileName());

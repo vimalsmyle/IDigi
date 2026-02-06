@@ -269,7 +269,7 @@ public class LoginDAO {
 
 			pstmt.close();
 			resultSet.close();
-			con.close();
+//			con.close();
 
 		}
 
