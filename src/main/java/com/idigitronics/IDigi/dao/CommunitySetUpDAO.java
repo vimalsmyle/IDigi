@@ -28,6 +28,7 @@ import com.idigitronics.IDigi.constants.ExtraConstants;
 import com.idigitronics.IDigi.request.vo.BlockRequestVO;
 import com.idigitronics.IDigi.request.vo.CommunityRequestVO;
 import com.idigitronics.IDigi.request.vo.CustomerRequestVO;
+import com.idigitronics.IDigi.request.vo.CustomerSolarMasterRequestVO;
 import com.idigitronics.IDigi.request.vo.GatewayRequestVO;
 import com.idigitronics.IDigi.request.vo.MailRequestVO;
 import com.idigitronics.IDigi.request.vo.SMSRequestVO;
@@ -2085,6 +2086,62 @@ public class CommunitySetUpDAO {
 		}
 		
 		return responsevo;
+	}
+
+	public ResponseVO mapSolarMasterAdd(CustomerSolarMasterRequestVO customerSolarMasterRequestVO) throws SQLException {
+		// TODO Auto-generated method stub
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResponseVO responsevo = new ResponseVO();
+		try {
+			con = getConnection(); 
+			pstmt = con.prepareStatement("INSERT INTO customersolardetails (CommunityID, BlockID, CustomerID, CustomerUniqueID, HouseNumber, MasterCustomerID, LogDate, ModifiedDate) VALUES (?, ?, ?, ?, ?, ?, NOW(), NOW())");
+			pstmt.setLong(1, customerSolarMasterRequestVO.getCommunityID());
+			pstmt.setLong(2, customerSolarMasterRequestVO.getBlockID());
+			pstmt.setLong(3, customerSolarMasterRequestVO.getCustomerID());
+			pstmt.setString(4, customerSolarMasterRequestVO.getCustomerUniqueID());
+			pstmt.setString(5, customerSolarMasterRequestVO.getHouseNumber());
+			pstmt.setLong(6, customerSolarMasterRequestVO.getMasterCustomerID());
+
+			if (pstmt.executeUpdate() > 0) {
+				responsevo.setResult("Success");
+				responsevo.setMessage("Solar Master Mapped Successfully");
+			} 
+			
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			responsevo.setMessage("INTERNAL SERVER ERROR");
+			responsevo.setResult("Failure");
+		} finally {
+			pstmt.close();
+			con.close();
+		}
+
+		return responsevo;
+	}
+
+	public boolean checkMapSolarMasterStatus(CustomerSolarMasterRequestVO customerSolarMasterRequestVO) throws SQLException {
+		// TODO Auto-generated method stub
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		boolean result = false;
+
+		try {
+			con = getConnection();
+			pstmt = con.prepareStatement("SELECT * FROM customersolardetails WHERE CustomerID = "+customerSolarMasterRequestVO.getCustomerID());
+			ResultSet rs = pstmt.executeQuery();
+			if (rs.next()) {
+					result = true;
+			} 
+			
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			pstmt.close();
+			con.close();
+		}
+
+		return result;
 	}
 
 }

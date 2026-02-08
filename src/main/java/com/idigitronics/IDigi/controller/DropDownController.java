@@ -167,6 +167,15 @@ public class DropDownController {
 		return responsevo;
 	}
 	
+	@RequestMapping(value = "/solarmasters",method = RequestMethod.GET, produces="application/json")
+	public @ResponseBody ResponseVO getallsolarmasters() throws SQLException {
+		
+		ResponseVO responsevo = new ResponseVO();
+		responsevo.setDropDownSolarMasters(dropdowndao.getallsolarmasters());
+
+		return responsevo;
+	}
+	
 	@RequestMapping(value = "/testmail",method = RequestMethod.GET, produces="application/json")
 	public @ResponseBody ResponseVO testmail() throws SQLException {
 		

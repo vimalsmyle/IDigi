@@ -12,6 +12,7 @@ import com.idigitronics.IDigi.exceptions.BusinessException;
 import com.idigitronics.IDigi.request.vo.BlockRequestVO;
 import com.idigitronics.IDigi.request.vo.CommunityRequestVO;
 import com.idigitronics.IDigi.request.vo.CustomerRequestVO;
+import com.idigitronics.IDigi.request.vo.CustomerSolarMasterRequestVO;
 import com.idigitronics.IDigi.request.vo.GatewayRequestVO;
 import com.idigitronics.IDigi.request.vo.MeterSizeRequestVO;
 import com.idigitronics.IDigi.request.vo.TariffRequestVO;
@@ -466,6 +467,24 @@ public class CommunitySetUpBO {
 
 		return result;
 
+	}
+
+	public ResponseVO mapSolarMasterAdd(CustomerSolarMasterRequestVO customerSolarMasterRequestVO) throws SQLException, BusinessException {
+		// TODO Auto-generated method stub
+		
+		if(communitysetupdao.checkMapSolarMasterStatus(customerSolarMasterRequestVO)) {
+			throw new BusinessException("SOLAR MASTER ALREADY MAPPED");
+		}
+		
+		if (customerSolarMasterRequestVO.getCommunityID()==0
+				|| customerSolarMasterRequestVO.getBlockID()==0
+				|| customerSolarMasterRequestVO.getHouseNumber().isEmpty()
+				|| customerSolarMasterRequestVO.getCustomerUniqueID().isEmpty()
+				|| customerSolarMasterRequestVO.getMasterCustomerID()==0) {
+			throw new BusinessException("ALL FIELDS ARE MANDATORY");
+		}
+		
+		return communitysetupdao.mapSolarMasterAdd(customerSolarMasterRequestVO);
 	}
 
 }

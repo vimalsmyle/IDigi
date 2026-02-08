@@ -24,6 +24,7 @@ import com.idigitronics.IDigi.exceptions.BusinessException;
 import com.idigitronics.IDigi.request.vo.BlockRequestVO;
 import com.idigitronics.IDigi.request.vo.CommunityRequestVO;
 import com.idigitronics.IDigi.request.vo.CustomerRequestVO;
+import com.idigitronics.IDigi.request.vo.CustomerSolarMasterRequestVO;
 import com.idigitronics.IDigi.request.vo.GatewayRequestVO;
 import com.idigitronics.IDigi.request.vo.MeterSizeRequestVO;
 import com.idigitronics.IDigi.request.vo.TariffRequestVO;
@@ -402,6 +403,22 @@ public class CommunitySetUpController {
 		try {
 			responsevo = communitysetupdao.approverequest(requestid, action);
 		} catch (Exception e) {
+			responsevo.setResult("Failure");
+			responsevo.setMessage(e.getMessage());
+		}
+
+		return responsevo;
+	}
+	
+	@RequestMapping(value = "/customer/mapsolarmaster/add", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	public @ResponseBody
+	ResponseVO editcustomer(@RequestBody CustomerSolarMasterRequestVO customerSolarMasterRequestVO) throws ClassNotFoundException,
+			BusinessException, SQLException {
+		ResponseVO responsevo = new ResponseVO();
+
+		try {
+			responsevo = communitysetupbo.mapSolarMasterAdd(customerSolarMasterRequestVO);
+		} catch (BusinessException e) {
 			responsevo.setResult("Failure");
 			responsevo.setMessage(e.getMessage());
 		}

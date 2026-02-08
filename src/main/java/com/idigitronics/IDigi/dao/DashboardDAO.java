@@ -2278,12 +2278,12 @@ public class DashboardDAO {
 					ValidateResponseVO insertOrUpdate = checkChangeInRelayStatus(solarDataRequestVO, rs.getLong("CustomerID"));
 					if(insertOrUpdate.isResult()) {
 					
-					pstmt = con.prepareStatement("INSERT INTO solarlog (Device_BlockID, CommunityID, BlockID, HouseNumber, CustomerID, CustomerUniqueID, Relay_Status, R_Status, Y_Status, B_Status, LogDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
+					pstmt = con.prepareStatement("INSERT INTO solarlog (Device_BlockID, CommunityID, BlockID, HouseNumber, CustomerID, CustomerUniqueID, Relay_Status, R_Status, Y_Status, B_Status, LogDate, UpdatedDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())");
 
 					}
 					else {
 						
-						pstmt = con.prepareStatement("UPDATE solarlog SET Device_BlockID = ?, CommunityID = ?, BlockID = ?, HouseNumber = ?, CustomerID = ?, CustomerUniqueID = ?, Relay_Status = ?, R_Status = ?, Y_Status = ?, B_Status = ?, LogDate = NOW() WHERE ReadingID = ?");
+						pstmt = con.prepareStatement("UPDATE solarlog SET Device_BlockID = ?, CommunityID = ?, BlockID = ?, HouseNumber = ?, CustomerID = ?, CustomerUniqueID = ?, Relay_Status = ?, R_Status = ?, Y_Status = ?, B_Status = ?, UpdatedDate = NOW() WHERE ReadingID = ?");
 						pstmt.setLong(11, insertOrUpdate.getReadingID());
 
 					}
@@ -2302,9 +2302,13 @@ public class DashboardDAO {
 					if (pstmt.executeUpdate() > 0) {
 						result = "Success";
 						
-						if(insertOrUpdate.isResult()) {
+							// check the relay status of the current villa with the respective master relay
 							
-							sendalertmail("Solar Power Status Changed!!!", "The Solar Power Generation of " + " villa-"+solarDataRequestVO.getHomeid() + " has been switched " + (solarDataRequestVO.getRelay_status() == 0 ? " OFF. " : " ON. ") , "villa-"+solarDataRequestVO.getHomeid());
+							boolean alert = checkForSendingAlert(solarDataRequestVO);
+							
+							if(alert) {
+								sendalertmail("Solar Power Status Changed!!!", "The Solar Power Generation of " + " villa-"+solarDataRequestVO.getHomeid() + " has been switched " + (solarDataRequestVO.getRelay_status() == 0 ? " OFF. " : " ON. ") , "villa-"+solarDataRequestVO.getHomeid());
+							}
 							
 //							if(solarDataRequestVO.getRelay_status() == 0) {
 //								PreparedStatement pstmt1 = con.prepareStatement("SELECT LogDate from idigitest.solarlog where Relay_Status = 1 and HouseNumber = " + " villa-"+solarDataRequestVO.getHomeid() +" Limit 0,1");
@@ -2314,7 +2318,6 @@ public class DashboardDAO {
 //								long minutes = TimeUnit.MILLISECONDS.toMinutes(currentDateTime.getTime() - (rs1.getTimestamp("LogDate")).getTime());
 //							}
 
-							}
 					}
 		} 
 				
@@ -2323,6 +2326,42 @@ public class DashboardDAO {
 		}
 		
 		return result;
+	}
+
+	private boolean checkForSendingAlert(SolarDataRequestVO solarDataRequestVO) {
+		// TODO Auto-generated method stub
+		
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		boolean alert = false;
+		
+		try {
+			
+			con = getConnection();
+			
+			pstmt = con.prepareStatement("SELECT Relay_Status FROM solarlog WHERE CustomerID = (SELECT MasterCustomerID FROM customersolardetails WHERE HouseNumber = 'Villa-"+solarDataRequestVO.getHomeid()+"') ORDER BY UpdatedDate DESC LIMIT 0,1");
+			ResultSet rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				
+				if(solarDataRequestVO.getRelay_status() != rs.getInt("Relay_Status")) {
+					PreparedStatement pstmt1 = con.prepareStatement("SELECT timestampdiff(MINUTE, LogDate, UpdatedDate) as diff FROM solarlog where HouseNumber = 'villa-"+solarDataRequestVO.getHomeid()+"' ORDER BY LogDate DESC Limit 0,1;");
+					ResultSet rs1 = pstmt1.executeQuery();
+					if(rs1.next()) {
+						if(rs1.getInt("diff")>=240) { // change diff value from alertsettings
+							alert = true;
+						}
+					}
+				}
+				
+			}
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		
+		return alert;
 	}
 
 	private ValidateResponseVO checkChangeInRelayStatus(SolarDataRequestVO solarDataRequestVO, long cutomerID) throws ClassNotFoundException {
@@ -2415,8 +2454,7 @@ public class DashboardDAO {
 		// TODO Auto-generated method stub
 		Connection con = null;
 		
-		List<SolarDashboardResponseVO> green = new ArrayList<SolarDashboardResponseVO>();  // relay on
-		List<SolarDashboardResponseVO> red = new ArrayList<SolarDashboardResponseVO>();  // relay off
+		List<List<SolarDashboardResponseVO>> mainblock = new ArrayList<List<SolarDashboardResponseVO>>();  
 		List<SolarDashboardResponseVO> master = new ArrayList<SolarDashboardResponseVO>();  // master
 		
 		GraphResponseVO response = new GraphResponseVO();
@@ -2441,18 +2479,14 @@ public class DashboardDAO {
 							
 							for(SolarDashboardResponseVO res : responselist) {
 								
-								if(res.getRelayStatus().equalsIgnoreCase("ON") && !res.getHouseNumber().equalsIgnoreCase("villa-0")) {
-									green.add(res);
-								} else if (res.getRelayStatus().equalsIgnoreCase("OFF") && !res.getHouseNumber().equalsIgnoreCase("villa-0")) {
-									red.add(res);
-									}
-								else {
+								if(res.getHouseNumber().startsWith("villa-DG")) {
 									master.add(res);
+									responselist.remove(res);
+								} 
 								}
-								}
+							mainblock.add(responselist);
 							}
-//							response.setGreen(green);
-//							response.setRed(red);
+							response.setBlocks(mainblock);
 							response.setMaster(master);
 							
 

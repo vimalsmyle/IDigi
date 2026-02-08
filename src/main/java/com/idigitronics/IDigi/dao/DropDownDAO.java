@@ -474,4 +474,26 @@ public class DropDownDAO {
 		return customerResponseVO;
 	}
 
+	public HashMap<Integer, String> getallsolarmasters() throws SQLException {
+		// TODO Auto-generated method stub
+		HashMap<Integer, String> solarMasters = new HashMap<Integer, String>();
+		
+		Connection con = null;
+		try {
+			con = getConnection();
+			PreparedStatement pstmt = con
+					.prepareStatement("SELECT CustomerID, HouseNumber FROM customerdetails WHERE HouseNumber LIKE 'Villa-DG'");
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				solarMasters.put(rs.getInt("CustomerID"), rs.getString("HouseNumber"));
+			}
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			con.close();
+			
+		}
+		return solarMasters;
+	}
+
 }
