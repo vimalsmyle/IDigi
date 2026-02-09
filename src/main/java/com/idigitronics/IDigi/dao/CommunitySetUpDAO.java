@@ -2099,6 +2099,12 @@ public class CommunitySetUpDAO {
 			pstmt.setLong(1, customerSolarMasterRequestVO.getCommunityID());
 			pstmt.setLong(2, customerSolarMasterRequestVO.getBlockID());
 			pstmt.setLong(3, customerSolarMasterRequestVO.getCustomerID());
+			
+			String [] parts = customerSolarMasterRequestVO.getHouseNumber().split("/");
+			
+			customerSolarMasterRequestVO.setHouseNumber(parts[0]);
+			customerSolarMasterRequestVO.setCustomerUniqueID(parts[1]);
+			
 			pstmt.setString(4, customerSolarMasterRequestVO.getCustomerUniqueID());
 			pstmt.setString(5, customerSolarMasterRequestVO.getHouseNumber());
 			pstmt.setLong(6, customerSolarMasterRequestVO.getMasterCustomerID());

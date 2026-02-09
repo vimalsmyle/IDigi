@@ -42,6 +42,9 @@
                 <%if(user_id.equalsIgnoreCase("1")){ %>
                 <li> <a href="configuration.jsp" title="Meter Commands"><img src=common/images/icons/configuration.png /> <span class="nav-label">Meter Commands </span></a> </li>
                 <%}%>
+                <%if(user_id.equalsIgnoreCase("1")){ %>
+                <li> <a href="solarmastermapping.jsp" title="Solar Master Mapping"><img src=common/images/icons/configuration.png /> <span class="nav-label">Solar Master Mapping</span></a> </li>
+                <%}%>
                 <li> <a href="configurationStatus.jsp" title="Meter Commands Status"><img src=common/images/icons/configurationdetails1.png /> <span class="nav-label">Meter Commands Status</span></a> </li>
                 <li> <a href="LiveDashBoard.jsp" title="Customer Details"><img src=common/images/icons/dashboard.png /> <span class="nav-label">Customer Details</span></a> </li>
                   <%if(user_id.equalsIgnoreCase("1")){ %>

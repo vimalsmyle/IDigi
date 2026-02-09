@@ -20,6 +20,7 @@ public class ResponseVO {
 	private HashMap<Integer, String> dropDownGateways;
 	private HashMap<Integer, Integer> dropDownMeterSizes;
 	private HashMap<Integer, String> dropDownSolarMasters;
+	private HashMap<Integer, String> dropDownSolarCustomers;
 	private HashMap<Long, String> dropDownCustomerMeters;
 	private HashMap<Long, String> dropDownAllCustomerMeters;
 	private TopupDetailsResponseVO topupdetails;
@@ -202,6 +203,12 @@ public class ResponseVO {
 	}
 	public void setDropDownSolarMasters(HashMap<Integer, String> dropDownSolarMasters) {
 		this.dropDownSolarMasters = dropDownSolarMasters;
+	}
+	public HashMap<Integer, String> getDropDownSolarCustomers() {
+		return dropDownSolarCustomers;
+	}
+	public void setDropDownSolarCustomers(HashMap<Integer, String> dropDownSolarCustomers) {
+		this.dropDownSolarCustomers = dropDownSolarCustomers;
 	}
 	
 }

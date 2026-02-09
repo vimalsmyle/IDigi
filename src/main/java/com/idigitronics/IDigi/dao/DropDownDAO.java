@@ -12,6 +12,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 
+import org.springframework.web.bind.annotation.PathVariable;
+
 import com.idigitronics.IDigi.constants.DataBaseConstants;
 import com.idigitronics.IDigi.request.vo.LoginVO;
 import com.idigitronics.IDigi.request.vo.Status;
@@ -494,6 +496,27 @@ public class DropDownDAO {
 			
 		}
 		return solarMasters;
+	}
+
+	public HashMap<Integer, String> getallsolarcustomers(String communityID, String blockID) throws SQLException {
+		// TODO Auto-generated method stub
+		Connection con = null;
+		HashMap<Integer, String> solarCustomers = new HashMap<Integer, String>();
+		try {
+			con = getConnection();
+			PreparedStatement pstmt = con
+					.prepareStatement("SELECT CustomerID, HouseNumber, CustomerUniqueID FROM customerdetails WHERE BlockID = " + blockID + " AND CustomerID = " + communityID + " AND HouseNumber NOT LIKE 'Villa-DG'");
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				solarCustomers.put(rs.getInt("CustomerID"), rs.getString("HouseNumber") + "/" + rs.getString("CustomerUniqueID"));
+			}
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			con.close();
+			
+		}
+		return solarCustomers;
 	}
 
 }
