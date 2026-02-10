@@ -498,14 +498,14 @@ public class DropDownDAO {
 		return solarMasters;
 	}
 
-	public HashMap<Integer, String> getallsolarcustomers(String communityID, String blockID) throws SQLException {
+	public HashMap<Integer, String> getallsolarcustomers(String blockID) throws SQLException {
 		// TODO Auto-generated method stub
 		Connection con = null;
 		HashMap<Integer, String> solarCustomers = new HashMap<Integer, String>();
 		try {
 			con = getConnection();
 			PreparedStatement pstmt = con
-					.prepareStatement("SELECT CustomerID, HouseNumber, CustomerUniqueID FROM customerdetails WHERE BlockID = " + blockID + " AND CustomerID = " + communityID + " AND HouseNumber NOT LIKE 'Villa-DG'");
+					.prepareStatement("SELECT CustomerID, HouseNumber, CustomerUniqueID FROM customerdetails WHERE BlockID = " + blockID + " AND HouseNumber NOT LIKE 'Villa-DG'");
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
 				solarCustomers.put(rs.getInt("CustomerID"), rs.getString("HouseNumber") + "/" + rs.getString("CustomerUniqueID"));

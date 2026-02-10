@@ -65,8 +65,8 @@
 													</div>
 													<div class="col-md-4">
 														<div class="form-group has-feedback has-success bmd-form-group is-filled">
-															<label class="bmd-label-floating select-label">Community Name<span class="impp"><sup>*</sup></span></label> 
-																<select class="form-control select3 form-control-sm select2" id="selectcommunityName" name="selectcommunityName" onchange="showBlockbyCommunity(this.value);"></select>
+															<label class="bmd-label-floating select-label">Select Community<span class="impp"><sup>*</sup></span></label> 
+															<select class="form-control select3 form-control-sm select2" id="selectcommunityName" name="selectcommunityName" onchange="showBlockbyCommunity(this.value);"></select>
 														</div>
 													</div>
 														<div class="col-md-4">
@@ -76,64 +76,31 @@
 																</label> <select class="form-control form-control-sm select2"
 																	id="selectBlockBasedonCommunity"
 																	name="selectBlockBasedonCommunity"
-																	onchange="showCustomerbyBlock(this.value);">
+																	onchange="showSolarCustomerbyBlock(this.value);">
 																</select>
 															</div>
 														</div>
 													<div class="col-md-4">
+															<div class="group form-group">
+																<label class="bmd-label-floating select-label">Select
+																	House<sup class="imp">*</sup>
+																</label> <select class="form-control form-control-sm"
+																	id="selectHouseBasedonBlock"
+																	name="selectHouseBasedonBlock"
+																	onchange="showMasterDetails(this.value);">
+																</select>
+															</div>
+														</div>
+
+													<div class="col-md-4">
 														<div
 															class="form-group has-feedback has-success bmd-form-group is-filled">
 															<label class="bmd-label-floating select-label">Select
-																CRN/CAN/UAN</label> <select class="form-control select2"
-																id="manualCRNAll" name="manualCRNAll"
-																onchange="showMetersbyCRN(this.value);">
+																Master</label> <select class="form-control"
+																id="selectmaster" name="selectmaster">
 															</select>
 														</div>
 													</div>
-
-
-
-													<div class="col-md-4">
-														<div
-															class="form-group has-feedback has-success bmd-form-group is-filled">
-															<label class="bmd-label-floating select-label">Select
-																MIU</label> <select class="form-control"
-																id="allMeters" name="allMeters"
-																onchange="showDetailsbyMeter(this.value);">
-															</select>
-														</div>
-													</div>
-													
-													<div class="col-md-4">
-														<div
-															class="form-group has-feedback has-success bmd-form-group is-filled">
-															<label class="bmd-label-floating select-label">Previous Reading
-															</label> <input type="text" class="form-control form-control-sm"
-																name="oldreading" id="oldreading" disabled>
-														</div>
-													</div>
-
-													<div class="col-md-4">
-														<div
-															class="form-group has-feedback has-success bmd-form-group is-filled">
-															<label class="bmd-label-floating select-label">Last updated time
-															</label> <input type="text"
-																class="form-control form-control-sm" name="lastUpdatedTime"
-																id="lastUpdatedTime" disabled>
-														</div>
-													</div>
-													
-													
-													<div class="col-md-4">
-														<div
-															class="form-group has-feedback has-success bmd-form-group is-filled">
-															<label class="bmd-label-floating select-label">Current Reading
-															</label> <input type="text"
-																class="form-control form-control-sm" name="currentreading"
-																id="currentreading">
-														</div>
-													</div>
-													
 												</div>
 											</div>
 
@@ -141,7 +108,7 @@
 
 												<div class="col-md-12 text-right">
 													<button class="btn btn-primary submit-button" value="Save!"
-														id="manual" type="button">Save</button>
+														id="manual" type="button">Map</button>
 
 
 												</div>
@@ -178,7 +145,7 @@
 
 
 	<script src="js/dropdown.js"></script>
-	<script src="js/manualdata.js"></script>
+	<script src="js/solarmastermapping.js"></script>
 	<script src="js/common.js"></script>
 	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
 
@@ -241,25 +208,6 @@
 	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 	<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-
-	<script>
-		$(function() {
-			$('#timestamp').bootstrapMaterialDatePicker({
-				format : 'YYYY-MM-DD HH:mm:ss',
-				clearBtn : true,
-				todayBtn : "linked",
-				weekStart : 1,
-			})
-
-			$('#syncTime').bootstrapMaterialDatePicker({
-				format : 'HH:mm:ss',
-				clearBtn : true,
-				todayBtn : "linked",
-				weekStart : 1,
-			})
-
-		});
-	</script>
 </body>
 
 </html>

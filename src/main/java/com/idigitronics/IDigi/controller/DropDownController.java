@@ -167,11 +167,11 @@ public class DropDownController {
 		return responsevo;
 	}
 	
-	@RequestMapping(value = "/solarcustomers/{communityID}/{blockID}",method = RequestMethod.GET, produces="application/json")
-	public @ResponseBody ResponseVO getallsolarcustomers(@PathVariable("communityID") String communityID, @PathVariable("blockID") String blockID) throws SQLException {
+	@RequestMapping(value = "/solarcustomers/{blockID}",method = RequestMethod.GET, produces="application/json")
+	public @ResponseBody ResponseVO getallsolarcustomers(@PathVariable("blockID") String blockID) throws SQLException {
 		
 		ResponseVO responsevo = new ResponseVO();
-		responsevo.setDropDownSolarCustomers(dropdowndao.getallsolarcustomers(communityID,blockID));
+		responsevo.setDropDownSolarCustomers(dropdowndao.getallsolarcustomers(blockID));
 
 		return responsevo;
 	}

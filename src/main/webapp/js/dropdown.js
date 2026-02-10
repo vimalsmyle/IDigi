@@ -120,6 +120,19 @@ function showCustomerbyBlock(blockId){
 	});
 }
 
+function showSolarCustomerbyBlock(blockId){
+	$("#selectHouseBasedonBlock").find('option').remove();
+	$("#selectHouseBasedonBlock").append("<option>" + "Select House" + "</option>");
+	$.getJSON("./solarcustomers/" + blockId, function(data) {
+		var Options = "";
+		$.each(data.dropDownSolarCustomers, function(key, value) {
+			Options = Options + "<option value='" + value + "'>" + value
+					+ "</option>";
+		});
+		$('#selectHouseBasedonBlock').append(Options);
+	});
+}
+
 function showCustomerbyBlockForBill(blockId){
 	$("#selectHouseBasedonBlockForBill").find('option').remove();
 	$("#selectHouseBasedonBlockForBill").append("<option>" + "Select CRN" + "</option>");
@@ -163,6 +176,20 @@ function showMetersDetails(customerId){
 					+ "</option>";
 		});
 		$('#selectMeters').append(Options);
+	});
+}
+
+function showMastersDetails(){
+	$("#selectMaster").find('option').remove();
+
+	$("#selectMaster").append("<option>" + "Select Master" + "</option>");
+	$.getJSON("./solarmasters", function(data) {
+		var Options = "";
+		$.each(data.dropDownSolarMasters, function(key, value) {
+			Options = Options + "<option value='" + key + "'>" + value
+					+ "</option>";
+		});
+		$('#selectmaster').append(Options);
 	});
 }
 
