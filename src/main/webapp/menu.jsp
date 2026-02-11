@@ -35,7 +35,7 @@
                 <li> <a href="communityDetails.jsp" title="Community Management"><img src=common/images/icons/community.png /> <span class="nav-label">Community Management</span></a> </li>
 				<li> <a href="blockDetails.jsp" title="Block Management"><img src=common/images/icons/2-block.png /> <span class="nav-label">Block Management</span></a> </li>
 				<li> <a href="customerDetails.jsp" title="Customer Management"><img src=common/images/icons/customer.png /> <span class="nav-label">Customer Management</span></a> </li>
-				<li> <a href="tariff.jsp" title="Tariff"><img src=common/images/icons/tariff.png /> <span class="nav-label">Tariaaaff</span></a> </li>
+				<li> <a href="tariff.jsp" title="Tariff"><img src=common/images/icons/tariff.png /> <span class="nav-label">Tariff</span></a> </li>
 				
 				                
                 <li> <a href="alert.jsp" title="Alerts Configuration"><img src=common/images/icons/alerts.png /> <span class="nav-label">Alerts Configuration</span></a> </li>
@@ -68,8 +68,8 @@
 				<%if(user_id.equalsIgnoreCase("1")){ %>
                 <li><a href="Mgmt.jsp" title="User Management"><img src=common/images/icons/usermanagement.png /><span class="nav-label">User Management</span></a></li>
                
-               <!--  added temporarily for sensor related page -->
-                <li><a href="Sensor.jsp" title="Sensor Dashboard"><img src=common/images/icons/dashboard.png /><span class="nav-label">Sensor Dashboard</span></a></li>
+               <!--  added temporarily for sensor related page 
+                <li><a href="Sensor.jsp" title="Sensor Dashboard"><img src=common/images/icons/dashboard.png /><span class="nav-label">Sensor Dashboard</span></a></li>-->
                 <%}%>	
                 
                 <% } else if (user_id.equalsIgnoreCase("2") || user_id.equalsIgnoreCase("5")) {

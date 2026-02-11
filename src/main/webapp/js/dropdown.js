@@ -179,7 +179,7 @@ function showMetersDetails(customerId){
 	});
 }
 
-function showMastersDetails(){
+function showMasterDetails(){
 	$("#selectMaster").find('option').remove();
 
 	$("#selectMaster").append("<option>" + "Select Master" + "</option>");
@@ -189,7 +189,7 @@ function showMastersDetails(){
 			Options = Options + "<option value='" + key + "'>" + value
 					+ "</option>";
 		});
-		$('#selectmaster').append(Options);
+		$('#selectMaster').append(Options);
 	});
 }
 

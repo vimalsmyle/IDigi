@@ -2144,7 +2144,7 @@ public class CommunitySetUpDAO {
 			ex.printStackTrace();
 		} finally {
 			pstmt.close();
-			con.close();
+//			con.close();
 		}
 
 		return result;

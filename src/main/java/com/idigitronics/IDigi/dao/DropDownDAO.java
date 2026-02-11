@@ -379,7 +379,7 @@ public class DropDownDAO {
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			con.close();
+//			con.close();
 			
 		}
 		return tariffs;
@@ -484,7 +484,7 @@ public class DropDownDAO {
 		try {
 			con = getConnection();
 			PreparedStatement pstmt = con
-					.prepareStatement("SELECT CustomerID, HouseNumber FROM customerdetails WHERE HouseNumber LIKE 'Villa-DG'");
+					.prepareStatement("SELECT CustomerID, HouseNumber FROM customerdetails WHERE HouseNumber LIKE 'Villa-DG%'");
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
 				solarMasters.put(rs.getInt("CustomerID"), rs.getString("HouseNumber"));
@@ -505,15 +505,15 @@ public class DropDownDAO {
 		try {
 			con = getConnection();
 			PreparedStatement pstmt = con
-					.prepareStatement("SELECT CustomerID, HouseNumber, CustomerUniqueID FROM customerdetails WHERE BlockID = " + blockID + " AND HouseNumber NOT LIKE 'Villa-DG'");
+					.prepareStatement("SELECT CustomerID, HouseNumber, CustomerUniqueID FROM customerdetails WHERE BlockID = " + blockID + " AND HouseNumber NOT LIKE 'Villa-DG%' AND CustomerID NOT IN (SELECT CustomerID FROM customersolardetails)");
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
-				solarCustomers.put(rs.getInt("CustomerID"), rs.getString("HouseNumber") + "/" + rs.getString("CustomerUniqueID"));
+				solarCustomers.put(rs.getInt("CustomerID"), rs.getString("HouseNumber") + "/" + rs.getString("CustomerUniqueID") + "/" + rs.getInt("CustomerID"));
 			}
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			con.close();
+//			con.close();
 			
 		}
 		return solarCustomers;

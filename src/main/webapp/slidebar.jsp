@@ -56,7 +56,7 @@
                 <%if(user_id.equalsIgnoreCase("1")){ %>
                  <a href="configuration.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><img src=common/images/icons/GAS1.png /> <span class="textData">Meter Commands</span></a>
                
-                <a href="Sensor.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><img src=common/images/icons/tariff.png /><span class="textData">Sensor</span></a> 
+                 <!--  <a href="Sensor.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><img src=common/images/icons/tariff.png /><span class="textData">Sensor</span></a> --> 
 				
                <!--   <a href="#" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-clock-o"></i> <span class="textData">Meter Commands</span></a>
                 
@@ -86,8 +86,9 @@
                  <a href="manualBilling.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-star"></i> <span class="textData">Manual Billing</span></a>
                  
                   <a href="manualdata.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-star"></i> <span class="textData">Manual Data</span></a>
-                  
-                   <a href="Sensor.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-star"></i> <span class="textData">Sensor Dashboard</span></a>
+                   <a href="solarmastermapping.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-star"></i> <span class="textData">Solar Master Mapping</span></a>
+
+                  <!-- <a href="Sensor.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-star"></i> <span class="textData">Sensor Dashboard</span></a>  -->
                   
             <%}%>
             <% } else if (user_id.equalsIgnoreCase("2") || user_id.equalsIgnoreCase("5")) {

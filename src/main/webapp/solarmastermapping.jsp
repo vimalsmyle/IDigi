@@ -96,8 +96,9 @@
 														<div
 															class="form-group has-feedback has-success bmd-form-group is-filled">
 															<label class="bmd-label-floating select-label">Select
-																Master</label> <select class="form-control"
-																id="selectmaster" name="selectmaster">
+																Master<sup class="imp">*</sup>
+																</label> <select class="form-control form-control-sm"
+																id="selectMaster" name="selectMaster">
 															</select>
 														</div>
 													</div>

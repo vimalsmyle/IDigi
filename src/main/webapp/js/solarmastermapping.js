@@ -34,7 +34,7 @@ $(document)
 													return false;
 												}
 												
-												if($("#selectmaster").val() == "" || $("#selectmaster").val() == 'Select Master' ){
+												if($("#selectMaster").val() == "" || $("#selectMaster").val() == 'Select Master' ){
 													swal
 													.fire({
 														title : "error",
@@ -47,14 +47,15 @@ $(document)
 												data1["communityID"] = $("#selectcommunityName").val();
 												data1["blockID"] = $("#selectBlockBasedonCommunity").val();
 												data1["houseNumber"] = $("#selectHouseBasedonBlock").val();
-												data1["masterCustomerID"] = $("#selectmaster").val();
+												data1["customerID"] = data1.houseNumber.split("/");
+												data1["masterCustomerID"] = $("#selectMaster").val();
 												
 												$("#loader").show();
 												$
 														.ajax({
 															type : "POST",
 															contentType : "application/json",
-															url : "/customer/mapsolarmaster/add",
+															url : "./customer/mapsolarmaster/add",
 															data : JSON
 																	.stringify(data1),
 															dataType : "JSON",

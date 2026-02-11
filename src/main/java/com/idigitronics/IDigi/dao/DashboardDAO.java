@@ -292,7 +292,7 @@ public class DashboardDAO {
 		} finally {
 			pstmt.close();
 			rs.close();
-			con.close();
+//			con.close();
 		}
 		return dashboard_list;
 	}
@@ -1199,7 +1199,7 @@ public class DashboardDAO {
 		} finally {
 //			pstmt.close();
 //			rs.close();
-			con.close();
+//			con.close();
 		}
 		logger.debug("Total count of "+type+" AMRs in the application: " + homeResponseVO.getAmr());
 		System.out.println("Total count of "+type+" AMRs in the application: " + homeResponseVO.getAmr());
@@ -2239,7 +2239,7 @@ public class DashboardDAO {
 		} finally {
 			pstmt.close();
 			rs.close();
-			con.close();
+//			con.close();
 		}
 		return solarDashboardList;
 	}
@@ -2443,7 +2443,7 @@ public class DashboardDAO {
 		catch (Exception ex) {
 			ex.printStackTrace();
 		} finally {
-			con.close();
+//			con.close();
 		}
 		logger.debug("Total count of Solar Devices in the application: " + homeResponseVO.getSolar());
 		System.out.println("Total count of Solar Devices in the application: " + homeResponseVO.getSolar());
