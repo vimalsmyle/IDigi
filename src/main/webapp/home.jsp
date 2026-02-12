@@ -409,10 +409,6 @@
 
 
 
-
-
-
-<!--
 						<div class="page-header">
 							<h3>Solar</h3>
 						</div>
@@ -577,7 +573,7 @@
 									</div>
 								</div>
 							</div>
-						</div> -->
+						</div>
 
 
 

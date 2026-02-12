@@ -479,7 +479,6 @@ public class CommunitySetUpBO {
 		if (customerSolarMasterRequestVO.getCommunityID()==0
 				|| customerSolarMasterRequestVO.getBlockID()==0
 				|| customerSolarMasterRequestVO.getHouseNumber().isEmpty()
-				|| customerSolarMasterRequestVO.getCustomerID()==0
 				|| customerSolarMasterRequestVO.getMasterCustomerID()==0) {
 			throw new BusinessException("ALL FIELDS ARE MANDATORY");
 		}

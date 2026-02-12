@@ -2095,16 +2095,16 @@ public class CommunitySetUpDAO {
 		ResponseVO responsevo = new ResponseVO();
 		try {
 			con = getConnection(); 
-			pstmt = con.prepareStatement("INSERT INTO customersolardetails (CommunityID, BlockID, CustomerID, CustomerUniqueID, HouseNumber, MasterCustomerID, LogDate, ModifiedDate) VALUES (?, ?, ?, ?, ?, ?, NOW(), NOW())");
+			pstmt = con.prepareStatement("INSERT INTO customersolardetails (CommunityID, BlockID, CustomerID, CustomerUniqueID, HouseNumber, MasterCustomerID, LogDate, ModifiedDate) VALUES (?, ?, (SELECT CustomerID FROM customerdetails WHERE CustomerUniqueID = ?), ?, ?, ?, NOW(), NOW())");
 			pstmt.setLong(1, customerSolarMasterRequestVO.getCommunityID());
 			pstmt.setLong(2, customerSolarMasterRequestVO.getBlockID());
-			pstmt.setLong(3, customerSolarMasterRequestVO.getCustomerID());
 			
 			String [] parts = customerSolarMasterRequestVO.getHouseNumber().split("/");
 			
 			customerSolarMasterRequestVO.setHouseNumber(parts[0]);
 			customerSolarMasterRequestVO.setCustomerUniqueID(parts[1]);
 			
+			pstmt.setString(3, customerSolarMasterRequestVO.getCustomerUniqueID());
 			pstmt.setString(4, customerSolarMasterRequestVO.getCustomerUniqueID());
 			pstmt.setString(5, customerSolarMasterRequestVO.getHouseNumber());
 			pstmt.setLong(6, customerSolarMasterRequestVO.getMasterCustomerID());
@@ -2120,7 +2120,7 @@ public class CommunitySetUpDAO {
 			responsevo.setResult("Failure");
 		} finally {
 			pstmt.close();
-			con.close();
+//			con.close();
 		}
 
 		return responsevo;
@@ -2134,7 +2134,7 @@ public class CommunitySetUpDAO {
 
 		try {
 			con = getConnection();
-			pstmt = con.prepareStatement("SELECT * FROM customersolardetails WHERE CustomerID = "+customerSolarMasterRequestVO.getCustomerID());
+			pstmt = con.prepareStatement("SELECT * FROM customersolardetails WHERE CustomerID = (SELECT CustomerID FROM customerdetails WHERE CustomerUniqueID = '"+customerSolarMasterRequestVO.getHouseNumber().split("/")[1] + "')");
 			ResultSet rs = pstmt.executeQuery();
 			if (rs.next()) {
 					result = true;

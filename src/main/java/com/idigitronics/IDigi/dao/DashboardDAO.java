@@ -1865,7 +1865,7 @@ public class DashboardDAO {
 			
 			if(rs.next()) {
 				mailRequestVO.setFileLocation("NoAttachment");
-				mailRequestVO.setToEmail(subject.equalsIgnoreCase("Low Balance Alert!!!") ? rs.getString("customerEmail") : rs.getString("adminEmail"));
+				mailRequestVO.setToEmail(subject.equalsIgnoreCase("Low Balance Alert!!!") ? rs.getString("customerEmail") : subject.equalsIgnoreCase("Solar Power Status Changed!!!") ? rs.getString("customerEmail") + "," +rs.getString("adminEmail") : rs.getString("adminEmail"));
 				mailRequestVO.setSubject(subject);
 				message = message.replaceAll("<CRN>", rs.getString("CustomerUniqueID"));
 				if(!subject.equalsIgnoreCase("Low Balance Alert!!!")) {
@@ -1874,7 +1874,7 @@ public class DashboardDAO {
 					message = message.replaceAll("<house>", rs.getString("HouseNumber"));	
 				}
 				
-				mailRequestVO.setMessage(subject.equalsIgnoreCase("Low Balance Alert!!!") ? "Dear Customer, \n \n"+message : "Dear Admin, \n \n"+ message);
+				mailRequestVO.setMessage(subject.equalsIgnoreCase("Low Balance Alert!!!") ? "Dear Customer, \n \n"+message : subject.equalsIgnoreCase("Solar Power Status Changed!!") ? "Dear Customer/Admin, \n \n"+message : "Dear Admin, \n \n"+ message);
 				
 				result = extraMethodsDao.sendmail(mailRequestVO);				
 			}
@@ -2348,13 +2348,17 @@ public class DashboardDAO {
 					PreparedStatement pstmt1 = con.prepareStatement("SELECT timestampdiff(MINUTE, LogDate, UpdatedDate) as diff FROM solarlog where HouseNumber = 'villa-"+solarDataRequestVO.getHomeid()+"' ORDER BY LogDate DESC Limit 0,1;");
 					ResultSet rs1 = pstmt1.executeQuery();
 					if(rs1.next()) {
-						if(rs1.getInt("diff")>=240) { // change diff value from alertsettings
-							alert = true;
+						
+						PreparedStatement pstmt2 = con.prepareStatement("SELECT MailAlertTime FROM alertsettings");
+						ResultSet rs2 = pstmt2.executeQuery();
+						if(rs2.next()) {
+							if(rs1.getInt("diff")>=rs2.getInt("MailAlertTime"))
+								alert = true;
+							}
 						}
 					}
 				}
 				
-			}
 		}
 		catch(Exception e) {
 			e.printStackTrace();

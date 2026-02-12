@@ -508,7 +508,7 @@ public class DropDownDAO {
 					.prepareStatement("SELECT CustomerID, HouseNumber, CustomerUniqueID FROM customerdetails WHERE BlockID = " + blockID + " AND HouseNumber NOT LIKE 'Villa-DG%' AND CustomerID NOT IN (SELECT CustomerID FROM customersolardetails)");
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
-				solarCustomers.put(rs.getInt("CustomerID"), rs.getString("HouseNumber") + "/" + rs.getString("CustomerUniqueID") + "/" + rs.getInt("CustomerID"));
+				solarCustomers.put(rs.getInt("CustomerID"), rs.getString("HouseNumber") + "/" + rs.getString("CustomerUniqueID"));
 			}
 
 		} catch (Exception e) {
