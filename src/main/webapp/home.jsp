@@ -426,24 +426,32 @@
 										<section class="sec">
 											<div class="">
 												<div class="row axis">
-													<div class="col-md-4 p-3">
+													<div class="col-md-3 p-3">
 														<div class="cube-p">
 															<div class="child" id="data-list"></div>
 
 														</div>
 													</div>
-													<div class="col-md-4 p-3">
+													<div class="col-md-3 p-3">
 														<div class="cube-p">
 															<div class="child" id="data-list1"></div>
 
 														</div>
 													</div>
-													<div class="col-md-4 p-3">
+													<div class="col-md-3 p-3">
 														<div class="cube-p">
 															<div class="child" id="data-list2"></div>
 
 														</div>
 													</div>
+													
+													<div class="col-md-3 p-3">
+														<div class="cube-p">
+															<div class="child" id="data-list3"></div>
+
+														</div>
+													</div>
+													
 												</div>
 											</div>
 

@@ -123,9 +123,10 @@ $.getJSON("./solargraph/"+sessionStorage.getItem("communityName"), function(data
     }
 
     // Render the data for each block list
-    renderList(data.block1List, '#data-list');
-    renderList(data.block2List, '#data-list1');
-    renderList(data.block3List, '#data-list2');
+    renderList(data.blocks[0], '#data-list');
+    renderList(data.blocks[1], '#data-list1');
+    renderList(data.blocks[2], '#data-list2');
+	renderList(data.master[0], '#data-list3');
 });
 
 	
