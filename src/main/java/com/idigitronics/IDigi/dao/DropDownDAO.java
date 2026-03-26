@@ -11,6 +11,8 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -22,6 +24,7 @@ import com.idigitronics.IDigi.response.vo.CustomerResponseVO;
 import com.idigitronics.IDigi.response.vo.DashboardResponseVO;
 import com.idigitronics.IDigi.response.vo.IndividualDashboardResponseVO;
 import com.idigitronics.IDigi.response.vo.LastReadingResponseVO;
+import com.idigitronics.IDigi.response.vo.PrefixResponseVO;
 import com.idigitronics.IDigi.response.vo.TopupDetailsResponseVO;
 
 /**
@@ -517,6 +520,74 @@ public class DropDownDAO {
 			
 		}
 		return solarCustomers;
+	}
+	
+	public HashMap<Integer, String> getAllPrefixes(int communityId, int blockID) throws SQLException {
+		// TODO Auto-generated method stub
+		Connection con = null;
+		HashMap<Integer, String> prefixes = new HashMap<Integer, String>();
+		try {
+			con = getConnection();
+			PreparedStatement pstmt = con.prepareStatement("SELECT PrefixID, PrefixName FROM prefixparams WHERE BlockID = " + blockID + " AND CommunityID = " + communityId);
+			ResultSet rs = pstmt.executeQuery();
+			
+			while (rs.next()) {
+				prefixes.put(rs.getInt("PrefixID"), rs.getString("PrefixName"));
+			}
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			con.close();
+			
+		}
+		return prefixes;
+	}
+
+	public PrefixResponseVO getPrefixDetails(int prefixID) throws SQLException {
+		// TODO Auto-generated method stub
+		
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		PrefixResponseVO prefixResponseVO = null;
+
+		try {
+			con = getConnection();
+			pstmt = con.prepareStatement("SELECT pp.CommunityID, c.CommunityName, pp.BlockID, b.BlockName, pp.PrefixID, pp.PrefixName, pp.MIUID, pp.MeterType, ms.MeterSizeID, ms.MeterSize, pp.PayType, t.TariffID, t.Tariff, t.TariffName, g.GatewayID, g.GatewayName, pp.ThresholdMaximum, pp.ThresholdMinimum "
+					+ "FROM prefixparams AS pp LEFT JOIN community AS c ON pp.CommunityID = c.CommunityID LEFT JOIN block AS b ON b.BlockID = pp.BlockID LEFT JOIN metersize AS ms ON ms.MeterSizeID = pp.MeterSizeID LEFT JOIN tariff AS t ON  t.TariffID = pp.TariffID LEFT JOIN gateway AS g on g.GatewayID = pp.GatewayID  WHERE pp.PrefixID = " + prefixID);
+			rs = pstmt.executeQuery();
+
+			if (rs.next()) {
+				prefixResponseVO = new PrefixResponseVO();
+				prefixResponseVO.setCommunityID(rs.getInt("CommunityID"));
+				prefixResponseVO.setCommunityName(rs.getString("CommunityName"));
+				prefixResponseVO.setBlockID(rs.getInt("BlockID"));
+				prefixResponseVO.setBlockName(rs.getString("BlockName"));
+				prefixResponseVO.setPrefixID(rs.getInt("PrefixID"));
+				prefixResponseVO.setPrefixName(rs.getString("PrefixName"));
+				prefixResponseVO.setMiuID(rs.getString("MIUID"));
+				prefixResponseVO.setMeterType(rs.getString("MeterType"));
+				prefixResponseVO.setMeterSizeID(rs.getInt("MeterSizeID"));
+				prefixResponseVO.setMeterSize(rs.getInt("MeterSize"));
+				prefixResponseVO.setPayType(rs.getString("PayType"));
+				prefixResponseVO.setTariffID(rs.getInt("TariffID"));
+				prefixResponseVO.setTariffName(rs.getString("TariffName"));
+				prefixResponseVO.setGatewayID(rs.getInt("GatewayID"));
+				prefixResponseVO.setGatewayName(rs.getString("GatewayName"));
+				prefixResponseVO.setThresholdMaximum(rs.getFloat("ThresholdMaximum"));
+				prefixResponseVO.setThresholdMinimum(rs.getFloat("ThresholdMinimum"));
+				prefixResponseVO.setModifiedDate(ExtraMethodsDAO.datetimeformatter(rs.getString("ModifiedDate")));
+
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			pstmt.close();
+			rs.close();
+			con.close();
+		}
+		
+		return prefixResponseVO;
 	}
 
 }

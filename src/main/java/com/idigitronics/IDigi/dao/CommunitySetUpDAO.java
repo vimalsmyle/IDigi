@@ -23,6 +23,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.idigitronics.IDigi.request.vo.MeterRequestVO;
 import com.idigitronics.IDigi.request.vo.MeterSizeRequestVO;
+import com.idigitronics.IDigi.request.vo.PrefixRequestVO;
 import com.idigitronics.IDigi.constants.DataBaseConstants;
 import com.idigitronics.IDigi.constants.ExtraConstants;
 import com.idigitronics.IDigi.request.vo.BlockRequestVO;
@@ -39,6 +40,7 @@ import com.idigitronics.IDigi.response.vo.CommunityResponseVO;
 import com.idigitronics.IDigi.response.vo.CustomerResponseVO;
 import com.idigitronics.IDigi.response.vo.GatewayResponseVO;
 import com.idigitronics.IDigi.response.vo.MeterSizeResponseVO;
+import com.idigitronics.IDigi.response.vo.PrefixResponseVO;
 import com.idigitronics.IDigi.response.vo.ResponseVO;
 import com.idigitronics.IDigi.response.vo.TariffResponseVO;
 import com.idigitronics.IDigi.utils.Encryptor;
@@ -969,7 +971,7 @@ public class CommunitySetUpDAO {
 		} finally {
 			pstmt.close();
 			rs.close();
-			con.close();
+//			con.close();
 		}
 		return customer_list;
 	}
@@ -2148,6 +2150,157 @@ public class CommunitySetUpDAO {
 		}
 
 		return result;
+	}
+
+	
+	/*Prefix*/
+	
+	public List<PrefixResponseVO> getPrefixDetails() throws SQLException {
+
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		List<PrefixResponseVO> prefixList = null;
+		PrefixResponseVO prefixResponseVO = null;
+
+		try {
+			con = getConnection();
+			prefixList = new LinkedList<PrefixResponseVO>();
+			pstmt = con.prepareStatement("SELECT c.CommunityName, b.BlockName, pp.PrefixID, pp.PrefixName, pp.MIUID, pp.MeterType, ms.MeterSize, pp.PayType, t.Tariff, t.TariffName, g.GatewayName, pp.ThresholdMaximum, pp.ThresholdMinimum, pp.ModifiedDate "
+					+ "FROM prefixparams AS pp LEFT JOIN community AS c ON pp.CommunityID = c.CommunityID LEFT JOIN block AS b ON b.BlockID = pp.BlockID LEFT JOIN metersize AS ms ON ms.MeterSizeID = pp.MeterSizeID LEFT JOIN tariff AS t ON  t.TariffID = pp.TariffID LEFT JOIN gateway AS g on g.GatewayID = pp.GatewayID "
+					+ "ORDER BY pp.PrefixID DESC");
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				prefixResponseVO = new PrefixResponseVO();
+				prefixResponseVO.setCommunityName(rs.getString("CommunityName"));
+				prefixResponseVO.setBlockName(rs.getString("BlockName"));
+				prefixResponseVO.setPrefixID(rs.getInt("PrefixID"));
+				prefixResponseVO.setPrefixName(rs.getString("PrefixName"));
+				prefixResponseVO.setMiuID(rs.getString("MIUID"));
+				prefixResponseVO.setMeterType(rs.getString("MeterType"));
+				prefixResponseVO.setMeterSize(rs.getInt("MeterSize"));
+				prefixResponseVO.setPayType(rs.getString("PayType"));
+				prefixResponseVO.setTariffName(rs.getString("TariffName"));
+				prefixResponseVO.setGatewayName(rs.getString("GatewayName"));
+				prefixResponseVO.setThresholdMaximum(rs.getFloat("ThresholdMaximum"));
+				prefixResponseVO.setThresholdMinimum(rs.getFloat("ThresholdMinimum"));
+				prefixResponseVO.setModifiedDate(ExtraMethodsDAO.datetimeformatter(rs.getString("ModifiedDate")));
+				prefixList.add(prefixResponseVO);
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			pstmt.close();
+			rs.close();
+			con.close();
+		}
+		return prefixList;
+	}
+
+	public ResponseVO addPrefix(PrefixRequestVO prefixvo) throws SQLException {
+		// TODO Auto-generated method stub
+
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResponseVO responsevo = new ResponseVO();
+		try {
+			con = getConnection();
+			pstmt = con.prepareStatement("INSERT INTO prefixparams (PrefixName, CommunityID, BlockID, MIUID, MeterType, MeterSizeID, PayType, TariffID, GatewayID, ThresholdMaximum, ThresholdMinimum, RegisteredDate) "
+					+ " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW()");
+			pstmt.setString(1, prefixvo.getPrefixName());
+			pstmt.setInt(2, prefixvo.getCommunityID());
+			pstmt.setInt(3, prefixvo.getBlockID());
+			pstmt.setString(4, prefixvo.getMiuID());
+			pstmt.setString(5, prefixvo.getMeterType());
+			pstmt.setInt(6, prefixvo.getMeterSizeID());
+			pstmt.setString(7, prefixvo.getPayType());
+			pstmt.setInt(8, prefixvo.getTariffID());
+			pstmt.setInt(9, prefixvo.getGatewayID());
+			pstmt.setFloat(10, prefixvo.getThresholdMaximum());
+			pstmt.setFloat(11, prefixvo.getThresholdMinimum());
+			
+			if (pstmt.executeUpdate() > 0) {
+				responsevo.setResult("Success");
+				responsevo.setMessage("Prefix Added Successfully");
+			} 
+			
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			responsevo.setMessage("INTERNAL SERVER ERROR");
+			responsevo.setResult("Failure");
+		} finally {
+			pstmt.close();
+			con.close();
+		}
+
+		return responsevo;
+	}
+
+	public ResponseVO editPrefix(PrefixRequestVO prefixvo) throws SQLException {
+		// TODO Auto-generated method stub
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResponseVO responsevo = new ResponseVO(); 
+
+		try {
+			con = getConnection();
+			pstmt = con.prepareStatement("UPDATE prefixparams SET PrefixName = ?, CommunityID = ?, BlockID = ?, MIUID = ?, MeterType = ?, MeterSizeID = ?, PayType = ?, TariffID = ?, GatewayID = ?, ThresholdMaximum = ?, ThresholdMinimum = ?, ModifiedDate = NOW() WHERE PrefixID = ?;");
+			pstmt.setString(1, prefixvo.getPrefixName());
+			pstmt.setInt(2, prefixvo.getCommunityID());
+			pstmt.setInt(3, prefixvo.getBlockID());
+			pstmt.setString(4, prefixvo.getMiuID());
+			pstmt.setString(5, prefixvo.getMeterType());
+			pstmt.setInt(6, prefixvo.getMeterSizeID());
+			pstmt.setString(7, prefixvo.getPayType());
+			pstmt.setInt(8, prefixvo.getTariffID());
+			pstmt.setInt(9, prefixvo.getGatewayID());
+			pstmt.setFloat(10, prefixvo.getThresholdMaximum());
+			pstmt.setFloat(11, prefixvo.getThresholdMinimum());
+			pstmt.setInt(12, prefixvo.getPrefixID());
+
+			if (pstmt.executeUpdate() > 0) {
+				responsevo.setResult("Success");
+				responsevo.setMessage("Prefix Updated Successfully");
+			} 
+			
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			responsevo.setMessage("INTERNAL SERVER ERROR");
+			responsevo.setResult("Failure");
+		} finally {
+			pstmt.close();
+			con.close();
+		}
+
+		return responsevo;
+	}
+	
+	public ResponseVO deletePrefix(int prefixID) throws SQLException {
+		// TODO Auto-generated method stub
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResponseVO responsevo = new ResponseVO(); 
+
+		try {
+			con = getConnection();
+			pstmt = con.prepareStatement("DELETE FROM prefixparams WHERE PrefixID = " + prefixID);
+
+			if (pstmt.executeUpdate() > 0) {
+				responsevo.setResult("Success");
+				responsevo.setMessage("Prefix Deleted Successfully");
+			} 
+			
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			responsevo.setMessage("INTERNAL SERVER ERROR");
+			responsevo.setResult("Failure");
+		} finally {
+			pstmt.close();
+			con.close();
+		}
+
+		return responsevo;
 	}
 
 }

@@ -185,6 +185,33 @@ public class DropDownController {
 		return responsevo;
 	}
 	
+	@RequestMapping(value = "/prefixes/{communityID}/{blockID}",method = RequestMethod.GET, produces="application/json")
+	public @ResponseBody ResponseVO getallsolarmasters(@PathVariable("communityID") int communityID, @PathVariable("blockID") int blockID) throws SQLException {
+		
+		ResponseVO responsevo = new ResponseVO();
+		responsevo.setDropDownPrefixes(dropdowndao.getAllPrefixes(communityID, blockID));
+
+		return responsevo;
+	}
+	
+	@RequestMapping(value = "/prefixdetails/{prefixID}",method = RequestMethod.GET, 
+			produces="application/json")
+	public @ResponseBody ResponseVO getPrefixDetails(@PathVariable("prefixID") int prefixID) throws SQLException {
+		
+		ResponseVO responsevo = new ResponseVO();
+		responsevo.setPrefixDetails(dropdowndao.getPrefixDetails(prefixID));
+		
+		if(responsevo.getPrefixDetails() != null) {
+			responsevo.setResult("Success");
+			responsevo.setMessage("Prefix Details Retrieved Successfully");
+		} else {
+			responsevo.setResult("Failure");
+			responsevo.setMessage("Prefix Details Not Found");
+		}
+		
+		return responsevo;
+	}
+	
 	@RequestMapping(value = "/testmail",method = RequestMethod.GET, produces="application/json")
 	public @ResponseBody ResponseVO testmail() throws SQLException {
 		

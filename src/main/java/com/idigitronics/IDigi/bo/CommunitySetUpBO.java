@@ -15,6 +15,7 @@ import com.idigitronics.IDigi.request.vo.CustomerRequestVO;
 import com.idigitronics.IDigi.request.vo.CustomerSolarMasterRequestVO;
 import com.idigitronics.IDigi.request.vo.GatewayRequestVO;
 import com.idigitronics.IDigi.request.vo.MeterSizeRequestVO;
+import com.idigitronics.IDigi.request.vo.PrefixRequestVO;
 import com.idigitronics.IDigi.request.vo.TariffRequestVO;
 import com.idigitronics.IDigi.response.vo.ResponseVO;
 
@@ -121,7 +122,7 @@ public class CommunitySetUpBO {
 		return communitysetupdao.deletegateway(gatewayID);
 	}
 	
-	/* Gateway */
+	/* MeterSize */
 
 	public ResponseVO addMeterSize(MeterSizeRequestVO meterSizeRequestVO) throws SQLException, BusinessException {
 		// TODO Auto-generated method stub
@@ -484,6 +485,36 @@ public class CommunitySetUpBO {
 		}
 		
 		return communitysetupdao.mapSolarMasterAdd(customerSolarMasterRequestVO);
+	}
+	
+	/* Prefix */
+
+	public ResponseVO addPrefix(PrefixRequestVO prefixvo) throws SQLException, BusinessException {
+		// TODO Auto-generated method stub
+
+		if(prefixvo.getPrefixName().isEmpty() || prefixvo.getCommunityID() == 0 || prefixvo.getBlockID() == 0 || prefixvo.getMiuID().isEmpty() || prefixvo.getMeterType().isEmpty() ||
+				prefixvo.getMeterSizeID() == 0 || prefixvo.getPayType().isEmpty() || prefixvo.getTariffID() == 0 || prefixvo.getGatewayID() == 0 || prefixvo.getThresholdMaximum() == 0 || prefixvo.getThresholdMinimum() == 0){
+			throw new BusinessException("ALL FIELDS ARE MANDATORY");
+		}
+
+		return communitysetupdao.addPrefix(prefixvo);
+	}
+	
+	public ResponseVO editPrefix(PrefixRequestVO prefixvo) throws SQLException, BusinessException {
+		// TODO Auto-generated method stub
+		
+		if(prefixvo.getPrefixName().isEmpty() || prefixvo.getCommunityID() == 0 || prefixvo.getBlockID() == 0 || prefixvo.getMiuID().isEmpty() || prefixvo.getMeterType().isEmpty() ||
+				prefixvo.getMeterSizeID() == 0 || prefixvo.getPayType().isEmpty() || prefixvo.getTariffID() == 0 || prefixvo.getGatewayID() == 0 || prefixvo.getThresholdMaximum() == 0 || prefixvo.getThresholdMinimum() == 0){
+			throw new BusinessException("ALL FIELDS ARE MANDATORY");
+		}
+		
+		return communitysetupdao.editPrefix(prefixvo);
+	}
+	
+	public ResponseVO deletePrefix(int prefixID) throws BusinessException, SQLException {
+		// TODO Auto-generated method stub
+		
+		return communitysetupdao.deletePrefix(prefixID);
 	}
 
 }

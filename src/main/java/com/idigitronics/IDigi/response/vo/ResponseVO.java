@@ -23,6 +23,7 @@ public class ResponseVO {
 	private HashMap<Integer, String> dropDownSolarCustomers;
 	private HashMap<Long, String> dropDownCustomerMeters;
 	private HashMap<Long, String> dropDownAllCustomerMeters;
+	private HashMap<Integer, String> dropDownPrefixes;
 	private TopupDetailsResponseVO topupdetails;
 	private BillDetailsResponseVO billdetails;
 	private LastReadingResponseVO lastReadingDetails; 
@@ -32,6 +33,7 @@ public class ResponseVO {
 	private String location;
 	private UserDetails userDetails;
 	private CustomerResponseVO customerDetails;
+	private PrefixResponseVO prefixDetails;
 	private CheckoutDetails checkoutDetails;
 	private String paymentMode;
 	private String payType;
@@ -209,6 +211,18 @@ public class ResponseVO {
 	}
 	public void setDropDownSolarCustomers(HashMap<Integer, String> dropDownSolarCustomers) {
 		this.dropDownSolarCustomers = dropDownSolarCustomers;
+	}
+	public PrefixResponseVO getPrefixDetails() {
+		return prefixDetails;
+	}
+	public void setPrefixDetails(PrefixResponseVO prefixDetails) {
+		this.prefixDetails = prefixDetails;
+	}
+	public HashMap<Integer, String> getDropDownPrefixes() {
+		return dropDownPrefixes;
+	}
+	public void setDropDownPrefixes(HashMap<Integer, String> dropDownPrefixes) {
+		this.dropDownPrefixes = dropDownPrefixes;
 	}
 	
 }

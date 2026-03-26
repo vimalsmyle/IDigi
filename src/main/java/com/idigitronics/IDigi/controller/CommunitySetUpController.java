@@ -27,12 +27,14 @@ import com.idigitronics.IDigi.request.vo.CustomerRequestVO;
 import com.idigitronics.IDigi.request.vo.CustomerSolarMasterRequestVO;
 import com.idigitronics.IDigi.request.vo.GatewayRequestVO;
 import com.idigitronics.IDigi.request.vo.MeterSizeRequestVO;
+import com.idigitronics.IDigi.request.vo.PrefixRequestVO;
 import com.idigitronics.IDigi.request.vo.TariffRequestVO;
 import com.idigitronics.IDigi.response.vo.BlockResponseVO;
 import com.idigitronics.IDigi.response.vo.CommunityResponseVO;
 import com.idigitronics.IDigi.response.vo.CustomerResponseVO;
 import com.idigitronics.IDigi.response.vo.GatewayResponseVO;
 import com.idigitronics.IDigi.response.vo.MeterSizeResponseVO;
+import com.idigitronics.IDigi.response.vo.PrefixResponseVO;
 import com.idigitronics.IDigi.response.vo.ResponseVO;
 import com.idigitronics.IDigi.response.vo.TariffResponseVO;
 
@@ -489,4 +491,62 @@ public class CommunitySetUpController {
 		return responsevo;
 	}
 	
+	/* PrefixParams */
+
+	@RequestMapping(value = "/prefix", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody PrefixResponseVO prefixDetails() throws SQLException {
+
+		PrefixResponseVO prefixResponsevo = new PrefixResponseVO();
+
+		prefixResponsevo.setData(communitysetupdao.getPrefixDetails());
+
+		return prefixResponsevo;
+	}
+
+	@RequestMapping(value = "/prefix/add", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	public @ResponseBody ResponseVO addPrefix(@RequestBody PrefixRequestVO prefixvo)
+			throws ClassNotFoundException, SQLException, BusinessException {
+		ResponseVO responsevo = new ResponseVO();
+		try {
+			responsevo = communitysetupbo.addPrefix(prefixvo);
+
+		} catch (BusinessException e) {
+			responsevo.setResult("Failure");
+			responsevo.setMessage(e.getMessage());
+		}
+
+		return responsevo;
+	}
+
+	@RequestMapping(value = "/prefix/edit/{prefixID}", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	public @ResponseBody ResponseVO editPrefix(@RequestBody PrefixRequestVO prefixvo,
+			@PathVariable("prefixID") int prefixID) throws ClassNotFoundException, SQLException, BusinessException {
+
+		prefixvo.setPrefixID(prefixID);
+		ResponseVO responsevo = new ResponseVO();
+		try {
+			responsevo = communitysetupbo.editPrefix(prefixvo);
+
+		} catch (BusinessException e) {
+			responsevo.setResult("Failure");
+			responsevo.setMessage(e.getMessage());
+		}
+
+		return responsevo;
+	}
+
+	@RequestMapping(value = "/prefix/delete/{prefixID}", method = RequestMethod.POST, produces = "application/json")
+	public @ResponseBody ResponseVO deletePrefix(@PathVariable("prefixID") int prefixID)
+			throws ClassNotFoundException, SQLException, BusinessException {
+		ResponseVO responsevo = new ResponseVO();
+		try {
+			responsevo = communitysetupbo.deletePrefix(prefixID);
+
+		} catch (BusinessException e) {
+			responsevo.setResult("Failure");
+			responsevo.setMessage(e.getMessage());
+		}
+
+		return responsevo;
+	}
 }
