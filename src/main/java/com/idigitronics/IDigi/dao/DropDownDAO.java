@@ -576,7 +576,6 @@ public class DropDownDAO {
 				prefixResponseVO.setGatewayName(rs.getString("GatewayName"));
 				prefixResponseVO.setThresholdMaximum(rs.getFloat("ThresholdMaximum"));
 				prefixResponseVO.setThresholdMinimum(rs.getFloat("ThresholdMinimum"));
-				prefixResponseVO.setModifiedDate(ExtraMethodsDAO.datetimeformatter(rs.getString("ModifiedDate")));
 
 			}
 		} catch (Exception ex) {

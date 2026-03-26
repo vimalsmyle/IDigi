@@ -2207,7 +2207,7 @@ public class CommunitySetUpDAO {
 		try {
 			con = getConnection();
 			pstmt = con.prepareStatement("INSERT INTO prefixparams (PrefixName, CommunityID, BlockID, MIUID, MeterType, MeterSizeID, PayType, TariffID, GatewayID, ThresholdMaximum, ThresholdMinimum, RegisteredDate) "
-					+ " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW()");
+					+ " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
 			pstmt.setString(1, prefixvo.getPrefixName());
 			pstmt.setInt(2, prefixvo.getCommunityID());
 			pstmt.setInt(3, prefixvo.getBlockID());
@@ -2231,7 +2231,7 @@ public class CommunitySetUpDAO {
 			responsevo.setResult("Failure");
 		} finally {
 			pstmt.close();
-			con.close();
+//			con.close();
 		}
 
 		return responsevo;
