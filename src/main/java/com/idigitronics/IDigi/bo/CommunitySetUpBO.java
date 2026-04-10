@@ -346,18 +346,27 @@ public class CommunitySetUpBO {
 					"MOBILE NUMBER CAN CONTAIN ONLY NUMERIC VALUES OF EXACTLY 10 DIGITS");
 		}
 		
-	/*	for(int i = 0; i < customervo.getMeters().size(); i++) {
-			
-			if(communitysetupdao.checkMIUID(customervo.getMeters().get(i).getMiuID(), customervo.getMeters().get(i).getCustomerMeterID())) {
-				throw new BusinessException(customervo.getMeters().get(i).getMiuID() +" - MIUID IS ALREADY REGISTERED");
-			}
-			
-			if(customervo.getMeters().get(i).getMeterSizeID() <= 0 || customervo.getMeters().get(i).getGatewayID() <= 0) {
-				throw new BusinessException("METERSIZE & GATEWAY ARE MANDATORY");
-			}
-			
-		}*/
-		
+				if(customervo.getMeters().size() > 0) {
+					
+					for(int i = 0; i < customervo.getMeters().size(); i++) {
+						
+						if(communitysetupdao.checkMIUID(customervo.getMeters().get(i).getMiuID(), customervo.getMeters().get(i).getCustomerMeterID())) {
+							throw new BusinessException(customervo.getMeters().get(i).getMiuID() +" - MIUID IS ALREADY REGISTERED");
+						}
+						
+						if(customervo.getMeters().get(i).getTariffID()==-1) {
+							throw new BusinessException(customervo.getMeters().get(i).getMiuID() +" - TARIFF IS NOT SELECTED");
+						}
+						
+						if(customervo.getMeters().get(i).getGatewayID()==-1) {
+							throw new BusinessException(customervo.getMeters().get(i).getMiuID() +" - GATEWAY IS NOT SELECTED");
+						}
+						if(customervo.getMeters().get(i).getDefaultReading()<0) {
+							throw new BusinessException(customervo.getMeters().get(i).getMiuID() +" - DEFAULT READING CANNOT BE LESS THAN ZERO");
+						}
+					}
+				}
+				
 		return communitysetupdao.editcustomer(customervo);
 	}
 

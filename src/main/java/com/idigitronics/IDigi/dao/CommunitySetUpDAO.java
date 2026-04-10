@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -16,10 +17,17 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.poi.EncryptedDocumentException;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.idigitronics.IDigi.request.vo.MeterRequestVO;
 import com.idigitronics.IDigi.request.vo.MeterSizeRequestVO;
@@ -45,6 +53,7 @@ import com.idigitronics.IDigi.response.vo.ResponseVO;
 import com.idigitronics.IDigi.response.vo.TariffResponseVO;
 import com.idigitronics.IDigi.utils.Encryptor;
 import com.idigitronics.IDigi.dao.ManagementSettingsDAO;
+import com.idigitronics.IDigi.exceptions.BusinessException;
 
 /**
  * @author K VimaL Kumar
@@ -1149,7 +1158,8 @@ public class CommunitySetUpDAO {
 					usermanagementvo.setBlockID(customervo.getBlockID());
 					usermanagementvo.setUserID(customervo.getCustomerUniqueID());
 					usermanagementvo.setUserName(customervo.getFirstName() + " " + customervo.getLastName());
-					usermanagementvo.setUserPassword(Encryptor.encrypt(ExtraConstants.key1, ExtraConstants.key2, customervo.getLastName()+"@"+ customervo.getMobileNumber().substring(3, 7)));
+//					usermanagementvo.setUserPassword(Encryptor.encrypt(ExtraConstants.key1, ExtraConstants.key2, customervo.getLastName()+"@"+ customervo.getMobileNumber().substring(3, 7)));
+					usermanagementvo.setUserPassword(Encryptor.encrypt(ExtraConstants.key1, ExtraConstants.key2, customervo.getCustomerUniqueID()));
 					usermanagementvo.setRoleID(3);
 					usermanagementvo.setCommunityID(customervo.getCommunityID());
 					usermanagementvo.setCustomerID(rs.getInt("CustomerID"));
@@ -1169,7 +1179,8 @@ public class CommunitySetUpDAO {
 						mailrequestvo.setFileLocation("NoAttachment");
 						mailrequestvo.setToEmail(customervo.getEmail());
 						mailrequestvo.setUserID(usermanagementvo.getUserID());
-						mailrequestvo.setUserPassword(customervo.getLastName()+"@"+ customervo.getMobileNumber().substring(3, 7));
+//						mailrequestvo.setUserPassword(customervo.getLastName()+"@"+ customervo.getMobileNumber().substring(3, 7));
+						mailrequestvo.setUserPassword(customervo.getCustomerUniqueID());
 						mailrequestvo.setSubject("Customer Login for CRN/CAN/UAN: " + mailrequestvo.getUserID());
 						mailrequestvo.setMessage("Please Save the Credentials for further communications \n"
 								+ " UserID: " + mailrequestvo.getUserID() + "\n Password: " + mailrequestvo.getUserPassword() + "\n Use URL for login : "+ ExtraConstants.ApplicationURL);
@@ -1226,6 +1237,58 @@ public class CommunitySetUpDAO {
 		return responsevo;
 	}
 	
+	public ResponseVO addCustomerExcel(MultipartFile file) throws BusinessException, IOException, EncryptedDocumentException, InvalidFormatException {
+		// TODO Auto-generated method stub
+		
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		PreparedStatement pstmt1 = null;
+		ResponseVO responsevo = new ResponseVO();
+		
+		 try (InputStream is = file.getInputStream();
+	             Workbook workbook = WorkbookFactory.create(is)) { // Auto-detects XLS or XLSX
+			 
+			 con = getConnection();
+
+	            Sheet sheet = workbook.getSheetAt(0); // Get the first sheet
+	            for (Row row : sheet) {
+	                // Example: Read string value from the first cell of each row
+	                
+	                if (row.getCell(0) != null || row.getCell(1) != null || row.getCell(2) != null || row.getCell(3) != null || row.getCell(4) != null || row.getCell(5) != null || row.getCell(6) != null || row.getCell(7) != null || row.getCell(8) != null) {
+	                    
+	                    pstmt = con.prepareStatement("SELECT c.CommunityID, b.BlockID FROM community AS c LEFT JOIN block AS b ON c.CommunityID = b.CommunityID WHERE c.CommunityName = ? and b.BlockName = ?");
+		                pstmt.setString(1, row.getCell(1).getStringCellValue());
+		                pstmt.setString(2, row.getCell(2).getStringCellValue());
+		                ResultSet rs = pstmt.executeQuery();
+		                
+		                if(rs.next()) {
+		                	
+		                	CustomerRequestVO customervo = new CustomerRequestVO();
+			                customervo.setCommunityID(rs.getInt("CommunityID"));
+			                customervo.setBlockID(rs.getInt("BlockID"));
+			                
+			                customervo.setFirstName(null);
+			                customervo.setLastName(null);
+			                customervo.setHouseNumber(null);
+			                customervo.setMobileNumber(null);
+			                customervo.setEmail(null);
+			                customervo.setCustomerUniqueID(null);
+			                
+			                customervo.setCreatedByID(0);
+			                customervo.setLoggedInRoleID(0);
+			                customervo.setLoggedInUserID(null);
+		                }
+	                    
+	                }
+	                
+	            }
+	 } catch (Exception e) {
+         e.printStackTrace();
+     }
+		
+		return null;
+	}
+	
 	public ResponseVO editcustomer(CustomerRequestVO customervo) throws SQLException {
 		// TODO Auto-generated method stub
 		
@@ -1236,14 +1299,15 @@ public class CommunitySetUpDAO {
 		try {
 			con = getConnection();
 			
+			PreparedStatement pstmt1 = con.prepareStatement("SELECT CustomerID, BlockID, LastName FROM customerdetails WHERE CustomerUniqueID = ?");
+			pstmt1.setString(1, customervo.getCustomerUniqueID());
+			ResultSet rs = pstmt1.executeQuery();
+			if(rs.next()) {
+				customervo.setCustomerID(rs.getInt("CustomerID"));
+				customervo.setBlockID(rs.getInt("BlockID"));
+			}
+			
 			if(customervo.getLoggedInRoleID() == 3) {
-				
-				PreparedStatement pstmt1 = con.prepareStatement("SELECT CustomerID, BlockID, LastName FROM customerdetails WHERE CustomerUniqueID = ?");
-				pstmt1.setString(1, customervo.getCustomerUniqueID());
-				ResultSet rs = pstmt1.executeQuery();
-				if(rs.next()) {
-					customervo.setCustomerID(rs.getInt("CustomerID"));
-					customervo.setBlockID(rs.getInt("BlockID"));
 				
 				pstmt = con.prepareStatement("INSERT INTO updaterequestcustomermeterdetails (BlockID, CustomerID, CustomerUniqueID, FirstName, LastName, Email, MobileNumber, ToBeApprovedByID) VALUES (?, ?, ?, ?, ?, ?, ?, (SELECT CreatedByID FROM user WHERE CustomerUniqueID = ?))");
 				pstmt.setInt(1, customervo.getBlockID());
@@ -1260,8 +1324,6 @@ public class CommunitySetUpDAO {
 					responsevo.setMessage("Request Submitted successfully and is pending for approval by Administrator");
 	            	}
 				
-				}
-				
 			}else {
 				pstmt = con.prepareStatement("UPDATE customerdetails SET HouseNumber=?, FirstName=?, LastName = ?, Email=?, MobileNumber=?, ModifiedDate=NOW() WHERE CustomerUniqueID = ?");
 	            
@@ -1275,20 +1337,47 @@ public class CommunitySetUpDAO {
 	            if (pstmt.executeUpdate() > 0) {
 	            	
 	            	if(customervo.getMeters().size() > 0) {
-	            	
-	            	for(int i = 0; i < customervo.getMeters().size(); i++) {
-	            		con.prepareStatement("UPDATE customermeterdetails SET MIUID = '"+customervo.getMeters().get(i).getMiuID().trim()+"', GatewayID = " +customervo.getMeters().get(i).getGatewayID()+ ", MeterSizeID = " +customervo.getMeters().get(i).getMeterSizeID() +", ThresholdMaximum = "+customervo.getMeters().get(i).getThresholdMaximum() +", ThresholdMinimum = "+customervo.getMeters().get(i).getThresholdMinimum()+", DefaultReading = " +customervo.getMeters().get(i).getDefaultReading()+ ", ModifiedDate = NOW() WHERE CustomerMeterID = " + customervo.getMeters().get(i).getCustomerMeterID()).executeUpdate();
-	            		con.prepareStatement("UPDATE displaybalancelog SET MIUID = '"+customervo.getMeters().get(i).getMiuID().trim()+"' WHERE CustomerMeterID = " + customervo.getMeters().get(i).getCustomerMeterID()).executeUpdate();
 	            		
-	            		}
+	            			for(int i = 0; i < customervo.getMeters().size(); i++) {
+	            				
+	            				ResultSet actionResult = con.prepareStatement("SELECT * FROM customermeterdetails WHERE MeterSerialNumber = '" + customervo.getMeters().get(i).getMeterSerialNumber().trim() + "'").executeQuery();
+	            				
+	            				if(actionResult.next()) {
+	            					con.prepareStatement("UPDATE customermeterdetails SET MIUID = '"+customervo.getMeters().get(i).getMiuID().trim()+"', GatewayID = " +customervo.getMeters().get(i).getGatewayID()+ ", MeterSizeID = " +customervo.getMeters().get(i).getMeterSizeID() +", ThresholdMaximum = "+customervo.getMeters().get(i).getThresholdMaximum() +", ThresholdMinimum = "+customervo.getMeters().get(i).getThresholdMinimum()+", DefaultReading = " +customervo.getMeters().get(i).getDefaultReading()+ ", ModifiedDate = NOW() WHERE CustomerMeterID = " + customervo.getMeters().get(i).getCustomerMeterID()).executeUpdate();
+		    	            		con.prepareStatement("UPDATE displaybalancelog SET MIUID = '"+customervo.getMeters().get(i).getMiuID().trim()+"' WHERE CustomerMeterID = " + customervo.getMeters().get(i).getCustomerMeterID()).executeUpdate();
+	
+	            				} else {
+	            					
+	            					PreparedStatement pstmt4 = con.prepareStatement("INSERT INTO customermeterdetails (CustomerID, CustomerUniqueID, MIUID, MeterSerialNumber, MeterType, MeterSizeID, PayType, TariffID, GatewayID, Location, ThresholdMaximum, ThresholdMinimum, DefaultReading, ModifiedDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
+		    						pstmt4.setLong(1, customervo.getCustomerID());
+		    						pstmt4.setString(2, customervo.getCustomerUniqueID());
+		    						pstmt4.setString(3, customervo.getMeters().get(i).getMiuID().toLowerCase());
+		    						pstmt4.setString(4, customervo.getMeters().get(i).getMeterSerialNumber());
+		    						pstmt4.setString(5, customervo.getMeters().get(i).getMeterType());
+		    						pstmt4.setInt(6, customervo.getMeters().get(i).getMeterSizeID());
+		    						pstmt4.setString(7, customervo.getMeters().get(i).getPayType());
+		    						pstmt4.setInt(8, customervo.getMeters().get(i).getTariffID());
+		    						pstmt4.setInt(9, customervo.getMeters().get(i).getGatewayID());
+		    						pstmt4.setString(10, customervo.getMeters().get(i).getLocation());
+		    						pstmt4.setFloat(11, customervo.getMeters().get(i).getThresholdMaximum());
+		    						pstmt4.setFloat(12, customervo.getMeters().get(i).getThresholdMinimum());
+		    						pstmt4.setFloat(13, customervo.getMeters().get(i).getDefaultReading());
+		    						
+		    						if(pstmt4.executeUpdate() > 0) {
+		    							responsevo.setResult("Success");
+		    						}
+	            				}
+	    	            			    	            		
+	    	            		}
+	            		
 	            	}
 	            	
-	            	PreparedStatement pstmt1 = con.prepareStatement("UPDATE USER SET UserName = ?, MobileNumber = ?, Email = ? WHERE CustomerUniqueID = ?");
-	            	pstmt1.setString(1, customervo.getFirstName() + " " + customervo.getLastName());
-	            	pstmt1.setString(2, customervo.getMobileNumber());
-	            	pstmt1.setString(3, customervo.getEmail());
-	            	pstmt1.setString(4, customervo.getCustomerUniqueID());
-	            	if(pstmt1.executeUpdate() > 0) {
+	            	PreparedStatement pstmt2 = con.prepareStatement("UPDATE USER SET UserName = ?, MobileNumber = ?, Email = ? WHERE CustomerUniqueID = ?");
+	            	pstmt2.setString(1, customervo.getFirstName() + " " + customervo.getLastName());
+	            	pstmt2.setString(2, customervo.getMobileNumber());
+	            	pstmt2.setString(3, customervo.getEmail());
+	            	pstmt2.setString(4, customervo.getCustomerUniqueID());
+	            	if(pstmt2.executeUpdate() > 0) {
 	            		
 	            		responsevo.setResult("Success");
 	            		responsevo.setMessage("Customer Details Updated Successfully");

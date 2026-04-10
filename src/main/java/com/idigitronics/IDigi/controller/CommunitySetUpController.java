@@ -6,8 +6,11 @@ package com.idigitronics.IDigi.controller;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.sql.SQLException;
 
+import org.apache.poi.EncryptedDocumentException;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +19,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.idigitronics.IDigi.bo.CommunitySetUpBO;
 import com.idigitronics.IDigi.dao.CommunitySetUpDAO;
@@ -328,6 +333,21 @@ public class CommunitySetUpController {
 		ResponseVO responsevo = new ResponseVO();
 		try {
 			responsevo = communitysetupbo.addcustomer(customervo);
+		} catch (BusinessException e) {
+			responsevo.setResult("Failure");
+			responsevo.setMessage(e.getMessage());
+		}
+
+		return responsevo;
+	}
+	
+	@RequestMapping(value = "/customer/exceladd/{roleid}/{id}/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	public @ResponseBody
+	ResponseVO addCustomerExcel(@RequestParam("file") MultipartFile file, @PathVariable("roleid") int roleid, @PathVariable("id") String id) throws ClassNotFoundException,
+			BusinessException, SQLException, EncryptedDocumentException, InvalidFormatException, IOException {
+		ResponseVO responsevo = new ResponseVO();
+		try {
+			responsevo = communitysetupdao.addCustomerExcel(file);
 		} catch (BusinessException e) {
 			responsevo.setResult("Failure");
 			responsevo.setMessage(e.getMessage());
