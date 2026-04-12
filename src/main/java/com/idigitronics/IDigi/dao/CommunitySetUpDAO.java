@@ -3,6 +3,8 @@
  */
 package com.idigitronics.IDigi.dao;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -13,6 +15,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -20,6 +23,7 @@ import java.util.List;
 import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -32,6 +36,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.idigitronics.IDigi.request.vo.MeterRequestVO;
 import com.idigitronics.IDigi.request.vo.MeterSizeRequestVO;
 import com.idigitronics.IDigi.request.vo.PrefixRequestVO;
+import com.idigitronics.IDigi.bo.CommunitySetUpBO;
 import com.idigitronics.IDigi.constants.DataBaseConstants;
 import com.idigitronics.IDigi.constants.ExtraConstants;
 import com.idigitronics.IDigi.request.vo.BlockRequestVO;
@@ -1237,56 +1242,270 @@ public class CommunitySetUpDAO {
 		return responsevo;
 	}
 	
-	public ResponseVO addCustomerExcel(MultipartFile file) throws BusinessException, IOException, EncryptedDocumentException, InvalidFormatException {
+	public ResponseVO addCustomerExcel(MultipartFile file, int roleid, int createdbyid, String id) throws BusinessException, IOException, EncryptedDocumentException, InvalidFormatException {
 		// TODO Auto-generated method stub
 		
 		Connection con = null;
 		PreparedStatement pstmt = null;
-		PreparedStatement pstmt1 = null;
 		ResponseVO responsevo = new ResponseVO();
+		List<CustomerRequestVO> unRegisteredList = new ArrayList<CustomerRequestVO>();
+		List<CustomerRequestVO> registeredList = new ArrayList<CustomerRequestVO>();
+		CommunitySetUpBO communitySetupBO = new CommunitySetUpBO();
+		boolean register = true;
 		
 		 try (InputStream is = file.getInputStream();
 	             Workbook workbook = WorkbookFactory.create(is)) { // Auto-detects XLS or XLSX
 			 
-			 con = getConnection();
+			 	con = getConnection();
 
 	            Sheet sheet = workbook.getSheetAt(0); // Get the first sheet
-	            for (Row row : sheet) {
-	                // Example: Read string value from the first cell of each row
-	                
-	                if (row.getCell(0) != null || row.getCell(1) != null || row.getCell(2) != null || row.getCell(3) != null || row.getCell(4) != null || row.getCell(5) != null || row.getCell(6) != null || row.getCell(7) != null || row.getCell(8) != null) {
+	            
+	            for (int i = 1; i <= sheet.getLastRowNum(); i++) {
+	            	
+	            	CustomerRequestVO customervo = new CustomerRequestVO();
+	            	customervo.setRemarks(" ");
+	            	
+	            	if (sheet.getRow(i).getCell(0) != null || sheet.getRow(i).getCell(1) != null || sheet.getRow(i).getCell(2) != null || sheet.getRow(i).getCell(3) != null || sheet.getRow(i).getCell(4) != null || sheet.getRow(i).getCell(5) != null || sheet.getRow(i).getCell(6) != null || sheet.getRow(i).getCell(7) != null || sheet.getRow(i).getCell(8) != null) {
+	            		
+	            		customervo.setCommunityName(sheet.getRow(i).getCell(1).getStringCellValue().trim());
+	            		customervo.setBlockName(sheet.getRow(i).getCell(2).getStringCellValue().trim());
+			            customervo.setFirstName(sheet.getRow(i).getCell(3).getStringCellValue().trim());
+			            customervo.setLastName(sheet.getRow(i).getCell(4).getStringCellValue().trim());
+			            sheet.getRow(i).getCell(5).setCellType(Cell.CELL_TYPE_STRING);
+			            customervo.setHouseNumber(sheet.getRow(i).getCell(5).getStringCellValue().trim());
+			            sheet.getRow(i).getCell(6).setCellType(Cell.CELL_TYPE_STRING);
+			            customervo.setMobileNumber(sheet.getRow(i).getCell(6).getStringCellValue().trim());
+			            customervo.setEmail(sheet.getRow(i).getCell(7).getStringCellValue().trim());
+			            customervo.setCustomerUniqueID(sheet.getRow(i).getCell(8).getStringCellValue().trim());
+			            customervo.setCreatedByID(createdbyid);
+			            customervo.setLoggedInRoleID(roleid);
+			            customervo.setLoggedInUserID(id);
 	                    
 	                    pstmt = con.prepareStatement("SELECT c.CommunityID, b.BlockID FROM community AS c LEFT JOIN block AS b ON c.CommunityID = b.CommunityID WHERE c.CommunityName = ? and b.BlockName = ?");
-		                pstmt.setString(1, row.getCell(1).getStringCellValue());
-		                pstmt.setString(2, row.getCell(2).getStringCellValue());
+		                pstmt.setString(1, customervo.getCommunityName());
+		                pstmt.setString(2, customervo.getBlockName());
 		                ResultSet rs = pstmt.executeQuery();
 		                
 		                if(rs.next()) {
 		                	
-		                	CustomerRequestVO customervo = new CustomerRequestVO();
 			                customervo.setCommunityID(rs.getInt("CommunityID"));
 			                customervo.setBlockID(rs.getInt("BlockID"));
 			                
-			                customervo.setFirstName(null);
-			                customervo.setLastName(null);
-			                customervo.setHouseNumber(null);
-			                customervo.setMobileNumber(null);
-			                customervo.setEmail(null);
-			                customervo.setCustomerUniqueID(null);
-			                
-			                customervo.setCreatedByID(0);
-			                customervo.setLoggedInRoleID(0);
-			                customervo.setLoggedInUserID(null);
+		                } else {
+		                	
+		                	customervo.setCustomerID(i);
+	            			customervo.setRemarks(customervo.getRemarks() + " COMMUNITY OR BLOCK NOT FOUND;");
+	            			unRegisteredList.add(customervo);
+	            			register = false;
 		                }
-	                    
+			                
+			            	if (customervo.getHouseNumber().isEmpty()
+			        				|| customervo.getFirstName().isEmpty()
+			        				|| customervo.getLastName().isEmpty()
+			        				|| customervo.getEmail().isEmpty()
+			        				|| customervo.getMobileNumber().isEmpty()
+			        				|| customervo.getCustomerUniqueID().isEmpty()) {
+			            		
+			            		customervo.setCustomerID(i);
+			            		customervo.setRemarks(customervo.getRemarks() + " ALL FIELDS ARE MANDATORY;");
+			            		unRegisteredList.add(customervo);
+			            		register = false;
+			            		
+			        		} 
+			            	
+			            	if (communitySetupBO.checkName(customervo.getFirstName()) == true || communitySetupBO.checkName(customervo.getLastName()) == true) {
+			        			
+			        			customervo.setCustomerID(i);
+			        			customervo.setRemarks(customervo.getRemarks() + " NAME MUST BE ALPHANUMERIC ONLY;");
+			            		unRegisteredList.add(customervo);
+			            		register = false;
+			        			
+			        		} 
+			            	
+			            	if(checkcustomerName(customervo)) {
+			        			
+			        			customervo.setCustomerID(i);
+			        			customervo.setRemarks(customervo.getRemarks() + " " +customervo.getLastName().trim() + " "+ customervo.getFirstName().trim() +" - CUSTOMER NAME ALREADY EXISTS;");
+			            		unRegisteredList.add(customervo);
+			            		register = false;
+			        			
+			        		} 
+			            	
+			            	if(checkHouseNumber(customervo)) {
+			        			
+			        			customervo.setCustomerID(i);
+			        			customervo.setRemarks(customervo.getRemarks() + " HOUSE NUMBER IS ALREADY REGISTERED;");
+			            		unRegisteredList.add(customervo);
+			            		register = false;
+			        			
+			        		} 
+			            	
+			            	if (!communitySetupBO.checkMobileNo(customervo.getMobileNumber())) {
+			        			
+			        			customervo.setCustomerID(i);
+			        			customervo.setRemarks(customervo.getRemarks() + " MOBILE NUMBER CAN CONTAIN ONLY NUMERIC VALUES OF EXACTLY 10 DIGITS;");
+			            		unRegisteredList.add(customervo);
+			            		register = false;
+			        			
+			        		}
+			            	
+			            	if (!communitySetupBO.checkEmailID(customervo.getEmail())) {
+			        			
+			        			customervo.setCustomerID(i);
+			        			customervo.setRemarks(customervo.getRemarks() + " INVALID EMAIL ID;");
+			            		unRegisteredList.add(customervo);
+			            		register = false;
+			            		
+			        		}
+			            	
+			            	if(checkCustomerUniqueID(customervo.getCustomerUniqueID())) {
+			        			
+			        			customervo.setCustomerID(i);
+			        			customervo.setRemarks(customervo.getRemarks() + " " +customervo.getCustomerUniqueID() + " - CUSTOMERUNIQUEID IS ALREADY REGISTERED;");
+			            		unRegisteredList.add(customervo);
+			            		register = false;
+			        		}
+			                if(register) {
+			                	
+			                	if(checkCustomersRegistrationCount()) {
+			                		
+				            		for(int j = i; j<= sheet.getLastRowNum(); j++) {
+				            			customervo.setCustomerID(j);
+				            			customervo.setRemarks(customervo.getRemarks() + " YOU HAVE REACHED THE MAXIMUM ALLOWABLE CUSTOMER REGISTRATIONS");
+				            			unRegisteredList.add(customervo);
+				            		}
+				            		
+				        		} else {
+//				                	customervo.setRemarks(addcustomer(customervo).getMessage());
+				                	registeredList.add(customervo);
+				                	
+				        		}
+			                	
+			                }
+	                } else {
+	                	customervo.setCustomerID(i);
+            			customervo.setRemarks(customervo.getRemarks() + " ALL FIELDS ARE MANDATORY");
+            			unRegisteredList.add(customervo);
 	                }
-	                
 	            }
+	            
+	            if(unRegisteredList.size() > 0) {
+	            	responsevo = writeExcel(unRegisteredList);
+	            }
+	            if(registeredList.size() > 0) {
+	            responsevo.setRegisteredList(registeredList);
+	            }
+	            
 	 } catch (Exception e) {
          e.printStackTrace();
      }
 		
-		return null;
+		return responsevo;
+	}
+	
+	public ResponseVO writeExcel(List<CustomerRequestVO> customerList) {
+		
+		ResponseVO responsevo = new ResponseVO();
+		ByteArrayInputStream in = null;
+		
+		try {
+		
+		XSSFWorkbook workbook = new XSSFWorkbook();
+		XSSFSheet spreadsheet = null;
+		
+		spreadsheet = workbook.createSheet("List");		
+		ByteArrayOutputStream outByteStream = new ByteArrayOutputStream();
+		
+		XSSFRow header = spreadsheet.createRow(0);
+		
+		int columnCount = 0;
+		
+		Cell headercell0 = header.createCell(columnCount);
+		headercell0.setCellValue("S.No.");
+        
+        Cell headercell1 = header.createCell(++columnCount);
+        headercell1.setCellValue("Community Name");
+        
+        Cell headercell2 = header.createCell(++columnCount);
+        headercell2.setCellValue("Block Name");
+        
+        Cell headercell3 = header.createCell(++columnCount);
+        headercell3.setCellValue("First Name");
+        
+        Cell headercell4 = header.createCell(++columnCount);
+        headercell4.setCellValue("Last Name");
+        
+        Cell headercell5 = header.createCell(++columnCount);
+        headercell5.setCellValue("House Number");
+        
+        Cell headercell6 = header.createCell(++columnCount);
+        headercell6.setCellValue("Mobile Number");
+        
+        Cell headercell7 = header.createCell(++columnCount);
+        headercell7.setCellValue("Email");
+        
+        Cell headercell8 = header.createCell(++columnCount);
+        headercell8.setCellValue("CRN/CAN/CUI");
+        
+        Cell headercell9 = header.createCell(++columnCount);
+        headercell9.setCellValue("Remarks");
+        
+        
+            for(int i = 0; i < customerList.size(); i++) {
+            	
+            	XSSFRow data = spreadsheet.createRow(spreadsheet.getLastRowNum()+1);            	
+            	int dataColumnCount = 0;
+            	
+            	Cell cell0 = data.createCell(dataColumnCount);
+                cell0.setCellValue(i+1);
+            	
+            	Cell cell1 = data.createCell(++dataColumnCount);
+                cell1.setCellValue(customerList.get(i).getCommunityName());
+                
+                Cell cell2 = data.createCell(++dataColumnCount);
+                cell2.setCellValue(customerList.get(i).getBlockName());
+                
+                Cell cell3 = data.createCell(++dataColumnCount);
+                cell3.setCellValue(customerList.get(i).getFirstName());
+                
+                Cell cell4 = data.createCell(++dataColumnCount);
+                cell4.setCellValue(customerList.get(i).getLastName());
+                
+                Cell cell5 = data.createCell(++dataColumnCount);
+                cell5.setCellValue(customerList.get(i).getHouseNumber());
+                
+                Cell cell6 = data.createCell(++dataColumnCount);
+                cell6.setCellValue(customerList.get(i).getMobileNumber());
+                
+                Cell cell7 = data.createCell(++dataColumnCount);
+                cell7.setCellValue(customerList.get(i).getEmail());
+                
+                Cell cell8 = data.createCell(++dataColumnCount);
+                cell8.setCellValue(customerList.get(i).getCustomerUniqueID());
+                
+                Cell cell9 = data.createCell(++dataColumnCount);
+                cell9.setCellValue(customerList.get(i).getRemarks());
+            	
+            }
+        	
+		workbook.write(outByteStream);
+		in = new ByteArrayInputStream(outByteStream.toByteArray());
+		workbook.close();
+		
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        
+        responsevo.setResult("Success");
+		responsevo.setFileName("Customer_Registration_Failed_List.xlsx");
+		responsevo.setByteArrayInputStream(in);
+        
+		return responsevo;
+		
 	}
 	
 	public ResponseVO editcustomer(CustomerRequestVO customervo) throws SQLException {

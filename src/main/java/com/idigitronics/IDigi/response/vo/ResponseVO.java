@@ -5,6 +5,9 @@ package com.idigitronics.IDigi.response.vo;
 
 import java.io.ByteArrayInputStream;
 import java.util.HashMap;
+import java.util.List;
+
+import com.idigitronics.IDigi.request.vo.CustomerRequestVO;
 
 /**
  * @author VmL
@@ -43,6 +46,7 @@ public class ResponseVO {
 	private long transactionID;
 	private String tariff;
 	private String emergencyCredit;
+	private List<CustomerRequestVO> registeredList;
 	
 	public UserDetails getUserDetails() {
 		return userDetails;
@@ -223,6 +227,12 @@ public class ResponseVO {
 	}
 	public void setDropDownPrefixes(HashMap<Integer, String> dropDownPrefixes) {
 		this.dropDownPrefixes = dropDownPrefixes;
+	}
+	public List<CustomerRequestVO> getRegisteredList() {
+		return registeredList;
+	}
+	public void setRegisteredList(List<CustomerRequestVO> registeredList) {
+		this.registeredList = registeredList;
 	}
 	
 }

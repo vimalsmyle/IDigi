@@ -13,7 +13,9 @@ public class CustomerRequestVO {
 	
 	private long customerID;
 	private int communityID;
+	private String communityName;
 	private int blockID;
+	private String blockName; 
 	private String houseNumber;
 	private String firstName;
 	private String lastName;
@@ -24,6 +26,7 @@ public class CustomerRequestVO {
 	private int createdByID;
 	private int loggedInRoleID;
 	private String loggedInUserID;
+	private String remarks;
 	
 	public long getCustomerID() {
 		return customerID;
@@ -103,4 +106,23 @@ public class CustomerRequestVO {
 	public void setMeters(List<MeterRequestVO> meters) {
 		this.meters = meters;
 	}
+	public String getRemarks() {
+		return remarks;
+	}
+	public void setRemarks(String remarks) {
+		this.remarks = remarks;
+	}
+	public String getCommunityName() {
+		return communityName;
+	}
+	public void setCommunityName(String communityName) {
+		this.communityName = communityName;
+	}
+	public String getBlockName() {
+		return blockName;
+	}
+	public void setBlockName(String blockName) {
+		this.blockName = blockName;
+	}
+	
 }

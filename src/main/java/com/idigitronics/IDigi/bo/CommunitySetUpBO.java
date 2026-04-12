@@ -438,7 +438,7 @@ public class CommunitySetUpBO {
 
 	/* Validations */
 
-	private boolean checkName(String customerName) {
+	public boolean checkName(String customerName) {
 		// TODO Auto-generated method stub
 		boolean result = false;
 
@@ -450,19 +450,19 @@ public class CommunitySetUpBO {
 		return result;
 	}
 
-	private boolean checkMobileNo(String contactNumber) {
+	public boolean checkMobileNo(String contactNumber) {
 		// TODO Auto-generated method stub
 		boolean result = false;
-		Pattern pattern = Pattern.compile("[0-9-]\\d{10}");
+		Pattern pattern = Pattern.compile("[0-9]{10}");
 		Matcher matcher = pattern.matcher(contactNumber);
 		
-		if (!matcher.find()) {
+		if (matcher.matches()) {
 			result = true;
 		}
 		return result;
 	}
 
-	private boolean checkEmailID(String emailId) {
+	public boolean checkEmailID(String emailId) {
 		// TODO Auto-generated method stub
 
 		boolean result = false;

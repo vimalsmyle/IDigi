@@ -9,10 +9,14 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.SQLException;
 
+import javax.servlet.annotation.MultipartConfig;
+
 import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -48,6 +52,7 @@ import com.idigitronics.IDigi.response.vo.TariffResponseVO;
  * 
  */
 @Controller
+@MultipartConfig
 public class CommunitySetUpController {
 	
 	CommunitySetUpDAO communitysetupdao = new CommunitySetUpDAO();
@@ -341,19 +346,24 @@ public class CommunitySetUpController {
 		return responsevo;
 	}
 	
-	@RequestMapping(value = "/customer/exceladd/{roleid}/{id}/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
-	public @ResponseBody
-	ResponseVO addCustomerExcel(@RequestParam("file") MultipartFile file, @PathVariable("roleid") int roleid, @PathVariable("id") String id) throws ClassNotFoundException,
+	@RequestMapping(value = "/customer/exceladd/{roleid}/{createdbyid}/{id}", method = RequestMethod.POST, produces = "application/xlsx")
+	public ResponseEntity<InputStreamResource> addCustomerExcel(@RequestParam("file") MultipartFile file, @PathVariable("roleid") int roleid, @PathVariable("createdbyid") int createdbyid, @PathVariable("id") String id) throws ClassNotFoundException,
 			BusinessException, SQLException, EncryptedDocumentException, InvalidFormatException, IOException {
-		ResponseVO responsevo = new ResponseVO();
-		try {
-			responsevo = communitysetupdao.addCustomerExcel(file);
-		} catch (BusinessException e) {
-			responsevo.setResult("Failure");
-			responsevo.setMessage(e.getMessage());
-		}
-
-		return responsevo;
+		
+			ResponseVO responsevo = new ResponseVO();
+			responsevo = communitysetupdao.addCustomerExcel(file, roleid, createdbyid, id);
+			
+			return ResponseEntity.ok()
+			        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + responsevo.getFileName())
+			        .contentType(MediaType.parseMediaType("application/octet-stream"))
+			        .body(new InputStreamResource(responsevo.getByteArrayInputStream()));
+			
+//			File unregisteredFile = new File(responsevo.getLocation() + responsevo.getFileName());
+//		    InputStreamResource resource = new InputStreamResource(new FileInputStream(unregisteredFile));
+//			
+//			ResponseEntity<InputStreamResource> response = new ResponseEntity<InputStreamResource>(resource, HttpStatus.OK);
+//			
+//			return response;
 	}
 
 	@RequestMapping(value = "/customer/edit/{customerUniqueID}", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
