@@ -467,11 +467,12 @@ public class CommunitySetUpBO {
 
 		boolean result = false;
 
-		Pattern pattern = Pattern
-				.compile("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@ [A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$");
+		Pattern pattern = Pattern.compile("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@ [A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$");
+//		Pattern pattern = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\\\.[A-Z]{2,6}$");
+		
 		Matcher matcher = pattern.matcher(emailId);
 
-		if (!matcher.find()) {
+		if (matcher.matches()) {
 			result = true;
 		}
 

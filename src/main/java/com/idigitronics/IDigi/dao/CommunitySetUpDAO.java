@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
@@ -1263,24 +1264,27 @@ public class CommunitySetUpDAO {
 	            for (int i = 1; i <= sheet.getLastRowNum(); i++) {
 	            	
 	            	CustomerRequestVO customervo = new CustomerRequestVO();
+	            	customervo.setCommunityName(Objects.nonNull(sheet.getRow(i).getCell(1)) ? sheet.getRow(i).getCell(1).getStringCellValue().trim() : null);
+            		customervo.setBlockName(Objects.nonNull(sheet.getRow(i).getCell(2)) ? sheet.getRow(i).getCell(2).getStringCellValue().trim() : null);
+		            customervo.setFirstName(Objects.nonNull(sheet.getRow(i).getCell(3)) ? sheet.getRow(i).getCell(3).getStringCellValue().trim() : null);
+		            customervo.setLastName(Objects.nonNull(sheet.getRow(i).getCell(4)) ? sheet.getRow(i).getCell(4).getStringCellValue().trim() : null);
+		            if(Objects.nonNull(sheet.getRow(i).getCell(5))) {
+		            	sheet.getRow(i).getCell(5).setCellType(Cell.CELL_TYPE_STRING);		            	
+		            }
+		            customervo.setHouseNumber(Objects.nonNull(sheet.getRow(i).getCell(5)) ? sheet.getRow(i).getCell(5).getStringCellValue().trim() : null);
+		            if(Objects.nonNull(sheet.getRow(i).getCell(6))) {
+		            	sheet.getRow(i).getCell(6).setCellType(Cell.CELL_TYPE_STRING);		            	
+		            }
+		            customervo.setMobileNumber(Objects.nonNull(sheet.getRow(i).getCell(6)) ? sheet.getRow(i).getCell(6).getStringCellValue().trim() : null);
+		            customervo.setEmail(Objects.nonNull(sheet.getRow(i).getCell(7)) ? sheet.getRow(i).getCell(7).getStringCellValue().trim() : null);
+		            customervo.setCustomerUniqueID(Objects.nonNull(sheet.getRow(i).getCell(8)) ? sheet.getRow(i).getCell(8).getStringCellValue().trim() : null);
+		            customervo.setCreatedByID(createdbyid);
+		            customervo.setLoggedInRoleID(roleid);
+		            customervo.setLoggedInUserID(id);
 	            	customervo.setRemarks(" ");
 	            	
-	            	if (sheet.getRow(i).getCell(0) != null || sheet.getRow(i).getCell(1) != null || sheet.getRow(i).getCell(2) != null || sheet.getRow(i).getCell(3) != null || sheet.getRow(i).getCell(4) != null || sheet.getRow(i).getCell(5) != null || sheet.getRow(i).getCell(6) != null || sheet.getRow(i).getCell(7) != null || sheet.getRow(i).getCell(8) != null) {
+	            	if (Objects.nonNull(sheet.getRow(i).getCell(0)) && Objects.nonNull(sheet.getRow(i).getCell(1)) && Objects.nonNull(sheet.getRow(i).getCell(2)) && Objects.nonNull(sheet.getRow(i).getCell(3)) && Objects.nonNull(sheet.getRow(i).getCell(4)) && Objects.nonNull(sheet.getRow(i).getCell(5)) && Objects.nonNull(sheet.getRow(i).getCell(6)) && Objects.nonNull(sheet.getRow(i).getCell(7)) && Objects.nonNull(sheet.getRow(i).getCell(8))) {
 	            		
-	            		customervo.setCommunityName(sheet.getRow(i).getCell(1).getStringCellValue().trim());
-	            		customervo.setBlockName(sheet.getRow(i).getCell(2).getStringCellValue().trim());
-			            customervo.setFirstName(sheet.getRow(i).getCell(3).getStringCellValue().trim());
-			            customervo.setLastName(sheet.getRow(i).getCell(4).getStringCellValue().trim());
-			            sheet.getRow(i).getCell(5).setCellType(Cell.CELL_TYPE_STRING);
-			            customervo.setHouseNumber(sheet.getRow(i).getCell(5).getStringCellValue().trim());
-			            sheet.getRow(i).getCell(6).setCellType(Cell.CELL_TYPE_STRING);
-			            customervo.setMobileNumber(sheet.getRow(i).getCell(6).getStringCellValue().trim());
-			            customervo.setEmail(sheet.getRow(i).getCell(7).getStringCellValue().trim());
-			            customervo.setCustomerUniqueID(sheet.getRow(i).getCell(8).getStringCellValue().trim());
-			            customervo.setCreatedByID(createdbyid);
-			            customervo.setLoggedInRoleID(roleid);
-			            customervo.setLoggedInUserID(id);
-	                    
 	                    pstmt = con.prepareStatement("SELECT c.CommunityID, b.BlockID FROM community AS c LEFT JOIN block AS b ON c.CommunityID = b.CommunityID WHERE c.CommunityName = ? and b.BlockName = ?");
 		                pstmt.setString(1, customervo.getCommunityName());
 		                pstmt.setString(2, customervo.getBlockName());
@@ -1384,7 +1388,7 @@ public class CommunitySetUpDAO {
 			                }
 	                } else {
 	                	customervo.setCustomerID(i);
-            			customervo.setRemarks(customervo.getRemarks() + " ALL FIELDS ARE MANDATORY");
+	                	customervo.setRemarks(customervo.getRemarks() + " " + (customervo.getCommunityName() == null ? "COMMUNITY NAME" : customervo.getBlockName() == null ? "BLOCK NAME" : customervo.getHouseNumber() == null ? "HOUSE NUMBER" : customervo.getFirstName() == null ? "FIRST NAME" : customervo.getLastName() == null ? "LAST NAME" : customervo.getMobileNumber() == null ? "MOBILE NUMBER" : customervo.getEmail() == null ? "EMAIL ID" : customervo.getCustomerUniqueID() == null ? "CRN/CAN/UAN" : "") + " CANNOT BE EMPTY; ");
             			unRegisteredList.add(customervo);
 	                }
 	            }
