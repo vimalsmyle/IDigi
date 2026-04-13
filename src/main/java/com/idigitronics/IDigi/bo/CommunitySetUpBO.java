@@ -264,7 +264,7 @@ public class CommunitySetUpBO {
 //			throw new BusinessException("NO METERS ASSIGNED TO CUSTOMER");
 //		}
 
-		if (checkName(customervo.getFirstName()) == true || checkName(customervo.getLastName()) == true) {
+		if (checkName(customervo.getFirstName()) || checkName(customervo.getLastName())) {
 			throw new BusinessException("NAME MUST BE ALPHANUMERIC ONLY");
 		}
 
@@ -329,11 +329,11 @@ public class CommunitySetUpBO {
 			throw new BusinessException("ALL FIELDS ARE MANDATORY");
 		}
 
-		if (checkName(customervo.getFirstName()) == true) {
+		if (checkName(customervo.getFirstName())) {
 			throw new BusinessException("NAME CAN CONTAIN ONLY ALPHABETS");
 		}
 		
-		if (checkName(customervo.getLastName()) == true) {
+		if (checkName(customervo.getLastName())) {
 			throw new BusinessException("NAME CAN CONTAIN ONLY ALPHABETS");
 		}
 
@@ -442,9 +442,11 @@ public class CommunitySetUpBO {
 		// TODO Auto-generated method stub
 		boolean result = false;
 
-		Pattern pattern = Pattern.compile("[A-Za-z0-9]");
+		Pattern pattern = Pattern.compile("[^a-z0-9 ]");
+//		Pattern pattern = Pattern.compile("^(?=.*[a-zA-Z])(?=.*[0-9])[A-Za-z0-9]+$");
+		
 		Matcher matcher = pattern.matcher(customerName);
-		if (!matcher.find()) {
+		if (matcher.find()) {
 			result = true;
 		}
 		return result;
@@ -466,10 +468,11 @@ public class CommunitySetUpBO {
 		// TODO Auto-generated method stub
 
 		boolean result = false;
-
-		Pattern pattern = Pattern.compile("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@ [A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$");
-//		Pattern pattern = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\\\.[A-Z]{2,6}$");
 		
+//		Pattern pattern = Pattern.compile("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@ [A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$");
+//		Pattern pattern = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\\\.[A-Z]{2,6}$");
+		Pattern pattern = Pattern.compile("^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@" 
+		        + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$");
 		Matcher matcher = pattern.matcher(emailId);
 
 		if (matcher.matches()) {

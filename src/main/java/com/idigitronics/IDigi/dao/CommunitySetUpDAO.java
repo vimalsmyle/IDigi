@@ -1252,7 +1252,6 @@ public class CommunitySetUpDAO {
 		List<CustomerRequestVO> unRegisteredList = new ArrayList<CustomerRequestVO>();
 		List<CustomerRequestVO> registeredList = new ArrayList<CustomerRequestVO>();
 		CommunitySetUpBO communitySetupBO = new CommunitySetUpBO();
-		boolean register = true;
 		
 		 try (InputStream is = file.getInputStream();
 	             Workbook workbook = WorkbookFactory.create(is)) { // Auto-detects XLS or XLSX
@@ -1262,6 +1261,8 @@ public class CommunitySetUpDAO {
 	            Sheet sheet = workbook.getSheetAt(0); // Get the first sheet
 	            
 	            for (int i = 1; i <= sheet.getLastRowNum(); i++) {
+	            	
+	            	boolean register = true;
 	            	
 	            	CustomerRequestVO customervo = new CustomerRequestVO();
 	            	customervo.setCommunityName(Objects.nonNull(sheet.getRow(i).getCell(1)) ? sheet.getRow(i).getCell(1).getStringCellValue().trim() : null);
@@ -1282,6 +1283,9 @@ public class CommunitySetUpDAO {
 		            customervo.setLoggedInRoleID(roleid);
 		            customervo.setLoggedInUserID(id);
 	            	customervo.setRemarks(" ");
+	            	customervo.setCustomerID(i);
+	            	
+	            	System.out.println("i==" + i);
 	            	
 	            	if (Objects.nonNull(sheet.getRow(i).getCell(0)) && Objects.nonNull(sheet.getRow(i).getCell(1)) && Objects.nonNull(sheet.getRow(i).getCell(2)) && Objects.nonNull(sheet.getRow(i).getCell(3)) && Objects.nonNull(sheet.getRow(i).getCell(4)) && Objects.nonNull(sheet.getRow(i).getCell(5)) && Objects.nonNull(sheet.getRow(i).getCell(6)) && Objects.nonNull(sheet.getRow(i).getCell(7)) && Objects.nonNull(sheet.getRow(i).getCell(8))) {
 	            		
@@ -1297,9 +1301,7 @@ public class CommunitySetUpDAO {
 			                
 		                } else {
 		                	
-		                	customervo.setCustomerID(i);
 	            			customervo.setRemarks(customervo.getRemarks() + " COMMUNITY OR BLOCK NOT FOUND;");
-	            			unRegisteredList.add(customervo);
 	            			register = false;
 		                }
 			                
@@ -1310,84 +1312,70 @@ public class CommunitySetUpDAO {
 			        				|| customervo.getMobileNumber().isEmpty()
 			        				|| customervo.getCustomerUniqueID().isEmpty()) {
 			            		
-			            		customervo.setCustomerID(i);
 			            		customervo.setRemarks(customervo.getRemarks() + " ALL FIELDS ARE MANDATORY;");
-			            		unRegisteredList.add(customervo);
 			            		register = false;
 			            		
 			        		} 
 			            	
-			            	if (communitySetupBO.checkName(customervo.getFirstName()) == true || communitySetupBO.checkName(customervo.getLastName()) == true) {
+			            	if (communitySetupBO.checkName(customervo.getFirstName()) || communitySetupBO.checkName(customervo.getLastName())) {
 			        			
-			        			customervo.setCustomerID(i);
 			        			customervo.setRemarks(customervo.getRemarks() + " NAME MUST BE ALPHANUMERIC ONLY;");
-			            		unRegisteredList.add(customervo);
 			            		register = false;
 			        			
 			        		} 
 			            	
 			            	if(checkcustomerName(customervo)) {
 			        			
-			        			customervo.setCustomerID(i);
 			        			customervo.setRemarks(customervo.getRemarks() + " " +customervo.getLastName().trim() + " "+ customervo.getFirstName().trim() +" - CUSTOMER NAME ALREADY EXISTS;");
-			            		unRegisteredList.add(customervo);
 			            		register = false;
 			        			
 			        		} 
 			            	
 			            	if(checkHouseNumber(customervo)) {
 			        			
-			        			customervo.setCustomerID(i);
 			        			customervo.setRemarks(customervo.getRemarks() + " HOUSE NUMBER IS ALREADY REGISTERED;");
-			            		unRegisteredList.add(customervo);
 			            		register = false;
 			        			
 			        		} 
 			            	
 			            	if (!communitySetupBO.checkMobileNo(customervo.getMobileNumber())) {
 			        			
-			        			customervo.setCustomerID(i);
 			        			customervo.setRemarks(customervo.getRemarks() + " MOBILE NUMBER CAN CONTAIN ONLY NUMERIC VALUES OF EXACTLY 10 DIGITS;");
-			            		unRegisteredList.add(customervo);
 			            		register = false;
 			        			
 			        		}
 			            	
 			            	if (!communitySetupBO.checkEmailID(customervo.getEmail())) {
 			        			
-			        			customervo.setCustomerID(i);
 			        			customervo.setRemarks(customervo.getRemarks() + " INVALID EMAIL ID;");
-			            		unRegisteredList.add(customervo);
 			            		register = false;
 			            		
 			        		}
 			            	
 			            	if(checkCustomerUniqueID(customervo.getCustomerUniqueID())) {
 			        			
-			        			customervo.setCustomerID(i);
 			        			customervo.setRemarks(customervo.getRemarks() + " " +customervo.getCustomerUniqueID() + " - CUSTOMERUNIQUEID IS ALREADY REGISTERED;");
-			            		unRegisteredList.add(customervo);
 			            		register = false;
 			        		}
+			            	
 			                if(register) {
 			                	
 			                	if(checkCustomersRegistrationCount()) {
 			                		
-				            		for(int j = i; j<= sheet.getLastRowNum(); j++) {
-				            			customervo.setCustomerID(j);
 				            			customervo.setRemarks(customervo.getRemarks() + " YOU HAVE REACHED THE MAXIMUM ALLOWABLE CUSTOMER REGISTRATIONS");
 				            			unRegisteredList.add(customervo);
-				            		}
 				            		
 				        		} else {
-//				                	customervo.setRemarks(addcustomer(customervo).getMessage());
+				        			customervo.setMeters(new ArrayList<MeterRequestVO>());
+				                	customervo.setRemarks(addcustomer(customervo).getMessage());
 				                	registeredList.add(customervo);
-				                	
 				        		}
+			                	
+			                } else {
+			                	unRegisteredList.add(customervo);
 			                	
 			                }
 	                } else {
-	                	customervo.setCustomerID(i);
 	                	customervo.setRemarks(customervo.getRemarks() + " " + (customervo.getCommunityName() == null ? "COMMUNITY NAME" : customervo.getBlockName() == null ? "BLOCK NAME" : customervo.getHouseNumber() == null ? "HOUSE NUMBER" : customervo.getFirstName() == null ? "FIRST NAME" : customervo.getLastName() == null ? "LAST NAME" : customervo.getMobileNumber() == null ? "MOBILE NUMBER" : customervo.getEmail() == null ? "EMAIL ID" : customervo.getCustomerUniqueID() == null ? "CRN/CAN/UAN" : "") + " CANNOT BE EMPTY; ");
             			unRegisteredList.add(customervo);
 	                }
