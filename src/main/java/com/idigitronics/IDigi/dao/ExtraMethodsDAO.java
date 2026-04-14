@@ -6,7 +6,11 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.URI;
 import java.net.URL;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -44,6 +48,7 @@ import org.springframework.web.client.RestTemplate;
 import com.google.gson.Gson;
 import com.idigitronics.IDigi.constants.DataBaseConstants;
 import com.idigitronics.IDigi.constants.ExtraConstants;
+import com.idigitronics.IDigi.request.vo.ElMeasureRequestVO;
 import com.idigitronics.IDigi.request.vo.MailRequestVO;
 import com.idigitronics.IDigi.request.vo.RazorPayOrderVO;
 import com.idigitronics.IDigi.request.vo.RazorpayRequestVO;
@@ -1597,4 +1602,20 @@ public void sensordatabillgeneration() throws SQLException {
 		}
 		
 	}*/
+
+public int postToElmeasure(ElMeasureRequestVO elMeasureRequestVO) throws IOException, InterruptedException {
+
+	String data = gson.toJson(elMeasureRequestVO, ElMeasureRequestVO.class);
+
+	HttpClient client = HttpClient.newHttpClient();
+
+	HttpRequest request = HttpRequest.newBuilder().uri(URI.create("http://iot.theiox.com/appv2/update"))
+			.header("Content-Type", "application/json")
+			.header("Access Token", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MTA0OSwidXNlcl9pZCI6InVzZXJfMTc0MzgiLCJzaXRlX2lkIjoiaW5kdXN0cnlfNjkwIiwiY2xpZW50X2lkIjoiY2xpZW50XzM3NyIsImV4cCI6MjY0MDA3MTY3Nn0.ferrhelPYAlFg8UgFppk3K81G1WrPdPw64Rlzm3MFrk")
+			.POST(HttpRequest.BodyPublishers.ofString(data)).build();
+
+	HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+	return response.statusCode();
+}
 }
