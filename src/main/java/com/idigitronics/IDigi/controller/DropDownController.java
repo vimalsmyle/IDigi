@@ -3,6 +3,7 @@
  */
 package com.idigitronics.IDigi.controller;
 
+import java.io.IOException;
 import java.sql.SQLException;
 
 import org.springframework.stereotype.Controller;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.idigitronics.IDigi.dao.DropDownDAO;
 import com.idigitronics.IDigi.dao.ExtraMethodsDAO;
+import com.idigitronics.IDigi.request.vo.ElMeasureRequestVO;
 import com.idigitronics.IDigi.request.vo.MailRequestVO;
 import com.idigitronics.IDigi.response.vo.ResponseVO;
 
@@ -225,6 +227,25 @@ public class DropDownController {
 		mailRequestVO.setSubject("test");
 		mailRequestVO.setMessage("testing email");
 		extraMethodsDAO.sendmail(mailRequestVO);
+
+		return responsevo;
+	}
+	
+	@RequestMapping(value = "/elmeasure",method = RequestMethod.GET, produces="application/json")
+	public @ResponseBody ResponseVO testElMeasure() throws SQLException, IOException, InterruptedException {
+		
+		ResponseVO responsevo = new ResponseVO();
+		
+		ExtraMethodsDAO extraMethodsDAO = new ExtraMethodsDAO();
+		ElMeasureRequestVO elMeasureRequestVO = new ElMeasureRequestVO();
+		
+		elMeasureRequestVO.setUtcDateTime("2026-04-15T08:45:25.412Z");
+		elMeasureRequestVO.setTagId("tag_3637");
+		elMeasureRequestVO.setTagValue(140);
+		elMeasureRequestVO.setDeviceInstanceId("device_instance_24794_da:95:22:62:9d:1c");
+		int responseCode = extraMethodsDAO.postToElmeasure(elMeasureRequestVO);
+		
+		responsevo.setResult(responseCode == 200 ? "success" : "Failure");
 
 		return responsevo;
 	}

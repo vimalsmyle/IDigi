@@ -1611,10 +1611,12 @@ public int postToElmeasure(ElMeasureRequestVO elMeasureRequestVO) throws IOExcep
 
 	HttpRequest request = HttpRequest.newBuilder().uri(URI.create("http://iot.theiox.com/appv2/update"))
 			.header("Content-Type", "application/json")
-			.header("Access Token", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MTA0OSwidXNlcl9pZCI6InVzZXJfMTc0MzgiLCJzaXRlX2lkIjoiaW5kdXN0cnlfNjkwIiwiY2xpZW50X2lkIjoiY2xpZW50XzM3NyIsImV4cCI6MjY0MDA3MTY3Nn0.ferrhelPYAlFg8UgFppk3K81G1WrPdPw64Rlzm3MFrk")
+			.header("Access-Token", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MTA0OSwidXNlcl9pZCI6InVzZXJfMTc0MzgiLCJzaXRlX2lkIjoiaW5kdXN0cnlfNjkwIiwiY2xpZW50X2lkIjoiY2xpZW50XzM3NyIsImV4cCI6MjY0MDA3MTY3Nn0.ferrhelPYAlFg8UgFppk3K81G1WrPdPw64Rlzm3MFrk")
 			.POST(HttpRequest.BodyPublishers.ofString(data)).build();
 
 	HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+	
+	System.out.println("response:-" + response.toString());
 
 	return response.statusCode();
 }
