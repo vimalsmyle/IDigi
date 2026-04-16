@@ -243,10 +243,8 @@ public class DropDownController {
 		elMeasureRequestVO.setTagId("tag_3637");
 		elMeasureRequestVO.setTagValue(140);
 		elMeasureRequestVO.setDeviceInstanceId("device_instance_24794_da:95:22:62:9d:1c");
-		int responseCode = extraMethodsDAO.postToElmeasure(elMeasureRequestVO);
+		responsevo = extraMethodsDAO.postToElmeasure(elMeasureRequestVO);
 		
-		responsevo.setResult(responseCode == 200 ? "success" : "Failure");
-
 		return responsevo;
 	}
 	

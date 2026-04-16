@@ -55,6 +55,7 @@ import com.idigitronics.IDigi.request.vo.RazorpayRequestVO;
 import com.idigitronics.IDigi.request.vo.RestCallVO;
 import com.idigitronics.IDigi.request.vo.SMSRequestVO;
 import com.idigitronics.IDigi.response.vo.IndividualBillingResponseVO;
+import com.idigitronics.IDigi.response.vo.ResponseVO;
 import com.idigitronics.IDigi.response.vo.FromEmailDetails;
 import com.itextpdf.io.font.FontConstants;
 import com.itextpdf.io.image.ImageDataFactory;
@@ -1603,9 +1604,39 @@ public void sensordatabillgeneration() throws SQLException {
 		
 	}*/
 
-public int postToElmeasure(ElMeasureRequestVO elMeasureRequestVO) throws IOException, InterruptedException {
+@Scheduled(cron="30 22 * * *")
+public void postDataToElMeasure() throws SQLException {
+	
+	Connection con = null;
+	PreparedStatement pstmt = null;
+	ResultSet rs = null;
+	
+	try {
+		con = getConnection();
+		
+		pstmt = con.prepareStatement("SELECT * FROM customermeterdetails");
+		rs = pstmt.executeQuery();
+		
+		if(rs.next()) {
+
+		}
+		
+	} catch (Exception e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	finally {
+		pstmt.close();
+		rs.close();
+		con.close();
+	}
+	
+}
+
+public ResponseVO postToElmeasure(ElMeasureRequestVO elMeasureRequestVO) throws IOException, InterruptedException {
 
 	String data = gson.toJson(elMeasureRequestVO, ElMeasureRequestVO.class);
+	ResponseVO responseVO = new ResponseVO();
 
 	HttpClient client = HttpClient.newHttpClient();
 
@@ -1617,7 +1648,10 @@ public int postToElmeasure(ElMeasureRequestVO elMeasureRequestVO) throws IOExcep
 	HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 	
 	System.out.println("response:-" + response.toString());
+	
+	responseVO.setResult(response.statusCode() == 200 ? "success" : "Failure");
+	responseVO.setMessage(response.body().toString());
 
-	return response.statusCode();
+	return responseVO;
 }
 }
