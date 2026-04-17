@@ -2466,22 +2466,28 @@ public class CommunitySetUpDAO {
 		try {
 			con = getConnection();
 			prefixList = new LinkedList<PrefixResponseVO>();
-			pstmt = con.prepareStatement("SELECT c.CommunityName, b.BlockName, pp.PrefixID, pp.PrefixName, pp.MIUID, pp.MeterType, ms.MeterSize, pp.PayType, t.Tariff, t.TariffName, g.GatewayName, pp.ThresholdMaximum, pp.ThresholdMinimum, pp.ModifiedDate "
+			pstmt = con.prepareStatement("SELECT pp.CommunityID, c.CommunityName, pp.BlockID, b.BlockName, pp.PrefixID, pp.PrefixName, pp.MIUID, pp.MeterType, pp.MeterSizeID, ms.MeterSize, pp.PayType, pp.TariffID, t.Tariff, t.TariffName, pp.GatewayID, g.GatewayName, pp.ThresholdMaximum, pp.ThresholdMinimum, pp.ModifiedDate "
 					+ "FROM prefixparams AS pp LEFT JOIN community AS c ON pp.CommunityID = c.CommunityID LEFT JOIN block AS b ON b.BlockID = pp.BlockID LEFT JOIN metersize AS ms ON ms.MeterSizeID = pp.MeterSizeID LEFT JOIN tariff AS t ON  t.TariffID = pp.TariffID LEFT JOIN gateway AS g on g.GatewayID = pp.GatewayID "
 					+ "ORDER BY pp.PrefixID DESC");
 			rs = pstmt.executeQuery();
 
 			while (rs.next()) {
 				prefixResponseVO = new PrefixResponseVO();
+				prefixResponseVO.setCommunityID(rs.getInt("CommunityID"));
 				prefixResponseVO.setCommunityName(rs.getString("CommunityName"));
+				prefixResponseVO.setBlockID(rs.getInt("BlockID"));
 				prefixResponseVO.setBlockName(rs.getString("BlockName"));
 				prefixResponseVO.setPrefixID(rs.getInt("PrefixID"));
 				prefixResponseVO.setPrefixName(rs.getString("PrefixName"));
 				prefixResponseVO.setMiuID(rs.getString("MIUID"));
 				prefixResponseVO.setMeterType(rs.getString("MeterType"));
+				prefixResponseVO.setMeterSizeID(rs.getInt("MeterSizeID"));
 				prefixResponseVO.setMeterSize(rs.getInt("MeterSize"));
 				prefixResponseVO.setPayType(rs.getString("PayType"));
+				prefixResponseVO.setTariffID(rs.getInt("TariffID"));
+				prefixResponseVO.setTariff(rs.getString("Tariff"));
 				prefixResponseVO.setTariffName(rs.getString("TariffName"));
+				prefixResponseVO.setGatewayID(rs.getInt("GatewayID"));
 				prefixResponseVO.setGatewayName(rs.getString("GatewayName"));
 				prefixResponseVO.setThresholdMaximum(rs.getFloat("ThresholdMaximum"));
 				prefixResponseVO.setThresholdMinimum(rs.getFloat("ThresholdMinimum"));

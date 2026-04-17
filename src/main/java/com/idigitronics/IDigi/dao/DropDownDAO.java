@@ -571,6 +571,7 @@ public class DropDownDAO {
 				prefixResponseVO.setMeterSize(rs.getInt("MeterSize"));
 				prefixResponseVO.setPayType(rs.getString("PayType"));
 				prefixResponseVO.setTariffID(rs.getInt("TariffID"));
+				prefixResponseVO.setTariff(rs.getString("Tariff"));
 				prefixResponseVO.setTariffName(rs.getString("TariffName"));
 				prefixResponseVO.setGatewayID(rs.getInt("GatewayID"));
 				prefixResponseVO.setGatewayName(rs.getString("GatewayName"));
