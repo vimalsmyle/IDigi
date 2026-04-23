@@ -16,7 +16,7 @@ $("#uploadBtn").click(function () {
     formData.append("file", fileInput.files[0]);
 
     $.ajax({
-        url: "/upload",   // your backend API
+        url: "/customer/exceladd/"+sessionStorage.getItem("roleID")+"/"+sessionStorage.getItem("createdByID")+"/"+sessionStorage.getItem("userID"),   // your backend API
         type: "POST",
         data: formData,
         processData: false,   // IMPORTANT

@@ -19,7 +19,7 @@
 	
 	<task:annotation-driven />
 	
-	 <bean id="individualbillgeneration" class="com.idigitronics.IDigi.dao.ExtraMethodsDAO"> </bean>
+<!--	 <bean id="individualbillgeneration" class="com.idigitronics.IDigi.dao.ExtraMethodsDAO"> </bean> -->
 	 <bean class="org.springframework.web.multipart.commons.CommonsMultipartResolver" id="multipartResolver"/>
 	 	<!-- <property name="targetObject" ref="ExtraMethodsDAO" />
   		<property name="targetMethod" value="individualbillgeneration" />   -->
