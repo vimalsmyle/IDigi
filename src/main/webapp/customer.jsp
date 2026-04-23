@@ -61,6 +61,7 @@
 														<div id="status">&nbsp;</div>
 													</div>
 						<%if(!user_id.equalsIgnoreCase("2")) {%>
+							
 							<div class="col-md-4">
 								<div class="form-group has-feedback has-success bmd-form-group is-filled">
 									<label class="bmd-label-floating select-label">Community Name<span class="impp"><sup>*</sup></span></label> 

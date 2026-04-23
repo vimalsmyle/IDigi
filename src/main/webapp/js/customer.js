@@ -2,9 +2,29 @@
  * 
  */
 $(document).ready(function() {
+	$("#addMeter").prop("disabled", true);
 
+	    
+	    $("#selectcommunityName, #selectBlockBasedonCommunity").on("change", function () {
+	        toggleAddMeterButton();
+	    });
 	
-	
+		function toggleAddMeterButton() {
+
+		    var communityID = $("#selectcommunityName").val();
+		    var blockID = $("#selectBlockBasedonCommunity").val();
+
+		    // Check invalid values
+		    var isInvalidCommunity = !communityID || communityID == "-1";
+		    var isInvalidBlock = !blockID || blockID == "-1";
+
+		    if (isInvalidCommunity || isInvalidBlock) {
+		        $("#addMeter").prop("disabled", true);
+				$("#addMeterList").hide();
+		    } else {
+		        $("#addMeter").prop("disabled", false);
+		    }
+		}
 	
 	$.getJSON("./customer/"+sessionStorage.getItem("roleID")+"/"+sessionStorage.getItem("ID")+"/-1", function(data) {
 	$.each(data.data, function(i, item) {
@@ -68,6 +88,13 @@ $(document).ready(function() {
 				$.each(data.dropDownGateways, function(key, value) {
 					OptionsGatewayEdit = OptionsGatewayEdit + "<option value='" + key + "'>" + value
 							+ "</option>";
+							
+					
+							
+							
+							
+							
+							
 					
 					
 					/*$.getJSON("./metersizes/Gas", function(data) {
@@ -543,7 +570,15 @@ $("#addMeter")
 			}
 			
 			
-			$("#template").append("<div class=row> " +
+			$("#template").append("<div class=row id=addMeterList> " +
+										"<div class=col-md-4>" +
+													"<div class='group form-group has-feedback has-success bmd-form-group is-filled'>"
+													+"<label class=bmd-label-floating>Prefix<span class=impp><sup>*</sup></span></label> " +
+													"<select "+
+													"class='form-control form-control-sm' id=prefixList-"+rowCount+" name=prefixListName["+rowCount+"]>"+
+													 
+													"</select>"
+													+"</div></div>"+
 									"<div class=col-md-4>" +
 									"<div class='group form-group'>"
 													+"<label class=bmd-label-floating>MIU ID<span class=impp><sup>*</sup></span></label> <input "
@@ -792,7 +827,11 @@ $("#addMeter")
 					});
 					$('#gatewayIDAdd-'+rowCount).append(Options);
 				});
-			 
+				var communityID = $("#selectcommunityName").val();
+				var blockID = $("#selectBlockBasedonCommunity").val();
+
+				
+				loadPrefixDropdown(rowCount, communityID, blockID);
 
 		});
 
@@ -1630,6 +1669,88 @@ $.fn.removeMeter = function(removeValue) {
 	$("#rowCount").val(rowCount);
 };
 
-	
+function loadPrefixDropdown(rowCount, communityID, blockID, selectedId = null) {
 
+    var url = "./prefixes/" + communityID + "/" + blockID;
+
+    $.getJSON(url, function(data) {
+
+        let options = "<option value=''>Select Prefix</option>";
+
+        $.each(data.dropDownPrefixes, function(key, value) {
+            options += `<option value="${key}">${value}</option>`;
+        });
+
+        $("#prefixList-" + rowCount).html(options);
+
+        // Prefill (Edit case)
+        if (selectedId) {
+            $("#prefixList-" + rowCount).val(selectedId).trigger("change");
+        }
+    });
+}
+	
+$(document).on("change", "[id^=prefixList-]", function () {
+
+    var prefixID = $(this).val();
+
+    if (prefixID) {
+        loadPrefixDetails(prefixID, $(this));
+    }else {
+		clearRow($(this));   
+	}
+
+});
+
+function loadPrefixDetails(prefixID, currentDropdown) {
+
+    // Extract rowCount from ID
+    var rowCount = currentDropdown.attr("id").split("-")[1];
+
+    var url = "./prefixdetails/" + prefixID;
+
+    $.getJSON(url, function (data) {
+
+		var d = data.prefixDetails;
+
+		$("#miuIDAdd-" + rowCount).val(d.miuID);
+
+		$("#selectMeterType-" + rowCount).val(d.meterType).trigger("change");
+
+		setTimeout(function () {
+		    $("#meterSizeAdd-" + rowCount).val(d.meterSizeID).trigger("change");
+			$("#selectTariffName-" + rowCount).val(String(d.tariffID)).trigger("change");
+			$("#gatewayIDAdd-" + rowCount).val(d.gatewayID).trigger("change");
+		}, 300);
+
+		$("#payTypeAdd-" + rowCount).val(d.payType).trigger("change");
+
+		$("#thresholdMaximumAdd-" + rowCount).val(d.thresholdMaximum);
+		$("#thresholdMinimumAdd-" + rowCount).val(d.thresholdMinimum);
+
+    });
+}
+function clearRow(currentDropdown) {
+
+    var rowCount = currentDropdown.attr("id").split("-")[1];
+
+    // Clear text fields
+    $("#miuIDAdd-" + rowCount).val("");
+    $("#meterSerialNumberAdd-" + rowCount).val("");
+
+    // Reset selects
+    $("#selectMeterType-" + rowCount).val("").trigger("change");
+    $("#meterSizeAdd-" + rowCount).html("<option value=''>Select</option>");
+
+    $("#payTypeAdd-" + rowCount).val("").trigger("change");
+
+    $("#selectTariffName-" + rowCount).val("").trigger("change");
+    $("#gatewayIDAdd-" + rowCount).val("").trigger("change");
+
+    // Clear numbers
+    $("#thresholdMaximumAdd-" + rowCount).val("");
+    $("#thresholdMinimumAdd-" + rowCount).val("");
+
+    $("#defaultReadingAdd-" + rowCount).val("");
+}
 

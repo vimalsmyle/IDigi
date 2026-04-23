@@ -60,7 +60,12 @@
 				
                <!--   <a href="#" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-clock-o"></i> <span class="textData">Meter Commands</span></a>
                 
- -->                 <%}%>
+ -->               
+               
+               <a href="upload.jsp" class="list-group-item" data-parent="#menu3">
+             	 <i class="fa fa-cogs"></i>
+             	 <span class="textData">Upload file </span></a>
+   <%}%>
                 
                 <!-- <a href="configurationStatus.jsp" class="list-group-item d-inline-block collapsed" data-parent="#sidebar"><i class="fa fa-th"></i> <span class="textData">Meter Commands Status</span></a>
                  -->

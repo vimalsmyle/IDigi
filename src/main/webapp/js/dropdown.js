@@ -45,9 +45,12 @@ $(function() {
 					+ "</option>";
 		});
 		$('#selectcommunityName').append(Options);
+		$('#selectcommunityNameEdit').append(Options);
 		$('#filterselectcommunityName').append(Options);
 		// $("#selectcommunityName").material_select();
 	});
+	
+	
 	
 	
 	$.getJSON("./tariffs", function(data) {
@@ -83,6 +86,11 @@ function showBlockbyCommunity(communityId){
 
 	$("#filterselectBlockBasedonCommunity").append("<option>" + "Select Block" + "</option>");
 	
+	$("#selectBlockBasedonCommunityEdit").find('option').remove();
+
+		$("#selectBlockBasedonCommunityEdit").append("<option>" + "Select Block" + "</option>");
+		
+	
 	$("#selectHouseBasedonBlock").find('option').remove();
 
 	$("#selectHouseBasedonBlock").append("<option>" + "Select CRN" + "</option>");
@@ -100,6 +108,8 @@ function showBlockbyCommunity(communityId){
 		});
 		$('#selectBlockBasedonCommunity').append(Options);
 		$('#filterselectBlockBasedonCommunity').append(Options);
+		$('#selectBlockBasedonCommunityEdit').append(Options);
+		
 		// $("#filterselectBlockBasedonCommunity").material_select();
 	});
 }
