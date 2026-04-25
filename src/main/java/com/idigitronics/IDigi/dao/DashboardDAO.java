@@ -30,6 +30,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.idigitronics.IDigi.constants.DataBaseConstants;
 import com.idigitronics.IDigi.request.vo.DataRequestVO;
+import com.idigitronics.IDigi.request.vo.EnergyRequestVO;
 import com.idigitronics.IDigi.request.vo.FilterVO;
 import com.idigitronics.IDigi.request.vo.MailRequestVO;
 import com.idigitronics.IDigi.request.vo.SMSRequestVO;
@@ -2499,6 +2500,50 @@ public class DashboardDAO {
 		}
 		
 		return response;
+	}
+
+	public ResponseVO postEnergyDasboarddetails(EnergyRequestVO energyRequestVO) throws SQLException {
+		// TODO Auto-generated method stub
+		
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		PreparedStatement pstmt1 = null;
+		ResultSet rs = null;
+		int count = 1;
+		ResponseVO responseVO = new ResponseVO();;
+		
+		try{
+		con = getConnection();
+		
+		pstmt = con.prepareStatement("SELECT * from energylog where DeviceName = '" + energyRequestVO.getDeviceName().trim() + "' AND Date(LogDate) = CURDATE() order by LogDate DESC Limit 0,1");
+		rs = pstmt.executeQuery();
+		
+		if(rs.next()) {
+			count = rs.getInt("count") + 1;
+			}
+		
+		pstmt1 = con.prepareStatement("INSERT INTO energylog (DeviceName, data, PublishedAt, count, LogDate, ModifiedDate) VALUES (?, ?, ?, ?, NOW(), NOW())");
+		
+		pstmt1.setString(1, energyRequestVO.getDeviceName());
+		pstmt1.setString(2, energyRequestVO.getData());
+		pstmt1.setString(3, energyRequestVO.getPublishedAt());
+		pstmt1.setInt(4, count);
+		
+		
+		if (pstmt1.executeUpdate() > 0) {
+			
+			responseVO.setResult("Success");
+			responseVO.setTransactionID(count);
+		}
+		
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			pstmt.close();
+			con.close();
+		}
+		
+		return responseVO;
 	}
 
 }

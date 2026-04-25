@@ -35,6 +35,7 @@ import com.idigitronics.IDigi.request.vo.MqttPostVO;
 import com.idigitronics.IDigi.dao.DashboardDAO;
 import com.idigitronics.IDigi.dao.SimpleMqttCallBack;
 import com.idigitronics.IDigi.request.vo.DataRequestVO;
+import com.idigitronics.IDigi.request.vo.EnergyRequestVO;
 import com.idigitronics.IDigi.request.vo.FilterVO;
 import com.idigitronics.IDigi.request.vo.SensorDataRequestVO;
 import com.idigitronics.IDigi.request.vo.SolarDataRequestVO;
@@ -463,5 +464,21 @@ public class DashboardController {
         e.printStackTrace();
     }
 }
+	
+	@RequestMapping(value = "/energydatacount", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	public @ResponseBody ResponseVO postEnergyData(@RequestBody EnergyRequestVO energyRequestVO) {
+
+		DashboardDAO dashboarddao = new DashboardDAO();
+		ResponseVO responsevo = new ResponseVO();
+		
+		try {
+			responsevo = dashboarddao.postEnergyDasboarddetails(energyRequestVO);
+			responsevo.setMessage(responsevo.getResult().equalsIgnoreCase("Success") ? "Data Inserted Successfully" : "Data Insertion Failed");
+		} catch (Exception ex) {
+			logger.error("This is Error message", ex);
+			ex.printStackTrace();
+		}
+		return responsevo;
+	}
 	
 }
