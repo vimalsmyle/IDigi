@@ -48,12 +48,15 @@ import org.springframework.web.client.RestTemplate;
 import com.google.gson.Gson;
 import com.idigitronics.IDigi.constants.DataBaseConstants;
 import com.idigitronics.IDigi.constants.ExtraConstants;
+import com.idigitronics.IDigi.request.vo.Data;
+import com.idigitronics.IDigi.request.vo.Devices;
 import com.idigitronics.IDigi.request.vo.ElMeasureRequestVO;
 import com.idigitronics.IDigi.request.vo.MailRequestVO;
 import com.idigitronics.IDigi.request.vo.RazorPayOrderVO;
 import com.idigitronics.IDigi.request.vo.RazorpayRequestVO;
 import com.idigitronics.IDigi.request.vo.RestCallVO;
 import com.idigitronics.IDigi.request.vo.SMSRequestVO;
+import com.idigitronics.IDigi.request.vo.Tags_Raw;
 import com.idigitronics.IDigi.response.vo.IndividualBillingResponseVO;
 import com.idigitronics.IDigi.response.vo.ResponseVO;
 import com.idigitronics.IDigi.response.vo.FromEmailDetails;
@@ -1604,22 +1607,54 @@ public void sensordatabillgeneration() throws SQLException {
 		
 	}*/
 
-@Scheduled(cron="30 22 * * *")
+//@Scheduled(cron="30 22 * * *")
 public void postDataToElMeasure() throws SQLException {
 	
 	Connection con = null;
 	PreparedStatement pstmt = null;
 	ResultSet rs = null;
 	
+	ElMeasureRequestVO elMeasureRequestVO = new ElMeasureRequestVO();
+	Data data = new Data();
+	ArrayList<Devices> devices = new ArrayList<Devices>();
+	
 	try {
 		con = getConnection();
 		
-		pstmt = con.prepareStatement("SELECT * FROM customermeterdetails");
+		pstmt = con.prepareStatement("SELECT * FROM customerdetails");
 		rs = pstmt.executeQuery();
 		
-		if(rs.next()) {
-
+		while(rs.next()) {
+			Devices device = new Devices();
+			device.setDevice_instance_id(rs.getString("DeviceInstanceID"));
+			
+			ArrayList<Tags_Raw> tags_raw = new ArrayList<Tags_Raw>();
+			
+			PreparedStatement pstmt1 = con.prepareStatement("SELECT MeterType, Reading, CONVERT_TZ( LogDate, @@session.time_zone, '+00:00' ) as UTCLogDate  FROM displaybalancelog WHERE CustomerID = " + rs.getInt("CustomerID") + " ORDER BY MeterType ASC ");
+			ResultSet rs1 = pstmt1.executeQuery();
+			
+			int i = 0;
+			
+			while(rs1.next()) {
+				Tags_Raw tag = new Tags_Raw();
+				
+				if(rs1.getString("MeterType").equalsIgnoreCase("Water")) {
+					i = i+1;
+				}
+				
+				tag.setTag_id(rs1.getString("MeterType").equalsIgnoreCase("Gas") ? "tag_3641" : rs1.getString("MeterType").equalsIgnoreCase("Water") && i == 1 ? "tag_3637" : rs1.getString("MeterType").equalsIgnoreCase("Water") && i == 2 ? "tag_4809" : rs1.getString("MeterType").equalsIgnoreCase("Water") && i == 3 ? "tag_4810" : "");  // check for metertypes and add tagids accordingly
+				tag.setTag_value(rs1.getInt("Reading"));
+				tag.setUtctimestamp(rs1.getString("UTCLogDate")); 
+				
+				tags_raw.add(tag);
+			}
+			device.setTags_raw(tags_raw);
+			devices.add(device);
 		}
+		data.setDevices(devices);
+		elMeasureRequestVO.setData(data);
+		
+		postToElmeasure(elMeasureRequestVO);
 		
 	} catch (Exception e) {
 		// TODO Auto-generated catch block
@@ -1637,10 +1672,11 @@ public ResponseVO postToElmeasure(ElMeasureRequestVO elMeasureRequestVO) throws 
 
 	String data = gson.toJson(elMeasureRequestVO, ElMeasureRequestVO.class);
 	ResponseVO responseVO = new ResponseVO();
+	System.out.println(data);
 
 	HttpClient client = HttpClient.newHttpClient();
 
-	HttpRequest request = HttpRequest.newBuilder().uri(URI.create("http://iot.theiox.com/appv2/update"))
+	HttpRequest request = HttpRequest.newBuilder().uri(URI.create("http://iot.theiox.com/appv2/multiple_update"))
 			.header("Content-Type", "application/json")
 			.header("Access-Token", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MTA0OSwidXNlcl9pZCI6InVzZXJfMTc0MzgiLCJzaXRlX2lkIjoiaW5kdXN0cnlfNjkwIiwiY2xpZW50X2lkIjoiY2xpZW50XzM3NyIsImV4cCI6MjY0MDA3MTY3Nn0.ferrhelPYAlFg8UgFppk3K81G1WrPdPw64Rlzm3MFrk")
 			.POST(HttpRequest.BodyPublishers.ofString(data)).build();
