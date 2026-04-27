@@ -143,16 +143,20 @@
 							</div>
 
 							<div class="col-md-6">
-								<label>Meter Type</label> <select class="form-control"
-									id="meterType" name="meterType">
-									<option>Water</option>
-									<option>Gas</option>
+								<label>Meter Type</label><select class="form-control"
+									id="meterType" name="meterType"
+									>
+									<option value="-1">Select Meter Type</option>
+									<option value="Water">Water</option>
+									<option value="Gas">Gas</option>
 								</select>
 							</div>
 
 							<div class="col-md-6">
-								<label>Meter Size</label> <input type="number"
-									class="form-control" id="meterSizeID" name="meterSizeID">
+								<label>Meter Size</label> <select class="form-control"
+									id="meterSizeID" name="meterSizeID">
+								</select>
+
 							</div>
 
 							<div class="col-md-6">
@@ -222,7 +226,7 @@
 				</div>
 
 				<div class="modal-body">
-					<form id=blockEdit>
+					<form id=blockEditForm>
 
 						<div class="row">
 
@@ -230,6 +234,7 @@
 								<div class="group form-group" id="formprefixNameEdit">
 									<label>Prefix Name</label> <input type="text"
 										class="form-control" id="prefixNameEdit" name="prefixNameEdit">
+									<input type="hidden" id="prefixIdhidden" name="prefixIdhidden" />
 								</div>
 							</div>
 
@@ -271,24 +276,33 @@
 
 							<div class="col-md-6" id="formmeterTypeEdit">
 								<label>Meter Type</label> <select class="form-control"
-									id="meterTypeEdit" name="meterTypeEdit">
+									id="meterTypeEdit" name="meterTypeEdit"
+									>
 									<option>Water</option>
 									<option>Gas</option>
 								</select>
 							</div>
 
-							<div class="col-md-6" id="formmeterSizeIDEdit">
-								<label>Meter Size</label> <input type="number"
-									class="form-control" id="meterSizeIDEdit"
-									name="meterSizeIDEdit">
+							<div class="col-md-6" id="">
+								<div id="formmeterSizeIDEdit"
+									class="form-group has-feedback has-success bmd-form-group is-filled">
+									<label>Meter Size</label> <select class="form-control"
+										id="meterSizeIDEdit" name="meterSizeIDEdit">
+									</select>
+
+
+								</div>
 							</div>
 
-							<div class="col-md-6" id="formpayTypeEdit">
-								<label>Pay Type</label> <select class="form-control"
-									id="payTypeEdit" name="payTypeEdit">
-									<option>Prepaid</option>
-									<option>Postpaid</option>
-								</select>
+							<div class="col-md-6" id="">
+								<div id="formpayTypeEdit"
+									class="form-group has-feedback has-success bmd-form-group is-filled">
+									<label>Pay Type</label> <select class="form-control"
+										id="payTypeEdit" name="payTypeEdit">
+										<option>Prepaid</option>
+										<option>Postpaid</option>
+									</select>
+								</div>
 							</div>
 
 							<div class="col-md-6">
@@ -302,21 +316,30 @@
 								</div>
 							</div>
 
-							<div class="col-md-6" id="formgatewayIDAddEdit">
-								<label>Gateway</label> <select class="form-control"
-									id="gatewayIDAddEdit" name="gatewayIDAddEdit"></select>
+							<div class="col-md-6" id="">
+								<div id="formgatewayIDAddEdit"
+									class="form-group has-feedback has-success bmd-form-group is-filled">
+									<label>Gateway</label> <select class="form-control"
+										id="gatewayIDAddEdit" name="gatewayIDAddEdit"></select>
+								</div>
 							</div>
 
-							<div class="col-md-6" id="formthresholdMaximumEdit">
-								<label>Threshold Max</label> <input type="number"
-									class="form-control" id="thresholdMaximumEdit"
-									name="thresholdMaximumEdit">
+							<div class="col-md-6" id="">
+								<div id="formthresholdMaximumEdit"
+									class="form-group has-feedback has-success bmd-form-group is-filled">
+									<label>Threshold Max</label> <input type="number"
+										class="form-control" id="thresholdMaximumEdit"
+										name="thresholdMaximumEdit" />
+								</div>
 							</div>
 
-							<div class="col-md-6" id="formthresholdMinimumEdit">
-								<label>Threshold Min</label> <input type="number"
-									class="form-control" id="thresholdMinimumEdit"
-									name="thresholdMinimumEdit">
+							<div class="col-md-6" id="">
+								<div id="formthresholdMinimumEdit"
+									class="form-group has-feedback has-success bmd-form-group is-filled">
+									<label>Threshold Min</label> <input type="number"
+										class="form-control" id="thresholdMinimumEdit"
+										name="thresholdMinimumEdit" />
+								</div>
 							</div>
 
 						</div>

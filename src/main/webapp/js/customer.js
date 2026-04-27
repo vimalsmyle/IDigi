@@ -580,7 +580,7 @@ $("#addMeter")
 													"</select>"
 													+"</div></div>"+
 									"<div class=col-md-4>" +
-									"<div class='group form-group'>"
+									"<div id=divMiUId-"+rowCount+" class='group form-group has-feedback has-success bmd-form-group is-filled'>"
 													+"<label class=bmd-label-floating>MIU ID<span class=impp><sup>*</sup></span></label> <input "
 													+"type=text class='form-control form-control-sm' name=miuIDAdd["+rowCount+"]"
 													+" id=miuIDAdd-"+rowCount+">"
@@ -1287,14 +1287,14 @@ $(document)
 													return false;
 												}
 												
-												if(parseInt($("#rowCount").val()) == 0 || $("#rowCount").val() == ""){
+											/**	if(parseInt($("#rowCount").val()) == 0 || $("#rowCount").val() == ""){
 													swal.fire({
 														  title: "error",
 														  text: "Please add atleast one meter",
 														  icon: "error"
 														});
 													return false;
-												}
+												}*/
 }			
 												let communityId = sessionStorage.getItem("roleID") == 2 ? sessionStorage.getItem("communityID") : $("#selectcommunityName").val();
 												let blockId = sessionStorage.getItem("roleID") == 2 ? sessionStorage.getItem("ID") : $("#selectBlockBasedonCommunity").val();
@@ -1713,7 +1713,11 @@ function loadPrefixDetails(prefixID, currentDropdown) {
 
 		var d = data.prefixDetails;
 
-		$("#miuIDAdd-" + rowCount).val(d.miuID);
+		$("#miuIDAdd-" + rowCount).val(d.miuID).trigger("change");
+		
+		
+		
+		$("#divMiUId-" + rowCount).addClass("group form-group has-feedback has-success bmd-form-group is-filled")
 
 		$("#selectMeterType-" + rowCount).val(d.meterType).trigger("change");
 

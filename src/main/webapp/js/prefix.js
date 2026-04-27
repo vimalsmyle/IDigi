@@ -7,6 +7,56 @@
 $(document).ready(function() {
 
 
+ $('#meterType').on('change', function () {
+        onChangeMeterSizeNew();
+    });
+    
+     $('#meterTypeEdit').on('change', function () {
+        onChangeMeterSizeEditNew();
+    });
+    
+    
+    
+    function onChangeMeterSizeNew() {
+		
+			$('#meterSizeID').find('option').remove();
+			$('#meterTypeEdit').find('option').remove();
+		
+		$.getJSON("./metersizes/" + $("#meterType").val(), function(data) {
+			var Options = '<option value=-1>Select  Meter Size</option>';
+			$.each(data.dropDownMeterSizes, function(key, value) {
+				Options = Options + '<option value=' + key + '>' + value
+					+ '</option>';
+			});
+			
+				$('#meterSizeID').append(Options);
+			
+		});
+
+	}
+	
+	
+	function onChangeMeterSizeEditNew(selectedValue) {
+		
+			$('#meterSizeIDEdit').find('option').remove();
+		
+		$.getJSON("./metersizes/" + $("#meterTypeEdit").val(), function(data) {
+			var Options = '<option value=-1>Select  Meter Size</option>';
+			$.each(data.dropDownMeterSizes, function(key, value) {
+				Options = Options + '<option value=' + key + '>' + value
+					+ '</option>';
+			});
+			
+				$('#meterSizeIDEdit').append(Options);
+			
+		});
+		
+		if (selectedValue) {
+            $('#meterSizeIDEdit').val(String(selectedValue)).trigger("change");
+        }
+
+	}
+
 	$.getJSON("./gateways", function(data) {
 		var Options = "<option value='-1'>Select  Gateway</option>";
 		$.each(data.dropDownGateways, function(key, value) {
@@ -218,7 +268,7 @@ $(document)
 
 
 
-			$('#blockEdit')
+			$('#blockEditForm')
 				.bootstrapValidator(
 					{
 						feedbackIcons: {
@@ -336,11 +386,11 @@ $(document)
 							});
 
 					if (formIsValid) {
-						$('#blockEditsave', $(this))
+						$('#blockEdit', $(this))
 							.attr('disabled',
 								false);
 					} else {
-						$('#blockEditsave', $(this))
+						$('#blockEdit', $(this))
 							.attr('disabled',
 								true);
 					}
@@ -372,6 +422,55 @@ $(document)
 																		});
 																	return false;
 																}
+																
+																
+																if($("#meterType").val() == -1 || $("#meterType").val() == null || $("#meterType").val() == "-1"){
+																	
+																	swal.fire({
+																		  title: "error",
+																		  text: "Select Meter type",
+																		  icon: "error"
+																		});
+																	return false;
+																}
+																
+																
+																if($("#meterSizeID").val() == -1 || $("#meterSizeID").val() == null || $("#meterSizeID").val() == "-1"){
+																	
+																	swal.fire({
+																		  title: "error",
+																		  text: "Select Meter Size",
+																		  icon: "error"
+																		});
+																	return false;
+																}
+																
+																
+																
+																
+																
+																if($("#selectTariffName").val() == -1 || $("#selectTariffName").val() == null || $("#selectTariffName").val() == "Select Tariff"){
+																	
+																	swal.fire({
+																		  title: "error",
+																		  text: "Select Tariff id",
+																		  icon: "error"
+																		});
+																	return false;
+																}
+																
+																	if($("#gatewayIDAdd").val() == -1 || $("#gatewayIDAdd").val() == null || $("#gatewayIDAdd").val() == "Select Gateway"){
+																	
+																	swal.fire({
+																		  title: "error",
+																		  text: "Select Gateway Id",
+																		  icon: "error"
+																		});
+																	return false;
+																}
+																
+																
+																
 
 				var requestBody = {
 				        prefixName: $("#prefixName").val(),
@@ -455,24 +554,73 @@ $(document)
 
 
 
-			$("#blockEditsave")
+			$("#blockEdit")
 				.click(
 					function() {
 
-						var data1 = {}
 
-						var data1 = {}
-						data1["blockName"] = $("#blockNameEdit").val();
-						data1["location"] = $("#blockLocationEdit").val();
-						data1["mobileNumber"] = $("#blockMobileEdit").val();
-						data1["email"] = $("#blockEmailEdit").val();
-						data1["createdByID"] = sessionStorage.getItem("createdByID");
-						data1["loggedInUserID"] = sessionStorage.getItem("userID");
-						data1["roleID"] = sessionStorage.getItem("roleID");
+						if($("#meterSizeIDEdit").val() == -1 || $("#meterSizeIDEdit").val() == null || $("#meterSizeIDEdit").val() == "-1"){
+																	
+																	swal.fire({
+																		  title: "error",
+																		  text: "Select Meter Size",
+																		  icon: "error"
+																		});
+																	return false;
+																}
+
+				
+
+						
+						if($("#selectTariffNameEdit").val() == -1 || $("#selectTariffNameEdit").val() == null || $("#selectTariffNameEdit").val() == "Select Tariff"){
+																	
+																	swal.fire({
+																		  title: "error",
+																		  text: "Select Tariff id",
+																		  icon: "error"
+																		});
+																	return false;
+																}
+																
+																	if($("#gatewayIDAddEdit").val() == -1 || $("#gatewayIDAddEdit").val() == null || $("#gatewayIDAddEdit").val() == "Select Gateway"){
+																	
+																	swal.fire({
+																		  title: "error",
+																		  text: "Select Gateway Id",
+																		  icon: "error"
+																		});
+																	return false;
+																}
+																
+																
+																
+																
+																
+																
+
+						var requestBody = {
+				        prefixName: $("#prefixNameEdit").val(),
+
+				        // dropdowns
+				        communityID: parseInt($("#selectcommunityNameEditHidden").val()),
+				        blockID: parseInt($("#selectBlockBasedonCommunityEditHidden").val()),
+
+				        miuID: $("#miuIDEdit").val(),
+				        meterType: $("#meterTypeEdit").val(),
+
+				        meterSizeID: parseInt($("#meterSizeIDEdit").val()),
+				        payType: $("#payTypeEdit").val(),
+
+				        tariffID: parseInt($("#selectTariffNameEdit").val()),
+				        gatewayID: parseInt($("#gatewayIDAddEdit").val()),
+
+				        thresholdMaximum: parseInt($("#thresholdMaximumEdit").val()),
+				        thresholdMinimum: parseInt($("#thresholdMinimumEdit").val())
+				    };
 
 						/*alert("===>"
-								+ JSON.stringify(data1));*/
-						$('#blockEditsave').prop('disabled', true).addClass('disabled').off("click");
+								+ JSON.stringify(blockEditForm));*/
+						$('#blockEdit').prop('disabled', true).addClass('disabled').off("click");
 						$("#loader").show();
 						$
 							.ajax({
@@ -480,14 +628,14 @@ $(document)
 								contentType: "application/json",
 								url: "./prefix/edit/" + $("#prefixIdhidden").val(),
 								data: JSON
-									.stringify(data1),
+									.stringify(requestBody),
 								dataType: "JSON",
 
 								success: function(
 									data) {
 									/*alert("data"
 											+ JSON
-													.stringify(data));*/
+													.stringify(requestBody));*/
 									$("#loader").hide();
 									if (data.result == "Success") {
 
@@ -562,6 +710,7 @@ function getBlockFormEdit(id) {
 				$('#meterTypeEdit').val(item.meterType).trigger("change");
 				$("#formmeterTypeEdit").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
 				
+					$('#prefixIdhidden').val(item.prefixID)
 				
 				$('#meterSizeIDEdit').val(item.meterSize).trigger("change");
 				$("#formmeterSizeIDEdit").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
@@ -572,18 +721,22 @@ function getBlockFormEdit(id) {
 				$('#selectTariffNameEdit').val(item.tariffID).trigger("change");
 				
 				
-				 $.getJSON("./gateways", function(data) {
-					var Options = "<option value='-1'>Select  Gateway</option>";
-					$.each(data.dropDownGateways, function(key, value) {
-						Options = Options + "<option value='" + key + "'>" + value
-								+ "</option>";
-					});
-					$('#gatewayIDAddEdit').append(Options);
-				});
-				
-				
-				$('#gatewayIDAddEdit').val(item.gatewayName).trigger("change");
-				$("#formgatewayIDAddEdit").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
+				$.getJSON("./gateways", function(data) {
+
+    var options = "<option value='-1'>Select Gateway</option>";
+
+    $.each(data.dropDownGateways, function(key, value) {
+        options += "<option value='" + key + "'>" + value + "</option>";
+    });
+
+    $('#gatewayIDAddEdit').html(options); // better than append
+
+    // ✅ Set value AFTER options are added
+    $('#gatewayIDAddEdit').val(item.gatewayID).trigger("change");
+
+    $("#formgatewayIDAddEdit")
+        .addClass("group form-group has-feedback has-success bmd-form-group is-filled");
+});
 				
 				$('#thresholdMaximumEdit').val(item.thresholdMaximum).trigger("change");
 				$("#formthresholdMaximumEdit").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
@@ -591,7 +744,7 @@ function getBlockFormEdit(id) {
 				$('#thresholdMinimumEdit').val(item.thresholdMinimum).trigger("change");
 				$("#formthresholdMinimumEdit").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
 
-				$('#blockEditsave')
+				$('#blockEdit')
 					.attr('disabled',
 						false);
 
