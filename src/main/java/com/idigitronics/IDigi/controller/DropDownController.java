@@ -5,6 +5,8 @@ package com.idigitronics.IDigi.controller;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,6 +18,9 @@ import com.idigitronics.IDigi.dao.DropDownDAO;
 import com.idigitronics.IDigi.dao.ExtraMethodsDAO;
 import com.idigitronics.IDigi.request.vo.ElMeasureRequestVO;
 import com.idigitronics.IDigi.request.vo.MailRequestVO;
+import com.idigitronics.IDigi.request.vo.Data;
+import com.idigitronics.IDigi.request.vo.Devices;
+import com.idigitronics.IDigi.request.vo.Tags_Raw;
 import com.idigitronics.IDigi.response.vo.ResponseVO;
 
 /**
@@ -238,12 +243,45 @@ public class DropDownController {
 		
 		ExtraMethodsDAO extraMethodsDAO = new ExtraMethodsDAO();
 		ElMeasureRequestVO elMeasureRequestVO = new ElMeasureRequestVO();
+		Data data = new Data();
+		ArrayList<Devices> devices = new ArrayList<Devices>();
+		Devices device = new Devices();
+		ArrayList<Tags_Raw> tags_raw = new ArrayList<Tags_Raw>();
 		
-		elMeasureRequestVO.setUtcDateTime("2026-04-15T08:45:25.412Z");
-		elMeasureRequestVO.setTagId("tag_3637");
-		elMeasureRequestVO.setTagValue(140);
-		elMeasureRequestVO.setDeviceInstanceId("device_instance_24794_da:95:22:62:9d:1c");
-		responsevo = extraMethodsDAO.postToElmeasure(elMeasureRequestVO);
+		Tags_Raw watertag1 = new Tags_Raw();
+		Tags_Raw watertag2 = new Tags_Raw();
+		Tags_Raw watertag3 = new Tags_Raw();
+		Tags_Raw gastag = new Tags_Raw();
+		
+		watertag1.setUtctimestamp("2026-04-15T08:45:25.412Z");
+		watertag1.setTag_id("tag_3637");
+		watertag1.setTag_value(140);
+	
+		watertag2.setUtctimestamp("2026-04-15T08:45:25.412Z");
+		watertag2.setTag_id("tag_4809");
+		watertag2.setTag_value(140);
+		
+		watertag3.setUtctimestamp("2026-04-15T08:45:25.412Z");
+		watertag3.setTag_id("tag_4810");
+		watertag3.setTag_value(140);
+		
+		gastag.setUtctimestamp("2026-04-15T08:45:25.412Z");
+		gastag.setTag_id("tag_3641");
+		gastag.setTag_value(140);
+		
+		tags_raw.add(watertag1);
+		tags_raw.add(watertag2);
+		tags_raw.add(watertag3);
+		tags_raw.add(gastag);
+		
+		device.setDevice_instance_id("device_instance_24794_da:95:22:62:9d:1c");
+		device.setTags_raw(tags_raw);
+		devices.add(device);
+		data.setDevices(devices);
+		elMeasureRequestVO.setData(data);
+		
+//		responsevo = extraMethodsDAO.postToElmeasure(elMeasureRequestVO);
+		extraMethodsDAO.postDataToElMeasure();
 		
 		return responsevo;
 	}
