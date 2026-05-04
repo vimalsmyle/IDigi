@@ -903,7 +903,7 @@ public class CommunitySetUpDAO {
 		
 			// create a view for this
 			
-			String query = "SELECT c.CommunityName, b.BlockName, cd.CustomerID, cd.HouseNumber, cd.FirstName, cd.LastName, cd.Email, cd.MobileNumber, cd.CustomerUniqueID, cd.CreatedByID, cd.CreatedByRoleID, cd.ModifiedDate\n" + 
+			String query = "SELECT c.CommunityName,c.CommunityID, b.BlockName,b.BlockID, cd.CustomerID, cd.HouseNumber, cd.FirstName, cd.LastName, cd.Email, cd.MobileNumber, cd.CustomerUniqueID, cd.CreatedByID, cd.CreatedByRoleID, cd.ModifiedDate\n" + 
 							"FROM customerdetails AS cd LEFT JOIN community AS c ON cd.CommunityID = c.CommunityID LEFT JOIN block AS b ON b.BlockID = cd.BlockID <change>";
 							
 			pstmt = con.prepareStatement(query.replaceAll("<change>", ((roleid == 1 || roleid == 4) && (filterCid == -1)) ? "ORDER BY cd.CustomerID DESC" : ((roleid == 1 || roleid == 4) && (filterCid != -1)) ? " WHERE cd.CommunityID = "+filterCid+" ORDER BY cd.CustomerID DESC" : (roleid == 2 || roleid == 5) ? "WHERE cd.BlockID = "+id+ " ORDER BY cd.CustomerID DESC" : (roleid == 3) ? "WHERE cd.CustomerUniqueID = '"+id+"'":""));
@@ -916,7 +916,9 @@ public class CommunitySetUpDAO {
 				customer_meter_list = new LinkedList<MeterRequestVO>();
 				
 				customervo.setCommunityName(rs.getString("CommunityName"));
+				customervo.setCommunityID(rs.getInt("CommunityID"));
 				customervo.setBlockName(rs.getString("BlockName"));
+				customervo.setBlockID(rs.getInt("BlockID"));
 				customervo.setFirstName(rs.getString("FirstName"));
 				customervo.setLastName(rs.getString("LastName"));
 				customervo.setEmail(rs.getString("Email"));

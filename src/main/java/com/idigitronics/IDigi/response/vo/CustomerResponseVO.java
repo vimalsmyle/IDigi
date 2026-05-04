@@ -15,7 +15,9 @@ public class CustomerResponseVO {
 	
 	private long customerID;
 	private String communityName;
+	private int communityID;
 	private String blockName;
+	private int blockID;
 	private String houseNumber;
 	private String CustomerUniqueID;
 	private String firstName;
@@ -149,5 +151,19 @@ public class CustomerResponseVO {
 	public void setStatus(String status) {
 		this.status = status;
 	}
+	public int getCommunityID() {
+		return communityID;
+	}
+	public void setCommunityID(int communityID) {
+		this.communityID = communityID;
+	}
+	public int getBlockID() {
+		return blockID;
+	}
+	public void setBlockID(int blockID) {
+		this.blockID = blockID;
+	}
+	
+	
 	
 }

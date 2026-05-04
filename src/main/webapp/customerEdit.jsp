@@ -63,6 +63,9 @@
 									 <input
 										type="text" class="form-control" name="communityNameEdit"
 										id="communityNameEdit" disabled>
+										<input type="hidden" id="communityIdEdit" name="communityIdEdit" />
+										
+										<input type="hidden" id="mode" name="mode" value="edit"/>
 								</div>
 							</div>
 							<div class="col-md-4">
@@ -70,6 +73,7 @@
 									<label class="bmd-label-floating">Block</label> <input
 										type="text" class="form-control" name="blockNameEdit"
 										id="blockNameEdit" disabled>
+										<input type="hidden" id="blockIdEdit" name="blockIdEdit" />
 								</div>
 							</div>
 

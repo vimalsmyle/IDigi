@@ -60,6 +60,7 @@
 						<div id="loader" style="display: none;">
 														<div id="status">&nbsp;</div>
 													</div>
+													<input type="hidden" id="mode" name="mode" value="add"/>
 						<%if(!user_id.equalsIgnoreCase("2")) {%>
 							
 							<div class="col-md-4">
@@ -84,6 +85,7 @@
 									<label class="bmd-label-floating">Community Name<span class="impp"><sup>*</sup></span></label> <input
 										type="text" class="form-control form-control-sm" name="communityNameAdd"
 										id="communityNameAdd" disabled>
+										
 								</div>
 							</div>
 							<div class="col-md-4">

@@ -37,9 +37,11 @@ $(document).ready(function() {
 			var rowCount = 0;
 			var rowCountArray=[];
 			$('#communityNameEdit').val(item.communityName).trigger("change");
+			$('#communityIdEdit').val(item.communityID);
 			$("#formcommunityNameEdit").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
 			
 			$('#blockNameEdit').val(item.blockName).trigger("change");
+			$('#blockIdEdit').val(item.blockID);
 			$("#formblockNameEdit").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
 			
 			$('#firstNameEdit').val(item.firstName).trigger("change");
@@ -113,6 +115,13 @@ $(document).ready(function() {
 						});
 					});*/
 				});
+				
+				if(item.meters.length==0){
+				$("#addMeter").prop("disabled", false);
+				var communityId=$("#communityIdEdit").val();
+				var blockId=$("#blockIdEdit").val()
+				loadPrefixDropdown(rowCount,communityId ,blockId );
+				}
 				
 				
 			
@@ -827,8 +836,19 @@ $("#addMeter")
 					});
 					$('#gatewayIDAdd-'+rowCount).append(Options);
 				});
-				var communityID = $("#selectcommunityName").val();
-				var blockID = $("#selectBlockBasedonCommunity").val();
+				
+				var communityID ='';
+				var blockID ='';
+				
+				if($("#mode").val()=='add'){
+										 communityID = $("#selectcommunityName").val();
+										 blockID = $("#selectBlockBasedonCommunity").val();
+										
+				}else{
+								communityID = $("#communityIdEdit").val();
+								blockID = $("#blockIdEdit").val();
+				
+				}
 
 				
 				loadPrefixDropdown(rowCount, communityID, blockID);
