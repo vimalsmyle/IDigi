@@ -11,6 +11,9 @@ import java.net.URL;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -37,13 +40,20 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import org.apache.commons.collections.map.MultiValueMap;
 import org.apache.log4j.Logger;
 import org.json.JSONObject;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.google.gson.Gson;
 import com.idigitronics.IDigi.constants.DataBaseConstants;
@@ -1690,4 +1700,49 @@ public ResponseVO postToElmeasure(ElMeasureRequestVO elMeasureRequestVO) throws 
 
 	return responseVO;
 }
+
+public ResponseVO processImage(MultipartFile file) throws Exception {
+	
+	// TODO Auto-generated method stub
+	ResponseVO responseVO = new ResponseVO();
+	RestTemplate restTemplate = new RestTemplate();
+	
+	File convFile = File.createTempFile("upload-", file.getOriginalFilename());
+    file.transferTo(convFile);
+    
+    LinkedMultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
+    body.add("file", new FileSystemResource(convFile));
+
+    HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+
+    HttpEntity<LinkedMultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
+
+    responseVO.setMessage(restTemplate.postForObject(
+            "ttp://localhost:5000/ocr", // update the API to access the python service
+            requestEntity,
+            String.class
+    ));
+    
+    responseVO.setResult("Success");
+    
+    System.out.println("response:-" + responseVO.getMessage());
+    
+	return responseVO;
+	
+}
+
+public static HttpRequest.BodyPublisher ofMimeMultipartData(String name, Path path) throws Exception {
+    String boundary = "---123";
+    List<byte[]> byteArrays = new java.util.ArrayList<byte[]>();
+
+    byteArrays.add(("--" + boundary + "\r\n").getBytes());
+    byteArrays.add(("Content-Disposition: form-data; name=\"" + name + "\"; filename=\"" + path.getFileName() + "\"\r\n").getBytes());
+    byteArrays.add(("Content-Type: image/jpeg\r\n\r\n").getBytes());
+    byteArrays.add(Files.readAllBytes(path));
+    byteArrays.add(("\r\n--" + boundary + "--\r\n").getBytes());
+
+    return HttpRequest.BodyPublishers.ofByteArrays(byteArrays);
+}
+
 }

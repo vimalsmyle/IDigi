@@ -12,7 +12,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.idigitronics.IDigi.dao.DropDownDAO;
 import com.idigitronics.IDigi.dao.ExtraMethodsDAO;
@@ -253,19 +255,19 @@ public class DropDownController {
 		Tags_Raw watertag3 = new Tags_Raw();
 		Tags_Raw gastag = new Tags_Raw();
 		
-		watertag1.setUtctimestamp("2026-04-15T08:45:25.412Z");
+		watertag1.setUtctimestamp("2026-05-04T08:45:25.412Z");
 		watertag1.setTag_id("tag_3637");
 		watertag1.setTag_value(140);
 	
-		watertag2.setUtctimestamp("2026-04-15T08:45:25.412Z");
+		watertag2.setUtctimestamp("2026-05-04T08:45:25.412Z");
 		watertag2.setTag_id("tag_4809");
 		watertag2.setTag_value(140);
 		
-		watertag3.setUtctimestamp("2026-04-15T08:45:25.412Z");
+		watertag3.setUtctimestamp("2026-05-04T08:45:25.412Z");
 		watertag3.setTag_id("tag_4810");
 		watertag3.setTag_value(140);
 		
-		gastag.setUtctimestamp("2026-04-15T08:45:25.412Z");
+		gastag.setUtctimestamp("2026-05-04T08:45:25.412Z");
 		gastag.setTag_id("tag_3641");
 		gastag.setTag_value(140);
 		
@@ -280,8 +282,20 @@ public class DropDownController {
 		data.setDevices(devices);
 		elMeasureRequestVO.setData(data);
 		
-//		responsevo = extraMethodsDAO.postToElmeasure(elMeasureRequestVO);
-		extraMethodsDAO.postDataToElMeasure();
+		responsevo = extraMethodsDAO.postToElmeasure(elMeasureRequestVO);
+//		extraMethodsDAO.postDataToElMeasure();
+		
+		return responsevo;
+	}
+	
+	@RequestMapping(value = "/processimage", method = RequestMethod.POST, produces = "application/json")
+	public @ResponseBody ResponseVO processImage(@RequestParam("file") MultipartFile file) throws Exception {
+		
+		ResponseVO responsevo = new ResponseVO();
+		
+		ExtraMethodsDAO extraMethodsDAO = new ExtraMethodsDAO();
+		
+		responsevo = extraMethodsDAO.processImage(file);
 		
 		return responsevo;
 	}
