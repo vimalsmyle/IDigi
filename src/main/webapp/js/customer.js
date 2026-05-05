@@ -594,6 +594,12 @@ $("#addMeter")
 													+"type=text class='form-control form-control-sm' name=miuIDAdd["+rowCount+"]"
 													+" id=miuIDAdd-"+rowCount+">"
 													+"</div></div>"+
+													"<div class=col-md-4>" +
+										"<div class='group form-group has-feedback bmd-form-group is-filled has-success'>"
+										+"<label class=bmd-label-floating>OCR<span class=impp><sup>*</sup></span></label><input "
+										+"type=file class='form-control form-control-sm' name=imageInput["+rowCount+"]"
+										+" id=imageInput-"+rowCount+"><button type=button class=imageBtn data-id="+rowCount+">Upload</button>"
+										+"</div></div>"+
 										"<div class=col-md-4>" +
 										"<div class='group form-group'>"
 										+"<label class=bmd-label-floating>Meter Serial Number<span class=impp><sup>*</sup></span></label> <input "
@@ -872,6 +878,43 @@ window.location ="customer.jsp";
 
 
 
+$(document).on("click", ".imageBtn", function () {
+
+    var id = $(this).data("id"); // dynamic row id
+    var fileInput = $("#imageInput-" + id)[0].files[0];
+
+    if (!fileInput) {
+        alert("Please select an image");
+        return;
+    }
+
+    var formData = new FormData();
+    formData.append("image", fileInput);
+
+    $.ajax({
+        url: "./processimage",
+        type: "POST",
+        data: formData,
+        contentType: false,
+        processData: false,
+        success: function (response) {
+            console.log(response);
+
+            if (response.result === "success") {
+                alert("Meter Details: " + response.message);
+
+                // Example: auto-fill meter serial if needed
+                // $("#meterSerialNumberAdd-" + id).val(response.message);
+            } else {
+                alert("Error: " + response.message);
+            }
+        },
+        error: function () {
+            alert("Upload failed");
+        }
+    });
+
+});
 
 
 $(document)
