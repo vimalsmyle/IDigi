@@ -581,6 +581,7 @@ public class CommunitySetUpDAO {
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		List<BlockResponseVO> block_list = null;
+		List<String> meterLocations = null;
 
 		try {
 			con = getConnection();
@@ -602,6 +603,15 @@ public class CommunitySetUpDAO {
 				blockvo.setEmail(rs.getString("Email"));
 				blockvo.setLocation(rs.getString("Location"));
 				blockvo.setBlockID(rs.getInt("BlockID"));
+				
+				ResultSet rs1  = con.prepareStatement("SELECT * FROM meterlocation WHERE BlockID = " + blockvo.getBlockID()).executeQuery();
+				meterLocations = new LinkedList<String>();
+				
+				while (rs1.next()) {
+					meterLocations.add(rs1.getString("MeterLocationName"));
+				}
+				
+				blockvo.setMeterLocations(meterLocations);
 
 				block_list.add(blockvo);
 			}
@@ -682,6 +692,16 @@ public class CommunitySetUpDAO {
 				usermanagementvo.setEmailID(blockvo.getEmail());
 				}
 				
+					for(int j = 0; j < blockvo.getMeterLocations().size(); j++) {
+						
+						PreparedStatement pstmt3 = con.prepareStatement("INSERT INTO meterlocation (MeterLocationName, BlockID, CommunityID, CreatedDate, ModifiedDate) VALUES (?, ?, ?, NOW(), NOW())");
+						pstmt3.setString(1, blockvo.getMeterLocations().get(j));
+						pstmt3.setInt(2, rs.getInt("BlockID"));
+						pstmt3.setInt(3, blockvo.getCommunityID());
+						
+						pstmt3.executeUpdate();
+					}
+				
 				if(managementsettingsdao.adduser(usermanagementvo).getResult().equalsIgnoreCase("Success")){
 					
 					ExtraMethodsDAO extraMethodsDAO = new ExtraMethodsDAO();
@@ -699,7 +719,7 @@ public class CommunitySetUpDAO {
 					smsRequestVO.setToMobileNumber(blockvo.getMobileNumber());
 					smsRequestVO.setMessage("Please Save the Credentials for further communications \n" + " UserID: " + mailrequestvo.getUserID() + "\n Password: " + mailrequestvo.getUserPassword()+ "\n Use URL for login : "+ ExtraConstants.ApplicationURL);
 					
-					extraMethodsDAO.sendsms(smsRequestVO);
+//					extraMethodsDAO.sendsms(smsRequestVO);
 					
 					if(extraMethodsDAO.sendmail(mailrequestvo).equalsIgnoreCase("Success")) {
 						extraMethodsDAO.sendsms(smsRequestVO);
@@ -712,9 +732,7 @@ public class CommunitySetUpDAO {
 					}
 					
 				} else {
-					PreparedStatement pstmt2 = con.prepareStatement("DELETE FROM block WHERE BlockID = (SELECT BlockID FROM block WHERE BlockName = ? AND CommunityID = ?)");
-					pstmt2.setString(1, blockvo.getBlockName());
-					pstmt2.setInt(2, blockvo.getCommunityID());
+					PreparedStatement pstmt2 = con.prepareStatement("DELETE FROM block WHERE BlockID = " + rs.getInt("BlockID") + " AND CommunityID = " + blockvo.getCommunityID());
 					
 					if(pstmt2.executeUpdate() > 0) {
 						responsevo.setResult("Failure");
@@ -761,6 +779,26 @@ public class CommunitySetUpDAO {
 
 			if (pstmt.executeUpdate() > 0) {
 				
+				for(int i = 0; i < blockvo.getMeterLocations().size(); i++) {
+					
+					ResultSet actionResult = con.prepareStatement("SELECT * FROM meterlocation WHERE BlockID = " + blockvo.getBlockID() + " AND MeterLocationName = '" + blockvo.getMeterLocations().get(i).trim() + "'").executeQuery();
+					
+					if(actionResult.next()) {
+    					con.prepareStatement("UPDATE meterlocation SET MeterLocationName = '"+blockvo.getMeterLocations().get(i).trim()+"' WHERE BlockID = " +blockvo.getBlockID()+ " AND MeterLocationID = " + actionResult.getInt("MeterLocationID")).executeUpdate();
+
+    				} else {
+    					
+    					PreparedStatement pstmt2 = con.prepareStatement("INSERT INTO meterlocation (MeterLocationName, BlockID, CommunityID, CreatedDate, ModifiedDate) VALUES (?, ?, ?, NOW(), NOW())");
+						pstmt2.setString(1, blockvo.getMeterLocations().get(i).trim());
+						pstmt2.setInt(2, blockvo.getBlockID());
+						pstmt2.setInt(3, blockvo.getCommunityID());
+						
+						if(pstmt2.executeUpdate() > 0) {
+						}
+    				}
+					
+				}
+				
 				pstmt1 = con.prepareStatement("UPDATE user SET MobileNumber = ?, Email = ?, ModifiedDate = NOW() WHERE RoleID = 2 AND BlockID = ?");
 				pstmt1.setString(1, blockvo.getMobileNumber());
 				pstmt1.setString(2, blockvo.getEmail());
@@ -801,8 +839,14 @@ public class CommunitySetUpDAO {
         	
         	PreparedStatement pstmt1 = con.prepareStatement("DELETE FROM user WHERE RoleID = 2 AND BlockID = "+blockID);
         	if(pstmt1.executeUpdate() > 0) {
-        		responsevo.setResult("Success");
-    			responsevo.setMessage("Block Deleted Successfully");        		
+        		
+        		PreparedStatement pstmt2 = con.prepareStatement("DELETE FROM meterlocation WHERE BlockID = "+blockID);
+        		
+        	 	if(pstmt2.executeUpdate() > 0) {
+        	 		responsevo.setResult("Success");
+        			responsevo.setMessage("Block Deleted Successfully");  
+        	 	}
+        		
         	}
         	}
 		}

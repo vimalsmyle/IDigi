@@ -168,7 +168,7 @@ public class CommunitySetUpBO {
 			BusinessException {
 		// TODO Auto-generated method stub
 
-		if (blockvo.getCommunityID()==0 || blockvo.getBlockName().isEmpty() || blockvo.getEmail().isEmpty() || blockvo.getLocation().isEmpty() || blockvo.getMobileNumber().isEmpty()) {
+		if (blockvo.getCommunityID()==0 || blockvo.getBlockName().isEmpty() || blockvo.getEmail().isEmpty() || blockvo.getLocation().isEmpty() || blockvo.getMobileNumber().isEmpty() || blockvo.getMeterLocations().size() == 0) {
 			throw new BusinessException("ALL FIELDS ARE MANDATORY");
 		}
 
@@ -187,6 +187,11 @@ public class CommunitySetUpBO {
 		if (!checkMobileNo(blockvo.getMobileNumber())) {
 			throw new BusinessException(
 					"MOBILE NUMBER CAN CONTAIN ONLY NUMERIC VALUES OF EXACTLY 10 DIGITS");
+		}
+		
+		if (blockvo.getMeterLocations().size() == 0 || blockvo.getMeterLocations().isEmpty()) {
+			throw new BusinessException(
+					"ATLEAST ONE METER LOCATION IS REQUIRED");
 		}
 
 		return communitysetupdao.addblock(blockvo);
@@ -442,8 +447,8 @@ public class CommunitySetUpBO {
 		// TODO Auto-generated method stub
 		boolean result = false;
 
-		Pattern pattern = Pattern.compile("[^a-z0-9 ]");
-//		Pattern pattern = Pattern.compile("^(?=.*[a-zA-Z])(?=.*[0-9])[A-Za-z0-9]+$");
+//		Pattern pattern = Pattern.compile("[^a-z0-9 ]");
+		Pattern pattern = Pattern.compile("^(?=.*[a-zA-Z])(?=.*[0-9])[A-Za-z0-9]+$");
 		
 		Matcher matcher = pattern.matcher(customerName);
 		if (matcher.find()) {

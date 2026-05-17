@@ -1696,7 +1696,7 @@ public ResponseVO postToElmeasure(ElMeasureRequestVO elMeasureRequestVO) throws 
 	System.out.println("response:-" + response.toString());
 	
 	responseVO.setResult(response.statusCode() == 200 ? "success" : "Failure");
-	responseVO.setMessage(response.body().toString());
+	responseVO.setMessage(response.body());
 
 	return responseVO;
 }
@@ -1732,17 +1732,17 @@ public ResponseVO processImage(MultipartFile file) throws Exception {
 	
 }
 
-public static HttpRequest.BodyPublisher ofMimeMultipartData(String name, Path path) throws Exception {
-    String boundary = "---123";
-    List<byte[]> byteArrays = new java.util.ArrayList<byte[]>();
-
-    byteArrays.add(("--" + boundary + "\r\n").getBytes());
-    byteArrays.add(("Content-Disposition: form-data; name=\"" + name + "\"; filename=\"" + path.getFileName() + "\"\r\n").getBytes());
-    byteArrays.add(("Content-Type: image/jpeg\r\n\r\n").getBytes());
-    byteArrays.add(Files.readAllBytes(path));
-    byteArrays.add(("\r\n--" + boundary + "--\r\n").getBytes());
-
-    return HttpRequest.BodyPublishers.ofByteArrays(byteArrays);
-}
+//public static HttpRequest.BodyPublisher ofMimeMultipartData(String name, Path path) throws Exception {
+//    String boundary = "---123";
+//    List<byte[]> byteArrays = new java.util.ArrayList<byte[]>();
+//
+//    byteArrays.add(("--" + boundary + "\r\n").getBytes());
+//    byteArrays.add(("Content-Disposition: form-data; name=\"" + name + "\"; filename=\"" + path.getFileName() + "\"\r\n").getBytes());
+//    byteArrays.add(("Content-Type: image/jpeg\r\n\r\n").getBytes());
+//    byteArrays.add(Files.readAllBytes(path));
+//    byteArrays.add(("\r\n--" + boundary + "--\r\n").getBytes());
+//
+//    return HttpRequest.BodyPublishers.ofByteArrays(byteArrays);
+//}
 
 }

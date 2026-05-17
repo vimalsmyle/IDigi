@@ -590,4 +590,25 @@ public class DropDownDAO {
 		return prefixResponseVO;
 	}
 
+	public HashMap<Integer, String> getMeterLocations(int communityID, int blockID) throws SQLException {
+		// TODO Auto-generated method stub
+		Connection con = null;
+		HashMap<Integer, String> meterLocations = new HashMap<Integer, String>();
+		try {
+			con = getConnection();
+			PreparedStatement pstmt = con.prepareStatement("SELECT MeterLocationID, MeterLocationName FROM meterlocation WHERE BlockID = " + blockID + " AND CommunityID = " + communityID);
+			ResultSet rs = pstmt.executeQuery();
+			
+			while (rs.next()) {
+				meterLocations.put(rs.getInt("MeterLocationID"), rs.getString("MeterLocationName"));
+			}
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			con.close();
+			
+		}
+		return meterLocations;
+	}
+
 }

@@ -195,7 +195,7 @@ public class DropDownController {
 	}
 	
 	@RequestMapping(value = "/prefixes/{communityID}/{blockID}",method = RequestMethod.GET, produces="application/json")
-	public @ResponseBody ResponseVO getallsolarmasters(@PathVariable("communityID") int communityID, @PathVariable("blockID") int blockID) throws SQLException {
+	public @ResponseBody ResponseVO getallprefixes(@PathVariable("communityID") int communityID, @PathVariable("blockID") int blockID) throws SQLException {
 		
 		ResponseVO responsevo = new ResponseVO();
 		responsevo.setDropDownPrefixes(dropdowndao.getAllPrefixes(communityID, blockID));
@@ -218,6 +218,15 @@ public class DropDownController {
 			responsevo.setMessage("Prefix Details Not Found");
 		}
 		
+		return responsevo;
+	}
+	
+	@RequestMapping(value = "/meterlocations/{communityID}/{blockID}",method = RequestMethod.GET, produces="application/json")
+	public @ResponseBody ResponseVO getMeterLocations(@PathVariable("communityID") int communityID, @PathVariable("blockID") int blockID) throws SQLException {
+		
+		ResponseVO responsevo = new ResponseVO();
+		responsevo.setDropDownPrefixes(dropdowndao.getMeterLocations(communityID, blockID));
+
 		return responsevo;
 	}
 	

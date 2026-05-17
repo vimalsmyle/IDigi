@@ -27,6 +27,7 @@ public class ResponseVO {
 	private HashMap<Long, String> dropDownCustomerMeters;
 	private HashMap<Long, String> dropDownAllCustomerMeters;
 	private HashMap<Integer, String> dropDownPrefixes;
+	private HashMap<Integer, String> dropDownMeterLocations;
 	private TopupDetailsResponseVO topupdetails;
 	private BillDetailsResponseVO billdetails;
 	private LastReadingResponseVO lastReadingDetails; 
@@ -233,6 +234,12 @@ public class ResponseVO {
 	}
 	public void setRegisteredList(List<CustomerRequestVO> registeredList) {
 		this.registeredList = registeredList;
+	}
+	public HashMap<Integer, String> getDropDownMeterLocations() {
+		return dropDownMeterLocations;
+	}
+	public void setDropDownMeterLocations(HashMap<Integer, String> dropDownMeterLocations) {
+		this.dropDownMeterLocations = dropDownMeterLocations;
 	}
 	
 }
