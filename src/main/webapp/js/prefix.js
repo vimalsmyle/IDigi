@@ -231,20 +231,20 @@ $(document)
 							},
 							miuID: {
 								message: 'MUI ID is not valid',
-								validators : {
-														notEmpty : {
-															message : 'MUI ID is required and cannot be empty'
-														},
-														stringLength : {
-															min : 2,
-															max : 30,
-															message : 'MUI ID must be more than 2 and less than 30 characters long'
-														},
-														regexp : {
-															regexp : /^[a-zA-Z0-9.,$; ]+$/,
-															message : 'MUI ID can only consist of Alphanumaric'
-														}
-													}
+								validators: {
+    notEmpty: {
+        message: 'MUI ID is required and cannot be empty'
+    },
+    stringLength: {
+        min: 16,
+        max: 16,
+        message: 'MUI ID must be exactly 16 characters long'
+    },
+    regexp: {
+        regexp: /^[A-Fa-f0-9]{16}$/,
+        message: 'MUI ID can only contain hexadecimal characters (A-F, a-f, 0-9)'
+    }
+}
 							},
 							meterSizeID: {
 								message: 'MeterSIze is not valid',
