@@ -181,7 +181,7 @@ public class DashboardDAO {
 					individualDashboardResponseVO.setMeterSize(rs3.getFloat("MeterSize"));
 					individualDashboardResponseVO.setGatewayName(rs3.getString("GatewayName"));
 					individualDashboardResponseVO.setLocation(rs3.getString("Location"));
-					individualDashboardResponseVO.setReading(((rs3.getFloat("Reading")*rs3.getFloat("PerUnitValue"))/1000));
+					individualDashboardResponseVO.setReading(individualDashboardResponseVO.getMeterType().equalsIgnoreCase("Water") ? ((rs3.getFloat("Reading")*rs3.getFloat("PerUnitValue"))/1000) : individualDashboardResponseVO.getMeterType().equalsIgnoreCase("Gas") ? ((rs3.getFloat("Reading")*rs3.getFloat("PerUnitValue"))/100) : (rs3.getFloat("Reading")*rs3.getFloat("PerUnitValue")));
 //					individualDashboardResponseVO.setConsumption((int) (individualDashboardResponseVO.getReading() * rs3.getFloat("PerUnitValue")));
 					individualDashboardResponseVO.setBattery(rs3.getInt("BatteryVoltage"));
 					individualDashboardResponseVO.setBatteryColor((rs3.getInt("LowBattery") == 1 ) ? "RED" : "GREEN");

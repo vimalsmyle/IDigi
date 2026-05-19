@@ -15,7 +15,7 @@ public class BlockRequestVO {
 	private String location;
 	private String mobileNumber;
 	private String email;
-	private List<String> meterLocations;
+//	private List<String> meterLocations;
 	private int communityID;
 	private int createdByID;
 	private int createdByRoleID;
@@ -76,12 +76,12 @@ public class BlockRequestVO {
 	public void setLoggedInUserID(String loggedInUserID) {
 		this.loggedInUserID = loggedInUserID;
 	}
-	public List<String> getMeterLocations() {
-		return meterLocations;
-	}
-	public void setMeterLocations(List<String> meterLocations) {
-		this.meterLocations = meterLocations;
-	}
+//	public List<String> getMeterLocations() {
+//		return meterLocations;
+//	}
+//	public void setMeterLocations(List<String> meterLocations) {
+//		this.meterLocations = meterLocations;
+//	}
 	
 	
 }

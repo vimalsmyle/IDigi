@@ -604,14 +604,14 @@ public class CommunitySetUpDAO {
 				blockvo.setLocation(rs.getString("Location"));
 				blockvo.setBlockID(rs.getInt("BlockID"));
 				
-				ResultSet rs1  = con.prepareStatement("SELECT * FROM meterlocation WHERE BlockID = " + blockvo.getBlockID()).executeQuery();
+		/*		ResultSet rs1  = con.prepareStatement("SELECT * FROM meterlocation WHERE BlockID = " + blockvo.getBlockID()).executeQuery();
 				meterLocations = new LinkedList<String>();
 				
 				while (rs1.next()) {
 					meterLocations.add(rs1.getString("MeterLocationName"));
 				}
 				
-				blockvo.setMeterLocations(meterLocations);
+				blockvo.setMeterLocations(meterLocations); */
 
 				block_list.add(blockvo);
 			}
@@ -692,7 +692,7 @@ public class CommunitySetUpDAO {
 				usermanagementvo.setEmailID(blockvo.getEmail());
 				}
 				
-					for(int j = 0; j < blockvo.getMeterLocations().size(); j++) {
+			/*		for(int j = 0; j < blockvo.getMeterLocations().size(); j++) {
 						
 						PreparedStatement pstmt3 = con.prepareStatement("INSERT INTO meterlocation (MeterLocationName, BlockID, CommunityID, CreatedDate, ModifiedDate) VALUES (?, ?, ?, NOW(), NOW())");
 						pstmt3.setString(1, blockvo.getMeterLocations().get(j));
@@ -700,7 +700,7 @@ public class CommunitySetUpDAO {
 						pstmt3.setInt(3, blockvo.getCommunityID());
 						
 						pstmt3.executeUpdate();
-					}
+					} */
 				
 				if(managementsettingsdao.adduser(usermanagementvo).getResult().equalsIgnoreCase("Success")){
 					
@@ -779,7 +779,7 @@ public class CommunitySetUpDAO {
 
 			if (pstmt.executeUpdate() > 0) {
 				
-				for(int i = 0; i < blockvo.getMeterLocations().size(); i++) {
+			/*	for(int i = 0; i < blockvo.getMeterLocations().size(); i++) {
 					
 					ResultSet actionResult = con.prepareStatement("SELECT * FROM meterlocation WHERE BlockID = " + blockvo.getBlockID() + " AND MeterLocationName = '" + blockvo.getMeterLocations().get(i).trim() + "'").executeQuery();
 					
@@ -797,7 +797,7 @@ public class CommunitySetUpDAO {
 						}
     				}
 					
-				}
+				} */
 				
 				pstmt1 = con.prepareStatement("UPDATE user SET MobileNumber = ?, Email = ?, ModifiedDate = NOW() WHERE RoleID = 2 AND BlockID = ?");
 				pstmt1.setString(1, blockvo.getMobileNumber());

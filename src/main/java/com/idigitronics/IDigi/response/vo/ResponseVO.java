@@ -48,6 +48,10 @@ public class ResponseVO {
 	private String tariff;
 	private String emergencyCredit;
 	private List<CustomerRequestVO> registeredList;
+	private boolean success;
+	private String meterSerialNumber;
+	private String meterReading;
+	private String fullText;
 	
 	public UserDetails getUserDetails() {
 		return userDetails;
@@ -240,6 +244,30 @@ public class ResponseVO {
 	}
 	public void setDropDownMeterLocations(HashMap<Integer, String> dropDownMeterLocations) {
 		this.dropDownMeterLocations = dropDownMeterLocations;
+	}
+	public boolean isSuccess() {
+		return success;
+	}
+	public void setSuccess(boolean success) {
+		this.success = success;
+	}
+	public String getMeterSerialNumber() {
+		return meterSerialNumber;
+	}
+	public void setMeterSerialNumber(String meterSerialNumber) {
+		this.meterSerialNumber = meterSerialNumber;
+	}
+	public String getMeterReading() {
+		return meterReading;
+	}
+	public void setMeterReading(String meterReading) {
+		this.meterReading = meterReading;
+	}
+	public String getFullText() {
+		return fullText;
+	}
+	public void setFullText(String fullText) {
+		this.fullText = fullText;
 	}
 	
 }

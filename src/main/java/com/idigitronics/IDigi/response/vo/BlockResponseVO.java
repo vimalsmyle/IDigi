@@ -18,7 +18,7 @@ public class BlockResponseVO {
 	private String mobile;
 	private List<BlockResponseVO> data;
 	private int blockID;
-	private List<String> meterLocations;
+//	private List<String> meterLocations;
 
 	public String getCommunityName() {
 		return communityName;
@@ -77,12 +77,12 @@ public class BlockResponseVO {
 		this.data = data;
 	}
 
-	public List<String> getMeterLocations() {
-		return meterLocations;
-	}
-
-	public void setMeterLocations(List<String> meterLocations) {
-		this.meterLocations = meterLocations;
-	}
+//	public List<String> getMeterLocations() {
+//		return meterLocations;
+//	}
+//
+//	public void setMeterLocations(List<String> meterLocations) {
+//		this.meterLocations = meterLocations;
+//	}
 	
 }

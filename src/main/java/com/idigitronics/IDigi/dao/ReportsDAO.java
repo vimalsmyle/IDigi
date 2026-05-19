@@ -138,7 +138,7 @@ public class ReportsDAO {
 			
 			if(type.equalsIgnoreCase("Tabular")) {
 				
-				String query = "SELECT DISTINCT c.CommunityName, b.BlockName, cd.FirstName, cd.LastName, cd.HouseNumber, cd.CustomerUniqueID, bl.ReadingID, bl.EmergencyCredit, \r\n" + 
+				String query = "SELECT DISTINCT c.CommunityName, b.BlockName, cd.FirstName, cd.LastName, cd.HouseNumber, cd.CustomerUniqueID, cmd.MeterType, bl.ReadingID, bl.EmergencyCredit, \r\n" + 
 						"bl.MIUID, bl.Reading, bl.Balance, bl.BatteryVoltage, bl.Tariff, bl.ValveStatus, bl.DoorOpenTamper, bl.MagneticTamper, bl.NFCTamper, bl.LowBattery, bl.LowBalance, bl.LogDate, ms.MeterSize, ms.PerUnitValue \r\n" + 
 						"FROM balancelog AS bl LEFT JOIN community AS c ON c.communityID = bl.CommunityID LEFT JOIN block AS b ON b.BlockID = bl.BlockID\r\n" + 
 						"LEFT JOIN customerdetails AS cd ON cd.CustomerID = bl.CustomerID LEFT JOIN customermeterdetails AS cmd ON cd.CustomerID = cmd.CustomerID LEFT JOIN metersize AS ms ON ms.MeterSizeID = bl.MeterSizeID WHERE bl.CustomerUniqueID = ? AND bl.LogDate BETWEEN ? AND ? ";
@@ -155,7 +155,8 @@ public class ReportsDAO {
 						
 						userconsumptionreportsresponsevo.setCustomerUniqueID(rs.getString("CustomerUniqueID"));
 						userconsumptionreportsresponsevo.setMiuID(rs.getString("MIUID"));
-						userconsumptionreportsresponsevo.setReading(((rs.getFloat("Reading")* rs.getInt("PerUnitValue"))/1000));
+						userconsumptionreportsresponsevo.setReading(rs.getString("MeterType").equalsIgnoreCase("Water") ? ((rs.getFloat("Reading")*rs.getFloat("PerUnitValue"))/1000) : rs.getString("MeterType").equalsIgnoreCase("Gas") ? ((rs.getFloat("Reading")*rs.getFloat("PerUnitValue"))/100) : (rs.getFloat("Reading")*rs.getFloat("PerUnitValue")));
+//						userconsumptionreportsresponsevo.setReading(((rs.getFloat("Reading")* rs.getInt("PerUnitValue"))/1000));
 						userconsumptionreportsresponsevo.setBattery(rs.getInt("BatteryVoltage"));
 						userconsumptionreportsresponsevo.setBalance(rs.getFloat("Balance"));
 						userconsumptionreportsresponsevo.setTariff(rs.getFloat("Tariff"));

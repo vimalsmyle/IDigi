@@ -274,7 +274,7 @@ public class ExtraMethodsDAO {
 	return responses.toString();
 }
 	
-//	@Scheduled(cron="30 6 2 * * *") // scheduled for every month 2nd day at 06:30
+	@Scheduled(cron="30 6 2 * * *") // scheduled for every month 2nd day at 06:30
 //	@Scheduled(cron="15 15 * * * *") 
 	public void individualbillgeneration() throws SQLException {
 		
@@ -1617,7 +1617,7 @@ public void sensordatabillgeneration() throws SQLException {
 		
 	}*/
 
-//@Scheduled(cron="30 22 * * *")
+@Scheduled(cron="30 22 * * * *")
 public void postDataToElMeasure() throws SQLException {
 	
 	Connection con = null;
@@ -1725,6 +1725,8 @@ public ResponseVO processImage(MultipartFile file) throws Exception {
     ));
     
     responseVO.setResult("Success");
+
+    responseVO = gson.fromJson(responseVO.getMessage(), ResponseVO.class);
     
     System.out.println("response:-" + responseVO.getMessage());
     

@@ -168,7 +168,7 @@ public class CommunitySetUpBO {
 			BusinessException {
 		// TODO Auto-generated method stub
 
-		if (blockvo.getCommunityID()==0 || blockvo.getBlockName().isEmpty() || blockvo.getEmail().isEmpty() || blockvo.getLocation().isEmpty() || blockvo.getMobileNumber().isEmpty() || blockvo.getMeterLocations().size() == 0) {
+		if (blockvo.getCommunityID()==0 || blockvo.getBlockName().isEmpty() || blockvo.getEmail().isEmpty() || blockvo.getLocation().isEmpty() || blockvo.getMobileNumber().isEmpty()) {
 			throw new BusinessException("ALL FIELDS ARE MANDATORY");
 		}
 
@@ -189,10 +189,10 @@ public class CommunitySetUpBO {
 					"MOBILE NUMBER CAN CONTAIN ONLY NUMERIC VALUES OF EXACTLY 10 DIGITS");
 		}
 		
-		if (blockvo.getMeterLocations().size() == 0 || blockvo.getMeterLocations().isEmpty()) {
-			throw new BusinessException(
-					"ATLEAST ONE METER LOCATION IS REQUIRED");
-		}
+//		if (blockvo.getMeterLocations().size() == 0 || blockvo.getMeterLocations().isEmpty()) {
+//			throw new BusinessException(
+//					"ATLEAST ONE METER LOCATION IS REQUIRED");
+//		}
 
 		return communitysetupdao.addblock(blockvo);
 	}

@@ -253,7 +253,7 @@ public class DropDownController {
 		ResponseVO responsevo = new ResponseVO();
 		
 		ExtraMethodsDAO extraMethodsDAO = new ExtraMethodsDAO();
-		ElMeasureRequestVO elMeasureRequestVO = new ElMeasureRequestVO();
+		/*	ElMeasureRequestVO elMeasureRequestVO = new ElMeasureRequestVO();
 		Data data = new Data();
 		ArrayList<Devices> devices = new ArrayList<Devices>();
 		Devices device = new Devices();
@@ -291,8 +291,8 @@ public class DropDownController {
 		data.setDevices(devices);
 		elMeasureRequestVO.setData(data);
 		
-		responsevo = extraMethodsDAO.postToElmeasure(elMeasureRequestVO);
-//		extraMethodsDAO.postDataToElMeasure();
+		responsevo = extraMethodsDAO.postToElmeasure(elMeasureRequestVO); */
+		extraMethodsDAO.postDataToElMeasure();
 		
 		return responsevo;
 	}
