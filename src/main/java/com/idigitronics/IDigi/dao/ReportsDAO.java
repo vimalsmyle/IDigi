@@ -1,5 +1,7 @@
 package com.idigitronics.IDigi.dao;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -155,7 +157,13 @@ public class ReportsDAO {
 						
 						userconsumptionreportsresponsevo.setCustomerUniqueID(rs.getString("CustomerUniqueID"));
 						userconsumptionreportsresponsevo.setMiuID(rs.getString("MIUID"));
-						userconsumptionreportsresponsevo.setReading(rs.getString("MeterType").equalsIgnoreCase("Water") ? ((rs.getFloat("Reading")*rs.getFloat("PerUnitValue"))/1000) : rs.getString("MeterType").equalsIgnoreCase("Gas") ? ((rs.getFloat("Reading")*rs.getFloat("PerUnitValue"))/100) : (rs.getFloat("Reading")*rs.getFloat("PerUnitValue")));
+						
+						BigDecimal bd = new BigDecimal(Double.toString(rs.getString("MeterType").equalsIgnoreCase("Water") ? ((rs.getFloat("Reading")*rs.getFloat("PerUnitValue"))/1000) : rs.getString("MeterType").equalsIgnoreCase("Gas") ? ((rs.getFloat("Reading")*rs.getFloat("PerUnitValue"))/100) : (rs.getFloat("Reading")*rs.getFloat("PerUnitValue"))));
+						bd = bd.setScale(rs.getString("MeterType").equalsIgnoreCase("Water") ? 3 : rs.getString("MeterType").equalsIgnoreCase("Gas") ? 2 : 0, RoundingMode.HALF_UP);
+						double roundedValue = bd.doubleValue();
+						userconsumptionreportsresponsevo.setReading(roundedValue);
+						
+//						userconsumptionreportsresponsevo.setReading(rs.getString("MeterType").equalsIgnoreCase("Water") ? ((rs.getFloat("Reading")*rs.getFloat("PerUnitValue"))/1000) : rs.getString("MeterType").equalsIgnoreCase("Gas") ? ((rs.getFloat("Reading")*rs.getFloat("PerUnitValue"))/100) : (rs.getFloat("Reading")*rs.getFloat("PerUnitValue")));
 //						userconsumptionreportsresponsevo.setReading(((rs.getFloat("Reading")* rs.getInt("PerUnitValue"))/1000));
 						userconsumptionreportsresponsevo.setBattery(rs.getInt("BatteryVoltage"));
 						userconsumptionreportsresponsevo.setBalance(rs.getFloat("Balance"));
