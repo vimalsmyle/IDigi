@@ -13,6 +13,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -23,7 +24,9 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.log4j.Logger;
+import org.apache.poi.ss.format.CellFormatType;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -433,7 +436,8 @@ public class DashboardDAO {
             	cell8.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getMiuID());
             	
             	Cell cell9 = data.createCell(++dashboarDataColumnCount);
-            	cell9.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getReading());
+            	DecimalFormat df = new DecimalFormat("####.##");
+            	cell9.setCellValue(df.format(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getReading()));
             	
             	Cell cell10 = data.createCell(++dashboarDataColumnCount);
             	cell10.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getConsumption());
