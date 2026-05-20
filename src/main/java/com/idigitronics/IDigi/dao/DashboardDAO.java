@@ -187,8 +187,8 @@ public class DashboardDAO {
 					individualDashboardResponseVO.setGatewayName(rs3.getString("GatewayName"));
 					individualDashboardResponseVO.setLocation(rs3.getString("Location"));
 
-					BigDecimal bd = new BigDecimal(Double.toString(((rs3.getFloat("Reading")*rs3.getFloat("PerUnitValue"))/1000)));
-					bd = bd.setScale(3, RoundingMode.HALF_UP);
+					BigDecimal bd = new BigDecimal(Double.toString(individualDashboardResponseVO.getMeterType().equalsIgnoreCase("Water") ? ((rs3.getFloat("Reading")*rs3.getFloat("PerUnitValue"))/1000) : individualDashboardResponseVO.getMeterType().equalsIgnoreCase("Gas") ? ((rs3.getFloat("Reading")*rs3.getFloat("PerUnitValue"))/100) : (rs3.getFloat("Reading")*rs3.getFloat("PerUnitValue"))));
+					bd = bd.setScale(individualDashboardResponseVO.getMeterType().equalsIgnoreCase("Water") ? 3 : individualDashboardResponseVO.getMeterType().equalsIgnoreCase("Gas") ? 2 : 0, RoundingMode.HALF_UP);
 					double roundedValue = bd.doubleValue();
 					individualDashboardResponseVO.setReading(roundedValue);
 					
@@ -445,7 +445,8 @@ public class DashboardDAO {
             	
             	Cell cell9 = data.createCell(++dashboarDataColumnCount);
             	BigDecimal bd = new BigDecimal(Double.toString(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getReading()));
-				bd = bd.setScale(3, RoundingMode.HALF_UP);
+//				bd = bd.setScale(3, RoundingMode.HALF_UP);
+				bd = bd.setScale(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getMeterType().equalsIgnoreCase("Water") ? 3 : dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getMeterType().equalsIgnoreCase("Gas") ? 2 : 0, RoundingMode.HALF_UP);
 				double roundedValue = bd.doubleValue();
             	cell9.setCellValue(roundedValue);
 //            	cell9.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getReading());
