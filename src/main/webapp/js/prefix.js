@@ -236,9 +236,9 @@ $(document)
         message: 'MUI ID is required and cannot be empty'
     },
     stringLength: {
-        min: 16,
+        min: 0,
         max: 16,
-        message: 'MUI ID must be exactly 16 characters long'
+        message: 'MUI ID must be 0 to 16 characters long'
     },
     regexp: {
         regexp: /^[A-Fa-f0-9]{16}$/,

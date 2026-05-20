@@ -23,6 +23,12 @@ color: #fff !important;
     float : right !important;
 }
 
+.locked-select {
+    pointer-events: none;
+    background-color: #e9ecef;
+    cursor: not-allowed;
+}
+
 th.dt-center, td.dt-center { text-align: center; }
 
 .imp{
@@ -558,6 +564,8 @@ option {
     -ms-user-select: none;
     user-select: none;
 }
+
+
 
 table.dataTable.dtr-inline.collapsed>tbody>tr[role="row"]>td:first-child:before, table.dataTable.dtr-inline.collapsed>tbody>tr[role="row"]>th:first-child:before {
     top: 19px !important;
