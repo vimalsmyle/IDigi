@@ -7,6 +7,8 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -184,7 +186,13 @@ public class DashboardDAO {
 					individualDashboardResponseVO.setMeterSize(rs3.getFloat("MeterSize"));
 					individualDashboardResponseVO.setGatewayName(rs3.getString("GatewayName"));
 					individualDashboardResponseVO.setLocation(rs3.getString("Location"));
-					individualDashboardResponseVO.setReading(individualDashboardResponseVO.getMeterType().equalsIgnoreCase("Water") ? ((rs3.getFloat("Reading")*rs3.getFloat("PerUnitValue"))/1000) : individualDashboardResponseVO.getMeterType().equalsIgnoreCase("Gas") ? ((rs3.getFloat("Reading")*rs3.getFloat("PerUnitValue"))/100) : (rs3.getFloat("Reading")*rs3.getFloat("PerUnitValue")));
+
+					BigDecimal bd = new BigDecimal(Double.toString(((rs3.getFloat("Reading")*rs3.getFloat("PerUnitValue"))/1000)));
+					bd = bd.setScale(3, RoundingMode.HALF_UP);
+					double roundedValue = bd.doubleValue();
+					individualDashboardResponseVO.setReading(roundedValue);
+					
+//					individualDashboardResponseVO.setReading(individualDashboardResponseVO.getMeterType().equalsIgnoreCase("Water") ? ((rs3.getFloat("Reading")*rs3.getFloat("PerUnitValue"))/1000) : individualDashboardResponseVO.getMeterType().equalsIgnoreCase("Gas") ? ((rs3.getFloat("Reading")*rs3.getFloat("PerUnitValue"))/100) : (rs3.getFloat("Reading")*rs3.getFloat("PerUnitValue")));
 //					individualDashboardResponseVO.setConsumption((int) (individualDashboardResponseVO.getReading() * rs3.getFloat("PerUnitValue")));
 					individualDashboardResponseVO.setBattery(rs3.getInt("BatteryVoltage"));
 					individualDashboardResponseVO.setBatteryColor((rs3.getInt("LowBattery") == 1 ) ? "RED" : "GREEN");
@@ -346,8 +354,8 @@ public class DashboardDAO {
         Cell headercell9 = header.createCell(++columnCount);
         headercell9.setCellValue("Reading" + (dashboardResponseVO.getData().size()>0 ? (dashboardResponseVO.getData().get(0).getDasboarddata().get(0).getMeterType().equalsIgnoreCase("GAS") ? "M\u00B3" : "KL") : ""));
         
-        Cell headercell10 = header.createCell(++columnCount);
-        headercell10.setCellValue("Consumption" + (dashboardResponseVO.getData().size()>0 ? (dashboardResponseVO.getData().get(0).getDasboarddata().get(0).getMeterType().equalsIgnoreCase("GAS") ? "M\u00B3" : "KL") : ""));
+//        Cell headercell10 = header.createCell(++columnCount);
+//        headercell10.setCellValue("Consumption" + (dashboardResponseVO.getData().size()>0 ? (dashboardResponseVO.getData().get(0).getDasboarddata().get(0).getMeterType().equalsIgnoreCase("GAS") ? "M\u00B3" : "KL") : ""));
         
         Cell headercell11 = header.createCell(++columnCount);
         headercell11.setCellValue("Battery");
@@ -436,11 +444,14 @@ public class DashboardDAO {
             	cell8.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getMiuID());
             	
             	Cell cell9 = data.createCell(++dashboarDataColumnCount);
-            	DecimalFormat df = new DecimalFormat("####.##");
-            	cell9.setCellValue(df.format(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getReading()));
+            	BigDecimal bd = new BigDecimal(Double.toString(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getReading()));
+				bd = bd.setScale(3, RoundingMode.HALF_UP);
+				double roundedValue = bd.doubleValue();
+            	cell9.setCellValue(roundedValue);
+//            	cell9.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getReading());
             	
-            	Cell cell10 = data.createCell(++dashboarDataColumnCount);
-            	cell10.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getConsumption());
+//            	Cell cell10 = data.createCell(++dashboarDataColumnCount);
+//            	cell10.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getConsumption());
             	
             	Cell cell11 = data.createCell(++dashboarDataColumnCount);
             	cell11.setCellValue(dashboardResponseVO.getData().get(i).getDasboarddata().get(j).getBattery());
