@@ -298,7 +298,7 @@ public class DropDownController {
 	}
 	
 	@RequestMapping(value = "/processimage", method = RequestMethod.POST, produces = "application/json")
-	public @ResponseBody ResponseVO processImage(@RequestParam("file") MultipartFile file) throws Exception {
+	public @ResponseBody ResponseVO processImage(@RequestParam("image") MultipartFile file) throws Exception {
 		
 		ResponseVO responsevo = new ResponseVO();
 		

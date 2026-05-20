@@ -590,28 +590,13 @@ $("#addMeter")
 													 
 													"</select>"
 													+"</div></div>"+
-									"<div class=col-md-4>" +
-									"<div id=divMiUId-"+rowCount+" class='group form-group has-feedback has-success bmd-form-group is-filled'>"
-													+"<label class=bmd-label-floating>MIU ID<span class=impp><sup>*</sup></span></label> <input "
-													+"type=text class='form-control form-control-sm' name=miuIDAdd["+rowCount+"]"
-													+" id=miuIDAdd-"+rowCount+">"
-													+"</div></div>"+
-													"<div class=col-md-4>" +
-										"<div class='group form-group has-feedback bmd-form-group is-filled has-success'>"
-										+"<label class=bmd-label-floating>OCR<span class=impp><sup>*</sup></span></label><input "
-										+"type=file class='form-control form-control-sm' name=imageInput["+rowCount+"]"
-										+" id=imageInput-"+rowCount+"><button type=button class=imageBtn data-id="+rowCount+">Upload</button>"
-										+"</div></div>"+
-										"<div class=col-md-4>" +
-										"<div class='group form-group'>"
-										+"<label class=bmd-label-floating>Meter Serial Number<span class=impp><sup>*</sup></span></label> <input "
-										+"type=text class='form-control form-control-sm' name=meterSerialNumberAdd["+rowCount+"]"
-										+" id=meterSerialNumberAdd-"+rowCount+">"
-										+"</div></div>"+
+									
+									
+										
 									"<div class=col-md-4>" +
 									"<div class='group form-group has-feedback has-success bmd-form-group is-filled'>"
 									+"<label class=bmd-label-floating>Meter Type<span class=impp><sup>*</sup></span></label> " +
-									"<select class='form-control form-control-sm select2'  id=selectMeterType-"+rowCount+" onchange='onChangeMeterSize("+rowCount+")' name=selectMeterType["+rowCount+"]>"+
+									"<select class='form-control form-control-sm select2' readonly id=selectMeterType-"+rowCount+" onchange='onChangeMeterSize("+rowCount+")' name=selectMeterType["+rowCount+"]>"+
 										"<option value='-1'>Select Meter Type</option>"+
 										"<option value='Gas'>Gas</option>"+
 										"<option value='Water'>Water</option>"+
@@ -621,14 +606,14 @@ $("#addMeter")
 									"<div class=col-md-4>" +
 									"<div class='group form-group has-feedback has-success bmd-form-group is-filled'>"
 									+"<label class=bmd-label-floating>Meter Size<span class=impp><sup>*</sup></span></label> <select "+
-									"class='form-control form-control-sm' " +
+									"class='form-control form-control-sm locked-select' " +
 									"id=meterSizeAdd-"+rowCount+" name=meterSizeAdd["+rowCount+"]>"+
 									"</select>"
 									+"</div></div>"+
 									"<div class=col-md-4>" +
 									"<div class='group form-group has-feedback has-success bmd-form-group is-filled'>"
 									+"<label class=bmd-label-floating>Pay Type<span class=impp><sup>*</sup></span></label>" +
-									"<select class='form-control form-control-sm select2' id=payTypeAdd-"+rowCount+" name=payTypeAdd["+rowCount+"]>"+
+									"<select class='form-control form-control-sm select2 locked-select' readonly id=payTypeAdd-"+rowCount+" name=payTypeAdd["+rowCount+"]>"+
 									"<option value='-1'>Select Pay Type</option>"+
 									"<option value='Prepaid'>Prepaid</option>"+
 									"<option value='Postpaid'>Postpaid</option>"+
@@ -638,7 +623,7 @@ $("#addMeter")
 									"<div class='group form-group has-feedback has-success bmd-form-group is-filled'>"
 									+"<label class=bmd-label-floating>Tariff Name<span class=impp><sup>*</sup></span></label> " +
 									"<select "+
-									"class='form-control form-control-sm' id=selectTariffName-"+rowCount+" name=selectTariffName["+rowCount+"]>"+
+									"class='form-control form-control-sm locked-select' readonly id=selectTariffName-"+rowCount+" name=selectTariffName["+rowCount+"]>"+
 									 
 									"</select>"
 									+"</div></div>"+
@@ -646,22 +631,18 @@ $("#addMeter")
 									"<div class='group form-group has-feedback has-success bmd-form-group is-filled'>"
 									+"<label class=bmd-label-floating>Gateway ID<span class=impp><sup>*</sup></span></label> " +
 									"<select "+
-									"class='form-control form-control-sm' id=gatewayIDAdd-"+rowCount+" name=gatewayIDAdd["+rowCount+"]>"+
+									"class='form-control form-control-sm locked-select' readonly id=gatewayIDAdd-"+rowCount+" name=gatewayIDAdd["+rowCount+"]>"+
 									 
 									"</select>"
 									+"</div></div>"+
-									"<div class=col-md-4>" +
-									"<div class='group form-group'>"
-									+"<label class=bmd-label-floating>Location<span class=impp><sup>*</sup></span></label> <input "
-									+"type=text class='form-control form-control-sm' name=locationAdd["+rowCount+"]"
-									+" id=locationAdd-"+rowCount+">"
-									+"</div></div>   " +
+									
+									
 									
 									
 									"<div class=col-md-4>" +
 									"<div class='group form-group has-feedback has-success bmd-form-group is-filled'>"
 									+"<label class=bmd-label-floating>Threshold Maximum<span class=impp><sup>*</sup></span></label> <input "
-									+"type=number class='form-control form-control-sm' name=thresholdMaximumAdd["+rowCount+"]"
+									+"type=number class='form-control form-control-sm' readonly name=thresholdMaximumAdd["+rowCount+"]"
 									+" id=thresholdMaximumAdd-"+rowCount+">"
 									+"</div></div>   " +
 									
@@ -669,9 +650,31 @@ $("#addMeter")
 									"<div class=col-md-4>" +
 									"<div class='group form-group has-feedback has-success bmd-form-group is-filled'>"
 									+"<label class=bmd-label-floating>Threshold Minimum<span class=impp><sup>*</sup></span></label> <input "
-									+"type=number class='form-control form-control-sm' name=thresholdMinimumAdd["+rowCount+"]"
+									+"type=number class='form-control form-control-sm' readonly name=thresholdMinimumAdd["+rowCount+"]"
 									+" id=thresholdMinimumAdd-"+rowCount+">"
 									+"<hr></div></div>   " +
+									
+									"<div class=col-md-4>" +
+										"<div class='group form-group has-feedback bmd-form-group is-filled has-success'>"
+										+"<label class=bmd-label-floating>OCR<span class=impp><sup>*</sup></span></label><input "
+										+"type=file class='form-control form-control-sm' name=imageInput["+rowCount+"]"
+										+" id=imageInput-"+rowCount+"><button type=button class=imageBtn data-id="+rowCount+">Upload</button>"
+										+"</div></div>"+
+									
+									"<div class=col-md-4>" +
+									"<div id=divMiUId-"+rowCount+" class='group form-group has-feedback has-success bmd-form-group is-filled'>"
+													+"<label class=bmd-label-floating>MIU ID<span class=impp><sup>*</sup></span></label> <input "
+													+"type=text class='form-control form-control-sm' name=miuIDAdd["+rowCount+"]"
+													+" id=miuIDAdd-"+rowCount+">"
+													+"</div></div>"+
+													
+													
+										"<div class=col-md-4>" +
+										"<div class='group form-group'>"
+										+"<label class=bmd-label-floating>Meter Serial Number<span class=impp><sup>*</sup></span></label> <input "
+										+"type=text class='form-control form-control-sm' name=meterSerialNumberAdd["+rowCount+"]"
+										+" id=meterSerialNumberAdd-"+rowCount+">"
+										+"</div></div>"+
 									
 									"<div class=col-md-4>" +
 									"<div class='group form-group has-feedback has-success bmd-form-group is-filled'>"
@@ -679,6 +682,13 @@ $("#addMeter")
 									+"type=number class='form-control form-control-sm' name=defaultReadingAdd["+rowCount+"]"
 									+" id=defaultReadingAdd-"+rowCount+">"
 									+"<hr></div></div>   " +
+									
+									"<div class=col-md-4>" +
+									"<div class='group form-group'>"
+									+"<label class=bmd-label-floating>Location<span class=impp><sup>*</sup></span></label> <input "
+									+"type=text class='form-control form-control-sm' name=locationAdd["+rowCount+"]"
+									+" id=locationAdd-"+rowCount+">"
+									+"</div></div>   " +
 									
 									
 											" <div class='col-md-12 text-right'>" 
@@ -903,10 +913,11 @@ $(document).on("click", ".imageBtn", function () {
             console.log(response);
 
             if (response.result === "success") {
-                alert("Meter Details: " + response.message);
+            //    alert("Meter Details: " + response.message);
 
                 // Example: auto-fill meter serial if needed
-                // $("#meterSerialNumberAdd-" + id).val(response.message);
+                 $("#meterSerialNumberAdd-" + id).val(response.meterSerialNumber);
+                  $("#defaultReadingAdd-" + id).val(response.meterReading);
             } else {
                 alert("Error: " + response.message);
             }

@@ -63,7 +63,7 @@
 						
 						<input type="hidden" value='<%=blockName%>' id="blockName">
 						
-						<input type="hidden" value='<%=type%>' id="type">
+						<input type="hidden" value='<%=type%>' id="type" />
 						
 						
 
@@ -245,12 +245,16 @@
 							<tr>
 								<th>TimeStamp</th>
 								<th>Location</th>
-								<th>Reading</th>
+								<th>Reading<% if (type != null && type.equalsIgnoreCase("gas")) { %>
+                (m<sup>3</sup>)
+            <% } else if (type != null && type.equalsIgnoreCase("water")) { %>
+                (KL)
+            <% } %></th>
 								<th>MIU ID</th>								
 								<th>Meter Type</th>
 								<th>Meter Serial Number</th>
 								<th>Gateway</th>
-								<th>Consumption</th>
+								<!-- <th>Consumption</th> -->
 								<th>Battery</th>
 								<th>Box AMR Tamper</th>
 								<th>Magnetic Tamper</th>

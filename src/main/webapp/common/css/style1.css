@@ -24,6 +24,13 @@
 	margin-left:10px;
 }
 
+.locked-select {
+    pointer-events: none;
+    background-color: #e9ecef;
+    cursor: not-allowed;
+}
+
+
 body {
 	background-color: #fff;
 	/* //font-family: 'Jost',Roboto,sans-serif; */

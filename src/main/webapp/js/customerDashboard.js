@@ -514,10 +514,10 @@ function getCustomerMeters(CRNNumber) {
 																				"data" : "gatewayName"
 
 																			},
-																			{
+																			/*{
 																				"data" : "consumption"
 
-																			},
+																			},*/
 																			{
 																				"mData" : "action",
 																				"render" : function(
