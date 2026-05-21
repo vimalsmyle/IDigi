@@ -16,7 +16,7 @@ public class IndividualDashboardResponseVO {
 	private float meterSize;
 	private String location;
 	private String payType;
-	private float reading;
+	private double reading;
 	private int consumption;
 	private String balance;
 	private String emergencyCredit;
@@ -82,11 +82,11 @@ public class IndividualDashboardResponseVO {
 		this.payType = payType;
 	}
 
-	public float getReading() {
+	public double getReading() {
 		return reading;
 	}
 
-	public void setReading(float reading) {
+	public void setReading(double reading) {
 		this.reading = reading;
 	}
 

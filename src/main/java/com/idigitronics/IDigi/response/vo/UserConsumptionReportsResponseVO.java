@@ -13,7 +13,7 @@ public class UserConsumptionReportsResponseVO {
 	
 	private String customerUniqueID;
 	private String miuID;
-	private float reading;
+	private double reading;
 	private float reading1;
 	private float reading2;
 	private int consumption;
@@ -44,10 +44,10 @@ public class UserConsumptionReportsResponseVO {
 	public void setMiuID(String miuID) {
 		this.miuID = miuID;
 	}
-	public float getReading() {
+	public double getReading() {
 		return reading;
 	}
-	public void setReading(float reading) {
+	public void setReading(double reading) {
 		this.reading = reading;
 	}
 	public float getBalance() {
