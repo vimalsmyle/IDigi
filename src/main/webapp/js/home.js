@@ -80,13 +80,13 @@ $(document)
 											.querySelector("#solarActive").innerText = data.active;
 									document
 											.querySelector("#solarInactive").innerText = data.inActive;
-									document.querySelector("#solarLive").innerText = data.live;
-									document
-											.querySelector("#solarnonLive").innerText = data.nonLive;
-									document
-											.querySelector("#solaremergency").innerText = data.emergency;
-									document
-											.querySelector("#solarLowbattery").innerText = data.lowBattery;
+//									document.querySelector("#solarLive").innerText = data.live;
+							//		document
+								//			.querySelector("#solarnonLive").innerText = data.nonLive;
+									//document
+										//	.querySelector("#solaremergency").innerText = data.emergency;
+									//document
+										//	.querySelector("#solarLowbattery").innerText = data.lowBattery;
 									
 								});
 						
@@ -101,6 +101,7 @@ $.getJSON("./solargraph/"+sessionStorage.getItem("communityName"), function(data
     // Function to handle list rendering based on the provided list and element ID
     function renderList(listData, listElementId) {
         const listElement = $(listElementId);
+        if(listData!=undefined){
         listData.forEach(item => {
             // Determine background color based on rStatus
             const colorCode = item.rStatus === "OFF" ? 'red' : 'green';
@@ -120,6 +121,7 @@ $.getJSON("./solargraph/"+sessionStorage.getItem("communityName"), function(data
     
             listElement.append(listItem);
         });
+        }
     }
 
     // Render the data for each block list
