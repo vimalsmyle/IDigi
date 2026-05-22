@@ -409,7 +409,7 @@
 
 
 
-						<div class="page-header">
+						<%-- Solar Start <div class="page-header">
 							<h3>Solar</h3>
 						</div>
 						<div class="row">
@@ -465,11 +465,13 @@
 
 									<%
 											}
-										%>
+										%>  
+										Solar end --%>
 
 									<div class="box-footer">
 										<div class="container">
-											<div class="row">
+										<!-- Solar start -->
+											<%-- <div class="row">
 												<div class="col-md-12">
 
 													<section class="logo-carousel slider" data-arrows="true">
@@ -493,6 +495,7 @@
 															</div>
 
 														</div>
+														</section>
 														<!-- 	<div class="slide sliding-block">
 
 															<div class="text-xs font-weight-bold text-uppercase">
@@ -608,7 +611,8 @@
 
 
 					</div>
-				</div>
+				</div>  
+				solar end--%> 
 				<%
 					} else if (user_id.equalsIgnoreCase("3")) {
 				%>

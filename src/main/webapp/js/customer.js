@@ -134,7 +134,7 @@ $(document).ready(function() {
 						"<div class=col-md-4>" +
 						"<div id='formmiuIDAdd' class='group form-group has-feedback has-success bmd-form-group is-filled'>"
 										+"<label class=bmd-label-floating>MIU ID<span class=impp><sup>*</sup></span></label> <input "
-										+"type=text class='form-control form-control-sm' name=miuIDAdd["+rowCount+"]"
+										+"type=text class='form-control form-control-sm' maxlength='16' name=miuIDAdd["+rowCount+"]"
 										+" id=miuIDAdd-"+rowCount+">"
 										+"</div></div>"+
 							"<div class=col-md-4>" +
@@ -596,7 +596,7 @@ $("#addMeter")
 									"<div class=col-md-4>" +
 									"<div class='group form-group has-feedback has-success bmd-form-group is-filled'>"
 									+"<label class=bmd-label-floating>Meter Type<span class=impp><sup>*</sup></span></label> " +
-									"<select class='form-control form-control-sm select2' readonly id=selectMeterType-"+rowCount+" onchange='onChangeMeterSize("+rowCount+")' name=selectMeterType["+rowCount+"]>"+
+									"<select class='form-control form-control-sm select2 locked-select' readonly id=selectMeterType-"+rowCount+" onchange='onChangeMeterSize("+rowCount+")' name=selectMeterType["+rowCount+"]>"+
 										"<option value='-1'>Select Meter Type</option>"+
 										"<option value='Gas'>Gas</option>"+
 										"<option value='Water'>Water</option>"+
@@ -664,7 +664,7 @@ $("#addMeter")
 									"<div class=col-md-4>" +
 									"<div id=divMiUId-"+rowCount+" class='group form-group has-feedback has-success bmd-form-group is-filled'>"
 													+"<label class=bmd-label-floating>MIU ID<span class=impp><sup>*</sup></span></label> <input "
-													+"type=text class='form-control form-control-sm' name=miuIDAdd["+rowCount+"]"
+													+"type=text class='form-control form-control-sm' maxlength='16' name=miuIDAdd["+rowCount+"]"
 													+" id=miuIDAdd-"+rowCount+">"
 													+"</div></div>"+
 													
@@ -1560,24 +1560,20 @@ $(document)
 														} else if(data.result == "Failure" && data.Message == undefined){
 															
 															swal.fire({
-																  title: "error",
-																  text: data.Message,
-																  icon: "error"
-																}).then(function() {
-																    window.location = "customerDetails.jsp";
-																    
-																});
+																			  title: "error",
+																			  text: data.Message,
+																			  icon: "error"
+																			})
+																			return false;
 															
 														}else {
 															
 															swal.fire({
-																  title: "error",
-																  text: data.Message,
-																  icon: "error"
-																}).then(function() {
-																    window.location = "customerDetails.jsp";
-																    
-																});
+																			  title: "error",
+																			  text: data.Message,
+																			  icon: "error"
+																			})
+																			return false;
 														}
 													}
 												});
