@@ -1005,7 +1005,7 @@ public static FromEmailDetails getFromEmailDetails() throws SQLException {
 	finally {
 		pstmt.close();
 		rs.close();
-		con.close();
+//		con.close();
 	}
 	
 	return details;
