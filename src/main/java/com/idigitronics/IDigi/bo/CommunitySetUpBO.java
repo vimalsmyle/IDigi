@@ -4,10 +4,14 @@
 package com.idigitronics.IDigi.bo;
 
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.log4j.Logger;
+
 import com.idigitronics.IDigi.dao.CommunitySetUpDAO;
+import com.idigitronics.IDigi.dao.DashboardDAO;
 import com.idigitronics.IDigi.exceptions.BusinessException;
 import com.idigitronics.IDigi.request.vo.BlockRequestVO;
 import com.idigitronics.IDigi.request.vo.CommunityRequestVO;
@@ -26,6 +30,7 @@ import com.idigitronics.IDigi.response.vo.ResponseVO;
 public class CommunitySetUpBO {
 	
 	CommunitySetUpDAO communitysetupdao = new CommunitySetUpDAO();
+	private static final Logger logger = Logger.getLogger(CommunitySetUpDAO.class);
 
 	/* Community */
 
@@ -172,10 +177,11 @@ public class CommunitySetUpBO {
 			throw new BusinessException("ALL FIELDS ARE MANDATORY");
 		}
 
-		/*
-		 * if (checkName(blockvo.getBlockName())) { throw new
-		 * BusinessException("BLOCK NAME MUST BE ALPHANUMERIC ONLY"); }
-		 */
+		
+		if (checkName(blockvo.getBlockName())) {
+			throw new BusinessException("BLOCK NAME MUST BE ALPHANUMERIC ONLY");
+		}
+		 
 		if(communitysetupdao.checkIfBlockNameExists(blockvo, "add")) {
 			throw new BusinessException("BLOCK NAME ALREADY EXISTS IN THE SELECTED COMMUNITY");
 		}
@@ -201,10 +207,10 @@ public class CommunitySetUpBO {
 			BusinessException {
 		// TODO Auto-generated method stub
 
-		/*
-		 * if (checkName(blockvo.getBlockName())) { throw new
-		 * BusinessException("BLOCK NAME MUST BE ALPHANUMERIC ONLY"); }
-		 */
+		
+		if (checkName(blockvo.getBlockName())) {
+			throw new BusinessException("BLOCK NAME MUST BE ALPHANUMERIC ONLY");
+		} 
 		
 		if(communitysetupdao.checkIfBlockNameExists(blockvo, "edit")) {
 			throw new BusinessException("BLOCK NAME ALREADY EXISTS IN THE SELECTED COMMUNITY");
@@ -270,11 +276,10 @@ public class CommunitySetUpBO {
 //			throw new BusinessException("NO METERS ASSIGNED TO CUSTOMER");
 //		}
 
-		/*
-		 * if (checkName(customervo.getFirstName()) ||
-		 * checkName(customervo.getLastName())) { throw new
-		 * BusinessException("NAME MUST BE ALPHANUMERIC ONLY"); }
-		 */
+		
+		if (checkName(customervo.getFirstName()) || checkName(customervo.getLastName())) {
+			throw new BusinessException("NAME MUST BE ALPHANUMERIC ONLY");
+		}
 
 		if (!checkEmailID(customervo.getEmail())) {
 			throw new BusinessException("INVALID EMAIL ID");
@@ -337,11 +342,11 @@ public class CommunitySetUpBO {
 			throw new BusinessException("ALL FIELDS ARE MANDATORY");
 		}
 
-		/*
-		 * if (checkName(customervo.getFirstName()) ||
-		 * checkName(customervo.getLastName())) { throw new
-		 * BusinessException("NAME MUST BE ALPHANUMERIC ONLY"); }
-		 */
+		
+		if (checkName(customervo.getFirstName()) || checkName(customervo.getLastName())) {
+			throw new BusinessException("NAME MUST BE ALPHANUMERIC ONLY");
+		}
+		 
 
 		if (!checkEmailID(customervo.getEmail())) {
 			throw new BusinessException("INVALID EMAIL ID");
@@ -447,14 +452,16 @@ public class CommunitySetUpBO {
 	public boolean checkName(String customerName) {
 		// TODO Auto-generated method stub
 		boolean result = false;
-
-		Pattern pattern = Pattern.compile("[^a-z0-9 ]");
+		logger.info("logger in cbo: " + LocalDateTime.now() + "--" + customerName);
+//		Pattern pattern = Pattern.compile("^[a-zA-Z0-9]+$");
 //		Pattern pattern = Pattern.compile("^(?=.*[a-zA-Z])(?=.*[0-9])[A-Za-z0-9]+$");
 		
-		Matcher matcher = pattern.matcher(customerName);
-		if (matcher.find()) {
+		if(customerName.matches("^[a-zA-Z0-9]+$")) {
 			result = true;
 		}
+		
+//		Matcher matcher = pattern.matcher(customerName);
+//		if (matcher.find()) {}
 		return result;
 	}
 

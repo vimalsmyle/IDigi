@@ -1712,6 +1712,7 @@ public ResponseVO processImage(MultipartFile file) throws Exception {
 	RestTemplate restTemplate = new RestTemplate();
 	
 	logger.info("Process Image: " + LocalDateTime.now());
+	logger.debug("Process Image: " + LocalDateTime.now());
 	
 	File convFile = File.createTempFile("upload-", file.getOriginalFilename());
     file.transferTo(convFile);
