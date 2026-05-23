@@ -304,14 +304,14 @@ public class ExtraMethodsDAO {
 			check = pstmt4.executeQuery();
 			
 			if(check.next()) {
-				logger.debug("Individual Bills already generated for current month" + LocalDateTime.now());
+				logger.info("Individual Bills already generated for current month" + LocalDateTime.now());
 				System.out.println("Individual Bills already generated for current month" + LocalDateTime.now());
 			} else {
 				
 			pstmt = con.prepareStatement("SELECT cd.CommunityID, cd.BlockID, cd.CustomerID, cd.CustomerUniqueID, cmd.CustomerMeterID, cmd.MIUID, cmd.MeterType, cmd.TariffID, t.Tariff FROM customerdetails AS cd LEFT JOIN customermeterdetails AS cmd ON cd.CustomerID = cmd.CustomerID LEFT JOIN tariff AS t ON t.TariffID = cmd.TariffID WHERE cmd.PayType = 'Postpaid'");
 			rs = pstmt.executeQuery();
 			while(rs.next()) {
-				logger.debug("in individualbillgeneration" + LocalDateTime.now());
+				logger.info("in individualbillgeneration" + LocalDateTime.now());
 				System.out.println("in individualbillgeneration" + LocalDateTime.now());
 				pstmt1 = con.prepareStatement("SELECT Reading, LogDate FROM balancelog WHERE CustomerMeterID = ? AND MONTH(LogDate) = MONTH(CURDATE() - INTERVAL 1 MONTH) ORDER BY LogDate DESC LIMIT 0,1");
 				pstmt1.setInt(1, rs.getInt("CustomerMeterID"));
@@ -392,7 +392,7 @@ public class ExtraMethodsDAO {
 			check1 = pstmt5.executeQuery();
 			
 			if(check1.next()) {
-				logger.debug("Bills already generated for current month" + LocalDateTime.now());
+				logger.info("Bills already generated for current month" + LocalDateTime.now());
 				System.out.println("Bills already generated for current month" + LocalDateTime.now());
 			} else {
 				billgeneration();
@@ -431,7 +431,7 @@ public class ExtraMethodsDAO {
 			
 			if(check.next()) {
 				billsGenerated = true;
-				logger.debug("Bills already generated for current month" + LocalDateTime.now());
+				logger.info("Bills already generated for current month" + LocalDateTime.now());
 				System.out.println("Bills already generated for current month" + LocalDateTime.now());
 			} else {
 				
@@ -441,7 +441,7 @@ public class ExtraMethodsDAO {
 			rs = pstmt.executeQuery();
 			while(rs.next()) {
 				List<IndividualBillingResponseVO> individualBillsList = new LinkedList<IndividualBillingResponseVO>();
-				logger.debug("in billgeneration" + LocalDateTime.now());
+				logger.info("in billgeneration" + LocalDateTime.now());
 				System.out.println("in billgeneration" + LocalDateTime.now());
 				float totalamount = 0;
 				float totalConsumption = 0;
@@ -823,7 +823,7 @@ public class ExtraMethodsDAO {
 				rs1 = con.prepareStatement("SELECT * FROM customerbillingdetails WHERE CustomerID = "+rs.getLong("CustomerID")+ " And BillMonth = "+((currentdate.getMonthValue() - 1) == 0 ? 12 : (currentdate.getMonthValue() - 1)) +" AND BillYear = "+(currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear())).executeQuery();
 				
 				if(rs1.next()) {
-					logger.debug("Sending Bill message and email for the current month for Customer: "+rs.getLong("CustomerID") +"-"+ rs.getString("FirstName") + " " + rs.getString("LastName") + " at " + LocalDateTime.now());
+					logger.info("Sending Bill message and email for the current month for Customer: "+rs.getLong("CustomerID") +"-"+ rs.getString("FirstName") + " " + rs.getString("LastName") + " at " + LocalDateTime.now());
 					System.out.println("Sending Bill message and email for the current month for Customer: "+rs.getLong("CustomerID") +"-"+ rs.getString("FirstName") + " " + rs.getString("LastName") + " at " + LocalDateTime.now());
 				
 				smsRequestVO = new SMSRequestVO();
@@ -1042,14 +1042,14 @@ public void sensordatabillgeneration() throws SQLException {
 		check = pstmt4.executeQuery();
 		
 		if(check.next()) {
-			logger.debug("Individual Bills already generated for current month" + LocalDateTime.now());
+			logger.info("Individual Bills already generated for current month" + LocalDateTime.now());
 			System.out.println("Individual Bills already generated for current month" + LocalDateTime.now());
 		} else {
 			
 		pstmt = con.prepareStatement("SELECT cd.CommunityID, cd.BlockID, cd.CustomerID, cd.CustomerUniqueID, cmd.CustomerMeterID, cmd.MIUID, cmd.MeterType, cmd.TariffID, t.Tariff FROM customerdetails AS cd LEFT JOIN customermeterdetails AS cmd ON cd.CustomerID = cmd.CustomerID LEFT JOIN tariff AS t ON t.TariffID = cmd.TariffID WHERE cd.ActiveStatus = 2 AND cmd.PayType = 'Postpaid'");
 		rs = pstmt.executeQuery();
 		while(rs.next()) {
-			logger.debug("in individualbillgeneration" + LocalDateTime.now());
+			logger.info("in individualbillgeneration" + LocalDateTime.now());
 			System.out.println("in individualbillgeneration" + LocalDateTime.now());
 			//later on change to customermeterid in place of equipment serial id
 			pstmt1 = con.prepareStatement("SELECT reading1, reading2, reading3, reading4, LogDate FROM sensorlog WHERE equipment_serial_id = ? AND MONTH(LogDate) = MONTH(CURDATE() - INTERVAL 1 MONTH) ORDER BY LogDate DESC LIMIT 0,1");
@@ -1157,7 +1157,7 @@ public void sensordatabillgeneration() throws SQLException {
 		check1 = pstmt5.executeQuery();
 		
 		if(check1.next()) {
-			logger.debug("Bills already generated for current month" + LocalDateTime.now());
+			logger.info("Bills already generated for current month" + LocalDateTime.now());
 			System.out.println("Bills already generated for current month" + LocalDateTime.now());
 		} else {
 			sensorbillgeneration();
@@ -1194,7 +1194,7 @@ public void sensordatabillgeneration() throws SQLException {
 			
 			if(check.next()) {
 				billsGenerated = true;
-				logger.debug("Bills already generated for current month" + LocalDateTime.now());
+				logger.info("Bills already generated for current month" + LocalDateTime.now());
 				System.out.println("Bills already generated for current month" + LocalDateTime.now());
 			} else {
 				
@@ -1204,7 +1204,7 @@ public void sensordatabillgeneration() throws SQLException {
 			rs = pstmt.executeQuery();
 			while(rs.next()) {
 				List<IndividualBillingResponseVO> individualBillsList = new LinkedList<IndividualBillingResponseVO>();
-				logger.debug("in billgeneration" + LocalDateTime.now());
+				logger.info("in billgeneration" + LocalDateTime.now());
 				System.out.println("in billgeneration" + LocalDateTime.now());
 				float totalamount = 0;
 				float totalConsumption = 0;
@@ -1585,7 +1585,7 @@ public void sensordatabillgeneration() throws SQLException {
 				rs1 = con.prepareStatement("SELECT * FROM customerbillingdetails WHERE CustomerID = "+rs.getLong("CustomerID")+ " And BillMonth = "+((currentdate.getMonthValue() - 1) == 0 ? 12 : (currentdate.getMonthValue() - 1)) +" AND BillYear = "+(currentdate.getMonthValue() == 1 ? currentdate.getYear() - 1 : currentdate.getYear())).executeQuery();
 				
 				if(rs1.next()) {
-					logger.debug("Sending Bill message and email for the current month for Customer: "+rs.getLong("CustomerID") +"-"+ rs.getString("FirstName") + " " + rs.getString("LastName") + " at " + LocalDateTime.now());
+					logger.info("Sending Bill message and email for the current month for Customer: "+rs.getLong("CustomerID") +"-"+ rs.getString("FirstName") + " " + rs.getString("LastName") + " at " + LocalDateTime.now());
 					System.out.println("Sending Bill message and email for the current month for Customer: "+rs.getLong("CustomerID") +"-"+ rs.getString("FirstName") + " " + rs.getString("LastName") + " at " + LocalDateTime.now());
 				
 				smsRequestVO = new SMSRequestVO();
@@ -1633,6 +1633,7 @@ public void postDataToElMeasure() throws SQLException {
 		
 		pstmt = con.prepareStatement("SELECT * FROM customerdetails");
 		rs = pstmt.executeQuery();
+		logger.info("Posting Data to ElMeasure Start" + LocalDateTime.now());
 		
 		while(rs.next()) {
 			Devices device = new Devices();
@@ -1666,6 +1667,8 @@ public void postDataToElMeasure() throws SQLException {
 		
 		postToElmeasure(elMeasureRequestVO);
 		
+		logger.info("Posting Data to ElMeasure End" + LocalDateTime.now());
+		
 	} catch (Exception e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
@@ -1694,6 +1697,7 @@ public ResponseVO postToElmeasure(ElMeasureRequestVO elMeasureRequestVO) throws 
 	HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 	
 	System.out.println("response:-" + response.toString());
+	logger.info("Response from ELmeasure" + LocalDateTime.now() + "--" + response.toString());
 	
 	responseVO.setResult(response.statusCode() == 200 ? "success" : "Failure");
 	responseVO.setMessage(response.body());
@@ -1706,6 +1710,8 @@ public ResponseVO processImage(MultipartFile file) throws Exception {
 	// TODO Auto-generated method stub
 	ResponseVO responseVO = new ResponseVO();
 	RestTemplate restTemplate = new RestTemplate();
+	
+	logger.info("Process Image: " + LocalDateTime.now());
 	
 	File convFile = File.createTempFile("upload-", file.getOriginalFilename());
     file.transferTo(convFile);
@@ -1724,11 +1730,14 @@ public ResponseVO processImage(MultipartFile file) throws Exception {
             String.class
     ));
     
+    logger.info("Process Image Response From Python Service: " + LocalDateTime.now() + "--" + responseVO.getMessage());
+    
     responseVO.setResult("Success");
 
     responseVO = gson.fromJson(responseVO.getMessage(), ResponseVO.class);
     
     System.out.println("response:-" + responseVO.getMessage());
+    logger.info("Process Image Response posting to UI: " + LocalDateTime.now() + "--" + responseVO.getMessage());
     
 	return responseVO;
 	
