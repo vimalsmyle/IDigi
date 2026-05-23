@@ -1725,7 +1725,7 @@ public ResponseVO processImage(MultipartFile file) throws Exception {
     HttpEntity<LinkedMultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
 
     responseVO.setMessage(restTemplate.postForObject(
-            "ttp://localhost:5000/ocr", // update the API to access the python service
+            "http://localhost:5000/ocr", // update the API to access the python service
             requestEntity,
             String.class
     ));
