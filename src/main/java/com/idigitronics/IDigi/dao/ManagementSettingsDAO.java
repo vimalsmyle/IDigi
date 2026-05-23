@@ -178,7 +178,7 @@ public class ManagementSettingsDAO {
 			responsevo.setResult("Failure");
 		} finally {
 			pstmt.close();
-			con.close();
+//			con.close();
 		}
 
 		return responsevo;

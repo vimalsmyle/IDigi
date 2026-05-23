@@ -172,10 +172,10 @@ public class CommunitySetUpBO {
 			throw new BusinessException("ALL FIELDS ARE MANDATORY");
 		}
 
-		if (checkName(blockvo.getBlockName())) {
-			throw new BusinessException("BLOCK NAME MUST BE ALPHANUMERIC ONLY");
-		}
-		
+		/*
+		 * if (checkName(blockvo.getBlockName())) { throw new
+		 * BusinessException("BLOCK NAME MUST BE ALPHANUMERIC ONLY"); }
+		 */
 		if(communitysetupdao.checkIfBlockNameExists(blockvo, "add")) {
 			throw new BusinessException("BLOCK NAME ALREADY EXISTS IN THE SELECTED COMMUNITY");
 		}
@@ -201,9 +201,10 @@ public class CommunitySetUpBO {
 			BusinessException {
 		// TODO Auto-generated method stub
 
-		if (checkName(blockvo.getBlockName())) {
-			throw new BusinessException("BLOCK NAME MUST BE ALPHANUMERIC ONLY");
-		}
+		/*
+		 * if (checkName(blockvo.getBlockName())) { throw new
+		 * BusinessException("BLOCK NAME MUST BE ALPHANUMERIC ONLY"); }
+		 */
 		
 		if(communitysetupdao.checkIfBlockNameExists(blockvo, "edit")) {
 			throw new BusinessException("BLOCK NAME ALREADY EXISTS IN THE SELECTED COMMUNITY");
@@ -269,9 +270,11 @@ public class CommunitySetUpBO {
 //			throw new BusinessException("NO METERS ASSIGNED TO CUSTOMER");
 //		}
 
-		if (checkName(customervo.getFirstName()) || checkName(customervo.getLastName())) {
-			throw new BusinessException("NAME MUST BE ALPHANUMERIC ONLY");
-		}
+		/*
+		 * if (checkName(customervo.getFirstName()) ||
+		 * checkName(customervo.getLastName())) { throw new
+		 * BusinessException("NAME MUST BE ALPHANUMERIC ONLY"); }
+		 */
 
 		if (!checkEmailID(customervo.getEmail())) {
 			throw new BusinessException("INVALID EMAIL ID");
@@ -334,9 +337,11 @@ public class CommunitySetUpBO {
 			throw new BusinessException("ALL FIELDS ARE MANDATORY");
 		}
 
-		if (checkName(customervo.getFirstName()) || checkName(customervo.getLastName())) {
-			throw new BusinessException("NAME MUST BE ALPHANUMERIC ONLY");
-		}
+		/*
+		 * if (checkName(customervo.getFirstName()) ||
+		 * checkName(customervo.getLastName())) { throw new
+		 * BusinessException("NAME MUST BE ALPHANUMERIC ONLY"); }
+		 */
 
 		if (!checkEmailID(customervo.getEmail())) {
 			throw new BusinessException("INVALID EMAIL ID");

@@ -1283,7 +1283,7 @@ public class CommunitySetUpDAO {
 			responsevo.setResult("Failure");
 		} finally {
 			pstmt.close();
-			con.close();
+//			con.close();
 		}
 
 		return responsevo;
@@ -1363,12 +1363,15 @@ public class CommunitySetUpDAO {
 			            		
 			        		} 
 			            	
-			            	if (communitySetupBO.checkName(customervo.getFirstName()) || communitySetupBO.checkName(customervo.getLastName())) {
-			        			
-			        			customervo.setRemarks(customervo.getRemarks() + " NAME MUST BE ALPHANUMERIC ONLY;");
-			            		register = false;
-			        			
-			        		} 
+							/*
+							 * if (communitySetupBO.checkName(customervo.getFirstName()) ||
+							 * communitySetupBO.checkName(customervo.getLastName())) {
+							 * 
+							 * customervo.setRemarks(customervo.getRemarks() +
+							 * " NAME MUST BE ALPHANUMERIC ONLY;"); register = false;
+							 * 
+							 * }
+							 */
 			            	
 			            	if(checkcustomerName(customervo)) {
 			        			
@@ -1430,8 +1433,9 @@ public class CommunitySetUpDAO {
 	            if(unRegisteredList.size() > 0) {
 	            	responsevo = writeExcel(unRegisteredList);
 	            }
-	            if(registeredList.size() > 0) {
+	            if(registeredList.size() > 0 && unRegisteredList.size() == 0) {
 	            responsevo.setRegisteredList(registeredList);
+	            responsevo = writeExcel(registeredList);
 	            }
 	            
 	 } catch (Exception e) {
@@ -1539,7 +1543,7 @@ public class CommunitySetUpDAO {
 		}
         
         responsevo.setResult("Success");
-		responsevo.setFileName("Customer_Registration_Failed_List.xlsx");
+		responsevo.setFileName("Customer_Registration_Success_Failed_List.xlsx");
 		responsevo.setByteArrayInputStream(in);
         
 		return responsevo;
@@ -1908,7 +1912,7 @@ public class CommunitySetUpDAO {
 			ex.printStackTrace();
 		} finally {
 			pstmt.close();
-			con.close();
+//			con.close();
 		}
 		
 		return result;
@@ -1934,7 +1938,7 @@ public class CommunitySetUpDAO {
 			ex.printStackTrace();
 		} finally {
 			pstmt.close();
-			con.close();
+//			con.close();
 		}
 		
 		return result;
@@ -1960,7 +1964,7 @@ public class CommunitySetUpDAO {
 			ex.printStackTrace();
 		} finally {
 			pstmt.close();
-			con.close();
+//			con.close();
 		}
 		
 		return result;
@@ -1988,7 +1992,7 @@ public class CommunitySetUpDAO {
 			ex.printStackTrace();
 		} finally {
 			pstmt.close();
-			con.close();
+//			con.close();
 		}
 		
 		return result;
@@ -2015,7 +2019,7 @@ public class CommunitySetUpDAO {
 			ex.printStackTrace();
 		} finally {
 			pstmt.close();
-			con.close();
+//			con.close();
 		}
 		
 		return result;
@@ -2377,7 +2381,7 @@ public class CommunitySetUpDAO {
 			ex.printStackTrace();
 		} finally {
 			pstmt.close();
-			con.close();
+//			con.close();
 		}
 
 		return result;

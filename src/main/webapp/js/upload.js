@@ -21,7 +21,7 @@ $(document).ready(function() {
 			url: "./customer/exceladd/"
 				+ sessionStorage.getItem("roleID") + "/"
 				+ sessionStorage.getItem("createdByID") + "/"
-				+ sessionStorage.getItem("ID"),
+				+ sessionStorage.getItem("userID"),
 			type: "POST",
 			data: formData,
 			processData: false,
