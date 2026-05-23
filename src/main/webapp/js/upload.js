@@ -16,7 +16,7 @@ $(document).ready(function() {
 
 		var formData = new FormData();
 		formData.append("file", fileInput.files[0]);
-
+		$("#preloader").show();
 		$.ajax({
 			url: "./customer/exceladd/"
 				+ sessionStorage.getItem("roleID") + "/"
@@ -33,7 +33,7 @@ $(document).ready(function() {
 			},
 
 			success: function(data, status, xhr) {
-
+	$("#preloader").hide();
 				// Get filename from header
 				var filename = "download.xlsx";
 				var disposition = xhr.getResponseHeader('Content-Disposition');
@@ -52,6 +52,7 @@ $(document).ready(function() {
 			},
 
 			error: function(err) {
+			$("#preloader").hide();
 				console.error("Upload failed:", err);
 				console.error("Status:", err.status);
 				console.error("Response:", err.responseText);
