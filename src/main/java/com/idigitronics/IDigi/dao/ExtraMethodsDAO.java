@@ -1712,6 +1712,7 @@ public ResponseVO processImage(MultipartFile file) throws Exception {
 	RestTemplate restTemplate = new RestTemplate();
 	
 	logger.info("Process Image: " + LocalDateTime.now());
+	logger.debug("Process Image: " + LocalDateTime.now());
 	
 	File convFile = File.createTempFile("upload-", file.getOriginalFilename());
     file.transferTo(convFile);
@@ -1725,7 +1726,7 @@ public ResponseVO processImage(MultipartFile file) throws Exception {
     HttpEntity<LinkedMultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
 
     responseVO.setMessage(restTemplate.postForObject(
-            "ttp://localhost:5000/ocr", // update the API to access the python service
+            "http://localhost:5000/ocr", // update the API to access the python service
             requestEntity,
             String.class
     ));

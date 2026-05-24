@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.idigitronics.IDigi.bo.CommunitySetUpBO;
 import com.idigitronics.IDigi.dao.DropDownDAO;
 import com.idigitronics.IDigi.dao.ExtraMethodsDAO;
 import com.idigitronics.IDigi.request.vo.ElMeasureRequestVO;
@@ -230,8 +231,8 @@ public class DropDownController {
 		return responsevo;
 	}
 	
-	@RequestMapping(value = "/testmail",method = RequestMethod.GET, produces="application/json")
-	public @ResponseBody ResponseVO testmail() throws SQLException {
+	@RequestMapping(value = "/testmail/{name}",method = RequestMethod.GET, produces="application/json")
+	public @ResponseBody ResponseVO testmail(@PathVariable("name") String name) throws SQLException {
 		
 		ResponseVO responsevo = new ResponseVO();
 		responsevo.setResult("success");
@@ -242,8 +243,14 @@ public class DropDownController {
 		mailRequestVO.setToEmail("kvk9889@gmail.com");
 		mailRequestVO.setSubject("test");
 		mailRequestVO.setMessage("testing email");
-		extraMethodsDAO.sendmail(mailRequestVO);
-
+//		extraMethodsDAO.sendmail(mailRequestVO);
+		CommunitySetUpBO cbo = new CommunitySetUpBO();
+		if(cbo.checkName(name)) {
+			System.out.println("matched");
+		} else {
+			System.out.println("not-matched");
+		}
+		
 		return responsevo;
 	}
 	
