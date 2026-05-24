@@ -912,7 +912,7 @@ $(document).on("click", ".imageBtn", function () {
         success: function (response) {
             console.log(response);
 
-            if (response.result === "success") {
+            if (response.success) {
             //    alert("Meter Details: " + response.message);
 
                 // Example: auto-fill meter serial if needed
