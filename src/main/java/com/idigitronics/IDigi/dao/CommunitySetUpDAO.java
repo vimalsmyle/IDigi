@@ -620,7 +620,7 @@ public class CommunitySetUpDAO {
 		} finally {
 			pstmt.close();
 //			rs.close();
-			con.close();
+//			con.close();
 		}
 
 		return block_list;
@@ -880,12 +880,12 @@ public class CommunitySetUpDAO {
         	result = true;
         	}
 		}
-		catch (Exception ex) {
+		catch (Exception ex) {	
 			ex.printStackTrace();
 		} finally {
 			pstmt.close();
 			rs.close();
-			con.close();
+//			con.close();
 		}
 		
 		return result;
@@ -915,7 +915,7 @@ public class CommunitySetUpDAO {
 		} finally {
 			pstmt.close();
 			rs.close();
-			con.close();
+			//con.close();
 		}
 		
 		return result;
@@ -2046,7 +2046,7 @@ public class CommunitySetUpDAO {
 			ex.printStackTrace();
 		} finally {
 			pstmt.close();
-			con.close();
+			//con.close();
 		}
 		
 		return result;
@@ -2074,7 +2074,7 @@ public class CommunitySetUpDAO {
 			ex.printStackTrace();
 		} finally {
 			pstmt.close();
-			con.close();
+			//con.close();
 		}
 		
 		return result;
@@ -2328,7 +2328,7 @@ public class CommunitySetUpDAO {
 		} finally {
 			pstmt.close();
 			rs.close();
-			con.close();
+			//con.close();
 		}
 
 		return result;
@@ -2354,7 +2354,7 @@ public class CommunitySetUpDAO {
 			ex.printStackTrace();
 		} finally {
 			pstmt.close();
-			con.close();
+			//con.close();
 		}
 
 		return result;
@@ -2433,7 +2433,7 @@ public class CommunitySetUpDAO {
 			ex.printStackTrace();
 		} finally {
 			pstmt.close();
-			con.close();
+			//con.close();
 		}
 		
 		return responsevo;

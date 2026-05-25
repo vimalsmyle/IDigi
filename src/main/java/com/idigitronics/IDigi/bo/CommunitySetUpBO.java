@@ -178,7 +178,7 @@ public class CommunitySetUpBO {
 		}
 
 		
-		if (checkName(blockvo.getBlockName())) {
+		if (!checkName(blockvo.getBlockName())) {
 			throw new BusinessException("BLOCK NAME MUST BE ALPHANUMERIC ONLY");
 		}
 		 
@@ -208,7 +208,7 @@ public class CommunitySetUpBO {
 		// TODO Auto-generated method stub
 
 		
-		if (checkName(blockvo.getBlockName())) {
+		if (!checkName(blockvo.getBlockName())) {
 			throw new BusinessException("BLOCK NAME MUST BE ALPHANUMERIC ONLY");
 		} 
 		
@@ -277,7 +277,7 @@ public class CommunitySetUpBO {
 //		}
 
 		
-		if (checkName(customervo.getFirstName()) || checkName(customervo.getLastName())) {
+		if (!checkName(customervo.getFirstName()) || !checkName(customervo.getLastName())) {
 			throw new BusinessException("NAME MUST BE ALPHANUMERIC ONLY");
 		}
 
@@ -343,7 +343,7 @@ public class CommunitySetUpBO {
 		}
 
 		
-		if (checkName(customervo.getFirstName()) || checkName(customervo.getLastName())) {
+		if (!checkName(customervo.getFirstName()) || !checkName(customervo.getLastName())) {
 			throw new BusinessException("NAME MUST BE ALPHANUMERIC ONLY");
 		}
 		 
@@ -449,14 +449,14 @@ public class CommunitySetUpBO {
 
 	/* Validations */
 
-	public boolean checkName(String customerName) {
+	public boolean checkName(String name) {
 		// TODO Auto-generated method stub
 		boolean result = false;
-		logger.info("logger in cbo: " + LocalDateTime.now() + "--" + customerName);
+		logger.info("logger in cbo: " + LocalDateTime.now() + "--" + name);
 //		Pattern pattern = Pattern.compile("^[a-zA-Z0-9]+$");
 //		Pattern pattern = Pattern.compile("^(?=.*[a-zA-Z])(?=.*[0-9])[A-Za-z0-9]+$");
 		
-		if(customerName.matches("^[a-zA-Z0-9]+$")) {
+		if(name.matches("^[a-zA-Z0-9]+$")) {
 			result = true;
 		}
 		
