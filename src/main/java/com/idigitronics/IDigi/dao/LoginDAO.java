@@ -292,6 +292,7 @@ public class LoginDAO {
 			ExtraMethodsDAO maildao = new ExtraMethodsDAO();
 			MailRequestVO mailrequestvo = new MailRequestVO();
 			mailrequestvo.setFileLocation("NoAttachment");
+			mailrequestvo.setSubject("Password for the UserID: " + userid);
 			pstmt = con.prepareStatement(
 					"SELECT CustomerID, CustomerUniqueID, UserPassword, CommunityID, BlockID FROM user WHERE UserID = ?");
 			pstmt.setString(1, userid);
@@ -324,7 +325,9 @@ public class LoginDAO {
 				mailrequestvo.setUserID(userid);
 				mailrequestvo.setUserPassword(
 						Encryptor.decrypt(ExtraConstants.key1, ExtraConstants.key2, rs.getString("UserPassword")));
+				mailrequestvo.setMessage("Your password for the UserID: " + userid + " is " + mailrequestvo.getUserPassword());
 				responsevo.setResult(maildao.sendmail(mailrequestvo));
+				responsevo.setMessage("Password has been sent to your registered email id");
 
 			} else {
 				responsevo.setMessage("UserID is not Registered");
@@ -367,7 +370,7 @@ public class LoginDAO {
 			responsevo.setMessage("Password Updation Failed");
 		} finally {
 			pstmt.close();
-			con.close();
+//			con.close();
 		}
 
 		return responsevo;
@@ -417,7 +420,7 @@ public class LoginDAO {
 			rs = pstmt.executeQuery();
 			if (rs.next()) {
 
-				result = usermanagementvo.getOldPassword().toLowerCase().equalsIgnoreCase(rs.getString("UserPassword").toLowerCase());
+				result = usermanagementvo.getOldPassword().toLowerCase().equalsIgnoreCase(Encryptor.decrypt(ExtraConstants.key1, ExtraConstants.key2, rs.getString("UserPassword")).toLowerCase());
 			}
 
 		} catch (Exception ex) {
