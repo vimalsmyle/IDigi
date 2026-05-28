@@ -1729,8 +1729,9 @@ public ResponseVO processImage(MultipartFile file) throws Exception {
 		try {
 			result = restTemplate.postForObject("http://localhost:5000/ocr", requestEntity, String.class);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			responseVO.setResult("Failure");
+			responseVO.setSuccess(false);
+			responseVO.setMessage("Failed to Connect to OCR Server. Please Try Again After Sometime");
 		}
 
 	if (result != null) {
