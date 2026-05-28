@@ -902,7 +902,7 @@ $(document).on("click", ".imageBtn", function () {
 
     var formData = new FormData();
     formData.append("image", fileInput);
-
+	$("#preloader").show();
     $.ajax({
         url: "./processimage",
         type: "POST",
@@ -911,7 +911,7 @@ $(document).on("click", ".imageBtn", function () {
         processData: false,
         success: function (response) {
             console.log(response);
-
+			$("#preloader").hide();
             if (response.success) {
             //    alert("Meter Details: " + response.message);
 
@@ -923,7 +923,8 @@ $(document).on("click", ".imageBtn", function () {
             }
         },
         error: function () {
-            alert("Upload failed");
+			$("#preloader").hide();
+            alert("Error: " + response.message);
         }
     });
 
