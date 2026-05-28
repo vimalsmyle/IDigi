@@ -606,7 +606,7 @@ public class DropDownDAO {
 		} finally {
 			pstmt.close();
 			rs.close();
-			con.close();
+//			con.close();
 		}
 		
 		return prefixResponseVO;

@@ -52,6 +52,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -1706,42 +1707,57 @@ public ResponseVO postToElmeasure(ElMeasureRequestVO elMeasureRequestVO) throws 
 }
 
 public ResponseVO processImage(MultipartFile file) throws Exception {
-	
+
 	// TODO Auto-generated method stub
 	RestTemplate restTemplate = new RestTemplate();
+	ResponseVO responseVO = new ResponseVO();
+	String result = null;
 	
 	logger.info("Process Image: " + LocalDateTime.now());
-	
+
 	File convFile = File.createTempFile("upload-", file.getOriginalFilename());
-    file.transferTo(convFile);
-    
-    LinkedMultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
-    body.add("file", new FileSystemResource(convFile));
+	file.transferTo(convFile);
 
-    HttpHeaders headers = new HttpHeaders();
-    headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+	LinkedMultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
+	body.add("file", new FileSystemResource(convFile));
 
-    HttpEntity<LinkedMultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
-    
-    String result = restTemplate.postForObject("http://localhost:5000/ocr", requestEntity, String.class);
-    
-    ResponseVO responseVO = gson.fromJson(result, ResponseVO.class);
-    
-    logger.info("Process Image Response From Python Service: " + LocalDateTime.now() + "--" + responseVO.getMessage());
-    
-    if(responseVO.isSuccess()) {
-    	responseVO.setResult("Success");
-    	responseVO.setMessage("Image Processed Successfully. Please Check The Populated Details and Proceed");
-    } else {
-    	responseVO.setResult("Failure");
-    	responseVO.setMessage("Failed to Read Image. Please Upload Clear Image");
-    }
-    
-    System.out.println("Reading:-" + responseVO.getMeterReading() + " MeterSerialNumber:-" + responseVO.getMeterSerialNumber());
-    logger.info("Processed Image Response posting to UI: " + LocalDateTime.now() + "--" + "Reading:-" + responseVO.getMeterReading() + " MeterSerialNumber:-" + responseVO.getMeterSerialNumber());
-    
+	HttpHeaders headers = new HttpHeaders();
+	headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+
+	HttpEntity<LinkedMultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
+		
+		try {
+			result = restTemplate.postForObject("http://localhost:5000/ocr", requestEntity, String.class);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	if (result != null) {
+		
+		responseVO = gson.fromJson(result, ResponseVO.class);
+
+		logger.info("Process Image Response From Python Service: " + LocalDateTime.now() + "--" + responseVO.getMessage());
+
+		if (responseVO.isSuccess()) {
+			responseVO.setResult("Success");
+			responseVO.setMessage("Image Processed Successfully. Please Check The Populated Details and Proceed");
+		} else {
+			responseVO.setResult("Failure");
+			responseVO.setMessage("Failed to Read Image. Please Upload Clear Image");
+		}
+
+		System.out.println("Reading:-" + responseVO.getMeterReading() + " MeterSerialNumber:-" + responseVO.getMeterSerialNumber());
+		logger.info("Processed Image Response posting to UI: " + LocalDateTime.now() + "--" + "Reading:-" + responseVO.getMeterReading() + " MeterSerialNumber:-" + responseVO.getMeterSerialNumber());
+		
+		} else {
+			responseVO.setResult("Failure");
+			responseVO.setSuccess(false);
+			responseVO.setMessage("Failed to Connect to OCR Server. Please Try Again After Sometime");
+		}
+
 	return responseVO;
-	
+
 }
 
 //public static HttpRequest.BodyPublisher ofMimeMultipartData(String name, Path path) throws Exception {
