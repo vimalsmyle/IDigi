@@ -32,7 +32,7 @@ public class ResponseVO {
 	private BillDetailsResponseVO billdetails;
 	private LastReadingResponseVO lastReadingDetails; 
 	private String result;
-	private String message;
+	private String Message;
 	private String fileName;
 	private String location;
 	private UserDetails userDetails;
@@ -60,10 +60,10 @@ public class ResponseVO {
 		this.userDetails = userDetails;
 	}
 	public String getMessage() {
-		return message;
+		return Message;
 	}
-	public void setMessage(String message) {
-		this.message = message;
+	public void setMessage(String Message) {
+		this.Message = Message;
 	}
 	public TopupDetailsResponseVO getTopupdetails() {
 		return topupdetails;

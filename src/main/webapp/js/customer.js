@@ -919,12 +919,12 @@ $(document).on("click", ".imageBtn", function () {
                  $("#meterSerialNumberAdd-" + id).val(response.meterSerialNumber);
                   $("#defaultReadingAdd-" + id).val(response.meterReading);
             } else {
-                alert("Error: " + response.message);
+                alert("Error: " + response.Message);
             }
         },
         error: function () {
 			$("#preloader").hide();
-            alert("Error: " + response.message);
+            alert("Error: " + response.Message);
         }
     });
 
