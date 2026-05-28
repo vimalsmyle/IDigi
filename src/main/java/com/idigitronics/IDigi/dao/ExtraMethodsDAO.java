@@ -1617,7 +1617,7 @@ public void sensordatabillgeneration() throws SQLException {
 		
 	}*/
 
-@Scheduled(cron="30 22 * * * *")
+//@Scheduled(cron="30 22 * * * *")
 public void postDataToElMeasure() throws SQLException {
 	
 	Connection con = null;
@@ -1708,11 +1708,9 @@ public ResponseVO postToElmeasure(ElMeasureRequestVO elMeasureRequestVO) throws 
 public ResponseVO processImage(MultipartFile file) throws Exception {
 	
 	// TODO Auto-generated method stub
-	ResponseVO responseVO = new ResponseVO();
 	RestTemplate restTemplate = new RestTemplate();
 	
 	logger.info("Process Image: " + LocalDateTime.now());
-	logger.debug("Process Image: " + LocalDateTime.now());
 	
 	File convFile = File.createTempFile("upload-", file.getOriginalFilename());
     file.transferTo(convFile);
@@ -1724,21 +1722,23 @@ public ResponseVO processImage(MultipartFile file) throws Exception {
     headers.setContentType(MediaType.MULTIPART_FORM_DATA);
 
     HttpEntity<LinkedMultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
-
-    responseVO.setMessage(restTemplate.postForObject(
-            "http://localhost:5000/ocr", // update the API to access the python service
-            requestEntity,
-            String.class
-    ));
+    
+    String result = restTemplate.postForObject("http://localhost:5000/ocr", requestEntity, String.class);
+    
+    ResponseVO responseVO = gson.fromJson(result, ResponseVO.class);
     
     logger.info("Process Image Response From Python Service: " + LocalDateTime.now() + "--" + responseVO.getMessage());
     
-    responseVO.setResult("Success");
-
-    responseVO = gson.fromJson(responseVO.getMessage(), ResponseVO.class);
+    if(responseVO.isSuccess()) {
+    	responseVO.setResult("Success");
+    	responseVO.setMessage("Image Processed Successfully. Please Check The Populated Details and Proceed");
+    } else {
+    	responseVO.setResult("Failure");
+    	responseVO.setMessage("Failed to Read Image. Please Upload Clear Image");
+    }
     
-    System.out.println("response:-" + responseVO.getMessage());
-    logger.info("Process Image Response posting to UI: " + LocalDateTime.now() + "--" + responseVO.getMessage());
+    System.out.println("Reading:-" + responseVO.getMeterReading() + " MeterSerialNumber:-" + responseVO.getMeterSerialNumber());
+    logger.info("Processed Image Response posting to UI: " + LocalDateTime.now() + "--" + "Reading:-" + responseVO.getMeterReading() + " MeterSerialNumber:-" + responseVO.getMeterSerialNumber());
     
 	return responseVO;
 	
