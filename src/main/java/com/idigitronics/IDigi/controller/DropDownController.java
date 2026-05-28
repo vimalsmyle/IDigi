@@ -57,10 +57,20 @@ public class DropDownController {
 	
 	@RequestMapping(value = "/customers/{roleID}/{id}/{blockID}",method = RequestMethod.GET, 
 			produces="application/json")
-	public @ResponseBody ResponseVO getallhouses(@PathVariable("roleID") int roleid, @PathVariable("id") String id, @PathVariable ("blockID") int blockID) {
+	public @ResponseBody ResponseVO getallcustomers(@PathVariable("roleID") int roleid, @PathVariable("id") String id, @PathVariable ("blockID") int blockID) {
 		
 		ResponseVO responsevo = new ResponseVO();
 		responsevo.setDropDownCustomers(dropdowndao.getallcustomers(blockID, roleid, id));
+		
+		return responsevo;
+	}
+	
+	@RequestMapping(value = "/houses/{roleID}/{id}/{blockID}",method = RequestMethod.GET, 
+			produces="application/json")
+	public @ResponseBody ResponseVO getallhouses(@PathVariable("roleID") int roleid, @PathVariable("id") int id, @PathVariable ("blockID") int blockID) {
+		
+		ResponseVO responsevo = new ResponseVO();
+		responsevo.setDropDownCustomers(dropdowndao.getAllHouses(blockID, roleid, id));
 		
 		return responsevo;
 	}
@@ -75,12 +85,12 @@ public class DropDownController {
 		return responsevo;
 	}
 	
-	@RequestMapping(value = "/customerdetails/{communityID}/{blockID}/{houseNumber}",method = RequestMethod.GET, 
+	@RequestMapping(value = "/customerdetails/{communityID}/{blockID}/{customerID}",method = RequestMethod.GET, 
 			produces="application/json")
-	public @ResponseBody ResponseVO getcustomerdetails(@PathVariable("communityID") int communityId, @PathVariable("blockID") int blockID, @PathVariable ("houseNumber") String houseNumber) throws SQLException {
+	public @ResponseBody ResponseVO getcustomerdetails(@PathVariable("communityID") int communityId, @PathVariable("blockID") int blockID, @PathVariable ("customerID") long customerID) throws SQLException {
 		
 		ResponseVO responsevo = new ResponseVO();
-		responsevo.setCustomerDetails(dropdowndao.getcustomerdetails(blockID, communityId, houseNumber));
+		responsevo.setCustomerDetails(dropdowndao.getcustomerdetails(blockID, communityId, customerID));
 		
 		if(responsevo.getCustomerDetails() != null) {
 			responsevo.setResult("Success");

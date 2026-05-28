@@ -1364,8 +1364,8 @@ public class CommunitySetUpDAO {
 			        		} 
 			            	
 							
-							if (communitySetupBO.checkName(customervo.getFirstName())
-									|| communitySetupBO.checkName(customervo.getLastName())) {
+							if (!communitySetupBO.checkName(customervo.getFirstName())
+									|| !communitySetupBO.checkName(customervo.getLastName())) {
 
 								customervo.setRemarks(customervo.getRemarks() + " NAME MUST BE ALPHANUMERIC ONLY;");
 								register = false;

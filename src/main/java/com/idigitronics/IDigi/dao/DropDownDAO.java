@@ -109,6 +109,27 @@ public class DropDownDAO {
 		return houses;
 	}
 	
+	public HashMap<Long, String> getAllHouses(int blockID, int roleid, int id) {
+		// TODO Auto-generated method stub
+		HashMap<Long, String> houses = new HashMap<Long, String>();
+		
+		Connection con = null;
+		try {
+			con = getConnection();
+			String query = "SELECT HouseNumber, CustomerID from customerdetails WHERE BlockID = ? <change>";
+			PreparedStatement pstmt = con.prepareStatement(query.replaceAll("<change>", (roleid == 1 || roleid == 2 || roleid == 4 || roleid == 5) ? "ORDER BY CustomerID ASC" : (roleid == 3) ? " AND CustomerUniqueID = '"+id+"'" :""));
+			pstmt.setInt(1, blockID);
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				houses.put(rs.getLong("CustomerID"), rs.getString("HouseNumber"));
+			}
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+		}
+		return houses;
+	}
+	
 	public HashMap<Long, String> gettotalcustomers() {
 		// TODO Auto-generated method stub
 		HashMap<Long, String> customers = new HashMap<Long, String>();
@@ -445,7 +466,7 @@ public class DropDownDAO {
 		return lastReadingResponseVO;
 	}
 
-	public CustomerResponseVO getcustomerdetails(int blockID, int communityId, String houseNumber) throws SQLException {
+	public CustomerResponseVO getcustomerdetails(int blockID, int communityId, long customerID) throws SQLException {
 		// TODO Auto-generated method stub
 		
 		Connection con = null;
@@ -455,11 +476,12 @@ public class DropDownDAO {
 		
 		try {
 			con = getConnection();
-			pstmt = con.prepareStatement("SELECT * FROM customerdetails WHERE HouseNumber = '" + houseNumber + "' and BlockID = " + blockID + " and CommunityID = " + communityId);
+			pstmt = con.prepareStatement("SELECT * FROM customerdetails WHERE CustomerID = " + customerID + " and BlockID = " + blockID + " and CommunityID = " + communityId);
 			rs = pstmt.executeQuery();
 			if (rs.next()) {
 				customerResponseVO = new CustomerResponseVO();
 				customerResponseVO.setCustomerID(rs.getLong("CustomerID"));
+				customerResponseVO.setHouseNumber(rs.getString("HouseNumber"));
 				customerResponseVO.setFirstName(rs.getString("FirstName"));
 				customerResponseVO.setLastName(rs.getString("LastName"));
 				customerResponseVO.setEmail(rs.getString("Email"));
