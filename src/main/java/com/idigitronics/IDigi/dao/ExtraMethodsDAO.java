@@ -1618,7 +1618,7 @@ public void sensordatabillgeneration() throws SQLException {
 		
 	}*/
 
-//@Scheduled(cron="30 22 * * * *")
+@Scheduled(cron="30 22 * * * *")
 public void postDataToElMeasure() throws SQLException {
 	
 	Connection con = null;
@@ -1689,6 +1689,46 @@ public ResponseVO postToElmeasure(ElMeasureRequestVO elMeasureRequestVO) throws 
 	System.out.println(data);
 
 	HttpClient client = HttpClient.newHttpClient();
+
+	HttpRequest request = HttpRequest.newBuilder().uri(URI.create("http://iot.theiox.com/appv2/multiple_update"))
+			.header("Content-Type", "application/json")
+			.header("Access-Token", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MTA0OSwidXNlcl9pZCI6InVzZXJfMTc0MzgiLCJzaXRlX2lkIjoiaW5kdXN0cnlfNjkwIiwiY2xpZW50X2lkIjoiY2xpZW50XzM3NyIsImV4cCI6MjY0MDA3MTY3Nn0.ferrhelPYAlFg8UgFppk3K81G1WrPdPw64Rlzm3MFrk")
+			.POST(HttpRequest.BodyPublishers.ofString(data)).build();
+
+	HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+	
+	System.out.println("response:-" + response.toString());
+	logger.info("Response from ELmeasure" + LocalDateTime.now() + "--" + response.toString());
+	
+	responseVO.setResult(response.statusCode() == 200 ? "success" : "Failure");
+	responseVO.setMessage(response.body());
+
+	return responseVO;
+}
+
+public ResponseVO postToElmeasureNew(ElMeasureRequestVO elMeasureRequestVO) throws IOException, InterruptedException {
+
+	String data = gson.toJson(elMeasureRequestVO, ElMeasureRequestVO.class);
+	ResponseVO responseVO = new ResponseVO();
+	System.out.println(data);
+	String result = null;
+
+	HttpClient client = HttpClient.newHttpClient();
+	RestTemplate restTemplate = new RestTemplate();
+	
+	HttpHeaders headers = new HttpHeaders();
+	headers.setContentType(MediaType.APPLICATION_JSON);
+	headers.set("Access-Token", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MTA0OSwidXNlcl9pZCI6InVzZXJfMTc0MzgiLCJzaXRlX2lkIjoiaW5kdXN0cnlfNjkwIiwiY2xpZW50X2lkIjoiY2xpZW50XzM3NyIsImV4cCI6MjY0MDA3MTY3Nn0.ferrhelPYAlFg8UgFppk3K81G1WrPdPw64Rlzm3MFrk");
+
+//	HttpEntity<LinkedMultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
+		
+		try {
+//			result = restTemplate.postForObject("http://iot.theiox.com/appv2/multiple_update", requestEntity, String.class);
+		} catch (Exception e) {
+			responseVO.setResult("Failure");
+			responseVO.setSuccess(false);
+			responseVO.setMessage("Failed to Connect to OCR Server. Please Try Again After Sometime");
+		}
 
 	HttpRequest request = HttpRequest.newBuilder().uri(URI.create("http://iot.theiox.com/appv2/multiple_update"))
 			.header("Content-Type", "application/json")
