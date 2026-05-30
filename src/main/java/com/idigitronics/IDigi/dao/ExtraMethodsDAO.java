@@ -1634,7 +1634,7 @@ public void postDataToElMeasure() throws SQLException {
 	try {
 		con = getConnection();
 		
-		pstmt = con.prepareStatement("SELECT * FROM customerdetails where CustomerID = 317");
+		pstmt = con.prepareStatement("SELECT * FROM customerdetails");
 		rs = pstmt.executeQuery();
 		logger.info("Posting Data to ElMeasure Start" + LocalDateTime.now());
 		System.out.println("Posting Data to ElMeasure Start" + LocalDateTime.now());
