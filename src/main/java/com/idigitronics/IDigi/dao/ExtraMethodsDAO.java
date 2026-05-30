@@ -41,6 +41,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 import org.apache.commons.collections.map.MultiValueMap;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.json.JSONObject;
 import org.springframework.core.io.FileSystemResource;
@@ -1633,7 +1634,7 @@ public void postDataToElMeasure() throws SQLException {
 	try {
 		con = getConnection();
 		
-		pstmt = con.prepareStatement("SELECT * FROM customerdetails");
+		pstmt = con.prepareStatement("SELECT * FROM customerdetails where CustomerID = 317");
 		rs = pstmt.executeQuery();
 		logger.info("Posting Data to ElMeasure Start" + LocalDateTime.now());
 		System.out.println("Posting Data to ElMeasure Start" + LocalDateTime.now());
@@ -1642,9 +1643,11 @@ public void postDataToElMeasure() throws SQLException {
 			
 			Devices device = new Devices();
 			
-			if(rs.getString("DeviceInstanceID") != null && !rs.getString("DeviceInstanceID").isBlank() && !rs.getString("DeviceInstanceID").isEmpty()) {
+			String deviceInstanceID = StringUtils.stripToEmpty(rs.getString("DeviceInstanceID"));
+			
+			if(!deviceInstanceID.isEmpty()) {
 				
-				device.setDevice_instance_id(rs.getString("DeviceInstanceID"));
+				device.setDevice_instance_id(deviceInstanceID);
 				
 				ArrayList<Tags_Raw> tags_raw = new ArrayList<Tags_Raw>();
 				
