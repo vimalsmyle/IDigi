@@ -1731,13 +1731,17 @@ public ResponseVO postToElmeasure(ElMeasureRequestVO elMeasureRequestVO) throws 
 	headers.set("Access-Token", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MTA0OSwidXNlcl9pZCI6InVzZXJfMTc0MzgiLCJzaXRlX2lkIjoiaW5kdXN0cnlfNjkwIiwiY2xpZW50X2lkIjoiY2xpZW50XzM3NyIsImV4cCI6MjY0MDA3MTY3Nn0.ferrhelPYAlFg8UgFppk3K81G1WrPdPw64Rlzm3MFrk");
 
 	HttpEntity<ElMeasureRequestVO> requestEntity = new HttpEntity<>(elMeasureRequestVO, headers);
+	
+	System.out.println("before try");
 		
 		try {
+			System.out.println("before try in");
 			response = restTemplate.postForEntity("http://iot.theiox.com/appv2/multiple_update", requestEntity, String.class);
+			System.out.println("after try in");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+		System.out.println("after try: " + response);
 	if(response != null) {
 		System.out.println("response:-" + response.getBody());
 		logger.info("Response from ELmeasure" + LocalDateTime.now() + "--" + response.toString());
