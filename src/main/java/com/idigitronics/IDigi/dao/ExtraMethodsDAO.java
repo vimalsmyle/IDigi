@@ -1636,40 +1636,50 @@ public void postDataToElMeasure() throws SQLException {
 		pstmt = con.prepareStatement("SELECT * FROM customerdetails");
 		rs = pstmt.executeQuery();
 		logger.info("Posting Data to ElMeasure Start" + LocalDateTime.now());
+		System.out.println("Posting Data to ElMeasure Start" + LocalDateTime.now());
 		
 		while(rs.next()) {
+			
 			Devices device = new Devices();
-			device.setDevice_instance_id(rs.getString("DeviceInstanceID"));
 			
-			ArrayList<Tags_Raw> tags_raw = new ArrayList<Tags_Raw>();
-			
-			PreparedStatement pstmt1 = con.prepareStatement("SELECT MeterType, Reading, CONVERT_TZ( LogDate, @@session.time_zone, '+00:00' ) as UTCLogDate  FROM displaybalancelog WHERE CustomerID = " + rs.getInt("CustomerID") + " ORDER BY MeterType ASC ");
-			ResultSet rs1 = pstmt1.executeQuery();
-			
-			int i = 0;
-			
-			while(rs1.next()) {
-				Tags_Raw tag = new Tags_Raw();
+			if(rs.getString("DeviceInstanceID") != null && !rs.getString("DeviceInstanceID").isBlank() && !rs.getString("DeviceInstanceID").isEmpty()) {
 				
-				if(rs1.getString("MeterType").equalsIgnoreCase("Water")) {
-					i = i+1;
+				device.setDevice_instance_id(rs.getString("DeviceInstanceID"));
+				
+				ArrayList<Tags_Raw> tags_raw = new ArrayList<Tags_Raw>();
+				
+				PreparedStatement pstmt1 = con.prepareStatement("SELECT MeterType, Reading, CONVERT_TZ( LogDate, @@session.time_zone, '+00:00' ) as UTCLogDate  FROM displaybalancelog WHERE CustomerID = " + rs.getInt("CustomerID") + " ORDER BY MeterType ASC ");
+				ResultSet rs1 = pstmt1.executeQuery();
+				
+				int i = 0;
+				
+				while(rs1.next()) {
+					Tags_Raw tag = new Tags_Raw();
+					
+					if(rs1.getString("MeterType").equalsIgnoreCase("Water")) {
+						i = i+1;
+					}
+					
+					tag.setTag_id(rs1.getString("MeterType").equalsIgnoreCase("Gas") ? "tag_3641" : rs1.getString("MeterType").equalsIgnoreCase("Water") && i == 1 ? "tag_3637" : rs1.getString("MeterType").equalsIgnoreCase("Water") && i == 2 ? "tag_4809" : rs1.getString("MeterType").equalsIgnoreCase("Water") && i == 3 ? "tag_4810" : "");  // check for metertypes and add tagids accordingly
+					tag.setTag_value(rs1.getInt("Reading"));
+					tag.setUtctimestamp(rs1.getString("UTCLogDate")); 
+					
+					tags_raw.add(tag);
 				}
+				device.setTags_raw(tags_raw);
+				devices.add(device);
 				
-				tag.setTag_id(rs1.getString("MeterType").equalsIgnoreCase("Gas") ? "tag_3641" : rs1.getString("MeterType").equalsIgnoreCase("Water") && i == 1 ? "tag_3637" : rs1.getString("MeterType").equalsIgnoreCase("Water") && i == 2 ? "tag_4809" : rs1.getString("MeterType").equalsIgnoreCase("Water") && i == 3 ? "tag_4810" : "");  // check for metertypes and add tagids accordingly
-				tag.setTag_value(rs1.getInt("Reading"));
-				tag.setUtctimestamp(rs1.getString("UTCLogDate")); 
-				
-				tags_raw.add(tag);
 			}
-			device.setTags_raw(tags_raw);
-			devices.add(device);
+			
 		}
 		data.setDevices(devices);
 		elMeasureRequestVO.setData(data);
 		
-		postToElmeasure(elMeasureRequestVO);
-		
-		logger.info("Posting Data to ElMeasure End" + LocalDateTime.now());
+		if(!elMeasureRequestVO.getData().getDevices().isEmpty()) {
+			postToElmeasure(elMeasureRequestVO);
+			logger.info("Posting Data to ElMeasure End" + LocalDateTime.now());
+			System.out.println("Posting Data to ElMeasure End" + LocalDateTime.now());
+		}
 		
 	} catch (Exception e) {
 		// TODO Auto-generated catch block
