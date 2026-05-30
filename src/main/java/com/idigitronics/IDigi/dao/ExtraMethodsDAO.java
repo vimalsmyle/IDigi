@@ -1636,8 +1636,8 @@ public void postDataToElMeasure() throws SQLException {
 		
 		pstmt = con.prepareStatement("SELECT * FROM customerdetails");
 		rs = pstmt.executeQuery();
-		logger.info("Posting Data to ElMeasure Start" + LocalDateTime.now());
-		System.out.println("Posting Data to ElMeasure Start" + LocalDateTime.now());
+		logger.info("Posting Data to ElMeasure Start " + LocalDateTime.now());
+		System.out.println("Posting Data to ElMeasure Start " + LocalDateTime.now());
 		
 		while(rs.next()) {
 			
@@ -1680,8 +1680,8 @@ public void postDataToElMeasure() throws SQLException {
 		
 		if(!elMeasureRequestVO.getData().getDevices().isEmpty()) {
 			postToElmeasure(elMeasureRequestVO);
-			logger.info("Posting Data to ElMeasure End" + LocalDateTime.now());
-			System.out.println("Posting Data to ElMeasure End" + LocalDateTime.now());
+			logger.info("Posting Data to ElMeasure End " + LocalDateTime.now());
+			System.out.println("Posting Data to ElMeasure End " + LocalDateTime.now());
 		}
 		
 	} catch (Exception e) {
@@ -1722,9 +1722,7 @@ public void postDataToElMeasure() throws SQLException {
 
 public ResponseVO postToElmeasure(ElMeasureRequestVO elMeasureRequestVO) throws IOException, InterruptedException {
 
-	String data = gson.toJson(elMeasureRequestVO, ElMeasureRequestVO.class);
 	ResponseVO responseVO = new ResponseVO();
-	System.out.println(data);
 	ResponseEntity<String> response = null;
 
 	RestTemplate restTemplate = new RestTemplate();
@@ -1738,16 +1736,16 @@ public ResponseVO postToElmeasure(ElMeasureRequestVO elMeasureRequestVO) throws 
 	System.out.println("before try");
 		
 		try {
-			System.out.println("before try in");
+			System.out.println("inside try");
 			response = restTemplate.postForEntity("http://iot.theiox.com/appv2/multiple_update", requestEntity, String.class);
-			System.out.println("after try in");
+			System.out.println("after trying to access iot theiox server");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		System.out.println("after try: " + response);
+		System.out.println("after try : " + response);
 	if(response != null) {
-		System.out.println("response:-" + response.getBody());
-		logger.info("Response from ELmeasure" + LocalDateTime.now() + "--" + response.toString());
+		System.out.println("response:- " + response.getBody());
+		logger.info("Response from ELmeasure " + LocalDateTime.now() + " -- " + response.toString());
 		
 		responseVO.setResult(response.getStatusCode() == HttpStatus.OK ? "success" : "Failure");
 		responseVO.setMessage(response.getBody());
@@ -1756,7 +1754,8 @@ public ResponseVO postToElmeasure(ElMeasureRequestVO elMeasureRequestVO) throws 
 	} else {
 		responseVO.setResult("Failure");
 		responseVO.setMessage("Failed to Connect to IOT THEIOX Server. Please Try Again After Sometime");
-		logger.info("Response: " + LocalDateTime.now() + "--" + responseVO.getMessage());
+		System.out.println("response is null therefore in else block");
+		logger.info("Response: " + LocalDateTime.now() + " -- " + responseVO.getMessage());
 	}
 
 	return responseVO;
@@ -1794,7 +1793,7 @@ public ResponseVO processImage(MultipartFile file) throws Exception {
 		
 		responseVO = gson.fromJson(result, ResponseVO.class);
 
-		logger.info("Process Image Response From Python Service: " + LocalDateTime.now() + "--" + responseVO.getMessage());
+		logger.info("Process Image Response From Python Service: " + LocalDateTime.now() + " -- " + responseVO.getMessage());
 
 		if (responseVO.isSuccess()) {
 			responseVO.setResult("Success");
@@ -1804,8 +1803,8 @@ public ResponseVO processImage(MultipartFile file) throws Exception {
 			responseVO.setMessage("Failed to Read Image. Please Upload Clear Image");
 		}
 
-		System.out.println("Reading:-" + responseVO.getMeterReading() + " MeterSerialNumber:-" + responseVO.getMeterSerialNumber());
-		logger.info("Processed Image Response posting to UI: " + LocalDateTime.now() + "--" + "Reading:-" + responseVO.getMeterReading() + " MeterSerialNumber:-" + responseVO.getMeterSerialNumber());
+		System.out.println("Reading:- " + responseVO.getMeterReading() + " MeterSerialNumber:- " + responseVO.getMeterSerialNumber());
+		logger.info("Processed Image Response posting to UI: " + LocalDateTime.now() + " -- " + " Reading:- " + responseVO.getMeterReading() + " MeterSerialNumber:- " + responseVO.getMeterSerialNumber());
 		
 		} else {
 			responseVO.setResult("Failure");
