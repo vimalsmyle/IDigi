@@ -1283,7 +1283,7 @@ public class CommunitySetUpDAO {
 			responsevo.setResult("Failure");
 		} finally {
 			pstmt.close();
-//			con.close();
+			con.close();
 		}
 
 		return responsevo;
@@ -1653,7 +1653,7 @@ public class CommunitySetUpDAO {
 			
 	    } finally {
 			pstmt.close();
-			con.close();
+//			con.close();
 	    }
 		return responsevo;
 	}

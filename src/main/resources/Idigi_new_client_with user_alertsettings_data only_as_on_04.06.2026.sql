@@ -766,10 +766,13 @@ CREATE TABLE `updaterequestcustomermeterdetails` (
   `CustomerID` int NOT NULL,
   `CustomerUniqueID` varchar(100) NOT NULL,
   `FirstName` varchar(50) NOT NULL,
+  `LastName` varchar(50) DEFAULT NULL,
   `Email` varchar(100) NOT NULL,
   `MobileNumber` varchar(10) NOT NULL,
   `ToBeApprovedByID` int NOT NULL,
+  `Status` varchar(1000) DEFAULT 'Pending',
   `RegistrationDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `ModifiedDate` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`RequestID`),
   UNIQUE KEY `CustomerID` (`CustomerID`),
   CONSTRAINT `updaterequestcustomermeterdetails_ibfk_1` FOREIGN KEY (`CustomerID`) REFERENCES `customerdetails` (`CustomerID`)
