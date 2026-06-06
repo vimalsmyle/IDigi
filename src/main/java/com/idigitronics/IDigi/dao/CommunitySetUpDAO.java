@@ -186,15 +186,15 @@ public class CommunitySetUpDAO {
 	
 	public boolean checkIfCommunityNameExists(CommunityRequestVO communityvo, String mode) throws SQLException {
 		// TODO Auto-generated method stub
-		Connection con = null;
+		Connection validateCon = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		boolean result = false;
 		
 		try{
-		con = getConnection();
+			validateCon = getConnection();
 		String query = "SELECT * from community WHERE <change> CommunityName = '"+communityvo.getCommunityName().trim()+"'";
-		pstmt = con.prepareStatement(query.replaceAll("<change>", (mode.equalsIgnoreCase("add")) ? "" : "CommunityID != "+communityvo.getCommunityID() + " AND "));
+		pstmt = validateCon.prepareStatement(query.replaceAll("<change>", (mode.equalsIgnoreCase("add")) ? "" : "CommunityID != "+communityvo.getCommunityID() + " AND "));
 		
 		rs = pstmt.executeQuery();
         if (rs.next()) {
@@ -206,7 +206,7 @@ public class CommunitySetUpDAO {
 		} finally {
 			pstmt.close();
 			rs.close();
-			con.close();
+			validateCon.close();
 		}
 		
 		return result;
@@ -341,16 +341,16 @@ public class CommunitySetUpDAO {
 	public boolean checkgateway(GatewayRequestVO gatewayvo, String mode) throws SQLException {
 		// TODO Auto-generated method stub
 
-		Connection con = null;
+		Connection validateCon = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		Boolean result = false;
 
 		try {
-			con = getConnection();
+			validateCon = getConnection();
 			
 			String query = "SELECT * FROM gateway WHERE <change> GatewaySerialNumber = '" + gatewayvo.getGatewaySerialNumber().trim() + "'";
-			pstmt = con.prepareStatement(query.replaceAll("<change>", (mode.equalsIgnoreCase("add")) ? "" : "GatewayID != "+gatewayvo.getGatewayID() + " AND "));
+			pstmt = validateCon.prepareStatement(query.replaceAll("<change>", (mode.equalsIgnoreCase("add")) ? "" : "GatewayID != "+gatewayvo.getGatewayID() + " AND "));
 			rs = pstmt.executeQuery();
 			if (rs.next()) {
 				result = true;
@@ -360,7 +360,7 @@ public class CommunitySetUpDAO {
 		} finally {
 			pstmt.close();
 			rs.close();
-			con.close();
+			validateCon.close();
 		}
 
 		return result;
@@ -368,13 +368,13 @@ public class CommunitySetUpDAO {
 	
 	public boolean checkgatewayIsSetToCustomers(int gatewayID) throws SQLException {
 		// TODO Auto-generated method stub
-		Connection con = null;
+		Connection validateCon1 = null;
 		PreparedStatement pstmt = null;
 		boolean result = false;
 
 		try {
-			con = getConnection();
-			pstmt = con.prepareStatement("SELECT * FROM customermeterdetails WHERE GatewayID = "+gatewayID);
+			validateCon1 = getConnection();
+			pstmt = validateCon1.prepareStatement("SELECT * FROM customermeterdetails WHERE GatewayID = "+gatewayID);
 			ResultSet rs = pstmt.executeQuery();
 			if (rs.next()) {
 
@@ -386,7 +386,7 @@ public class CommunitySetUpDAO {
 			ex.printStackTrace();
 		} finally {
 			pstmt.close();
-			con.close();
+			validateCon1.close();
 		}
 
 		return result;
@@ -520,16 +520,16 @@ public class CommunitySetUpDAO {
 	public boolean checkMeterSize(MeterSizeRequestVO meterSizeRequestVO, String mode) throws SQLException {
 		// TODO Auto-generated method stub
 
-		Connection con = null;
+		Connection validateCon = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		Boolean result = false;
 
 		try {
-			con = getConnection();
+			validateCon = getConnection();
 			
 			String query = "SELECT * FROM metersize WHERE <change> MeterType = '"+ meterSizeRequestVO.getMeterType()+"' AND MeterSize = " + meterSizeRequestVO.getMeterSize();
-			pstmt = con.prepareStatement(query.replaceAll("<change>", (mode.equalsIgnoreCase("add")) ? "" : "MeterSizeID != "+meterSizeRequestVO.getMeterSizeID() + " AND "));
+			pstmt = validateCon.prepareStatement(query.replaceAll("<change>", (mode.equalsIgnoreCase("add")) ? "" : "MeterSizeID != "+meterSizeRequestVO.getMeterSizeID() + " AND "));
 			
 			rs = pstmt.executeQuery();
 			if (rs.next()) {
@@ -540,7 +540,7 @@ public class CommunitySetUpDAO {
 		} finally {
 			pstmt.close();
 			rs.close();
-			con.close();
+			validateCon.close();
 		}
 
 		return result;
@@ -549,13 +549,13 @@ public class CommunitySetUpDAO {
 	public boolean checkMeterSizeIsSetToMeters(int metersizeID) throws SQLException {
 		// TODO Auto-generated method stub
 		
-		Connection con = null;
+		Connection validateCon1 = null;
 		PreparedStatement pstmt = null;
 		boolean result = false;
 
 		try {
-			con = getConnection();
-			pstmt = con.prepareStatement("SELECT * FROM customermeterdetails WHERE MeterSizeID = "+metersizeID);
+			validateCon1 = getConnection();
+			pstmt = validateCon1.prepareStatement("SELECT * FROM customermeterdetails WHERE MeterSizeID = "+metersizeID);
 			ResultSet rs = pstmt.executeQuery();
 			if (rs.next()) {
 
@@ -567,7 +567,7 @@ public class CommunitySetUpDAO {
 			ex.printStackTrace();
 		} finally {
 			pstmt.close();
-			con.close();
+			validateCon1.close();
 		}
 
 		return result;
@@ -864,15 +864,15 @@ public class CommunitySetUpDAO {
 	
 	public boolean checkIfBlockNameExists(BlockRequestVO blockvo, String mode) throws SQLException {
 		// TODO Auto-generated method stub
-		Connection con = null;
+		Connection validateCon = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		boolean result = false;
 		
 		try{
-		con = getConnection();
+			validateCon = getConnection();
 		String query = "SELECT * FROM block WHERE CommunityID = ? AND <change> BlockName = '"+blockvo.getBlockName().trim()+"'";
-		pstmt = con.prepareStatement(query.replaceAll("<change>", (mode.equalsIgnoreCase("add")) ? "" : "BlockID != "+blockvo.getBlockID() + " AND "));
+		pstmt = validateCon.prepareStatement(query.replaceAll("<change>", (mode.equalsIgnoreCase("add")) ? "" : "BlockID != "+blockvo.getBlockID() + " AND "));
 		pstmt.setInt(1, blockvo.getCommunityID());
 		
 		rs = pstmt.executeQuery();
@@ -885,7 +885,7 @@ public class CommunitySetUpDAO {
 		} finally {
 			pstmt.close();
 			rs.close();
-//			con.close();
+			validateCon.close();
 		}
 		
 		return result;
@@ -894,15 +894,15 @@ public class CommunitySetUpDAO {
 	public boolean checkifhousesexist(int blockID) throws SQLException {
 		// TODO Auto-generated method stub
 		
-		Connection con = null;
+		Connection validateCon1 = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		boolean result = false;
 		
 		try{
-		con = getConnection();
+			validateCon1 = getConnection();
 		
-		pstmt = con.prepareStatement("select * from customerdetails where BlockID = ?");
+		pstmt = validateCon1.prepareStatement("select * from customerdetails where BlockID = ?");
 		pstmt.setInt(1, blockID);
 		
 		rs = pstmt.executeQuery();
@@ -915,7 +915,7 @@ public class CommunitySetUpDAO {
 		} finally {
 			pstmt.close();
 			rs.close();
-			//con.close();
+			validateCon1.close();
 		}
 		
 		return result;
@@ -1890,15 +1890,15 @@ public class CommunitySetUpDAO {
 	
 	public boolean checkcustomerName(CustomerRequestVO customervo) throws SQLException {
 		// TODO Auto-generated method stub
-		Connection con = null;
+		Connection validateCon = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		boolean result = false;
 		
 		try{
-		con = getConnection();
+			validateCon = getConnection();
 		
-		pstmt = con.prepareStatement("SELECT * from customerdetails where LastName = ? AND FirstName = ?");
+		pstmt = validateCon.prepareStatement("SELECT * from customerdetails where LastName = ? AND FirstName = ?");
 		pstmt.setString(1, customervo.getLastName().trim());
 		pstmt.setString(2, customervo.getFirstName().trim());
 		rs = pstmt.executeQuery();
@@ -1911,7 +1911,7 @@ public class CommunitySetUpDAO {
 			ex.printStackTrace();
 		} finally {
 			pstmt.close();
-//			con.close();
+			validateCon.close();
 		}
 		
 		return result;
@@ -1919,14 +1919,14 @@ public class CommunitySetUpDAO {
 	
 	public boolean checkMIUID(MeterRequestVO metervo) throws SQLException {
 		// TODO Auto-generated method stub
-		Connection con = null;
+		Connection validateCon1 = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		boolean result = false;
 		
 		try{
-		con = getConnection();
-		pstmt = con.prepareStatement("SELECT * from customermeterdetails where MIUID = '"+metervo.getMiuID().trim()+"'");
+			validateCon1 = getConnection();
+		pstmt = validateCon1.prepareStatement("SELECT * from customermeterdetails where MIUID = '"+metervo.getMiuID().trim()+"'");
 		rs = pstmt.executeQuery();
         
 		if (rs.next()) {
@@ -1937,7 +1937,7 @@ public class CommunitySetUpDAO {
 			ex.printStackTrace();
 		} finally {
 			pstmt.close();
-//			con.close();
+			validateCon1.close();
 		}
 		
 		return result;
@@ -1945,14 +1945,14 @@ public class CommunitySetUpDAO {
 
 	public boolean checkMeterSerialNumber(MeterRequestVO metervo) throws SQLException {
 		// TODO Auto-generated method stub
-		Connection con = null;
+		Connection validateCon2 = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		boolean result = false;
 		
 		try{
-		con = getConnection();
-		pstmt = con.prepareStatement("SELECT * from customermeterdetails where MeterSerialNumber = '"+metervo.getMeterSerialNumber().trim()+"'");
+			validateCon2 = getConnection();
+		pstmt = validateCon2.prepareStatement("SELECT * from customermeterdetails where MeterSerialNumber = '"+metervo.getMeterSerialNumber().trim()+"'");
 		rs = pstmt.executeQuery();
 		
 		if(rs.next()) {
@@ -1963,7 +1963,7 @@ public class CommunitySetUpDAO {
 			ex.printStackTrace();
 		} finally {
 			pstmt.close();
-//			con.close();
+			validateCon2.close();
 		}
 		
 		return result;
@@ -1971,15 +1971,15 @@ public class CommunitySetUpDAO {
 
 	public boolean checkHouseNumber(CustomerRequestVO customervo) throws SQLException {
 		// TODO Auto-generated method stub
-		Connection con = null;
+		Connection validateCon3 = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		boolean result = false;
 		
 		try{
-		con = getConnection();
+			validateCon3 = getConnection();
 		
-		pstmt = con.prepareStatement("SELECT * from customerdetails where HouseNumber = ? AND BlockID = " + customervo.getBlockID());
+		pstmt = validateCon3.prepareStatement("SELECT * from customerdetails where HouseNumber = ? AND BlockID = " + customervo.getBlockID());
 		pstmt.setString(1, customervo.getHouseNumber().trim());
 		rs = pstmt.executeQuery();
 		
@@ -1991,7 +1991,7 @@ public class CommunitySetUpDAO {
 			ex.printStackTrace();
 		} finally {
 			pstmt.close();
-//			con.close();
+			validateCon3.close();
 		}
 		
 		return result;
@@ -1999,15 +1999,15 @@ public class CommunitySetUpDAO {
 	
 	public boolean checkCustomerUniqueID(String CustomerUniqueID) throws SQLException {
 		// TODO Auto-generated method stub
-		Connection con = null;
+		Connection validateCon4 = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		boolean result = false;
 		
 		try{
-		con = getConnection();
+			validateCon4 = getConnection();
 		
-		pstmt = con.prepareStatement("SELECT * from customerdetails where CustomerUniqueID = '" + CustomerUniqueID.trim() + "'");
+		pstmt = validateCon4.prepareStatement("SELECT * from customerdetails where CustomerUniqueID = '" + CustomerUniqueID.trim() + "'");
 		rs = pstmt.executeQuery();
 		
 		if(rs.next()) {
@@ -2018,7 +2018,7 @@ public class CommunitySetUpDAO {
 			ex.printStackTrace();
 		} finally {
 			pstmt.close();
-//			con.close();
+			validateCon4.close();
 		}
 		
 		return result;
@@ -2027,15 +2027,15 @@ public class CommunitySetUpDAO {
 	public boolean checkMIUID(String miuID, long id) throws SQLException {
 		// TODO Auto-generated method stub
 		
-		Connection con = null;
+		Connection validateCon5 = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		boolean result = false;
 		
 		try{
-		con = getConnection();
+			validateCon5 = getConnection();
 		
-		pstmt = con.prepareStatement("SELECT * from customermeterdetails where MIUID = '" + miuID.trim() + "'");
+		pstmt = validateCon5.prepareStatement("SELECT * from customermeterdetails where MIUID = '" + miuID.trim() + "'");
 		rs = pstmt.executeQuery();
 		
 		if(rs.next()) {
@@ -2046,7 +2046,7 @@ public class CommunitySetUpDAO {
 			ex.printStackTrace();
 		} finally {
 			pstmt.close();
-			//con.close();
+			validateCon5.close();
 		}
 		
 		return result;
@@ -2054,15 +2054,15 @@ public class CommunitySetUpDAO {
 	
 	public boolean checkpendingrequest(String CustomerUniqueID) throws SQLException {
 		// TODO Auto-generated method stub
-		Connection con = null;
+		Connection validateCon6 = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		boolean result = false;
 		
 		try{
-		con = getConnection();
+			validateCon6 = getConnection();
 		
-		pstmt = con.prepareStatement("SELECT CustomerUniqueID from updaterequestcustomermeterdetails where CustomerUniqueID = ? AND Status = 'Pending'");
+		pstmt = validateCon6.prepareStatement("SELECT CustomerUniqueID from updaterequestcustomermeterdetails where CustomerUniqueID = ? AND Status = 'Pending'");
 		pstmt.setString(1, CustomerUniqueID);
 		
 		rs = pstmt.executeQuery();
@@ -2074,7 +2074,7 @@ public class CommunitySetUpDAO {
 			ex.printStackTrace();
 		} finally {
 			pstmt.close();
-			//con.close();
+			validateCon6.close();
 		}
 		
 		return result;
@@ -2308,16 +2308,16 @@ public class CommunitySetUpDAO {
 	public boolean checktariffamount(TariffRequestVO tariffvo, String mode) throws SQLException {
 		// TODO Auto-generated method stub
 
-		Connection con = null;
+		Connection validateCon = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		Boolean result = false;
 
 		try {
-			con = getConnection();
+			validateCon = getConnection();
 			
 			String query = "SELECT * FROM tariff WHERE <change> Tariff = " + tariffvo.getTariff();
-			pstmt = con.prepareStatement(query.replaceAll("<change>", (mode.equalsIgnoreCase("add")) ? "" : "TariffID != "+tariffvo.getTariffID() + " AND "));
+			pstmt = validateCon.prepareStatement(query.replaceAll("<change>", (mode.equalsIgnoreCase("add")) ? "" : "TariffID != "+tariffvo.getTariffID() + " AND "));
 			
 			rs = pstmt.executeQuery();
 			if (rs.next()) {
@@ -2328,7 +2328,7 @@ public class CommunitySetUpDAO {
 		} finally {
 			pstmt.close();
 			rs.close();
-			//con.close();
+			validateCon.close();
 		}
 
 		return result;
@@ -2336,13 +2336,13 @@ public class CommunitySetUpDAO {
 	
 	public boolean checktariffIsSetToCustomers(int tariffID) throws SQLException {
 		// TODO Auto-generated method stub
-		Connection con = null;
+		Connection validateCon1 = null;
 		PreparedStatement pstmt = null;
 		boolean result = false;
 
 		try {
-			con = getConnection();
-			pstmt = con.prepareStatement("SELECT * FROM customermeterdetails WHERE TariffID = "+tariffID);
+			validateCon1 = getConnection();
+			pstmt = validateCon1.prepareStatement("SELECT * FROM customermeterdetails WHERE TariffID = "+tariffID);
 			ResultSet rs = pstmt.executeQuery();
 			if (rs.next()) {
 
@@ -2354,7 +2354,7 @@ public class CommunitySetUpDAO {
 			ex.printStackTrace();
 		} finally {
 			pstmt.close();
-			//con.close();
+			validateCon1.close();
 		}
 
 		return result;
@@ -2362,13 +2362,13 @@ public class CommunitySetUpDAO {
 
 	public boolean checkCustomersRegistrationCount() throws SQLException {
 		// TODO Auto-generated method stub
-		Connection con = null;
+		Connection validateCon7 = null;
 		PreparedStatement pstmt = null;
 		boolean result = false;
 
 		try {
-			con = getConnection();
-			pstmt = con.prepareStatement("select count(CustomerID) >= (SELECT MaximumNumberOfRegistrations FROM alertsettings) as count from customerdetails");
+			validateCon7 = getConnection();
+			pstmt = validateCon7.prepareStatement("select count(CustomerID) >= (SELECT MaximumNumberOfRegistrations FROM alertsettings) as count from customerdetails");
 			ResultSet rs = pstmt.executeQuery();
 			if (rs.next()) {
 				if(rs.getInt("count") == 1) {
@@ -2380,7 +2380,7 @@ public class CommunitySetUpDAO {
 			ex.printStackTrace();
 		} finally {
 			pstmt.close();
-//			con.close();
+			validateCon7.close();
 		}
 
 		return result;
@@ -2389,16 +2389,16 @@ public class CommunitySetUpDAO {
 	public ResponseVO customerupdatesrequeststatus(String customerUniqueID) throws SQLException {
 		// TODO Auto-generated method stub
 		
-		Connection con = null;
+		Connection validateCon8 = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		ResponseVO responsevo = new ResponseVO();
 		CustomerResponseVO customerResponseVO = null;
 		
 		try{
-		con = getConnection();
+			validateCon8 = getConnection();
 		
-		pstmt = con.prepareStatement("SELECT * from updaterequestcustomermeterdetails where CustomerUniqueID = ? order by RegistrationDate Desc limit 1");
+		pstmt = validateCon8.prepareStatement("SELECT * from updaterequestcustomermeterdetails where CustomerUniqueID = ? order by RegistrationDate Desc limit 1");
 		pstmt.setString(1, customerUniqueID);
 		
 		rs = pstmt.executeQuery();
@@ -2433,7 +2433,7 @@ public class CommunitySetUpDAO {
 			ex.printStackTrace();
 		} finally {
 			pstmt.close();
-			//con.close();
+			validateCon8.close();
 		}
 		
 		return responsevo;
@@ -2479,13 +2479,13 @@ public class CommunitySetUpDAO {
 
 	public boolean checkMapSolarMasterStatus(CustomerSolarMasterRequestVO customerSolarMasterRequestVO) throws SQLException {
 		// TODO Auto-generated method stub
-		Connection con = null;
+		Connection validateCon = null;
 		PreparedStatement pstmt = null;
 		boolean result = false;
 
 		try {
-			con = getConnection();
-			pstmt = con.prepareStatement("SELECT * FROM customersolardetails WHERE CustomerID = (SELECT CustomerID FROM customerdetails WHERE CustomerUniqueID = '"+customerSolarMasterRequestVO.getHouseNumber().split("/")[1] + "')");
+			validateCon = getConnection();
+			pstmt = validateCon.prepareStatement("SELECT * FROM customersolardetails WHERE CustomerID = (SELECT CustomerID FROM customerdetails WHERE CustomerUniqueID = '"+customerSolarMasterRequestVO.getHouseNumber().split("/")[1] + "')");
 			ResultSet rs = pstmt.executeQuery();
 			if (rs.next()) {
 					result = true;
@@ -2495,7 +2495,7 @@ public class CommunitySetUpDAO {
 			ex.printStackTrace();
 		} finally {
 			pstmt.close();
-//			con.close();
+			validateCon.close();
 		}
 
 		return result;
