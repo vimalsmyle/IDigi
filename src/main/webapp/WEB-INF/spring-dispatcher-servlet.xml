@@ -22,6 +22,7 @@
 	 <bean id="individualbillgeneration" class="com.idigitronics.IDigi.dao.ExtraMethodsDAO"> </bean> 
 	 <bean id="postDataToElMeasure" class="com.idigitronics.IDigi.dao.ExtraMethodsDAO"> </bean>
 	 <bean class="org.springframework.web.multipart.commons.CommonsMultipartResolver" id="multipartResolver"/>
+	 <bean id="swagger2Config" class="springfox.documentation.swagger2.configuration.Swagger2DocumentationConfiguration"> </bean>
 	 	<!-- <property name="targetObject" ref="ExtraMethodsDAO" />
   		<property name="targetMethod" value="individualbillgeneration" />   -->
 	 <!-- <bean id="billgeneration" class="com.idigitronics.IDigi.dao.ExtraMethodsDAO"></bean> -->
