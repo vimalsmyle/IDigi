@@ -57,12 +57,6 @@ public class UserDetails {
 	public void setCommunity(int communityID) {
 		this.communityID = communityID;
 	}
-	public String getuserName() {
-		return userName;
-	}
-	public void setuserName(String userName) {
-		this.userName = userName;
-	}
 	public long getCustomerID() {
 		return customerID;
 	}

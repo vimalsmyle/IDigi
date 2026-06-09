@@ -23,20 +23,24 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 public class SwaggerConfig {
 
-	
-	
-    @Bean
-    public Docket api() {
+	    public SwaggerConfig() {
 
-    	System.out.println("Swagger Loaded");
-    	
-        return new Docket(
-                DocumentationType.SWAGGER_2)
-                .select()
-                .apis(RequestHandlerSelectors
-                        .basePackage(
-                                "com.idigitronics.IDigi.controller"))
-                .paths(PathSelectors.any())
-                .build();
-    }
+//	        String swaggerEnabled = System.getProperty("swagger.enabled", "false");
+	        String swaggerEnabled = System.getProperty("swagger.enabled", "true");
+
+	        if (!"true".equalsIgnoreCase(swaggerEnabled)) {
+	            throw new RuntimeException("Swagger Disabled");
+	        }
+	    }
+
+	    @Bean
+	    public Docket api() {
+
+	        return new Docket(DocumentationType.SWAGGER_2)
+	                .select()
+	                .apis(RequestHandlerSelectors.basePackage(
+	                        "com.idigitronics.IDigi.controller"))
+	                .paths(PathSelectors.any())
+	                .build();
+	    }
 }

@@ -105,7 +105,7 @@ public class LoginDAO {
 							userDetails.setMobileNumber((userDetails.getRoleID() == 2 || userDetails.getRoleID() == 5) ? resultSet.getString("bmobile") : (userDetails.getRoleID() == 3) ? resultSet.getString("cmobile") : "");
 							userDetails.setCustomerID(resultSet.getInt("CustomerID"));
 							userDetails.setCustomerUniqueID(resultSet.getString("CustomerUniqueID"));
-							userDetails.setuserName(resultSet.getString("UserName"));
+							userDetails.setUserName(resultSet.getString("UserName"));
 							userDetails.setCommunity(userDetails.getRoleID() == 1 ? communityId : resultSet.getInt("CommunityID"));
 							userDetails.setCommunityName(userDetails.getRoleID() == 1 ? communityName : resultSet.getString("CommunityName"));
 							userDetails.setBlockName(resultSet.getString("BlockName"));
