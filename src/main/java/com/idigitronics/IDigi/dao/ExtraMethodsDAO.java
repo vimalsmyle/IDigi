@@ -1729,7 +1729,9 @@ public ResponseVO postToElmeasure(ElMeasureRequestVO elMeasureRequestVO) throws 
 	
 	HttpHeaders headers = new HttpHeaders();
 	headers.setContentType(MediaType.APPLICATION_JSON);
-	headers.set("Access-Token", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MTA0OSwidXNlcl9pZCI6InVzZXJfMTc0MzgiLCJzaXRlX2lkIjoiaW5kdXN0cnlfNjkwIiwiY2xpZW50X2lkIjoiY2xpZW50XzM3NyIsImV4cCI6MjY0MDA3MTY3Nn0.ferrhelPYAlFg8UgFppk3K81G1WrPdPw64Rlzm3MFrk");
+// Urbanrise	headers.set("Access-Token", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MTA0OSwidXNlcl9pZCI6InVzZXJfMTc0MzgiLCJzaXRlX2lkIjoiaW5kdXN0cnlfNjkwIiwiY2xpZW50X2lkIjoiY2xpZW50XzM3NyIsImV4cCI6MjY0MDA3MTY3Nn0.ferrhelPYAlFg8UgFppk3K81G1WrPdPw64Rlzm3MFrk");
+// BMR Avalon	
+	headers.set("Access-Token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTA1NSwidXNlcl9pZCI6InVzZXJfMjkzNjgiLCJzaXRlX2lkIjoiaW5kdXN0cnlfODcyIiwiY2xpZW50X2lkIjoiY2xpZW50XzQ3NCIsImV4cCI6MjY1MTY0NzA5OX0.HG-HZiTVCeJtcegA7p9GIdOzEDZYq_ipnUOUAhX9W1Q");
 
 	HttpEntity<ElMeasureRequestVO> requestEntity = new HttpEntity<>(elMeasureRequestVO, headers);
 	
