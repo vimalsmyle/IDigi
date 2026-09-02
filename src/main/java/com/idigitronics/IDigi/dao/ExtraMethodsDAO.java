@@ -1623,7 +1623,7 @@ public void sensordatabillgeneration() throws SQLException {
 @Scheduled(cron="30 22 * * * *")
 public void postDataToElMeasure() throws SQLException {
 	
-	Connection con = null;
+	Connection con1 = null;
 	PreparedStatement pstmt = null;
 	ResultSet rs = null;
 	
@@ -1632,9 +1632,9 @@ public void postDataToElMeasure() throws SQLException {
 	ArrayList<Devices> devices = new ArrayList<Devices>();
 	
 	try {
-		con = getConnection();
+		con1 = getConnection();
 		
-		pstmt = con.prepareStatement("SELECT * FROM customerdetails");
+		pstmt = con1.prepareStatement("SELECT * FROM customerdetails");
 		rs = pstmt.executeQuery();
 		logger.info("Posting Data to ElMeasure Start " + LocalDateTime.now());
 		System.out.println("Posting Data to ElMeasure Start " + LocalDateTime.now());
@@ -1651,7 +1651,7 @@ public void postDataToElMeasure() throws SQLException {
 				
 				ArrayList<Tags_Raw> tags_raw = new ArrayList<Tags_Raw>();
 				
-				PreparedStatement pstmt1 = con.prepareStatement("SELECT MeterType, Reading, CONVERT_TZ( LogDate, @@session.time_zone, '+00:00' ) as UTCLogDate  FROM displaybalancelog WHERE CustomerID = " + rs.getInt("CustomerID") + " ORDER BY MeterType ASC ");
+				PreparedStatement pstmt1 = con1.prepareStatement("SELECT MeterType, Reading, CONVERT_TZ( LogDate, @@session.time_zone, '+00:00' ) as UTCLogDate  FROM displaybalancelog WHERE CustomerID = " + rs.getInt("CustomerID") + " ORDER BY MeterType ASC ");
 				ResultSet rs1 = pstmt1.executeQuery();
 				
 				int i = 0;
@@ -1691,7 +1691,7 @@ public void postDataToElMeasure() throws SQLException {
 	finally {
 		pstmt.close();
 		rs.close();
-		con.close();
+		con1.close();
 	}
 	
 }
