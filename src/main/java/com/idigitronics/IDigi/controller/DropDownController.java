@@ -253,13 +253,11 @@ public class DropDownController {
 		mailRequestVO.setToEmail("kvk9889@gmail.com");
 		mailRequestVO.setSubject("test");
 		mailRequestVO.setMessage("testing email");
-//		extraMethodsDAO.sendmail(mailRequestVO);
-		CommunitySetUpBO cbo = new CommunitySetUpBO();
-		if(cbo.checkName(name)) {
-			System.out.println("matched");
-		} else {
-			System.out.println("not-matched");
-		}
+		extraMethodsDAO.sendmail(mailRequestVO);
+		/*
+		 * CommunitySetUpBO cbo = new CommunitySetUpBO(); if(cbo.checkName(name)) {
+		 * System.out.println("matched"); } else { System.out.println("not-matched"); }
+		 */
 		
 		return responsevo;
 	}
