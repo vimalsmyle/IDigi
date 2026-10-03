@@ -7,12 +7,14 @@ import java.io.ByteArrayInputStream;
 import java.util.HashMap;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.idigitronics.IDigi.request.vo.CustomerRequestVO;
 
 /**
  * @author VmL
  *
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ResponseVO {
 	
 	

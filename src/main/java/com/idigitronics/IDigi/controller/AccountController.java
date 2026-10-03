@@ -40,6 +40,8 @@ import com.idigitronics.IDigi.response.vo.ConfigurationStatusResponseVO;
 import com.idigitronics.IDigi.response.vo.ResponseVO;
 import com.idigitronics.IDigi.response.vo.StatusResponseVO;
 
+import io.swagger.annotations.Api;
+
 /**
  * @author K VimaL Kumar
  * 
@@ -47,6 +49,7 @@ import com.idigitronics.IDigi.response.vo.StatusResponseVO;
 
 
 @Controller
+@Api(tags = "Recharge/Payment Related APIs")
 public class AccountController {
 
 	Gson gson = new Gson();

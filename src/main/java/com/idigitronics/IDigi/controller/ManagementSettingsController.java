@@ -27,11 +27,14 @@ import com.idigitronics.IDigi.response.vo.ResponseVO;
 import com.idigitronics.IDigi.response.vo.UserManagementResponseVO;
 import com.idigitronics.IDigi.utils.Encryptor;
 
+import io.swagger.annotations.Api;
+
 /**
  * @author K VimaL kumar
  * 
  */
 @Controller
+@Api(tags = "Profile Settings Related APIs")
 public class ManagementSettingsController {
 	
 	ManagementSettingsBO managementsettingsbo = new ManagementSettingsBO();

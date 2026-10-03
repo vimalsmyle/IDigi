@@ -47,6 +47,8 @@ import com.idigitronics.IDigi.response.vo.ResponseVO;
 import com.idigitronics.IDigi.response.vo.SensorDashboardResponseVO;
 import com.idigitronics.IDigi.response.vo.SolarDashboardResponseVO;
 
+import io.swagger.annotations.Api;
+
 
 /**
  * @author K VimaL Kumar
@@ -54,6 +56,7 @@ import com.idigitronics.IDigi.response.vo.SolarDashboardResponseVO;
  */
 
 @Controller
+@Api(tags = "Dashboard Related APIs")
 public class DashboardController {
 
 	private static final Logger logger = Logger.getLogger(DashboardController.class);

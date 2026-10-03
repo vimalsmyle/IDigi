@@ -47,12 +47,15 @@ import com.idigitronics.IDigi.response.vo.PrefixResponseVO;
 import com.idigitronics.IDigi.response.vo.ResponseVO;
 import com.idigitronics.IDigi.response.vo.TariffResponseVO;
 
+import io.swagger.annotations.Api;
+
 /**
  * @author VmL
  * 
  */
 @Controller
 @MultipartConfig
+@Api(tags = "Community/Customer Setup Related APIs")
 public class CommunitySetUpController {
 	
 	CommunitySetUpDAO communitysetupdao = new CommunitySetUpDAO();

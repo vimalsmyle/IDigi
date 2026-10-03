@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.idigitronics.IDigi.bo.LoginBO;
@@ -63,6 +64,7 @@ public class LoginController {
 	@ApiResponses(value = {@ApiResponse(code = 200, message = "Password has been sent to your registered email id")})
 	@RequestMapping(value = "/forgotpassword/{userid}", method = RequestMethod.POST, produces = "application/json")
 	public @ResponseBody
+//	ResponseVO forgotpassword(@ApiParam(value = "user id") @RequestParam("userid") String userid)
 	ResponseVO forgotpassword(@ApiParam(value = "user id") @PathVariable("userid") String userid)
 			throws ClassNotFoundException, BusinessException, SQLException {
 

@@ -28,12 +28,15 @@ import com.idigitronics.IDigi.response.vo.FinancialReportsResponseVO;
 import com.idigitronics.IDigi.response.vo.TopUpSummaryResponseVO;
 import com.idigitronics.IDigi.response.vo.UserConsumptionReportsResponseVO;
 
+import io.swagger.annotations.Api;
+
 /**
  * @author K VimaL Kumar
  * 
  */
 
 @Controller
+@Api(tags = "Reports Related APIs")
 public class ReportsController {
 
 	Gson gson = new Gson();

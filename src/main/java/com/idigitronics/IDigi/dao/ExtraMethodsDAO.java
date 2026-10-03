@@ -864,7 +864,7 @@ public class ExtraMethodsDAO {
 			check.close();
 			bg.close();
 			if (!billsGenerated) {
-//				BillSmsAndMail();
+				BillSmsAndMail();
 			}
 		}
 
