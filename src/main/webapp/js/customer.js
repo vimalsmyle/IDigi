@@ -28,7 +28,7 @@ $(document).ready(function() {
 	
 	$.getJSON("./customer/"+sessionStorage.getItem("roleID")+"/"+sessionStorage.getItem("ID")+"/-1", function(data) {
 	$.each(data.data, function(i, item) {
-		if ($("#custUniqueId").val() == item.CustomerUniqueID) {
+		if ($("#custUniqueId").val() == item.customerUniqueID) {
 			
 			var GasOptions;
 			var WaterOptions;
@@ -66,7 +66,7 @@ $(document).ready(function() {
 				.attr('disabled',
 						true);
 			}
-			$('#CRNEdit').val(item.CustomerUniqueID).trigger("change");
+			$('#CRNEdit').val(item.customerUniqueID).trigger("change");
 			$("#formCRNEdit").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
 		    
 			$("#customerIdhidden").val(item.CRNNumber);
@@ -465,7 +465,7 @@ return json.data;
 },{
 "data" : "blockName"
 },{
-"data" : "CustomerUniqueID"
+"data" : "customerUniqueID"
 },{
 "data" : "firstName"
 },{
@@ -483,7 +483,7 @@ return json.data;
 	"render" : function(data, type, row) {
 		
 		return "<a href=# id=CustomerMeters data-toggle=modal data-target=#myCustomerMeters onclick='getCustomerMeters(\""
-		+ row.CustomerUniqueID
+		+ row.customerUniqueID
 		+ "\")'>"
 		+ "Multiple"
 		+ "</a>"
@@ -502,11 +502,11 @@ return json.data;
 	"mData" : "action",
 	"render" : function(data, type, row) {
 		
-		return "<a href='customerEdit.jsp?cust="+row.CustomerUniqueID+"'>"
+		return "<a href='customerEdit.jsp?cust="+row.customerUniqueID+"'>"
 																	+ "<i class='material-icons' style='color:#17e9e9'>edit</i>"
 																	+ "</a>"
 																	+"<a onclick='getCustomerFormDelete(\""
-																	+ row.CustomerUniqueID
+																	+ row.customerUniqueID
 																	+ "\")'>"
 																	+ "<i class='material-icons' style='color:#17e9e9;cursor:pointer;'>delete</i>"
 																	+ "</a>"
@@ -517,11 +517,11 @@ return json.data;
 		"mData" : "action",
 		"render" : function(data, type, row) {
 			
-			return "<a href='customerEdit.jsp?cust="+row.CustomerUniqueID+"'>"
+			return "<a href='customerEdit.jsp?cust="+row.customerUniqueID+"'>"
 																		+ "<i class='material-icons' style='color:#17e9e9'>edit</i>"
 																		+ "</a>"
 																		+"<a onclick='getCustomerFormDelete(\""
-																		+ row.CustomerUniqueID
+																		+ row.customerUniqueID
 																		+ "\")'>"
 																		+ "<i class='material-icons' style='color:#17e9e9;cursor:pointer;'>delete</i>"
 																		+ "</a>"
@@ -1189,7 +1189,7 @@ $(document)
 																	},{
 																	"data" : "blockName"
 																	},{
-																	"data" : "CustomerUniqueID"
+																	"data" : "customerUniqueID"
 																	},{
 																	"data" : "firstName"
 																	},{
@@ -1208,7 +1208,7 @@ $(document)
 																		"render" : function(data, type, row) {
 																			
 																			return "<a href=# id=CustomerMeters data-toggle=modal data-target=#myCustomerMeters onclick='getCustomerMeters(\""
-																			+ row.CustomerUniqueID
+																			+ row.customerUniqueID
 																			+ "\")'>"
 																			+ "Multiple"
 																			+ "</a>"
@@ -1235,7 +1235,7 @@ $(document)
 																			"render" : function(data, type, row) {
 																				
 																				return "<a href=# id=CustomerEdit data-toggle=modal data-target=#myCustomerEdit onclick='getCustomerFormEdit(\""
-																																			+ row.CustomerUniqueID
+																																			+ row.customerUniqueID
 																																			+ "\")'>"
 																																			+ "<i class='material-icons' style='color:#17e9e9'>edit</i>"
 																																			+ "</a>"
@@ -1644,7 +1644,7 @@ function getCustomerMeters(CRNNumber){
 		$('#myCustomerMetersTable_wrapper tbody').remove();*/
 	$.getJSON("./customer/"+sessionStorage.getItem("roleID")+"/"+sessionStorage.getItem("ID")+"/-1", function(data) {
 		$.each(data.data, function(i, item) {
-			if (CRNNumber == item.CustomerUniqueID) {
+			if (CRNNumber == item.customerUniqueID) {
 				
 				$('#customerMeterTable')
 				.DataTable(

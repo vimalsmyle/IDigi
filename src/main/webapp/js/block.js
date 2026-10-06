@@ -43,7 +43,7 @@ return json.data;
 },{
 "data" : "blockName"
 },{
-"data" : "Location"
+"data" : "location"
 },{
 "data" : "email"
 }
@@ -501,7 +501,7 @@ function getBlockFormEdit(id) {
 				$("#formcomunityName").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
 				$('#blockNameEdit').val(item.blockName).trigger("change");
 				$("#formblockName").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
-				$('#blockLocationEdit').val(item.Location).trigger("change");
+				$('#blockLocationEdit').val(item.location).trigger("change");
 				$("#formblocklocation").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
 			    $('#blockMobileEdit').val(item.mobile).trigger("change");
 				$("#formblockMobile").addClass("group form-group has-feedback has-success bmd-form-group is-filled")
