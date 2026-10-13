@@ -1755,6 +1755,8 @@ public class ExtraMethodsDAO {
 			elMeasureRequestVO.setData(data);
 
 			if (!elMeasureRequestVO.getData().getDevices().isEmpty()) {
+				String dataReq = gson.toJson(elMeasureRequestVO, ElMeasureRequestVO.class);
+				System.out.println("request: " + dataReq);
 				postToElmeasure(elMeasureRequestVO);
 				logger.info("Posting Data to ElMeasure End " + LocalDateTime.now());
 				System.out.println("Posting Data to ElMeasure End " + LocalDateTime.now());
@@ -1808,10 +1810,10 @@ public class ExtraMethodsDAO {
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
-// Urbanrise	headers.set("Access-Token", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MTA0OSwidXNlcl9pZCI6InVzZXJfMTc0MzgiLCJzaXRlX2lkIjoiaW5kdXN0cnlfNjkwIiwiY2xpZW50X2lkIjoiY2xpZW50XzM3NyIsImV4cCI6MjY0MDA3MTY3Nn0.ferrhelPYAlFg8UgFppk3K81G1WrPdPw64Rlzm3MFrk");
-// BMR Avalon	
-		headers.set("Access-Token",
-				"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTA1NSwidXNlcl9pZCI6InVzZXJfMjkzNjgiLCJzaXRlX2lkIjoiaW5kdXN0cnlfODcyIiwiY2xpZW50X2lkIjoiY2xpZW50XzQ3NCIsImV4cCI6MjY1MTY0NzA5OX0.HG-HZiTVCeJtcegA7p9GIdOzEDZYq_ipnUOUAhX9W1Q");
+// Urbanrise	
+		headers.set("Access-Token", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MTA0OSwidXNlcl9pZCI6InVzZXJfMTc0MzgiLCJzaXRlX2lkIjoiaW5kdXN0cnlfNjkwIiwiY2xpZW50X2lkIjoiY2xpZW50XzM3NyIsImV4cCI6MjY0MDA3MTY3Nn0.ferrhelPYAlFg8UgFppk3K81G1WrPdPw64Rlzm3MFrk");
+// BMR Avalon	                     eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTA1NSwidXNlcl9pZCI6InVzZXJfMjkzNjgiLCJzaXRlX2lkIjoiaW5kdXN0cnlfODcyIiwiY2xpZW50X2lkIjoiY2xpZW50XzQ3NCIsImV4cCI6MjY1MTY0NzA5OX0.HG-HZiTVCeJtcegA7p9GIdOzEDZYq_ipnUOUAhX9W1Q
+//		headers.set("Access-Token",	"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTA1NSwidXNlcl9pZCI6InVzZXJfMjkzNjgiLCJzaXRlX2lkIjoiaW5kdXN0cnlfODcyIiwiY2xpZW50X2lkIjoiY2xpZW50XzQ3NCIsImV4cCI6MjY1MTY0NzA5OX0.HG-HZiTVCeJtcegA7p9GIdOzEDZYq_ipnUOUAhX9W1Q");
 
 		HttpEntity<ElMeasureRequestVO> requestEntity = new HttpEntity<>(elMeasureRequestVO, headers);
 
@@ -1819,8 +1821,7 @@ public class ExtraMethodsDAO {
 
 		try {
 			System.out.println("inside try");
-			response = restTemplate.postForEntity("http://iot.theiox.com/appv2/multiple_update", requestEntity,
-					String.class);
+			response = restTemplate.postForEntity("http://iot.theiox.com/appv2/multiple_update", requestEntity, String.class);
 			System.out.println("after trying to access iot theiox server");
 		} catch (Exception e) {
 			e.printStackTrace();
