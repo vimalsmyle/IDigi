@@ -282,7 +282,7 @@ public class ExtraMethodsDAO {
 		return responses.toString();
 	}
 
-	@Scheduled(cron="30 6 2 * * *") // scheduled for every month 2nd day at 06:30
+//	@Scheduled(cron="30 6 2 * * *") // scheduled for every month 2nd day at 06:30
 //	@Scheduled(cron="15 15 * * * *") 
 	public void individualbillgeneration() throws SQLException {
 
@@ -1689,7 +1689,7 @@ public class ExtraMethodsDAO {
 	 * }
 	 */
 
-	@Scheduled(cron = "30 22 * * * *")
+//	@Scheduled(cron = "30 22 * * * *")
 	public void postDataToElMeasure() throws SQLException {
 
 		Connection con1 = null;
@@ -1751,11 +1751,14 @@ public class ExtraMethodsDAO {
 				}
 
 			}
+			
+			devices.removeIf(e -> e.getTags_raw().size()<=0);
 			data.setDevices(devices);
 			elMeasureRequestVO.setData(data);
 
 			if (!elMeasureRequestVO.getData().getDevices().isEmpty()) {
 				String dataReq = gson.toJson(elMeasureRequestVO, ElMeasureRequestVO.class);
+				logger.info("Final payload which is being posted at " + LocalDateTime.now() + " is: " + dataReq);
 				System.out.println("request: " + dataReq);
 				postToElmeasure(elMeasureRequestVO);
 				logger.info("Posting Data to ElMeasure End " + LocalDateTime.now());
